@@ -1,0 +1,195 @@
+<template>
+  <div class="flex flex-col h-full">
+    <div class="hidden lg:block font-semibold mb-4">Situational Awareness</div>
+    <div class="flex lg:hidden justify-between mb-4">
+      <div class="font-semibold">Situational Awareness</div>
+      <div
+        class="
+          cursor-pointer
+          text-sm
+          hover:text-black
+          dark:hover:text-white
+          energy:hover:text-white
+        "
+      >
+        View More
+      </div>
+    </div>
+    <div class="hidden h-full lg:flex flex-col justify-between">
+      <div class="lg:flex flex-col justify-between text-sm">
+        <template v-for="item in sitreps" :key="item">
+          <div class="hover:underline mb-4">
+            <div
+              class="rounded-md shadow-md px-4 py-4"
+              :class="
+                item.locked
+                  ? 'bg-slate-200 hover:bg-slate-300/80 dark:bg-slate-700 dark:hover:bg-slate-700/80 energy:bg-gray-700 energy:hover:bg-gray-700/80'
+                  : 'cursor-pointer bg-slate-50 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 energy:bg-gray-800 energy:hover:bg-gray-700/80'
+              "
+            >
+              <div class="flex flex-col">
+                <div class="flex items-center pb-1">
+                  <template v-if="item.locked">
+                    <LockClosedIcon
+                      class="mr-2 h-4 w-4"
+                      aria-hidden="true"
+                    ></LockClosedIcon>
+                  </template>
+                  <span class="line-clamp-1">{{ item.title }}</span>
+                </div>
+                <div>{{ item.date }}</div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <p
+        class="
+          text-sm text-right
+          cursor-pointer
+          hover:text-black
+          dark:hover:text-white
+          energy:hover:text-white
+        "
+      >
+        More >
+      </p>
+    </div>
+    <Carousel
+      :settings="settings"
+      :breakpoints="breakpoints"
+      class="lg:hidden w-full"
+    >
+      <Slide v-for="item in sitreps" :key="item">
+        <div class="pr-2 text-sm">
+          <div
+            class="w-[220px] rounded-md shadow-md px-4 py-2"
+            :class="
+              item.locked
+                ? 'bg-slate-200 hover:bg-slate-300/80 dark:bg-slate-700 dark:hover:bg-slate-700/80 energy:bg-gray-700 energy:hover:bg-gray-700/80'
+                : 'cursor-pointer bg-slate-50 hover:bg-slate-100/80 dark:bg-slate-800 dark:hover:bg-slate-800/80 energy:bg-gray-800 energy:hover:bg-gray-800/80'
+            "
+          >
+            <div class="flex flex-col text-left">
+              <div class="flex items-center pb-1">
+                <template v-if="item.locked">
+                  <LockClosedIcon
+                    class="mr-2 h-4 w-4"
+                    aria-hidden="true"
+                  ></LockClosedIcon> </template
+                >{{ item.title }}
+              </div>
+              <div>{{ item.date }}</div>
+            </div>
+          </div>
+        </div>
+      </Slide>
+      <template #addons>
+        <Navigation
+          class="
+            invisible
+            xl:visible
+            bg-mission-blue
+            text-mission-gray
+            dark:bg-slate-300 dark:text-dark-navy
+            energy:bg-gray-800 energy:text-gray-300
+          "
+        />
+      </template>
+    </Carousel>
+  </div>
+</template>
+
+<script>
+import { LockClosedIcon } from "@heroicons/vue/outline";
+import { Carousel, Navigation, Slide } from "vue3-carousel";
+
+const sitreps = [
+  {
+    title: "(U) Sample SITREP TItle",
+    date: "04/24/22, 0100 EDT",
+    locked: false,
+  },
+  {
+    title: "(U) Sample SITREP TItle",
+    date: "04/23/22, 0100 EDT",
+    locked: true,
+  },
+  {
+    title: "(U) Sample SITREP TItle",
+    date: "04/22/22, 0100 EDT",
+    locked: false,
+  },
+  {
+    title: "(U) Sample SITREP TItle",
+    date: "04/21/22, 0100 EDT",
+    locked: false,
+  },
+  {
+    title: "(U) Sample SITREP TItle",
+    date: "04/20/22, 0100 EDT",
+    locked: true,
+  },
+  // { title: "(U) SITREP TItle", date: "04/19/22, 0100 EDT", locked: true },
+];
+
+export default {
+  components: {
+    LockClosedIcon,
+    Carousel,
+    Slide,
+    Navigation,
+  },
+  setup() {
+    //
+    return {
+      sitreps,
+    };
+  },
+  data: () => ({
+    // carousel settings
+    settings: {
+      itemsToShow: 1.75,
+      snapAlign: "start",
+    },
+    breakpoints: {
+      //iPhone XR
+      414: {
+        itemsToShow: 1.65,
+        snapAlign: "start",
+      },
+      //Custom Size
+      500: {
+        itemsToShow: 1.9,
+        snapAlign: "start",
+      },
+      //Custom Size
+      600: {
+        itemsToShow: 2.25,
+        snapAlign: "start",
+      },
+      //Tailwind MD
+      768: {
+        itemsToShow: 2.85,
+        snapAlign: "start",
+      },
+      //iPad Air
+      820: {
+        itemsToShow: 3.25,
+        snapAlign: "start",
+      },
+      //Custom Size
+      950: {
+        itemsToShow: 3.75,
+        snapAlign: "start",
+      },
+    },
+  }),
+};
+</script>
+<style lang="scss">
+.carousel__prev--in-active,
+.carousel__next--in-active {
+  display: none;
+}
+</style>
