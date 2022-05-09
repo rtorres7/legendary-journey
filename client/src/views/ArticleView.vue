@@ -109,8 +109,8 @@
         >
           PDF Version of this product
         </p>
-        <p class="font-bold">Tags</p>
-        <p class="font-medium text-sm">ukraine, protests, putin, invasion</p>
+        <!-- <p class="font-bold">Tags</p>
+        <p class="font-medium text-sm">ukraine, protests, putin, invasion</p> -->
       </div>
     </div>
   </div>
