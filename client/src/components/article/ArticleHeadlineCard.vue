@@ -1,8 +1,8 @@
 <template>
   <div
     class="
-      headline-card
       h-96
+      md:h-108
       lg:h-full
       w-full
       shadow-md
@@ -19,7 +19,7 @@
           p-3
           bg-white bg-opacity-90
           dark:bg-slate-800 dark:bg-opacity-90
-          energy:bg-gray-600 energy:bg-opacity-90
+          energy:bg-gray-800 energy:bg-opacity-90
           shadow-xl
           rounded-t-md
         "

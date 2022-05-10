@@ -3,31 +3,24 @@
     <div
       class="
         flex
-        items-center        
+        items-center
         py-1.5
         pl-2
         pr-3
         rounded-md
-        shadow-sm        
+        shadow-sm
         w-full
-        xl:w-[350px]
+        xl:w-[400px]
         bg-slate-300
         dark:bg-slate-800
         energy:bg-gray-600
-        leading-6        
-        text-sm
-        text-primary
+        leading-6
+        text-sm text-primary
         dark:text-slate-300
       "
     >
       <SearchIcon
-        class="
-          w-6
-          h-6
-          text-slate-800
-          dark:text-slate-300
-          energy:text-gray-300
-        "
+        class="w-6 h-6 text-slate-800 dark:text-slate-300 energy:text-gray-300"
         aria-hidden="true"
       />
       <input
@@ -43,21 +36,10 @@
           energy:text-gray-300
         "
       />
-      <button
-        type="button"
-        @click="toggleModal"
-        class="
-          ml-2
-          text-slate-800
-        ">
+      <button type="button" @click="toggleModal" class="ml-2 text-slate-800">
         <span class="sr-only">Advanced Search</span>
         <ChevronDownIcon
-          class="
-            w-5
-            h-5
-            dark:text-slate-300
-            energy:text-gray-300
-          "
+          class="w-5 h-5 dark:text-slate-300 energy:text-gray-300"
         />
       </button>
       <SearchModal :modalActive="modalActive" @close="toggleModal" />
@@ -66,35 +48,31 @@
 </template>
 
 <script>
-  import { ref } from "vue";
-  import SearchModal from "./SearchModal.vue";
-  import {
+import { ref } from "vue";
+import SearchModal from "./SearchModal.vue";
+import { SearchIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+
+export default {
+  components: {
+    SearchModal,
     SearchIcon,
     ChevronDownIcon,
-  } from "@heroicons/vue/outline";
+  },
 
-  export default {
-    components: {
-      SearchModal,
-      SearchIcon,
-      ChevronDownIcon,
-    },
-    
-    setup() {
-      const modalActive = ref(false);
+  setup() {
+    const modalActive = ref(false);
 
-      const toggleModal = () => {
-        modalActive.value = !modalActive.value;
-      };
+    const toggleModal = () => {
+      modalActive.value = !modalActive.value;
+    };
 
-      return {
-        modalActive,
-        toggleModal,
-      };
-    },
-  };
+    return {
+      modalActive,
+      toggleModal,
+    };
+  },
+};
 </script>
 
 <style lang="scss">
-
 </style>
