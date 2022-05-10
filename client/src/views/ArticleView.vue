@@ -113,7 +113,7 @@
             </router-link>
           </li>
         </ol>
-        <p class="font-bold pt-4">Discussion</p>
+        <CommentForm />
       </div>
     </div>
     <div class="col-span-1 lg:pl-20 lg:pt-10">
@@ -148,8 +148,12 @@
 </template>
 
 <script>
+import CommentForm from "@/components/article/CommentForm.vue"
 export default {
   name: "ArticlePageView",
+  components: {
+    CommentForm,
+  }
 };
 </script>
 
