@@ -7,10 +7,9 @@
       md:max-w-xl
       rounded-lg
       bg-slate-50
-      hover:bg-slate-200
-      hover:underline
+      hover:bg-slate-200/80 hover:underline
       dark:bg-slate-800 dark:hover:bg-slate-700/80
-      energy:bg-gray-600 energy:hover:bg-gray-700
+      energy:bg-gray-800 energy:hover:bg-gray-700/80
       shadow-md
     "
   >

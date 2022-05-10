@@ -4,46 +4,51 @@
       cursor-pointer
       rounded-lg
       bg-slate-50
-      hover:bg-slate-200
-      hover:underline
+      hover:bg-slate-200 hover:underline
       dark:bg-slate-800 dark:hover:bg-slate-700/80
-      energy:bg-gray-600 energy:hover:bg-gray-700
+      energy:bg-gray-800 energy:hover:bg-gray-700/80
       shadow-md
       text-left
     "
-    :class="
-      carousel === true ? 'h-64' : ''
-    "
+    :class="carousel === true ? 'h-64' : ''"
   >
     <div class="p-6 flex flex-col justify-between h-full">
       <div class="flex flex-wrap gap-y-2 mb-2 lg:mb-4">
         <!-- <template v-for="index in 2" :key="index"> -->
-            <div class="
-                flex-col 
-                bg-gray-200 
-                text-gray-800 
-                text-xs
-                font-medium 
-                mr-2 px-2.5 py-1 
-                rounded-3xl
-                shadow-lg 
-                dark:bg-gray-600 dark:text-gray-300
-                energy:bg-gray-700/40 energy:text-energy-yellow
-            "
-            >#{{article.tag1}}</div>
-            <div class="
-                flex-col 
-                bg-gray-200 
-                text-gray-800 
-                text-xs
-                font-medium 
-                mr-2 px-2.5 py-1 
-                rounded-3xl
-                shadow-lg 
-                dark:bg-gray-600 dark:text-gray-300
-                energy:bg-gray-700/40 energy:text-energy-yellow
-            "
-            >#{{article.tag2}}</div>
+        <div
+          class="
+            flex-col
+            bg-gray-200
+            text-gray-800 text-xs
+            font-medium
+            mr-2
+            px-2.5
+            py-1
+            rounded-3xl
+            shadow-lg
+            dark:bg-gray-600 dark:text-gray-300
+            energy:bg-gray-700/40 energy:text-energy-yellow
+          "
+        >
+          #{{ article.tag1 }}
+        </div>
+        <div
+          class="
+            flex-col
+            bg-gray-200
+            text-gray-800 text-xs
+            font-medium
+            mr-2
+            px-2.5
+            py-1
+            rounded-3xl
+            shadow-lg
+            dark:bg-gray-600 dark:text-gray-300
+            energy:bg-gray-700/40 energy:text-energy-yellow
+          "
+        >
+          #{{ article.tag2 }}
+        </div>
         <!-- </template> -->
       </div>
       <h5
@@ -58,11 +63,11 @@
           line-clamp-3
         "
       >
-        {{article.title}}
+        {{ article.title }}
       </h5>
 
       <p class="text-sm mb-2 lg:mb-4 line-clamp-3">
-        {{article.summary}}
+        {{ article.summary }}
       </p>
       <p
         class="
@@ -72,7 +77,7 @@
           text-sm
         "
       >
-        {{article.date}}
+        {{ article.date }}
       </p>
     </div>
   </div>
@@ -87,7 +92,7 @@ export default {
       type: Boolean,
     },
     article: Object,
-  }
+  },
 };
 </script>
 <style lang="scss">

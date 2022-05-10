@@ -116,7 +116,7 @@
           </div>
         </div>
         <div class="hidden lg:block">
-          <div class="ml-4 flex items-center md:ml-6">
+          <div class="ml-4 flex items-center md:ml-6 lg:ml-3">
             <SearchBar />
             <div class="text-sm leading-6 pl-6 pr-3 font-semibold">
               <ul class="flex space-x-3 xl:space-x-6">
@@ -258,8 +258,8 @@
                       mt-2
                       w-40
                       rounded-md
-                      shadow-xl
-                      py-1
+                      shadow-2xl
+                      py-2
                       ring-1 ring-black ring-opacity-5
                       focus:outline-none
                       text-sm text-slate-700
@@ -344,8 +344,8 @@
                       mt-2
                       w-40
                       rounded-md
-                      shadow-xl
-                      py-1
+                      shadow-2xl
+                      py-2
                       ring-1 ring-black ring-opacity-5
                       focus:outline-none
                       text-sm text-slate-700
@@ -362,7 +362,7 @@
                         :href="item.href"
                         class="
                           py-1
-                          px-2
+                          px-3
                           hover:bg-slate-200/80
                           dark:hover:bg-slate-600/80
                           energy:hover:bg-gray-600/80
