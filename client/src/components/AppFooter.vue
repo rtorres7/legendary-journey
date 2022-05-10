@@ -4,7 +4,9 @@
       class="max-w-8xl mx-auto px-4 flex justify-center lg:justify-between py-8"
     >
       <div class="hidden lg:flex h-full items-center">
-        <img class="h-14 w-14" src="@/assets/NCTCSealcolor.png" />
+        <router-link class="h-full" to="/">
+          <img class="h-full w-14" src="@/assets/NCTCSealcolor.png" />
+        </router-link>
         <div
           class="
             ml-4
@@ -21,9 +23,12 @@
       </div>
       <ul
         class="
-          flex
+          flex flex-col
+          md:flex-row
           self-center
-          space-x-6
+          space-y-3
+          text-center
+          md:text-left md:space-y-0 md:space-x-6
           text-sm text-slate-300
           energy:text-gray-300
         "
@@ -38,6 +43,8 @@
                 max-w-xs
                 flex
                 items-center
+                m-auto
+                md:m-0
                 hover:text-white
                 focus:outline-none
                 focus:ring-2
@@ -107,6 +114,8 @@
                 max-w-xs
                 flex
                 items-center
+                m-auto
+                md:m-0
                 hover:text-white
                 focus:outline-none
                 focus:ring-2
