@@ -18,15 +18,8 @@
     <div class="hidden h-full lg:flex flex-col justify-between">
       <div class="lg:flex flex-col justify-between text-sm">
         <template v-for="item in sitreps" :key="item">
-          <div class="hover:underline mb-4">
-            <div
-              class="rounded-md shadow-md px-4 py-4"
-              :class="
-                item.locked
-                  ? 'bg-slate-200 hover:bg-slate-300/80 dark:bg-slate-700 dark:hover:bg-slate-700/80 energy:bg-gray-700 energy:hover:bg-gray-700/80'
-                  : 'cursor-pointer bg-slate-50 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 energy:bg-gray-800 energy:hover:bg-gray-700/80'
-              "
-            >
+          <div class="mb-4">
+            <BaseCard class="px-4 py-4" :locked="item.locked">
               <div class="flex flex-col">
                 <div class="flex items-center pb-1">
                   <template v-if="item.locked">
@@ -39,7 +32,7 @@
                 </div>
                 <div>{{ item.date }}</div>
               </div>
-            </div>
+            </BaseCard>
           </div>
         </template>
       </div>
@@ -103,6 +96,7 @@
 <script>
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
+import BaseCard from "@/layout/BaseCard.vue";
 
 const sitreps = [
   {
@@ -139,6 +133,7 @@ export default {
     Carousel,
     Slide,
     Navigation,
+    BaseCard,
   },
   setup() {
     //
@@ -187,9 +182,6 @@ export default {
   }),
 };
 </script>
-<style lang="scss">
-.carousel__prev--in-active,
-.carousel__next--in-active {
-  display: none;
-}
+<style lang="scss" scoped>
+// Empty on Purpose
 </style>

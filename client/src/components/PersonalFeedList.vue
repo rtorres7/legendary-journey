@@ -1,5 +1,9 @@
 <template>
   <!-- Because You Were Interested Section -->
+  <!-- <PersonalSection
+    :title="'Because you were interested in Ukraine and COVID19'"
+    :items="articles"
+  /> -->
   <div class="mb-4">
     <div class="hidden lg:block font-semibold mb-4">
       Because you were interested in Ukraine and COVID19
@@ -137,6 +141,7 @@
 <script>
 import { Carousel, Slide } from "vue3-carousel";
 import PersonalCard from "@/components/PersonalCard.vue";
+//import PersonalSection from "@/components/PersonalSection.vue";
 
 const articles = [
   {
@@ -193,6 +198,7 @@ export default {
     Carousel,
     Slide,
     PersonalCard,
+    //PersonalSection,
   },
   setup() {
     return {
