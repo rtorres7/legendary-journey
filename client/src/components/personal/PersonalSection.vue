@@ -49,7 +49,7 @@
 
 <script>
 import { Carousel, Slide } from "vue3-carousel";
-import PersonalCard from "@/components/PersonalCard.vue";
+import PersonalCard from "./PersonalCard.vue";
 
 export default {
   name: "PersonalFeedList",

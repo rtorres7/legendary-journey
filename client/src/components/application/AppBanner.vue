@@ -379,7 +379,7 @@
                           flex
                           cursor-pointer
                           py-1
-                          px-2
+                          px-3
                           hover:bg-slate-200/80
                           dark:hover:bg-slate-600/80
                           energy:hover:bg-gray-600/80
@@ -918,7 +918,7 @@
 
 <script>
 import { ref, watch } from "vue";
-import SearchBar from "./SearchBar.vue";
+import SearchBar from "./search/SearchBar.vue";
 import {
   Dialog,
   DialogOverlay,

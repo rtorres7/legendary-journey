@@ -9,7 +9,7 @@
       bg-cover
       cursor-pointer
       hover:opacity-90 hover:underline
-      rounded-xl
+      rounded-b-lg
     "
     :style="{ background: `url(${selectedImage})`, backgroundSize: 'cover' }"
   >
@@ -21,7 +21,6 @@
           dark:bg-slate-800 dark:bg-opacity-90
           energy:bg-gray-800 energy:bg-opacity-90
           shadow-xl
-          rounded-t-md
         "
       >
         <h1

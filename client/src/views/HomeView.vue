@@ -73,7 +73,7 @@
   </div>
   <!-- Personal Section -->
   <div class="pt-4">
-    <PersonalFeedList />
+    <PersonalFeed />
   </div>
   <!-- <ScrollToTopBtn /> -->
 </template>
@@ -83,9 +83,9 @@ import * as dayjs from "dayjs";
 import { ref } from "vue";
 import ArticleHeadlineCard from "@/components/article/ArticleHeadlineCard";
 import ArticleCard from "@/components/article/ArticleCard";
-import PersonalFeedList from "@/components/PersonalFeedList.vue";
-import SitrepList from "@/components/SitrepList.vue";
-import ThreatList from "@/components/ThreatList.vue";
+import PersonalFeed from "@/components/personal/PersonalFeed.vue";
+import SitrepList from "@/components/sitrep/SitrepList.vue";
+import ThreatList from "@/components/threat/ThreatList.vue";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 export default {
@@ -95,7 +95,7 @@ export default {
     SitrepList,
     ArticleCard,
     ThreatList,
-    PersonalFeedList,
+    PersonalFeed,
     // ScrollToTopBtn,
   },
   setup() {

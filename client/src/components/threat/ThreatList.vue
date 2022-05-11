@@ -45,7 +45,7 @@
 </template>
 <script>
 import { Carousel, Navigation, Slide } from "vue3-carousel";
-import ThreatCard from "./threat/ThreatCard";
+import ThreatCard from "./ThreatCard";
 
 const threats = [
   {
