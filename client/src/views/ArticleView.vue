@@ -2,6 +2,10 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <div class="col-span-2">
       <div class="flex flex-col pb-8 space-y-3">
+        <div class="flex space-x-2">
+          <PrinterIcon class="h-5 w-5 cursor-pointer"/>
+          <MailIcon class="h-5 w-5 cursor-pointer"/>
+        </div>
         <p class="font-bold text-sm lg:text-md uppercase">article</p>
         <h1
           class="
@@ -113,46 +117,63 @@
             </router-link>
           </li>
         </ol>
-        <CommentForm />
+        
       </div>
+      <CommentsList :comments="comments"/>
+      <CommentForm @comment-submitted="addComment"/>
     </div>
     <div class="col-span-1 lg:pl-20 lg:pt-10">
       <div class="flex flex-col pb-8 space-y-3">
-        <p class="font-bold">Attachments</p>
-        <router-link to="/article">
-          <p
-            class="
-              border-b-4 border-slate-400
-              dark:border-teal-300
-              energy:border-energy-yellow
-              hover:underline
-              pb-4
-              text-sm
-            "
-          >
-            PDF Version of this product
-          </p>
+        <div class="border-b-4 border-slate-400 dark:border-teal-300 energy:border-energy-yellow">
+          <p class="font-bold">Attachments</p>
+          <router-link to="/article">
+            <p class="hover:underline mb-4 text-sm">PDF Version of this product</p>
           </router-link>
-        <p class="font-bold">Related Products</p>
-        <router-link to="/article">
-          <p class="hover:underline text-sm">(U) This is a related product title</p>
-        </router-link>
-        <router-link to="/article">
-          <p class="hover:underline text-sm">(U) Sample title of another related product</p>
-        </router-link>
+        </div>
+        <div class="border-b-4 border-slate-400 dark:border-teal-300 energy:border-energy-yellow">
+          <p class="font-bold">Related Products</p>
+          <div class="mb-4">
+            <router-link to="/article">
+              <p class="hover:underline text-sm">(U) This is a related product title</p>
+            </router-link>
+            <router-link to="/article">
+              <p class="hover:underline text-sm">(U) Sample title of another related product</p>
+            </router-link>
+          </div>
+        </div>
         <!-- <p class="font-bold">Tags</p>
         <p class="font-medium text-sm">ukraine, protests, putin, invasion</p> -->
+        <div>
+          <p class="font-bold">Metrics</p>
+          <p>Unique Readers (1792)</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CommentForm from "@/components/article/CommentForm.vue"
+import CommentForm from "@/components/comments/CommentForm.vue"
+import CommentsList from "@/components/comments/CommentsList.vue"
+import { PrinterIcon, MailIcon } from "@heroicons/vue/outline"
+
 export default {
   name: "ArticlePageView",
   components: {
     CommentForm,
+    CommentsList,
+    PrinterIcon,
+    MailIcon
+  },
+  data() {
+    return {
+      comments: []
+    }
+  },
+  methods: {
+    addComment(comment) {
+      this.comments.push(comment)
+    }
   }
 };
 </script>
