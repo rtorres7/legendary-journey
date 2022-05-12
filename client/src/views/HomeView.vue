@@ -73,7 +73,12 @@
   </div>
   <!-- Personal Section -->
   <div class="pt-4">
-    <PersonalFeed />
+    <PersonalSection
+      :title="'Because you were interested in Ukraine and COVID19'"
+      :items="personalArticles"
+    />
+    <PersonalSection :title="'Your Favorites'" :items="personalArticles" />
+    <PersonalSection :title="'Recently Viewed'" :items="personalArticles" />
   </div>
   <!-- <ScrollToTopBtn /> -->
 </template>
@@ -83,10 +88,59 @@ import * as dayjs from "dayjs";
 import { ref } from "vue";
 import ArticleHeadlineCard from "@/components/article/ArticleHeadlineCard";
 import ArticleCard from "@/components/article/ArticleCard";
-import PersonalFeed from "@/components/personal/PersonalFeed.vue";
+import PersonalSection from "@/components/personal/PersonalSection.vue";
 import SitrepList from "@/components/sitrep/SitrepList.vue";
 import ThreatList from "@/components/threat/ThreatList.vue";
 import { CalendarIcon } from "@heroicons/vue/outline";
+
+const personalArticles = [
+  {
+    id: 1,
+    title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
+    summary:
+      "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
+    tag1: "Russia",
+    tag2: "Ukraine",
+    date: "24 April 2022",
+  },
+  {
+    id: 2,
+    title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
+    summary:
+      "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
+    tag1: "COVID19",
+    tag2: "C.D.C.",
+    date: "23 April 2022",
+  },
+  {
+    id: 3,
+    title:
+      "(U) Coronavirus Has Infected Most Americans at Least Once, C.D.C. Says",
+    summary:
+      "(U) By February 2022, nearly 60 percent of the population had signs of exposure, almost double the proportion seen in December 2021, the agency’s data showed.",
+    tag1: "COVID19",
+    tag2: "C.D.C.",
+    date: "22 April 2022",
+  },
+  {
+    id: 4,
+    title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
+    summary:
+      "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
+    tag1: "Russia",
+    tag2: "Ukraine",
+    date: "21 April 2022",
+  },
+  {
+    id: 5,
+    title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
+    summary:
+      "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
+    tag1: "COVID19",
+    tag2: "C.D.C.",
+    date: "22 April 2022",
+  },
+];
 
 export default {
   components: {
@@ -95,12 +149,13 @@ export default {
     SitrepList,
     ArticleCard,
     ThreatList,
-    PersonalFeed,
+    PersonalSection,
     // ScrollToTopBtn,
   },
   setup() {
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
     return {
+      personalArticles,
       today,
     };
   },
