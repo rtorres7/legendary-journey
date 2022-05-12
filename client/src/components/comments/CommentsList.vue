@@ -1,17 +1,17 @@
 <template>
-    <div class="bg-slate-50 dark:bg-slate-800 energy:bg-gray-600 rounded-lg shadow-md p-4 mt-8">
-            <p class="font-bold mb-4">Discussion:</p>
+    <div>
+            <p class="font-semibold mb-4">Discussion:</p>
             <div v-if="comments.length">
                 <div v-for="(comment, index) in comments" :key="index" class="mb-4">
-                    <div class="flex space-x-2">
-                        <p class="font-bold">Jane E. Doe</p>
+                    <div class="flex space-x-2 text-sm">
+                        <p class="font-medium">Jane E. Doe</p>
                         <p class="">25 May 2022</p>
                     </div>
                     <p>(U) {{comment.comment}}</p>
                 </div>
             </div>
             <div v-else>
-                <p class="italic">No comments yet</p>
+                <p class="italic text-sm">No comments yet</p>
             </div>
         </div>
 </template>

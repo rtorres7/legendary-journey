@@ -1,24 +1,15 @@
 <template>
-    <form @submit.prevent="onSubmit"
-        class="
-            bg-slate-50 dark:bg-slate-800 energy:bg-gray-600 
-            mb-8
-            mt-8
-            p-4 pt-8 
-            rounded-lg 
-            shadow-md 
-            text-left
-        "
-    >
-        <label for="comment" class="inline-block font-bold pb-4">Leave a Comment:</label>
+    <form @submit.prevent="onSubmit" class="mb-8 text-left">
+        <label for="comment" class="inline-block font-semibold pb-4">Leave a Comment:</label>
         <textarea  
             id="comment"
             class="
                 bg-transparent 
-                border-b-2 border-slate-400 
+                border-2 border-slate-400
                 block
                 mb-4
                 p-2
+                resize-none
                 w-full
             " 
             maxlength="4000"
@@ -28,20 +19,31 @@
         </textarea>
         <input id="acknowledgement" class="cursor-pointer" required type="checkbox" v-model="acknowledgement">
         <label for="acknowledgement" class="p-2 text-sm">I acknowledge that my comment is professional in nature and adheres to the commenting guidelines.</label>
-        <select id="classification" class="block bg-transparent border-b-2 border-slate-400 cursor-pointer mt-8 text-sm" required v-model="classification">
+        <select id="classification" 
+            class="
+                block 
+                bg-transparent 
+                border-b-2 border-slate-400
+                cursor-pointer 
+                mt-8 
+                text-sm
+            " 
+            required v-model="classification"
+        >
             <option value="" disabled hidden>Please Classify...</option>
             <option value="U" class="dark:text-black energy:text-black">Unclassified</option>
             <option value="notU" class="dark:text-black energy:text-black">Not Unclassified</option>
         </select>
         <input type="submit" value="Submit Comment"
             class="
-                border-2 border-slate-400 
+                bg-mission-blue dark:bg-slate-700/80 energy:bg-slate-700/80
                 cursor-pointer 
-                hover:bg-slate-200 dark:hover:bg-slate-700/80 energy:hover:bg-gray-700
+                hover:opacity-80 
                 mt-8 
                 p-2 
                 rounded-md 
                 shadow-md 
+                text-white
                 text-sm
             "
         >
