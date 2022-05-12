@@ -1,13 +1,9 @@
 <template>
   <div class="pr-4 lg:pr-0">
-    <div
+    <BaseCard
+      :locked="threat.locked"
       class="w-[275px] lg:w-full hover:underline rounded-lg shadow-md"
-      :class="[
-        threat.locked
-          ? 'bg-slate-200 hover:bg-slate-300/80 dark:bg-slate-700 dark:hover:bg-slate-700/80 energy:bg-gray-700 energy:hover:bg-gray-700/80'
-          : 'cursor-pointer bg-slate-50 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 energy:bg-gray-800 energy:hover:bg-gray-700/80',
-        carousel === true ? 'h-36' : '',
-      ]"
+      :class="carousel === true ? 'h-36' : ''"
     >
       <div class="h-36 p-4 flex flex-col justify-between text-sm text-left">
         <div class="pb-2">
@@ -30,14 +26,17 @@
           {{ threat.date }}
         </p>
       </div>
-    </div>
+    </BaseCard>
   </div>
 </template>
 <script>
 import { LockClosedIcon } from "@heroicons/vue/outline";
+import BaseCard from "@/layout/BaseCard.vue";
+
 export default {
   components: {
     LockClosedIcon,
+    BaseCard,
   },
   props: {
     carousel: {

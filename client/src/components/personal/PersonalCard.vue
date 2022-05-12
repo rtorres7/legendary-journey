@@ -1,15 +1,6 @@
 <template>
-  <div
-    class="
-      cursor-pointer
-      rounded-lg
-      bg-slate-50
-      hover:bg-slate-200 hover:underline
-      dark:bg-slate-800 dark:hover:bg-slate-700/80
-      energy:bg-gray-800 energy:hover:bg-gray-700/80
-      shadow-md
-      text-left
-    "
+  <BaseCard
+    class="hover:underline text-left"
     :class="carousel === true ? 'h-64' : ''"
   >
     <div class="p-6 flex flex-col justify-between h-full">
@@ -80,12 +71,15 @@
         {{ article.date }}
       </p>
     </div>
-  </div>
+  </BaseCard>
 </template>
 
 <script>
+import BaseCard from "@/layout/BaseCard.vue";
 export default {
-  name: "PersonalCard",
+  components: {
+    BaseCard,
+  },
   props: {
     carousel: {
       default: false,
@@ -95,6 +89,6 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 /* Empty on Purpose */
 </style>

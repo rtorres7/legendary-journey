@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import AppBanner from "@/components/AppBanner.vue";
-import AppFooter from "@/components/AppFooter.vue";
+import AppBanner from "@/components/application/AppBanner.vue";
+import AppFooter from "@/components/application/AppFooter.vue";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
 
 export default {

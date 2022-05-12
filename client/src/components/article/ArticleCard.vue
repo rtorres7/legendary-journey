@@ -1,18 +1,5 @@
 <template>
-  <div
-    class="
-      cursor-pointer
-      flex flex-col
-      lg:flex-row
-      md:max-w-xl
-      rounded-lg
-      bg-slate-50
-      hover:bg-slate-200/80 hover:underline
-      dark:bg-slate-800 dark:hover:bg-slate-700/80
-      energy:bg-gray-800 energy:hover:bg-gray-700/80
-      shadow-md
-    "
-  >
+  <BaseCard class="flex flex-col lg:flex-row md:max-w-xl hover:underline">
     <router-link to="/article">
       <div class="p-6 flex flex-col justify-start">
         <h1
@@ -65,13 +52,15 @@
       :src="selectedImage"
       alt=""
     />
-  </div>
+  </BaseCard>
 </template>
 
 <script>
+import BaseCard from "@/layout/BaseCard.vue";
 export default {
-  name: "ArticleCard",
-
+  components: {
+    BaseCard,
+  },
   data() {
     return {
       images: [
