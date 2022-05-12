@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap md:flex-nowrap md:space-x-10 lg:space-x-32 mb-8">
+  <div class="flex flex-wrap md:flex-nowrap justify-between mb-8">
     <div class="md:basis-9/12 flex flex-col space-y-4">
       <div class="flex space-x-2">
         <PrinterIcon class="h-5 w-5 cursor-pointer"/>
@@ -84,17 +84,13 @@
           <ChevronDownIcon class="h-4 w-4" :class='open ? "transform rotate-180" : ""' />
         </DisclosureButton>
         <DisclosurePanel>
-          <div class="ml-4">
-            <div class="flex flex-wrap text-sm space-x-4">
-              <p><span class="font-semibold">Produced By: </span>NCTC</p>
-              <p><span class="font-semibold">Product Type: </span>NexCT Article</p>
-              <p><span class="font-semibold">Document Number: </span>NexCT2022-08088</p>
-            </div>
-            <div class="flex flex-wrap text-sm space-x-4">
-              <p><span class="font-semibold">Posted: </span>25 Apr 2022 00:01:15</p>
-              <p><span class="font-semibold">Publication Date: </span>25 Apr 2022</p>
-            </div>
-            <p class="text-sm"><span class="font-semibold">Contact: </span>(U) Produced by the Test</p>
+          <div class="ml-4 space-y-2 text-sm">
+            <p><span class="font-semibold">Produced By: </span>NCTC</p>
+            <p><span class="font-semibold">Product Type: </span>NexCT Article</p>
+            <p><span class="font-semibold">Document Number: </span>NexCT2022-08088</p>
+            <p><span class="font-semibold">Posted: </span>25 Apr 2022 00:01:15</p>
+            <p><span class="font-semibold">Publication Date: </span>25 Apr 2022</p>
+            <p><span class="font-semibold">Contact: </span>(U) Produced by the Test</p>
           </div>
         </DisclosurePanel>
       </Disclosure>
@@ -104,7 +100,7 @@
           <ChevronDownIcon class="h-4 w-4" :class='open ? "transform rotate-180" : ""' />
         </DisclosureButton>
         <DisclosurePanel>
-          <ol class="list-decimal list-inside ml-4">
+          <ol class="list-decimal list-inside ml-4 space-y-2">
             <li v-for="index in 2" :key="index" class="text-sm">
               <router-link to="/article" class="hover:underline">
                 (U) This would be the title with a link to the source being credited for the creation of this article.

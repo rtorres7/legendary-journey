@@ -36,7 +36,7 @@
         </select>
         <input type="submit" value="Submit Comment"
             class="
-                bg-mission-blue dark:bg-slate-700/80 energy:bg-slate-700/80
+                bg-mission-blue dark:bg-slate-700/80 energy:bg-gray-700/80
                 cursor-pointer 
                 hover:opacity-80 
                 mt-8 
