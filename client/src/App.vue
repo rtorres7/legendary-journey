@@ -8,8 +8,10 @@
     ```
   -->
   <div class="min-h-full">
+    <SkipLinks :targets="$refs" />
     <AppBanner />
     <main
+      role="main"
       class="
         text-slate-800
         bg-mission-gray
@@ -18,6 +20,7 @@
       "
     >
       <div class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8">
+        <div ref="skipLink" tabindex="-1">Main content</div>
         <router-view></router-view>
       </div>
     </main>
@@ -29,12 +32,19 @@
 import AppBanner from "@/components/application/AppBanner.vue";
 import AppFooter from "@/components/application/AppFooter.vue";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
+import SkipLinks from "@/components/SkipLinks";
 
 export default {
   components: {
     AppBanner,
     AppFooter,
     // ScrollToTopBtn,
+    SkipLinks,
+  },
+  watch: {
+    $route() {
+      this.$refs.skipLink.focus();
+    }
   },
   setup() {
     return {};
