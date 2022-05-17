@@ -7,8 +7,8 @@
     <body class="h-full">
     ```
   -->
-  <div class="min-h-full">
-    <SkipLinks :targets="$refs" />
+  <div class="min-h-full" ref="topOfApp" tabindex="-1">
+    <button @click="skipToMain" class="skipLink">Skip to main content</button>
     <AppBanner />
     <main
       role="main"
@@ -19,8 +19,7 @@
         energy:text-gray-300 energy:bg-gray-900
       "
     >
-      <div class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8">
-        <div ref="skipLink" tabindex="-1">Main content</div>
+      <div class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8" ref="mainContent" tabindex="-1">
         <router-view></router-view>
       </div>
     </main>
@@ -32,18 +31,16 @@
 import AppBanner from "@/components/application/AppBanner.vue";
 import AppFooter from "@/components/application/AppFooter.vue";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
-import SkipLinks from "@/components/SkipLinks";
 
 export default {
   components: {
     AppBanner,
     AppFooter,
     // ScrollToTopBtn,
-    SkipLinks,
   },
   watch: {
     $route() {
-      this.$refs.skipLink.focus();
+      this.$refs.topOfApp.focus();
     }
   },
   setup() {
@@ -69,6 +66,11 @@ export default {
       //do nothing
     }
   },
+  methods: {
+    skipToMain() {
+      this.$refs.mainContent.focus();
+    }
+  },
 };
 </script>
 <style lang="scss">
@@ -92,5 +94,22 @@ html {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.skipLink{
+    &:link,
+    &:visited {
+        color: black;
+    }
+    position: absolute;
+    left: -9999px;
+    top: 20px;
+    z-index: 1000;
+    &:active, 
+    &:focus {
+        background: white;
+        left: 20px;
+        padding: 10px;
+    }
 }
 </style>
