@@ -7,9 +7,11 @@
     <body class="h-full">
     ```
   -->
-  <div class="min-h-full">
+  <div class="min-h-full" ref="topOfApp" tabindex="-1">
+    <button @click="skipToMain" class="skipLink">Skip to main content</button>
     <AppBanner />
     <main
+      role="main"
       class="
         text-slate-800
         bg-mission-gray
@@ -17,7 +19,7 @@
         energy:text-gray-300 energy:bg-gray-900
       "
     >
-      <div class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8" ref="mainContent" tabindex="-1">
         <router-view></router-view>
       </div>
     </main>
@@ -35,6 +37,11 @@ export default {
     AppBanner,
     AppFooter,
     // ScrollToTopBtn,
+  },
+  watch: {
+    $route() {
+      this.$refs.topOfApp.focus();
+    }
   },
   setup() {
     return {};
@@ -57,6 +64,11 @@ export default {
         break;
       default:
       //do nothing
+    }
+  },
+  methods: {
+    skipToMain() {
+      this.$refs.mainContent.focus();
     }
   },
 };
@@ -82,5 +94,22 @@ html {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.skipLink{
+    &:link,
+    &:visited {
+        color: black;
+    }
+    position: absolute;
+    left: -9999px;
+    top: 20px;
+    z-index: 1000;
+    &:active, 
+    &:focus {
+        background: white;
+        left: 20px;
+        padding: 10px;
+    }
 }
 </style>
