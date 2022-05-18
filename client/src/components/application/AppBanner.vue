@@ -138,21 +138,51 @@
                   </div>
                 </li>
                 <li>
-                  <div
-                    class="
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Regions<ChevronDownIcon
-                      class="h-3 w-3 ml-1"
-                      aria-hidden="true"
-                    />
-                  </div>
+                  <Menu>
+                    <!-- <MenuButton> -->
+                      <MenuButton
+                        class="
+                          flex
+                          items-center
+                          hover:text-amber-300
+                          dark:hover:text-teal-400
+                          energy:hover:text-energy-yellow
+                        "
+                        tabindex="0"
+                      >
+                        Regions<ChevronDownIcon
+                          class="h-3 w-3 ml-1"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                    <!-- </MenuButton> -->
+                    <MenuItems   class="
+                      origin-top-right
+                      absolute
+                      right-0
+                      mt-2
+                      w-40
+                      rounded-md
+                      shadow-2xl
+                      py-2
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
+                      text-sm text-slate-700
+                      font-semibold
+                      bg-mission-gray
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                      energy:text-gray-300
+                    ">
+                      <MenuItem>
+                        <a>hello</a>
+                      </MenuItem>
+                      <MenuItem>
+                        <RegionsMap/>
+                      </MenuItem>
+                    </MenuItems>
+                  </Menu>
                 </li>
                 <li>
                   <div
@@ -919,6 +949,7 @@
 <script>
 import { ref, watch } from "vue";
 import SearchBar from "./search/SearchBar.vue";
+import RegionsMap from "@/components/regions/RegionsMap.vue";
 import {
   Dialog,
   DialogOverlay,
@@ -966,6 +997,7 @@ const themeOptions = ["light", "dark", "energy", "system"];
 export default {
   components: {
     SearchBar,
+    RegionsMap,
     Dialog,
     DialogOverlay,
     Listbox,
