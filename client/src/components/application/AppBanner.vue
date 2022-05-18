@@ -29,6 +29,7 @@
         persequeris. No has nihil electram.
       </p>
       <a
+        aria-label="Remove system message"
         @click="removeSystemMessage"
         class="m-4 text-slate-300 hover:text-white"
       >
@@ -99,7 +100,7 @@
       <div class="grid lg:flex items-center lg:justify-between h-16">
         <div class="hidden lg:flex h-full items-center">
           <router-link class="h-full" to="/">
-            <img class="h-full w-18" src="@/assets/NCTCSealcolor.png" alt="NCTC Seal. Link to homepage." />
+            <img class="h-full w-18" src="@/assets/NCTCSealcolor.png" alt="NCTC. Seal. Link to homepage." />
           </router-link>
           <div
             class="
@@ -222,7 +223,7 @@
                         : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
                     "
                   >
-                    <span class="sr-only">Open user menu</span>
+                    <span class="sr-only">Open menu for toggling color palettes.</span>
                     <template v-if="selectedTheme === 'dark'">
                       <MoonIcon class="h-6 w-6" aria-hidden="true" />
                     </template>

@@ -19,7 +19,7 @@
           <img
             class="lg:hidden float-right w-auto h-28 rounded-lg px-1"
             :src="selectedImage"
-            alt=""
+            alt="Thumbnail for article"
           />
           Ut est iusto decore nonumy, cum no mollis saperet. Esse percipitur id
           sea, mea no dicam aperiri. Ex assum quando aliquip his, vero porro

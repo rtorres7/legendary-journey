@@ -37,8 +37,7 @@
           energy:text-gray-300
         "
       />
-      <button type="button" @click="toggleModal" class="ml-2 text-slate-800" aria-label="activate to open advanced search">
-        <span class="sr-only">Advanced Search</span>
+      <button type="button" @click="toggleModal" class="ml-2 text-slate-800" aria-label="advanced search">
         <ChevronDownIcon
           class="w-5 h-5 dark:text-slate-300 energy:text-gray-300"
         />
