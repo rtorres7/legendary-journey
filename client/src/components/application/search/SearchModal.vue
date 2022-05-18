@@ -69,7 +69,7 @@
               aria-hidden="true"
             />
             <input
-              aria-label="Search"
+              aria-label="Search field. Enter text to search"
               class="
                 inline-block
                 focus-visible:outline-none
