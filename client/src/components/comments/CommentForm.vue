@@ -19,7 +19,7 @@
         </textarea>
         <input id="acknowledgement" class="cursor-pointer" required type="checkbox" v-model="acknowledgement">
         <label for="acknowledgement" class="p-2 text-sm">I acknowledge that my comment is professional in nature and adheres to the commenting guidelines.</label>
-        <select id="classification" 
+        <select id="classification" aria-label="Please select classification for your comment."
             class="
                 block 
                 bg-transparent 

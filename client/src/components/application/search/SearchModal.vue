@@ -68,7 +68,10 @@
               "
               aria-hidden="true"
             />
+            <label id="advSearchLabel" for="advSearch" class="sr-only">Search</label>
             <input
+              aria-labelledBy="advSearchLabel"
+              id="advSearch"
               class="
                 inline-block
                 focus-visible:outline-none

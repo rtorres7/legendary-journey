@@ -99,7 +99,7 @@
       <div class="grid lg:flex items-center lg:justify-between h-16">
         <div class="hidden lg:flex h-full items-center">
           <router-link class="h-full" to="/">
-            <img class="h-full w-18" src="@/assets/NCTCSealcolor.png" />
+            <img class="h-full w-18" src="@/assets/NCTCSealcolor.png" alt="NCTC Seal. Link to homepage." />
           </router-link>
           <div
             class="
