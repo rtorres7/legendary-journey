@@ -5,7 +5,7 @@
     >
       <div class="hidden lg:flex h-full items-center">
         <router-link class="h-full" to="/">
-          <img class="h-full w-14" src="@/assets/NCTCSealcolor.png" />
+          <img class="h-full w-14" src="@/assets/NCTCSealcolor.png" alt="NCTC seal. Link to top of the homepage" />
         </router-link>
         <div
           class="

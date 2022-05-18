@@ -13,6 +13,7 @@
     "
     :style="{ background: `url(${selectedImage})`, backgroundSize: 'cover' }"
   >
+    <span role="img" aria-label="Thumbnail for headline article"></span>
     <router-link to="/article">
       <div
         class="
