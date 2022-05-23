@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap md:flex-nowrap justify-between mb-8">
+  <div class="flex flex-wrap md:flex-nowrap justify-between md:space-x-10 lg:space-x-0 mb-8">
     <div class="md:basis-9/12 flex flex-col space-y-4">
       <div class="flex space-x-2">
         <PrinterIcon class="h-5 w-5 cursor-pointer"/>
@@ -12,7 +12,7 @@
       </h1>
       <div class="flex space-x-4 text-sm md:text-md">
         <p>PUBLISHED WED, APR 27, 2022</p>
-        <p> ● </p>
+        <p aria-hidden="true"> ● </p>
         <p>John E. Doe</p>
       </div>
       <img

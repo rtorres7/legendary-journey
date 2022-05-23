@@ -186,7 +186,7 @@
                 xl:ml-4 xl:pl-4
               "
             >
-              <button
+              <button disabled
                 type="button"
                 class="
                   p-1
