@@ -138,9 +138,8 @@
                   </div>
                 </li>
                 <li>
-                  <Menu>
-                    <!-- <MenuButton> -->
-                      <MenuButton
+                  <Popover class="relative">
+                      <PopoverButton
                         class="
                           flex
                           items-center
@@ -154,35 +153,48 @@
                           class="h-3 w-3 ml-1"
                           aria-hidden="true"
                         />
-                      </MenuButton>
-                    <!-- </MenuButton> -->
-                    <MenuItems   class="
-                      origin-top-right
-                      absolute
-                      right-0
-                      mt-2
-                      w-40
-                      rounded-md
-                      shadow-2xl
-                      py-2
-                      ring-1 ring-black ring-opacity-5
-                      focus:outline-none
-                      text-sm text-slate-700
-                      font-semibold
-                      bg-mission-gray
-                      dark:bg-slate-700
-                      energy:bg-gray-700
-                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
-                    ">
-                      <MenuItem>
-                        <a>hello</a>
-                      </MenuItem>
-                      <MenuItem>
-                        <RegionsMap/>
-                      </MenuItem>
-                    </MenuItems>
-                  </Menu>
+                      </PopoverButton>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <PopoverPanel class="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+                          <div class="
+                            origin-top-right
+                            absolute
+                            right-0
+                            ml-2
+                            mt-2
+                            lg:w-full
+                            w-40
+                            rounded-md
+                            shadow-2xl
+                            py-2
+                            ring-1 ring-black ring-opacity-5
+                            focus:outline-none
+                            text-sm text-slate-700
+                            font-semibold
+                            bg-mission-gray
+                            dark:bg-slate-700
+                            energy:bg-gray-700
+                            dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                            energy:text-gray-300
+                            flex
+                          ">
+                            <div class="p-4 w-1/3">
+                              <p>hello</p>
+                            </div>
+                            <div class="w-2/3">
+                              <RegionsMap/>
+                            </div>
+                          </div>
+                        </PopoverPanel>
+                      </transition>
+                  </Popover>
                 </li>
                 <li>
                   <div
@@ -961,6 +973,9 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
   Switch,
   SwitchGroup,
   SwitchLabel,
@@ -1008,6 +1023,9 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
+    Popover,
+    PopoverButton,
+    PopoverPanel,
     Switch,
     SwitchGroup,
     SwitchLabel,
