@@ -33,7 +33,6 @@
           energy:text-gray-300
         "
       >
-        <li class="cursor-pointer hover:text-white">My CT Daily</li>
         <li class="cursor-pointer hover:text-white">NCTC Info</li>
         <li class="cursor-pointer hover:text-white">Revisions</li>
         <Menu as="li" class="relative">
