@@ -1,84 +1,73 @@
 <template>
-  <BaseCard class="flex flex-col lg:flex-row md:max-w-xl hover:underline">
-    <router-link to="/article">
-      <div class="p-6 flex flex-col justify-start">
-        <h1
-          class="
-            text-black
-            dark:text-teal-300
-            energy:text-slate-200
-            text-md
-            mb-2
-            lg:mb-4
-          "
-        >
-          (U) This is the placeholder headline for an older article
-        </h1>
-
-        <p class="text-sm mb-2 lg:mb-4">
-          <img
-            class="lg:hidden float-right w-auto h-28 rounded-lg px-1"
-            :src="selectedImage"
-            alt="Thumbnail for article"
-          />
-          Ut est iusto decore nonumy, cum no mollis saperet. Esse percipitur id
-          sea, mea no dicam aperiri. Ex assum quando aliquip his, vero porro
-          voluptaria cum ea. Vero labore scribentur.
-        </p>
-        <p
-          class="
-            text-slate-600
-            dark:text-slate-300/80
-            energy:text-slate-300/80
-            text-sm
-          "
-        >
-          31 March 2022
-        </p>
-      </div>
-    </router-link>
-    <img
-      class="
-        hidden
-        lg:block
-        w-full
-        h-96
-        md:h-auto
-        object-cover
-        lg:w-48
-        rounded-t-lg
-        lg:rounded-none lg:rounded-r-lg
-      "
-      :src="selectedImage"
-      alt=""
-    />
-  </BaseCard>
+  <div v-for="article in articles.slice(1, 7)" :key="article.id">
+    <BaseCard class="flex flex-col lg:flex-row md:max-w-xl hover:underline">
+      <router-link :to="{ name: 'article', params: { id: article.id }}">
+        <div class="p-6 flex flex-col justify-start">
+          <h1
+            class="
+              text-black
+              dark:text-teal-300
+              energy:text-slate-200
+              text-md
+              mb-2
+              lg:mb-4
+              line-clamp-3
+            "
+          >
+            {{ article.title }}
+          </h1>
+          <p class="text-sm mb-2 lg:mb-4 line-clamp-5">
+            {{ article.content[0] }}
+          </p>
+          <p
+            class="
+              text-slate-600
+              dark:text-slate-300/80
+              energy:text-slate-300/80
+              text-sm
+            "
+          >
+            {{ article.published_date }}
+          </p>
+        </div>
+      </router-link>
+      <img
+        class="
+          hidden
+          lg:block
+          w-full
+          h-96
+          md:h-auto
+          object-cover
+          lg:w-48
+          rounded-t-lg
+          lg:rounded-none lg:rounded-r-lg
+        "
+        :src="getImgUrl(article.image.url)"
+        alt=""
+      />
+    </BaseCard>
+  </div>
 </template>
 
 <script>
 import BaseCard from "@/layout/BaseCard.vue";
+import articles from "@/data/articles.js";
+
 export default {
+  name: "ArticleCard",
   components: {
     BaseCard,
   },
   data() {
     return {
-      images: [
-        require("@/assets/farmers.jpg"),
-        require("@/assets/havana.jpg"),
-        require("@/assets/more-farmers.png"),
-        require("@/assets/papaya-dog.png"),
-        require("@/assets/people.png"),
-        require("@/assets/traffic.jpg"),
-        require("@/assets/train.png"),
-        require("@/assets/user.png"),
-      ],
-      selectedImage: "",
+      articles: articles,
     };
   },
-  created() {
-    const idx = Math.floor(Math.random() * this.images.length);
-    this.selectedImage = this.images[idx];
+  methods: {
+    getImgUrl(url) {
+      return require('@/assets/'+url)
+    },
   },
 };
 </script>

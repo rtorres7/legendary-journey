@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
+import AttachmentView from '../views/AttachmentView.vue'
 
 const routes = [
   {
@@ -9,10 +10,17 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/article',
+    path: '/article/:id',
     name: 'article',
-    component: ArticleView
+    component: ArticleView,
+    props: true
   },
+  {
+    path: '/attachment/:url?',
+    name: 'attachment',
+    component: AttachmentView,
+    props: true
+  }
 ]
 
 const router = createRouter({

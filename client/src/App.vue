@@ -9,7 +9,7 @@
   -->
   <div class="min-h-full" ref="topOfApp" tabindex="-1">
     <button @click="skipToMain" class="skipLink">Skip to main content</button>
-    <AppBanner />
+    <AppBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
       class="
@@ -23,7 +23,7 @@
         <router-view></router-view>
       </div>
     </main>
-    <AppFooter />
+    <AppFooter v-if="!['attachment'].includes($route.name)"  />
   </div>
 </template>
 
