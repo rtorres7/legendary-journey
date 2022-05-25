@@ -1,10 +1,12 @@
 <template>
-    <div class="flex flex-wrap justify-between">
+    <div class="grid grid-cols-2 gap-y-8">
         <div v-for="region in regions" :key="region">
-            <p class="text-lg">{{ region.name }}</p>
+            <router-link to="" class="text-lg">{{ region.name }}</router-link>
             <ul class="list-disc list-inside">
                 <template v-for="subRegion in region.subRegions" :key="subRegion">
-                    <li v-if="subRegion.name != ''">{{ subRegion.name }}</li>
+                    <li v-if="subRegion.name != ''">
+                        <router-link to="">{{ subRegion.name }}</router-link>
+                    </li>
                 </template>
             </ul>
         </div>
