@@ -43,7 +43,7 @@ export default {
 
 <style scoped lang="scss">
 .chartDiv {
-    width: 800px;
-    height: 400px;
+    width: 100%;
+    height: 500px;
 }
 </style>
