@@ -162,13 +162,8 @@
                         leave-from-class="transform opacity-100 scale-100"
                         leave-to-class="transform opacity-0 scale-95"
                       >
-                        <PopoverPanel class="fixed left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-8xl">
+                        <PopoverPanel class="absolute -left-96 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-8xl">
                           <div class="
-                            origin-top-right
-                            absolute
-                            right-0
-                            ml-2
-                            mt-2
                             lg:w-full
                             w-40
                             rounded-md
@@ -188,7 +183,8 @@
                             <div class="p-4 w-1/3">
                               <RegionsList/>
                             </div>
-                            <div class="w-2/3">
+                            <div class="w-2/3 flex flex-col mt-4">
+                              <RegionsListBox class="ml-4"/>
                               <RegionsMap/>
                             </div>
                           </div>
@@ -963,6 +959,7 @@ import { ref, watch } from "vue";
 import SearchBar from "./search/SearchBar.vue";
 import RegionsMap from "@/components/regions/RegionsMap.vue";
 import RegionsList from "@/components/regions/RegionsList.vue";
+import RegionsListBox from "@/components/regions/RegionsListBox.vue";
 import {
   Dialog,
   DialogOverlay,
@@ -1015,6 +1012,7 @@ export default {
     SearchBar,
     RegionsMap,
     RegionsList,
+    RegionsListBox,
     Dialog,
     DialogOverlay,
     Listbox,

@@ -1,5 +1,5 @@
 <template>
-   <div class="bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600 m-4 rounded-md ">
+   <div class="m-4">
     <div class="chartDiv" ref="chartdiv"></div>
    </div>
 </template>
@@ -31,13 +31,12 @@ export default {
         );
         polygonSeries.mapPolygons.template.states.create("hover", {
             fill: am5.color(0x002142),
-            stroke: am5.color(0xffffff),
         });
         polygonSeries.mapPolygons.template.setAll({
             tooltipText: "{name}",
             interactive: true,
-            strokeWidth: 2,
-            fillOpacity: 0.5
+            strokeWidth: 1,
+            fill: am5.color(0x64748b),
         });
     }
 }
