@@ -17,6 +17,12 @@
             {{ article.title }}
           </h1>
           <p class="text-sm mb-2 lg:mb-4 line-clamp-5">
+             <!-- image for mobile view -->
+             <img
+              class="lg:hidden float-right w-auto h-28 rounded-lg px-1"
+              :src="getImgUrl(article.image.url)"
+              alt="Thumbnail for article"
+            />
             {{ article.content[0] }}
           </p>
           <p
