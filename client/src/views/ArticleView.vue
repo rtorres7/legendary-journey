@@ -16,7 +16,7 @@
       </div>
       <img
         alt="article thumbnail"
-        class="lg:w-4/5"
+        class="lg:w-4/5 max-h-96 w-full object-cover"
         :src="getImgUrl(selectedArticle.image.url)"
       />
       <p class="italic text-sm">
