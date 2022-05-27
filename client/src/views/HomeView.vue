@@ -66,9 +66,7 @@
   >
     <div class="font-semibold mb-4">Featured Articles</div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6 text-left">
-      <template v-for="index in 6" :key="index">
         <ArticleCard></ArticleCard>
-      </template>
     </div>
   </div>
   <!-- Personal Section -->
