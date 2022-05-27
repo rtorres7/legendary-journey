@@ -118,7 +118,6 @@ export default {
     return {
       comments: [],
       articles: articles,
-      disableLink: false,
     }
   },
   methods: {
