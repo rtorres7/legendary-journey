@@ -185,7 +185,7 @@
                             </div>
                             <div class="w-2/3 flex flex-col mt-4">
                               <RegionsListBox class="ml-4"/>
-                              <RegionsMap/>
+                              <RegionsMap aria-hidden="true"/>
                             </div>
                           </div>
                         </PopoverPanel>
