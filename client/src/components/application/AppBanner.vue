@@ -186,9 +186,6 @@
                             <div class="w-2/3 flex flex-col m-4">
                               <RegionsListBox class="mb-6"/>
                               <RegionsMap aria-hidden="true"/>
-                              <p class="ml-64 mt-6">
-                                View a <router-link to="" class="underline">list of countries </router-link>that fall under each region and subregion
-                              </p>
                             </div>
                           </div>
                         </PopoverPanel>
