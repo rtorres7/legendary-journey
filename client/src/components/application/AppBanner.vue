@@ -583,7 +583,56 @@
                 </button>
                 <ul class="space-y-6">
                   <li v-for="item in mainNavigation" :key="item">
-                    <a
+                    <Popover v-if="item.name==='Regions'" class="relative">
+                      <PopoverButton
+                        class="
+                          flex
+                          items-center
+                          hover:text-black
+                          dark:hover:text-white
+                          energy:text-white
+                        "
+                        tabindex="0"
+                      >
+                        Regions<ChevronDownIcon
+                          class="h-3 w-3 ml-1"
+                          aria-hidden="true"
+                        />
+                      </PopoverButton>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <PopoverPanel class="absolute left-2/3 md:left-3/4 z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4 sm:px-4 max-w-5xl">
+                          <div class="
+                            rounded-md
+                            shadow-2xl
+                            py-2
+                            p-2
+                            ring-1 ring-black ring-opacity-5
+                            focus:outline-none
+                            text-sm text-slate-700
+                            font-semibold
+                            bg-mission-gray
+                            dark:bg-slate-700
+                            energy:bg-gray-700
+                            dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                            energy:text-gray-300
+                            flex flex-col
+                            space-y-4
+                          ">
+                              <RegionsListBox class="mb-6 mt-2"/>
+                              <RegionsList/>
+                              <RegionsMap aria-hidden="true"/>
+                          </div>
+                        </PopoverPanel>
+                      </transition>
+                    </Popover>
+                    <a v-else
                       class="
                         hover:text-black
                         dark:hover:text-white

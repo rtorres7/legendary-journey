@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="chartDiv" ref="chartdiv"></div>
-        <p class="ml-64 mt-6">
+        <div class="chartDiv hidden lg:block" ref="chartdiv"></div>
+        <p class="lg:ml-64 mt-6">
             View a <button @click="openPDF" class="underline"> list of countries </button> that fall under each region and subregion
         </p>
     </div>

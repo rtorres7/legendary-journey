@@ -1,7 +1,8 @@
 <template>
     <div>
-        <label for="country" class="font-normal">Select your country from the map or the dropdown</label>
-        <Listbox v-model="selectedCountry" class="w-1/3">
+        <label for="country" class="font-normal hidden lg:block">Select a country from the map or the dropdown</label>
+        <label for="country" class="font-normal lg:hidden">Select a country from the dropdown or a region below</label>
+        <Listbox v-model="selectedCountry" class="lg:w-1/3">
             <div class="relative mt-1">
                 <ListboxButton
                     class="

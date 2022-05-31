@@ -1,7 +1,7 @@
 <template>
     <div class="grid grid-cols-2 gap-y-8">
         <div v-for="region in regions" :key="region">
-            <router-link to="" class="text-lg">{{ region.name }}</router-link>
+            <router-link to="" class="lg:text-lg">{{ region.name }}</router-link>
             <ul class="list-disc list-inside">
                 <template v-for="subRegion in region.subRegions" :key="subRegion">
                     <li v-if="subRegion.name != ''">
