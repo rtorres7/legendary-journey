@@ -1,8 +1,8 @@
 <template>
     <div>
-        <label for="country" class="font-normal hidden lg:block">Select a country from the map or the dropdown</label>
+        <label for="country" class="font-normal hidden lg:block" aria-hidden="true">Select a country from the map or the dropdown</label>
         <label for="country" class="font-normal lg:hidden">Select a country from the dropdown or a region below</label>
-        <Listbox v-model="selectedCountry" class="lg:w-1/3">
+        <Listbox v-model="selectedCountry" class="lg:w-1/3" aria-label="select a country from the dropdown">
             <div class="relative mt-1">
                 <ListboxButton
                     class="
@@ -22,10 +22,7 @@
                         focus:outline-none
                         focus-visible:ring-2
                         focus-visible:ring-opacity-75
-                        focus-visible:ring-white
-                        focus-visible:ring-offset-orange-300
                         focus-visible:ring-offset-2
-                        focus-visible:border-indigo-500
                     "
                 >
                     <span class="block truncate">{{ selectedCountry.name }}</span>
@@ -51,7 +48,7 @@
                             text-base
                             bg-white
                             dark:bg-slate-600
-                            energy:bg-slate-600
+                            energy:bg-gray-600
                             rounded-md
                             shadow-lg
                             max-h-60
@@ -61,21 +58,26 @@
                         "
                     >
                         <ListboxOption
+                            v-slot="{ active }"
                             v-for="country in countries"
                             :key="country"
                             :value="country"
+                            as="template"
                             class="
                                 capitalize
                                 px-2
                                 py-1
                                 cursor-pointer
-                                hover:bg-slate-200/80
-                                dark:hover:bg-slate-600/80
-                                energy:hover:bg-gray-600/80
                                 text-sm
                             "
+                        >
+                            <li
+                                :class="[
+                                    active ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700' : 'bg-none'
+                                ]"
                             >
-                            {{ country.name }}
+                                {{ country.name }}
+                            </li>
                         </ListboxOption>
                     </ListboxOptions>
                 </transition>
@@ -294,7 +296,6 @@ export default {
         ListboxButton,
         ListboxOptions,
         ListboxOption,
-        // CheckIcon,
         SelectorIcon,
     },
    setup() {

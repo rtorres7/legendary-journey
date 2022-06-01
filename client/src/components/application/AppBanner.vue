@@ -180,12 +180,12 @@
                             energy:text-gray-300
                             flex
                           ">
-                            <div class="p-4 w-1/3">
-                              <RegionsList/>
-                            </div>
-                            <div class="w-2/3 flex flex-col m-4">
+                            <div class="w-2/3 m-4">
                               <RegionsListBox class="mb-6"/>
                               <RegionsMap aria-hidden="true"/>
+                            </div>
+                            <div class="p-4 w-1/3">
+                              <RegionsList/>
                             </div>
                           </div>
                         </PopoverPanel>

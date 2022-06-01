@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-2 gap-y-8">
+    <div class="grid grid-cols-2 gap-y-8" aria-label="select a region or subregion">
         <div v-for="region in regions" :key="region">
             <router-link to="" class="lg:text-lg hover:underline">{{ region.name }}</router-link>
             <ul class="list-disc list-inside">
