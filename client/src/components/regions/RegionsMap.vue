@@ -2,7 +2,8 @@
     <div>
         <div class="chartDiv hidden lg:block" ref="chartdiv"></div>
         <p class="lg:ml-64 lg:mt-6">
-            View a <button @click="openPDF" class="underline"> list of countries </button> that fall under each region and subregion
+            View a <button @click="openPDF" class="underline" aria-label="View a PDF document with a list of countries that fall under each region and subregion"> 
+            list of countries </button> that fall under each region and subregion
         </p>
     </div>
 </template>
