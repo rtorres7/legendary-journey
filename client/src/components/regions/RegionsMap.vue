@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="chartDiv hidden lg:block" ref="chartdiv"></div>
-        <p class="lg:ml-64 mt-6">
+        <p class="lg:ml-64 lg:mt-6">
             View a <button @click="openPDF" class="underline"> list of countries </button> that fall under each region and subregion
         </p>
     </div>
@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         openPDF() {
-            window.open("./List-of-Countries-by-Region-UN-Annex-II.pdf");
+            window.open('/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf');
         }
     }
 }
@@ -53,6 +53,6 @@ export default {
 <style scoped lang="scss">
 .chartDiv {
     width: 100%;
-    height: 500px;
+    height: 400px;
 }
 </style>

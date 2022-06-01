@@ -607,7 +607,7 @@
                         leave-from-class="transform opacity-100 scale-100"
                         leave-to-class="transform opacity-0 scale-95"
                       >
-                        <PopoverPanel class="absolute left-2/3 md:left-3/4 z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4 sm:px-4 max-w-5xl">
+                        <PopoverPanel class="absolute left-2/3 md:left-3/4 lg:hidden z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4 sm:px-4 max-w-5xl">
                           <div class="
                             rounded-md
                             shadow-2xl
@@ -623,11 +623,11 @@
                             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
                             energy:text-gray-300
                             flex flex-col
-                            space-y-4
+                            space-y-6
                           ">
-                              <RegionsListBox class="mb-6 mt-2"/>
-                              <RegionsList/>
-                              <RegionsMap aria-hidden="true"/>
+                              <RegionsListBox class="mt-2"/>
+                              <RegionsList class="pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"/>
+                              <RegionsMap aria-hidden="true" class="pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"/>
                           </div>
                         </PopoverPanel>
                       </transition>

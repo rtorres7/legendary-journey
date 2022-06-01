@@ -1,11 +1,11 @@
 <template>
     <div class="grid grid-cols-2 gap-y-8">
         <div v-for="region in regions" :key="region">
-            <router-link to="" class="lg:text-lg">{{ region.name }}</router-link>
+            <router-link to="" class="lg:text-lg hover:underline">{{ region.name }}</router-link>
             <ul class="list-disc list-inside">
                 <template v-for="subRegion in region.subRegions" :key="subRegion">
                     <li v-if="subRegion.name != ''">
-                        <router-link to="">{{ subRegion.name }}</router-link>
+                        <router-link to="" class="hover:underline">{{ subRegion.name }}</router-link>
                     </li>
                 </template>
             </ul>
