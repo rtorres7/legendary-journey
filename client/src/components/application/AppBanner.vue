@@ -162,7 +162,7 @@
                         leave-from-class="transform opacity-100 scale-100"
                         leave-to-class="transform opacity-0 scale-95"
                       >
-                        <PopoverPanel class="absolute -left-96 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-8xl">
+                        <PopoverPanel class="absolute -left-96 z-10 mt-3 w-screen -translate-x-1/2 transform px-4 lg:max-w-8xl">
                           <div class="
                             lg:w-full
                             w-40
@@ -607,7 +607,7 @@
                         leave-from-class="transform opacity-100 scale-100"
                         leave-to-class="transform opacity-0 scale-95"
                       >
-                        <PopoverPanel class="absolute left-2/3 md:left-3/4 lg:hidden z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4 sm:px-4 max-w-5xl">
+                        <PopoverPanel class="absolute left-2/3 md:left-3/4 lg:hidden z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4">
                           <div class="
                             rounded-md
                             shadow-2xl
