@@ -7,7 +7,6 @@
                 <ListboxButton
                     class="
                         flex
-                        items-center
                         relative
                         w-full
                         p-2

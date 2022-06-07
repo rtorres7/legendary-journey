@@ -180,7 +180,7 @@
                             energy:text-gray-300
                             flex
                           ">
-                            <div class="w-2/3 m-4">
+                            <div class="m-4 w-2/3">
                               <RegionsListBox class="mb-6"/>
                               <RegionsMap aria-hidden="true"/>
                             </div>
