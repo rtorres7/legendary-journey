@@ -209,27 +209,37 @@ export default {
     return {
       comments: [],
       articles: articles,
-      routerError: false,
+      selectedArticle: null,
+      routerError: true,
     };
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.selectedArticle = vm.getArticle(to.params.id);
+      if (vm.selectedArticle) {
+        vm.routerError = false;
+      } else {
+        vm.routerError = true;
+      }
+    });
+  },
   beforeRouteUpdate(to) {
-    if (!this.articles.find((article) => article.id === to.params.id)) {
-      this.routerError = true;
-    } else {
+    this.selectedArticle = this.getArticle(to.params.id);
+    if (this.selectedArticle) {
       this.routerError = false;
+    } else {
+      this.routerError = true;
     }
   },
   methods: {
+    getArticle(id) {
+      return this.articles.find((article) => article.id === id);
+    },
     addComment(comment) {
       this.comments.push(comment);
     },
     getImgUrl(url) {
       return require("@/assets/" + url);
-    },
-  },
-  computed: {
-    selectedArticle() {
-      return this.articles.find((article) => article.id === this.id);
     },
   },
 };
