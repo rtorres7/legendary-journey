@@ -156,6 +156,74 @@
                   </div>
                 </li>
                 <li>
+                  <Menu as="div" class="relative">
+                    <MenuButton
+                      class="
+                        flex
+                        items-center
+                        font-semibold
+                        hover:text-amber-300
+                        dark:hover:text-teal-400
+                        energy:hover:text-energy-yellow
+                      "
+                      tabindex="0"
+                    >
+                    <span class="sr-only">Open issues menu</span>
+                      Issues<ChevronDownIcon
+                        class="h-3 w-3 ml-1"
+                        aria-hidden="true"
+                      />
+                    </MenuButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <MenuItems
+                        class="
+                          origin-top-right
+                          absolute
+                          right-0
+                          mt-2
+                          w-40
+                          rounded-md
+                          shadow-2xl
+                          py-2
+                          ring-1 ring-black ring-opacity-5
+                          focus:outline-none
+                          text-sm text-slate-700
+                          font-semibold
+                          bg-mission-gray
+                          dark:bg-slate-700
+                          energy:bg-gray-700
+                          dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                      >
+                        <MenuItem v-for="item in issuesNavigation" :key="item.name">
+                          <a
+                            :href="item.href"
+                            class="
+                              py-1
+                              px-3
+                              hover:bg-slate-200/80
+                              dark:hover:bg-slate-600/80
+                              energy:hover:bg-gray-600/80
+                              flex
+                              items-center
+                              cursor-pointer
+                            "
+                            >{{ item.name }}</a
+                          >
+                        </MenuItem>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
+                </li>                
+                <li>
                   <div
                     class="
                       flex
@@ -546,7 +614,71 @@
                 </button>
                 <ul class="space-y-6">
                   <li v-for="item in mainNavigation" :key="item">
-                    <a
+                    <Menu as="div" v-if="item.name ==='Issues'" class="relative">
+                      <MenuButton
+                        class="
+                          flex
+                          items-center
+                          hover:text-black
+                          dark:hover:text-white
+                          energy:text-white
+                        "
+                        tabindex="0"
+                      >
+                        Issues<ChevronDownIcon
+                          class="h-3 w-3 ml-1"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                      <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <MenuItems
+                        class="
+                          origin-top-right
+                          absolute
+                          right-0
+                          mt-2
+                          w-40
+                          rounded-md
+                          shadow-2xl
+                          py-2
+                          ring-1 ring-black ring-opacity-5
+                          focus:outline-none
+                          text-sm text-slate-700
+                          font-semibold
+                          bg-mission-gray
+                          dark:bg-slate-700
+                          energy:bg-gray-700
+                          dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                      >
+                        <MenuItem v-for="item in issuesNavigation" :key="item.name">
+                          <a
+                            :href="item.href"
+                            class="
+                              py-1
+                              px-3
+                              hover:bg-slate-200/80
+                              dark:hover:bg-slate-600/80
+                              energy:hover:bg-gray-600/80
+                              flex
+                              items-center
+                              cursor-pointer
+                            "
+                            >{{ item.name }}</a
+                          >
+                        </MenuItem>
+                      </MenuItems>
+                    </transition>
+                    </Menu>
+                    <a v-else
                       class="
                         hover:text-black
                         dark:hover:text-white
@@ -957,10 +1089,23 @@ const mainNavigation = [
   { name: "Searches", href: "/", current: false },
   { name: "Community", href: "/", current: false },
   { name: "Regions", href: "/", current: false },
+  { name: "Issues", href: "/", current: false },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "/" },
   { name: "Settings", href: "/" },
+];
+const issuesNavigation = [
+  { name: "_issue_0", href: "/" },
+  { name: "_issue_1", href: "/" },
+  { name: "_issue_2", href: "/" },
+  { name: "_issue_3", href: "/" },
+  { name: "_issue_4", href: "/" },
+  { name: "_issue_5", href: "/" },
+  { name: "_issue_6", href: "/" },
+  { name: "_issue_7", href: "/" },
+  { name: "_issue_8", href: "/" },
+  { name: "_issue_9", href: "/" },    
 ];
 const themeOptions = ["light", "dark", "energy", "system"];
 
@@ -1036,6 +1181,7 @@ export default {
       mainNavigation,
       themeOptions,
       userNavigation,
+      issuesNavigation,
       isMainMenuOpen,
       isUserMenuOpen,
       isAlertMenuOpen,
