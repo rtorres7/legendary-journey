@@ -38,6 +38,7 @@
                             xl:-left-80 
                             2xl:-translate-x-2/3 
                             2xl:max-w-7xl 
+                            2xl:-left-64
                         "
                     >
                         <div class="
