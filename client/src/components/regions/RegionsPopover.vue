@@ -1,106 +1,125 @@
 <template>
-    <Popover class="hidden lg:block relative">
-        <PopoverButton
-        class="
-            flex
-            items-center
-            hover:text-amber-300
-            dark:hover:text-teal-400
-            energy:hover:text-energy-yellow
-        "
-        tabindex="0"
-        >
-            Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
-        </PopoverButton>
-        <transition
-            enter-active-class="transition ease-out duration-100"
-            enter-from-class="transform opacity-0 scale-95"
-            enter-to-class="transform opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="transform opacity-100 scale-100"
-            leave-to-class="transform opacity-0 scale-95"
-        >
-            <div>
-                <PopoverPanel class="absolute -left-96 z-10 mt-3 w-screen -translate-x-1/2 transform px-4 lg:max-w-8xl">
-                    <div class="
-                        lg:w-full
-                        w-40
-                        rounded-md
-                        shadow-2xl
-                        py-2
-                        ring-1 ring-black ring-opacity-5
-                        focus:outline-none
-                        text-sm text-slate-700
-                        font-semibold
-                        bg-mission-gray
-                        dark:bg-slate-700
-                        energy:bg-gray-700
-                        dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                        energy:text-gray-300
-                        flex
-                    ">
-                        <div class="m-4 w-2/3">
-                            <RegionsListBox class="mb-6"/>
-                            <RegionsMap aria-hidden="true"/>
+    <div>
+        <Popover class="hidden lg:block relative">
+            <PopoverButton
+            class="
+                flex
+                items-center
+                font-semibold
+                hover:text-amber-300
+                dark:hover:text-teal-400
+                energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+            >
+                Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </PopoverButton>
+            <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+            >
+                <div>
+                    <PopoverPanel 
+                        class="
+                            absolute 
+                            -left-96 
+                            mt-3
+                            w-screen
+                            -translate-x-1/4 
+                            transform 
+                            px-4 
+                            z-10
+                            lg:max-w-5xl 
+                            xl:-translate-x-1/2 
+                            xl:-left-80 
+                            2xl:-translate-x-2/3 
+                            2xl:max-w-7xl 
+                        "
+                    >
+                        <div class="
+                            lg:w-full
+                            w-40
+                            rounded-md
+                            shadow-2xl
+                            py-2
+                            ring-1 ring-black ring-opacity-5
+                            focus:outline-none
+                            text-sm text-slate-700
+                            font-semibold
+                            bg-mission-gray
+                            dark:bg-slate-700
+                            energy:bg-gray-700
+                            dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                            energy:text-gray-300
+                            flex
+                        ">
+                            <div class="m-4 w-2/3">
+                                <RegionsListBox class="mb-6"/>
+                                <RegionsMap aria-hidden="true"/>
+                            </div>
+                            <div class="p-4 w-1/3">
+                                <RegionsList/>
+                            </div>
                         </div>
-                        <div class="p-4 w-1/3">
-                            <RegionsList/>
-                        </div>
-                    </div>
-                </PopoverPanel>
-            </div>
-        </transition>
-    </Popover>
+                    </PopoverPanel>
+                </div>
+            </transition>
+        </Popover>
 
-    <!-- mobile/tablet version -->
-    <Popover class="lg:hidden relative">
-        <PopoverButton
-        class="
-            flex
-            items-center
-            hover:text-black
-            dark:hover:text-white
-            energy:text-white
-        "
-        tabindex="0"
-        >
-            Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
-        </PopoverButton>
-        <transition
-            enter-active-class="transition ease-out duration-100"
-            enter-from-class="transform opacity-0 scale-95"
-            enter-to-class="transform opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="transform opacity-100 scale-100"
-            leave-to-class="transform opacity-0 scale-95"
-        >
-            <div>
-                <PopoverPanel class="absolute left-2/3 md:left-3/4 lg:hidden z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4">
-                    <div class="
-                        rounded-md
-                        shadow-2xl
-                        py-2
-                        p-2
-                        ring-1 ring-black ring-opacity-5
-                        focus:outline-none
-                        text-sm text-slate-700
-                        font-semibold
-                        bg-mission-gray
-                        dark:bg-slate-700
-                        energy:bg-gray-700
-                        dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                        energy:text-gray-300
-                        flex flex-col
-                        space-y-6
-                    ">
-                        <RegionsListBox class="mt-2"/>
-                        <RegionsList class="pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"/>
-                        <RegionsMap aria-hidden="true" class="pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"/>
-                    </div>
-                </PopoverPanel>
-            </div>
-        </transition>
-    </Popover>
+        <!-- mobile/tablet version -->
+        <Popover class="lg:hidden relative">
+            <PopoverButton
+            class="
+                flex
+                items-center
+                hover:text-black
+                dark:hover:text-white
+                energy:text-white
+            "
+            tabindex="0"
+            >
+                Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </PopoverButton>
+            <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+            >
+                <div>
+                    <PopoverPanel class="absolute left-2/3 md:left-3/4 lg:hidden z-10 mt-3 w-96 md:w-max -translate-x-1/2 transform px-4">
+                        <div class="
+                            rounded-md
+                            shadow-2xl
+                            py-2
+                            p-2
+                            ring-1 ring-black ring-opacity-5
+                            focus:outline-none
+                            text-sm text-slate-700
+                            font-semibold
+                            bg-mission-gray
+                            dark:bg-slate-700
+                            energy:bg-gray-700
+                            dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                            energy:text-gray-300
+                            flex flex-col
+                            space-y-6
+                        ">
+                            <RegionsListBox class="mt-2"/>
+                            <RegionsList class="pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"/>
+                            <RegionsMap aria-hidden="true" class="pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"/>
+                        </div>
+                    </PopoverPanel>
+                </div>
+            </transition>
+        </Popover>
+    </div>
 </template>
 
 <script> 
