@@ -26,6 +26,8 @@
           origin-top-right
           absolute
           min-w-[675px]
+          xl:w-[915px]
+          2xl:w-[1175px]
           right-0
           mt-3
           transform
