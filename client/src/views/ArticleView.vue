@@ -231,6 +231,9 @@ export default {
       this.routerError = true;
     }
   },
+  mounted() {
+    document.title = 'boo'
+  },  
   methods: {
     getArticle(id) {
       return this.articles.find((article) => article.id === id);

@@ -8,12 +8,18 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      title: 'Home',
+    },
   },
   {
     path: '/article/:id',
     name: 'article',
     component: ArticleView,
+    meta: {
+      title: 'Article - ',
+    },
     props: true
   },
   {
@@ -22,7 +28,7 @@ const routes = [
     component: AttachmentView,
     props: true
   },
-  { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView },
+  { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
 ]
 
 const router = createRouter({
@@ -35,6 +41,12 @@ const router = createRouter({
       window.scrollTo(0, 0)
     }
   }
-})
+});
+
+router.afterEach(to => {
+  if (to.meta.title) {
+    document.title = `${to.meta.title}`;
+  }
+});
 
 export default router
