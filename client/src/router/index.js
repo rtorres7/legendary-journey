@@ -43,10 +43,9 @@ const router = createRouter({
   }
 });
 
-router.afterEach(to => {
-  if (to.meta.title) {
-    document.title = `${to.meta.title}`;
-  }
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title}`;
+  next();
 });
 
 export default router
