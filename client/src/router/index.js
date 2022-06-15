@@ -17,9 +17,6 @@ const routes = [
     path: '/article/:id',
     name: 'article',
     component: ArticleView,
-    meta: {
-      title: 'Article - ',
-    },
     props: true
   },
   {
@@ -44,8 +41,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  document.title = `${to.meta.title}`;
-  next();
+  if (to.meta.title) {
+    document.title = `${to.meta.title}`;
+    next();
+  }
+  else if (to.params.url) {
+    document.title = `${to.params.url}`;
+    next();
+  }
+  else {
+    next();
+  }
 });
 
 export default router
