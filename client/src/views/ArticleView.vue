@@ -83,49 +83,31 @@
           <span>CONTENTS</span>
           <ChevronDownIcon class="h-4 w-4" :class='open ? "transform rotate-180" : ""' />
         </DisclosureButton>
-        <transition
-          enter-active-class="transition ease-out duration-100"
-          enter-from-class="transform opacity-0 scale-95"
-          enter-to-class="transform opacity-100 scale-100"
-          leave-active-class="transition ease-in duration-75"
-          leave-from-class="transform opacity-100 scale-100"
-          leave-to-class="transform opacity-0 scale-95"
-        >
-          <DisclosurePanel>
-            <div class="ml-4 space-y-2 text-sm">
-              <p><span class="font-semibold">Produced By: </span>NCTC</p>
-              <p><span class="font-semibold">Product Type: </span>NexCT Article</p>
-              <p><span class="font-semibold">Document Number: </span>NexCT2022-08088</p>
-              <p><span class="font-semibold">Posted: </span>25 Apr 2022 00:01:15</p>
-              <p><span class="font-semibold">Publication Date: </span>25 Apr 2022</p>
-              <p><span class="font-semibold">Contact: </span>(U) Produced by the Test</p>
-            </div>
-          </DisclosurePanel>
-        </transition>
+        <DisclosurePanel>
+          <div class="ml-4 space-y-2 text-sm">
+            <p><span class="font-semibold">Produced By: </span>NCTC</p>
+            <p><span class="font-semibold">Product Type: </span>NexCT Article</p>
+            <p><span class="font-semibold">Document Number: </span>NexCT2022-08088</p>
+            <p><span class="font-semibold">Posted: </span>25 Apr 2022 00:01:15</p>
+            <p><span class="font-semibold">Publication Date: </span>25 Apr 2022</p>
+            <p><span class="font-semibold">Contact: </span>(U) Produced by the Test</p>
+          </div>
+        </DisclosurePanel>
       </Disclosure>
       <Disclosure v-slot="{ open }">
         <DisclosureButton class="flex space-x-2 text-sm">
           <span>SOURCES</span>
           <ChevronDownIcon class="h-4 w-4" :class='open ? "transform rotate-180" : ""' />
         </DisclosureButton>
-        <transition
-            enter-active-class="transition ease-out duration-100"
-            enter-from-class="transform opacity-0 scale-95"
-            enter-to-class="transform opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="transform opacity-100 scale-100"
-            leave-to-class="transform opacity-0 scale-95"
-        >
-          <DisclosurePanel>
-            <ol class="list-decimal list-inside ml-4 space-y-2">
-              <li v-for="index in 2" :key="index" class="text-sm">
-                <router-link to="/article" class="hover:underline">
-                  (U) This would be the title with a link to the source being credited for the creation of this article.
-                </router-link>
-              </li>
-            </ol>
-          </DisclosurePanel>
-        </transition>
+        <DisclosurePanel>
+          <ol class="list-decimal list-inside ml-4 space-y-2">
+            <li v-for="index in 2" :key="index" class="text-sm">
+              <router-link to="/article" class="hover:underline">
+                (U) This would be the title with a link to the source being credited for the creation of this article.
+              </router-link>
+            </li>
+          </ol>
+        </DisclosurePanel>
       </Disclosure>
       <CommentsList :comments="comments" class="border-t-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25 pt-4"/>
       <CommentForm @comment-submitted="addComment" class="border-t-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25 pt-4"/>
