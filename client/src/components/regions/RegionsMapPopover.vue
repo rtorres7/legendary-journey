@@ -1,5 +1,5 @@
 <template>
-  <Popover class="hidden lg:block relative">
+  <Popover class="relative">
     <PopoverButton
       class="
         flex
@@ -11,7 +11,7 @@
       "
       tabindex="0"
     >
-      Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+      <GlobeIcon class="h-6 w-6" aria-label="View world map" />
     </PopoverButton>
     <transition
       enter-active-class="transition ease-out duration-100"
@@ -26,6 +26,8 @@
           origin-top-right
           absolute
           min-w-[675px]
+          xl:w-[915px]
+          2xl:w-[1175px]
           right-0
           mt-3
           transform
@@ -47,11 +49,11 @@
             energy:bg-gray-700
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
             energy:text-gray-300
-            flex
           "
         >
           <div class="m-4">
-            <RegionsList />
+            <RegionsListBox class="mb-6" />
+            <RegionsMap aria-hidden="true" />
           </div>
         </div>
       </PopoverPanel>
@@ -60,17 +62,19 @@
 </template>
 
 <script>
-import RegionsList from "./RegionsList.vue";
+import RegionsMap from "./RegionsMap.vue";
+import RegionsListBox from "./RegionsListBox.vue";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { GlobeIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
-    RegionsList,
+    RegionsMap,
+    RegionsListBox,
     Popover,
     PopoverButton,
     PopoverPanel,
-    ChevronDownIcon,
+    GlobeIcon,
   },
 };
 </script>

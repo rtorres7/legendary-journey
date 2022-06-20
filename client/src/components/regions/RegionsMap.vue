@@ -1,14 +1,5 @@
 <template>
-    <div>
-        <div class="chartDiv hidden lg:block" ref="chartdiv"></div>
-        <p class="lg:mt-6">
-            View a 
-            <button @click="openPDF" class="underline" aria-label="View a PDF document with a list of countries that fall under each region and subregion"> 
-                list of countries 
-            </button> 
-            that fall under each region and subregion
-        </p>
-    </div>
+    <div class="chartDiv hidden lg:block" ref="chartdiv"></div>
 </template>
 
 <script>
@@ -46,11 +37,6 @@ export default {
             fill: am5.color(0xc2c4cb),
         });
     },
-    methods: {
-        openPDF() {
-            window.open('/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf');
-        }
-    }
 }
 </script>
 

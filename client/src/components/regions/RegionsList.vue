@@ -1,77 +1,41 @@
 <template>
-    <div class="grid grid-cols-2 gap-y-4" aria-label="select a region or subregion">
-        <div v-for="region in regions" :key="region">
-            <router-link to="" class="lg:text-lg hover:underline">{{ region.name }}</router-link>
-            <ul class="list-disc list-inside">
-                <template v-for="subRegion in region.subRegions" :key="subRegion">
-                    <li v-if="subRegion.name != ''">
-                        <router-link to="" class="hover:underline">{{ subRegion.name }}</router-link>
-                    </li>
-                </template>
-            </ul>
+    <div class="hidden lg:block">
+        <div class="grid grid-cols-3 gap-6 pb-4" aria-label="select a region or subregion">
+            <div v-for="region in $store.state.regions" :key="region">
+                <router-link to="" class="lg:text-lg hover:underline">{{ region.name }}</router-link>
+                <ul class="list-disc list-inside">
+                    <template v-for="subRegion in region.subRegions" :key="subRegion">
+                        <li v-if="subRegion.name != ''">
+                            <router-link to="" class="hover:underline">{{ subRegion.name }}</router-link>
+                        </li>
+                    </template>
+                </ul>
+            </div>
         </div>
+        <p 
+            class="  
+                pt-4
+                border-t border-slate-900/10
+                dark:border-slate-50/[0.06]
+                energy:border-gray-700/25
+                "
+            >
+            View a 
+            <button @click="openPDF" class="underline" aria-label="View a PDF document with a list of countries that fall under each region and subregion"> 
+                list of countries 
+            </button> 
+            that fall under each region and subregion
+        </p>
     </div>
 </template>
 
 <script>
-
-const regions = [
-    {
-        name: "Africa",
-        subRegions: [
-            { name: "Africa Central" }, { name: "Africa East" }, { name: "Africa North" }, { name: "Africa Southern" }, { name: "Africa West" }
-        ],
-    },
-    {
-        name: "Americas",
-        subRegions: [
-            { name: "Americas Caribbean" }, { name: "Americas Central" }, { name: "Americas North" }, { name: "Americas South" }, { name: "Antarctica" }  
-        ],
-    },
-    {
-        name: "Asia",
-        subRegions: [
-            { name: "Asia East" }, { name: "Asia South" }, { name: "Asia South East" }
-        ],
-    },
-    {
-        name: "Eurasia",
-        subRegions: [
-            { name: "Eurasia Caucasus" }, { name: "Eurasia Central" }, { name: "Eurasia Western and Russia" }
-        ],
-    },
-    {
-        name: "Europe",
-        subRegions: [
-            { name: "Europe Balkans" }, { name: "Europe Central" }, { name: "Europe North" }, { name: "Europe South" }
-        ],
-    },
-    {
-        name: "Middle East",
-        subRegions: [
-            { name: "Middle East" }
-        ],
-    },
-    {
-        name: "Oceania",
-        subRegions: [
-            { name: "Oceania" }
-        ],
-    },
-    {
-        name: "Worldwide",
-        subRegions: [
-            { name: "" }
-        ]
-    },
-];
-
 export default {
-    setup() {
-        return {
-            regions,
-        };
-    },
+    methods: {
+        openPDF() {
+            window.open('/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf');
+        }
+    }
 }
 </script>
 

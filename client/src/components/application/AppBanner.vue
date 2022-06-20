@@ -141,6 +141,9 @@
                   <RegionsPopover />
                 </li>
                 <li>
+                  <RegionsMapPopover />
+                </li>
+                <li>
                   <div
                     class="
                       flex
@@ -531,7 +534,7 @@
                 </button>
                 <ul class="space-y-6">
                   <li v-for="item in mainNavigation" :key="item">
-                    <RegionsPopover v-if="item.name==='Regions'" />
+                    <RegionsDisclosures v-if="item.name==='Regions'" />
                     <a v-else
                       class="
                         hover:text-black
@@ -906,7 +909,9 @@
 <script>
 import { ref, watch } from "vue";
 import SearchBar from "./search/SearchBar.vue";
+import RegionsDisclosures from "@/components/regions/RegionsDisclosures.vue";
 import RegionsPopover from "@/components/regions/RegionsPopover.vue";
+import RegionsMapPopover from "@/components/regions/RegionsMapPopover.vue";
 import {
   Dialog,
   DialogOverlay,
@@ -954,7 +959,9 @@ const themeOptions = ["light", "dark", "energy", "system"];
 export default {
   components: {
     SearchBar,
+    RegionsDisclosures,
     RegionsPopover,
+    RegionsMapPopover,
     Dialog,
     DialogOverlay,
     Listbox,

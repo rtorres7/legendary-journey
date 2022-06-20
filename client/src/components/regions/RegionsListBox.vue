@@ -2,7 +2,7 @@
     <div>
         <label for="country" class="font-normal hidden lg:block" aria-hidden="true">Select a country from the map or the dropdown</label>
         <label for="country" class="font-normal lg:hidden">Select a country from the dropdown or a region below</label>
-        <Listbox v-model="selectedCountry" class="lg:w-1/3" aria-label="select a country from the dropdown">
+        <Listbox v-model="selectedCountry" class="lg:w-1/2" aria-label="select a country from the dropdown">
             <div class="relative mt-1">
                 <ListboxButton
                     class="
