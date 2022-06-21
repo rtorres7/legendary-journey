@@ -9,8 +9,8 @@
         pr-3
         rounded-md
         shadow-sm
-        w-full
-        xl:w-[400px]
+        w-[250px]
+        xl:w-[425px]
         bg-slate-300
         dark:bg-slate-800
         energy:bg-gray-600
