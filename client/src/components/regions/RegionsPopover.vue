@@ -1,5 +1,5 @@
 <template>
-  <Popover class="hidden lg:block relative">
+  <Popover class="relative">
     <PopoverButton
       class="
         flex
@@ -25,33 +25,72 @@
         class="
           origin-top-right
           absolute
-          min-w-[675px]
+          min-w-[44rem]
           right-0
           mt-3
           transform
-          px-4
           z-10
         "
       >
         <div
           class="
-            rounded-md
             shadow-2xl
-            py-2
+            p-6
+            w-full
             ring-1 ring-black ring-opacity-5
             focus:outline-none
             text-sm text-slate-700
-            font-semibold
             bg-mission-gray
-            dark:bg-slate-700
+            dark:bg-dark-space-blue
             energy:bg-gray-700
+            border border-solid
+            dark:border-slate-700
+            border-t-0
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
             energy:text-gray-300
-            flex
           "
         >
-          <div class="m-4">
-            <RegionsList />
+          <div class="hidden lg:block">
+            <div
+              class="grid grid-cols-3 gap-6 pb-4"
+              aria-label="select a region or subregion"
+            >
+              <div v-for="region in regions" :key="region">
+                <router-link to="" class="lg:text-lg hover:underline">{{
+                  region.name
+                }}</router-link>
+                <ul class="pt-2 list-disc list-inside">
+                  <template
+                    v-for="subRegion in region.subRegions"
+                    :key="subRegion"
+                  >
+                    <li v-if="subRegion.name != ''">
+                      <router-link to="" class="hover:underline font-light">{{
+                        subRegion.name
+                      }}</router-link>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+            <p
+              class="
+                pt-4
+                border-t border-slate-900/10
+                dark:border-slate-50/[0.06]
+                energy:border-gray-700/25
+              "
+            >
+              View a
+              <a
+                @click="openPDF"
+                class="cursor-pointer underline"
+                aria-label="View a PDF document with a list of countries that fall under each region and subregion"
+              >
+                list of countries
+              </a>
+              that fall under each region and subregion
+            </p>
           </div>
         </div>
       </PopoverPanel>
@@ -60,17 +99,26 @@
 </template>
 
 <script>
-import RegionsList from "./RegionsList.vue";
+import { regions } from "@/data/regions.js";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
-    RegionsList,
     Popover,
     PopoverButton,
     PopoverPanel,
     ChevronDownIcon,
+  },
+  data() {
+    return {
+      regions,
+    };
+  },
+  methods: {
+    openPDF() {
+      window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
+    },
   },
 };
 </script>

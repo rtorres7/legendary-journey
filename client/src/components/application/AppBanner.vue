@@ -118,11 +118,12 @@
         <div class="hidden lg:block">
           <div class="ml-4 flex items-center md:ml-6 lg:ml-3">
             <SearchBar />
-            <div class="text-sm leading-6 pl-6 pr-3 font-semibold">
+            <div class="text-sm leading-6 pl-6 pr-3">
               <ul class="flex space-x-3 xl:space-x-6">
                 <li>
                   <div
                     class="
+                      font-semibold
                       flex
                       items-center
                       hover:text-amber-300
@@ -453,6 +454,7 @@
         </div>
       </div>
     </div>
+    <!-- Mobile side menu -->
     <TransitionRoot appear :show="isMainMenuOpen" as="template">
       <Dialog as="div" @close="closeMainMenuModal">
         <div class="fixed z-20 inset-0 overflow-y-auto w-full">
@@ -621,6 +623,134 @@
                             </a>
                             that fall under each region and subregion
                           </p>
+                        </div>
+                      </DisclosurePanel>
+                    </transition>
+                  </Disclosure>
+                  <Disclosure v-slot="{ open }">
+                    <DisclosureButton
+                      as="li"
+                      class="
+                        cursor-pointer
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                        flex
+                        space-x-2
+                        items-center
+                      "
+                    >
+                      <span class="font-semibold">Countries</span>
+                      <ChevronDownIcon
+                        class="h-4 w-4"
+                        :class="open ? 'transform rotate-180' : ''"
+                      />
+                    </DisclosureButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <DisclosurePanel>
+                        <div class="ml-4">
+                          <label for="country" aria-hidden="true"
+                            >Select a country</label
+                          >
+                          <Listbox
+                            v-model="selectedCountry"
+                            aria-label="select a country from the dropdown"
+                          >
+                            <div class="relative mt-1">
+                              <ListboxButton
+                                class="
+                                  flex
+                                  relative
+                                  w-full
+                                  p-2
+                                  text-left
+                                  capitalize
+                                  bg-white
+                                  dark:bg-slate-600
+                                  energy:bg-gray-600
+                                  rounded-lg
+                                  shadow-md
+                                  cursor-default
+                                  focus:outline-none
+                                  focus-visible:ring-2
+                                  focus-visible:ring-opacity-75
+                                  focus-visible:ring-offset-2
+                                "
+                              >
+                                <span class="block truncate">{{
+                                  selectedCountry.name
+                                }}</span>
+                                <span
+                                  class="
+                                    absolute
+                                    inset-y-0
+                                    right-0
+                                    flex
+                                    items-center
+                                    pr-2
+                                  "
+                                >
+                                  <SelectorIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </ListboxButton>
+                              <transition
+                                enter-active-class="transition ease-out duration-100"
+                                enter-from-class="transform opacity-0 scale-95"
+                                enter-to-class="transform opacity-100 scale-100"
+                                leave-active-class="transition ease-in duration-75"
+                                leave-from-class="transform opacity-100 scale-100"
+                                leave-to-class="transform opacity-0 scale-95"
+                              >
+                                <ListboxOptions
+                                  class="
+                                    absolute
+                                    w-full
+                                    py-1
+                                    mt-1
+                                    overflow-auto
+                                    bg-white
+                                    dark:bg-slate-600
+                                    energy:bg-gray-600
+                                    rounded-md
+                                    shadow-lg
+                                    max-h-60
+                                    ring-1 ring-black ring-opacity-5
+                                    focus:outline-none
+                                    z-10
+                                  "
+                                >
+                                  <ListboxOption
+                                    v-slot="{ active }"
+                                    v-for="country in countries"
+                                    :key="country"
+                                    :value="country"
+                                    as="template"
+                                    class="capitalize px-2 py-1 cursor-pointer"
+                                  >
+                                    <li
+                                      :class="[
+                                        active
+                                          ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                          : 'bg-none',
+                                      ]"
+                                    >
+                                      {{ country.name }}
+                                    </li>
+                                  </ListboxOption>
+                                </ListboxOptions>
+                              </transition>
+                            </div>
+                          </Listbox>
                         </div>
                       </DisclosurePanel>
                     </transition>
@@ -1021,12 +1151,13 @@ import {
   MenuIcon,
   MoonIcon,
   SearchIcon,
+  SelectorIcon,
   SunIcon,
   UserCircleIcon,
   XIcon,
 } from "@heroicons/vue/outline";
 
-import { regions } from "@/data/regions.js";
+import { regions, countries } from "@/data/regions.js";
 
 const mainNavigation = [
   { name: "Home", href: "/", current: true },
@@ -1071,6 +1202,7 @@ export default {
     MenuIcon,
     MoonIcon,
     SearchIcon,
+    SelectorIcon,
     SunIcon,
     UserCircleIcon,
     XIcon,
@@ -1112,8 +1244,12 @@ export default {
       changeTheme(newTheme);
     });
     const alertEnabled = ref(false);
+
+    const selectedCountry = ref(countries[0]);
     return {
       regions,
+      countries,
+      selectedCountry,
       mainNavigation,
       themeOptions,
       userNavigation,
