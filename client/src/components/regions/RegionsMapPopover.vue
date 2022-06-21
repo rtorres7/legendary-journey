@@ -31,7 +31,6 @@
           right-0
           mt-3
           transform
-          px-4
           z-10
         "
       >
@@ -39,11 +38,11 @@
           class="
             rounded-md
             shadow-2xl
-            py-2
+            p-4
+            w-full
             ring-1 ring-black ring-opacity-5
             focus:outline-none
             text-sm text-slate-700
-            font-semibold
             bg-mission-gray
             dark:bg-slate-700
             energy:bg-gray-700
@@ -51,10 +50,8 @@
             energy:text-gray-300
           "
         >
-          <div class="m-4">
-            <RegionsListBox class="mb-6" />
-            <RegionsMap aria-hidden="true" />
-          </div>
+          <RegionsListBox class="mb-4" />
+          <RegionsMap aria-hidden="true" />
         </div>
       </PopoverPanel>
     </transition>

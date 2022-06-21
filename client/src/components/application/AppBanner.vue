@@ -143,23 +143,6 @@
                 <li>
                   <RegionsMapPopover />
                 </li>
-                <li>
-                  <div
-                    class="
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Special Editions<ChevronDownIcon
-                      class="h-3 w-3 ml-1"
-                      aria-hidden="true"
-                    />
-                  </div>
-                </li>
               </ul>
             </div>
             <div
@@ -534,9 +517,9 @@
                 </button>
                 <ul class="space-y-6">
                   <li v-for="item in mainNavigation" :key="item">
-                    <RegionsDisclosures v-if="item.name==='Regions'" />
-                    <a v-else
+                    <a
                       class="
+                        font-semibold
                         hover:text-black
                         dark:hover:text-white
                         energy:text-white
@@ -545,6 +528,103 @@
                       >{{ item.name }}</a
                     >
                   </li>
+                  <Disclosure v-slot="{ open }">
+                    <DisclosureButton
+                      as="li"
+                      class="
+                        cursor-pointer
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                        flex
+                        space-x-2
+                        items-center
+                      "
+                    >
+                      <span class="font-semibold">Regions</span>
+                      <ChevronDownIcon
+                        class="h-4 w-4"
+                        :class="open ? 'transform rotate-180' : ''"
+                      />
+                    </DisclosureButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <DisclosurePanel>
+                        <div class="ml-4 space-y-4">
+                          <div v-for="region in regions" :key="region">
+                            <Disclosure v-slot="{ open }">
+                              <DisclosureButton
+                                class="
+                                  hover:text-black
+                                  dark:hover:text-white
+                                  energy:text-white
+                                  flex
+                                  space-x-2
+                                  items-center
+                                "
+                              >
+                                <span>{{ region.name }}</span>
+                                <ChevronDownIcon
+                                  class="h-3 w-3"
+                                  :class="open ? 'transform rotate-180' : ''"
+                                />
+                              </DisclosureButton>
+                              <transition
+                                enter-active-class="transition ease-out duration-100"
+                                enter-from-class="transform opacity-0 scale-95"
+                                enter-to-class="transform opacity-100 scale-100"
+                                leave-active-class="transition ease-in duration-75"
+                                leave-from-class="transform opacity-100 scale-100"
+                                leave-to-class="transform opacity-0 scale-95"
+                              >
+                                <DisclosurePanel>
+                                  <ul class="list-disc list-inside ml-4 my-2">
+                                    <template
+                                      v-for="subRegion in region.subRegions"
+                                      :key="subRegion"
+                                    >
+                                      <li v-if="subRegion.name != ''">
+                                        <router-link
+                                          to=""
+                                          class="font-light hover:underline"
+                                          >{{ subRegion.name }}</router-link
+                                        >
+                                      </li>
+                                    </template>
+                                  </ul>
+                                </DisclosurePanel>
+                              </transition>
+                            </Disclosure>
+                          </div>
+                          <p
+                            class="
+                              text-sm
+                              pt-4
+                              border-t border-slate-900/10
+                              dark:border-slate-50/[0.06]
+                              energy:border-gray-700/25
+                            "
+                          >
+                            View a
+                            <a
+                              @click="openPDF"
+                              class="cursor-pointer underline"
+                              aria-label="View a PDF document with a list of countries that fall under each region and subregion"
+                            >
+                              list of countries
+                            </a>
+                            that fall under each region and subregion
+                          </p>
+                        </div>
+                      </DisclosurePanel>
+                    </transition>
+                  </Disclosure>
                 </ul>
               </div>
             </TransitionChild>
@@ -909,12 +989,14 @@
 <script>
 import { ref, watch } from "vue";
 import SearchBar from "./search/SearchBar.vue";
-import RegionsDisclosures from "@/components/regions/RegionsDisclosures.vue";
 import RegionsPopover from "@/components/regions/RegionsPopover.vue";
 import RegionsMapPopover from "@/components/regions/RegionsMapPopover.vue";
 import {
   Dialog,
   DialogOverlay,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
   Listbox,
   ListboxButton,
   ListboxOptions,
@@ -944,11 +1026,12 @@ import {
   XIcon,
 } from "@heroicons/vue/outline";
 
+import { regions } from "@/data/regions.js";
+
 const mainNavigation = [
   { name: "Home", href: "/", current: true },
   { name: "Searches", href: "/", current: false },
   { name: "Community", href: "/", current: false },
-  { name: "Regions", href: "/", current: false },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "/" },
@@ -959,11 +1042,13 @@ const themeOptions = ["light", "dark", "energy", "system"];
 export default {
   components: {
     SearchBar,
-    RegionsDisclosures,
     RegionsPopover,
     RegionsMapPopover,
     Dialog,
     DialogOverlay,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
     Listbox,
     ListboxButton,
     ListboxOptions,
@@ -1028,6 +1113,7 @@ export default {
     });
     const alertEnabled = ref(false);
     return {
+      regions,
       mainNavigation,
       themeOptions,
       userNavigation,
@@ -1071,6 +1157,9 @@ export default {
     },
     openAlertModal() {
       this.isAlertMenuOpen = true;
+    },
+    openPDF() {
+      window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
     },
   },
 };
