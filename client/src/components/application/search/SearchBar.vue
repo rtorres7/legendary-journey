@@ -9,7 +9,7 @@
         pr-3
         rounded-md
         shadow-sm
-        w-full
+        w-[310px]
         xl:w-[400px]
         bg-slate-300
         dark:bg-slate-800
@@ -37,7 +37,12 @@
           energy:text-gray-300
         "
       />
-      <button type="button" @click="toggleModal" class="ml-2 text-slate-800" aria-label="advanced search">
+      <button
+        type="button"
+        @click="toggleModal"
+        class="ml-2 text-slate-800"
+        aria-label="advanced search"
+      >
         <ChevronDownIcon
           class="w-5 h-5 dark:text-slate-300 energy:text-gray-300"
         />

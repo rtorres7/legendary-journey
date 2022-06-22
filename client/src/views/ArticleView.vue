@@ -204,7 +204,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
   },
-  props: ["id"],
+  props: ["id", "title"],
   data() {
     return {
       comments: [],
@@ -231,6 +231,7 @@ export default {
       this.routerError = true;
     }
   },
+  
   methods: {
     getArticle(id) {
       return this.articles.find((article) => article.id === id);
@@ -241,7 +242,18 @@ export default {
     getImgUrl(url) {
       return require("@/assets/" + url);
     },
+    setTitle(str) {
+      document.title = `${str}`;
+    }
   },
+   updated() {
+    if (this.selectedArticle && this.selectedArticle.title) {
+      this.setTitle(this.selectedArticle.title);
+    }
+    else {
+      this.setTitle('Page not found');
+    }
+  }, 
 };
 </script>
 

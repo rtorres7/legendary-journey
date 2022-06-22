@@ -5,7 +5,11 @@
     >
       <div class="hidden lg:flex h-full items-center">
         <router-link class="h-full" to="/">
-          <img class="h-full w-14" src="@/assets/NCTCSealcolor.png" alt="NCTC seal. Link to top of the homepage" />
+          <img
+            class="h-full w-14"
+            src="@/assets/NCTCSealcolor.png"
+            alt="NCTC seal. Link to top of the homepage"
+          />
         </router-link>
         <div
           class="
@@ -29,7 +33,7 @@
           space-y-3
           text-center
           md:text-left md:space-y-0 md:space-x-6
-          text-sm text-slate-300
+          text-sm text-slate-200
           energy:text-gray-300
         "
       >
@@ -73,15 +77,13 @@
                 right-0
                 transform
                 -translate-y-full
-                rounded-md
                 shadow-2xl
                 w-52
                 py-2
                 ring-1 ring-black ring-opacity-5
                 focus:outline-none
-                text-slate-700
-                bg-mission-gray
-                dark:bg-slate-800
+                bg-mission-blue
+                dark:bg-dark-space-blue
                 energy:bg-gray-700
                 dark:ring-0 dark:highlight-white/5 dark:text-slate-300
                 energy:text-gray-300
@@ -93,7 +95,7 @@
                   class="
                     py-1
                     px-3
-                    hover:bg-slate-200/80
+                    hover:bg-slate-700/80
                     dark:hover:bg-slate-600/80
                     energy:hover:bg-gray-600/80
                     flex
@@ -144,14 +146,12 @@
                 right-0
                 transform
                 -translate-y-full
-                rounded-md
                 shadow-2xl
                 w-56
                 ring-1 ring-black ring-opacity-5
                 focus:outline-none
-                text-slate-700
-                bg-mission-gray
-                dark:bg-slate-700
+                bg-mission-blue
+                dark:bg-dark-space-blue
                 energy:bg-gray-700
                 dark:ring-0 dark:highlight-white/5 dark:text-slate-300
                 energy:text-gray-300
@@ -163,7 +163,7 @@
                 class="
                   py-2
                   last:border-none
-                  border-b border-slate-800/10
+                  border-b border-slate-700
                   dark:border-slate-600
                   energy:border-gray-600
                 "
@@ -174,7 +174,7 @@
                     class="
                       py-1
                       px-3
-                      hover:bg-slate-200/80
+                      hover:bg-slate-700/80
                       dark:hover:bg-slate-600/80
                       energy:hover:bg-gray-600/80
                       flex
