@@ -205,20 +205,19 @@
                         "
                       >
                         <MenuItem
+                          as="div"
                           v-for="item in issuesNavigation"
                           :key="item.name"
+                          v-slot="{ active }"
                         >
                           <a
                             :href="item.href"
-                            class="
-                              py-1
-                              px-3
-                              hover:bg-slate-700/80
-                              dark:hover:bg-slate-600/80
-                              energy:hover:bg-gray-600/80
-                              flex
-                              cursor-pointer
-                            "
+                            :class="[
+                              active
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                : '',
+                              'py-1 px-3 flex cursor-pointer',
+                            ]"
                             >{{ item.name }}</a
                           >
                         </MenuItem>
