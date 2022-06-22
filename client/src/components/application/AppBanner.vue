@@ -98,6 +98,7 @@
     </div>
     <div class="mx-auto lg:px-8 lg:pt-2">
       <div class="grid lg:flex items-center lg:justify-between h-16">
+        <!-- Desktop Logo -->
         <div class="hidden lg:flex h-full items-center">
           <router-link class="h-full" to="/">
             <img
@@ -122,6 +123,7 @@
             logo
           </div>
         </div>
+        <!-- Desktop Nav Bar -->
         <div class="hidden lg:block">
           <div class="ml-4 flex items-center md:ml-6 lg:ml-3">
             <SearchBar />
@@ -1156,7 +1158,7 @@
                               px-2
                               py-1
                               cursor-pointer
-                              hover:bg-slate-700/80
+                              hover:bg-slate-200/80
                               dark:hover:bg-slate-600/80
                               energy:hover:bg-gray-600/80
                             "
@@ -1336,7 +1338,7 @@
 
 <script>
 import { ref, watch } from "vue";
-import SearchBar from "./search/SearchBar.vue";
+import SearchBar from "./SearchBar";
 import SideMenuDisclosure from "@/layout/SideMenuDisclosure";
 import MainNavPopover from "@/layout/MainNavPopover";
 import RegionsMap from "@/components/regions/RegionsMap";
