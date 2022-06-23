@@ -184,6 +184,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import ArticleCommentForm from "@/components/ArticleCommentForm.vue";
 import ArticleCommentList from "@/components/ArticleCommentList.vue";
 import NotFound from "@/components/NotFound";
@@ -205,12 +206,17 @@ export default {
     DisclosurePanel,
   },
   props: ["id", "title"],
-  data() {
+  setup() {
+    const comments = ref([]);
+    const articlesData = ref(articles);
+    const selectedArticle = ref();
+    const routerError = ref(true);
+
     return {
-      comments: [],
-      articles: articles,
-      selectedArticle: null,
-      routerError: true,
+      comments,
+      articlesData,
+      selectedArticle,
+      routerError,
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -231,10 +237,9 @@ export default {
       this.routerError = true;
     }
   },
-
   methods: {
     getArticle(id) {
-      return this.articles.find((article) => article.id === id);
+      return this.articlesData.find((article) => article.id === id);
     },
     addComment(comment) {
       this.comments.push(comment);

@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
@@ -34,37 +36,42 @@ export default {
     TheFooter,
     // ScrollToTopBtn,
   },
-  watch: {
-    $route() {
-      this.$refs.topOfApp.focus();
-    },
-  },
   setup() {
-    return {};
-  },
-  mounted() {
-    document.documentElement.classList.remove(
-      ...document.documentElement.classList
-    );
-    switch (localStorage.theme) {
-      case "dark":
-        document.documentElement.classList.add("dark");
-        break;
-      case "energy":
-        document.documentElement.classList.add("energy");
-        break;
-      case "system":
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    const topOfApp = ref(null);
+    const mainContent = ref(null);
+
+    watch(useRoute(), () => {
+      topOfApp.value.focus();
+    });
+
+    onMounted(() => {
+      document.documentElement.classList.remove(
+        ...document.documentElement.classList
+      );
+      switch (localStorage.theme) {
+        case "dark":
           document.documentElement.classList.add("dark");
-        }
-        break;
-      default:
-      //do nothing
-    }
+          break;
+        case "energy":
+          document.documentElement.classList.add("energy");
+          break;
+        case "system":
+          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            document.documentElement.classList.add("dark");
+          }
+          break;
+        default:
+        //do nothing
+      }
+    });
+    return {
+      topOfApp,
+      mainContent,
+    };
   },
   methods: {
     skipToMain() {
-      this.$refs.mainContent.focus();
+      this.mainContent.focus();
     },
   },
 };
