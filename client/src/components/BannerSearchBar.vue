@@ -63,7 +63,6 @@ export default {
     SearchIcon,
     ChevronDownIcon,
   },
-
   setup() {
     const modalActive = ref(false);
 

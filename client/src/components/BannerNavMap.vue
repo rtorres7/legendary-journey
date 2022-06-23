@@ -3,38 +3,46 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 
 export default {
-  mounted() {
-    let root = am5.Root.new(this.$refs.chartdiv);
-    root.setThemes([am5themes_Animated.new(root)]);
+  setup() {
+    const chartdiv = ref(null);
 
-    let chart = root.container.children.push(
-      am5map.MapChart.new(root, {
-        projection: am5map.geoNaturalEarth1(),
-        panX: "translateX",
-        panY: "translateY",
-      })
-    );
-    let polygonSeries = chart.series.push(
-      am5map.MapPolygonSeries.new(root, {
-        geoJSON: am5geodata_worldLow,
-        exclude: ["AQ"],
-      })
-    );
-    polygonSeries.mapPolygons.template.states.create("hover", {
-      fill: am5.color(0x6a737b),
+    onMounted(() => {
+      let root = am5.Root.new(chartdiv.value);
+      root.setThemes([am5themes_Animated.new(root)]);
+
+      let chart = root.container.children.push(
+        am5map.MapChart.new(root, {
+          projection: am5map.geoNaturalEarth1(),
+          panX: "translateX",
+          panY: "translateY",
+        })
+      );
+      let polygonSeries = chart.series.push(
+        am5map.MapPolygonSeries.new(root, {
+          geoJSON: am5geodata_worldLow,
+          exclude: ["AQ"],
+        })
+      );
+      polygonSeries.mapPolygons.template.states.create("hover", {
+        fill: am5.color(0x6a737b),
+      });
+      polygonSeries.mapPolygons.template.setAll({
+        tooltipText: "{name}",
+        interactive: true,
+        strokeWidth: 1,
+        fill: am5.color(0xc2c4cb),
+      });
     });
-    polygonSeries.mapPolygons.template.setAll({
-      tooltipText: "{name}",
-      interactive: true,
-      strokeWidth: 1,
-      fill: am5.color(0xc2c4cb),
-    });
+    return {
+      chartdiv,
+    };
   },
 };
 </script>

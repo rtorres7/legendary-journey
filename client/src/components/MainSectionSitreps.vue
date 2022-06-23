@@ -122,6 +122,45 @@ const sitreps = [
   },
 ];
 
+// carousel settings
+const settings = {
+  itemsToShow: 1.75,
+  snapAlign: "start",
+};
+// carousel breakpoints
+const breakpoints = {
+  //iPhone XR
+  414: {
+    itemsToShow: 1.65,
+    snapAlign: "start",
+  },
+  //Custom Size
+  500: {
+    itemsToShow: 1.9,
+    snapAlign: "start",
+  },
+  //Custom Size
+  600: {
+    itemsToShow: 2.25,
+    snapAlign: "start",
+  },
+  //Tailwind MD
+  768: {
+    itemsToShow: 2.85,
+    snapAlign: "start",
+  },
+  //iPad Air
+  820: {
+    itemsToShow: 3.25,
+    snapAlign: "start",
+  },
+  //Custom Size
+  950: {
+    itemsToShow: 3.75,
+    snapAlign: "start",
+  },
+};
+
 export default {
   components: {
     LockClosedIcon,
@@ -131,50 +170,12 @@ export default {
     BaseCard,
   },
   setup() {
-    //
     return {
       sitreps,
+      settings,
+      breakpoints,
     };
   },
-  data: () => ({
-    // carousel settings
-    settings: {
-      itemsToShow: 1.75,
-      snapAlign: "start",
-    },
-    breakpoints: {
-      //iPhone XR
-      414: {
-        itemsToShow: 1.65,
-        snapAlign: "start",
-      },
-      //Custom Size
-      500: {
-        itemsToShow: 1.9,
-        snapAlign: "start",
-      },
-      //Custom Size
-      600: {
-        itemsToShow: 2.25,
-        snapAlign: "start",
-      },
-      //Tailwind MD
-      768: {
-        itemsToShow: 2.85,
-        snapAlign: "start",
-      },
-      //iPad Air
-      820: {
-        itemsToShow: 3.25,
-        snapAlign: "start",
-      },
-      //Custom Size
-      950: {
-        itemsToShow: 3.75,
-        snapAlign: "start",
-      },
-    },
-  }),
 };
 </script>
 <style lang="scss" scoped>

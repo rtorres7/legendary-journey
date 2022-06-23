@@ -1,5 +1,5 @@
 <template>
-  <div v-for="article in articles.slice(1, 7)" :key="article.id">
+  <div v-for="article in articlesData.slice(1, 7)" :key="article.id">
     <BaseCard class="flex flex-col lg:flex-row md:max-w-xl hover:underline">
       <router-link :to="{ name: 'article', params: { id: article.id } }">
         <div class="p-6 flex flex-col justify-start">
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import BaseCard from "@/components/base/BaseCard";
 import articles from "@/data/articles.js";
 
@@ -64,9 +65,11 @@ export default {
   components: {
     BaseCard,
   },
-  data() {
+  setup() {
+    const articlesData = ref(articles);
+
     return {
-      articles: articles,
+      articlesData,
     };
   },
   methods: {

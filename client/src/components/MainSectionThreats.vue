@@ -68,6 +68,46 @@ const threats = [
   },
 ];
 
+// carousel settings
+const settings = {
+  itemsToShow: 1.25,
+  snapAlign: "start",
+};
+
+// carousel breakpoints
+const breakpoints = {
+  //iPhone XR
+  414: {
+    itemsToShow: 1.3,
+    snapAlign: "start",
+  },
+  //Custom Size
+  500: {
+    itemsToShow: 1.5,
+    snapAlign: "start",
+  },
+  //Custom Size
+  600: {
+    itemsToShow: 1.9,
+    snapAlign: "start",
+  },
+  //Tailwind MD
+  768: {
+    itemsToShow: 2.5,
+    snapAlign: "start",
+  },
+  //iPad Air
+  820: {
+    itemsToShow: 2.65,
+    snapAlign: "start",
+  },
+  //Custom Size
+  950: {
+    itemsToShow: 3.15,
+    snapAlign: "start",
+  },
+};
+
 export default {
   components: {
     Carousel,
@@ -79,47 +119,10 @@ export default {
     //
     return {
       threats,
+      settings,
+      breakpoints,
     };
   },
-  data: () => ({
-    // carousel settings
-    settings: {
-      itemsToShow: 1.25,
-      snapAlign: "start",
-    },
-    breakpoints: {
-      //iPhone XR
-      414: {
-        itemsToShow: 1.3,
-        snapAlign: "start",
-      },
-      //Custom Size
-      500: {
-        itemsToShow: 1.5,
-        snapAlign: "start",
-      },
-      //Custom Size
-      600: {
-        itemsToShow: 1.9,
-        snapAlign: "start",
-      },
-      //Tailwind MD
-      768: {
-        itemsToShow: 2.5,
-        snapAlign: "start",
-      },
-      //iPad Air
-      820: {
-        itemsToShow: 2.65,
-        snapAlign: "start",
-      },
-      //Custom Size
-      950: {
-        itemsToShow: 3.15,
-        snapAlign: "start",
-      },
-    },
-  }),
 };
 </script>
 <style lang="scss">
