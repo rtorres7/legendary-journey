@@ -47,19 +47,19 @@
           class="w-5 h-5 dark:text-slate-300 energy:text-gray-300"
         />
       </button>
-      <SearchModal :modalActive="modalActive" @close="toggleModal" />
+      <BannerSearchBarModal :modalActive="modalActive" @close="toggleModal" />
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import SearchModal from "./SearchModal.vue";
+import BannerSearchBarModal from "./BannerSearchBarModal.vue";
 import { SearchIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
-    SearchModal,
+    BannerSearchBarModal,
     SearchIcon,
     ChevronDownIcon,
   },

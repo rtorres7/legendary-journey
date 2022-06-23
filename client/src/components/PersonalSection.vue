@@ -41,7 +41,7 @@
     </div>
     <Carousel :settings="settings" :breakpoints="breakpoints" class="lg:hidden">
       <Slide v-for="item in items" :key="item" class="p-2 pb-10">
-        <PersonalCard :article="item" :carousel="true" />
+        <PersonalSectionCard :article="item" :carousel="true" />
       </Slide>
     </Carousel>
   </div>
@@ -49,14 +49,14 @@
 
 <script>
 import { Carousel, Slide } from "vue3-carousel";
-import PersonalCard from "./PersonalCard.vue";
+import PersonalSectionCard from "./PersonalSectionCard.vue";
 
 export default {
   name: "PersonalFeedList",
   components: {
     Carousel,
     Slide,
-    PersonalCard,
+    PersonalSectionCard,
   },
   props: {
     title: String,

@@ -118,7 +118,7 @@
             </ol>
           </DisclosurePanel>
         </Disclosure>
-        <CommentsList
+        <ArticleCommentList
           :comments="comments"
           class="
             border-t-2 border-slate-900/10
@@ -127,7 +127,7 @@
             pt-4
           "
         />
-        <CommentForm
+        <ArticleCommentForm
           @comment-submitted="addComment"
           class="
             border-t-2 border-slate-900/10
@@ -184,9 +184,9 @@
 </template>
 
 <script>
-import CommentForm from "@/components/comments/CommentForm.vue";
-import CommentsList from "@/components/comments/CommentsList.vue";
-import NotFound from "@/components/application/NotFound";
+import ArticleCommentForm from "@/components/ArticleCommentForm.vue";
+import ArticleCommentList from "@/components/ArticleCommentList.vue";
+import NotFound from "@/components/NotFound";
 import { PrinterIcon, MailIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import articles from "@/data/articles.js";
@@ -194,8 +194,8 @@ import articles from "@/data/articles.js";
 export default {
   name: "ArticlePageView",
   components: {
-    CommentForm,
-    CommentsList,
+    ArticleCommentForm,
+    ArticleCommentList,
     NotFound,
     PrinterIcon,
     MailIcon,
@@ -231,7 +231,7 @@ export default {
       this.routerError = true;
     }
   },
-  
+
   methods: {
     getArticle(id) {
       return this.articles.find((article) => article.id === id);
@@ -244,16 +244,15 @@ export default {
     },
     setTitle(str) {
       document.title = `${str}`;
-    }
+    },
   },
-   updated() {
+  updated() {
     if (this.selectedArticle && this.selectedArticle.title) {
       this.setTitle(this.selectedArticle.title);
+    } else {
+      this.setTitle("Page not found");
     }
-    else {
-      this.setTitle('Page not found');
-    }
-  }, 
+  },
 };
 </script>
 

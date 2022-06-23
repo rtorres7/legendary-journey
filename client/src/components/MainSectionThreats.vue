@@ -18,7 +18,7 @@
     <div class="hidden h-full lg:flex flex-col justify-between">
       <div class="flex flex-col">
         <template v-for="item in threats" :key="item">
-          <ThreatCard :threat="item" class="mb-4" />
+          <MainSectionThreatsCard :threat="item" class="mb-4" />
         </template>
       </div>
       <p
@@ -35,7 +35,7 @@
     </div>
     <Carousel :settings="settings" :breakpoints="breakpoints" class="lg:hidden">
       <Slide v-for="item in threats" :key="item">
-        <ThreatCard :threat="item" :carousel="true" />
+        <MainSectionThreatsCard :threat="item" :carousel="true" />
       </Slide>
       <template #addons>
         <Navigation class="hidden" />
@@ -45,7 +45,7 @@
 </template>
 <script>
 import { Carousel, Navigation, Slide } from "vue3-carousel";
-import ThreatCard from "./ThreatCard";
+import MainSectionThreatsCard from "./MainSectionThreatsCard";
 
 const threats = [
   {
@@ -66,30 +66,6 @@ const threats = [
     date: "23 April 2022",
     locked: true,
   },
-  // {
-  //   title:
-  //     "(U) Volutpat diam ut venenatis tellus in metus vulputate eu. Orci phasellus egestas tellus rutrum tellus.",
-  //   date: "22 April 2022",
-  //   locked: false,
-  // },
-  // {
-  //   title:
-  //     "(U) Dictumst quisque sagittis purus sit amet volutpat consequat mauris nunc. Aliquet lectus proin nibh nisl condimentum id venenatis.",
-  //   date: "21 April 2022",
-  //   locked: false,
-  // },
-  // {
-  //   title:
-  //     "(U) Quisque non tellus orci ac auctor augue. Amet massa vitae tortor condimentum lacinia quis vel eros.",
-  //   date: "20 April 2022",
-  //   locked: true,
-  // },
-  // {
-  //   title:
-  //     "(U) Tempor id eu nisl nunc mi. Diam maecenas sed enim ut sem viverra aliquet eget sit.",
-  //   date: "19 April 2022",
-  //   locked: false,
-  // },
 ];
 
 export default {
@@ -97,7 +73,7 @@ export default {
     Carousel,
     Slide,
     Navigation,
-    ThreatCard,
+    MainSectionThreatsCard,
   },
   setup() {
     //

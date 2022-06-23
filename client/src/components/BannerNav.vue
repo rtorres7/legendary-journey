@@ -1,56 +1,4 @@
 <template>
-  <div
-    v-if="!hasAcknowledged"
-    id="system-message"
-    class="
-      bg-mission-blue
-      dark:bg-dark-space-blue
-      energy:bg-gray-800
-      justify-center
-      p-4
-    "
-  >
-    <div
-      class="
-        flex
-        items-center
-        bg-slate-700/40
-        dark:bg-slate-700/30
-        energy:bg-gray-700/40
-        rounded-lg
-        p-4
-      "
-    >
-      <p class="text-sm text-amber-300 dark:text-teal-400">
-        Use of this system message content placeholder message. Sit an qualisque
-        appellantur. Eu clita omnesque elaboraret usu, semper dictas vim ea. Nam
-        ea ipsum sonet. Volumus fabellas expetendis no quo, ei pro commodo
-        pertinax. Diam doming inimicus ex est, ex his audiam fastidii
-        persequeris. No has nihil electram.
-      </p>
-      <a
-        aria-label="Remove system message"
-        @click="removeSystemMessage"
-        class="m-4 text-slate-300 hover:text-white"
-      >
-        <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
-      </a>
-    </div>
-  </div>
-  <div id="classification">
-    <p
-      class="
-        text-slate-300
-        bg-mission-blue
-        dark:text-slate-300 dark:bg-dark-space-blue
-        energy:text-gray-300 energy:bg-gray-800
-        text-center text-sm
-        uppercase
-      "
-    >
-      Unclassified
-    </p>
-  </div>
   <nav
     class="
       text-slate-200
@@ -126,7 +74,7 @@
         <!-- Desktop Nav Bar -->
         <div class="hidden lg:block">
           <div class="ml-4 flex items-center md:ml-6 lg:ml-3">
-            <SearchBar />
+            <BannerSearchBar />
             <div class="text-sm leading-6 pl-6 pr-3">
               <ul class="flex space-x-3 xl:space-x-4">
                 <li>
@@ -228,7 +176,7 @@
                   </Menu>
                 </li>
                 <li>
-                  <MainNavPopover>
+                  <BannerNavPopover>
                     <template #heading>
                       Regions<ChevronDownIcon
                         class="h-3 w-3 ml-1"
@@ -283,10 +231,10 @@
                         </p>
                       </div>
                     </template>
-                  </MainNavPopover>
+                  </BannerNavPopover>
                 </li>
                 <li>
-                  <MainNavPopover>
+                  <BannerNavPopover>
                     <template #heading>
                       <GlobeIcon class="h-6 w-6" aria-label="View world map" />
                     </template>
@@ -393,9 +341,9 @@
                           </div>
                         </Listbox>
                       </div>
-                      <RegionsMap aria-hidden="true" />
+                      <BannerNavMap aria-hidden="true" />
                     </template>
-                  </MainNavPopover>
+                  </BannerNavPopover>
                 </li>
               </ul>
             </div>
@@ -711,275 +659,7 @@
       </div>
     </div>
     <!-- Mobile side menu -->
-    <TransitionRoot appear :show="isMainMenuOpen" as="template">
-      <Dialog as="div" class="block lg:hidden" @close="closeMainMenuModal">
-        <div class="fixed z-20 inset-0 overflow-y-auto w-full">
-          <div class="min-h-screen text-center">
-            <TransitionChild
-              as="template"
-              enter="transition-opacity ease-linear duration-300"
-              enter-from="opacity-0"
-              enter-to="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leave-from="opacity-100"
-              leave-to="opacity-0"
-            >
-              <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
-            </TransitionChild>
-            <TransitionChild
-              as="template"
-              enter="transform transition ease-in-out duration-300"
-              enter-from="-translate-x-full"
-              enter-to="translate-x-0"
-              leave="transform transition ease-in-out duration-300"
-              leave-from="translate-x-0"
-              leave-to="-translate-x-full"
-            >
-              <div
-                class="
-                  relative
-                  min-h-screen
-                  w-80
-                  max-w-calc[(100%-3rem)]
-                  p-6
-                  text-left
-                  align-top
-                  transition-all
-                  transform
-                  text-slate-700
-                  dark:text-slate-300
-                  energy:text-gray-300
-                  bg-mission-gray
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  shadow-lg
-                "
-              >
-                <button
-                  type="button"
-                  class="
-                    absolute
-                    top-5
-                    right-5
-                    w-8
-                    h-8
-                    flex
-                    items-center
-                    justify-center
-                  "
-                  tabindex="0"
-                  @click="closeMainMenuModal"
-                >
-                  <span class="sr-only">Close main menu</span
-                  ><XIcon class="h-5 w-5" aria-hidden="true" />
-                </button>
-                <ul class="space-y-6">
-                  <li v-for="item in mainNavigation" :key="item">
-                    <a
-                      class="
-                        font-semibold
-                        hover:text-black
-                        dark:hover:text-white
-                        energy:text-white
-                      "
-                      :href="item.href"
-                      >{{ item.name }}</a
-                    >
-                  </li>
-                  <li>
-                    <SideMenuDisclosure :title="'Issues'">
-                      <ul class="list-disc list-inside ml-4 mt-4">
-                        <template
-                          v-for="issue in issuesNavigation"
-                          :key="issue"
-                        >
-                          <li>
-                            <router-link to="/" class="hover:underline">{{
-                              issue.name
-                            }}</router-link>
-                          </li>
-                        </template>
-                      </ul>
-                    </SideMenuDisclosure>
-                  </li>
-                  <li>
-                    <SideMenuDisclosure :title="'Regions'">
-                      <div class="ml-4 mt-4 space-y-4">
-                        <div v-for="region in regions" :key="region">
-                          <Disclosure v-slot="{ open }">
-                            <DisclosureButton
-                              class="
-                                hover:text-black
-                                dark:hover:text-white
-                                energy:text-white
-                                flex
-                                space-x-2
-                                items-center
-                              "
-                            >
-                              <span>{{ region.name }}</span>
-                              <ChevronDownIcon
-                                class="h-3 w-3"
-                                :class="open ? 'transform rotate-180' : ''"
-                              />
-                            </DisclosureButton>
-                            <transition
-                              enter-active-class="transition ease-out duration-100"
-                              enter-from-class="transform opacity-0 scale-95"
-                              enter-to-class="transform opacity-100 scale-100"
-                              leave-active-class="transition ease-in duration-75"
-                              leave-from-class="transform opacity-100 scale-100"
-                              leave-to-class="transform opacity-0 scale-95"
-                            >
-                              <DisclosurePanel>
-                                <ul class="list-disc list-inside ml-4 my-2">
-                                  <template
-                                    v-for="subRegion in region.subRegions"
-                                    :key="subRegion"
-                                  >
-                                    <li v-if="subRegion.name != ''">
-                                      <router-link
-                                        to=""
-                                        class="font-light hover:underline"
-                                        >{{ subRegion.name }}</router-link
-                                      >
-                                    </li>
-                                  </template>
-                                </ul>
-                              </DisclosurePanel>
-                            </transition>
-                          </Disclosure>
-                        </div>
-                        <p
-                          class="
-                            text-sm
-                            pt-4
-                            border-t border-slate-900/10
-                            dark:border-slate-50/[0.06]
-                            energy:border-gray-700/25
-                          "
-                        >
-                          View a
-                          <a
-                            @click="openPDF"
-                            class="cursor-pointer underline"
-                            aria-label="View a PDF document with a list of countries that fall under each region and subregion"
-                          >
-                            list of countries
-                          </a>
-                          that fall under each region and subregion
-                        </p>
-                      </div>
-                    </SideMenuDisclosure>
-                  </li>
-                  <li>
-                    <SideMenuDisclosure :title="'Countries'">
-                      <div class="ml-4 mt-4">
-                        <label for="country" aria-hidden="true"
-                          >Select a country</label
-                        >
-                        <Listbox
-                          v-model="selectedCountry"
-                          aria-label="select a country from the dropdown"
-                        >
-                          <div class="relative mt-1">
-                            <ListboxButton
-                              class="
-                                flex
-                                relative
-                                w-full
-                                p-2
-                                text-left
-                                capitalize
-                                bg-white
-                                dark:bg-slate-600
-                                energy:bg-gray-600
-                                rounded-lg
-                                shadow-md
-                                cursor-default
-                                focus:outline-none
-                                focus-visible:ring-2
-                                focus-visible:ring-opacity-75
-                                focus-visible:ring-offset-2
-                              "
-                            >
-                              <span class="block truncate">{{
-                                selectedCountry.name
-                              }}</span>
-                              <span
-                                class="
-                                  absolute
-                                  inset-y-0
-                                  right-0
-                                  flex
-                                  items-center
-                                  pr-2
-                                "
-                              >
-                                <SelectorIcon
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </ListboxButton>
-                            <transition
-                              enter-active-class="transition ease-out duration-100"
-                              enter-from-class="transform opacity-0 scale-95"
-                              enter-to-class="transform opacity-100 scale-100"
-                              leave-active-class="transition ease-in duration-75"
-                              leave-from-class="transform opacity-100 scale-100"
-                              leave-to-class="transform opacity-0 scale-95"
-                            >
-                              <ListboxOptions
-                                class="
-                                  absolute
-                                  w-full
-                                  py-1
-                                  mt-1
-                                  overflow-auto
-                                  bg-white
-                                  dark:bg-slate-600
-                                  energy:bg-gray-600
-                                  rounded-md
-                                  shadow-lg
-                                  max-h-60
-                                  ring-1 ring-black ring-opacity-5
-                                  focus:outline-none
-                                  z-10
-                                "
-                              >
-                                <ListboxOption
-                                  v-slot="{ active }"
-                                  v-for="country in countries"
-                                  :key="country"
-                                  :value="country"
-                                  as="template"
-                                  class="capitalize px-2 py-1 cursor-pointer"
-                                >
-                                  <li
-                                    :class="[
-                                      active
-                                        ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
-                                        : 'bg-none',
-                                    ]"
-                                  >
-                                    {{ country.name }}
-                                  </li>
-                                </ListboxOption>
-                              </ListboxOptions>
-                            </transition>
-                          </div>
-                        </Listbox>
-                      </div>
-                    </SideMenuDisclosure>
-                  </li>
-                </ul>
-              </div>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
+    <MobileSideMenu :isOpen="isMainMenuOpen" @close="closeMainMenuModal" />
     <!-- Mobile user menu -->
     <TransitionRoot appear :show="isUserMenuOpen" as="template">
       <Dialog as="div" class="block lg:hidden" @close="closeUserMenuModal">
@@ -1338,16 +1018,13 @@
 
 <script>
 import { ref, watch } from "vue";
-import SearchBar from "./SearchBar";
-import SideMenuDisclosure from "@/layout/SideMenuDisclosure";
-import MainNavPopover from "@/layout/MainNavPopover";
-import RegionsMap from "@/components/regions/RegionsMap";
+import BannerSearchBar from "./BannerSearchBar.vue";
+import BannerNavPopover from "@/components/BannerNavPopover";
+import BannerNavMap from "@/components/BannerNavMap";
+import MobileSideMenu from "@/components/MobileSideMenu";
 import {
   Dialog,
   DialogOverlay,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
   Listbox,
   ListboxButton,
   ListboxOptions,
@@ -1407,15 +1084,12 @@ const themeOptions = ["light", "dark", "energy", "system"];
 
 export default {
   components: {
-    SearchBar,
-    SideMenuDisclosure,
-    MainNavPopover,
-    RegionsMap,
+    BannerSearchBar,
+    BannerNavPopover,
+    MobileSideMenu,
+    BannerNavMap,
     Dialog,
     DialogOverlay,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
     Listbox,
     ListboxButton,
     ListboxOptions,
@@ -1455,7 +1129,6 @@ export default {
         : false;
     }
     const selectedTheme = ref(localStorage.getItem("theme"));
-    const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));
 
     const changeTheme = (newTheme) => {
       selectedTheme.value = newTheme;
@@ -1496,16 +1169,11 @@ export default {
       isAlertMenuOpen,
       isDark,
       selectedTheme,
-      hasAcknowledged,
       changeTheme,
       alertEnabled,
     };
   },
   methods: {
-    removeSystemMessage() {
-      document.querySelector("#system-message").remove();
-      sessionStorage.setItem("acknowledged", true);
-    },
     removeAlertMessage() {
       this.alertEnabled = false;
     },
