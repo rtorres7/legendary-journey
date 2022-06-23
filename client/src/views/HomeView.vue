@@ -85,10 +85,10 @@
 import * as dayjs from "dayjs";
 import { ref } from "vue";
 import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
-import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
-import PersonalSection from "@/components/PersonalSection.vue";
 import MainSectionSitreps from "@/components/MainSectionSitreps";
-import MainSectionThreats from "@/components/MainSectionThreats.vue";
+import MainSectionThreats from "@/components/MainSectionThreats";
+import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
+import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [

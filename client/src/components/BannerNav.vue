@@ -220,13 +220,13 @@
                           "
                         >
                           View a
-                          <a
+                          <button
                             @click="openPDF"
-                            class="cursor-pointer underline"
+                            class="underline"
                             aria-label="View a PDF document with a list of countries that fall under each region and subregion"
                           >
                             list of countries
-                          </a>
+                          </button>
                           that fall under each region and subregion
                         </p>
                       </div>
@@ -1018,7 +1018,7 @@
 
 <script>
 import { ref, watch } from "vue";
-import BannerSearchBar from "./BannerSearchBar.vue";
+import BannerSearchBar from "@/components/BannerSearchBar.vue";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
 import MobileSideMenu from "@/components/MobileSideMenu";

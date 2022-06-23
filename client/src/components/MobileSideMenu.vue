@@ -145,13 +145,13 @@
                         "
                       >
                         View a
-                        <a
+                        <button
                           @click="openPDF"
-                          class="cursor-pointer underline"
+                          class="underline"
                           aria-label="View a PDF document with a list of countries that fall under each region and subregion"
                         >
                           list of countries
-                        </a>
+                        </button>
                         that fall under each region and subregion
                       </p>
                     </div>

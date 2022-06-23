@@ -56,7 +56,7 @@
 
 <script>
 import { ref } from "vue";
-import BannerNav from "./BannerNav.vue";
+import BannerNav from "@/components/BannerNav.vue";
 import { XIcon } from "@heroicons/vue/outline";
 
 export default {

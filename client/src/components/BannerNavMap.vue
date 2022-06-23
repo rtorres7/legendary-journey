@@ -9,7 +9,6 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 
 export default {
-  name: "RegionsMap",
   mounted() {
     let root = am5.Root.new(this.$refs.chartdiv);
     root.setThemes([am5themes_Animated.new(root)]);

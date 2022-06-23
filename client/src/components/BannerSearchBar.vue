@@ -54,7 +54,7 @@
 
 <script>
 import { ref } from "vue";
-import BannerSearchBarModal from "./BannerSearchBarModal.vue";
+import BannerSearchBarModal from "@/components/BannerSearchBarModal.vue";
 import { SearchIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
 export default {
