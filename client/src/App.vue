@@ -1,15 +1,7 @@
 <template>
-  <!--
-    This example requires updating your template:
-
-    ```
-    <html class="h-full bg-gray-100">
-    <body class="h-full">
-    ```
-  -->
   <div class="min-h-full" ref="topOfApp" tabindex="-1">
     <button @click="skipToMain" class="skipLink">Skip to main content</button>
-    <AppBanner v-if="!['attachment'].includes($route.name)" />
+    <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
       class="
@@ -19,29 +11,33 @@
         energy:text-gray-300 energy:bg-gray-900
       "
     >
-      <div class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8" ref="mainContent" tabindex="-1">
+      <div
+        class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8"
+        ref="mainContent"
+        tabindex="-1"
+      >
         <router-view></router-view>
       </div>
     </main>
-    <AppFooter v-if="!['attachment'].includes($route.name)"  />
+    <TheFooter v-if="!['attachment'].includes($route.name)" />
   </div>
 </template>
 
 <script>
-import AppBanner from "@/components/application/AppBanner.vue";
-import AppFooter from "@/components/application/AppFooter.vue";
+import TheBanner from "@/components/TheBanner";
+import TheFooter from "@/components/TheFooter";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
 
 export default {
   components: {
-    AppBanner,
-    AppFooter,
+    TheBanner,
+    TheFooter,
     // ScrollToTopBtn,
   },
   watch: {
     $route() {
       this.$refs.topOfApp.focus();
-    }
+    },
   },
   setup() {
     return {};
@@ -69,7 +65,7 @@ export default {
   methods: {
     skipToMain() {
       this.$refs.mainContent.focus();
-    }
+    },
   },
 };
 </script>
@@ -96,20 +92,20 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.skipLink{
-    &:link,
-    &:visited {
-        color: black;
-    }
-    position: absolute;
-    left: -9999px;
-    top: 20px;
-    z-index: 1000;
-    &:active, 
-    &:focus {
-        background: white;
-        left: 20px;
-        padding: 10px;
-    }
+.skipLink {
+  &:link,
+  &:visited {
+    color: black;
+  }
+  position: absolute;
+  left: -9999px;
+  top: 20px;
+  z-index: 1000;
+  &:active,
+  &:focus {
+    background: white;
+    left: 20px;
+    padding: 10px;
+  }
 }
 </style>

@@ -22,7 +22,7 @@
     </div>
     <div class="hidden lg:grid lg:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-for="(item, index) in 3" :key="item">
-        <PersonalCard :article="items[index]" />
+        <PersonalSectionCard :article="items[index]" />
       </template>
     </div>
     <div
@@ -41,7 +41,7 @@
     </div>
     <Carousel :settings="settings" :breakpoints="breakpoints" class="lg:hidden">
       <Slide v-for="item in items" :key="item" class="p-2 pb-10">
-        <PersonalCard :article="item" :carousel="true" />
+        <PersonalSectionCard :article="item" :carousel="true" />
       </Slide>
     </Carousel>
   </div>
@@ -49,14 +49,13 @@
 
 <script>
 import { Carousel, Slide } from "vue3-carousel";
-import PersonalCard from "./PersonalCard.vue";
+import PersonalSectionCard from "@/components/PersonalSectionCard.vue";
 
 export default {
-  name: "PersonalFeedList",
   components: {
     Carousel,
     Slide,
-    PersonalCard,
+    PersonalSectionCard,
   },
   props: {
     title: String,

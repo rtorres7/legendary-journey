@@ -92,7 +92,7 @@
 <script>
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
-import BaseCard from "@/layout/BaseCard.vue";
+import BaseCard from "@/components/base/BaseCard";
 
 const sitreps = [
   {
@@ -120,7 +120,6 @@ const sitreps = [
     date: "04/20/22, 0100 EDT",
     locked: true,
   },
-  // { title: "(U) SITREP TItle", date: "04/19/22, 0100 EDT", locked: true },
 ];
 
 export default {

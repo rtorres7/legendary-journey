@@ -34,10 +34,10 @@
           energy:border-gray-700/25
         "
       >
-        <SitrepList />
+        <MainSectionSitreps />
       </div>
       <div class="py-4 lg:py-0 lg:basis-3/5 lg:px-4">
-        <ArticleHeadlineCard />
+        <MainSectionHeadlineCard />
       </div>
       <div
         class="
@@ -50,11 +50,11 @@
           energy:border-gray-700/25
         "
       >
-        <ThreatList />
+        <MainSectionThreats />
       </div>
     </div>
   </div>
-  <!-- Features Articles Section -->
+  <!-- Featured Articles Section -->
   <div
     class="
       pt-4
@@ -66,7 +66,7 @@
   >
     <div class="font-semibold mb-4">Featured Articles</div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6 text-left">
-        <ArticleCard></ArticleCard>
+      <FeaturedArticlesCard></FeaturedArticlesCard>
     </div>
   </div>
   <!-- Personal Section -->
@@ -84,11 +84,11 @@
 <script>
 import * as dayjs from "dayjs";
 import { ref } from "vue";
-import ArticleHeadlineCard from "@/components/article/ArticleHeadlineCard";
-import ArticleCard from "@/components/article/ArticleCard";
-import PersonalSection from "@/components/personal/PersonalSection.vue";
-import SitrepList from "@/components/sitrep/SitrepList.vue";
-import ThreatList from "@/components/threat/ThreatList.vue";
+import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
+import MainSectionSitreps from "@/components/MainSectionSitreps";
+import MainSectionThreats from "@/components/MainSectionThreats";
+import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
+import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
@@ -142,11 +142,11 @@ const personalArticles = [
 
 export default {
   components: {
-    ArticleHeadlineCard,
+    MainSectionHeadlineCard,
     CalendarIcon,
-    SitrepList,
-    ArticleCard,
-    ThreatList,
+    MainSectionSitreps,
+    FeaturedArticlesCard,
+    MainSectionThreats,
     PersonalSection,
     // ScrollToTopBtn,
   },
