@@ -39,6 +39,7 @@
 </template>
 
 <script>
+//TODO: Convert to Composition API syntax before this feature is implemented.
 import { ChevronUpIcon } from "@heroicons/vue/outline";
 
 export default {

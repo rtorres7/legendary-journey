@@ -120,7 +120,6 @@
                       "
                       tabindex="0"
                     >
-                      <span class="sr-only">Open issues menu</span>
                       Issues<ChevronDownIcon
                         class="h-3 w-3 ml-1"
                         aria-hidden="true"

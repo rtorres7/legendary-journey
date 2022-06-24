@@ -51,6 +51,24 @@
 import { Carousel, Slide } from "vue3-carousel";
 import PersonalSectionCard from "@/components/PersonalSectionCard.vue";
 
+// carousel settings
+const settings = {
+  itemsToShow: 1.5,
+  snapAlign: "start",
+};
+
+// carousel breakpoints
+const breakpoints = {
+  768: {
+    itemsToShow: 2.5,
+    snapAlign: "start",
+  },
+  1024: {
+    itemsToShow: 0,
+    snapAlign: "start",
+  },
+};
+
 export default {
   components: {
     Carousel,
@@ -63,26 +81,10 @@ export default {
   },
   setup() {
     return {
-      //
+      settings,
+      breakpoints,
     };
   },
-  data: () => ({
-    // carousel settings
-    settings: {
-      itemsToShow: 1.5,
-      snapAlign: "start",
-    },
-    breakpoints: {
-      768: {
-        itemsToShow: 2.5,
-        snapAlign: "start",
-      },
-      1024: {
-        itemsToShow: 0,
-        snapAlign: "start",
-      },
-    },
-  }),
 };
 </script>
 <style lang="scss" scoped>

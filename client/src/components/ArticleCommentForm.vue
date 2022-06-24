@@ -73,12 +73,18 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
-  data() {
+  setup() {
+    const acknowledgement = ref(false);
+    const comment = ref();
+    const classification = ref();
+
     return {
-      comment: "",
-      acknowledgement: false,
-      classification: "",
+      acknowledgement,
+      comment,
+      classification,
     };
   },
   methods: {
