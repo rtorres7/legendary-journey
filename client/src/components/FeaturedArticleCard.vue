@@ -7,7 +7,7 @@
         alt=""
       />
     </div>
-    <div class="pt-4 xl:pt-2 px-4 h-1/3">
+    <div class="flex flex-col justify-between pt-4 xl:pt-2 px-4 h-1/3">
       <h1
         class="
           text-black
@@ -21,7 +21,7 @@
       </h1>
       <p
         class="
-          mt-2
+          mb-2
           xl:mt-1
           text-center text-sm text-slate-600
           dark:text-slate-300/80

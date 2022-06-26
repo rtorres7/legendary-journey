@@ -9,24 +9,28 @@
             alt=""
           />
         </div>
-        <div class="mt-4 px-4 h-1/2">
-          <h1
-            class="
-              text-black
-              dark:text-teal-300
-              energy:text-slate-200
-              font-semibold
-              text-center text-lg
-            "
-          >
-            {{ article.title }}
-          </h1>
-          <p class="mt-4 text-md line-clamp-3 md:line-clamp-4 lg:line-clamp-6">
-            {{ article.content[0] }}
-          </p>
+        <div class="flex flex-col justify-between mt-4 px-4 h-1/2">
+          <div>
+            <h1
+              class="
+                text-black
+                dark:text-teal-300
+                energy:text-slate-200
+                font-semibold
+                text-center text-lg
+              "
+            >
+              {{ article.title }}
+            </h1>
+            <p
+              class="mt-4 text-md line-clamp-3 md:line-clamp-4 lg:line-clamp-6"
+            >
+              {{ article.content[0] }}
+            </p>
+          </div>
           <p
             class="
-              mt-4
+              mb-4
               text-center text-sm text-slate-600
               dark:text-slate-300/80
               energy:text-slate-300/80
