@@ -12,7 +12,7 @@
       "
     >
       <div
-        class="max-w-xl md:max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8"
+        class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8"
         ref="mainContent"
         tabindex="-1"
       >

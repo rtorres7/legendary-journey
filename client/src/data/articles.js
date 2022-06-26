@@ -1,4 +1,41 @@
 const articles = [
+    /* source - Channel News Asia - https://www.channelnewsasia.com/world/russia-steps-missile-strikes-ukraine-g7-leaders-gather-2771576 */
+    {
+        id: "0012419",
+        type: "article",
+        title: "(U) Russia steps up missile strikes on Ukraine as G7 leaders gather",
+        author: "Reuters",
+        classification: "Unclassified",
+        content: [
+            '(U) Russian missiles struck an apartment block and close to a kindergarten in the Ukrainian capital Kyiv on Sunday (Jun 26), in strikes US President Joe Biden condemned as "barbarism" as world leaders gathered in Europe to discuss further sanctions against Moscow. Up to four explosions shook central Kyiv in the early hours, in the first such attack on the city in weeks.',
+            "(U) A Reuters photographer saw a large blast crater near a playground in a kindergarten that had smashed windows. Deputy Mayor Mykola Povoroznyk said one person was killed and six wounded. He said explosions heard later in other parts if Kyiv were air defences destroying further incoming missiles. Russia has stepped up air strikes on Ukraine this weekend, which has also seen the fall of a strategic eastern city to pro-Russian forces.",
+            "(U) Ukraine's Foreign Minister Dmytro Kuleba said G7 countries should respond to the latest missile strikes by imposing further sanctions on Russia and providing more heavy weapons to Ukraine. As Europe's biggest land conflict since World War Two entered its fifth month, the Western alliance supporting Kyiv was starting to show signs of strain as leaders fret about the growing economic cost.",
+            "(U) British Prime Minister Boris Johnson said the West needed to maintain a united front against Russian President Vladimir Putin. At Sunday's G7 meeting, Britain, Canada, Japan and the United States proposed a ban on imports of gold from Russia. Life had been returning to normal in Kyiv after fierce resistance held off Russian advances in the early phase of the war, although air raid sirens regularly sound across the city.",
+            "(U) There had been no major strikes on Kyiv since early June. In his nightly address, Ukraine President Volodymyr Zelenskyy said a wounded seven-year-old girl was pulled from the rubble of a nine-storey apartment block. The girl's father was killed in the strike, he said. A Ukrainian air force spokesperson said the strike was carried out with 4-6 long-range missiles fired from Russian bombers more than 1,000km away in the southern Russian region of Astrakhan."
+        ],
+        image: {
+            // Save image below into /assets directory and change url to that location
+            // url: "https://onecms-res.cloudinary.com/image/upload/s--X7zv7Jiw--/c_fill%2Cg_auto%2Ch_468%2Cw_830/fl_relative%2Cg_south_east%2Cl_one-cms:core:watermark:reuters%2Cw_0.1/f_auto%2Cq_auto/v1/one-cms/core/2022-06-26t104721z_1_lynxmpei5p04y_rtroptp_3_ukraine-crisis-kyiv-blasts.jpg?itok=zMU02ncA",
+            url: "kyiv.jpg",
+            caption: "(U) Smoke rises after a missile strike, as Russia's attack on Ukraine continues, in Kyiv, Ukraine, on Jun 26, 2022."
+        },
+        attachments: [
+        ],
+        tags: [
+            "ukraine", "kyiv", "russia", "war"
+        ],
+        sources: [
+            {
+                name: "Explosions rock Kyiv, as Russians 'fully occupy' Sievierodonetsk",
+                url: "https://www.channelnewsasia.com/world/explosions-rock-kyiv-russians-fully-occupy-sievierodonetsk-2771636"
+            },
+            {
+                name: "Biden urges G7 to stay together as leaders target Russian gold, oil price",
+                url: "https://www.channelnewsasia.com/world/biden-urges-g7-stay-together-leaders-target-russian-gold-oil-price-2771846"
+            }
+        ],
+        published_date: "Sun, June 26, 2022"
+    },
     /* source - TIME Magazine - https://time.com/6171277/volodymyr-zelensky-interview-ukraine-war/ */
     {
         id: "0017521",

@@ -21,9 +21,82 @@
       energy:border-gray-700/25
     "
   >
-    <MainSection />
+    <div
+      class="
+        flex flex-col
+        lg:block
+        xl:flex xl:flex-row xl:max-h-max
+        h-full
+        xl:h-116
+      "
+    >
+      <!-- Main Section Sit. Awareness & Headline Container -->
+      <div
+        class="h-116 md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-116"
+      >
+        <div
+          class="
+            pb-4
+            xl:pb-0
+            border-b
+            lg:border-b-0 lg:basis-1/3 lg:pr-4 lg:border-r
+            xl:basis-1/3
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+          "
+        >
+          <MainSectionSituationalAwareness />
+        </div>
+        <div
+          class="
+            py-4
+            lg:py-0
+            h-[425px]
+            lg:h-full lg:basis-2/3
+            xl:basis-2/3
+            lg:px-4
+          "
+        >
+          <MainSectionHeadlineCard :article="articles[0]" />
+        </div>
+      </div>
+      <!-- Main Section Featured Articles -->
+      <div
+        class="
+          pt-4
+          xl:basis-1/3 xl:pt-0
+          border-t
+          xl:border-t-0 xl:pl-4 xl:border-l
+          border-slate-900/10
+          dark:border-slate-50/[0.06]
+          energy:border-gray-700/25
+        "
+      >
+        <div
+          class="
+            flex flex-col
+            md:flex-row
+            xl:flex-col
+            h-full
+            space-y-4
+            md:space-y-0 md:space-x-4
+            xl:space-y-4 xl:space-x-0
+          "
+        >
+          <template v-for="article in articles.slice(1, 3)" :key="article">
+            <router-link
+              class="md:w-1/2 xl:w-full"
+              :to="{ name: 'article', params: { id: article.id } }"
+            >
+              <FeaturedArticleCard :article="article" />
+            </router-link>
+          </template>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- More Articles Section -->
+  <!-- More Featured Articles Section -->
   <div
     class="
       pt-4
@@ -34,53 +107,23 @@
     "
   >
     <div class="font-semibold mb-4">More Articles</div>
-    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6 text-left">
-      <template v-for="article in articles.slice(2)" :key="article">
-        <BaseCard class="h-[300px] xl:max-h-[264px]">
-          <div class="h-2/3">
-            <img
-              class="max-h-full w-full object-cover"
-              :src="getImgUrl(article.image.url)"
-              alt=""
-            />
-          </div>
-          <div class="pt-4 xl:pt-2 px-4 h-1/3">
-            <h1
-              class="
-                text-black
-                dark:text-teal-300
-                energy:text-slate-200
-                text-center
-                line-clamp-2
-              "
-            >
-              {{ article.title }}
-            </h1>
-            <p
-              class="
-                mt-2
-                xl:mt-1
-                text-center text-sm text-slate-600
-                dark:text-slate-300/80
-                energy:text-slate-300/80
-              "
-            >
-              {{ article.published_date }}
-            </p>
-          </div>
-        </BaseCard>
+    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
+      <template v-for="article in articles.slice(3)" :key="article">
+        <router-link :to="{ name: 'article', params: { id: article.id } }">
+          <FeaturedArticleCard :article="article" />
+        </router-link>
       </template>
     </div>
   </div>
   <!-- Personal Section -->
-  <!-- <div class="pt-4">
+  <div class="pt-4">
     <PersonalSection
       :title="'Because you were interested in Ukraine and COVID19'"
       :items="personalArticles"
     />
     <PersonalSection :title="'Your Favorites'" :items="personalArticles" />
     <PersonalSection :title="'Recently Viewed'" :items="personalArticles" />
-  </div> -->
+  </div>
   <!-- <ScrollToTopBtn /> -->
 </template>
 
@@ -88,10 +131,10 @@
 import * as dayjs from "dayjs";
 import { ref } from "vue";
 import articles from "@/data/articles.js";
-import BaseCard from "@/components/base/BaseCard";
-import MainSection from "@/components/MainSection";
-// import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
-//import PersonalSection from "@/components/PersonalSection";
+import FeaturedArticleCard from "@/components/FeaturedArticleCard";
+import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
+import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
+import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
@@ -145,15 +188,11 @@ const personalArticles = [
 
 export default {
   components: {
-    BaseCard,
-    // MainSectionHeadlineCard,
+    FeaturedArticleCard,
+    MainSectionSituationalAwareness,
+    MainSectionHeadlineCard,
+    PersonalSection,
     CalendarIcon,
-    MainSection,
-    //MainSectionSitreps,
-    //FeaturedArticlesCard,
-    //MainSectionArticles,
-    //PersonalSection,
-    // ScrollToTopBtn,
   },
   setup() {
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
@@ -162,11 +201,6 @@ export default {
       personalArticles,
       today,
     };
-  },
-  methods: {
-    getImgUrl(url) {
-      return require("@/assets/" + url);
-    },
   },
 };
 </script>

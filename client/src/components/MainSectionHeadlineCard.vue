@@ -21,7 +21,7 @@
           >
             {{ article.title }}
           </h1>
-          <p class="mt-4 text-md line-clamp-4 lg:line-clamp-6">
+          <p class="mt-4 text-md line-clamp-3 md:line-clamp-4 lg:line-clamp-6">
             {{ article.content[0] }}
           </p>
           <p
