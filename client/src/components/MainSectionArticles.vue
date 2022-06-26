@@ -1,32 +1,29 @@
 <template>
-  <div class="w-full h-full">
-    <router-link :to="{ name: 'article', params: { id: article.id } }">
-      <BaseCard class="pb-4 h-full hover:underline">
-        <div class="h-1/2">
+  <div class="flex flex-col h-full space-y-4">
+    <template v-for="article in articles.slice(1, 3)" :key="article">
+      <BaseCard class="h-[300px]">
+        <div class="h-2/3">
           <img
             class="max-h-full w-full object-cover"
             :src="getImgUrl(article.image.url)"
             alt=""
           />
         </div>
-        <div class="mt-4 px-4 h-1/2">
+        <div class="pt-4 px-4 h-1/3">
           <h1
             class="
               text-black
               dark:text-teal-300
               energy:text-slate-200
-              font-semibold
-              text-center text-lg
+              text-center
+              line-clamp-2
             "
           >
             {{ article.title }}
           </h1>
-          <p class="mt-4 text-md line-clamp-4 lg:line-clamp-6">
-            {{ article.content[0] }}
-          </p>
           <p
             class="
-              mt-4
+              mt-2
               text-center text-sm text-slate-600
               dark:text-slate-300/80
               energy:text-slate-300/80
@@ -36,22 +33,22 @@
           </p>
         </div>
       </BaseCard>
-    </router-link>
+    </template>
   </div>
 </template>
-
 <script>
-//import { ref } from "vue";
+import articles from "@/data/articles.js";
 import BaseCard from "@/components/base/BaseCard";
 
 export default {
   components: {
     BaseCard,
   },
-  props: {
-    article: Object,
+  setup() {
+    return {
+      articles,
+    };
   },
-  setup() {},
   methods: {
     getImgUrl(url) {
       return require("@/assets/" + url);

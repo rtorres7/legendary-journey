@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
-    <div class="hidden lg:block font-semibold mb-4">Situational Awareness</div>
-    <div class="flex lg:hidden justify-between mb-4">
+    <div class="hidden xl:block font-semibold mb-4">Situational Awareness</div>
+    <div class="flex xl:hidden justify-between mb-4">
       <div class="font-semibold">Situational Awareness</div>
       <div
         class="
@@ -15,7 +15,7 @@
         View More
       </div>
     </div>
-    <div class="hidden h-full lg:flex flex-col justify-between">
+    <div class="hidden h-full xl:flex flex-col justify-between">
       <div class="lg:flex flex-col justify-between text-sm">
         <template v-for="item in sitreps" :key="item">
           <div class="mb-4">
@@ -51,7 +51,7 @@
     <Carousel
       :settings="settings"
       :breakpoints="breakpoints"
-      class="lg:hidden w-full"
+      class="xl:hidden w-full"
     >
       <Slide v-for="item in sitreps" :key="item">
         <div class="pr-2 text-sm">

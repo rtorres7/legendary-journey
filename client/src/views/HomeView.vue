@@ -15,46 +15,15 @@
   <!-- Main Section -->
   <div
     class="
-      pt-4
-      pb-6
+      py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-gray-700/25
     "
   >
-    <div class="flex flex-col lg:flex-row lg:h-116">
-      <div
-        class="
-          pb-4
-          lg:pb-0
-          border-b
-          lg:border-b-0 lg:basis-1/5 lg:pr-4 lg:border-r
-          border-slate-900/10
-          dark:border-slate-50/[0.06]
-          energy:border-gray-700/25
-        "
-      >
-        <MainSectionSitreps />
-      </div>
-      <div class="py-4 lg:py-0 lg:basis-3/5 lg:px-4">
-        <MainSectionHeadlineCard />
-      </div>
-      <div
-        class="
-          pt-4
-          lg:pt-0
-          border-t
-          lg:border-t-0 lg:basis-1/5 lg:pl-4 lg:border-l
-          border-slate-900/10
-          dark:border-slate-50/[0.06]
-          energy:border-gray-700/25
-        "
-      >
-        <MainSectionThreats />
-      </div>
-    </div>
+    <MainSection />
   </div>
-  <!-- Featured Articles Section -->
+  <!-- More Articles Section -->
   <div
     class="
       pt-4
@@ -64,31 +33,65 @@
       energy:border-gray-700/25
     "
   >
-    <div class="font-semibold mb-4">Featured Articles</div>
+    <div class="font-semibold mb-4">More Articles</div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6 text-left">
-      <FeaturedArticlesCard></FeaturedArticlesCard>
+      <template v-for="article in articles.slice(2)" :key="article">
+        <BaseCard class="h-[300px] xl:max-h-[264px]">
+          <div class="h-2/3">
+            <img
+              class="max-h-full w-full object-cover"
+              :src="getImgUrl(article.image.url)"
+              alt=""
+            />
+          </div>
+          <div class="pt-4 xl:pt-2 px-4 h-1/3">
+            <h1
+              class="
+                text-black
+                dark:text-teal-300
+                energy:text-slate-200
+                text-center
+                line-clamp-2
+              "
+            >
+              {{ article.title }}
+            </h1>
+            <p
+              class="
+                mt-2
+                xl:mt-1
+                text-center text-sm text-slate-600
+                dark:text-slate-300/80
+                energy:text-slate-300/80
+              "
+            >
+              {{ article.published_date }}
+            </p>
+          </div>
+        </BaseCard>
+      </template>
     </div>
   </div>
   <!-- Personal Section -->
-  <div class="pt-4">
+  <!-- <div class="pt-4">
     <PersonalSection
       :title="'Because you were interested in Ukraine and COVID19'"
       :items="personalArticles"
     />
     <PersonalSection :title="'Your Favorites'" :items="personalArticles" />
     <PersonalSection :title="'Recently Viewed'" :items="personalArticles" />
-  </div>
+  </div> -->
   <!-- <ScrollToTopBtn /> -->
 </template>
 
 <script>
 import * as dayjs from "dayjs";
 import { ref } from "vue";
-import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
-import MainSectionSitreps from "@/components/MainSectionSitreps";
-import MainSectionThreats from "@/components/MainSectionThreats";
-import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
-import PersonalSection from "@/components/PersonalSection";
+import articles from "@/data/articles.js";
+import BaseCard from "@/components/base/BaseCard";
+import MainSection from "@/components/MainSection";
+// import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
+//import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
@@ -142,20 +145,28 @@ const personalArticles = [
 
 export default {
   components: {
-    MainSectionHeadlineCard,
+    BaseCard,
+    // MainSectionHeadlineCard,
     CalendarIcon,
-    MainSectionSitreps,
-    FeaturedArticlesCard,
-    MainSectionThreats,
-    PersonalSection,
+    MainSection,
+    //MainSectionSitreps,
+    //FeaturedArticlesCard,
+    //MainSectionArticles,
+    //PersonalSection,
     // ScrollToTopBtn,
   },
   setup() {
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
     return {
+      articles,
       personalArticles,
       today,
     };
+  },
+  methods: {
+    getImgUrl(url) {
+      return require("@/assets/" + url);
+    },
   },
 };
 </script>

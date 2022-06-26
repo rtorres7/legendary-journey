@@ -78,36 +78,6 @@
             <div class="text-sm leading-6 pl-6 pr-3">
               <ul class="flex space-x-3 xl:space-x-4">
                 <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Community
-                  </div>
-                </li>
-                <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Special Editions
-                  </div>
-                </li>
-                <li>
                   <Menu as="div" class="relative">
                     <MenuButton
                       class="
@@ -235,7 +205,8 @@
                 <li>
                   <BannerNavPopover>
                     <template #heading>
-                      <GlobeIcon class="h-6 w-6" aria-label="View world map" />
+                      <span class="sr-only">View countries and world map</span>
+                      <GlobeIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template #content>
                       <div class="flex items-center mb-4">
@@ -343,6 +314,36 @@
                       <BannerNavMap aria-hidden="true" />
                     </template>
                   </BannerNavPopover>
+                </li>
+                <li>
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Community
+                  </div>
+                </li>
+                <li>
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Special Editions
+                  </div>
                 </li>
               </ul>
             </div>
