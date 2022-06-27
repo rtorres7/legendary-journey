@@ -96,7 +96,7 @@
       </div>
     </div>
   </div>
-  <!-- More Featured Articles Section -->
+  <!-- More (Featured) Articles Section -->
   <div
     class="
       pt-4

@@ -5,7 +5,7 @@
     <main
       role="main"
       class="
-        text-slate-800
+        text-slate-900
         bg-mission-gray
         dark:text-slate-300 dark:bg-dark-navy
         energy:text-gray-300 energy:bg-gray-900
