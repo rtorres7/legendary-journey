@@ -78,6 +78,36 @@
             <div class="text-sm leading-6 pl-6 pr-3">
               <ul class="flex space-x-3 xl:space-x-4">
                 <li>
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Community
+                  </div>
+                </li>
+                <li>
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Special Editions
+                  </div>
+                </li>
+                <li>
                   <Menu as="div" class="relative">
                     <MenuButton
                       class="
@@ -314,36 +344,6 @@
                       <BannerNavMap aria-hidden="true" />
                     </template>
                   </BannerNavPopover>
-                </li>
-                <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Community
-                  </div>
-                </li>
-                <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Special Editions
-                  </div>
                 </li>
               </ul>
             </div>
