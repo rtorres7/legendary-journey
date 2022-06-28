@@ -129,6 +129,11 @@ const settings = {
 };
 // carousel breakpoints
 const breakpoints = {
+  //iPhone 12 Pro
+  390: {
+    itemsToShow: 1.5,
+    snapAlign: "start",
+  },
   //iPhone XR
   414: {
     itemsToShow: 1.65,
@@ -142,6 +147,11 @@ const breakpoints = {
   //Custom Size
   600: {
     itemsToShow: 2.25,
+    snapAlign: "start",
+  },
+  //Custom Size
+  700: {
+    itemsToShow: 2.65,
     snapAlign: "start",
   },
   //Tailwind MD
