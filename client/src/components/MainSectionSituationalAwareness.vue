@@ -101,7 +101,7 @@ const sitreps = [
     locked: false,
   },
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample Threat TItle",
     date: "04/23/22, 0100 EDT",
     locked: true,
   },
@@ -111,7 +111,7 @@ const sitreps = [
     locked: false,
   },
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample Threat TItle",
     date: "04/21/22, 0100 EDT",
     locked: false,
   },
@@ -157,6 +157,16 @@ const breakpoints = {
   //Custom Size
   950: {
     itemsToShow: 3.75,
+    snapAlign: "start",
+  },
+  //Custom Size
+  1024: {
+    itemsToShow: 4.25,
+    snapAlign: "start",
+  },
+  //Custom Size
+  1180: {
+    itemsToShow: 4.75,
     snapAlign: "start",
   },
 };

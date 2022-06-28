@@ -235,7 +235,8 @@
                 <li>
                   <BannerNavPopover>
                     <template #heading>
-                      <GlobeIcon class="h-6 w-6" aria-label="View world map" />
+                      <span class="sr-only">View countries and world map</span>
+                      <GlobeIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template #content>
                       <div class="flex items-center mb-4">

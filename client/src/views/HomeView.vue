@@ -15,46 +15,88 @@
   <!-- Main Section -->
   <div
     class="
-      pt-4
-      pb-6
+      py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-gray-700/25
     "
   >
-    <div class="flex flex-col lg:flex-row lg:h-116">
+    <div
+      class="
+        flex flex-col
+        lg:block
+        xl:flex xl:flex-row xl:max-h-max
+        h-full
+        xl:h-116
+      "
+    >
+      <!-- Main Section Sit. Awareness & Headline Container -->
       <div
-        class="
-          pb-4
-          lg:pb-0
-          border-b
-          lg:border-b-0 lg:basis-1/5 lg:pr-4 lg:border-r
-          border-slate-900/10
-          dark:border-slate-50/[0.06]
-          energy:border-gray-700/25
-        "
+        class="h-116 md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-116"
       >
-        <MainSectionSitreps />
+        <div
+          class="
+            pb-4
+            xl:pb-0
+            border-b
+            lg:border-b-0 lg:basis-1/3 lg:pr-4 lg:border-r
+            xl:basis-1/3
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+          "
+        >
+          <MainSectionSituationalAwareness />
+        </div>
+        <div
+          class="
+            py-4
+            lg:py-0
+            h-[425px]
+            lg:h-full lg:basis-2/3
+            xl:basis-2/3
+            lg:px-4
+          "
+        >
+          <MainSectionHeadlineCard :article="articles[0]" />
+        </div>
       </div>
-      <div class="py-4 lg:py-0 lg:basis-3/5 lg:px-4">
-        <MainSectionHeadlineCard />
-      </div>
+      <!-- Main Section Featured Articles -->
       <div
         class="
           pt-4
-          lg:pt-0
+          xl:basis-1/3 xl:pt-0
           border-t
-          lg:border-t-0 lg:basis-1/5 lg:pl-4 lg:border-l
+          xl:border-t-0 xl:pl-4 xl:border-l
           border-slate-900/10
           dark:border-slate-50/[0.06]
           energy:border-gray-700/25
         "
       >
-        <MainSectionThreats />
+        <div
+          class="
+            flex flex-col
+            md:flex-row
+            xl:flex-col
+            h-full
+            space-y-4
+            md:space-y-0 md:space-x-4
+            xl:space-y-4 xl:space-x-0
+          "
+        >
+          <template v-for="article in articles.slice(1, 3)" :key="article">
+            <router-link
+              class="md:w-1/2 xl:w-full"
+              :to="{ name: 'article', params: { id: article.id } }"
+            >
+              <FeaturedArticleCard :article="article" />
+            </router-link>
+          </template>
+        </div>
       </div>
     </div>
   </div>
-  <!-- Featured Articles Section -->
+  <!-- More (Featured) Articles Section -->
   <div
     class="
       pt-4
@@ -64,9 +106,13 @@
       energy:border-gray-700/25
     "
   >
-    <div class="font-semibold mb-4">Featured Articles</div>
-    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6 text-left">
-      <FeaturedArticlesCard></FeaturedArticlesCard>
+    <div class="font-semibold mb-4">More Articles</div>
+    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
+      <template v-for="article in articles.slice(3)" :key="article">
+        <router-link :to="{ name: 'article', params: { id: article.id } }">
+          <FeaturedArticleCard :article="article" />
+        </router-link>
+      </template>
     </div>
   </div>
   <!-- Personal Section -->
@@ -84,10 +130,10 @@
 <script>
 import * as dayjs from "dayjs";
 import { ref } from "vue";
+import articles from "@/data/articles.js";
+import FeaturedArticleCard from "@/components/FeaturedArticleCard";
+import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
-import MainSectionSitreps from "@/components/MainSectionSitreps";
-import MainSectionThreats from "@/components/MainSectionThreats";
-import FeaturedArticlesCard from "@/components/FeaturedArticlesCard";
 import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
@@ -142,17 +188,16 @@ const personalArticles = [
 
 export default {
   components: {
+    FeaturedArticleCard,
+    MainSectionSituationalAwareness,
     MainSectionHeadlineCard,
-    CalendarIcon,
-    MainSectionSitreps,
-    FeaturedArticlesCard,
-    MainSectionThreats,
     PersonalSection,
-    // ScrollToTopBtn,
+    CalendarIcon,
   },
   setup() {
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
     return {
+      articles,
       personalArticles,
       today,
     };
