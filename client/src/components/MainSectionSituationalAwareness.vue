@@ -92,7 +92,7 @@
 <script>
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
-import BaseCard from "@/layout/BaseCard.vue";
+import BaseCard from "@/components/base/BaseCard";
 
 const sitreps = [
   {
@@ -101,7 +101,7 @@ const sitreps = [
     locked: false,
   },
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample Threat TItle",
     date: "04/23/22, 0100 EDT",
     locked: true,
   },
@@ -111,7 +111,7 @@ const sitreps = [
     locked: false,
   },
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample Threat TItle",
     date: "04/21/22, 0100 EDT",
     locked: false,
   },
@@ -120,8 +120,66 @@ const sitreps = [
     date: "04/20/22, 0100 EDT",
     locked: true,
   },
-  // { title: "(U) SITREP TItle", date: "04/19/22, 0100 EDT", locked: true },
 ];
+
+// carousel settings
+const settings = {
+  itemsToShow: 1.75,
+  snapAlign: "start",
+};
+// carousel breakpoints
+const breakpoints = {
+  //iPhone 12 Pro
+  390: {
+    itemsToShow: 1.5,
+    snapAlign: "start",
+  },
+  //iPhone XR
+  414: {
+    itemsToShow: 1.65,
+    snapAlign: "start",
+  },
+  //Custom Size
+  500: {
+    itemsToShow: 1.9,
+    snapAlign: "start",
+  },
+  //Custom Size
+  600: {
+    itemsToShow: 2.25,
+    snapAlign: "start",
+  },
+  //Custom Size
+  700: {
+    itemsToShow: 2.65,
+    snapAlign: "start",
+  },
+  //Tailwind MD
+  768: {
+    itemsToShow: 2.85,
+    snapAlign: "start",
+  },
+  //iPad Air
+  820: {
+    itemsToShow: 3.25,
+    snapAlign: "start",
+  },
+  //Custom Size
+  950: {
+    itemsToShow: 3.75,
+    snapAlign: "start",
+  },
+  //Custom Size
+  1024: {
+    itemsToShow: 4.25,
+    snapAlign: "start",
+  },
+  //Custom Size
+  1180: {
+    itemsToShow: 4.75,
+    snapAlign: "start",
+  },
+};
 
 export default {
   components: {
@@ -132,50 +190,12 @@ export default {
     BaseCard,
   },
   setup() {
-    //
     return {
       sitreps,
+      settings,
+      breakpoints,
     };
   },
-  data: () => ({
-    // carousel settings
-    settings: {
-      itemsToShow: 1.75,
-      snapAlign: "start",
-    },
-    breakpoints: {
-      //iPhone XR
-      414: {
-        itemsToShow: 1.65,
-        snapAlign: "start",
-      },
-      //Custom Size
-      500: {
-        itemsToShow: 1.9,
-        snapAlign: "start",
-      },
-      //Custom Size
-      600: {
-        itemsToShow: 2.25,
-        snapAlign: "start",
-      },
-      //Tailwind MD
-      768: {
-        itemsToShow: 2.85,
-        snapAlign: "start",
-      },
-      //iPad Air
-      820: {
-        itemsToShow: 3.25,
-        snapAlign: "start",
-      },
-      //Custom Size
-      950: {
-        itemsToShow: 3.75,
-        snapAlign: "start",
-      },
-    },
-  }),
 };
 </script>
 <style lang="scss" scoped>

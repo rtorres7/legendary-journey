@@ -22,7 +22,7 @@
     </div>
     <div class="hidden lg:grid lg:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-for="(item, index) in 3" :key="item">
-        <PersonalCard :article="items[index]" />
+        <PersonalSectionCard :article="items[index]" />
       </template>
     </div>
     <div
@@ -41,7 +41,7 @@
     </div>
     <Carousel :settings="settings" :breakpoints="breakpoints" class="lg:hidden">
       <Slide v-for="item in items" :key="item" class="p-2 pb-10">
-        <PersonalCard :article="item" :carousel="true" />
+        <PersonalSectionCard :article="item" :carousel="true" />
       </Slide>
     </Carousel>
   </div>
@@ -49,14 +49,31 @@
 
 <script>
 import { Carousel, Slide } from "vue3-carousel";
-import PersonalCard from "./PersonalCard.vue";
+import PersonalSectionCard from "@/components/PersonalSectionCard.vue";
+
+// carousel settings
+const settings = {
+  itemsToShow: 1.5,
+  snapAlign: "start",
+};
+
+// carousel breakpoints
+const breakpoints = {
+  768: {
+    itemsToShow: 2.5,
+    snapAlign: "start",
+  },
+  1024: {
+    itemsToShow: 0,
+    snapAlign: "start",
+  },
+};
 
 export default {
-  name: "PersonalFeedList",
   components: {
     Carousel,
     Slide,
-    PersonalCard,
+    PersonalSectionCard,
   },
   props: {
     title: String,
@@ -64,26 +81,10 @@ export default {
   },
   setup() {
     return {
-      //
+      settings,
+      breakpoints,
     };
   },
-  data: () => ({
-    // carousel settings
-    settings: {
-      itemsToShow: 1.5,
-      snapAlign: "start",
-    },
-    breakpoints: {
-      768: {
-        itemsToShow: 2.5,
-        snapAlign: "start",
-      },
-      1024: {
-        itemsToShow: 0,
-        snapAlign: "start",
-      },
-    },
-  }),
 };
 </script>
 <style lang="scss" scoped>

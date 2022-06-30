@@ -9,7 +9,7 @@
         pr-3
         rounded-md
         shadow-sm
-        w-full
+        w-[310px]
         xl:w-[400px]
         bg-slate-300
         dark:bg-slate-800
@@ -24,6 +24,7 @@
         aria-hidden="true"
       />
       <input
+        aria-label="Search field. Enter text to search."
         class="
           ml-2
           focus-visible:outline-none
@@ -36,29 +37,32 @@
           energy:text-gray-300
         "
       />
-      <button type="button" @click="toggleModal" class="ml-2 text-slate-800">
-        <span class="sr-only">Advanced Search</span>
+      <button
+        type="button"
+        @click="toggleModal"
+        class="ml-2 text-slate-800"
+        aria-label="advanced search"
+      >
         <ChevronDownIcon
           class="w-5 h-5 dark:text-slate-300 energy:text-gray-300"
         />
       </button>
-      <SearchModal :modalActive="modalActive" @close="toggleModal" />
+      <BannerSearchBarModal :modalActive="modalActive" @close="toggleModal" />
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import SearchModal from "./SearchModal.vue";
+import BannerSearchBarModal from "@/components/BannerSearchBarModal.vue";
 import { SearchIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
-    SearchModal,
+    BannerSearchBarModal,
     SearchIcon,
     ChevronDownIcon,
   },
-
   setup() {
     const modalActive = ref(false);
 

@@ -39,17 +39,16 @@
 </template>
 
 <script>
+//TODO: Convert to Composition API syntax before this feature is implemented.
 import { ChevronUpIcon } from "@heroicons/vue/outline";
 
 export default {
-  name: "ScrollToTopBtn",
   components: {
     ChevronUpIcon,
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
   },
-
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
   },

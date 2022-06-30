@@ -42,7 +42,7 @@
         </div>
         <!-- </template> -->
       </div>
-      <h5
+      <h1
         class="
           text-black
           dark:text-teal-300
@@ -55,7 +55,7 @@
         "
       >
         {{ article.title }}
-      </h5>
+      </h1>
 
       <p class="text-sm mb-2 lg:mb-4 line-clamp-3">
         {{ article.summary }}
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import BaseCard from "@/layout/BaseCard.vue";
+import BaseCard from "@/components/base/BaseCard";
 export default {
   components: {
     BaseCard,
