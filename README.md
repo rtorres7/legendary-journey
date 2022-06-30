@@ -17,7 +17,7 @@
 
 ## Project setup
 ```
-npm install
+npm run install-all-deps
 ```
 
 ### Running the application (server + clent)
