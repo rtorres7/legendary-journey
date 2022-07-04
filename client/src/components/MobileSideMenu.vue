@@ -37,7 +37,7 @@
                 text-slate-700
                 dark:text-slate-300
                 energy:text-gray-300
-                bg-mission-gray
+                bg-slate-100
                 dark:bg-slate-700
                 energy:bg-gray-700
                 shadow-lg

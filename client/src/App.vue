@@ -6,7 +6,7 @@
       role="main"
       class="
         text-slate-900
-        bg-mission-gray
+        bg-slate-100
         dark:text-slate-300 dark:bg-dark-navy
         energy:text-gray-300 energy:bg-gray-900
       "
