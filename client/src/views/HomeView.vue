@@ -58,7 +58,12 @@
             lg:px-4
           "
         >
-          <MainSectionHeadlineCard :article="articles[0]" />
+          <template v-if="loadingArticles">
+            <MainSectionHeadlineCard :loading="true" />
+          </template>
+          <template v-else>
+            <MainSectionHeadlineCard :article="articles[0]" />
+          </template>
         </div>
       </div>
       <!-- Main Section Featured Articles -->
@@ -84,13 +89,25 @@
             xl:space-y-4 xl:space-x-0
           "
         >
-          <template v-for="article in articles.slice(1, 3)" :key="article">
-            <router-link
-              class="md:w-1/2 xl:w-full"
-              :to="{ name: 'article', params: { id: article.id } }"
-            >
-              <FeaturedArticleCard :article="article" />
-            </router-link>
+          <template v-if="loadingArticles">
+            <template v-for="n in 2" :key="n">
+              <router-link
+                class="md:w-1/2 xl:w-full"
+                :to="{ name: 'notFound' }"
+              >
+                <FeaturedArticleCard :loading="true" />
+              </router-link>
+            </template>
+          </template>
+          <template v-else>
+            <template v-for="article in articles.slice(1, 3)" :key="article">
+              <router-link
+                class="md:w-1/2 xl:w-full"
+                :to="{ name: 'article', params: { id: article.id } }"
+              >
+                <FeaturedArticleCard :article="article" />
+              </router-link>
+            </template>
           </template>
         </div>
       </div>
@@ -108,10 +125,19 @@
   >
     <div class="font-semibold mb-4">More Articles</div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
-      <template v-for="article in articles.slice(3)" :key="article">
-        <router-link :to="{ name: 'article', params: { id: article.id } }">
-          <FeaturedArticleCard :article="article" />
-        </router-link>
+      <template v-if="loadingArticles">
+        <template v-for="n in 6" :key="n">
+          <router-link :to="{ name: 'notFound' }">
+            <FeaturedArticleCard :loading="true" />
+          </router-link>
+        </template>
+      </template>
+      <template v-else>
+        <template v-for="article in articles.slice(3)" :key="article">
+          <router-link :to="{ name: 'article', params: { id: article.id } }">
+            <FeaturedArticleCard :article="article" />
+          </router-link>
+        </template>
       </template>
     </div>
   </div>
@@ -129,8 +155,8 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { ref } from "vue";
-import articles from "@/data/articles.js";
+import { ref, onMounted, computed } from "vue";
+import { useStore } from "vuex";
 import FeaturedArticleCard from "@/components/FeaturedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
@@ -195,9 +221,18 @@ export default {
     CalendarIcon,
   },
   setup() {
+    const store = useStore();
+    const articles = computed(() => store.state.articles.featured);
+    const loadingArticles = computed(() => store.state.articles.loading);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
+
+    onMounted(() => {
+      store.dispatch("articles/getHomeArticles");
+    });
+
     return {
       articles,
+      loadingArticles,
       personalArticles,
       today,
     };

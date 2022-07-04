@@ -146,7 +146,7 @@
                           ring-1 ring-black ring-opacity-5
                           focus:outline-none
                           text-sm
-                          bg-mission-blue
+                          bg-mission-blue/95
                           dark:bg-dark-space-blue/95
                           energy:bg-gray-700
                           dark:ring-0 dark:highlight-white/5 dark:text-slate-300
@@ -527,7 +527,7 @@
                       focus:outline-none
                       text-sm
                       font-semibold
-                      bg-mission-blue
+                      bg-mission-blue/95
                       dark:bg-dark-space-blue/95
                       energy:bg-gray-700
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
@@ -561,8 +561,8 @@
                           dark:hover:bg-slate-600/80
                           energy:hover:bg-gray-600/80
                         "
-                        @click="openAlertModal"
-                        >Alert</a
+                        @click="openTestConsoleModal"
+                        >Test Console</a
                       >
                     </MenuItem>
                   </MenuItems>
@@ -890,6 +890,51 @@
                       </Switch>
                     </div>
                   </SwitchGroup>
+                  <SwitchGroup>
+                    <div class="flex items-center justify-between">
+                      <SwitchLabel class="mr-4"
+                        >Enable Loading Articles</SwitchLabel
+                      >
+                      <Switch
+                        v-model="loadingArticlesEnabled"
+                        :class="
+                          loadingArticlesEnabled
+                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                        "
+                        class="
+                          relative
+                          inline-flex
+                          items-center
+                          h-6
+                          transition-colors
+                          rounded-full
+                          w-11
+                          focus:outline-none
+                          focus:ring-2
+                          focus:ring-offset-2
+                          focus:ring-slate-500
+                        "
+                      >
+                        <span
+                          :class="
+                            loadingArticlesEnabled
+                              ? 'translate-x-6'
+                              : 'translate-x-1'
+                          "
+                          class="
+                            inline-block
+                            w-4
+                            h-4
+                            transition-transform
+                            transform
+                            bg-white
+                            rounded-full
+                          "
+                        />
+                      </Switch>
+                    </div>
+                  </SwitchGroup>
                 </div>
               </div>
             </TransitionChild>
@@ -897,9 +942,9 @@
         </div>
       </Dialog>
     </TransitionRoot>
-    <!-- Alert dialog -->
-    <TransitionRoot appear :show="isAlertMenuOpen" as="template">
-      <Dialog as="div" @close="closeAlertModal">
+    <!-- Test Console dialog -->
+    <TransitionRoot appear :show="isTestConsoleMenuOpen" as="template">
+      <Dialog as="div" @close="closeTestConsoleModal">
         <div class="fixed inset-0 z-20 overflow-y-auto w-full">
           <div class="min-h-screen px-4 text-center">
             <TransitionChild
@@ -960,7 +1005,7 @@
                       justify-center
                     "
                     tabindex="0"
-                    @click="closeAlertModal"
+                    @click="closeTestConsoleModal"
                   >
                     <span class="sr-only">Close navigation</span
                     ><XIcon class="h-5 w-5" aria-hidden="true" />
@@ -1006,6 +1051,51 @@
                       </Switch>
                     </div>
                   </SwitchGroup>
+                  <SwitchGroup>
+                    <div class="flex items-center justify-between mt-2">
+                      <SwitchLabel class="mr-4"
+                        >Enable Loading Articles</SwitchLabel
+                      >
+                      <Switch
+                        v-model="loadingArticlesEnabled"
+                        :class="
+                          loadingArticlesEnabled
+                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                        "
+                        class="
+                          relative
+                          inline-flex
+                          items-center
+                          h-6
+                          transition-colors
+                          rounded-full
+                          w-11
+                          focus:outline-none
+                          focus:ring-2
+                          focus:ring-offset-2
+                          focus:ring-slate-500
+                        "
+                      >
+                        <span
+                          :class="
+                            loadingArticlesEnabled
+                              ? 'translate-x-6'
+                              : 'translate-x-1'
+                          "
+                          class="
+                            inline-block
+                            w-4
+                            h-4
+                            transition-transform
+                            transform
+                            bg-white
+                            rounded-full
+                          "
+                        />
+                      </Switch>
+                    </div>
+                  </SwitchGroup>
                 </div>
               </div>
             </TransitionChild>
@@ -1017,7 +1107,8 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
+import { useStore } from "vuex";
 import BannerSearchBar from "@/components/BannerSearchBar.vue";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
@@ -1119,9 +1210,10 @@ export default {
     XIcon,
   },
   setup() {
+    const store = useStore();
     const isMainMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
-    const isAlertMenuOpen = ref(false);
+    const isTestConsoleMenuOpen = ref(false);
     const isDark = ref(localStorage.getItem("theme") === "dark" ? true : false);
     if (localStorage.getItem("theme") === "system") {
       isDark.value = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -1153,7 +1245,25 @@ export default {
     watch(selectedTheme, (newTheme) => {
       changeTheme(newTheme);
     });
+
     const alertEnabled = ref(false);
+    const loadingArticlesEnabled = ref(false);
+
+    const loadingArticlesFromStore = computed(
+      () => store.state.articles.loading
+    );
+
+    watch(loadingArticlesEnabled, (enabled) => {
+      if (enabled) {
+        store.dispatch("articles/removeHomeArticles");
+      } else {
+        store.dispatch("articles/getHomeArticles");
+      }
+    });
+
+    watch(loadingArticlesFromStore, (loading) => {
+      loadingArticlesEnabled.value = loading;
+    });
 
     const selectedCountry = ref(countries[0]);
     return {
@@ -1166,11 +1276,12 @@ export default {
       issuesNavigation,
       isMainMenuOpen,
       isUserMenuOpen,
-      isAlertMenuOpen,
+      isTestConsoleMenuOpen,
       isDark,
       selectedTheme,
       changeTheme,
       alertEnabled,
+      loadingArticlesEnabled,
     };
   },
   methods: {
@@ -1194,11 +1305,11 @@ export default {
     openUserMenuModal() {
       this.isUserMenuOpen = true;
     },
-    closeAlertModal() {
-      this.isAlertMenuOpen = false;
+    closeTestConsoleModal() {
+      this.isTestConsoleMenuOpen = false;
     },
-    openAlertModal() {
-      this.isAlertMenuOpen = true;
+    openTestConsoleModal() {
+      this.isTestConsoleMenuOpen = true;
     },
     openPDF() {
       window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");

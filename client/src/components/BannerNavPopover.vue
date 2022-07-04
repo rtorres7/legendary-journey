@@ -39,7 +39,7 @@
             w-full
             ring-1 ring-black ring-opacity-5
             focus:outline-none
-            bg-mission-blue
+            bg-mission-blue/95
             dark:bg-dark-space-blue/95
             energy:bg-gray-700
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
