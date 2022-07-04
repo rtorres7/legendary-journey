@@ -1,7 +1,10 @@
 import { createStore } from 'vuex'
+import articles from "./modules/articles";
 
 export default createStore({
     state: {
+        loading: true,
+        errors: null,
     },
     getters: {
     },
@@ -10,5 +13,6 @@ export default createStore({
     actions: {
     },
     modules: {
+        articles
     }
 })
