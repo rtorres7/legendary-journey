@@ -9,7 +9,6 @@
       top-0
       z-10
       backdrop-filter backdrop-blur
-      lg:py-2
     "
   >
     <div
@@ -50,7 +49,7 @@
         <div class="hidden lg:flex h-full items-center">
           <router-link class="h-full" to="/">
             <img
-              class="h-full w-18"
+              class="h-14 w-14"
               src="@/assets/NCTCSealcolor.png"
               alt="NCTC. Seal. Link to homepage."
             />
@@ -148,7 +147,7 @@
                           text-sm
                           bg-mission-blue/95
                           dark:bg-dark-space-blue/95
-                          energy:bg-gray-700
+                          energy:bg-gray-800/95
                           dark:ring-0 dark:highlight-white/5 dark:text-slate-300
                           energy:text-gray-300
                         "
@@ -233,7 +232,7 @@
                   </BannerNavPopover>
                 </li>
                 <li>
-                  <BannerNavPopover>
+                  <BannerNavPopover :title="'Countries and World Map'">
                     <template #heading>
                       <span class="sr-only">View countries and world map</span>
                       <GlobeIcon class="h-6 w-6" aria-hidden="true" />
@@ -443,7 +442,7 @@
                       font-semibold
                       bg-mission-blue
                       dark:bg-dark-space-blue/95
-                      energy:bg-gray-700
+                      energy:bg-gray-800/95
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
                       energy:text-gray-300
                     "
@@ -529,7 +528,7 @@
                       font-semibold
                       bg-mission-blue/95
                       dark:bg-dark-space-blue/95
-                      energy:bg-gray-700
+                      energy:bg-gray-800/95
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
                       energy:text-gray-300
                     "
@@ -702,7 +701,7 @@
                   text-slate-700
                   dark:text-slate-300
                   energy:text-gray-300
-                  bg-mission-gray
+                  bg-slate-100
                   dark:bg-slate-700
                   energy:bg-gray-700
                   shadow-lg
@@ -984,7 +983,7 @@
                   text-slate-700
                   dark:text-slate-300
                   energy:text-gray-300
-                  bg-mission-gray
+                  bg-slate-100
                   dark:bg-slate-700
                   energy:bg-gray-700
                   shadow-lg

@@ -10,6 +10,7 @@
         energy:hover:text-energy-yellow
       "
       tabindex="0"
+      :title="title"
     >
       <slot name="heading"></slot>
     </PopoverButton>
@@ -41,7 +42,7 @@
             focus:outline-none
             bg-mission-blue/95
             dark:bg-dark-space-blue/95
-            energy:bg-gray-700
+            energy:bg-gray-800/95
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
             energy:text-gray-300
           "
@@ -61,6 +62,9 @@ export default {
     Popover,
     PopoverButton,
     PopoverPanel,
+  },
+  props: {
+    title: String,
   },
 };
 </script>
