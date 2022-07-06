@@ -190,7 +190,7 @@ import ArticleCommentList from "@/components/ArticleCommentList.vue";
 import NotFound from "@/components/NotFound";
 import { PrinterIcon, MailIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import articles from "@/data/articles.js";
+import { articles } from "@/data";
 
 export default {
   name: "ArticlePageView",

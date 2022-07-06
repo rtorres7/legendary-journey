@@ -440,7 +440,7 @@
                       focus:outline-none
                       text-sm
                       font-semibold
-                      bg-mission-blue
+                      bg-mission-blue/95
                       dark:bg-dark-space-blue/95
                       energy:bg-gray-800/95
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
@@ -518,7 +518,7 @@
                       absolute
                       right-0
                       mt-2
-                      w-40
+                      w-52
                       rounded-md
                       shadow-2xl
                       py-2
@@ -533,9 +533,23 @@
                       energy:text-gray-300
                     "
                   >
-                    <MenuItem v-for="item in userNavigation" :key="item.name">
+                    <MenuItem>
                       <a
-                        :href="item.href"
+                        class="
+                          flex
+                          cursor-pointer
+                          py-1
+                          px-3
+                          hover:bg-slate-700/80
+                          dark:hover:bg-slate-600/80
+                          energy:hover:bg-gray-600/80
+                        "
+                        >{{ loadingUser ? "Loading..." : currentUsername }}</a
+                      >
+                    </MenuItem>
+                    <MenuItem>
+                      <a
+                        href="/"
                         class="
                           py-1
                           px-3
@@ -546,7 +560,7 @@
                           items-center
                           cursor-pointer
                         "
-                        >{{ item.name }}</a
+                        >Settings</a
                       >
                     </MenuItem>
                     <MenuItem>
@@ -727,15 +741,26 @@
                   ><XIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <ul class="space-y-6">
-                  <li v-for="item in userNavigation" :key="item">
+                  <li>
                     <a
                       class="
                         hover:text-black
                         dark:hover:text-white
                         energy:text-white
                       "
-                      ::href="item.href"
-                      >{{ item.name }}</a
+                      href="/"
+                      >{{ loadingUser ? "Loading..." : currentUsername }}</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Settings</a
                     >
                   </li>
                 </ul>
@@ -1154,10 +1179,6 @@ const mainNavigation = [
   { name: "Community", href: "/", current: false },
   { name: "Special Editions", href: "/", current: false },
 ];
-const userNavigation = [
-  { name: "Your Profile", href: "/" },
-  { name: "Settings", href: "/" },
-];
 const issuesNavigation = [
   { name: "Issue 0", href: "/" },
   { name: "Issue 1", href: "/" },
@@ -1248,6 +1269,9 @@ export default {
     const alertEnabled = ref(false);
     const loadingArticlesEnabled = ref(false);
 
+    const currentUsername = computed(() => store.state.user.user.name);
+    const loadingUser = computed(() => store.state.user.loading);
+
     const loadingArticlesFromStore = computed(
       () => store.state.articles.loading
     );
@@ -1265,13 +1289,13 @@ export default {
     });
 
     const selectedCountry = ref(countries[0]);
+
     return {
       regions,
       countries,
       selectedCountry,
       mainNavigation,
       themeOptions,
-      userNavigation,
       issuesNavigation,
       isMainMenuOpen,
       isUserMenuOpen,
@@ -1281,6 +1305,8 @@ export default {
       changeTheme,
       alertEnabled,
       loadingArticlesEnabled,
+      currentUsername,
+      loadingUser,
     };
   },
   methods: {

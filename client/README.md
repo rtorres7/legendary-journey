@@ -5,12 +5,22 @@
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compiles and hot-reloads for development [Low Side]
+```
+npm run serve:low
+```
+
+### Compiles and minifies for production [Low Side]
+```
+npm run build:low
+```
+
+### Compiles and hot-reloads for development [High Side]
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compiles and minifies for production [High Side]
 ```
 npm run build
 ```

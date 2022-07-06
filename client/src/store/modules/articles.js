@@ -1,4 +1,5 @@
-import articles from "@/data/articles.js";
+import { articles } from "@/data";
+
 export default {
   namespaced: true,
   state: {
