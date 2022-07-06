@@ -77,36 +77,6 @@
             <div class="text-sm leading-6 pl-6 pr-3">
               <ul class="flex space-x-3 xl:space-x-4">
                 <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Community
-                  </div>
-                </li>
-                <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Special Editions
-                  </div>
-                </li>
-                <li>
                   <Menu as="div" class="relative">
                     <MenuButton
                       class="
@@ -174,7 +144,7 @@
                   </Menu>
                 </li>
                 <li>
-                  <BannerNavPopover>
+                  <BannerNavPopover :wideShrunk="true">
                     <template #heading>
                       Regions<ChevronDownIcon
                         class="h-3 w-3 ml-1"
@@ -182,7 +152,7 @@
                       />
                     </template>
                     <template #content>
-                      <div class="hidden lg:block">
+                      <div class="hidden lg:block lg:max-w-[768px] lg:m-auto">
                         <div
                           class="grid grid-cols-3 gap-6 pb-4"
                           aria-label="select a region or subregion"
@@ -232,10 +202,12 @@
                   </BannerNavPopover>
                 </li>
                 <li>
-                  <BannerNavPopover :title="'Countries and World Map'">
+                  <BannerNavPopover>
                     <template #heading>
-                      <span class="sr-only">View countries and world map</span>
-                      <GlobeIcon class="h-6 w-6" aria-hidden="true" />
+                      Countries<ChevronDownIcon
+                        class="h-3 w-3 ml-1"
+                        aria-hidden="true"
+                      />
                     </template>
                     <template #content>
                       <div class="flex items-center mb-4">
@@ -344,6 +316,110 @@
                     </template>
                   </BannerNavPopover>
                 </li>
+                <li class="hidden xl:block">
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Community
+                  </div>
+                </li>
+                <li class="hidden xl:block">
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Special Editions
+                  </div>
+                </li>
+                <li class="xl:hidden">
+                  <Menu as="div" class="relative">
+                    <MenuButton
+                      class="
+                        flex
+                        items-center
+                        font-semibold
+                        hover:text-amber-300
+                        dark:hover:text-teal-400
+                        energy:hover:text-energy-yellow
+                      "
+                      tabindex="0"
+                    >
+                      More<ChevronDownIcon
+                        class="h-3 w-3 ml-1"
+                        aria-hidden="true"
+                      />
+                    </MenuButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <MenuItems
+                        class="
+                          origin-top-right
+                          absolute
+                          right-0
+                          mt-2
+                          w-40
+                          rounded-md
+                          shadow-2xl
+                          py-2
+                          ring-1 ring-black ring-opacity-5
+                          focus:outline-none
+                          text-sm
+                          bg-mission-blue/95
+                          dark:bg-dark-space-blue/95
+                          energy:bg-gray-800/95
+                          dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                      >
+                        <MenuItem as="div" v-slot="{ active }">
+                          <a
+                            href="/"
+                            :class="[
+                              active
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                : '',
+                              'py-1 px-3 flex cursor-pointer',
+                            ]"
+                            >Community</a
+                          >
+                        </MenuItem>
+                        <MenuItem as="div" v-slot="{ active }">
+                          <a
+                            href="/"
+                            :class="[
+                              active
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                : '',
+                              'py-1 px-3 flex cursor-pointer',
+                            ]"
+                            >Special Editions</a
+                          >
+                        </MenuItem>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
+                </li>
               </ul>
             </div>
             <div
@@ -352,7 +428,7 @@
                 flex
                 items-center
                 space-x-2
-                xl:space-x-4
+                xl:space-x-3
                 ml-2
                 pl-2
                 xl:ml-4 xl:pl-4
@@ -608,7 +684,7 @@
             <div
               class="
                 flex
-                w-full
+                max-w-[500px]
                 items-center
                 text-sm
                 leading-6
@@ -619,6 +695,7 @@
                 py-1.5
                 pl-2
                 pr-3
+                m-auto
                 bg-slate-300
                 dark:bg-slate-800
                 energy:bg-gray-600
@@ -1160,7 +1237,6 @@ import {
   DesktopComputerIcon,
   DotsVerticalIcon,
   ExclamationCircleIcon,
-  GlobeIcon,
   LightningBoltIcon,
   MenuIcon,
   MoonIcon,
@@ -1219,7 +1295,6 @@ export default {
     DesktopComputerIcon,
     DotsVerticalIcon,
     ExclamationCircleIcon,
-    GlobeIcon,
     LightningBoltIcon,
     MenuIcon,
     MoonIcon,

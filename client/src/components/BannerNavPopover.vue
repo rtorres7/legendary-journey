@@ -23,15 +23,8 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <PopoverPanel
-        class="
-          origin-top-right
-          absolute
-          min-w-[46rem]
-          right-0
-          mt-3
-          transform
-          z-10
-        "
+        class="origin-top-right min-w-[46rem] right-0 mt-3 transform z-10"
+        :class="wideShrunk ? 'w-full fixed xl:absolute ' : 'absolute'"
       >
         <div
           class="
@@ -65,6 +58,11 @@ export default {
   },
   props: {
     title: String,
+    //Popover width expands when screen size is shrunk to cover the horizontal width of the screen
+    wideShrunk: {
+      default: false,
+      type: Boolean,
+    },
   },
 };
 </script>
