@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import articles from "./modules/articles";
+import user from "./modules/user";
 
 export default createStore({
     state: {
@@ -13,6 +14,7 @@ export default createStore({
     actions: {
     },
     modules: {
-        articles
+        articles,
+        user
     }
 })

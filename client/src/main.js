@@ -1,9 +1,11 @@
 import { createApp } from 'vue'
+import axios from './wireAxios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import "vue3-carousel/dist/carousel.css";
 import './index.css'
 
-
-createApp(App).use(store).use(router).use(router).mount('#app')
+const app = createApp(App);
+app.provide('$axios', axios);
+app.use(store).use(router).use(router).mount('#app')
