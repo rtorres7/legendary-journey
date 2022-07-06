@@ -11,7 +11,7 @@
         shadow-sm
         w-[400px]
         xl:w-[370px]
-        bg-slate-300
+        bg-slate-100
         dark:bg-slate-800
         energy:bg-gray-600
         leading-6
@@ -28,7 +28,7 @@
         class="
           ml-2
           focus-visible:outline-none
-          bg-slate-300
+          bg-slate-100
           dark:bg-slate-800
           energy:bg-gray-600
           w-full

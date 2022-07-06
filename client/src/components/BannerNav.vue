@@ -229,7 +229,7 @@
                                 text-slate-800
                                 dark:text-gray-300
                                 energy:text-gray-300
-                                bg-slate-200
+                                bg-slate-100
                                 dark:bg-slate-800
                                 energy:bg-gray-600
                                 rounded-lg
@@ -278,7 +278,7 @@
                                   text-slate-800
                                   dark:text-gray-300
                                   energy:text-gray-300
-                                  bg-slate-200
+                                  bg-slate-100
                                   dark:bg-slate-800
                                   energy:bg-gray-600
                                   rounded-md
@@ -300,7 +300,7 @@
                                   <li
                                     :class="[
                                       active
-                                        ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                        ? 'bg-slate-200 dark:bg-slate-700 energy:bg-gray-700'
                                         : 'bg-none',
                                     ]"
                                   >
