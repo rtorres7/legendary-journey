@@ -4,7 +4,6 @@
       class="
         flex
         items-center
-        py-1.5
         pl-2
         pr-3
         rounded-md
@@ -23,8 +22,7 @@
         class="w-6 h-6 text-slate-800 dark:text-slate-300 energy:text-gray-300"
         aria-hidden="true"
       />
-      <input
-        aria-label="Search field. Enter text to search."
+      <vue3-simple-typeahead
         class="
           ml-2
           focus-visible:outline-none
@@ -36,7 +34,55 @@
           dark:text-gray-300
           energy:text-gray-300
         "
-      />
+        id="typeahead_id"
+        placeholder="Search"
+        :items="[
+          'One',
+          'Two',
+          'Three',
+          'Four',
+          'Five',
+          'Six',
+          'Seven',
+          'Eight',
+          'Nine',
+          'Ten',
+          'Eleven',
+        ]"
+        :minInputLength="1"
+        :itemProjection="itemProjectionFunction"
+        @selectItem="selectItemEventHandler"
+        @onInput="onInputEventHandler"
+        @onFocus="onFocusEventHandler"
+        @onBlur="onBlurEventHandler"
+      >
+        <template #list-item-text="slot">
+          <router-link :to="{ name: 'search' }">
+            <div
+              class="
+                text-slate-800
+                dark:text-gray-300
+                energy:text-gray-300
+                bg-slate-100
+                dark:bg-slate-800
+                energy:bg-gray-600
+                hover:bg-slate-200
+                dark:hover:bg-slate-700
+                energy:hover:bg-gray-500
+                active:bg-slate-300
+                dark:active:bg-slate-600
+                energy:active:bg-gray-400
+                px-2
+                py-1
+              "
+            >
+              <span
+                v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
+              ></span>
+            </div>
+          </router-link>
+        </template>
+      </vue3-simple-typeahead>
       <button
         type="button"
         @click="toggleModal"
@@ -77,6 +123,24 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
+<style>
+.simple-typeahead[data-v-590ce012] {
+  position: relative;
+  width: 100%;
+}
+.simple-typeahead > input[data-v-590ce012] {
+  margin-bottom: 0;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.simple-typeahead .simple-typeahead-list[data-v-590ce012] {
+  position: absolute;
+  width: 100%;
+  border: none;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 9;
+  box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%), 0 4px 8px 3px rgb(60 64 67 / 15%);
+  border-width: 1px;
+}
 </style>

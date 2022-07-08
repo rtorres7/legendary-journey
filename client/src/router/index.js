@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
+import SearchView from '../views/SearchView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
     name: 'attachment',
     component: AttachmentView,
     props: true
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: SearchView,
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
 ]

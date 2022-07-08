@@ -576,7 +576,7 @@
                       focus:ring-white
                     "
                   >
-                    <span class="sr-only">Open user menu</span>
+                    <span class="sr-only">Open user menu.</span>
                     <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
                   </MenuButton>
                 </div>
@@ -627,14 +627,13 @@
                       <a
                         href="/"
                         class="
+                          flex
+                          cursor-pointer
                           py-1
                           px-3
                           hover:bg-slate-700/80
                           dark:hover:bg-slate-600/80
                           energy:hover:bg-gray-600/80
-                          flex
-                          items-center
-                          cursor-pointer
                         "
                         >Settings</a
                       >
@@ -696,7 +695,7 @@
                 pl-2
                 pr-3
                 m-auto
-                bg-slate-300
+                bg-slate-100
                 dark:bg-slate-800
                 energy:bg-gray-600
               "
@@ -719,7 +718,7 @@
                   text-slate-800
                   dark:text-gray-300
                   energy:text-gray-300
-                  bg-slate-300
+                  bg-slate-100
                   dark:bg-slate-800
                   energy:bg-gray-600
                 "

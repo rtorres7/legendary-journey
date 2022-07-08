@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import articles from "./modules/articles";
+import search from "./modules/search";
 import user from "./modules/user";
 
 export default createStore({
@@ -15,6 +16,7 @@ export default createStore({
     },
     modules: {
         articles,
+        search,
         user
     }
 })
