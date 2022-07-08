@@ -36,19 +36,7 @@
         "
         id="typeahead_id"
         placeholder="Search"
-        :items="[
-          'One',
-          'Two',
-          'Three',
-          'Four',
-          'Five',
-          'Six',
-          'Seven',
-          'Eight',
-          'Nine',
-          'Ten',
-          'Eleven',
-        ]"
+        :items="['United Nations', 'Ukraine']"
         :minInputLength="1"
         :itemProjection="itemProjectionFunction"
         @selectItem="selectItemEventHandler"
@@ -57,30 +45,29 @@
         @onBlur="onBlurEventHandler"
       >
         <template #list-item-text="slot">
-          <router-link :to="{ name: 'search' }">
-            <div
-              class="
-                text-slate-800
-                dark:text-gray-300
-                energy:text-gray-300
-                bg-slate-100
-                dark:bg-slate-800
-                energy:bg-gray-600
-                hover:bg-slate-200
-                dark:hover:bg-slate-700
-                energy:hover:bg-gray-500
-                active:bg-slate-300
-                dark:active:bg-slate-600
-                energy:active:bg-gray-400
-                px-2
-                py-1
-              "
-            >
-              <span
-                v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
-              ></span>
-            </div>
-          </router-link>
+          <div
+            class="
+              cursor-pointer
+              text-slate-800
+              dark:text-gray-300
+              energy:text-gray-300
+              bg-slate-100
+              dark:bg-slate-800
+              energy:bg-gray-600
+              hover:bg-slate-200
+              dark:hover:bg-slate-700
+              energy:hover:bg-gray-500
+              active:bg-slate-300
+              dark:active:bg-slate-600
+              energy:active:bg-gray-400
+              px-2
+              py-1
+            "
+          >
+            <span
+              v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
+            ></span>
+          </div>
         </template>
       </vue3-simple-typeahead>
       <button
@@ -100,6 +87,7 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import BannerSearchBarModal from "@/components/BannerSearchBarModal.vue";
 import { SearchIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
@@ -110,15 +98,27 @@ export default {
     ChevronDownIcon,
   },
   setup() {
+    const router = useRouter();
     const modalActive = ref(false);
 
     const toggleModal = () => {
       modalActive.value = !modalActive.value;
     };
 
+    const selectItemEventHandler = (item) => {
+      router.push({
+        name: "search",
+        query: {
+          text: item,
+          view: "list",
+        },
+      });
+    };
+
     return {
       modalActive,
       toggleModal,
+      selectItemEventHandler,
     };
   },
 };

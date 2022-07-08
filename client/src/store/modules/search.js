@@ -1,4 +1,6 @@
-import axios from "axios";
+//import axios from "axios";
+import { useRoute } from "vue-router";
+import { search } from "@/data";
 
 export default {
   namespaced: true,
@@ -21,35 +23,50 @@ export default {
   },
 
   actions: {
-    search: ({ dispatch, rootState }) => {
-      let url = rootState.route ? rootState.route.fullPath : "";
-      if (rootState.route.query) {
+    search: ({ dispatch }) => {
+      const route = useRoute()
+      console.log('inside search route:', route)
+      let url = route ? route.fullPath : "";
+      if (route.query) {
         dispatch("standardSearch", url);
       }
     },
 
-    standardSearch({ commit, dispatch, rootState }, url) {
-      commit("savePreviousSearch", rootState.route);
+    standardSearch({ dispatch }, url) {
       if (url && url !== "/search") {
         url = "/search?" + url.split("?")[1];
       } else {
         url = "/search";
       }
+      console.log('url: ', url);
       dispatch("debouncedSearch", url);
     },
 
-    debouncedSearch: ({ state, commit }, url) => {
+    debouncedSearch: ({ commit, state }, url) => {
       state.loading = true;
-      axios.get(url).then((response) => {
-        commit("importData", response.data);
-        state.loading = false;
-      });
+      console.log('debouncedSearch action url: ', url);
+      switch (url) {
+        case '/search?text=Ukraine&view=list': {
+          commit("importData", search.ukraine)
+          break
+        }
+        case '/search?text=United+Nations&view=list': {
+          commit("importData", search.united_nations)
+          break
+        }
+        default: {
+          commit("importData", search.default)
+        }
+
+      }
+
     }
   },
 
   mutations: {
 
     importData(state, data) {
+      console.log('data: ', data);
       state.searchId = data.searchId;
       state.results = data.results.map((article) => {
         return article;
@@ -59,6 +76,7 @@ export default {
       state.totalCount = data.totalCount;
       state.siteEnhancement = data.siteEnhancement;
       state.daClassifError = data.daClassifError;
+      console.log('state: ', state);
     },
   },
 };
