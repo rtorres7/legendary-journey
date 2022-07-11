@@ -3,8 +3,8 @@
     <NotFound />
   </template>
   <template v-else>
-    <form>
-      <div class="mt-10">
+    <form class="mb-10 mt-10">
+      <div>
         <label class="block mb-2" for="file_input">Upload a file to publish</label>
         <input id="file_input" type="file"
           class="
@@ -24,14 +24,13 @@
       <div
         class="
           flex flex-wrap
-          md:flex-nowrap
-          justify-between
-          md:space-x-20
+          lg:flex-nowrap
+          lg:gap-12
           mb-8 mt-20
           gap-y-20
         "
       >
-        <div class="md:basis-9/12">
+        <div class="w-full lg:basis-9/12">
           <div class="flex flex-col space-y-8">
             <div 
               class="
@@ -501,90 +500,23 @@
                 />
               </div>
             </div>
-            <div> 
+            <div class="w-full"> 
               <label for="body" class="block mb-2">Body</label>
-            </div>
-            <div class="flex justify-between flex-wrap lg:flex-nowrap gap-y-3"> 
-              <div class="flex gap-3"> 
-                <button 
-                  class="
-                    bg-slate-100 hover:bg-slate-200/80 
-                    dark:bg-slate-700 dark:hover:bg-slate-700/80 
-                    energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-                    border-slate-300 
-                    p-2 
-                    rounded shadow
-                    text-sm
-                  "
-                >
-                  Publish
-                </button>
-                <button 
-                  class="
-                    bg-slate-100 hover:bg-slate-200/80 
-                    dark:bg-slate-700 dark:hover:bg-slate-700/80 
-                    energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-                    border-slate-300 
-                    p-2 
-                    rounded shadow
-                    text-sm
-                  "
-                >
-                  Save and Generate PDF
-                </button>
-                <button 
-                  class="
-                    bg-slate-100 hover:bg-slate-200/80 
-                    dark:bg-slate-700 dark:hover:bg-slate-700/80 
-                    energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-                    border-slate-300 
-                    p-2 
-                    rounded shadow
-                    text-sm
-                  "
-                >
-                  Preview
-                </button>
-                <button 
-                  class="
-                    bg-slate-100 hover:bg-slate-200/80 
-                    dark:bg-slate-700 dark:hover:bg-slate-700/80 
-                    energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-                    border-slate-300 
-                    p-2 
-                    rounded shadow
-                    text-sm
-                  "
-                >
-                  Cancel
-                </button>
-              </div>
-              <div>
-                <div class="flex flex-col gap-3">
-                  <button 
-                    class="
-                      bg-slate-100 hover:bg-slate-200/80 
-                      dark:bg-slate-700 dark:hover:bg-slate-700/80 
-                      energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-                      border-slate-300 
-                      p-2 
-                      rounded shadow
-                      text-sm
-                    "
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="flex justify-end">
-              <div>
-                <input type="checkbox" id="revision" name="revision" value="Revision">
-                <label for="revision" class="text-sm"> This edit is a substantive revision</label>
-              </div>
+              <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
             </div>
             <div> 
-              <h2 class="text-xl">Source Citations</h2>
+              <h2 class="text-xl border-b-2 border-slate-900/10
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+              pb-4">Source Citations</h2>
+              <ol class="list-decimal list-inside ml-4 mt-4 space-y-2">
+                <li>
+                  A terrifying journey to a Russian prison and back
+                </li>
+                <li>
+                  Isolated Russia divided over Ukraine offensive
+                </li>
+              </ol>
               <!-- <ol class="list-decimal list-inside ml-4 space-y-2">
                 <div v-for="source in selectedArticle.sources" :key="source.name">
                   <li class="text-sm">
@@ -597,7 +529,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full md:basis-3/12">
+        <div class="w-full lg:basis-3/12">
           <div class="flex flex-col space-y-8">
             <div class="
               border-b-2 border-slate-900/10
@@ -1002,6 +934,80 @@
           </div>
         </div>
       </div>
+      <div class="flex gap-20 flex-wrap lg:flex-nowrap gap-y-8"> 
+        <div class="flex gap-3"> 
+          <button 
+            class="
+              bg-slate-100 hover:bg-slate-200/80 
+              dark:bg-slate-700 dark:hover:bg-slate-700/80 
+              energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+              border-slate-300 
+              p-2 
+              rounded shadow
+              text-sm
+            "
+          >
+            Publish
+          </button>
+          <button 
+            class="
+              bg-slate-100 hover:bg-slate-200/80 
+              dark:bg-slate-700 dark:hover:bg-slate-700/80 
+              energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+              border-slate-300 
+              p-2 
+              rounded shadow
+              text-sm
+            "
+          >
+            Save and Generate PDF
+          </button>
+          <button 
+            class="
+              bg-slate-100 hover:bg-slate-200/80 
+              dark:bg-slate-700 dark:hover:bg-slate-700/80 
+              energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+              border-slate-300 
+              p-2 
+              rounded shadow
+              text-sm
+            "
+          >
+            Preview
+          </button>
+          <button 
+            class="
+              bg-slate-100 hover:bg-slate-200/80 
+              dark:bg-slate-700 dark:hover:bg-slate-700/80 
+              energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+              border-slate-300 
+              p-2 
+              rounded shadow
+              text-sm
+            "
+          >
+            Cancel
+          </button>
+        </div>
+        <div class="flex items-end gap-3">
+          <button 
+            class="
+              bg-red-800 hover:bg-red-900 
+              border border-slate-300 
+              p-2 
+              rounded shadow
+              text-sm
+              text-white
+            "
+          >
+            Delete
+          </button>
+          <div class="flex gap-1">
+            <input type="checkbox" id="revision" name="revision" value="Revision">
+            <label for="revision" class="text-sm"> This edit is a substantive revision</label>
+          </div>
+        </div>
+      </div>
     </form>
   </template>
 </template>
@@ -1022,6 +1028,8 @@ import {
 import { CheckIcon, ChevronDownIcon, SelectorIcon } from '@heroicons/vue/solid'
 import { countries } from "@/data/regions.js";
 import flatpickr from 'flatpickr';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { articles } from "@/data";
 
 const topics = [
   {title: "topic1"}, 
@@ -1101,6 +1109,7 @@ export default {
     const selectedActors = ref([actors[0], actors[1]]);
     const selectedOffice = ref([producingOffices[0]]);
     const selectedAnalysisType = ref([analysisTypes[0]]);
+    const articlesData = ref(articles);
 
     onMounted(() => {
       flatpickr('#datepicker', {});
@@ -1119,6 +1128,12 @@ export default {
       selectedOffice,
       analysisTypes,
       selectedAnalysisType,
+      articlesData,
+      editor: ClassicEditor,
+              editorData: '<p>Content of the editor.</p>',
+              editorConfig: {
+                  // The configuration of the editor.
+              }
     }
   }
 }
