@@ -11,16 +11,20 @@ import { useRoute } from "vue-router";
 export default {
   setup() {
     const store = useStore();
-    //const route = useRoute();
+    const route = useRoute();
+
     const results = computed(() => store.state.search.results);
 
     onMounted(() => {
       store.dispatch("search/search");
     });
 
-    watch(useRoute(), () => {
-      store.dispatch("search/search");
-    });
+    watch(
+      () => route.query,
+      () => {
+        store.dispatch("search/search");
+      }
+    );
 
     return {
       results,

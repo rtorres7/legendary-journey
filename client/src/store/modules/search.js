@@ -1,11 +1,11 @@
 //import axios from "axios";
-import { useRoute } from "vue-router";
-import { search } from "@/data";
+import { search } from "@/data"
+import router from "@/router"
 
 export default {
   namespaced: true,
   state: {
-    loading: false,
+    loading: true,
     results: [],
     compact: true,
     advancedFilters: null,
@@ -24,8 +24,7 @@ export default {
 
   actions: {
     search: ({ dispatch }) => {
-      const route = useRoute()
-      console.log('inside search route:', route)
+      const route = router.currentRoute.value
       let url = route ? route.fullPath : "";
       if (route.query) {
         dispatch("standardSearch", url);
@@ -43,7 +42,6 @@ export default {
     },
 
     debouncedSearch: ({ commit, state }, url) => {
-      state.loading = true;
       console.log('debouncedSearch action url: ', url);
       switch (url) {
         case '/search?text=Ukraine&view=list': {
@@ -59,7 +57,7 @@ export default {
         }
 
       }
-
+      state.loading = false;
     }
   },
 
