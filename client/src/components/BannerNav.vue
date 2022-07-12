@@ -8,6 +8,8 @@
       sticky
       top-0
       z-10
+      h-[72px]
+      lg:h-full
       backdrop-filter backdrop-blur
     "
   >

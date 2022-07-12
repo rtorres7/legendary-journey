@@ -12,7 +12,7 @@
         xl:w-[370px]
         bg-slate-100
         dark:bg-slate-800
-        energy:bg-gray-600
+        energy:bg-gray-700
         leading-6
         text-sm text-primary
         dark:text-slate-300
@@ -28,7 +28,7 @@
           focus-visible:outline-none
           bg-slate-100
           dark:bg-slate-800
-          energy:bg-gray-600
+          energy:bg-gray-700
           w-full
           text-slate-800
           dark:text-gray-300
