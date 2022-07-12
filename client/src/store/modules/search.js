@@ -44,8 +44,8 @@ export default {
     debouncedSearch: ({ commit, state }, url) => {
       console.log('debouncedSearch action url: ', url);
       switch (url) {
-        case '/search?text=Ukraine&view=list': {
-          commit("importData", search.ukraine)
+        case '/search?text=Zelensky&view=list': {
+          commit("importData", search.zelensky)
           break
         }
         case '/search?text=United+Nations&view=list': {

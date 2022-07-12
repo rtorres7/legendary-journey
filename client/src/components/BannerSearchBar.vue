@@ -36,7 +36,7 @@
         "
         id="typeahead_id"
         placeholder="Search"
-        :items="['United Nations', 'Ukraine']"
+        :items="['United Nations', 'Zelensky']"
         :minInputLength="1"
         :itemProjection="itemProjectionFunction"
         @selectItem="selectItemEventHandler"

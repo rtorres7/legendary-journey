@@ -12,7 +12,14 @@
     Search
   </p>
   <!-- Search Form -->
-  <div class="py-4">
+  <div
+    class="
+      py-4
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-gray-700/25
+    "
+  >
     <Disclosure v-slot="{ open }">
       <div class="flex flex-col justify-between">
         <div
@@ -112,10 +119,92 @@
       </DisclosurePanel>
     </Disclosure>
   </div>
-  <div>{{ results }}</div>
+  <!-- Search Results -->
+  <div class="py-4">
+    <p class="text-center text-sm py-2">
+      {{ totalCount?.toLocaleString() }} Results
+    </p>
+    <div class="flex flex-col-reverse lg:flex-row py-2">
+      <div class="basis-4/5">
+        <template v-for="result in results" :key="result">
+          <!-- Search Card -->
+          <div
+            class="
+              flex
+              px-2
+              py-6
+              border-b border-slate-900/10
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+            "
+          >
+            <div
+              class="
+                h-fit
+                px-2
+                border-l-2 border-slate-900/10
+                dark:border-slate-50/[0.06]
+                energy:border-gray-700/25
+                text-center
+              "
+            >
+              <span class="block font-semibold">{{
+                dayjs(result.date_published).format("DD")
+              }}</span>
+              <span class="block text-sm">{{
+                dayjs(result.date_published).format("MMM")
+              }}</span>
+              <span class="block text-sm">{{
+                dayjs(result.date_published).format("YYYY")
+              }}</span>
+            </div>
+            <div class="px-2">
+              <div class="flex justify-between">
+                <div
+                  class="
+                    basis-[768px]
+                    cursor-pointer
+                    hover:underline
+                    line-clamp-2
+                  "
+                >
+                  <span
+                    class="
+                      text-slate-600
+                      dark:text-slate-300
+                      energy:text-gray-300
+                    "
+                    >{{ `${"(" + result.title_classification + ") "}` }}</span
+                  >
+                  <span class="text-black dark:text-white energy:text-white">{{
+                    result.title
+                  }}</span>
+                </div>
+                <div class="text-sm">
+                  {{ result.doc_num }}
+                </div>
+              </div>
+              <div
+                class="
+                  py-2
+                  text-sm text-slate-600
+                  dark:text-slate-300
+                  energy:text-gray-300
+                "
+              >
+                <span v-html="result.highlighted_result" />
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div class="basis-1/5">facets</div>
+    </div>
+  </div>
 </template>
 
 <script>
+import * as dayjs from "dayjs";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -144,6 +233,8 @@ export default {
     const route = useRoute();
 
     const results = computed(() => store.state.search.results);
+    const totalCount = computed(() => store.state.search.totalCount);
+
     const testModel = ref(null);
 
     onMounted(() => {
@@ -158,13 +249,14 @@ export default {
     );
 
     return {
+      dayjs,
       testModel,
       testItems,
       results,
+      totalCount,
     };
   },
 };
 </script>
-
-<style>
+<style scoped lang="scss">
 </style>
