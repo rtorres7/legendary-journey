@@ -101,6 +101,7 @@ export default {
     itemModel: String,
   },
   setup(props) {
+    console.log("lol: ", props);
     const selectedItem = ref(props.itemModel);
     return {
       selectedItem,

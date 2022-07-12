@@ -95,7 +95,10 @@
           <div class="basis-2/5 flex space-x-6 max-w-[600px] lg:max-w-none">
             <div class="basis-1/2">
               <label class="text-sm font-semibold">Classifications</label>
-              <SearchFormListbox :itemModel="testModel" :items="testItems" />
+              <p>
+                {{ anotherTest }}
+              </p>
+              <SearchFormListbox :itemModel="anotherTest" :items="testItems" />
             </div>
             <div class="basis-1/2">
               <label class="text-sm font-semibold">Media Types</label>
@@ -235,7 +238,8 @@ export default {
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
 
-    const testModel = ref(null);
+    const testModel = ref("");
+    const anotherTest = ref("");
 
     onMounted(() => {
       store.dispatch("search/search");
@@ -251,6 +255,7 @@ export default {
     return {
       dayjs,
       testModel,
+      anotherTest,
       testItems,
       results,
       totalCount,
