@@ -23,7 +23,7 @@
           focus-visible:ring-offset-2
         "
       >
-        <span class="block truncate">{{ selectedItem }}</span>
+        <span class="block truncate">{{ modelValue }}</span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
           <SelectorIcon class="h-5 w-5" aria-hidden="true" />
         </span>
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed } from "vue";
 import {
   Listbox,
   ListboxButton,
@@ -98,11 +98,20 @@ export default {
   },
   props: {
     items: Array,
-    itemModel: String,
+    modelValue: {
+      type: String,
+      default: "",
+    },
   },
-  setup(props) {
-    console.log("lol: ", props);
-    const selectedItem = ref(props.itemModel);
+  emits: ["update:modelValue"],
+  setup(props, { emit }) {
+    const selectedItem = computed({
+      get: () => props.modelValue,
+      set: (value) => {
+        console.log("newVal: ", value);
+        emit("update:modelValue", value);
+      },
+    });
     return {
       selectedItem,
     };

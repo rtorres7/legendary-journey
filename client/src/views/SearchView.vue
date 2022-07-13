@@ -52,9 +52,9 @@
           </div>
           <template
             v-for="n in [
-              'Regions & Countries',
-              'Issues & Topics',
-              'Reporting & Product Types',
+              queryFilters.regions,
+              queryFilters.issues,
+              queryFilters.reporting,
             ]"
             :key="n"
           >
@@ -62,10 +62,10 @@
               <label>
                 <span
                   class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
-                  >{{ n }}</span
+                  >{{ n.label }}</span
                 >
               </label>
-              <SearchFormListbox :itemModel="testModel" :items="testItems" />
+              <SearchFormListbox v-model="n.model" :items="n.list" />
             </div>
           </template>
         </div>
@@ -93,29 +93,30 @@
           class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-6"
         >
           <div class="basis-2/5 flex space-x-6 max-w-[600px] lg:max-w-none">
-            <div class="basis-1/2">
-              <label class="text-sm font-semibold">Classifications</label>
-              <p>
-                {{ anotherTest }}
-              </p>
-              <SearchFormListbox :itemModel="anotherTest" :items="testItems" />
-            </div>
-            <div class="basis-1/2">
-              <label class="text-sm font-semibold">Media Types</label>
-              <SearchFormListbox :itemModel="testModel" :items="testItems" />
-            </div>
+            <template
+              v-for="n in [
+                queryFilters.classifications,
+                queryFilters.media_types,
+              ]"
+              :key="n"
+            >
+              <div class="basis-1/2">
+                <label class="text-sm font-semibold">{{ n.label }}</label>
+                <SearchFormListbox v-model="n.model" :items="n.list" />
+              </div>
+            </template>
           </div>
           <template
             v-for="n in [
-              'Non State Actors',
-              'Producing Offices',
-              'Front Page Featured',
+              queryFilters.nonstate_actors,
+              queryFilters.producing_offices,
+              queryFilters.frontpage_featured,
             ]"
             :key="n"
           >
             <div class="basis-1/5 max-w-[600px] lg:max-w-none">
-              <label class="text-sm font-semibold">{{ n }}</label>
-              <SearchFormListbox :itemModel="testModel" :items="testItems" />
+              <label class="text-sm font-semibold">{{ n.label }}</label>
+              <SearchFormListbox v-model="n.model" :items="n.list" />
             </div>
           </template>
         </div>
@@ -238,6 +239,49 @@ export default {
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
 
+    const queryFilters = ref({
+      regions: {
+        label: "Regions & Countries",
+        model: "",
+        list: testItems,
+      },
+      issues: {
+        label: "Issues & Topics",
+        model: "",
+        list: testItems,
+      },
+      reporting: {
+        label: "Reporting & Product Types",
+        model: "",
+        list: testItems,
+      },
+      classifications: {
+        label: "Classifications",
+        model: "",
+        list: testItems,
+      },
+      media_types: {
+        label: "Media Types",
+        model: "",
+        list: testItems,
+      },
+      nonstate_actors: {
+        label: "Non State Actors",
+        model: "",
+        list: testItems,
+      },
+      producing_offices: {
+        label: "Producing Offices",
+        model: "",
+        list: testItems,
+      },
+      frontpage_featured: {
+        label: "Front Page Featured",
+        model: "",
+        list: testItems,
+      },
+    });
+
     const testModel = ref("");
     const anotherTest = ref("");
 
@@ -254,6 +298,7 @@ export default {
 
     return {
       dayjs,
+      queryFilters,
       testModel,
       anotherTest,
       testItems,

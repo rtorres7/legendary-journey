@@ -22,8 +22,6 @@
         class="w-6 h-6 text-slate-800 dark:text-slate-300 energy:text-gray-300"
         aria-hidden="true"
       />
-      <!-- TODO: Enable this after merge to dev. -->
-      <!-- :items="['United Nations', 'Zelensky']" -->
       <vue3-simple-typeahead
         class="
           ml-2
@@ -38,6 +36,7 @@
         "
         id="typeahead_id"
         placeholder="Search"
+        :items="['United Nations', 'Zelensky']"
         :minInputLength="1"
         :itemProjection="itemProjectionFunction"
         @selectItem="selectItemEventHandler"
