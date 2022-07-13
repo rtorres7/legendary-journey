@@ -3,23 +3,11 @@
     <NotFound />
   </template>
   <template v-else>
-    <form class="mb-10 mt-10">
+    <form ref="publishingForm" class="mb-10 mt-10">
       <div>
         <label class="block mb-2" for="file_input">Upload a file to publish</label>
-        <input id="file_input" type="file"
-          class="
-            w-fit
-            text-left
-            capitalize
-            bg-slate-100 hover:bg-slate-200/80 
-            dark:bg-slate-700 dark:hover:bg-slate-700/80 
-            energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-            border-slate-300 
-            p-2 
-            rounded shadow
-            text-sm
-          " 
-        >
+        <PublishViewFileUploader id="file_input" @drop.prevent="drop" @change="selectedFile" />
+        <span>File: {{ dropzoneFile.name }}</span>
       </div>
       <div
         class="
@@ -30,7 +18,7 @@
           gap-y-20
         "
       >
-        <div class="w-full lg:basis-9/12">
+        <div class="w-full xl:basis-9/12 lg:max-w-[620px] xl:max-w-[850px]">
           <div class="flex flex-col space-y-8">
             <div 
               class="
@@ -41,8 +29,8 @@
             >
               <h1 class="text-3xl">Edit Document</h1>
             </div>
-            <div class="flex flex-wrap lg:flex-nowrap gap-3"> 
-              <div class="w-full">
+            <div class="flex flex-wrap md:flex-nowrap gap-3"> 
+              <div class="w-full md:max-w-[350px] lg:max-w-[300px] xl:max-w-[420px]">
                 <label class="block mb-2" for="countriesListbox">Countries</label>
                 <Listbox
                   id="countriesListbox"
@@ -150,7 +138,7 @@
                 <input type="checkbox" id="worldwide" name="worldwide" value="Worldwide" class="mt-2">
                 <label for="worldwide" class="text-sm"> Worldwide</label>
               </div>
-              <div class="w-full">
+              <div class="w-full md:max-w-[350px] lg:max-w-[300px] xl:max-w-[420px]">
                 <label class="block mb-2" for="topicsListbox">Topics</label>
                 <Listbox
                   id="topicsListbox"
@@ -364,7 +352,7 @@
               </Listbox>
               <div class="flex mt-6">
                 <div>
-                  <input type="checkbox" id="allOrgs" name="allOrgs" value="All Orgs">
+                  <input type="checkbox" id="allOrgs" name="allOrgs" value="All Orgs" class="orgCheckbox" @click="toggle(this)">
                   <label for="allOrgs" class="text-sm"> All Orgs</label>
                 </div>
                 <div class="ml-8 self-center">
@@ -385,9 +373,9 @@
                       leave-to-class="transform opacity-0 scale-95"
                     >
                       <DisclosurePanel>
-                        <div class="grid grid-cols-3 lg:grid-cols-5 gap-3">
+                        <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4">
                           <div v-for="org in dissemOrgs" :key="org.name">
-                            <input type="checkbox" id="dissemOrg" name="dissemOrg" value="Dissem Org" class="mt-2">
+                            <input type="checkbox" id="dissemOrg" name="dissemOrg" value="Dissem Org" class="orgCheckbox mt-2">
                             <label for="dissemOrg" class="text-sm ml-1"> {{ org.name }} </label>
                           </div>
                         </div>
@@ -397,7 +385,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex flex-wrap wrap lg:flex-nowrap gap-3">
+            <div class="flex flex-wrap wrap md:flex-nowrap gap-3">
               <div class="w-full lg:basis-2/3">
                 <label for="title" class="block mb-2">Title</label>
                 <input type="text" id="title" 
@@ -448,7 +436,7 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap wrap lg:flex-nowrap gap-3">
+            <div class="flex flex-wrap wrap md:flex-nowrap gap-3">
               <div class="w-full lg:basis-2/3">
                 <label for="summary" class="block mb-2">Summary</label>
                 <textarea id="summary" maxlength="4000" rows="4"
@@ -579,21 +567,9 @@
               <h2 class="text-xl">Attachments</h2>
             </div>
             <div>
-              <label class="block mb-2" for="file_input">Upload article files</label>
-              <input id="file_input" type="file" multiple
-                class="
-                  w-fit
-                  text-left
-                  capitalize
-                  bg-slate-100 hover:bg-slate-200/80 
-                    dark:bg-slate-700 dark:hover:bg-slate-700/80 
-                    energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-                    border-slate-300 
-                    p-2 
-                    rounded shadow
-                    text-sm
-                " 
-              >
+              <label class="block mb-2" for="attachment_input">Upload article files</label>
+              <PublishViewFileUploader id="attachment_input" @drop.prevent="drop" @change="selectedFile" />
+              <span>File: {{ dropzoneFile.name }}</span>
             </div>
             <a href="" class="hover:underline">View ****</a>
             <div class="
@@ -807,6 +783,7 @@
                           :value="office"
                           as="template"
                           class="capitalize px-2 py-1 cursor-pointer"
+                          onchange="changePocInfo(selectedOffice)"
                         >
                           <li
                             :class="[
@@ -1030,12 +1007,13 @@ import { countries } from "@/data/regions.js";
 import flatpickr from 'flatpickr';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { articles } from "@/data";
+import PublishViewFileUploader from '@/components/PublishViewFileUploader';
 
 const topics = [
   {title: "topic1"}, 
   {title: "topic2"},
   {title: "topic3"},
-  {title: "topic4"},
+  {title: "topic4jfkdsajfkdjfkdajfkdjfkdajfkl"},
 ];
 const actors = [
   {title: "actor1"}, 
@@ -1076,15 +1054,15 @@ const dissemOrgs = [
   {name: "Org30"},
 ];
 const producingOffices = [
-  {name: "Office1"},
-  {name: "Office2"},
-  {name: "Office3"},
-  {name: "Office4"},
+  {name: "Office1", pocInfo:"Office1's address and phone number"},
+  {name: "Office2", pocInfo:"Office2's address and phone number"},
+  {name: "Office3", pocInfo:"Office3's address and phone number"},
+  {name: "Office4", pocInfo:"Office4's address and phone number"},
 ];
 const analysisTypes = [
-  {name: "1"},
-  {name: "2"},
-  {name: "3"},
+  {name: "Type1"},
+  {name: "Type2"},
+  {name: "Type3"},
 ];
 
 export default {
@@ -1101,19 +1079,50 @@ export default {
     CheckIcon,
     ChevronDownIcon,
     SelectorIcon,
+    PublishViewFileUploader,
   },
 
   setup() {
-    const selectedCountries = ref([countries[0], countries[1]]);
-    const selectedTopics = ref([topics[0], topics[1]]);
-    const selectedActors = ref([actors[0], actors[1]]);
+    const selectedCountries = ref([countries[0]]);
+    const selectedTopics = ref([topics[0]]);
+    const selectedActors = ref([actors[0]]);
     const selectedOffice = ref([producingOffices[0]]);
     const selectedAnalysisType = ref([analysisTypes[0]]);
     const articlesData = ref(articles);
+    const dropzoneFile = ref("");
+
+    const toggle = () => {
+        var allInputs = document.getElementsByTagName('input');
+        for (var i=0;i<allInputs.length;i++) {
+             if (allInputs[i].type === 'checkbox' && allInputs[i].name === 'dissemOrg') { 
+                  allInputs[i].checked = !allInputs[i].checked;
+            }
+        }
+    };
+
+    const changePocInfo = (value) => {
+      // var dropdown = document.getElementById("officeListbox");
+      // var selection = dropdown.value;
+      // console.log("hello");
+      // if (selection === 'Office1') {
+      //   var pocInfoTextarea = document.getElementById("pocInfo");
+      //   pocInfoTextarea.value = "hello";
+      // }
+      console.log(value);
+    };
+
+    const drop = (event) => {
+      dropzoneFile.value = event.dataTransfer.files[0];
+    };
+
+    const selectedFile = () => {
+      dropzoneFile.value = document.querySelector('.dropzoneFile').files[0];
+    };
 
     onMounted(() => {
       flatpickr('#datepicker', {});
       require("flatpickr/dist/flatpickr.css");
+      // document.getElementById("pocInfo").value = "hello";
     });
     
     return {
@@ -1129,6 +1138,11 @@ export default {
       analysisTypes,
       selectedAnalysisType,
       articlesData,
+      dropzoneFile,
+      toggle,
+      changePocInfo,
+      drop,
+      selectedFile,
       editor: ClassicEditor,
               editorData: '<p>Content of the editor.</p>',
               editorConfig: {
