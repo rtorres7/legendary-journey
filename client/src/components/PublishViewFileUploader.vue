@@ -20,21 +20,7 @@
   >
     <span>Drag and drop file</span>
     <span>OR</span>
-    <label for="dropzoneFile" 
-      class="
-        bg-slate-100 hover:bg-slate-200/80 
-        dark:bg-slate-700 dark:hover:bg-slate-700/80 
-        energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-        border-slate-300 
-        p-2 
-        rounded shadow
-        text-sm
-      "
-    >
-        Select File
-    </label>
-    <!-- <slot/>  -->
-    <input type="file" id="dropzoneFile" class="dropzoneFile hidden" />
+    <slot/> 
   </div>
 </template>
 

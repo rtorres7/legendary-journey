@@ -6,8 +6,23 @@
     <form ref="publishingForm" class="mb-10 mt-10">
       <div>
         <label class="block mb-2" for="file_input">Upload a file to publish</label>
-        <PublishViewFileUploader id="file_input" @drop.prevent="drop" @change="selectedFile" />
-        <span>File: {{ dropzoneFile.name }}</span>
+        <PublishViewFileUploader id="file_input" @drop.prevent="drop" @change="selectedFile">
+          <label for="dropzoneFile" 
+            class="
+              bg-slate-100 hover:bg-slate-200/80 
+              dark:bg-slate-700 dark:hover:bg-slate-700/80 
+              energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+              border-slate-300 
+              p-2 
+              rounded shadow
+              text-sm
+            "
+          >
+            Select File
+          </label>
+          <input type="file" id="dropzoneFile" class="dropzoneFile hidden" />
+        </PublishViewFileUploader>
+        <span>{{ dropzoneFile.name }}</span>
       </div>
       <div
         class="
@@ -35,6 +50,7 @@
                 <Listbox
                   id="countriesListbox"
                   v-model="selectedCountries"
+                  name="countriesListbox"
                   multiple
                   aria-label="select a country from the dropdown"
                 >
@@ -143,6 +159,7 @@
                 <Listbox
                   id="topicsListbox"
                   v-model="selectedTopics"
+                  name="topicsListbox"
                   multiple
                   aria-label="select a topic from the dropdown"
                 >
@@ -250,6 +267,7 @@
               <Listbox
                 id="actorsListbox"
                 v-model="selectedActors"
+                name="actorsListbox"
                 multiple
                 aria-label="select a Non-State Actor from the dropdown"
               >
@@ -568,8 +586,22 @@
             </div>
             <div>
               <label class="block mb-2" for="attachment_input">Upload article files</label>
-              <PublishViewFileUploader id="attachment_input" @drop.prevent="drop" @change="selectedFile" />
-              <span>File: {{ dropzoneFile.name }}</span>
+              <PublishViewFileUploader id="attachment_input" @drop.prevent="attachmentDrop" @change="attachmentSelectedFile">
+                <label for="attachmentDropzoneFile" 
+                  class="
+                    bg-slate-100 hover:bg-slate-200/80 
+                    dark:bg-slate-700 dark:hover:bg-slate-700/80 
+                    energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+                    border-slate-300 
+                    p-2 
+                    rounded shadow
+                    text-sm
+                  "
+                >
+                  Select File
+                </label>
+                <input type="file" id="attachmentDropzoneFile" class="attachmentDropzoneFile hidden" multiple />
+              </PublishViewFileUploader>
             </div>
             <a href="" class="hover:underline">View ****</a>
             <div class="
@@ -590,6 +622,7 @@
             >
               <h2 class="text-xl">Supporting Attachments</h2>
             </div>
+            <span>{{ attachmentDropzoneFile.name }}</span>
             <div class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
@@ -702,6 +735,7 @@
                 <Listbox
                   id="officeListbox"
                   v-model="selectedOffice"
+                  name="officeListbox"
                   aria-label="select a Producing Office from the dropdown"
                 >
                   <div class="relative">
@@ -808,6 +842,7 @@
               <Listbox
                 id="analysisListbox"
                 v-model="selectedAnalysisType"
+                name="analysisListbox"
                 aria-label="select an analysis type from the dropdown"
               >
                 <div class="relative">
@@ -1013,7 +1048,7 @@ const topics = [
   {title: "topic1"}, 
   {title: "topic2"},
   {title: "topic3"},
-  {title: "topic4jfkdsajfkdjfkdajfkdjfkdajfkl"},
+  {title: "topic4"},
 ];
 const actors = [
   {title: "actor1"}, 
@@ -1082,14 +1117,15 @@ export default {
     PublishViewFileUploader,
   },
 
+  props: ["id", "title"],
   setup() {
     const selectedCountries = ref([countries[0]]);
     const selectedTopics = ref([topics[0]]);
     const selectedActors = ref([actors[0]]);
     const selectedOffice = ref([producingOffices[0]]);
     const selectedAnalysisType = ref([analysisTypes[0]]);
-    const articlesData = ref(articles);
     const dropzoneFile = ref("");
+    const attachmentDropzoneFile = ref("");
 
     const toggle = () => {
         var allInputs = document.getElementsByTagName('input');
@@ -1113,16 +1149,35 @@ export default {
 
     const drop = (event) => {
       dropzoneFile.value = event.dataTransfer.files[0];
+      populateFields();
     };
 
     const selectedFile = () => {
       dropzoneFile.value = document.querySelector('.dropzoneFile').files[0];
+      populateFields();
+    };
+
+    const attachmentDrop = (event) => {
+      attachmentDropzoneFile.value = event.dataTransfer.files[0];
+    };
+
+    const attachmentSelectedFile = () => {
+      attachmentDropzoneFile.value = document.querySelector('.attachmentDropzoneFile').files[0];
+    };
+
+    const populateFields = () => {
+      document.getElementById("title").value = articles[0].title;
+      document.getElementById("titlePM").value = articles[0].classification;
+      document.getElementById("summaryPM").value = articles[0].classification;
+      document.getElementById("documentClass").value = articles[0].classification;
+      document.getElementById("summary").value = articles[0].content[0];
+      document.getElementById("docNum").value = articles[0].id;
+      // editorData = articles[0].content;
     };
 
     onMounted(() => {
       flatpickr('#datepicker', {});
       require("flatpickr/dist/flatpickr.css");
-      // document.getElementById("pocInfo").value = "hello";
     });
     
     return {
@@ -1137,14 +1192,17 @@ export default {
       selectedOffice,
       analysisTypes,
       selectedAnalysisType,
-      articlesData,
       dropzoneFile,
+      attachmentDropzoneFile,
+      populateFields,
       toggle,
       changePocInfo,
       drop,
       selectedFile,
+      attachmentDrop,
+      attachmentSelectedFile,
       editor: ClassicEditor,
-              editorData: '<p>Content of the editor.</p>',
+              editorData: "",
               editorConfig: {
                   // The configuration of the editor.
               }
