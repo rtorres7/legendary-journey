@@ -12,27 +12,22 @@
     Search
   </p>
   <!-- Search Form -->
-  <div
-    class="
-      py-4
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
-    "
-  >
+  <div class="mt-4 p-4 bg-white rounded-lg shadow-md">
     <Disclosure v-slot="{ open }">
       <div class="flex flex-col justify-between">
         <div
           class="
-            flex
+            grid-cols-1
+            md:grid md:grid-cols-2 md:gap-4
             space-y-3
-            lg:space-y-0 lg:space-x-6
+            md:space-y-0
+            lg:flex lg:space-x-6 lg:gap-0
             flex-col
             lg:flex-row
             w-full
           "
         >
-          <div class="basis-2/5 max-w-[600px] lg:max-w-none">
+          <div class="lg:basis-2/5 lg:max-w-none">
             <label class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
               >Keyword Search or Filter
             </label>
@@ -58,7 +53,7 @@
             ]"
             :key="n"
           >
-            <div class="basis-1/5 max-w-[600px] lg:max-w-none">
+            <div class="lg:basis-1/5 lg:max-w-none">
               <label>
                 <span
                   class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
@@ -79,20 +74,18 @@
             energy:hover:text-whit
           "
         >
-          <span class="text-sm mr-2 inline-block">{{
+          <span class="text-sm text-mission-light-blue mr-2 inline-block">{{
             open ? "Less" : "More"
           }}</span>
           <ChevronUpIcon
             :class="open ? '' : 'rotate-180 transform'"
-            class="h-5 w-5 inline-block"
+            class="text-mission-light-blue h-5 w-5 inline-block"
           />
         </DisclosureButton>
       </div>
       <DisclosurePanel class="my-2">
-        <div
-          class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-6"
-        >
-          <div class="basis-2/5 flex space-x-6 max-w-[600px] lg:max-w-none">
+        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
+          <div class="lg:basis-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
             <template
               v-for="n in [
                 queryFilters.classifications,
@@ -106,37 +99,50 @@
               </div>
             </template>
           </div>
-          <template
-            v-for="n in [
-              queryFilters.nonstate_actors,
-              queryFilters.producing_offices,
-              queryFilters.frontpage_featured,
-            ]"
-            :key="n"
+          <div
+            class="
+              grid grid-cols-2
+              md:grid-cols-3
+              gap-4
+              lg:gap-0
+              lg:grid-cols-0
+              lg:flex
+              lg:basis-3/5
+              lg:space-x-6
+              lg:max-w-none
+            "
           >
-            <div class="basis-1/5 max-w-[600px] lg:max-w-none">
-              <label class="text-sm font-semibold">{{ n.label }}</label>
-              <SearchFormListbox v-model="n.model" :items="n.list" />
-            </div>
-          </template>
+            <template
+              v-for="n in [
+                queryFilters.nonstate_actors,
+                queryFilters.producing_offices,
+                queryFilters.frontpage_featured,
+              ]"
+              :key="n"
+            >
+              <div class="lg:basis-1/3 lg:max-w-none">
+                <label class="text-sm font-semibold">{{ n.label }}</label>
+                <SearchFormListbox v-model="n.model" :items="n.list" />
+              </div>
+            </template>
+          </div>
         </div>
       </DisclosurePanel>
     </Disclosure>
   </div>
-  <!-- Search Results -->
+  <!-- Search Results & Pagination -->
   <div class="py-4">
     <p class="text-center text-sm py-2">
       {{ totalCount?.toLocaleString() }} Results
     </p>
     <div class="flex flex-col-reverse lg:flex-row py-2">
-      <div class="basis-4/5">
+      <div class="basis-3/4 bg-white rounded-lg shadow-md">
         <template v-for="result in results" :key="result">
           <!-- Search Card -->
           <div
             class="
               flex
-              px-2
-              py-6
+              p-4
               border-b border-slate-900/10
               dark:border-slate-50/[0.06]
               energy:border-gray-700/25
@@ -184,7 +190,7 @@
                     result.title
                   }}</span>
                 </div>
-                <div class="text-sm">
+                <div class="text-xs lg:text-sm">
                   {{ result.doc_num }}
                 </div>
               </div>
@@ -201,8 +207,209 @@
             </div>
           </div>
         </template>
+        <div class="px-4 py-3 flex items-center border-t border-gray-200">
+          <div class="flex-1 flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-700">
+                Showing
+                <span class="font-medium">1</span>
+                to
+                <span class="font-medium">50</span>
+                of
+                <span class="font-medium">51</span>
+                results
+              </p>
+            </div>
+            <div>
+              <nav
+                class="
+                  relative
+                  z-0
+                  inline-flex
+                  rounded-md
+                  shadow-sm
+                  -space-x-px
+                "
+                aria-label="Pagination"
+              >
+                <a
+                  href="#"
+                  class="
+                    relative
+                    inline-flex
+                    items-center
+                    px-2
+                    py-2
+                    rounded-l-md
+                    border border-gray-300
+                    bg-white
+                    text-sm
+                    font-medium
+                    text-gray-500
+                    hover:bg-gray-50
+                  "
+                >
+                  <span class="sr-only">Previous</span>
+                  <!-- Heroicon name: solid/chevron-left -->
+                  <svg
+                    class="h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </a>
+                <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+                <a
+                  href="#"
+                  aria-current="page"
+                  class="
+                    z-10
+                    bg-slate-50
+                    border-black
+                    text-black
+                    relative
+                    inline-flex
+                    items-center
+                    px-4
+                    py-2
+                    border
+                    text-sm
+                    font-medium
+                  "
+                >
+                  1
+                </a>
+                <span
+                  class="
+                    relative
+                    inline-flex
+                    items-center
+                    px-4
+                    py-2
+                    border border-gray-300
+                    bg-white
+                    text-sm
+                    font-medium
+                    text-gray-700
+                  "
+                >
+                  ...
+                </span>
+                <a
+                  href="#"
+                  class="
+                    bg-white
+                    border-gray-300
+                    text-gray-500
+                    hover:bg-gray-50
+                    hidden
+                    md:inline-flex
+                    relative
+                    items-center
+                    px-4
+                    py-2
+                    border
+                    text-sm
+                    font-medium
+                  "
+                >
+                  2
+                </a>
+                <a
+                  href="#"
+                  class="
+                    relative
+                    inline-flex
+                    items-center
+                    px-2
+                    py-2
+                    rounded-r-md
+                    border border-gray-300
+                    bg-white
+                    text-sm
+                    font-medium
+                    text-gray-500
+                    hover:bg-gray-50
+                  "
+                >
+                  <span class="sr-only">Next</span>
+                  <!-- Heroicon name: solid/chevron-right -->
+                  <svg
+                    class="h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="basis-1/5">facets</div>
+      <div
+        class="
+          basis-1/4
+          grid grid-cols-3
+          gap-4
+          lg:gap-0 lg:grid-cols-none lg:flex lg:flex-col
+          h-full
+          lg:ml-4
+          mb-4
+          lg:mb-0
+          p-4
+          bg-white
+          rounded-lg
+          shadow-md
+        "
+      >
+        <template
+          v-for="({ displayName, rows, expand }, index) in aggregations"
+          :key="index"
+        >
+          <div class="py-2">
+            <p class="text-sm font-semibold">{{ displayName }}</p>
+            <div class="flex flex-col">
+              <template v-for="(facet, index) in rows" :key="facet">
+                <div :class="index > 4 && !expand ? 'hidden' : 'block'">
+                  <span class="cursor-pointer text-sm text-mission-light-blue"
+                    >{{ facet.name }}
+                  </span>
+                  <span class="text-sm"> ({{ facet.count }}) </span>
+                </div>
+              </template>
+              <template v-if="rows.length > 5">
+                <span
+                  @click="toggleExpand(index)"
+                  class="
+                    max-w-fit
+                    ml-2
+                    mt-2
+                    cursor-pointer
+                    text-sm text-mission-light-blue
+                  "
+                >
+                  <template v-if="expand"> Show Less... </template>
+                  <template v-else> Show More... </template>
+                </span>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -238,6 +445,7 @@ export default {
 
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
+    const aggregations = computed(() => store.state.search.aggregations);
 
     const queryFilters = ref({
       regions: {
@@ -296,6 +504,10 @@ export default {
       }
     );
 
+    const toggleExpand = (key) => {
+      aggregations.value[key].expand = !aggregations.value[key].expand;
+    };
+
     return {
       dayjs,
       queryFilters,
@@ -304,6 +516,8 @@ export default {
       testItems,
       results,
       totalCount,
+      aggregations,
+      toggleExpand,
     };
   },
 };

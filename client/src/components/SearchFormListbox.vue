@@ -14,6 +14,7 @@
           bg-white
           dark:bg-slate-700
           energy:bg-gray-700
+          border-t border-t-gray-100
           rounded-lg
           shadow-md
           cursor-default

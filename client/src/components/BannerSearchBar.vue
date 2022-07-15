@@ -10,27 +10,24 @@
         shadow-sm
         w-[400px]
         xl:w-[370px]
-        bg-slate-100
-        dark:bg-slate-800
-        energy:bg-gray-700
+        border border-slate-200
+        bg-transparent
         leading-6
         text-sm text-primary
         dark:text-slate-300
       "
     >
       <SearchIcon
-        class="w-6 h-6 text-slate-800 dark:text-slate-300 energy:text-gray-300"
+        class="w-6 h-6 text-slate-200 dark:text-slate-300 energy:text-gray-300"
         aria-hidden="true"
       />
       <vue3-simple-typeahead
         class="
           ml-2
           focus-visible:outline-none
-          bg-slate-100
-          dark:bg-slate-800
-          energy:bg-gray-700
+          bg-transparent
           w-full
-          text-slate-800
+          text-slate-200
           dark:text-gray-300
           energy:text-gray-300
         "
