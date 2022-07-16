@@ -7,7 +7,7 @@
       <div>
         <label class="block mb-2" for="file_input">Upload a file to publish</label>
         <PublishViewFileUploader id="file_input" @drop.prevent="drop" @change="selectedFile">
-          <label for="dropzoneFile" 
+          <button @click="fileInputButton.click()"
             class="
               bg-slate-100 hover:bg-slate-200/80 
               dark:bg-slate-700 dark:hover:bg-slate-700/80 
@@ -19,8 +19,8 @@
             "
           >
             Select File
-          </label>
-          <input type="file" id="dropzoneFile" class="dropzoneFile hidden" />
+          </button>
+          <input type="file" id="dropzoneFile" class="dropzoneFile hidden" ref="fileInputButton" />
         </PublishViewFileUploader>
         <span>{{ dropzoneFile.name }}</span>
       </div>
@@ -587,7 +587,7 @@
             <div>
               <label class="block mb-2" for="attachment_input">Upload article files</label>
               <PublishViewFileUploader id="attachment_input" @drop.prevent="attachmentDrop" @change="attachmentSelectedFile">
-                <label for="attachmentDropzoneFile" 
+                <button @click="attachmentFileInputButton.click()"
                   class="
                     bg-slate-100 hover:bg-slate-200/80 
                     dark:bg-slate-700 dark:hover:bg-slate-700/80 
@@ -599,8 +599,8 @@
                   "
                 >
                   Select File
-                </label>
-                <input type="file" id="attachmentDropzoneFile" class="attachmentDropzoneFile hidden" multiple />
+                </button>
+                <input type="file" id="attachmentDropzoneFile" class="attachmentDropzoneFile hidden" multiple ref="attachmentFileInputButton" />
               </PublishViewFileUploader>
             </div>
             <a href="" class="hover:underline">View ****</a>
@@ -1124,6 +1124,8 @@ export default {
     const selectedActors = ref([actors[0]]);
     const selectedOffice = ref([producingOffices[0]]);
     const selectedAnalysisType = ref([analysisTypes[0]]);
+    const fileInputButton = ref(null);
+    const attachmentFileInputButton = ref(null);
     const dropzoneFile = ref("");
     const attachmentDropzoneFile = ref("");
 
@@ -1172,7 +1174,7 @@ export default {
       document.getElementById("documentClass").value = articles[0].classification;
       document.getElementById("summary").value = articles[0].content[0];
       document.getElementById("docNum").value = articles[0].id;
-      // editorData = articles[0].content;
+      // editor: editorData: articles[0].content[3];
     };
 
     onMounted(() => {
@@ -1192,6 +1194,8 @@ export default {
       selectedOffice,
       analysisTypes,
       selectedAnalysisType,
+      fileInputButton,
+      attachmentFileInputButton,
       dropzoneFile,
       attachmentDropzoneFile,
       populateFields,
@@ -1202,7 +1206,7 @@ export default {
       attachmentDrop,
       attachmentSelectedFile,
       editor: ClassicEditor,
-              editorData: "",
+              editorData: articles[0].content[1],
               editorConfig: {
                   // The configuration of the editor.
               }
