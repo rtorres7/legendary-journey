@@ -109,7 +109,6 @@ export default {
     const selectedItem = computed({
       get: () => props.modelValue,
       set: (value) => {
-        console.log("newVal: ", value);
         emit("update:modelValue", value);
       },
     });

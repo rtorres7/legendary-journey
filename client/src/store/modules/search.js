@@ -48,12 +48,20 @@ export default {
           commit("importData", search.zelensky)
           break
         }
+        case '/search?text=Zelensky&view=list&page=1': {
+          commit("importData", search.default)
+          break
+        }
+        case '/search?text=Zelensky&view=list&page=2': {
+          commit("importData", search.zelensky)
+          break
+        }
         case '/search?text=United+Nations&view=list': {
           commit("importData", search.united_nations)
           break
         }
         default: {
-          commit("importData", search.default)
+          commit("importData", search.none)
         }
 
       }

@@ -1248,7 +1248,7 @@ import {
   XIcon,
 } from "@heroicons/vue/outline";
 
-import { regions, countries } from "@/data/regions.js";
+import { regions, countries } from "@/data";
 
 const mainNavigation = [
   { name: "Home", href: "/", current: true },

@@ -32,7 +32,7 @@
           energy:text-gray-300
         "
         id="typeahead_id"
-        placeholder="Search"
+        placeholder="Search (e.g. Zelensky)"
         :items="['United Nations', 'Zelensky']"
         :minInputLength="1"
         :itemProjection="itemProjectionFunction"
@@ -67,17 +67,6 @@
           </div>
         </template>
       </vue3-simple-typeahead>
-      <button
-        type="button"
-        @click="toggleModal"
-        class="ml-2 text-slate-800"
-        aria-label="advanced search"
-      >
-        <ChevronDownIcon
-          class="w-5 h-5 dark:text-slate-300 energy:text-gray-300"
-        />
-      </button>
-      <BannerSearchBarModal :modalActive="modalActive" @close="toggleModal" />
     </div>
   </div>
 </template>
@@ -85,22 +74,15 @@
 <script>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import BannerSearchBarModal from "@/components/BannerSearchBarModal.vue";
-import { SearchIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import { SearchIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
-    BannerSearchBarModal,
     SearchIcon,
-    ChevronDownIcon,
   },
   setup() {
     const router = useRouter();
     const modalActive = ref(false);
-
-    const toggleModal = () => {
-      modalActive.value = !modalActive.value;
-    };
 
     const selectItemEventHandler = (item) => {
       router.push({
@@ -114,7 +96,6 @@ export default {
 
     return {
       modalActive,
-      toggleModal,
       selectItemEventHandler,
     };
   },

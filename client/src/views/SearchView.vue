@@ -130,287 +130,329 @@
       </DisclosurePanel>
     </Disclosure>
   </div>
-  <!-- Search Results & Pagination -->
   <div class="py-4">
-    <p class="text-center text-sm py-2">
-      {{ totalCount?.toLocaleString() }} Results
-    </p>
-    <div class="flex flex-col-reverse lg:flex-row py-2">
-      <div class="basis-3/4 bg-white rounded-lg shadow-md">
-        <template v-for="result in results" :key="result">
-          <!-- Search Card -->
-          <div
-            class="
-              flex
-              p-4
-              border-b border-slate-900/10
-              dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
-            "
-          >
+    <!-- Search Results & Pagination Container -->
+    <template v-if="loading"> Loading...</template>
+    <template v-if="!loading && totalCount > 0">
+      <p class="text-center text-sm py-2">
+        {{ totalCount?.toLocaleString() }} Results
+      </p>
+      <div class="flex flex-col-reverse lg:flex-row py-2">
+        <div class="basis-3/4 h-fit bg-white rounded-lg shadow-md">
+          <!-- Results -->
+          <template v-for="result in results" :key="result">
             <div
               class="
-                h-fit
-                px-2
-                border-l-2 border-slate-900/10
+                flex
+                p-4
+                border-b border-slate-900/10
                 dark:border-slate-50/[0.06]
                 energy:border-gray-700/25
-                text-center
               "
             >
-              <span class="block font-semibold">{{
-                dayjs(result.date_published).format("DD")
-              }}</span>
-              <span class="block text-sm">{{
-                dayjs(result.date_published).format("MMM")
-              }}</span>
-              <span class="block text-sm">{{
-                dayjs(result.date_published).format("YYYY")
-              }}</span>
-            </div>
-            <div class="px-2">
-              <div class="flex justify-between">
+              <div class="h-fit px-2 text-center">
+                <span class="block font-semibold">{{
+                  dayjs(result.date_published).format("DD")
+                }}</span>
+                <span class="block text-sm">{{
+                  dayjs(result.date_published).format("MMM")
+                }}</span>
+                <span class="block text-sm">{{
+                  dayjs(result.date_published).format("YYYY")
+                }}</span>
+              </div>
+              <div class="px-2">
+                <div class="flex justify-between">
+                  <div
+                    class="
+                      basis-[768px]
+                      cursor-pointer
+                      hover:underline
+                      line-clamp-2
+                    "
+                  >
+                    <span
+                      class="
+                        text-slate-600
+                        dark:text-slate-300
+                        energy:text-gray-300
+                      "
+                      >{{ `${"(" + result.title_classification + ") "}` }}</span
+                    >
+                    <span
+                      class="text-black dark:text-white energy:text-white"
+                      >{{ result.title }}</span
+                    >
+                  </div>
+                  <div class="text-xs lg:text-sm">
+                    {{ result.doc_num }}
+                  </div>
+                </div>
                 <div
                   class="
-                    basis-[768px]
-                    cursor-pointer
-                    hover:underline
-                    line-clamp-2
+                    py-2
+                    text-sm text-slate-600
+                    dark:text-slate-300
+                    energy:text-gray-300
                   "
                 >
+                  <span v-html="result.highlighted_result" />
+                </div>
+              </div>
+            </div>
+          </template>
+          <!-- Pagination -->
+          <div class="px-4 py-3 flex items-center border-t border-gray-200">
+            <div class="flex-1 flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing
+                  <span class="font-medium">1</span>
+                  to
+                  <span class="font-medium">50</span>
+                  of
+                  <span class="font-medium">51</span>
+                  results
+                </p>
+              </div>
+              <div>
+                <nav
+                  class="
+                    relative
+                    z-0
+                    inline-flex
+                    rounded-md
+                    shadow-sm
+                    -space-x-px
+                  "
+                  aria-label="Pagination"
+                >
+                  <a
+                    href="#"
+                    class="
+                      relative
+                      inline-flex
+                      items-center
+                      px-2
+                      py-2
+                      rounded-l-md
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      font-medium
+                      text-gray-500
+                      hover:bg-gray-50
+                    "
+                  >
+                    <span class="sr-only">Previous</span>
+                    <ChevronLeftIcon class="h-5 w-5" />
+                  </a>
+                  <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+                  <a
+                    href="#"
+                    aria-current="page"
+                    class="
+                      z-10
+                      bg-slate-50
+                      border-black
+                      text-black
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border
+                      text-sm
+                      font-medium
+                    "
+                  >
+                    1
+                  </a>
                   <span
                     class="
-                      text-slate-600
-                      dark:text-slate-300
-                      energy:text-gray-300
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      font-medium
+                      text-gray-700
                     "
-                    >{{ `${"(" + result.title_classification + ") "}` }}</span
                   >
-                  <span class="text-black dark:text-white energy:text-white">{{
-                    result.title
-                  }}</span>
-                </div>
-                <div class="text-xs lg:text-sm">
-                  {{ result.doc_num }}
-                </div>
+                    ...
+                  </span>
+                  <a
+                    href="#"
+                    class="
+                      bg-white
+                      border-gray-300
+                      text-gray-500
+                      hover:bg-gray-50
+                      hidden
+                      md:inline-flex
+                      relative
+                      items-center
+                      px-4
+                      py-2
+                      border
+                      text-sm
+                      font-medium
+                    "
+                  >
+                    2
+                  </a>
+                  <a
+                    href="#"
+                    class="
+                      relative
+                      inline-flex
+                      items-center
+                      px-2
+                      py-2
+                      rounded-r-md
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      font-medium
+                      text-gray-500
+                      hover:bg-gray-50
+                    "
+                  >
+                    <span class="sr-only">Next</span>
+                    <ChevronRightIcon class="h-5 w-5" />
+                  </a>
+                </nav>
               </div>
-              <div
-                class="
-                  py-2
-                  text-sm text-slate-600
-                  dark:text-slate-300
-                  energy:text-gray-300
-                "
-              >
-                <span v-html="result.highlighted_result" />
-              </div>
-            </div>
-          </div>
-        </template>
-        <div class="px-4 py-3 flex items-center border-t border-gray-200">
-          <div class="flex-1 flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-700">
-                Showing
-                <span class="font-medium">1</span>
-                to
-                <span class="font-medium">50</span>
-                of
-                <span class="font-medium">51</span>
-                results
-              </p>
-            </div>
-            <div>
-              <nav
-                class="
-                  relative
-                  z-0
-                  inline-flex
-                  rounded-md
-                  shadow-sm
-                  -space-x-px
-                "
-                aria-label="Pagination"
-              >
-                <a
-                  href="#"
-                  class="
-                    relative
-                    inline-flex
-                    items-center
-                    px-2
-                    py-2
-                    rounded-l-md
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    font-medium
-                    text-gray-500
-                    hover:bg-gray-50
-                  "
-                >
-                  <span class="sr-only">Previous</span>
-                  <!-- Heroicon name: solid/chevron-left -->
-                  <svg
-                    class="h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </a>
-                <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-                <a
-                  href="#"
-                  aria-current="page"
-                  class="
-                    z-10
-                    bg-slate-50
-                    border-black
-                    text-black
-                    relative
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border
-                    text-sm
-                    font-medium
-                  "
-                >
-                  1
-                </a>
-                <span
-                  class="
-                    relative
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    font-medium
-                    text-gray-700
-                  "
-                >
-                  ...
-                </span>
-                <a
-                  href="#"
-                  class="
-                    bg-white
-                    border-gray-300
-                    text-gray-500
-                    hover:bg-gray-50
-                    hidden
-                    md:inline-flex
-                    relative
-                    items-center
-                    px-4
-                    py-2
-                    border
-                    text-sm
-                    font-medium
-                  "
-                >
-                  2
-                </a>
-                <a
-                  href="#"
-                  class="
-                    relative
-                    inline-flex
-                    items-center
-                    px-2
-                    py-2
-                    rounded-r-md
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    font-medium
-                    text-gray-500
-                    hover:bg-gray-50
-                  "
-                >
-                  <span class="sr-only">Next</span>
-                  <!-- Heroicon name: solid/chevron-right -->
-                  <svg
-                    class="h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </a>
-              </nav>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="
-          basis-1/4
-          grid grid-cols-3
-          gap-4
-          lg:gap-0 lg:grid-cols-none lg:flex lg:flex-col
-          h-full
-          lg:ml-4
-          mb-4
-          lg:mb-0
-          p-4
-          bg-white
-          rounded-lg
-          shadow-md
-        "
-      >
-        <template
-          v-for="({ displayName, rows, expand }, index) in aggregations"
-          :key="index"
+        <!-- Results Facets -->
+        <div
+          class="
+            hidden
+            lg:block
+            basis-1/4
+            bg-white
+            rounded-lg
+            shadow-md
+            ml-4
+            h-full
+          "
         >
-          <div class="py-2">
-            <p class="text-sm font-semibold">{{ displayName }}</p>
-            <div class="flex flex-col">
-              <template v-for="(facet, index) in rows" :key="facet">
-                <div :class="index > 4 && !expand ? 'hidden' : 'block'">
-                  <span class="cursor-pointer text-sm text-mission-light-blue"
-                    >{{ facet.name }}
-                  </span>
-                  <span class="text-sm"> ({{ facet.count }}) </span>
-                </div>
-              </template>
-              <template v-if="rows.length > 5">
-                <span
-                  @click="toggleExpand(index)"
-                  class="
-                    max-w-fit
-                    ml-2
-                    mt-2
-                    cursor-pointer
-                    text-sm text-mission-light-blue
-                  "
+          <SearchResultsFacets :facets="aggregations" />
+        </div>
+        <div
+          class="
+            lg:hidden
+            block
+            cursor-pointer
+            text-sm text-mission-light-blue
+            py-4
+          "
+          @click="openMobileFacetsDialog"
+        >
+          Show Filters
+        </div>
+        <!-- Mobile Result Facets Dialog -->
+        <TransitionRoot appear :show="isMobileFacetsDialogOpen" as="template">
+          <Dialog as="div" @close="closeMobileFacetsDialog">
+            <div class="fixed inset-0 z-20 overflow-y-auto w-full">
+              <div class="min-h-screen px-4 text-center">
+                <TransitionChild
+                  as="template"
+                  enter="duration-300 ease-out"
+                  enter-from="opacity-0"
+                  enter-to="opacity-100"
+                  leave="duration-200 ease-in"
+                  leave-from="opacity-100"
+                  leave-to="opacity-0"
                 >
-                  <template v-if="expand"> Show Less... </template>
-                  <template v-else> Show More... </template>
+                  <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+                </TransitionChild>
+                <span
+                  class="inline-block h-screen align-middle"
+                  aria-hidden="true"
+                >
+                  &#8203;
                 </span>
-              </template>
+                <TransitionChild
+                  as="template"
+                  enter="duration-300 ease-out"
+                  enter-from="opacity-0 scale-95"
+                  enter-to="opacity-100 scale-100"
+                  leave="duration-200 ease-in"
+                  leave-from="opacity-100 scale-100"
+                  leave-to="opacity-0 scale-95"
+                >
+                  <div
+                    class="
+                      inline-block
+                      w-full
+                      max-w-xl
+                      md:max-w-[700px]
+                      lg:max-w-[900px]
+                      p-6
+                      my-8
+                      text-left
+                      align-middle
+                      transition-all
+                      transform
+                      text-slate-700
+                      dark:text-slate-300
+                      energy:text-gray-300
+                      bg-slate-100
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      shadow-lg
+                      rounded-lg
+                    "
+                  >
+                    <div class="mt-6">
+                      <button
+                        type="button"
+                        class="
+                          absolute
+                          top-5
+                          right-5
+                          w-8
+                          h-8
+                          flex
+                          items-center
+                          justify-center
+                        "
+                        tabindex="0"
+                        @click="closeMobileFacetsDialog"
+                      >
+                        <span class="sr-only">Close navigation</span
+                        ><XIcon class="h-5 w-5" aria-hidden="true" />
+                      </button>
+                      <SearchResultsFacets
+                        :facets="aggregations"
+                        class="grid grid-cols-2 md:grid-cols-3 gap-4"
+                      />
+                    </div>
+                  </div>
+                </TransitionChild>
+              </div>
             </div>
-          </div>
-        </template>
+          </Dialog>
+        </TransitionRoot>
       </div>
-    </div>
+    </template>
+    <template v-if="!loading && totalCount === 0">
+      <div class="mt-6">
+        <p class="text-xl text-center font-semibold">
+          Sorry, we didn't find any results.
+        </p>
+        <p class="text text-center">
+          Here's some information about your keyword search that might help you
+          find what you're looking for.
+        </p>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -419,9 +461,19 @@ import * as dayjs from "dayjs";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronUpIcon } from "@heroicons/vue/outline";
+import {
+  Dialog,
+  DialogOverlay,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { ChevronUpIcon, XIcon } from "@heroicons/vue/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
 import SearchFormListbox from "@/components/SearchFormListbox";
+import SearchResultsFacets from "@/components/SearchResultsFacets";
 
 const testItems = [
   "test item 1",
@@ -433,19 +485,32 @@ const testItems = [
 
 export default {
   components: {
+    Dialog,
+    DialogOverlay,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+    TransitionChild,
+    TransitionRoot,
+    ChevronLeftIcon,
+    ChevronRightIcon,
     ChevronUpIcon,
+    XIcon,
     SearchFormListbox,
+    SearchResultsFacets,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
 
+    console.log("route query: ", route.query);
+
+    const loading = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
+
+    const isMobileFacetsDialogOpen = ref(false);
 
     const queryFilters = ref({
       regions: {
@@ -490,9 +555,6 @@ export default {
       },
     });
 
-    const testModel = ref("");
-    const anotherTest = ref("");
-
     onMounted(() => {
       store.dispatch("search/search");
     });
@@ -504,20 +566,23 @@ export default {
       }
     );
 
-    const toggleExpand = (key) => {
-      aggregations.value[key].expand = !aggregations.value[key].expand;
-    };
+    const closeMobileFacetsDialog = () =>
+      (isMobileFacetsDialogOpen.value = false);
+
+    const openMobileFacetsDialog = () =>
+      (isMobileFacetsDialogOpen.value = true);
 
     return {
       dayjs,
       queryFilters,
-      testModel,
-      anotherTest,
       testItems,
+      loading,
       results,
       totalCount,
       aggregations,
-      toggleExpand,
+      isMobileFacetsDialogOpen,
+      closeMobileFacetsDialog,
+      openMobileFacetsDialog,
     };
   },
 };

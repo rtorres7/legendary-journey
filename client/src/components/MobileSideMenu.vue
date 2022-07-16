@@ -320,7 +320,7 @@ import {
 } from "@headlessui/vue";
 import { ChevronDownIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 
-import { regions, countries } from "@/data/regions.js";
+import { regions, countries } from "@/data";
 
 const issuesNavigation = [
   { name: "Issue 0", href: "/" },
