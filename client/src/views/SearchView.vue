@@ -12,7 +12,17 @@
     Search
   </p>
   <!-- Search Form -->
-  <div class="mt-4 p-4 bg-white rounded-lg shadow-md">
+  <div
+    class="
+      mt-4
+      p-4
+      bg-white
+      dark:bg-slate-800
+      energy:bg-gray-800
+      rounded-lg
+      shadow-md
+    "
+  >
     <Disclosure v-slot="{ open }">
       <div class="flex flex-col justify-between">
         <div
@@ -74,12 +84,26 @@
             energy:hover:text-whit
           "
         >
-          <span class="text-sm text-mission-light-blue mr-2 inline-block">{{
-            open ? "Less" : "More"
-          }}</span>
+          <span
+            class="
+              text-sm text-mission-light-blue
+              dark:text-teal-200
+              energy:text-energy-yellow
+              mr-2
+              inline-block
+            "
+            >{{ open ? "Less" : "More" }}</span
+          >
           <ChevronUpIcon
             :class="open ? '' : 'rotate-180 transform'"
-            class="text-mission-light-blue h-5 w-5 inline-block"
+            class="
+              text-mission-light-blue
+              dark:text-teal-200
+              energy:text-energy-yellow
+              h-5
+              w-5
+              inline-block
+            "
           />
         </DisclosureButton>
       </div>
@@ -167,6 +191,8 @@
                     dark:bg-slate-700
                     energy:bg-gray-700
                     border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -234,9 +260,27 @@
           </div>
         </div>
         <!-- Search Results Table -->
-        <div class="bg-white rounded-lg shadow-md">
+        <div
+          class="
+            bg-white
+            dark:bg-slate-800
+            energy:bg-gray-800
+            rounded-lg
+            shadow-md
+          "
+        >
           <!-- Top Pagination -->
-          <div class="px-4 py-3 flex items-center border-b border-gray-200">
+          <div
+            class="
+              px-4
+              py-3
+              flex
+              items-center
+              border-b border-gray-200
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+            "
+          >
             <SearchResultsTablePagination
               :totalCount="totalCount"
               :currentPage="currentPage"
@@ -320,6 +364,8 @@
           lg:block
           basis-1/4
           bg-white
+          dark:bg-slate-800
+          energy:bg-gray-800
           rounded-lg
           shadow-md
           ml-4
@@ -330,7 +376,13 @@
       </div>
       <div class="lg:hidden flex justify-between py-4">
         <div
-          class="cursor-pointer text-mission-light-blue self-center"
+          class="
+            cursor-pointer
+            text-mission-light-blue
+            dark:text-teal-400
+            energy:text-energy-yellow
+            self-center
+          "
           @click="openMobileFacetsDialog"
         >
           Show Filters
@@ -353,6 +405,8 @@
                   dark:bg-slate-700
                   energy:bg-gray-700
                   border-t border-t-gray-100
+                  dark:border-t-slate-800
+                  energy:border-t-gray-800
                   rounded-lg
                   shadow-md
                   cursor-default

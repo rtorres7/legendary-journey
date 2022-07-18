@@ -681,8 +681,8 @@
             <span class="sr-only">Open main menu</span>
             <MenuIcon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <div class="px-2 w-full rounded-md pointer-events-auto">
-            <div
+          <BannerSearchBar class="px-2 w-full" />
+          <!-- <div
               class="
                 flex
                 max-w-[500px]
@@ -725,8 +725,8 @@
                   energy:bg-gray-600
                 "
               />
-            </div>
-          </div>
+            </div> -->
+
           <!-- Mobile user menu button -->
           <button
             type="button"
@@ -1241,7 +1241,7 @@ import {
   LightningBoltIcon,
   MenuIcon,
   MoonIcon,
-  SearchIcon,
+  //SearchIcon,
   SelectorIcon,
   SunIcon,
   UserCircleIcon,
@@ -1299,7 +1299,7 @@ export default {
     LightningBoltIcon,
     MenuIcon,
     MoonIcon,
-    SearchIcon,
+    //SearchIcon,
     SelectorIcon,
     SunIcon,
     UserCircleIcon,

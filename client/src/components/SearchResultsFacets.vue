@@ -9,7 +9,13 @@
         <div class="flex flex-col">
           <template v-for="(facet, index) in rows" :key="facet">
             <div :class="index > 4 && !expand ? 'hidden' : 'block'">
-              <span class="cursor-pointer text-sm text-mission-light-blue"
+              <span
+                class="
+                  cursor-pointer
+                  text-sm text-mission-light-blue
+                  dark:text-teal-400
+                  energy:text-energy-yellow
+                "
                 >{{ facet.name }}
               </span>
               <span class="text-sm"> ({{ facet.count }}) </span>
@@ -24,6 +30,8 @@
                 mt-2
                 cursor-pointer
                 text-sm text-mission-light-blue
+                dark:text-teal-400
+                energy:text-energy-yellow
               "
             >
               <template v-if="expand"> Show Less... </template>

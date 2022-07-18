@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 flex items-center justify-between">
     <div>
-      <p class="text-sm text-gray-700">
+      <p class="text-sm">
         Showing
         <span class="font-medium">{{ startingResult(currentPage) }}</span>
         to
@@ -37,6 +37,8 @@
               rounded-l-md
               border border-gray-300
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               text-sm
               font-medium
               text-gray-300
@@ -60,6 +62,8 @@
               rounded-l-md
               border border-gray-300
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               text-sm
               font-medium
               text-gray-500
@@ -84,6 +88,8 @@
                 py-2
                 border border-gray-300
                 bg-white
+                dark:bg-slate-800
+                energy:bg-gray-800
                 text-sm
                 font-medium
                 text-gray-700
@@ -120,6 +126,8 @@
                 class="
                   cursor-pointer
                   bg-white
+                  dark:bg-slate-800
+                  energy:bg-gray-800
                   border-gray-300
                   text-gray-500
                   hover:bg-gray-50
@@ -149,6 +157,8 @@
               rounded-r-md
               border border-gray-300
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               text-sm
               font-medium
               text-gray-300
@@ -172,6 +182,8 @@
               rounded-r-md
               border border-gray-300
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               text-sm
               font-medium
               text-gray-500
@@ -201,6 +213,8 @@
               rounded-md
               text-gray-300
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               hover:bg-gray-50
             "
           >
@@ -223,6 +237,8 @@
               rounded-md
               text-gray-700
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               hover:bg-gray-50
             "
           >
@@ -244,6 +260,8 @@
               rounded-md
               text-gray-300
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               hover:bg-gray-50
             "
           >
@@ -267,6 +285,8 @@
               rounded-md
               text-gray-700
               bg-white
+              dark:bg-slate-800
+              energy:bg-gray-800
               hover:bg-gray-50
             "
           >

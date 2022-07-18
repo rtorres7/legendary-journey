@@ -6,9 +6,12 @@
         items-center
         pl-2
         pr-3
+        m-auto
+        lg:m-0
         rounded-md
         shadow-sm
-        w-[400px]
+        max-w-[500px]
+        lg:max-w-none lg:w-[400px]
         xl:w-[370px]
         border border-slate-200
         bg-transparent
@@ -33,14 +36,39 @@
         "
         id="typeahead_id"
         placeholder="Search (e.g. Zelensky)"
-        :items="['United Nations', 'Zelensky']"
+        :items="searchMatches"
         :minInputLength="1"
         :itemProjection="itemProjectionFunction"
         @selectItem="selectItemEventHandler"
         @onInput="onInputEventHandler"
         @onFocus="onFocusEventHandler"
         @onBlur="onBlurEventHandler"
+        v-model="test"
+        @keyup.enter="whatthefuck"
       >
+        <!-- <template #list-header>
+          <div
+            class="
+              cursor-pointer
+              text-slate-800
+              dark:text-gray-300
+              energy:text-gray-300
+              bg-slate-100
+              dark:bg-slate-800
+              energy:bg-gray-600
+              hover:bg-slate-200
+              dark:hover:bg-slate-700
+              energy:hover:bg-gray-500
+              active:bg-slate-300
+              dark:active:bg-slate-600
+              energy:active:bg-gray-400
+              px-2
+              py-1
+            "
+          >
+            {{ test }}
+          </div>
+        </template> -->
         <template #list-item-text="slot">
           <div
             class="
@@ -76,6 +104,8 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { SearchIcon } from "@heroicons/vue/outline";
 
+let searchMatches = ["", "United Nations", "Zelensky"];
+
 export default {
   components: {
     SearchIcon,
@@ -83,8 +113,10 @@ export default {
   setup() {
     const router = useRouter();
     const modalActive = ref(false);
+    //const test = ref("");
 
     const selectItemEventHandler = (item) => {
+      console.log("selected: ", item);
       router.push({
         name: "search",
         query: {
@@ -94,9 +126,33 @@ export default {
       });
     };
 
+    // const onFocusEventHandler = (event) => {
+    //   console.log("focus event: ", event);
+    // };
+
+    // const onInputEventHandler = (event) => {
+    //   console.log("input event: ", event);
+    //   searchMatches.push(event.input);
+    // };
+
+    // const onBlurEventHandler = (event) => {
+    //   console.log("blur event: ", event);
+    //   searchMatches = ["United Nations", "Zelensky"];
+    // };
+
+    // const whatthefuck = (event) => {
+    //   console.log("on key up enter: ", event);
+    // };
+
     return {
+      //test,
+      searchMatches,
       modalActive,
       selectItemEventHandler,
+      // onInputEventHandler,
+      // onFocusEventHandler,
+      // onBlurEventHandler,
+      // whatthefuck,
     };
   },
 };
