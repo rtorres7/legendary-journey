@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col p-4">
     <template
-      v-for="({ displayName, rows, expand }, index) in facetsList"
+      v-for="({ displayName, rows, expand }, index) in facets"
       :key="index"
     >
       <div class="py-2">
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 export default {
   props: {
     facets: Object,
@@ -48,6 +48,10 @@ export default {
     const toggleExpand = (key) => {
       facetsList.value[key].expand = !facetsList.value[key].expand;
     };
+
+    watch(props.facets, () => {
+      facetsList.value = props.facets;
+    });
 
     return {
       facetsList,

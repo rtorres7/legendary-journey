@@ -130,15 +130,118 @@
       </DisclosurePanel>
     </Disclosure>
   </div>
-  <div class="py-4">
-    <!-- Search Results & Pagination Container -->
-    <template v-if="loading"> Loading...</template>
-    <template v-if="!loading && totalCount > 0">
-      <p class="text-center text-sm py-2">
-        {{ totalCount?.toLocaleString() }} Results
+  <!-- Results Container -->
+  <template v-if="loading"> Loading...</template>
+  <template v-if="!loading && totalCount === 0">
+    <div class="mt-6">
+      <p class="text-xl text-center font-semibold">
+        Sorry, we didn't find any results.
       </p>
-      <div class="flex flex-col-reverse lg:flex-row py-2">
-        <div class="basis-3/4 h-fit bg-white rounded-lg shadow-md">
+      <p class="text text-center">
+        Here's some information about your keyword search that might help you
+        find what you're looking for.
+      </p>
+    </div>
+  </template>
+  <template v-if="!loading && totalCount > 0">
+    <div class="flex flex-col-reverse lg:flex-row py-4">
+      <!-- Search Results & Sorting Listbox (Left) -->
+      <div class="basis-3/4 h-fit">
+        <!-- Search Sorting Listbox -->
+        <div class="hidden lg:flex justify-end py-4">
+          <div class="inline-flex">
+            <label class="self-center">Sort By</label>
+            <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
+              <div class="relative">
+                <ListboxButton
+                  class="
+                    min-h-[2rem]
+                    flex
+                    relative
+                    w-full
+                    py-1
+                    px-2
+                    text-left
+                    capitalize
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    rounded-lg
+                    shadow-md
+                    cursor-default
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-opacity-75
+                    focus-visible:ring-offset-2
+                  "
+                >
+                  <span class="block truncate">{{ selectedOrder.label }}</span>
+                  <span
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
+                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                  </span>
+                </ListboxButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <ListboxOptions
+                    class="
+                      absolute
+                      w-full
+                      py-1
+                      mt-1
+                      overflow-auto
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      rounded-md
+                      shadow-lg
+                      max-h-60
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
+                      z-10
+                    "
+                  >
+                    <ListboxOption
+                      v-slot="{ active }"
+                      v-for="item in sortOptions"
+                      :key="item"
+                      :value="item"
+                      as="template"
+                      class="capitalize px-2 py-1 cursor-pointer"
+                    >
+                      <li
+                        :class="[
+                          active
+                            ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                            : 'bg-none',
+                        ]"
+                      >
+                        {{ item.label }}
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
+          </div>
+        </div>
+        <!-- Search Results Table -->
+        <div class="bg-white rounded-lg shadow-md">
+          <!-- Top Pagination -->
+          <div class="px-4 py-3 flex items-center border-b border-gray-200">
+            <SearchResultsTablePagination
+              :totalCount="totalCount"
+              :currentPage="currentPage"
+            />
+          </div>
           <!-- Results -->
           <template v-for="result in results" :key="result">
             <div
@@ -201,278 +304,228 @@
               </div>
             </div>
           </template>
-          <!-- Pagination -->
-          <div class="px-4 py-3 flex items-center border-t border-gray-200">
-            <div class="flex-1 flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-700">
-                  Showing
-                  <span class="font-medium">1</span>
-                  to
-                  <span class="font-medium">50</span>
-                  of
-                  <span class="font-medium">51</span>
-                  results
-                </p>
-              </div>
-              <div>
-                <nav
-                  class="
-                    relative
-                    z-0
-                    inline-flex
-                    rounded-md
-                    shadow-sm
-                    -space-x-px
-                  "
-                  aria-label="Pagination"
-                >
-                  <a
-                    href="#"
-                    class="
-                      relative
-                      inline-flex
-                      items-center
-                      px-2
-                      py-2
-                      rounded-l-md
-                      border border-gray-300
-                      bg-white
-                      text-sm
-                      font-medium
-                      text-gray-500
-                      hover:bg-gray-50
-                    "
-                  >
-                    <span class="sr-only">Previous</span>
-                    <ChevronLeftIcon class="h-5 w-5" />
-                  </a>
-                  <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-                  <a
-                    href="#"
-                    aria-current="page"
-                    class="
-                      z-10
-                      bg-slate-50
-                      border-black
-                      text-black
-                      relative
-                      inline-flex
-                      items-center
-                      px-4
-                      py-2
-                      border
-                      text-sm
-                      font-medium
-                    "
-                  >
-                    1
-                  </a>
-                  <span
-                    class="
-                      relative
-                      inline-flex
-                      items-center
-                      px-4
-                      py-2
-                      border border-gray-300
-                      bg-white
-                      text-sm
-                      font-medium
-                      text-gray-700
-                    "
-                  >
-                    ...
-                  </span>
-                  <a
-                    href="#"
-                    class="
-                      bg-white
-                      border-gray-300
-                      text-gray-500
-                      hover:bg-gray-50
-                      hidden
-                      md:inline-flex
-                      relative
-                      items-center
-                      px-4
-                      py-2
-                      border
-                      text-sm
-                      font-medium
-                    "
-                  >
-                    2
-                  </a>
-                  <a
-                    href="#"
-                    class="
-                      relative
-                      inline-flex
-                      items-center
-                      px-2
-                      py-2
-                      rounded-r-md
-                      border border-gray-300
-                      bg-white
-                      text-sm
-                      font-medium
-                      text-gray-500
-                      hover:bg-gray-50
-                    "
-                  >
-                    <span class="sr-only">Next</span>
-                    <ChevronRightIcon class="h-5 w-5" />
-                  </a>
-                </nav>
-              </div>
-            </div>
+          <!-- Bottom Pagination -->
+          <div class="px-4 py-3 flex items-center">
+            <SearchResultsTablePagination
+              :totalCount="totalCount"
+              :currentPage="currentPage"
+            />
           </div>
         </div>
-        <!-- Results Facets -->
+      </div>
+      <!-- Search Results Filters -->
+      <div
+        class="
+          hidden
+          lg:block
+          basis-1/4
+          bg-white
+          rounded-lg
+          shadow-md
+          ml-4
+          h-full
+        "
+      >
+        <SearchResultsFacets :facets="aggregations" />
+      </div>
+      <div class="lg:hidden flex justify-between py-4">
         <div
-          class="
-            hidden
-            lg:block
-            basis-1/4
-            bg-white
-            rounded-lg
-            shadow-md
-            ml-4
-            h-full
-          "
-        >
-          <SearchResultsFacets :facets="aggregations" />
-        </div>
-        <div
-          class="
-            lg:hidden
-            block
-            cursor-pointer
-            text-sm text-mission-light-blue
-            py-4
-          "
+          class="cursor-pointer text-mission-light-blue self-center"
           @click="openMobileFacetsDialog"
         >
           Show Filters
         </div>
-        <!-- Mobile Result Facets Dialog -->
-        <TransitionRoot appear :show="isMobileFacetsDialogOpen" as="template">
-          <Dialog as="div" @close="closeMobileFacetsDialog">
-            <div class="fixed inset-0 z-20 overflow-y-auto w-full">
-              <div class="min-h-screen px-4 text-center">
-                <TransitionChild
-                  as="template"
-                  enter="duration-300 ease-out"
-                  enter-from="opacity-0"
-                  enter-to="opacity-100"
-                  leave="duration-200 ease-in"
-                  leave-from="opacity-100"
-                  leave-to="opacity-0"
-                >
-                  <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
-                </TransitionChild>
-                <span
-                  class="inline-block h-screen align-middle"
-                  aria-hidden="true"
-                >
-                  &#8203;
+        <div class="flex">
+          <label class="self-center">Sort By</label>
+          <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
+            <div class="relative">
+              <ListboxButton
+                class="
+                  min-h-[2rem]
+                  flex
+                  relative
+                  w-full
+                  py-1
+                  px-2
+                  text-left
+                  capitalize
+                  bg-white
+                  dark:bg-slate-700
+                  energy:bg-gray-700
+                  border-t border-t-gray-100
+                  rounded-lg
+                  shadow-md
+                  cursor-default
+                  focus:outline-none
+                  focus-visible:ring-2
+                  focus-visible:ring-opacity-75
+                  focus-visible:ring-offset-2
+                "
+              >
+                <span class="block truncate">{{ selectedOrder.label }}</span>
+                <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <SelectorIcon class="h-5 w-5" aria-hidden="true" />
                 </span>
-                <TransitionChild
-                  as="template"
-                  enter="duration-300 ease-out"
-                  enter-from="opacity-0 scale-95"
-                  enter-to="opacity-100 scale-100"
-                  leave="duration-200 ease-in"
-                  leave-from="opacity-100 scale-100"
-                  leave-to="opacity-0 scale-95"
+              </ListboxButton>
+              <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <ListboxOptions
+                  class="
+                    absolute
+                    w-full
+                    py-1
+                    mt-1
+                    overflow-auto
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    rounded-md
+                    shadow-lg
+                    max-h-60
+                    ring-1 ring-black ring-opacity-5
+                    focus:outline-none
+                    z-10
+                  "
                 >
-                  <div
-                    class="
-                      inline-block
-                      w-full
-                      max-w-xl
-                      md:max-w-[700px]
-                      lg:max-w-[900px]
-                      p-6
-                      my-8
-                      text-left
-                      align-middle
-                      transition-all
-                      transform
-                      text-slate-700
-                      dark:text-slate-300
-                      energy:text-gray-300
-                      bg-slate-100
-                      dark:bg-slate-700
-                      energy:bg-gray-700
-                      shadow-lg
-                      rounded-lg
-                    "
+                  <ListboxOption
+                    v-slot="{ active }"
+                    v-for="item in sortOptions"
+                    :key="item"
+                    :value="item"
+                    as="template"
+                    class="capitalize px-2 py-1 cursor-pointer"
                   >
-                    <div class="mt-6">
-                      <button
-                        type="button"
-                        class="
-                          absolute
-                          top-5
-                          right-5
-                          w-8
-                          h-8
-                          flex
-                          items-center
-                          justify-center
-                        "
-                        tabindex="0"
-                        @click="closeMobileFacetsDialog"
-                      >
-                        <span class="sr-only">Close navigation</span
-                        ><XIcon class="h-5 w-5" aria-hidden="true" />
-                      </button>
-                      <SearchResultsFacets
-                        :facets="aggregations"
-                        class="grid grid-cols-2 md:grid-cols-3 gap-4"
-                      />
-                    </div>
-                  </div>
-                </TransitionChild>
-              </div>
+                    <li
+                      :class="[
+                        active
+                          ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                          : 'bg-none',
+                      ]"
+                    >
+                      {{ item.label }}
+                    </li>
+                  </ListboxOption>
+                </ListboxOptions>
+              </transition>
             </div>
-          </Dialog>
-        </TransitionRoot>
+          </Listbox>
+        </div>
       </div>
-    </template>
-    <template v-if="!loading && totalCount === 0">
-      <div class="mt-6">
-        <p class="text-xl text-center font-semibold">
-          Sorry, we didn't find any results.
-        </p>
-        <p class="text text-center">
-          Here's some information about your keyword search that might help you
-          find what you're looking for.
-        </p>
-      </div>
-    </template>
-  </div>
+      <!-- Mobile Result Facets Dialog -->
+      <TransitionRoot appear :show="isMobileFacetsDialogOpen" as="template">
+        <Dialog as="div" @close="closeMobileFacetsDialog">
+          <div class="fixed inset-0 z-20 overflow-y-auto w-full">
+            <div class="min-h-screen px-4 text-center">
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+              </TransitionChild>
+              <span
+                class="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0 scale-95"
+                enter-to="opacity-100 scale-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100 scale-100"
+                leave-to="opacity-0 scale-95"
+              >
+                <div
+                  class="
+                    inline-block
+                    w-full
+                    max-w-xl
+                    md:max-w-[700px]
+                    lg:max-w-[900px]
+                    p-6
+                    my-8
+                    text-left
+                    align-middle
+                    transition-all
+                    transform
+                    text-slate-700
+                    dark:text-slate-300
+                    energy:text-gray-300
+                    bg-slate-100
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    shadow-lg
+                    rounded-lg
+                  "
+                >
+                  <div class="mt-6">
+                    <button
+                      type="button"
+                      class="
+                        absolute
+                        top-5
+                        right-5
+                        w-8
+                        h-8
+                        flex
+                        items-center
+                        justify-center
+                      "
+                      tabindex="0"
+                      @click="closeMobileFacetsDialog"
+                    >
+                      <span class="sr-only">Close navigation</span
+                      ><XIcon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <SearchResultsFacets
+                      :facets="aggregations"
+                      class="grid grid-cols-2 md:grid-cols-3 gap-4"
+                    />
+                  </div>
+                </div>
+              </TransitionChild>
+            </div>
+          </div>
+        </Dialog>
+      </TransitionRoot>
+    </div>
+  </template>
 </template>
 
 <script>
 import * as dayjs from "dayjs";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   Dialog,
   DialogOverlay,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ChevronUpIcon, XIcon } from "@heroicons/vue/outline";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchFormListbox from "@/components/SearchFormListbox";
+import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 
 const testItems = [
@@ -483,6 +536,11 @@ const testItems = [
   "test item 5",
 ];
 
+const sortOptions = [
+  { label: "Newest", key: "desc" },
+  { label: "Oldest", key: "asc" },
+];
+
 export default {
   components: {
     Dialog,
@@ -490,27 +548,33 @@ export default {
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
     TransitionChild,
     TransitionRoot,
-    ChevronLeftIcon,
-    ChevronRightIcon,
     ChevronUpIcon,
+    SelectorIcon,
     XIcon,
     SearchFormListbox,
+    SearchResultsTablePagination,
     SearchResultsFacets,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
-
-    console.log("route query: ", route.query);
+    const router = useRouter();
 
     const loading = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
 
-    const isMobileFacetsDialogOpen = ref(false);
+    const selectedOrder = ref(
+      route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
+    );
+    const currentPage = ref(parseInt(route.query.page) || 1);
 
     const queryFilters = ref({
       regions: {
@@ -555,14 +619,28 @@ export default {
       },
     });
 
+    const isMobileFacetsDialogOpen = ref(false);
+
     onMounted(() => {
       store.dispatch("search/search");
+    });
+
+    watch([selectedOrder], () => {
+      router.push({
+        name: "search",
+        query: {
+          ...route.query,
+          page: currentPage.value,
+          sort_dir: selectedOrder.value.key,
+        },
+      });
     });
 
     watch(
       () => route.query,
       () => {
         store.dispatch("search/search");
+        currentPage.value = parseInt(route.query.page) || 1;
       }
     );
 
@@ -574,12 +652,15 @@ export default {
 
     return {
       dayjs,
-      queryFilters,
-      testItems,
+      selectedOrder,
+      sortOptions,
       loading,
       results,
       totalCount,
       aggregations,
+      currentPage,
+      queryFilters,
+      testItems,
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,

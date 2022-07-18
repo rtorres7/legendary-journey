@@ -1,5 +1,5 @@
 //import axios from "axios";
-import { search } from "@/data"
+import { getSearchDataFromUrl } from "@/data"
 import router from "@/router"
 
 export default {
@@ -37,42 +37,18 @@ export default {
       } else {
         url = "/search";
       }
-      console.log('url: ', url);
       dispatch("debouncedSearch", url);
     },
 
     debouncedSearch: ({ commit, state }, url) => {
-      console.log('debouncedSearch action url: ', url);
-      switch (url) {
-        case '/search?text=Zelensky&view=list': {
-          commit("importData", search.zelensky)
-          break
-        }
-        case '/search?text=Zelensky&view=list&page=1': {
-          commit("importData", search.default)
-          break
-        }
-        case '/search?text=Zelensky&view=list&page=2': {
-          commit("importData", search.zelensky)
-          break
-        }
-        case '/search?text=United+Nations&view=list': {
-          commit("importData", search.united_nations)
-          break
-        }
-        default: {
-          commit("importData", search.none)
-        }
-
-      }
+      commit("importData", getSearchDataFromUrl(url, router.currentRoute.value));
       state.loading = false;
     }
   },
 
   mutations: {
-
     importData(state, data) {
-      console.log('data: ', data);
+      console.log('search data: ', data);
       state.searchId = data.searchId;
       state.results = data.results.map((article) => {
         return article;
@@ -82,7 +58,6 @@ export default {
       state.totalCount = data.totalCount;
       state.siteEnhancement = data.siteEnhancement;
       state.daClassifError = data.daClassifError;
-      console.log('state: ', state);
     },
   },
 };
