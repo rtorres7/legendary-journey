@@ -1176,7 +1176,7 @@ export default {
       document.getElementById("summaryPM").value = articles[0].classification;
       document.getElementById("documentClass").value = articles[0].classification;
       document.getElementById("summary").value = articles[0].content[0];
-      editor.setData('hello');
+      // editor.setData('hello');
       document.getElementById("docNum").value = articles[0].id;
       document.getElementById("publicationNumber").value = articles[0].id;
       document.getElementById("classifiedBy").innerHTML = articles[0].author;
