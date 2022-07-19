@@ -1,4 +1,5 @@
 import { articles } from "@/data";
+import { delay } from '@/helpers'
 
 export default {
   namespaced: true,
@@ -22,12 +23,22 @@ export default {
   },
 
   actions: {
-    getHomeArticles({ commit }) {
-      commit("saveArticles", articles);
+    getHomeArticles({ state, commit, rootState }) {
+      console.log('how many times is this running')
+      if (rootState.delay) {
+        state.loading = true;
+        delay(() =>
+          commit("saveArticles", articles))
+      } else {
+        commit("saveArticles", articles)
+      }
+      // rootState.delay ?
+      //   delay(() =>
+      //     commit("saveArticles", articles)) : commit("saveArticles", articles)
     },
     removeHomeArticles({ commit }) {
       commit("resetHomePage");
-    }
+    },
   },
 
   mutations: {

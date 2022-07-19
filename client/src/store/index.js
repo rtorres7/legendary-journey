@@ -7,12 +7,25 @@ export default createStore({
     state: {
         loading: true,
         errors: null,
+        delay: false
     },
     getters: {
     },
-    mutations: {
-    },
     actions: {
+        delay: ({ commit }) => {
+            commit("enableDelay");
+        },
+        removeDelay: ({ commit }) => {
+            commit("disableDelay");
+        },
+    },
+    mutations: {
+        enableDelay(state) {
+            state.delay = true
+        },
+        disableDelay(state) {
+            state.delay = false
+        },
     },
     modules: {
         articles,

@@ -23,7 +23,8 @@ export default {
   },
 
   actions: {
-    search: ({ dispatch }) => {
+    search: ({ state, dispatch }) => {
+      state.loading = true;
       const route = router.currentRoute.value
       let url = route ? route.fullPath : "";
       if (route.query) {
@@ -41,8 +42,12 @@ export default {
     },
 
     debouncedSearch: ({ commit, state }, url) => {
-      commit("importData", getSearchDataFromUrl(url, router.currentRoute.value));
+      commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
       state.loading = false;
+    },
+
+    removeSearch({ commit }) {
+      commit("resetSearch");
     }
   },
 
@@ -59,5 +64,15 @@ export default {
       state.siteEnhancement = data.siteEnhancement;
       state.daClassifError = data.daClassifError;
     },
+    resetSearch(state) {
+      state.searchId = null
+      state.results = []
+      state.aggregations = []
+      state.pages = 1
+      state.totalCount = null
+      state.siteEnhancement = []
+      state.daClassifError = false
+      state.loading = true
+    }
   },
 };

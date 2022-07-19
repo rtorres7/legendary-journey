@@ -8,7 +8,7 @@
       sticky
       top-0
       z-10
-      h-[72px]
+      min-h-[72px]
       lg:h-full
       backdrop-filter backdrop-blur
     "
@@ -843,7 +843,7 @@
                     >
                   </li>
                 </ul>
-                <div
+                <ul
                   class="
                     mt-6
                     pt-6
@@ -853,7 +853,7 @@
                     energy:border-gray-700/25
                   "
                 >
-                  <div class="flex items-center justify-between">
+                  <li class="flex items-center justify-between">
                     <label for="theme" class="font-normal">Switch theme</label>
                     <Listbox v-model="selectedTheme">
                       <div class="relative mt-1">
@@ -951,261 +951,26 @@
                         </ListboxOptions>
                       </div>
                     </Listbox>
-                  </div>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between">
-                      <SwitchLabel class="mr-4">Enable Alert</SwitchLabel>
-                      <Switch
-                        v-model="alertEnabled"
-                        :class="
-                          alertEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            alertEnabled ? 'translate-x-6' : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between">
-                      <SwitchLabel class="mr-4"
-                        >Enable Loading Articles</SwitchLabel
-                      >
-                      <Switch
-                        v-model="loadingArticlesEnabled"
-                        :class="
-                          loadingArticlesEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            loadingArticlesEnabled
-                              ? 'translate-x-6'
-                              : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                </div>
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-pointer"
+                      @click="openTestConsoleModalMobile"
+                      >Test Console</a
+                    >
+                  </li>
+                </ul>
               </div>
             </TransitionChild>
           </div>
         </div>
       </Dialog>
     </TransitionRoot>
-    <!-- Test Console dialog -->
-    <TransitionRoot appear :show="isTestConsoleMenuOpen" as="template">
-      <Dialog as="div" @close="closeTestConsoleModal">
-        <div class="fixed inset-0 z-20 overflow-y-auto w-full">
-          <div class="min-h-screen px-4 text-center">
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0"
-              enter-to="opacity-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100"
-              leave-to="opacity-0"
-            >
-              <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
-            </TransitionChild>
-            <span class="inline-block h-screen align-middle" aria-hidden="true">
-              &#8203;
-            </span>
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
-            >
-              <div
-                class="
-                  inline-block
-                  w-full
-                  max-w-xs
-                  p-6
-                  my-8
-                  text-left
-                  align-middle
-                  transition-all
-                  transform
-                  text-slate-700
-                  dark:text-slate-300
-                  energy:text-gray-300
-                  bg-slate-100
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  shadow-lg
-                  rounded-lg
-                "
-              >
-                <div class="mt-6 pt-6">
-                  <button
-                    type="button"
-                    class="
-                      absolute
-                      top-5
-                      right-5
-                      w-8
-                      h-8
-                      flex
-                      items-center
-                      justify-center
-                    "
-                    tabindex="0"
-                    @click="closeTestConsoleModal"
-                  >
-                    <span class="sr-only">Close navigation</span
-                    ><XIcon class="h-5 w-5" aria-hidden="true" />
-                  </button>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between">
-                      <SwitchLabel class="mr-4">Enable Alert</SwitchLabel>
-                      <Switch
-                        v-model="alertEnabled"
-                        :class="
-                          alertEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            alertEnabled ? 'translate-x-6' : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between mt-2">
-                      <SwitchLabel class="mr-4"
-                        >Enable Loading Articles</SwitchLabel
-                      >
-                      <Switch
-                        v-model="loadingArticlesEnabled"
-                        :class="
-                          loadingArticlesEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            loadingArticlesEnabled
-                              ? 'translate-x-6'
-                              : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                </div>
-              </div>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
+    <TestConsoleDialog
+      :isOpen="isTestConsoleMenuOpen"
+      @close="closeTestConsoleModal"
+      v-model:alert="alertEnabled"
+    />
   </nav>
 </template>
 
@@ -1216,6 +981,7 @@ import BannerSearchBar from "@/components/BannerSearchBar.vue";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
 import MobileSideMenu from "@/components/MobileSideMenu";
+import TestConsoleDialog from "@/components/TestConsoleDialog";
 import {
   Dialog,
   DialogOverlay,
@@ -1227,9 +993,6 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-  Switch,
-  SwitchGroup,
-  SwitchLabel,
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
@@ -1276,6 +1039,7 @@ export default {
     BannerSearchBar,
     BannerNavPopover,
     MobileSideMenu,
+    TestConsoleDialog,
     BannerNavMap,
     Dialog,
     DialogOverlay,
@@ -1287,9 +1051,6 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
-    Switch,
-    SwitchGroup,
-    SwitchLabel,
     TransitionChild,
     TransitionRoot,
     BellIcon,
@@ -1344,27 +1105,8 @@ export default {
     });
 
     const alertEnabled = ref(false);
-    const loadingArticlesEnabled = ref(false);
-
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
-
-    const loadingArticlesFromStore = computed(
-      () => store.state.articles.loading
-    );
-
-    watch(loadingArticlesEnabled, (enabled) => {
-      if (enabled) {
-        store.dispatch("articles/removeHomeArticles");
-      } else {
-        store.dispatch("articles/getHomeArticles");
-      }
-    });
-
-    watch(loadingArticlesFromStore, (loading) => {
-      loadingArticlesEnabled.value = loading;
-    });
-
     const selectedCountry = ref(countries[0]);
 
     return {
@@ -1381,7 +1123,6 @@ export default {
       selectedTheme,
       changeTheme,
       alertEnabled,
-      loadingArticlesEnabled,
       currentUsername,
       loadingUser,
     };
@@ -1411,6 +1152,10 @@ export default {
       this.isTestConsoleMenuOpen = false;
     },
     openTestConsoleModal() {
+      this.isTestConsoleMenuOpen = true;
+    },
+    openTestConsoleModalMobile() {
+      this.isUserMenuOpen = false;
       this.isTestConsoleMenuOpen = true;
     },
     openPDF() {
