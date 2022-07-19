@@ -27,172 +27,65 @@
         aria-label="Pagination"
       >
         <template v-if="currentPage === 1">
-          <span
-            class="
-              relative
-              inline-flex
-              items-center
-              px-2
-              py-2
-              rounded-l-md
-              border border-gray-300
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              text-sm
-              font-medium
-              text-gray-300
-              hover:bg-gray-50
-            "
+          <SearchResultsTablePaginationButton
+            class="px-2 rounded-l-md"
+            :disabled="true"
           >
             <span class="sr-only">Previous</span>
-            <ChevronLeftIcon class="h-5 w-5" />
-          </span>
+            <ChevronLeftIcon class="h-5 w-5"
+          /></SearchResultsTablePaginationButton>
         </template>
         <template v-else>
-          <a
+          <SearchResultsTablePaginationButton
+            class="px-2 rounded-l-md"
             @click="navigatePrevious(currentPage)"
-            class="
-              cursor-pointer
-              relative
-              inline-flex
-              items-center
-              px-2
-              py-2
-              rounded-l-md
-              border border-gray-300
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              text-sm
-              font-medium
-              text-gray-500
-              hover:bg-gray-50
-            "
           >
             <span class="sr-only">Previous</span>
-            <ChevronLeftIcon class="h-5 w-5" />
-          </a>
+            <ChevronLeftIcon class="h-5 w-5"
+          /></SearchResultsTablePaginationButton>
         </template>
         <template
           v-for="n in buildPageButtons(currentPage, totalPages(totalCount))"
           :key="n"
         >
           <template v-if="n === '...'">
-            <span
-              class="
-                relative
-                inline-flex
-                items-center
-                px-4
-                py-2
-                border border-gray-300
-                bg-white
-                dark:bg-slate-800
-                energy:bg-gray-800
-                text-sm
-                font-medium
-                text-gray-700
-              "
+            <SearchResultsTablePaginationButton
+              aria-current="page"
+              :disabled="true"
+              >...</SearchResultsTablePaginationButton
             >
-              ...
-            </span>
           </template>
           <template v-else>
             <template v-if="currentPage === n">
-              <span
+              <SearchResultsTablePaginationButton
                 aria-current="page"
-                class="
-                  z-10
-                  bg-slate-50
-                  border-mission-blue
-                  text-mission-blue
-                  relative
-                  inline-flex
-                  items-center
-                  px-4
-                  py-2
-                  border
-                  text-sm
-                  font-medium
-                "
+                :current="true"
+                :disabled="true"
+                >{{ n }}</SearchResultsTablePaginationButton
               >
-                {{ n }}
-              </span>
             </template>
             <template v-else>
-              <a
-                @click="navigatePage(n)"
-                class="
-                  cursor-pointer
-                  bg-white
-                  dark:bg-slate-800
-                  energy:bg-gray-800
-                  border-gray-300
-                  text-gray-500
-                  hover:bg-gray-50
-                  inline-flex
-                  relative
-                  items-center
-                  px-4
-                  py-2
-                  border
-                  text-sm
-                  font-medium
-                "
-              >
-                {{ n }}
-              </a>
+              <SearchResultsTablePaginationButton @click="navigatePage(n)">{{
+                n
+              }}</SearchResultsTablePaginationButton>
             </template>
           </template>
         </template>
         <template v-if="currentPage === totalPages(totalCount)">
-          <span
-            class="
-              relative
-              inline-flex
-              items-center
-              px-2
-              py-2
-              rounded-r-md
-              border border-gray-300
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              text-sm
-              font-medium
-              text-gray-300
-              hover:bg-gray-50
-            "
-          >
-            <span class="sr-only">Next</span>
-            <ChevronRightIcon class="h-5 w-5" />
-          </span>
+          <SearchResultsTablePaginationButton
+            class="px-2 rounded-r-md"
+            :disabled="true"
+            ><span class="sr-only">Next</span>
+            <ChevronRightIcon class="h-5 w-5"
+          /></SearchResultsTablePaginationButton>
         </template>
         <template v-else>
-          <a
+          <SearchResultsTablePaginationButton
+            class="px-2 rounded-r-md"
             @click="navigateNext(currentPage)"
-            class="
-              cursor-pointer
-              relative
-              inline-flex
-              items-center
-              px-2
-              py-2
-              rounded-r-md
-              border border-gray-300
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              text-sm
-              font-medium
-              text-gray-500
-              hover:bg-gray-50
-            "
-          >
-            <span class="sr-only">Next</span>
-            <ChevronRightIcon class="h-5 w-5" />
-          </a>
+            ><span class="sr-only">Next</span>
+            <ChevronRightIcon class="h-5 w-5"
+          /></SearchResultsTablePaginationButton>
         </template>
       </nav>
       <div
@@ -200,98 +93,32 @@
         aria-label="Pagination"
       >
         <template v-if="currentPage === 1">
-          <span
-            class="
-              relative
-              inline-flex
-              items-center
-              px-4
-              py-2
-              border border-gray-300
-              text-sm
-              font-medium
-              rounded-md
-              text-gray-300
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              hover:bg-gray-50
-            "
+          <SearchResultsTablePaginationButton
+            class="rounded-md"
+            :disabled="true"
+            >Previous</SearchResultsTablePaginationButton
           >
-            Previous
-          </span>
         </template>
         <template v-else>
-          <a
+          <SearchResultsTablePaginationButton
+            class="rounded-md"
             @click="navigatePrevious(currentPage)"
-            class="
-              cursor-pointer
-              relative
-              inline-flex
-              items-center
-              px-4
-              py-2
-              border border-gray-300
-              text-sm
-              font-medium
-              rounded-md
-              text-gray-700
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              hover:bg-gray-50
-            "
+            >Previous</SearchResultsTablePaginationButton
           >
-            Previous
-          </a>
         </template>
         <template v-if="currentPage === totalPages(totalCount)">
-          <span
-            class="
-              ml-3
-              relative
-              inline-flex
-              items-center
-              px-4
-              py-2
-              border border-gray-300
-              text-sm
-              font-medium
-              rounded-md
-              text-gray-300
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              hover:bg-gray-50
-            "
+          <SearchResultsTablePaginationButton
+            class="ml-3 rounded-md"
+            :disabled="true"
+            >Next</SearchResultsTablePaginationButton
           >
-            Next
-          </span>
         </template>
         <template v-else>
-          <a
+          <SearchResultsTablePaginationButton
+            class="ml-3 rounded-md"
             @click="navigateNext(currentPage)"
-            class="
-              cursor-pointer
-              ml-3
-              relative
-              inline-flex
-              items-center
-              px-4
-              py-2
-              border border-gray-300
-              text-sm
-              font-medium
-              rounded-md
-              text-gray-700
-              bg-white
-              dark:bg-slate-800
-              energy:bg-gray-800
-              hover:bg-gray-50
-            "
+            >Next</SearchResultsTablePaginationButton
           >
-            Next
-          </a>
         </template>
       </div>
     </div>
@@ -301,11 +128,13 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import SearchResultsTablePaginationButton from "./SearchResultsTablePaginationButton";
 
 export default {
   components: {
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchResultsTablePaginationButton,
   },
   props: {
     totalCount: Number,

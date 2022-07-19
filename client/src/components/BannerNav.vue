@@ -682,6 +682,7 @@
             <MenuIcon class="h-6 w-6" aria-hidden="true" />
           </button>
           <BannerSearchBar class="px-2 w-full" />
+          <!-- TODO: Remove this below -->
           <!-- <div
               class="
                 flex

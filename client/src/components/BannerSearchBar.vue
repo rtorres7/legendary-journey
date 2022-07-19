@@ -35,7 +35,7 @@
           energy:text-gray-300
         "
         id="typeahead_id"
-        placeholder="Search (e.g. Zelensky)"
+        placeholder="Search (e.g. Zelensky, United Nations)"
         :items="searchMatches"
         :minInputLength="1"
         :itemProjection="itemProjectionFunction"
@@ -44,32 +44,13 @@
         @onFocus="onFocusEventHandler"
         @onBlur="onBlurEventHandler"
         v-model="test"
-        @keyup.enter="whatthefuck"
+        @keyup.enter="onEnter"
       >
-        <!-- <template #list-header>
-          <div
-            class="
-              cursor-pointer
-              text-slate-800
-              dark:text-gray-300
-              energy:text-gray-300
-              bg-slate-100
-              dark:bg-slate-800
-              energy:bg-gray-600
-              hover:bg-slate-200
-              dark:hover:bg-slate-700
-              energy:hover:bg-gray-500
-              active:bg-slate-300
-              dark:active:bg-slate-600
-              energy:active:bg-gray-400
-              px-2
-              py-1
-            "
-          >
-            {{ test }}
-          </div>
-        </template> -->
         <template #list-item-text="slot">
+          <!-- <span
+            class="text-black"
+            v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
+          ></span> -->
           <div
             class="
               cursor-pointer
@@ -104,7 +85,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { SearchIcon } from "@heroicons/vue/outline";
 
-let searchMatches = ["", "United Nations", "Zelensky"];
+let searchMatches = ["United Nations", "Zelensky"];
 
 export default {
   components: {
@@ -113,7 +94,7 @@ export default {
   setup() {
     const router = useRouter();
     const modalActive = ref(false);
-    //const test = ref("");
+    const test = ref("");
 
     const selectItemEventHandler = (item) => {
       console.log("selected: ", item);
@@ -126,33 +107,39 @@ export default {
       });
     };
 
-    // const onFocusEventHandler = (event) => {
-    //   console.log("focus event: ", event);
-    // };
+    const onFocusEventHandler = (event) => {
+      console.log("focus event: ", event);
+    };
 
-    // const onInputEventHandler = (event) => {
-    //   console.log("input event: ", event);
-    //   searchMatches.push(event.input);
-    // };
+    const onInputEventHandler = (event) => {
+      console.log("input event: ", event);
+    };
 
-    // const onBlurEventHandler = (event) => {
-    //   console.log("blur event: ", event);
-    //   searchMatches = ["United Nations", "Zelensky"];
-    // };
+    const onBlurEventHandler = (event) => {
+      console.log("blur event: ", event);
+      console.log("test: ", test);
+      test.value = "wtf";
+    };
 
-    // const whatthefuck = (event) => {
-    //   console.log("on key up enter: ", event);
-    // };
+    const onEnter = (e) => {
+      router.push({
+        name: "search",
+        query: {
+          text: e.target.value,
+          view: "list",
+        },
+      });
+    };
 
     return {
       //test,
       searchMatches,
       modalActive,
       selectItemEventHandler,
-      // onInputEventHandler,
-      // onFocusEventHandler,
-      // onBlurEventHandler,
-      // whatthefuck,
+      onEnter,
+      onInputEventHandler,
+      onFocusEventHandler,
+      onBlurEventHandler,
     };
   },
 };
@@ -177,4 +164,57 @@ export default {
   box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%), 0 4px 8px 3px rgb(60 64 67 / 15%);
   border-width: 1px;
 }
+/* .simple-typeahead[data-v-590ce012] {
+  position: relative;
+  width: 100%;
+}
+.simple-typeahead > input[data-v-590ce012] {
+  margin-bottom: 0;
+}
+.simple-typeahead .simple-typeahead-list[data-v-590ce012] {
+  position: absolute;
+  width: 100%;
+  border: none;
+  max-height: 400px;
+  overflow-y: auto;
+  border-bottom: 0.1rem solid #d1d1d1;
+  z-index: 9;
+}
+.simple-typeahead
+  .simple-typeahead-list
+  .simple-typeahead-list-header[data-v-590ce012] {
+  background-color: #fafafa;
+  padding: 0.6rem 1rem;
+  border-bottom: 0.1rem solid #d1d1d1;
+  border-left: 0.1rem solid #d1d1d1;
+  border-right: 0.1rem solid #d1d1d1;
+}
+.simple-typeahead
+  .simple-typeahead-list
+  .simple-typeahead-list-footer[data-v-590ce012] {
+  background-color: #fafafa;
+  padding: 0.6rem 1rem;
+  border-left: 0.1rem solid #d1d1d1;
+  border-right: 0.1rem solid #d1d1d1;
+}
+.simple-typeahead
+  .simple-typeahead-list
+  .simple-typeahead-list-item[data-v-590ce012] {
+  cursor: pointer;
+  background-color: #fafafa;
+  padding: 0.6rem 1rem;
+  border-bottom: 0.1rem solid #d1d1d1;
+  border-left: 0.1rem solid #d1d1d1;
+  border-right: 0.1rem solid #d1d1d1;
+}
+.simple-typeahead
+  .simple-typeahead-list
+  .simple-typeahead-list-item[data-v-590ce012]:last-child {
+  border-bottom: none;
+}
+.simple-typeahead
+  .simple-typeahead-list
+  .simple-typeahead-list-item.simple-typeahead-list-item-active[data-v-590ce012] {
+  background-color: #e1e1e1;
+} */
 </style>
