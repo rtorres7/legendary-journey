@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p class="font-semibold mb-4">Discussion:</p>
     <div v-if="comments.length">
+    <p class="font-semibold mb-4">Discussions ({{ comments.length }}):</p>
       <div v-for="(comment, index) in comments" :key="index" class="mb-4">
         <div class="flex space-x-2 text-sm">
           <p class="font-medium">Jane E. Doe</p>
@@ -11,6 +11,7 @@
       </div>
     </div>
     <div v-else>
+      <p class="font-semibold mb-4">Discussions:</p>
       <p class="italic text-sm">No comments yet</p>
     </div>
   </div>
