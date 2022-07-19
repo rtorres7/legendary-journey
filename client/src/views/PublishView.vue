@@ -5,8 +5,8 @@
   <template v-else>
     <form ref="publishingForm" class="mb-10 mt-10">
       <div>
-        <label class="block mb-2" for="file_input">Upload a file to publish</label>
-        <PublishViewFileUploader id="file_input" @drop.prevent="drop" @change="selectedFile">
+        <label class="block mb-2" for="dropzoneFile">Upload a file to publish</label>
+        <PublishViewFileUploader @drop.prevent="drop" @change="selectedFile">
           <button @click="fileInputButton.click()"
             class="
               bg-slate-100 hover:bg-slate-200/80 
@@ -29,7 +29,7 @@
           flex flex-wrap
           lg:flex-nowrap
           lg:gap-12
-          mb-8 mt-20
+          mb-8 mt-8
           gap-y-20
         "
       >
@@ -508,30 +508,22 @@
             </div>
             <div class="w-full"> 
               <label for="body" class="block mb-2">Body</label>
-              <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+              <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" id="body"></ckeditor>
             </div>
             <div> 
               <h2 class="text-xl border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
               energy:border-gray-700/25
               pb-4">Source Citations</h2>
-              <ol class="list-decimal list-inside ml-4 mt-4 space-y-2">
-                <li>
-                  A terrifying journey to a Russian prison and back
-                </li>
-                <li>
-                  Isolated Russia divided over Ukraine offensive
-                </li>
-              </ol>
-              <!-- <ol class="list-decimal list-inside ml-4 space-y-2">
-                <div v-for="source in selectedArticle.sources" :key="source.name">
+              <ol class="list-decimal list-inside ml-4 mt-2 space-y-2">
+                <div v-for="source in articlesData[0].sources" :key="source.name">
                   <li class="text-sm">
                     <router-link to="#" class="hover:underline">
                       {{ source.name }}
                     </router-link>
                   </li>
                 </div>
-              </ol> -->
+              </ol>
             </div>
           </div>
         </div>
@@ -570,10 +562,10 @@
                 " 
               />
             </div>
-            <div class="font-semibold"> 
-              <p>Classified By: </p>
-              <p>Derived From: </p>
-              <p>Declassify On: </p>
+            <div> 
+              <p>Classified By: <span id="classifiedBy"></span></p>
+              <p>Derived From: Channel News Asia</p>
+              <p>Declassify On: Jun 26, 2032</p>
             </div>
             <div class="
               border-b-2 border-slate-900/10
@@ -1045,14 +1037,14 @@ import { articles } from "@/data";
 import PublishViewFileUploader from '@/components/PublishViewFileUploader';
 
 const topics = [
-  {title: "topic1"}, 
-  {title: "topic2"},
+  {title: "History"}, 
+  {title: "Science"},
   {title: "topic3"},
   {title: "topic4"},
 ];
 const actors = [
-  {title: "actor1"}, 
-  {title: "actor2"},
+  {title: "Gordon Ramsey"}, 
+  {title: "Michael Myers"},
   {title: "actor3"},
   {title: "actor4"},
 ];
@@ -1117,7 +1109,6 @@ export default {
     PublishViewFileUploader,
   },
 
-  props: ["id", "title"],
   setup() {
     const selectedCountries = ref([countries[0]]);
     const selectedTopics = ref([topics[0]]);
@@ -1128,6 +1119,7 @@ export default {
     const attachmentFileInputButton = ref(null);
     const dropzoneFile = ref("");
     const attachmentDropzoneFile = ref("");
+    const articlesData = ref(articles);
 
     const toggle = () => {
         var allInputs = document.getElementsByTagName('input');
@@ -1174,6 +1166,8 @@ export default {
       document.getElementById("documentClass").value = articles[0].classification;
       document.getElementById("summary").value = articles[0].content[0];
       document.getElementById("docNum").value = articles[0].id;
+      document.getElementById("publicationNumber").value = articles[0].id;
+      document.getElementById("classifiedBy").innerHTML = articles[0].author;
       // editor: editorData: articles[0].content[3];
     };
 
@@ -1198,6 +1192,7 @@ export default {
       attachmentFileInputButton,
       dropzoneFile,
       attachmentDropzoneFile,
+      articlesData,
       populateFields,
       toggle,
       changePocInfo,
