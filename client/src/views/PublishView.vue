@@ -7,7 +7,7 @@
       <div>
         <label class="block mb-2" for="dropzoneFile">Upload a file to publish</label>
         <PublishViewFileUploader @drop.prevent="drop" @change="selectedFile">
-          <button @click="fileInputButton.click()"
+          <button @click.prevent="fileInputButton.click()"
             class="
               bg-slate-100 hover:bg-slate-200/80 
               dark:bg-slate-700 dark:hover:bg-slate-700/80 
@@ -57,29 +57,31 @@
                   <div class="relative">
                     <ListboxButton
                       class="
-                        flex
-                        h-10
-                        w-full
-                        p-2
-                        text-left
-                        capitalize
-                        text-slate-800
-                        dark:text-gray-300
-                        energy:text-gray-300
-                        bg-slate-200
-                        dark:bg-slate-800
-                        energy:bg-gray-600
-                        rounded-lg
-                        shadow-md
-                        cursor-default
-                        focus:outline-none
-                        focus-visible:ring-2
-                        focus-visible:ring-opacity-75
-                        focus-visible:ring-offset-2
+                      min-h-[2rem]
+                      flex
+                      relative
+                      w-full
+                      py-1
+                      px-2
+                      text-left
+                      capitalize
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      border-t border-t-gray-100
+                      dark:border-t-slate-800
+                      energy:border-t-gray-800
+                      rounded-lg
+                      shadow-md
+                      cursor-default
+                      focus:outline-none
+                      focus-visible:ring-2
+                      focus-visible:ring-opacity-75
+                      focus-visible:ring-offset-2
                       "
                     >
-                      <span class="block truncate">{{
-                        selectedCountries.map((country) => country.name).join(', ')
+                      <span class="block truncate pr-4">{{
+                        selectedCountries.map((country) => country.name).join(' √ ')
                       }}</span>
                       <span
                         class="
@@ -112,12 +114,9 @@
                           py-1
                           mt-1
                           overflow-auto
-                          text-slate-800
-                          dark:text-gray-300
-                          energy:text-gray-300
-                          bg-slate-200
-                          dark:bg-slate-800
-                          energy:bg-gray-600
+                          bg-white
+                          dark:bg-slate-700
+                          energy:bg-gray-700
                           rounded-md
                           shadow-lg
                           max-h-60
@@ -137,7 +136,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-300 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
                                 : 'bg-none',
                             ]"
                           >
@@ -166,18 +165,20 @@
                   <div class="relative">
                     <ListboxButton
                       class="
+                        min-h-[2rem]
                         flex
-                        h-10
+                        relative
                         w-full
-                        p-2
+                        py-1
+                        px-2
                         text-left
                         capitalize
-                        text-slate-800
-                        dark:text-gray-300
-                        energy:text-gray-300
-                        bg-slate-200
-                        dark:bg-slate-800
-                        energy:bg-gray-600
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-gray-700
+                        border-t border-t-gray-100
+                        dark:border-t-slate-800
+                        energy:border-t-gray-800
                         rounded-lg
                         shadow-md
                         cursor-default
@@ -187,8 +188,8 @@
                         focus-visible:ring-offset-2
                       "
                     >
-                      <span class="block truncate">{{
-                        selectedTopics.map((topic) => topic.title).join(', ')
+                      <span class="block truncate pr-4">{{
+                        selectedTopics.map((topic) => topic.title).join(' √ ')
                       }}</span>
                       <span
                         class="
@@ -221,12 +222,9 @@
                           py-1
                           mt-1
                           overflow-auto
-                          text-slate-800
-                          dark:text-gray-300
-                          energy:text-gray-300
-                          bg-slate-200
-                          dark:bg-slate-800
-                          energy:bg-gray-600
+                          bg-white
+                          dark:bg-slate-700
+                          energy:bg-gray-700
                           rounded-md
                           shadow-lg
                           max-h-60
@@ -246,7 +244,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-300 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
                                 : 'bg-none',
                             ]"
                           >
@@ -274,29 +272,31 @@
                 <div class="relative">
                   <ListboxButton
                     class="
-                      flex
-                      h-10
-                      w-full
-                      p-2
-                      text-left
-                      capitalize
-                      text-slate-800
-                      dark:text-gray-300
-                      energy:text-gray-300
-                      bg-slate-200
-                      dark:bg-slate-800
-                      energy:bg-gray-600
-                      rounded-lg
-                      shadow-md
-                      cursor-default
-                      focus:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-opacity-75
-                      focus-visible:ring-offset-2
+                    min-h-[2rem]
+                    flex
+                    relative
+                    w-full
+                    py-1
+                    px-2
+                    text-left
+                    capitalize
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
+                    rounded-lg
+                    shadow-md
+                    cursor-default
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-opacity-75
+                    focus-visible:ring-offset-2
                     "
                   >
-                    <span class="block truncate">{{
-                      selectedActors.map((actor) => actor.title).join(', ')
+                    <span class="block truncate pr-4">{{
+                      selectedActors.map((actor) => actor.title).join(' √ ')
                     }}</span>
                     <span
                       class="
@@ -329,12 +329,9 @@
                         py-1
                         mt-1
                         overflow-auto
-                        text-slate-800
-                        dark:text-gray-300
-                        energy:text-gray-300
-                        bg-slate-200
-                        dark:bg-slate-800
-                        energy:bg-gray-600
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-gray-700
                         rounded-md
                         shadow-lg
                         max-h-60
@@ -354,7 +351,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-300 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
                               : 'bg-none',
                           ]"
                         >
@@ -408,17 +405,18 @@
                 <label for="title" class="block mb-2">Title</label>
                 <input type="text" id="title" 
                   class=" 
-                    h-10
+                    min-h-[2rem]
                     w-full
-                    p-2
+                    py-1
+                    px-2
                     text-left
                     capitalize
-                    text-slate-800
-                    dark:text-gray-300
-                    energy:text-gray-300
-                    bg-slate-200
-                    dark:bg-slate-800
-                    energy:bg-gray-600
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -433,16 +431,18 @@
                 <label for="titlePM" class="block mb-2" required>Title PM (required)</label>
                 <input type="text" id="titlePM" 
                   class=" 
+                    min-h-[2rem]
                     w-full
-                    p-2
+                    py-1
+                    px-2
                     text-left
                     capitalize
-                    text-slate-800
-                    dark:text-gray-300
-                    energy:text-gray-300
-                    bg-slate-200
-                    dark:bg-slate-800
-                    energy:bg-gray-600
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -459,16 +459,18 @@
                 <label for="summary" class="block mb-2">Summary</label>
                 <textarea id="summary" maxlength="4000" rows="4"
                   class=" 
+                    min-h-[2rem]
                     w-full
-                    p-2
+                    py-1
+                    px-2
                     text-left
                     capitalize
-                    text-slate-800
-                    dark:text-gray-300
-                    energy:text-gray-300
-                    bg-slate-200
-                    dark:bg-slate-800
-                    energy:bg-gray-600
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -478,23 +480,24 @@
                     focus-visible:ring-offset-2
                     resize-none
                   " 
-                >
-                </textarea>
+                ></textarea>
               </div>
               <div class="w-full lg:basis-1/3">
                 <label for="summaryPM" class="block mb-2" required>Summary PM (required)</label>
                 <input type="text" id="summaryPM" 
                   class=" 
+                    min-h-[2rem]
                     w-full
-                    p-2
+                    py-1
+                    px-2
                     text-left
                     capitalize
-                    text-slate-800
-                    dark:text-gray-300
-                    energy:text-gray-300
-                    bg-slate-200
-                    dark:bg-slate-800
-                    energy:bg-gray-600
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -542,16 +545,18 @@
               <label for="documentClass" class="block mb-2" required>Document Classification (required)</label>
               <input type="text" id="documentClass" 
                 class=" 
+                  min-h-[2rem]
                   w-full
-                  p-2
+                  py-1
+                  px-2
                   text-left
                   capitalize
-                  text-slate-800
-                  dark:text-gray-300
-                  energy:text-gray-300
-                  bg-slate-200
-                  dark:bg-slate-800
-                  energy:bg-gray-600
+                  bg-white
+                  dark:bg-slate-700
+                  energy:bg-gray-700
+                  border-t border-t-gray-100
+                  dark:border-t-slate-800
+                  energy:border-t-gray-800
                   rounded-lg
                   shadow-md
                   cursor-default
@@ -579,7 +584,7 @@
             <div>
               <label class="block mb-2" for="attachment_input">Upload article files</label>
               <PublishViewFileUploader id="attachment_input" @drop.prevent="attachmentDrop" @change="attachmentSelectedFile">
-                <button @click="attachmentFileInputButton.click()"
+                <button @click.prevent="attachmentFileInputButton.click()"
                   class="
                     bg-slate-100 hover:bg-slate-200/80 
                     dark:bg-slate-700 dark:hover:bg-slate-700/80 
@@ -628,16 +633,18 @@
               <label for="docNum" class="block mb-2">Doc Num (Permalink)</label>
               <input type="text" id="docNum" 
                 class=" 
+                  min-h-[2rem]
                   w-full
-                  p-2
+                  py-1
+                  px-2
                   text-left
                   capitalize
-                  text-slate-800
-                  dark:text-gray-300
-                  energy:text-gray-300
-                  bg-slate-200
-                  dark:bg-slate-800
-                  energy:bg-gray-600
+                  bg-white
+                  dark:bg-slate-700
+                  energy:bg-gray-700
+                  border-t border-t-gray-100
+                  dark:border-t-slate-800
+                  energy:border-t-gray-800
                   rounded-lg
                   shadow-md
                   cursor-default
@@ -652,16 +659,18 @@
               <label for="publicationNumber" class="block mb-2">Publication Number</label>
               <input type="text" id="publicationNumber" 
                 class=" 
+                  min-h-[2rem]
                   w-full
-                  p-2
+                  py-1
+                  px-2
                   text-left
                   capitalize
-                  text-slate-800
-                  dark:text-gray-300
-                  energy:text-gray-300
-                  bg-slate-200
-                  dark:bg-slate-800
-                  energy:bg-gray-600
+                  bg-white
+                  dark:bg-slate-700
+                  energy:bg-gray-700
+                  border-t border-t-gray-100
+                  dark:border-t-slate-800
+                  energy:border-t-gray-800
                   rounded-lg
                   shadow-md
                   cursor-default
@@ -676,16 +685,18 @@
               <label for="datepicker" class="block mb-2">Publication Date</label>
               <input type="text" id="datepicker" v-model="dateValue" autocomplete="off"
                 class=" 
+                  min-h-[2rem]
                   w-full
-                  p-2
+                  py-1
+                  px-2
                   text-left
                   capitalize
-                  text-slate-800
-                  dark:text-gray-300
-                  energy:text-gray-300
-                  bg-slate-200
-                  dark:bg-slate-800
-                  energy:bg-gray-600
+                  bg-white
+                  dark:bg-slate-700
+                  energy:bg-gray-700
+                  border-t border-t-gray-100
+                  dark:border-t-slate-800
+                  energy:border-t-gray-800
                   rounded-lg
                   shadow-md
                   cursor-default
@@ -700,16 +711,18 @@
                 <label for="pocInfo" class="block mb-2">Poc Info</label>
                 <textarea id="pocInfo" maxlength="4000" rows="4"
                   class=" 
+                    min-h-[2rem]
                     w-full
-                    p-2
+                    py-1
+                    px-2
                     text-left
                     capitalize
-                    text-slate-800
-                    dark:text-gray-300
-                    energy:text-gray-300
-                    bg-slate-200
-                    dark:bg-slate-800
-                    energy:bg-gray-600
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -719,8 +732,7 @@
                     focus-visible:ring-offset-2
                     resize-none
                   " 
-                >
-                </textarea>
+                ></textarea>
               </div>
               <div>
                 <label class="block mb-2" for="officeListbox">Producing Office</label>
@@ -733,18 +745,20 @@
                   <div class="relative">
                     <ListboxButton
                       class="
+                        min-h-[2rem]
                         flex
-                        h-10
+                        relative
                         w-full
-                        p-2
+                        py-1
+                        px-2
                         text-left
                         capitalize
-                        text-slate-800
-                        dark:text-gray-300
-                        energy:text-gray-300
-                        bg-slate-200
-                        dark:bg-slate-800
-                        energy:bg-gray-600
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-gray-700
+                        border-t border-t-gray-100
+                        dark:border-t-slate-800
+                        energy:border-t-gray-800
                         rounded-lg
                         shadow-md
                         cursor-default
@@ -788,12 +802,9 @@
                           py-1
                           mt-1
                           overflow-auto
-                          text-slate-800
-                          dark:text-gray-300
-                          energy:text-gray-300
-                          bg-slate-200
-                          dark:bg-slate-800
-                          energy:bg-gray-600
+                          bg-white
+                          dark:bg-slate-700
+                          energy:bg-gray-700
                           rounded-md
                           shadow-lg
                           max-h-60
@@ -814,7 +825,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-300 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
                                 : 'bg-none',
                             ]"
                           >
@@ -840,18 +851,20 @@
                 <div class="relative">
                   <ListboxButton
                     class="
+                      min-h-[2rem]
                       flex
-                      h-10
+                      relative
                       w-full
-                      p-2
+                      py-1
+                      px-2
                       text-left
                       capitalize
-                      text-slate-800
-                      dark:text-gray-300
-                      energy:text-gray-300
-                      bg-slate-200
-                      dark:bg-slate-800
-                      energy:bg-gray-600
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      border-t border-t-gray-100
+                      dark:border-t-slate-800
+                      energy:border-t-gray-800
                       rounded-lg
                       shadow-md
                       cursor-default
@@ -895,12 +908,9 @@
                         py-1
                         mt-1
                         overflow-auto
-                        text-slate-800
-                        dark:text-gray-300
-                        energy:text-gray-300
-                        bg-slate-200
-                        dark:bg-slate-800
-                        energy:bg-gray-600
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-gray-700
                         rounded-md
                         shadow-lg
                         max-h-60
@@ -920,7 +930,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-300 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
                               : 'bg-none',
                           ]"
                         >
@@ -1037,16 +1047,16 @@ import { articles } from "@/data";
 import PublishViewFileUploader from '@/components/PublishViewFileUploader';
 
 const topics = [
-  {title: "History"}, 
-  {title: "Science"},
-  {title: "topic3"},
-  {title: "topic4"},
+  {title: "International War"}, 
+  {title: "Politics"},
+  {title: "Climate Change"},
+  {title: "Space Tourism"},
 ];
 const actors = [
-  {title: "Gordon Ramsey"}, 
-  {title: "Michael Myers"},
-  {title: "actor3"},
-  {title: "actor4"},
+  {title: "Person1"}, 
+  {title: "Person2"},
+  {title: "Person3"},
+  {title: "Person4"},
 ];
 const producingOffices = [
   {name: "Office1", pocInfo:"Office1's address and phone number"},
@@ -1078,9 +1088,9 @@ export default {
   },
 
   setup() {
-    const selectedCountries = ref([countries[0]]);
-    const selectedTopics = ref([topics[0]]);
-    const selectedActors = ref([actors[0]]);
+    const selectedCountries = ref([countries]);
+    const selectedTopics = ref([topics]);
+    const selectedActors = ref([actors]);
     const selectedOffice = ref([producingOffices[0]]);
     const selectedAnalysisType = ref([analysisTypes[0]]);
     const fileInputButton = ref(null);
@@ -1158,11 +1168,15 @@ export default {
     };
 
     const populateFields = () => {
+      // selectedCountries.value
+      selectedTopics.value = [topics[0]];
+      selectedActors.value = [actors[2]];
       document.getElementById("title").value = articles[0].title;
       document.getElementById("titlePM").value = articles[0].classification;
       document.getElementById("summaryPM").value = articles[0].classification;
       document.getElementById("documentClass").value = articles[0].classification;
       document.getElementById("summary").value = articles[0].content[0];
+      editor.setData('hello');
       document.getElementById("docNum").value = articles[0].id;
       document.getElementById("publicationNumber").value = articles[0].id;
       document.getElementById("classifiedBy").innerHTML = articles[0].author;
@@ -1200,7 +1214,7 @@ export default {
       attachmentDrop,
       attachmentSelectedFile,
       editor: ClassicEditor,
-              editorData: articles[0].content[1],
+              editorData: "",
               editorConfig: {
                   // The configuration of the editor.
               }
