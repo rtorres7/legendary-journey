@@ -158,7 +158,16 @@
   <template v-if="loading">
     <div class="max-w-fit m-auto mt-[20vh]">
       <svg
-        class="animate-spin -ml-1 mr-3 h-24 w-24 text-mission-blue"
+        class="
+          animate-spin
+          -ml-1
+          mr-3
+          h-24
+          w-24
+          text-mission-blue
+          dark:text-slate-300
+          energy:text-gray-300
+        "
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

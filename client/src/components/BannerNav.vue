@@ -977,7 +977,7 @@
 <script>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
-import BannerSearchBar from "@/components/BannerSearchBar.vue";
+import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
 import MobileSideMenu from "@/components/MobileSideMenu";

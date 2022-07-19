@@ -43,7 +43,6 @@
         @onInput="onInputEventHandler"
         @onFocus="onFocusEventHandler"
         @onBlur="onBlurEventHandler"
-        v-model="test"
         @keyup.enter="onEnter"
       >
         <template #list-item-text="slot">
@@ -94,10 +93,9 @@ export default {
   setup() {
     const router = useRouter();
     const modalActive = ref(false);
-    const test = ref("");
 
     const selectItemEventHandler = (item) => {
-      console.log("selected: ", item);
+      //console.log("selected: ", item);
       router.push({
         name: "search",
         query: {
@@ -107,19 +105,17 @@ export default {
       });
     };
 
-    const onFocusEventHandler = (event) => {
-      console.log("focus event: ", event);
-    };
+    // const onFocusEventHandler = (event) => {
+    //   console.log("focus event: ", event);
+    // };
 
-    const onInputEventHandler = (event) => {
-      console.log("input event: ", event);
-    };
+    // const onInputEventHandler = (event) => {
+    //   console.log("input event: ", event);
+    // };
 
-    const onBlurEventHandler = (event) => {
-      console.log("blur event: ", event);
-      console.log("test: ", test);
-      test.value = "wtf";
-    };
+    // const onBlurEventHandler = (event) => {
+    //   console.log("blur event: ", event);
+    // };
 
     const onEnter = (e) => {
       router.push({
@@ -137,9 +133,9 @@ export default {
       modalActive,
       selectItemEventHandler,
       onEnter,
-      onInputEventHandler,
-      onFocusEventHandler,
-      onBlurEventHandler,
+      // onInputEventHandler,
+      // onFocusEventHandler,
+      //onBlurEventHandler,
     };
   },
 };

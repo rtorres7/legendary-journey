@@ -1,6 +1,4 @@
 import { articles } from "@/data";
-import { delay } from '@/helpers'
-
 export default {
   namespaced: true,
   state: {
@@ -23,18 +21,8 @@ export default {
   },
 
   actions: {
-    getHomeArticles({ state, commit, rootState }) {
-      console.log('how many times is this running')
-      if (rootState.delay) {
-        state.loading = true;
-        delay(() =>
-          commit("saveArticles", articles))
-      } else {
-        commit("saveArticles", articles)
-      }
-      // rootState.delay ?
-      //   delay(() =>
-      //     commit("saveArticles", articles)) : commit("saveArticles", articles)
+    getHomeArticles({ commit }) {
+      commit("saveArticles", articles)
     },
     removeHomeArticles({ commit }) {
       commit("resetHomePage");
