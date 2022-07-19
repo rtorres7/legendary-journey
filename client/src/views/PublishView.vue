@@ -370,7 +370,7 @@
               </Listbox>
               <div class="flex mt-6">
                 <div>
-                  <input type="checkbox" id="allOrgs" name="allOrgs" value="All Orgs" class="orgCheckbox" @click="toggle(this)">
+                  <input type="checkbox" id="allOrgs" name="allOrgs" v-model="checkAllOrgs" @click="toggleAllOrgs()" >
                   <label for="allOrgs" class="text-sm"> All Orgs</label>
                 </div>
                 <div class="ml-8 self-center">
@@ -392,9 +392,9 @@
                     >
                       <DisclosurePanel>
                         <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4">
-                          <div v-for="org in dissemOrgs" :key="org.name">
-                            <input type="checkbox" id="dissemOrg" name="dissemOrg" value="Dissem Org" class="orgCheckbox mt-2">
-                            <label for="dissemOrg" class="text-sm ml-1"> {{ org.name }} </label>
+                          <div v-for="(org, index) in dissemOrgs" :key="index">
+                            <input type="checkbox"  v-model="dissemOrgs[index].model" class="mt-2">
+                            <label :for="org.name" class="text-sm ml-1"> {{ org.name }} </label>
                           </div>
                         </div>
                       </DisclosurePanel>
@@ -1048,38 +1048,6 @@ const actors = [
   {title: "actor3"},
   {title: "actor4"},
 ];
-const dissemOrgs = [
-  {name: "Org1"},
-  {name: "Org2"},
-  {name: "Org3"},
-  {name: "Org4"},
-  {name: "Org5"},
-  {name: "Org6"},
-  {name: "Org7"},
-  {name: "Org8"},
-  {name: "Org9"},
-  {name: "Org10"},
-  {name: "Org11"},
-  {name: "Org12"},
-  {name: "Org13"},
-  {name: "Org14"},
-  {name: "Org15"},
-  {name: "Org16"},
-  {name: "Org17"},
-  {name: "Org18"},
-  {name: "Org19"},
-  {name: "Org20"},
-  {name: "Org21"},
-  {name: "Org22"},
-  {name: "Org23"},
-  {name: "Org24"},
-  {name: "Org25"},
-  {name: "Org26"},
-  {name: "Org27"},
-  {name: "Org28"},
-  {name: "Org29"},
-  {name: "Org30"},
-];
 const producingOffices = [
   {name: "Office1", pocInfo:"Office1's address and phone number"},
   {name: "Office2", pocInfo:"Office2's address and phone number"},
@@ -1120,14 +1088,44 @@ export default {
     const dropzoneFile = ref("");
     const attachmentDropzoneFile = ref("");
     const articlesData = ref(articles);
-
-    const toggle = () => {
-        var allInputs = document.getElementsByTagName('input');
-        for (var i=0;i<allInputs.length;i++) {
-             if (allInputs[i].type === 'checkbox' && allInputs[i].name === 'dissemOrg') { 
-                  allInputs[i].checked = !allInputs[i].checked;
-            }
-        }
+    let checkAllOrgs = ref(false);
+    const dissemOrgs = ref([
+      {name: "Org1", model:""},
+      {name: "Org2", model:""},
+      {name: "Org3", model:""},
+      {name: "Org4", model:""},
+      {name: "Org5", model:""},
+      {name: "Org6", model:""},
+      {name: "Org7", model:""},
+      {name: "Org8", model:""},
+      {name: "Org9", model:""},
+      {name: "Org10", model:""},
+      {name: "Org11", model:""},
+      {name: "Org12", model:""},
+      {name: "Org13", model:""},
+      {name: "Org14", model:""},
+      {name: "Org15", model:""},
+      {name: "Org16", model:""},
+      {name: "Org17", model:""},
+      {name: "Org18", model:""},
+      {name: "Org19", model:""},
+      {name: "Org20", model:""},
+      {name: "Org21", model:""},
+      {name: "Org22", model:""},
+      {name: "Org23", model:""},
+      {name: "Org24", model:""},
+      {name: "Org25", model:""},
+      {name: "Org26", model:""},
+      {name: "Org27", model:""},
+      {name: "Org28", model:""},
+      {name: "Org29", model:""},
+      {name: "Org30", model:""},
+    ]);
+    
+    const toggleAllOrgs = () => {
+        for(let i = 0; i < dissemOrgs.value.length; i++){
+          dissemOrgs.value[i].model = !checkAllOrgs.value;
+      }
     };
 
     const changePocInfo = (value) => {
@@ -1193,8 +1191,9 @@ export default {
       dropzoneFile,
       attachmentDropzoneFile,
       articlesData,
+      checkAllOrgs,
       populateFields,
-      toggle,
+      toggleAllOrgs,
       changePocInfo,
       drop,
       selectedFile,
