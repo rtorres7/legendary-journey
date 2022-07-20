@@ -127,7 +127,7 @@
                       >
                         <ListboxOption
                           v-slot="{ active, selected }"
-                          v-for="country in countries"
+                          v-for="country in countriesData"
                           :key="country"
                           :value="country"
                           as="template"
@@ -1088,7 +1088,8 @@ export default {
   },
 
   setup() {
-    const selectedCountries = ref([countries]);
+    const countriesData = ref(countries);
+    const selectedCountries = ref([countriesData]);
     const selectedTopics = ref([topics]);
     const selectedActors = ref([actors]);
     const selectedOffice = ref([producingOffices[0]]);
@@ -1168,9 +1169,9 @@ export default {
     };
 
     const populateFields = () => {
-      // selectedCountries.value
-      selectedTopics.value = [topics[0]];
-      selectedActors.value = [actors[2]];
+      selectedCountries.value = [countriesData.value[144],countriesData.value[183]];
+      selectedTopics.value = [topics[0],topics[1]];
+      selectedActors.value = [actors[0],actors[1]];
       document.getElementById("title").value = articles[0].title;
       document.getElementById("titlePM").value = articles[0].classification;
       document.getElementById("summaryPM").value = articles[0].classification;
@@ -1189,6 +1190,7 @@ export default {
     });
     
     return {
+      countriesData,
       countries,
       selectedCountries,
       topics,
