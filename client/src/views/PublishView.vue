@@ -1216,7 +1216,7 @@ export default {
       attachmentDrop,
       attachmentSelectedFile,
       editor: ClassicEditor,
-              editorData: "",
+              editorData: articles[0].content[3] + ' There had been no major strikes on Kyiv since early June. In his nightly address, Ukraine President Volodymyr Zelenskyy said a wounded seven-year-old girl was pulled from the rubble of a nine-storey apartment block. The girls father was killed in the strike, he said. A Ukrainian air force spokesperson said the strike was carried out with 4-6 long-range missiles fired from Russian bombers more than 1,000km away in the southern Russian region of Astrakhan.',
               editorConfig: {
                   // The configuration of the editor.
               }
