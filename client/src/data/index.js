@@ -356,3 +356,31 @@ export const articles = [
 export const user = {
     name: 'Jonathan Oszczakiewicz'
 }
+
+export const metrics = [
+    {
+        uniqueReadership: "2608",
+        readership: [
+            {
+                name: "Intelligence",
+                y: 1842
+            },
+            {
+                name: "Law Enforcement",
+                y: 72
+            },            
+            {
+                name: "Policy",
+                y: 196
+            },
+            {
+                name: "UNKNOWN",
+                y: 5
+            },
+            {
+                name: "Warfighter",
+                y: 493
+            },            
+        ],
+    },
+]

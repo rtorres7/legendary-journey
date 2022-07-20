@@ -190,21 +190,63 @@
             </router-link>
           </div>
         </div>
-        <div class="flex flex-col space-y-3">
-          <p class="font-semibold">Related Products</p>
-          <router-link to="#" class="hover:underline text-sm"
-            >(U) This is a related product title</router-link
-          >
-          <router-link to="#" class="hover:underline text-sm"
-            >(U) Sample title of another related product</router-link
-          >
+        <div
+          class="
+            border-t-2
+            md:border-t-0
+            border-b-2
+            pb-4
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+            flex flex-col
+            space-y-3
+          "
+        >
+          <div class="flex flex-col space-y-3">
+              <p class="font-semibold">Related Products</p>
+              <router-link to="#" class="hover:underline text-sm"
+                >(U) This is a related product title</router-link
+              >
+              <router-link to="#" class="hover:underline text-sm"
+                >(U) Sample title of another related product</router-link
+              >
+          </div>
         </div>
-        <p class="font-semibold">Tags</p>
-        <p class="font-medium text-sm">{{ selectedArticle.tags.join(", ") }}</p>
-        <!-- <div>
-        <p class="font-semibold">Metrics</p>
-        <p>Unique Readers (1792)</p>
-      </div> -->
+        <div
+          class="
+            border-t-2
+            md:border-t-0
+            border-b-2
+            pb-4
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+            flex flex-col
+            space-y-3
+          "
+        >
+         <p class="font-semibold">Tags</p>
+          <p class="font-medium text-sm">{{ selectedArticle.tags.join(", ") }}</p>
+        </div>
+        <div
+         class="
+            border-t-2
+            md:border-t-0
+            border-b-2
+            pb-4
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+            flex flex-col
+            space-y-3
+          ">
+            <p class="font-semibold">Metrics</p>
+            <p class="font-medium text-sm">Unique Readers (2608)</p>
+          <div>
+            <ArticleMetrics></ArticleMetrics>
+          </div>
+        </div>
       </div>
     </div>
   </template>
@@ -215,6 +257,7 @@ import { ref } from "vue";
 import ArticleNavigation from "@/components/ArticleNavigation.vue"
 import ArticleCommentForm from "@/components/ArticleCommentForm.vue";
 import ArticleCommentList from "@/components/ArticleCommentList.vue";
+import ArticleMetrics from "@/components/ArticleMetrics.vue";
 import NotFound from "@/components/NotFound";
 import { PrinterIcon, MailIcon, ChatIcon, FolderOpenIcon, TagIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
@@ -226,6 +269,7 @@ export default {
     ArticleNavigation,
     ArticleCommentForm,
     ArticleCommentList,
+    ArticleMetrics,
     NotFound,
     PrinterIcon,
     MailIcon,
