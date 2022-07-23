@@ -64,7 +64,6 @@
                       py-1
                       px-2
                       text-left
-                      capitalize
                       bg-white
                       dark:bg-slate-700
                       energy:bg-gray-700
@@ -172,7 +171,6 @@
                         py-1
                         px-2
                         text-left
-                        capitalize
                         bg-white
                         dark:bg-slate-700
                         energy:bg-gray-700
@@ -279,7 +277,6 @@
                     py-1
                     px-2
                     text-left
-                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
@@ -410,7 +407,6 @@
                     py-1
                     px-2
                     text-left
-                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
@@ -436,7 +432,6 @@
                     py-1
                     px-2
                     text-left
-                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
@@ -464,7 +459,6 @@
                     py-1
                     px-2
                     text-left
-                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
@@ -491,7 +485,6 @@
                     py-1
                     px-2
                     text-left
-                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
@@ -550,7 +543,6 @@
                   py-1
                   px-2
                   text-left
-                  capitalize
                   bg-white
                   dark:bg-slate-700
                   energy:bg-gray-700
@@ -638,7 +630,6 @@
                   py-1
                   px-2
                   text-left
-                  capitalize
                   bg-white
                   dark:bg-slate-700
                   energy:bg-gray-700
@@ -664,7 +655,6 @@
                   py-1
                   px-2
                   text-left
-                  capitalize
                   bg-white
                   dark:bg-slate-700
                   energy:bg-gray-700
@@ -690,7 +680,6 @@
                   py-1
                   px-2
                   text-left
-                  capitalize
                   bg-white
                   dark:bg-slate-700
                   energy:bg-gray-700
@@ -716,7 +705,6 @@
                     py-1
                     px-2
                     text-left
-                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
@@ -752,7 +740,6 @@
                         py-1
                         px-2
                         text-left
-                        capitalize
                         bg-white
                         dark:bg-slate-700
                         energy:bg-gray-700
@@ -820,7 +807,7 @@
                           :value="office"
                           as="template"
                           class="capitalize px-2 py-1 cursor-pointer"
-                          onchange="changePocInfo(selectedOffice)"
+                          @click="changePocInfo()"
                         >
                           <li
                             :class="[
@@ -858,7 +845,6 @@
                       py-1
                       px-2
                       text-left
-                      capitalize
                       bg-white
                       dark:bg-slate-700
                       energy:bg-gray-700
@@ -1139,15 +1125,9 @@ export default {
       }
     };
 
-    const changePocInfo = (value) => {
-      // var dropdown = document.getElementById("officeListbox");
-      // var selection = dropdown.value;
-      // console.log("hello");
-      // if (selection === 'Office1') {
-      //   var pocInfoTextarea = document.getElementById("pocInfo");
-      //   pocInfoTextarea.value = "hello";
-      // }
-      console.log(value);
+    const changePocInfo = () => {
+      var selection = selectedOffice.value;
+      document.getElementById("pocInfo").value = selection.pocInfo;
     };
 
     const drop = (event) => {
