@@ -8,6 +8,7 @@ import router from './router'
 import store from './store'
 import "vue3-carousel/dist/carousel.css";
 import './index.css'
+import * as CKEditor from '@ckeditor/ckeditor5-vue';
 
 const requireComponent = require.context(
   './components/base',
@@ -28,4 +29,4 @@ requireComponent.keys().forEach(fileName => {
 })
 
 app.provide('$axios', axios);
-app.use(SimpleTypeahead).use(store).use(router).use(router).mount('#app')
+app.use(SimpleTypeahead).use(store).use(router).use(CKEditor).mount('#app')
