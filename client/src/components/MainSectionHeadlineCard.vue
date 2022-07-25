@@ -8,8 +8,9 @@
       "
     >
       <BaseCard
-        class="pb-4 h-full hover:underline"
+        class="pb-4 h-full"
         :class="loading ? 'animate-pulse' : ''"
+        hoverable
       >
         <template v-if="loading">
           <div
@@ -110,13 +111,7 @@
 </template>
 
 <script>
-//import { ref } from "vue";
-import BaseCard from "@/components/base/BaseCard";
-
 export default {
-  components: {
-    BaseCard,
-  },
   props: {
     article: Object,
     loading: Boolean,

@@ -1,5 +1,4 @@
 import { articles } from "@/data";
-
 export default {
   namespaced: true,
   state: {
@@ -23,11 +22,11 @@ export default {
 
   actions: {
     getHomeArticles({ commit }) {
-      commit("saveArticles", articles);
+      commit("saveArticles", articles)
     },
     removeHomeArticles({ commit }) {
       commit("resetHomePage");
-    }
+    },
   },
 
   mutations: {

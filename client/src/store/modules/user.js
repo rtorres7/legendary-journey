@@ -1,5 +1,5 @@
-import { inject } from 'vue';
-import { user } from '@/data';
+import { inject } from 'vue'
+import { user } from '@/data'
 
 const axios = inject('$axios');
 
