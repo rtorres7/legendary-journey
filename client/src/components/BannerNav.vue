@@ -7,7 +7,7 @@
       energy:text-gray-300 energy:bg-gray-800
       sticky
       top-0
-      z-10
+      z-50
       backdrop-filter backdrop-blur
     "
   >
@@ -328,7 +328,7 @@
                                   <li
                                     :class="[
                                       active
-                                        ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                        ? 'bg-slate-300 dark:bg-slate-700 energy:bg-gray-700'
                                         : 'bg-none',
                                     ]"
                                   >
@@ -546,6 +546,22 @@
                         "
                         >{{ loadingUser ? "Loading..." : currentUsername }}</a
                       >
+                    </MenuItem>
+                    <MenuItem>
+                      <router-link to="/publish" 
+                        class="
+                          py-1
+                          px-3
+                          hover:bg-slate-700/80
+                          dark:hover:bg-slate-600/80
+                          energy:hover:bg-gray-600/80
+                          flex
+                          items-center
+                          cursor-pointer
+                        "
+                      >
+                        Publish an Article
+                      </router-link>
                     </MenuItem>
                     <MenuItem>
                       <a
