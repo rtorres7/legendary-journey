@@ -19,7 +19,7 @@
       <div class="lg:flex flex-col justify-between text-sm">
         <template v-for="item in sitreps" :key="item">
           <div class="mb-4">
-            <BaseCard class="px-4 py-4" :locked="item.locked">
+            <BaseCard class="px-4 py-4" :locked="item.locked" hoverable>
               <div class="flex flex-col">
                 <div class="flex items-center pb-1">
                   <template v-if="item.locked">
@@ -58,6 +58,7 @@
           <BaseCard
             class="w-[220px] rounded-md shadow-md px-4 py-2"
             :locked="item.locked"
+            hoverable
           >
             <div class="flex flex-col text-left">
               <div class="flex items-center pb-1">
@@ -92,7 +93,6 @@
 <script>
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
-import BaseCard from "@/components/base/BaseCard";
 
 const sitreps = [
   {
@@ -187,7 +187,6 @@ export default {
     Carousel,
     Slide,
     Navigation,
-    BaseCard,
   },
   setup() {
     return {

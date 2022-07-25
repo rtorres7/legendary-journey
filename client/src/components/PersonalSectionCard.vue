@@ -1,7 +1,8 @@
 <template>
   <BaseCard
-    class="hover:underline text-left"
+    class="text-left"
     :class="carousel === true ? 'h-64' : ''"
+    hoverable
   >
     <div class="p-6 flex flex-col justify-between h-full">
       <div class="flex flex-wrap gap-y-2 mb-2 lg:mb-4">
@@ -75,11 +76,7 @@
 </template>
 
 <script>
-import BaseCard from "@/components/base/BaseCard";
 export default {
-  components: {
-    BaseCard,
-  },
   props: {
     carousel: {
       default: false,

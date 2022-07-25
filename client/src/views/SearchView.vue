@@ -12,17 +12,7 @@
     Search
   </p>
   <!-- Search Form -->
-  <div
-    class="
-      mt-4
-      p-4
-      bg-white
-      dark:bg-slate-800
-      energy:bg-gray-800
-      rounded-lg
-      shadow-md
-    "
-  >
+  <BaseCard class="mt-4 p-4">
     <Disclosure v-slot="{ open }">
       <div class="flex flex-col justify-between">
         <div
@@ -153,7 +143,7 @@
         </div>
       </DisclosurePanel>
     </Disclosure>
-  </div>
+  </BaseCard>
   <!-- Results Container -->
   <template v-if="loading">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -292,15 +282,7 @@
           </div>
         </div>
         <!-- Search Results Table -->
-        <div
-          class="
-            bg-white
-            dark:bg-slate-800
-            energy:bg-gray-800
-            rounded-lg
-            shadow-md
-          "
-        >
+        <BaseCard>
           <!-- Top Pagination -->
           <div
             class="
@@ -387,25 +369,12 @@
               :currentPage="currentPage"
             />
           </div>
-        </div>
+        </BaseCard>
       </div>
       <!-- Search Results Filters -->
-      <div
-        class="
-          hidden
-          lg:block
-          basis-1/4
-          bg-white
-          dark:bg-slate-800
-          energy:bg-gray-800
-          rounded-lg
-          shadow-md
-          ml-4
-          h-full
-        "
-      >
+      <BaseCard class="hidden lg:block basis-1/4 ml-4 h-full">
         <SearchResultsFacets :facets="aggregations" />
-      </div>
+      </BaseCard>
       <div class="lg:hidden flex justify-between py-4">
         <div
           class="
