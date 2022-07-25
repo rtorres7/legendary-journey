@@ -7,7 +7,7 @@
       energy:text-gray-300 energy:bg-gray-800
       sticky
       top-0
-      z-10
+      z-50
       backdrop-filter backdrop-blur
     "
   >
@@ -482,75 +482,6 @@
                   </MenuItems>
                 </transition>
               </Menu>
-              <Menu as="div" class="relative">
-                <div>
-                  <MenuButton 
-                    class="
-                      max-w-xs
-                      bg-gray-800
-                      rounded-full
-                      flex
-                      items-center
-                      text-sm
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-offset-gray-800
-                      focus:ring-white
-                    "
-                  >
-                    <span class="sr-only">Open self publishing menu</span>
-                    <PencilAltIcon class="h-6 w-6" aria-hidden="true" />
-                  </MenuButton>
-                </div>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="
-                      origin-top-right
-                      absolute
-                      right-0
-                      mt-2
-                      w-40
-                      rounded-md
-                      shadow-2xl
-                      py-2
-                      ring-1 ring-black ring-opacity-5
-                      focus:outline-none
-                      text-sm
-                      font-semibold
-                      bg-mission-blue/95
-                      dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
-                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
-                    "
-                  >
-                    <MenuItem>
-                      <router-link to="/publish" 
-                        class="
-                          py-1
-                          px-3
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                          flex
-                          items-center
-                          cursor-pointer
-                        "
-                      >
-                        Publish an Article
-                      </router-link>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
               <!-- Profile dropdown -->
               <Menu as="div" class="ml-3 relative">
                 <div>
@@ -615,6 +546,22 @@
                         "
                         >{{ loadingUser ? "Loading..." : currentUsername }}</a
                       >
+                    </MenuItem>
+                    <MenuItem>
+                      <router-link to="/publish" 
+                        class="
+                          py-1
+                          px-3
+                          hover:bg-slate-700/80
+                          dark:hover:bg-slate-600/80
+                          energy:hover:bg-gray-600/80
+                          flex
+                          items-center
+                          cursor-pointer
+                        "
+                      >
+                        Publish an Article
+                      </router-link>
                     </MenuItem>
                     <MenuItem>
                       <a
@@ -1233,7 +1180,6 @@ import {
   LightningBoltIcon,
   MenuIcon,
   MoonIcon,
-  PencilAltIcon,
   SearchIcon,
   SelectorIcon,
   SunIcon,
@@ -1293,7 +1239,6 @@ export default {
     LightningBoltIcon,
     MenuIcon,
     MoonIcon,
-    PencilAltIcon,
     SearchIcon,
     SelectorIcon,
     SunIcon,

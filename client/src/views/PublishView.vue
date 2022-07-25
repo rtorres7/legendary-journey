@@ -1,29 +1,26 @@
 <template>
-   <template v-if="routerError">
-    <NotFound />
-  </template>
-  <template v-else>
-    <form ref="publishingForm" class="mb-10 mt-10">
-      <div>
-        <label class="block mb-2" for="dropzoneFile">Upload a file to publish</label>
-        <PublishViewFileUploader @drop.prevent="drop" @change="selectedFile">
-          <button @click.prevent="fileInputButton.click()"
-            class="
-              bg-slate-100 hover:bg-slate-200/80 
-              dark:bg-slate-700 dark:hover:bg-slate-700/80 
-              energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-              border-slate-300 
-              p-2 
-              rounded shadow
-              text-sm
-            "
-          >
-            Select File
-          </button>
-          <input type="file" id="dropzoneFile" class="dropzoneFile hidden" ref="fileInputButton" />
-        </PublishViewFileUploader>
-        <span>{{ dropzoneFile.name }}</span>
-      </div>
+  <form ref="publishingForm" class="mb-10 mt-10">
+    <div>
+      <label class="block mb-2" for="dropzoneFile">Upload a file to publish</label>
+      <PublishViewFileUploader @drop.prevent="drop(); populateCkEditor()" @change="selectedFile(); populateCkEditor()">
+        <button @click.prevent="fileInputButton.click()"
+          class="
+            bg-slate-100 hover:bg-slate-200/80 
+            dark:bg-slate-700 dark:hover:bg-slate-700/80 
+            energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
+            border-slate-300 
+            p-2 
+            rounded shadow
+            text-sm
+          "
+        >
+          Select File
+        </button>
+        <input type="file" id="dropzoneFile" class="dropzoneFile hidden" ref="fileInputButton" />
+      </PublishViewFileUploader>
+      <span>{{ dropzoneFile.name }}</span>
+    </div>
+    <div class="mt-4 p-4 rounded-lg shadow-md bg-white dark:bg-slate-800 energy:bg-gray-800">
       <div
         class="
           flex flex-wrap
@@ -42,7 +39,7 @@
                 energy:border-gray-700/25 pb-4
               "
             >
-              <h1 class="text-3xl">Edit Document</h1>
+              <h1 class="text-2xl">Edit Document</h1>
             </div>
             <div class="flex flex-wrap md:flex-nowrap gap-3"> 
               <div class="w-full md:max-w-[350px] lg:max-w-[300px] xl:max-w-[420px]">
@@ -149,7 +146,7 @@
                     </transition>
                   </div>
                 </Listbox>
-                <input type="checkbox" id="worldwide" name="worldwide" value="Worldwide" class="mt-2">
+                <input type="checkbox" id="worldwide" name="worldwide" value="Worldwide" v-model="worldwide" class="mt-6">
                 <label for="worldwide" class="text-sm"> Worldwide</label>
               </div>
               <div class="w-full md:max-w-[350px] lg:max-w-[300px] xl:max-w-[420px]">
@@ -574,7 +571,7 @@
               <h2 class="text-xl">Attachments</h2>
             </div>
             <div>
-              <label class="block mb-2" for="attachment_input">Upload article files</label>
+              <label class="block mb-2" for="attachment_input">Upload attachment files</label>
               <PublishViewFileUploader id="attachment_input" @drop.prevent="attachmentDrop" @change="attachmentSelectedFile">
                 <button @click.prevent="attachmentFileInputButton.click()"
                   class="
@@ -829,114 +826,14 @@
               </div>
               <div>
               <label class="block mb-2" for="analysisListbox">Analysis Type</label>
-              <Listbox
-                id="analysisListbox"
-                v-model="selectedAnalysisType"
-                name="analysisListbox"
-                aria-label="select an analysis type from the dropdown"
-              >
-                <div class="relative">
-                  <ListboxButton
-                    class="
-                      min-h-[2rem]
-                      flex
-                      relative
-                      w-full
-                      py-1
-                      px-2
-                      text-left
-                      bg-white
-                      dark:bg-slate-700
-                      energy:bg-gray-700
-                      border-t border-t-gray-100
-                      dark:border-t-slate-800
-                      energy:border-t-gray-800
-                      rounded-lg
-                      shadow-md
-                      cursor-default
-                      focus:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-opacity-75
-                      focus-visible:ring-offset-2
-                    "
-                  >
-                    <span class="block truncate">{{
-                      selectedAnalysisType.name
-                    }}</span>
-                    <span
-                      class="
-                        absolute
-                        inset-y-0
-                        right-0
-                        flex
-                        items-center
-                        pr-2
-                      "
-                    >
-                      <SelectorIcon
-                        class="h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="
-                        absolute
-                        w-full
-                        py-1
-                        mt-1
-                        overflow-auto
-                        bg-white
-                        dark:bg-slate-700
-                        energy:bg-gray-700
-                        rounded-md
-                        shadow-lg
-                        max-h-60
-                        ring-1 ring-black ring-opacity-5
-                        focus:outline-none
-                        z-10
-                      "
-                    >
-                      <ListboxOption
-                        v-slot="{ active, selected }"
-                        v-for="item in analysisTypes"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
-                              : 'bg-none',
-                          ]"
-                        >
-                          <div class="flex">
-                            {{ item.name }}
-                            <CheckIcon v-show="selected" class="h-5 w-5 ml-2"/>
-                          </div>
-                        </li>
-                      </ListboxOption>
-                    </ListboxOptions>
-                  </transition>
-                </div>
-              </Listbox>
+              <PublishingFormListbox v-model="selectedAnalysisType.model" :items="analysisTypes" id="analysisListbox" name="analysisListbox" />
             </div>
           </div>
         </div>
       </div>
-      <div class="flex gap-20 flex-wrap lg:flex-nowrap gap-y-8"> 
+      <div class="flex gap-20 flex-wrap lg:flex-nowrap gap-y-8 mb-8"> 
         <div class="flex gap-3"> 
-          <button 
+          <button type="submit"
             class="
               bg-slate-100 hover:bg-slate-200/80 
               dark:bg-slate-700 dark:hover:bg-slate-700/80 
@@ -1008,15 +905,13 @@
           </div>
         </div>
       </div>
-    </form>
-  </template>
+    </div>
+  </form>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import {
-  // Dialog,
-  // DialogOverlay,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -1031,6 +926,7 @@ import flatpickr from 'flatpickr';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { articles } from "@/data";
 import PublishViewFileUploader from '@/components/PublishViewFileUploader';
+import PublishingFormListbox from '@/components/base/PublishingFormListbox.vue';
 
 const topics = [
   {title: "International War"}, 
@@ -1051,15 +947,13 @@ const producingOffices = [
   {name: "Office4", pocInfo:"Office4's address and phone number"},
 ];
 const analysisTypes = [
-  {name: "Type1"},
-  {name: "Type2"},
-  {name: "Type3"},
+  "Type1",
+  "Type2",
+  "Type3",
 ];
 
 export default {
   components: {
-    // Dialog,
-    // DialogOverlay,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -1071,13 +965,28 @@ export default {
     ChevronDownIcon,
     SelectorIcon,
     PublishViewFileUploader,
+    PublishingFormListbox,
   },
-
+  data() {
+    return {
+        editor: ClassicEditor,
+        editorData: '',
+         editorConfig: {
+                }
+    };
+  },
+  methods: {
+    populateCkEditor() {
+        this.editorData = '(U) There had been no major strikes on Kyiv since early June. In his nightly address, Ukraine President Volodymyr Zelenskyy said a wounded seven-year-old girl was pulled from the rubble of a nine-storey apartment block. The girls father was killed in the strike, he said. A Ukrainian air force spokesperson said the strike was carried out with 4-6 long-range missiles fired from Russian bombers more than 1,000km away in the southern Russian region of Astrakhan.';
+    },
+    },
   setup() {
     const countriesData = ref(countries);
     const selectedCountries = ref([countriesData]);
+    const worldwide = ref(null);
     const selectedTopics = ref([topics]);
     const selectedActors = ref([actors]);
+    const dateValue = ref(null);
     const selectedOffice = ref([producingOffices[0]]);
     const selectedAnalysisType = ref([analysisTypes[0]]);
     const fileInputButton = ref(null);
@@ -1157,11 +1066,9 @@ export default {
       document.getElementById("summaryPM").value = articles[0].classification;
       document.getElementById("documentClass").value = articles[0].classification;
       document.getElementById("summary").value = articles[0].content[0];
-      // editor.setData('hello');
       document.getElementById("docNum").value = articles[0].id;
       document.getElementById("publicationNumber").value = articles[0].id;
       document.getElementById("classifiedBy").innerHTML = articles[0].author;
-      // editor: editorData: articles[0].content[3];
     };
 
     onMounted(() => {
@@ -1173,10 +1080,12 @@ export default {
       countriesData,
       countries,
       selectedCountries,
+      worldwide,
       topics,
       selectedTopics,
       actors,
       selectedActors,
+      dateValue,
       dissemOrgs,
       producingOffices,
       selectedOffice,
@@ -1195,14 +1104,13 @@ export default {
       selectedFile,
       attachmentDrop,
       attachmentSelectedFile,
-      editor: ClassicEditor,
-              editorData: articles[0].content[3] + ' There had been no major strikes on Kyiv since early June. In his nightly address, Ukraine President Volodymyr Zelenskyy said a wounded seven-year-old girl was pulled from the rubble of a nine-storey apartment block. The girls father was killed in the strike, he said. A Ukrainian air force spokesperson said the strike was carried out with 4-6 long-range missiles fired from Russian bombers more than 1,000km away in the southern Russian region of Astrakhan.',
-              editorConfig: {
-                  // The configuration of the editor.
-              }
     }
   }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.ck-content {
+    color: black;
+}
+</style>
