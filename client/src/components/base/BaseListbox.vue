@@ -1,6 +1,10 @@
 <template>
   <Listbox v-model="selectedItem">
     <div class="relative mt-1">
+      <ListboxLabel
+        class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
+        >{{ label }}</ListboxLabel
+      >
       <ListboxButton
         class="
           min-h-[2rem]
@@ -9,9 +13,6 @@
           w-full
           py-1
           px-2
-          text-left
-          capitalize
-          bg-white
           dark:bg-slate-700
           energy:bg-gray-700
           border-t border-t-gray-100
@@ -26,7 +27,9 @@
           focus-visible:ring-offset-2
         "
       >
-        <span class="block truncate">{{ modelValue }}</span>
+        <span class="block truncate max-w-[calc(100%-15px)]">{{
+          modelValue
+        }}</span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
           <SelectorIcon class="h-5 w-5" aria-hidden="true" />
         </span>
@@ -58,21 +61,33 @@
           "
         >
           <ListboxOption
-            v-slot="{ active }"
+            v-slot="{ active, selected }"
             v-for="item in items"
             :key="item"
-            :value="item"
+            :value="item.name"
             as="template"
-            class="capitalize px-2 py-1 cursor-pointer"
           >
             <li
               :class="[
                 active
-                  ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                   : 'bg-none',
+                'relative cursor-default select-none py-2 pl-10 pr-4',
               ]"
             >
-              {{ item }}
+              <span
+                :class="[
+                  selected ? 'font-medium' : 'font-normal',
+                  'block truncate',
+                ]"
+                >{{ item.name }}</span
+              >
+              <span
+                v-if="selected"
+                class="absolute inset-y-0 left-0 flex items-center pl-3"
+              >
+                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+              </span>
             </li>
           </ListboxOption>
         </ListboxOptions>
@@ -85,22 +100,32 @@
 import { computed } from "vue";
 import {
   Listbox,
+  ListboxLabel,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
 } from "@headlessui/vue";
-import { SelectorIcon } from "@heroicons/vue/outline";
+import { CheckIcon, SelectorIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
     Listbox,
+    ListboxLabel,
     ListboxButton,
     ListboxOptions,
     ListboxOption,
+    CheckIcon,
     SelectorIcon,
   },
   props: {
-    items: Array,
+    label: {
+      type: String,
+      default: "",
+    },
+    items: {
+      type: Array,
+      required: true,
+    },
     modelValue: {
       type: String,
       default: "",

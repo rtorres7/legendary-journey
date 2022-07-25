@@ -141,16 +141,16 @@ export default {
 };
 </script>
 <style>
-.simple-typeahead[data-v-590ce012] {
+.simple-typeahead[data-v-0ccb6f26] {
   position: relative;
   width: 100%;
 }
-.simple-typeahead > input[data-v-590ce012] {
+.simple-typeahead > input[data-v-0ccb6f26] {
   margin-bottom: 0;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-.simple-typeahead .simple-typeahead-list[data-v-590ce012] {
+.simple-typeahead .simple-typeahead-list[data-v-0ccb6f26] {
   position: absolute;
   width: 100%;
   border: none;

@@ -54,13 +54,7 @@
             :key="n"
           >
             <div class="lg:basis-1/5 lg:max-w-none">
-              <label>
-                <span
-                  class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
-                  >{{ n.label }}</span
-                >
-              </label>
-              <SearchFormListbox v-model="n.model" :items="n.list" />
+              <BaseListbox v-model="n.model" :label="n.label" :items="n.list" />
             </div>
           </template>
         </div>
@@ -108,8 +102,11 @@
               :key="n"
             >
               <div class="basis-1/2">
-                <label class="text-sm font-semibold">{{ n.label }}</label>
-                <SearchFormListbox v-model="n.model" :items="n.list" />
+                <BaseListbox
+                  v-model="n.model"
+                  :label="n.label"
+                  :items="n.list"
+                />
               </div>
             </template>
           </div>
@@ -135,8 +132,11 @@
               :key="n"
             >
               <div class="lg:basis-1/3 lg:max-w-none">
-                <label class="text-sm font-semibold">{{ n.label }}</label>
-                <SearchFormListbox v-model="n.model" :items="n.list" />
+                <BaseListbox
+                  v-model="n.model"
+                  :label="n.label"
+                  :items="n.list"
+                />
               </div>
             </template>
           </div>
@@ -194,7 +194,7 @@
       <!-- Search Results & Sorting Listbox (Left) -->
       <div class="basis-3/4 h-fit">
         <!-- Search Sorting Listbox -->
-        <div class="hidden lg:flex justify-end py-4">
+        <div class="hidden lg:flex py-4">
           <div class="inline-flex">
             <label class="self-center">Sort By</label>
             <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
@@ -376,19 +376,7 @@
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
       <div class="lg:hidden flex justify-between py-4">
-        <div
-          class="
-            cursor-pointer
-            text-mission-light-blue
-            dark:text-teal-400
-            energy:text-energy-yellow
-            self-center
-          "
-          @click="openMobileFacetsDialog"
-        >
-          Show Filters
-        </div>
-        <div class="flex">
+        <div class="inline-flex">
           <label class="self-center">Sort By</label>
           <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
             <div class="relative">
@@ -470,6 +458,18 @@
               </transition>
             </div>
           </Listbox>
+        </div>
+        <div
+          class="
+            cursor-pointer
+            text-mission-light-blue
+            dark:text-teal-400
+            energy:text-energy-yellow
+            self-center
+          "
+          @click="openMobileFacetsDialog"
+        >
+          Show Filters
         </div>
       </div>
       <!-- Mobile Result Facets Dialog -->
@@ -579,17 +579,9 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
-import SearchFormListbox from "@/components/SearchFormListbox";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
-
-const testItems = [
-  "test item 1",
-  "test item 2",
-  "test item 3",
-  "test item 4",
-  "test item 5",
-];
+import { getItems } from "@/data";
 
 const sortOptions = [
   { label: "Newest", key: "desc" },
@@ -612,7 +604,6 @@ export default {
     ChevronUpIcon,
     SelectorIcon,
     XIcon,
-    SearchFormListbox,
     SearchResultsTablePagination,
     SearchResultsFacets,
   },
@@ -635,42 +626,42 @@ export default {
       regions: {
         label: "Regions & Countries",
         model: "",
-        list: testItems,
+        list: getItems("regions"),
       },
       issues: {
         label: "Issues & Topics",
         model: "",
-        list: testItems,
+        list: getItems("issues"),
       },
       reporting: {
         label: "Reporting & Product Types",
         model: "",
-        list: testItems,
+        list: getItems("reporting"),
       },
       classifications: {
         label: "Classifications",
         model: "",
-        list: testItems,
+        list: getItems("classifications"),
       },
       media_types: {
         label: "Media Types",
         model: "",
-        list: testItems,
+        list: getItems("media"),
       },
       nonstate_actors: {
         label: "Non State Actors",
         model: "",
-        list: testItems,
+        list: getItems("non-state"),
       },
       producing_offices: {
         label: "Producing Offices",
         model: "",
-        list: testItems,
+        list: getItems("producing"),
       },
       frontpage_featured: {
         label: "Front Page Featured",
         model: "",
-        list: testItems,
+        list: getItems("front-page"),
       },
     });
 
@@ -715,7 +706,6 @@ export default {
       aggregations,
       currentPage,
       queryFilters,
-      testItems,
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,

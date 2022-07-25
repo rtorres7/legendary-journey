@@ -30,6 +30,9 @@ const routes = [
     path: '/search',
     name: 'search',
     component: SearchView,
+    meta: {
+      title: 'Search',
+    },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
 ]

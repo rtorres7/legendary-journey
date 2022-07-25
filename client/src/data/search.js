@@ -1,4 +1,5 @@
 import * as dayjs from "dayjs";
+import { countries } from '@/data'
 
 const buildArray = (item, count, sort_dir) => {
   const array = [];
@@ -439,6 +440,133 @@ export const getSearchDataFromUrl = (url, { query }) => {
         siteEnhancement: []
       }
     }
+  }
+}
+
+export const getItems = (type) => {
+  switch (type) {
+    case 'regions': return countries
+    case 'issues': return [
+      {
+        name: 'Eastern Europe Geopolitics'
+      },
+      {
+        name: 'Economic Turmoil'
+      },
+      {
+        name: 'Russian Invasion'
+      },
+      {
+        name: 'Ukraine War Crisis'
+      },
+      {
+        name: 'Ukraine War'
+      }
+    ]
+    case 'reporting': return [
+      {
+        name: 'Analysis: Critical'
+      },
+      {
+        name: 'Analysis: Live'
+      },
+      {
+        name: 'Reporting: Collaboration'
+      },
+      {
+        name: 'Reporting: Enterprise'
+      },
+      {
+        name: 'Reporting: Mass'
+      },
+      {
+        name: 'Reporting: Mission'
+      },
+      {
+        name: 'Reporting: Open Source'
+      },
+      {
+        name: 'Reporting: Operations'
+      },
+      {
+        name: 'Article'
+      },
+      {
+        name: 'Audio'
+      },
+      {
+        name: 'Translation'
+      },
+      {
+        name: 'Video'
+      }
+    ]
+    case 'classifications': return [
+      {
+        name: 'UNCLASSIFIED'
+      }
+    ]
+    case 'media': return [
+      {
+        name: 'audio'
+      },
+      {
+        name: 'interactive'
+      },
+      {
+        name: 'graphic'
+      },
+      {
+        name: 'map'
+      },
+      {
+        name: 'video'
+      },
+    ]
+    case 'non-state': return [
+      {
+        name: 'EU'
+      },
+      {
+        name: 'NATO'
+      },
+      {
+        name: 'UN'
+      },
+    ]
+    case 'producing': return [
+      {
+        name: 'Directorate of CounterTerrorism'
+      },
+      {
+        name: 'Directorate of Defense'
+      },
+      {
+        name: 'Directorate of Foreign Affairs'
+      },
+      {
+        name: 'National Office'
+      },
+      {
+        name: 'Office of Command'
+      },
+      {
+        name: 'Surveillance Office'
+      },
+    ]
+    case 'front-page': return [
+      {
+        name: 'Featured'
+      }
+    ]
+    default:
+      return [
+        "test item 1",
+        "test item 2",
+        "test item 3",
+        "test item 4",
+        "test item 5",
+      ];
   }
 }
 
