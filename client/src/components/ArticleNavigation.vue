@@ -12,8 +12,9 @@
     <div>
       <ArticleNavigationButton
         @click="returnHome"
-        tabIndex="0">
-        <span class="sr-only">Home</span>
+        @keyup.enter="returnHome"
+        tabIndex="0"
+      >
         Home
       </ArticleNavigationButton>
     </div>
@@ -23,16 +24,15 @@
           <ArticleNavigationButton
             :disabled="true"
           >
-            <span class="sr-only">Previous</span>
             Previous
           </ArticleNavigationButton>
         </template>
         <template v-else>
           <ArticleNavigationButton
             @click="previousArticle"
+            @keyup.enter="previousArticle"
             tabIndex="0"
           >
-            <span class="sr-only">Previous</span>
             Previous
           </ArticleNavigationButton>
         </template>
@@ -45,19 +45,18 @@
       </div>
       <div>
         <template v-if="currentArticle() === articles.length">
-            <ArticleNavigationButton
-              :disabled="true"
-            >
-              <span class="sr-only">Next</span>
-              Next
-            </ArticleNavigationButton>      
+          <ArticleNavigationButton
+            :disabled="true"
+          >
+            Next
+          </ArticleNavigationButton>      
         </template>
         <template v-else>
           <ArticleNavigationButton
             @click="nextArticle"
+            @keyup.enter="nextArticle"
             tabIndex="0"
           >
-            <span class="sr-only">Next</span>
             Next
           </ArticleNavigationButton>
         </template>
