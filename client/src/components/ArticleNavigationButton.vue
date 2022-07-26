@@ -11,6 +11,8 @@
         text-sm
         font-medium
         border
+        rounded
+        shadow
         border-gray-300
         dark:border-slate-300 
         energy:border-gray-300
@@ -40,7 +42,9 @@
         select-none        
         text-sm
         font-medium
-        border 
+        border
+        rounded
+        shadow
         border-gray-400
         dark:border-slate-300/50
         energy:border-gray-300/50

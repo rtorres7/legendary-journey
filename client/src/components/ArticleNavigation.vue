@@ -10,12 +10,13 @@
     "
   >
     <div>
-      <router-link :to="{ name: 'home' }">
-        <ArticleNavigationButton>
-          <span class="sr-only">Home</span>
-          Home
-        </ArticleNavigationButton>
-      </router-link>
+      <ArticleNavigationButton
+        @click="returnHome"
+        @keyup.enter="returnHome"
+        tabIndex="0"
+      >
+        Home
+      </ArticleNavigationButton>
     </div>
     <div class="flex flex-wrap sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2">
       <div>
@@ -23,15 +24,15 @@
           <ArticleNavigationButton
             :disabled="true"
           >
-            <span class="sr-only">Previous</span>
             Previous
           </ArticleNavigationButton>
         </template>
         <template v-else>
           <ArticleNavigationButton
             @click="previousArticle"
+            @keyup.enter="previousArticle"
+            tabIndex="0"
           >
-            <span class="sr-only">Previous</span>
             Previous
           </ArticleNavigationButton>
         </template>
@@ -44,18 +45,18 @@
       </div>
       <div>
         <template v-if="currentArticle() === articles.length">
-            <ArticleNavigationButton
-              :disabled="true"
-            >
-              <span class="sr-only">Next</span>
-              Next
-            </ArticleNavigationButton>      
+          <ArticleNavigationButton
+            :disabled="true"
+          >
+            Next
+          </ArticleNavigationButton>      
         </template>
         <template v-else>
           <ArticleNavigationButton
             @click="nextArticle"
+            @keyup.enter="nextArticle"
+            tabIndex="0"
           >
-            <span class="sr-only">Next</span>
             Next
           </ArticleNavigationButton>
         </template>
@@ -100,6 +101,9 @@ export default {
       if(currentIndex < this.articles.length - 1) {
         this.$router.push(`/article/${this.articles[currentIndex + 1].id}`);
       }
+    },
+    returnHome() {
+      this.$router.push({ name: 'home'});
     },
   },
 }
