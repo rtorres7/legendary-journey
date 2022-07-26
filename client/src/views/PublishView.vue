@@ -49,10 +49,11 @@
                   v-model="selectedCountries"
                   name="countriesListbox"
                   multiple
-                  aria-label="select a country from the dropdown"
+                  aria-label="select countries from the dropdown"
                 >
                   <div class="relative">
                     <ListboxButton
+                      aria-label="countries"
                       class="
                       min-h-[2rem]
                       flex
@@ -132,7 +133,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                                 : 'bg-none',
                             ]"
                           >
@@ -156,10 +157,11 @@
                   v-model="selectedTopics"
                   name="topicsListbox"
                   multiple
-                  aria-label="select a topic from the dropdown"
+                  aria-label="select topics from the dropdown"
                 >
                   <div class="relative">
                     <ListboxButton
+                      aria-label="topics"
                       class="
                         min-h-[2rem]
                         flex
@@ -239,7 +241,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                                 : 'bg-none',
                             ]"
                           >
@@ -256,16 +258,17 @@
               </div>
             </div>
             <div>
-              <label class="block mb-2" for="actorssListbox">Non-State Actors</label>
+              <label class="block mb-2" for="actorsListbox">Non-State Actors</label>
               <Listbox
                 id="actorsListbox"
                 v-model="selectedActors"
                 name="actorsListbox"
                 multiple
-                aria-label="select a Non-State Actor from the dropdown"
+                aria-label="select Non-State Actors from the dropdown"
               >
                 <div class="relative">
                   <ListboxButton
+                    aria-label="non-state actors"
                     class="
                     min-h-[2rem]
                     flex
@@ -345,7 +348,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                               : 'bg-none',
                           ]"
                         >
@@ -694,8 +697,8 @@
               />
             </div>
             <div>
-                <label for="pocInfo" class="block mb-2">Poc Info</label>
-                <textarea id="pocInfo" maxlength="4000" rows="4"
+                <label for="pocInfo" class="block mb-2" aria-hidden="true">Poc Info</label>
+                <textarea id="pocInfo" maxlength="4000" rows="4" aria-label="p o c info"
                   class=" 
                     min-h-[2rem]
                     w-full
@@ -729,6 +732,7 @@
                 >
                   <div class="relative">
                     <ListboxButton
+                      aria-label="producing office"
                       class="
                         min-h-[2rem]
                         flex
@@ -809,7 +813,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                                 : 'bg-none',
                             ]"
                           >
@@ -826,7 +830,9 @@
               </div>
               <div>
               <label class="block mb-2" for="analysisListbox">Analysis Type</label>
-              <PublishingFormListbox v-model="selectedAnalysisType.model" :items="analysisTypes" id="analysisListbox" name="analysisListbox" />
+              <PublishingFormListbox v-model="selectedAnalysisType.model" :items="analysisTypes" id="analysisListbox" name="analysisListbox" 
+                aria-label="select an analysis type from the dropdown"
+              />
             </div>
           </div>
         </div>
