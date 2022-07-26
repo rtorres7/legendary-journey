@@ -2,6 +2,7 @@
   <BaseCard
     class="h-[300px] xl:max-h-[264px]"
     :class="loading ? 'animate-pulse' : ''"
+    hoverable
   >
     <template v-if="loading">
       <div
@@ -63,12 +64,7 @@
 </template>
 
 <script>
-import BaseCard from "@/components/base/BaseCard";
-
 export default {
-  components: {
-    BaseCard,
-  },
   props: {
     article: Object,
     loading: Boolean,

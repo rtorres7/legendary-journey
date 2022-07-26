@@ -7,7 +7,9 @@
       energy:text-gray-300 energy:bg-gray-800
       sticky
       top-0
-      z-10
+      z-50
+      min-h-[72px]
+      lg:h-full
       backdrop-filter backdrop-blur
     "
   >
@@ -77,36 +79,6 @@
             <div class="text-sm leading-6 pl-6 pr-3">
               <ul class="flex space-x-3 xl:space-x-4">
                 <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Community
-                  </div>
-                </li>
-                <li>
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Special Editions
-                  </div>
-                </li>
-                <li>
                   <Menu as="div" class="relative">
                     <MenuButton
                       class="
@@ -174,7 +146,7 @@
                   </Menu>
                 </li>
                 <li>
-                  <BannerNavPopover>
+                  <BannerNavPopover :wideShrunk="true">
                     <template #heading>
                       Regions<ChevronDownIcon
                         class="h-3 w-3 ml-1"
@@ -182,7 +154,7 @@
                       />
                     </template>
                     <template #content>
-                      <div class="hidden lg:block">
+                      <div class="hidden lg:block lg:max-w-[768px] lg:m-auto">
                         <div
                           class="grid grid-cols-3 gap-6 pb-4"
                           aria-label="select a region or subregion"
@@ -232,10 +204,12 @@
                   </BannerNavPopover>
                 </li>
                 <li>
-                  <BannerNavPopover :title="'Countries and World Map'">
+                  <BannerNavPopover>
                     <template #heading>
-                      <span class="sr-only">View countries and world map</span>
-                      <GlobeIcon class="h-6 w-6" aria-hidden="true" />
+                      Countries<ChevronDownIcon
+                        class="h-3 w-3 ml-1"
+                        aria-hidden="true"
+                      />
                     </template>
                     <template #content>
                       <div class="flex items-center mb-4">
@@ -257,7 +231,7 @@
                                 text-slate-800
                                 dark:text-gray-300
                                 energy:text-gray-300
-                                bg-slate-200
+                                bg-slate-100
                                 dark:bg-slate-800
                                 energy:bg-gray-600
                                 rounded-lg
@@ -306,7 +280,7 @@
                                   text-slate-800
                                   dark:text-gray-300
                                   energy:text-gray-300
-                                  bg-slate-200
+                                  bg-slate-100
                                   dark:bg-slate-800
                                   energy:bg-gray-600
                                   rounded-md
@@ -328,7 +302,7 @@
                                   <li
                                     :class="[
                                       active
-                                        ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                        ? 'bg-slate-200 dark:bg-slate-700 energy:bg-gray-700'
                                         : 'bg-none',
                                     ]"
                                   >
@@ -344,6 +318,110 @@
                     </template>
                   </BannerNavPopover>
                 </li>
+                <li class="hidden xl:block">
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Community
+                  </div>
+                </li>
+                <li class="hidden xl:block">
+                  <div
+                    class="
+                      font-semibold
+                      flex
+                      items-center
+                      hover:text-amber-300
+                      dark:hover:text-teal-400
+                      energy:hover:text-energy-yellow
+                    "
+                    tabindex="0"
+                  >
+                    Special Editions
+                  </div>
+                </li>
+                <li class="xl:hidden">
+                  <Menu as="div" class="relative">
+                    <MenuButton
+                      class="
+                        flex
+                        items-center
+                        font-semibold
+                        hover:text-amber-300
+                        dark:hover:text-teal-400
+                        energy:hover:text-energy-yellow
+                      "
+                      tabindex="0"
+                    >
+                      More<ChevronDownIcon
+                        class="h-3 w-3 ml-1"
+                        aria-hidden="true"
+                      />
+                    </MenuButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <MenuItems
+                        class="
+                          origin-top-right
+                          absolute
+                          right-0
+                          mt-2
+                          w-40
+                          rounded-md
+                          shadow-2xl
+                          py-2
+                          ring-1 ring-black ring-opacity-5
+                          focus:outline-none
+                          text-sm
+                          bg-mission-blue/95
+                          dark:bg-dark-space-blue/95
+                          energy:bg-gray-800/95
+                          dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                      >
+                        <MenuItem as="div" v-slot="{ active }">
+                          <a
+                            href="/"
+                            :class="[
+                              active
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                : '',
+                              'py-1 px-3 flex cursor-pointer',
+                            ]"
+                            >Community</a
+                          >
+                        </MenuItem>
+                        <MenuItem as="div" v-slot="{ active }">
+                          <a
+                            href="/"
+                            :class="[
+                              active
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                : '',
+                              'py-1 px-3 flex cursor-pointer',
+                            ]"
+                            >Special Editions</a
+                          >
+                        </MenuItem>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
+                </li>
               </ul>
             </div>
             <div
@@ -352,7 +430,7 @@
                 flex
                 items-center
                 space-x-2
-                xl:space-x-4
+                xl:space-x-3
                 ml-2
                 pl-2
                 xl:ml-4 xl:pl-4
@@ -500,7 +578,7 @@
                       focus:ring-white
                     "
                   >
-                    <span class="sr-only">Open user menu</span>
+                    <span class="sr-only">Open user menu.</span>
                     <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
                   </MenuButton>
                 </div>
@@ -548,8 +626,7 @@
                       >
                     </MenuItem>
                     <MenuItem>
-                      <a
-                        href="/"
+                      <router-link to="/publish" 
                         class="
                           py-1
                           px-3
@@ -559,6 +636,22 @@
                           flex
                           items-center
                           cursor-pointer
+                        "
+                      >
+                        Publish an Article
+                      </router-link>
+                    </MenuItem>
+                    <MenuItem>
+                      <a
+                        href="/"
+                        class="
+                          flex
+                          cursor-pointer
+                          py-1
+                          px-3
+                          hover:bg-slate-700/80
+                          dark:hover:bg-slate-600/80
+                          energy:hover:bg-gray-600/80
                         "
                         >Settings</a
                       >
@@ -604,11 +697,12 @@
             <span class="sr-only">Open main menu</span>
             <MenuIcon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <div class="px-2 w-full rounded-md pointer-events-auto">
-            <div
+          <BannerSearchBar class="px-2 w-full" />
+          <!-- TODO: Remove this below -->
+          <!-- <div
               class="
                 flex
-                w-full
+                max-w-[500px]
                 items-center
                 text-sm
                 leading-6
@@ -619,7 +713,8 @@
                 py-1.5
                 pl-2
                 pr-3
-                bg-slate-300
+                m-auto
+                bg-slate-100
                 dark:bg-slate-800
                 energy:bg-gray-600
               "
@@ -642,13 +737,13 @@
                   text-slate-800
                   dark:text-gray-300
                   energy:text-gray-300
-                  bg-slate-300
+                  bg-slate-100
                   dark:bg-slate-800
                   energy:bg-gray-600
                 "
               />
-            </div>
-          </div>
+            </div> -->
+
           <!-- Mobile user menu button -->
           <button
             type="button"
@@ -764,7 +859,7 @@
                     >
                   </li>
                 </ul>
-                <div
+                <ul
                   class="
                     mt-6
                     pt-6
@@ -774,7 +869,7 @@
                     energy:border-gray-700/25
                   "
                 >
-                  <div class="flex items-center justify-between">
+                  <li class="flex items-center justify-between">
                     <label for="theme" class="font-normal">Switch theme</label>
                     <Listbox v-model="selectedTheme">
                       <div class="relative mt-1">
@@ -872,271 +967,37 @@
                         </ListboxOptions>
                       </div>
                     </Listbox>
-                  </div>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between">
-                      <SwitchLabel class="mr-4">Enable Alert</SwitchLabel>
-                      <Switch
-                        v-model="alertEnabled"
-                        :class="
-                          alertEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            alertEnabled ? 'translate-x-6' : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between">
-                      <SwitchLabel class="mr-4"
-                        >Enable Loading Articles</SwitchLabel
-                      >
-                      <Switch
-                        v-model="loadingArticlesEnabled"
-                        :class="
-                          loadingArticlesEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            loadingArticlesEnabled
-                              ? 'translate-x-6'
-                              : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                </div>
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-pointer"
+                      @click="openTestConsoleModalMobile"
+                      >Test Console</a
+                    >
+                  </li>
+                </ul>
               </div>
             </TransitionChild>
           </div>
         </div>
       </Dialog>
     </TransitionRoot>
-    <!-- Test Console dialog -->
-    <TransitionRoot appear :show="isTestConsoleMenuOpen" as="template">
-      <Dialog as="div" @close="closeTestConsoleModal">
-        <div class="fixed inset-0 z-20 overflow-y-auto w-full">
-          <div class="min-h-screen px-4 text-center">
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0"
-              enter-to="opacity-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100"
-              leave-to="opacity-0"
-            >
-              <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
-            </TransitionChild>
-            <span class="inline-block h-screen align-middle" aria-hidden="true">
-              &#8203;
-            </span>
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
-            >
-              <div
-                class="
-                  inline-block
-                  w-full
-                  max-w-xs
-                  p-6
-                  my-8
-                  text-left
-                  align-middle
-                  transition-all
-                  transform
-                  text-slate-700
-                  dark:text-slate-300
-                  energy:text-gray-300
-                  bg-slate-100
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  shadow-lg
-                  rounded-lg
-                "
-              >
-                <div class="mt-6 pt-6">
-                  <button
-                    type="button"
-                    class="
-                      absolute
-                      top-5
-                      right-5
-                      w-8
-                      h-8
-                      flex
-                      items-center
-                      justify-center
-                    "
-                    tabindex="0"
-                    @click="closeTestConsoleModal"
-                  >
-                    <span class="sr-only">Close navigation</span
-                    ><XIcon class="h-5 w-5" aria-hidden="true" />
-                  </button>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between">
-                      <SwitchLabel class="mr-4">Enable Alert</SwitchLabel>
-                      <Switch
-                        v-model="alertEnabled"
-                        :class="
-                          alertEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            alertEnabled ? 'translate-x-6' : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                  <SwitchGroup>
-                    <div class="flex items-center justify-between mt-2">
-                      <SwitchLabel class="mr-4"
-                        >Enable Loading Articles</SwitchLabel
-                      >
-                      <Switch
-                        v-model="loadingArticlesEnabled"
-                        :class="
-                          loadingArticlesEnabled
-                            ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                            : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                        "
-                        class="
-                          relative
-                          inline-flex
-                          items-center
-                          h-6
-                          transition-colors
-                          rounded-full
-                          w-11
-                          focus:outline-none
-                          focus:ring-2
-                          focus:ring-offset-2
-                          focus:ring-slate-500
-                        "
-                      >
-                        <span
-                          :class="
-                            loadingArticlesEnabled
-                              ? 'translate-x-6'
-                              : 'translate-x-1'
-                          "
-                          class="
-                            inline-block
-                            w-4
-                            h-4
-                            transition-transform
-                            transform
-                            bg-white
-                            rounded-full
-                          "
-                        />
-                      </Switch>
-                    </div>
-                  </SwitchGroup>
-                </div>
-              </div>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
+    <TestConsoleDialog
+      :isOpen="isTestConsoleMenuOpen"
+      @close="closeTestConsoleModal"
+      v-model:alert="alertEnabled"
+    />
   </nav>
 </template>
 
 <script>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
-import BannerSearchBar from "@/components/BannerSearchBar.vue";
+import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
 import MobileSideMenu from "@/components/MobileSideMenu";
+import TestConsoleDialog from "@/components/TestConsoleDialog";
 import {
   Dialog,
   DialogOverlay,
@@ -1148,9 +1009,6 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-  Switch,
-  SwitchGroup,
-  SwitchLabel,
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
@@ -1160,18 +1018,17 @@ import {
   DesktopComputerIcon,
   DotsVerticalIcon,
   ExclamationCircleIcon,
-  GlobeIcon,
   LightningBoltIcon,
   MenuIcon,
   MoonIcon,
-  SearchIcon,
+  //SearchIcon,
   SelectorIcon,
   SunIcon,
   UserCircleIcon,
   XIcon,
 } from "@heroicons/vue/outline";
 
-import { regions, countries } from "@/data/regions.js";
+import { regions, countries } from "@/data";
 
 const mainNavigation = [
   { name: "Home", href: "/", current: true },
@@ -1198,6 +1055,7 @@ export default {
     BannerSearchBar,
     BannerNavPopover,
     MobileSideMenu,
+    TestConsoleDialog,
     BannerNavMap,
     Dialog,
     DialogOverlay,
@@ -1209,9 +1067,6 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
-    Switch,
-    SwitchGroup,
-    SwitchLabel,
     TransitionChild,
     TransitionRoot,
     BellIcon,
@@ -1219,11 +1074,10 @@ export default {
     DesktopComputerIcon,
     DotsVerticalIcon,
     ExclamationCircleIcon,
-    GlobeIcon,
     LightningBoltIcon,
     MenuIcon,
     MoonIcon,
-    SearchIcon,
+    //SearchIcon,
     SelectorIcon,
     SunIcon,
     UserCircleIcon,
@@ -1267,27 +1121,8 @@ export default {
     });
 
     const alertEnabled = ref(false);
-    const loadingArticlesEnabled = ref(false);
-
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
-
-    const loadingArticlesFromStore = computed(
-      () => store.state.articles.loading
-    );
-
-    watch(loadingArticlesEnabled, (enabled) => {
-      if (enabled) {
-        store.dispatch("articles/removeHomeArticles");
-      } else {
-        store.dispatch("articles/getHomeArticles");
-      }
-    });
-
-    watch(loadingArticlesFromStore, (loading) => {
-      loadingArticlesEnabled.value = loading;
-    });
-
     const selectedCountry = ref(countries[0]);
 
     return {
@@ -1304,7 +1139,6 @@ export default {
       selectedTheme,
       changeTheme,
       alertEnabled,
-      loadingArticlesEnabled,
       currentUsername,
       loadingUser,
     };
@@ -1334,6 +1168,10 @@ export default {
       this.isTestConsoleMenuOpen = false;
     },
     openTestConsoleModal() {
+      this.isTestConsoleMenuOpen = true;
+    },
+    openTestConsoleModalMobile() {
+      this.isUserMenuOpen = false;
       this.isTestConsoleMenuOpen = true;
     },
     openPDF() {

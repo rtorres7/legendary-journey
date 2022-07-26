@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Setting highlight colors globally for emphasized text */
+@layer base {
+  em {
+    @apply bg-slate-200;
+  }
+
+  .dark em {
+    @apply bg-slate-700;
+  }
+
+  .energy em {
+    @apply bg-gray-700;
+  }
+}
