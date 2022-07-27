@@ -80,10 +80,11 @@
                   v-model="selectedCountries"
                   name="countriesListbox"
                   multiple
-                  aria-label="select a country from the dropdown"
+                  aria-label="select countries from the dropdown"
                 >
                   <div class="relative">
                     <ListboxButton
+                      aria-label="countries"
                       class="
                         min-h-[2rem]
                         flex
@@ -162,7 +163,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                                 : 'bg-none',
                             ]"
                           >
@@ -203,10 +204,11 @@
                   v-model="selectedTopics"
                   name="topicsListbox"
                   multiple
-                  aria-label="select a topic from the dropdown"
+                  aria-label="select topics from the dropdown"
                 >
                   <div class="relative">
                     <ListboxButton
+                      aria-label="topics"
                       class="
                         min-h-[2rem]
                         flex
@@ -283,7 +285,7 @@
                           <li
                             :class="[
                               active
-                                ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                                 : 'bg-none',
                             ]"
                           >
@@ -303,7 +305,7 @@
               </div>
             </div>
             <div>
-              <label class="block mb-2" for="actorssListbox"
+              <label class="block mb-2" for="actorsListbox"
                 >Non-State Actors</label
               >
               <Listbox
@@ -311,10 +313,11 @@
                 v-model="selectedActors"
                 name="actorsListbox"
                 multiple
-                aria-label="select a Non-State Actor from the dropdown"
+                aria-label="select Non-State Actors from the dropdown"
               >
                 <div class="relative">
                   <ListboxButton
+                    aria-label="non-state actors"
                     class="
                       min-h-[2rem]
                       flex
@@ -384,7 +387,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                               : 'bg-none',
                           ]"
                         >
@@ -570,7 +573,6 @@
                 v-model="editorData"
                 :config="editorConfig"
                 id="body"
-                class="dark:bg-red-500"
               ></ckeditor>
             </div>
             <div>
@@ -810,11 +812,14 @@
               />
             </div>
             <div>
-              <label for="pocInfo" class="block mb-2">Poc Info</label>
+              <label for="pocInfo" class="block mb-2" aria-hidden="true"
+                >Poc Info</label
+              >
               <textarea
                 id="pocInfo"
                 maxlength="4000"
                 rows="4"
+                aria-label="p o c info"
                 class="
                   min-h-[2rem]
                   w-full
@@ -850,6 +855,7 @@
               >
                 <div class="relative">
                   <ListboxButton
+                    aria-label="producing office"
                     class="
                       min-h-[2rem]
                       flex
@@ -920,7 +926,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                               : 'bg-none',
                           ]"
                         >
@@ -944,6 +950,7 @@
                 :items="analysisTypes"
                 id="analysisListbox"
                 name="analysisListbox"
+                aria-label="select an analysis type from the dropdown"
               />
             </div>
           </div>
@@ -952,6 +959,7 @@
       <div class="flex gap-20 flex-wrap lg:flex-nowrap gap-y-8 mb-8">
         <div class="flex gap-3">
           <button
+            @click.prevent
             type="submit"
             class="
               bg-slate-100
@@ -968,6 +976,7 @@
             Publish
           </button>
           <button
+            @click.prevent
             class="
               bg-slate-100
               hover:bg-slate-200/80
@@ -983,6 +992,7 @@
             Save and Generate PDF
           </button>
           <button
+            @click.prevent
             class="
               bg-slate-100
               hover:bg-slate-200/80
@@ -998,6 +1008,7 @@
             Preview
           </button>
           <button
+            @click.prevent
             class="
               bg-slate-100
               hover:bg-slate-200/80
@@ -1015,6 +1026,7 @@
         </div>
         <div class="flex items-end gap-3">
           <button
+            @click.prevent
             class="
               bg-red-800
               hover:bg-red-900

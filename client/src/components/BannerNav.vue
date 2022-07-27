@@ -7,7 +7,7 @@
       energy:text-gray-300 energy:bg-gray-800
       sticky
       top-0
-      z-50
+      z-10
       min-h-[72px]
       lg:h-full
       backdrop-filter backdrop-blur

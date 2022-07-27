@@ -7,6 +7,7 @@
   >
     <div class="relative">
       <ListboxButton
+        :aria-label="name"
         class="
         min-h-[2rem]
         flex
@@ -84,7 +85,7 @@
             <li
               :class="[
                 active
-                  ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                   : 'bg-none',
               ]"
             >

@@ -2,22 +2,49 @@
   <template v-if="routerError">
     <NotFound />
   </template>
-  <template v-else>
+  <template v-else>  
+    <div>
+      <ArticleNavigation :selectedArticle="selectedArticle"></ArticleNavigation>
+    </div>
     <div
       class="
         flex flex-wrap
         md:flex-nowrap
         justify-between
         md:space-x-10
-        lg:space-x-0
+        lg:space-x-5
         mb-8
       "
-    >
+    > 
+      <div class="flex md:flex-col gap-y-4 gap-x-4 mb-4">
+        <PrinterIcon class="h-5 w-5 cursor-pointer" />
+        <MailIcon class="h-5 w-5 cursor-pointer" />
+        <span class="relative inline-block">
+          <ChatIcon class="h-5 w-5 cursor-pointer" />
+          <span v-if="(comments.length)" class="
+            absolute
+            top-0 
+            left-0 
+            inline-flex 
+            items-center 
+            justify-center 
+            p-1
+            text-[.5rem]
+            font-bold 
+            leading-none 
+            text-red-100 
+            transform 
+            -translate-x-1/2 
+            -translate-y-1/2 
+            bg-blue-600 
+            rounded-full">
+              {{ comments.length }}
+          </span>
+        </span>
+        <FolderOpenIcon class="h-5 w-5 cursor-pointer" />
+        <TagIcon class="h-5 w-5 cursor-pointer" />
+      </div>
       <div class="md:basis-9/12 flex flex-col space-y-4">
-        <div class="flex space-x-2">
-          <PrinterIcon class="h-5 w-5 cursor-pointer" />
-          <MailIcon class="h-5 w-5 cursor-pointer" />
-        </div>
         <p class="font-semibold text-sm lg:text-md uppercase">article</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
           {{ selectedArticle.title }}
@@ -163,21 +190,63 @@
             </router-link>
           </div>
         </div>
-        <div class="flex flex-col space-y-3">
-          <p class="font-semibold">Related Products</p>
-          <router-link to="#" class="hover:underline text-sm"
-            >(U) This is a related product title</router-link
-          >
-          <router-link to="#" class="hover:underline text-sm"
-            >(U) Sample title of another related product</router-link
-          >
+        <div
+          class="
+            border-t-2
+            md:border-t-0
+            border-b-2
+            pb-4
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+            flex flex-col
+            space-y-3
+          "
+        >
+          <div class="flex flex-col space-y-3">
+              <p class="font-semibold">Related Products</p>
+              <router-link to="#" class="hover:underline text-sm"
+                >(U) This is a related product title</router-link
+              >
+              <router-link to="#" class="hover:underline text-sm"
+                >(U) Sample title of another related product</router-link
+              >
+          </div>
         </div>
-        <p class="font-semibold">Tags</p>
-        <p class="font-medium text-sm">{{ selectedArticle.tags.join(", ") }}</p>
-        <!-- <div>
-        <p class="font-semibold">Metrics</p>
-        <p>Unique Readers (1792)</p>
-      </div> -->
+        <div
+          class="
+            border-t-2
+            md:border-t-0
+            border-b-2
+            pb-4
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+            flex flex-col
+            space-y-3
+          "
+        >
+         <p class="font-semibold">Tags</p>
+          <p class="font-medium text-sm">{{ selectedArticle.tags.join(", ") }}</p>
+        </div>
+        <div
+         class="
+            border-t-2
+            md:border-t-0
+            border-b-2
+            pb-4
+            border-slate-900/10
+            dark:border-slate-50/[0.06]
+            energy:border-gray-700/25
+            flex flex-col
+            space-y-3
+          ">
+            <p class="font-semibold">Metrics</p>
+            <p class="font-medium text-sm">Unique Readers (2608)</p>
+          <div>
+            <ArticleMetrics></ArticleMetrics>
+          </div>
+        </div>
       </div>
     </div>
   </template>
@@ -185,21 +254,28 @@
 
 <script>
 import { ref } from "vue";
+import ArticleNavigation from "@/components/ArticleNavigation.vue"
 import ArticleCommentForm from "@/components/ArticleCommentForm.vue";
 import ArticleCommentList from "@/components/ArticleCommentList.vue";
+import ArticleMetrics from "@/components/ArticleMetrics.vue";
 import NotFound from "@/components/NotFound";
-import { PrinterIcon, MailIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import { PrinterIcon, MailIcon, ChatIcon, FolderOpenIcon, TagIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { articles } from "@/data";
 
 export default {
   name: "ArticlePageView",
   components: {
+    ArticleNavigation,
     ArticleCommentForm,
     ArticleCommentList,
+    ArticleMetrics,
     NotFound,
     PrinterIcon,
     MailIcon,
+    ChatIcon,
+    FolderOpenIcon,
+    TagIcon,
     ChevronDownIcon,
     Disclosure,
     DisclosureButton,
