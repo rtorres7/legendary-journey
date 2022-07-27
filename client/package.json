@@ -5,20 +5,26 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "serve:low": "cross-env NODE_ENV=low vue-cli-service serve --mode low",
+    "build:low": "cross-env NODE_ENV=low vue-cli-service build --mode low",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@amcharts/amcharts5": "^5.2.4",
     "@amcharts/amcharts5-geodata": "^5.0.3",
-    "@headlessui/vue": "^1.6.4",
+    "@ckeditor/ckeditor5-build-classic": "^34.2.0",
+    "@ckeditor/ckeditor5-vue": "^4.0.1",
+    "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.1",
     "inter-ui": "^3.19.3",
+    "lodash": "^4.17.21",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue3-carousel": "^0.1.38",
+    "vue3-simple-typeahead": "^1.0.9",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
@@ -31,6 +37,7 @@
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "autoprefixer": "^10.4.4",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
     "postcss": "^8.4.12",

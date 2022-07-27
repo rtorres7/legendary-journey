@@ -6,13 +6,13 @@
       role="main"
       class="
         text-slate-900
-        bg-mission-gray
+        bg-gray-50
         dark:text-slate-300 dark:bg-dark-navy
         energy:text-gray-300 energy:bg-gray-900
       "
     >
       <div
-        class="max-w-8xl mx-auto py-3 px-4 sm:px-6 lg:px-8"
+        class="max-w-8xl min-h-[85vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
         ref="mainContent"
         tabindex="-1"
       >
@@ -25,6 +25,7 @@
 
 <script>
 import { onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
@@ -37,6 +38,7 @@ export default {
     // ScrollToTopBtn,
   },
   setup() {
+    const store = useStore();
     const topOfApp = ref(null);
     const mainContent = ref(null);
 
@@ -45,6 +47,8 @@ export default {
     });
 
     onMounted(() => {
+      store.dispatch("user/loadUser");
+
       document.documentElement.classList.remove(
         ...document.documentElement.classList
       );

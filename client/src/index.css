@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Setting highlight colors globally for emphasized text */
+@layer base {
+  em {
+    @apply bg-slate-200;
+  }
+
+  .dark em {
+    @apply bg-slate-700;
+  }
+
+  .energy em {
+    @apply bg-gray-700;
+  }
+
+  .dark .ck-content {
+    @apply text-slate-300;
+  }
+
+  .energy .ck-content {
+    @apply text-gray-300;
+  }
+
+  .dark .ck.ck-editor__main>.ck-editor__editable {
+    @apply bg-slate-700;
+  }
+
+  .energy .ck.ck-editor__main>.ck-editor__editable {
+    @apply bg-gray-700;
+  }
+}

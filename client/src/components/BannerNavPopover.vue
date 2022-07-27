@@ -10,6 +10,7 @@
         energy:hover:text-energy-yellow
       "
       tabindex="0"
+      :title="title"
     >
       <slot name="heading"></slot>
     </PopoverButton>
@@ -22,15 +23,8 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <PopoverPanel
-        class="
-          origin-top-right
-          absolute
-          min-w-[46rem]
-          right-0
-          mt-3
-          transform
-          z-10
-        "
+        class="origin-top-right min-w-[46rem] right-0 mt-3 transform z-10"
+        :class="wideShrunk ? 'w-full fixed xl:absolute ' : 'absolute'"
       >
         <div
           class="
@@ -39,9 +33,9 @@
             w-full
             ring-1 ring-black ring-opacity-5
             focus:outline-none
-            bg-mission-blue
+            bg-mission-blue/95
             dark:bg-dark-space-blue/95
-            energy:bg-gray-700
+            energy:bg-gray-800/95
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
             energy:text-gray-300
           "
@@ -61,6 +55,14 @@ export default {
     Popover,
     PopoverButton,
     PopoverPanel,
+  },
+  props: {
+    title: String,
+    //Popover width expands when screen size is shrunk to cover the horizontal width of the screen
+    wideShrunk: {
+      default: false,
+      type: Boolean,
+    },
   },
 };
 </script>

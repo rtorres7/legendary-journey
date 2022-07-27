@@ -10,6 +10,7 @@ module.exports = {
         'black': '#000000',
         'white': '#ffffff',
         'mission-blue': '#002142',
+        'mission-light-blue': '#0355a6',
         'mission-gray': '#f0f0f0',
         'dark-navy': '#0F172A',
         'dark-space-blue': '#192136',

@@ -37,7 +37,7 @@
                 text-slate-700
                 dark:text-slate-300
                 energy:text-gray-300
-                bg-mission-gray
+                bg-slate-100
                 dark:bg-slate-700
                 energy:bg-gray-700
                 shadow-lg
@@ -62,7 +62,7 @@
                 ><XIcon class="h-5 w-5" aria-hidden="true" />
               </button>
               <ul class="space-y-6">
-                <li v-for="item in mainNavigation" :key="item">
+                <li>
                   <a
                     class="
                       font-semibold
@@ -70,8 +70,20 @@
                       dark:hover:text-white
                       energy:text-white
                     "
-                    :href="item.href"
-                    >{{ item.name }}</a
+                    href="/"
+                    >Home</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="
+                      font-semibold
+                      hover:text-black
+                      dark:hover:text-white
+                      energy:text-white
+                    "
+                    href="/"
+                    >Searches</a
                   >
                 </li>
                 <li>
@@ -258,6 +270,30 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
+                <li>
+                  <a
+                    class="
+                      font-semibold
+                      hover:text-black
+                      dark:hover:text-white
+                      energy:text-white
+                    "
+                    href="/"
+                    >Community</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="
+                      font-semibold
+                      hover:text-black
+                      dark:hover:text-white
+                      energy:text-white
+                    "
+                    href="/"
+                    >Special Editions</a
+                  >
+                </li>
               </ul>
             </div>
           </TransitionChild>
@@ -284,14 +320,8 @@ import {
 } from "@headlessui/vue";
 import { ChevronDownIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 
-import { regions, countries } from "@/data/regions.js";
+import { regions, countries } from "@/data";
 
-const mainNavigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Searches", href: "/", current: false },
-  { name: "Community", href: "/", current: false },
-  { name: "Special Editions", href: "/", current: false },
-];
 const issuesNavigation = [
   { name: "Issue 0", href: "/" },
   { name: "Issue 1", href: "/" },
@@ -335,7 +365,6 @@ export default {
       regions,
       countries,
       selectedCountry,
-      mainNavigation,
       issuesNavigation,
     };
   },
