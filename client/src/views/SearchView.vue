@@ -27,7 +27,7 @@
             w-full
           "
         >
-          <div class="lg:basis-2/5 lg:max-w-none">
+          <div class="lg:w-2/5">
             <label class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
               >Keyword Search or Filter
             </label>
@@ -53,8 +53,13 @@
             ]"
             :key="n"
           >
-            <div class="lg:basis-1/5 lg:max-w-none">
-              <BaseListbox v-model="n.model" :label="n.label" :items="n.list" />
+            <div class="lg:w-1/5">
+              <BaseListbox
+                v-model="n.model"
+                :label="n.label"
+                :items="n.list"
+                multiple
+              />
             </div>
           </template>
         </div>
@@ -625,17 +630,17 @@ export default {
     const queryFilters = ref({
       regions: {
         label: "Regions & Countries",
-        model: "",
+        model: [],
         list: getItems("regions"),
       },
       issues: {
         label: "Issues & Topics",
-        model: "",
+        model: [],
         list: getItems("issues"),
       },
       reporting: {
         label: "Reporting & Product Types",
-        model: "",
+        model: [],
         list: getItems("reporting"),
       },
       classifications: {
@@ -688,6 +693,14 @@ export default {
         store.dispatch("search/search");
         currentPage.value = parseInt(route.query.page) || 1;
       }
+    );
+
+    watch(
+      () => queryFilters,
+      (newValue) => {
+        console.log("queryFilters changed to: ", newValue);
+      },
+      { deep: true }
     );
 
     const closeMobileFacetsDialog = () =>
