@@ -4,7 +4,7 @@
       <label class="block mb-2" for="dropzoneFile"
         >Upload a file to publish</label
       >
-      <PublishViewFileUploader
+      <PublishFileUploader
         @drop.prevent="
           drop();
           populateCkEditor();
@@ -36,20 +36,10 @@
           class="dropzoneFile hidden"
           ref="fileInputButton"
         />
-      </PublishViewFileUploader>
+      </PublishFileUploader>
       <span>{{ dropzoneFile.name }}</span>
     </div>
-    <div
-      class="
-        mt-4
-        p-4
-        rounded-lg
-        shadow-md
-        bg-white
-        dark:bg-slate-800
-        energy:bg-gray-800
-      "
-    >
+    <BaseCard class="mt-4 p-4">
       <div class="flex flex-wrap lg:flex-nowrap lg:gap-12 mb-8 mt-8 gap-y-20">
         <div class="w-full xl:basis-9/12 lg:max-w-[620px] xl:max-w-[850px]">
           <div class="flex flex-col space-y-8">
@@ -372,7 +362,7 @@
               <label class="block mb-2" for="attachment_input"
                 >Upload attachment files</label
               >
-              <PublishViewFileUploader
+              <PublishFileUploader
                 id="attachment_input"
                 @drop.prevent="attachmentDrop"
                 @change="attachmentSelectedFile"
@@ -400,7 +390,7 @@
                   multiple
                   ref="attachmentFileInputButton"
                 />
-              </PublishViewFileUploader>
+              </PublishFileUploader>
             </div>
             <a href="" class="hover:underline">View ****</a>
             <div
@@ -667,7 +657,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </BaseCard>
   </form>
 </template>
 
@@ -678,7 +668,7 @@ import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { articles, countries } from "@/data";
 import flatpickr from "flatpickr";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import PublishViewFileUploader from "@/components/PublishViewFileUploader";
+import PublishFileUploader from "@/components/PublishFileUploader";
 
 const topics = [
   { name: "International War" },
@@ -706,7 +696,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
-    PublishViewFileUploader,
+    PublishFileUploader,
   },
   data() {
     return {
