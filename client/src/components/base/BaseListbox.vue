@@ -1,5 +1,5 @@
 <template>
-  <Listbox v-model="selectedItem">
+  <Listbox v-model="selectedItem" :multiple="multiple">
     <div class="relative mt-1">
       <ListboxLabel
         class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
@@ -27,8 +27,14 @@
           focus-visible:ring-offset-2
         "
       >
-        <span class="block truncate max-w-[calc(100%-15px)]">{{
-          modelValue
+        <span class="block truncate max-w-[calc(100%-20px)]">{{
+          multiple
+            ? modelValue.length > 1
+              ? `${modelValue[0].name} +(${modelValue.length - 1})`
+              : modelValue.length === 1
+              ? modelValue[0].name
+              : ""
+            : modelValue.name
         }}</span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
           <SelectorIcon class="h-5 w-5" aria-hidden="true" />
@@ -64,7 +70,7 @@
             v-slot="{ active, selected }"
             v-for="item in items"
             :key="item"
-            :value="item.name"
+            :value="item"
             as="template"
           >
             <li
@@ -122,12 +128,16 @@ export default {
       type: String,
       default: "",
     },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
     items: {
       type: Array,
       required: true,
     },
     modelValue: {
-      type: String,
+      type: String || Array,
       default: "",
     },
   },
@@ -139,6 +149,7 @@ export default {
         emit("update:modelValue", value);
       },
     });
+
     return {
       selectedItem,
     };
