@@ -195,90 +195,177 @@
       <div class="basis-3/4 h-fit">
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex py-4">
-          <div class="inline-flex">
-            <label class="self-center">Sort By</label>
-            <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
-              <div class="relative">
-                <ListboxButton
-                  class="
-                    min-h-[2rem]
-                    flex
-                    relative
-                    w-full
-                    py-1
-                    px-2
-                    text-left
-                    capitalize
-                    bg-white
-                    dark:bg-slate-700
-                    energy:bg-gray-700
-                    border-t border-t-gray-100
-                    dark:border-t-slate-800
-                    energy:border-t-gray-800
-                    rounded-lg
-                    shadow-md
-                    cursor-default
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-opacity-75
-                    focus-visible:ring-offset-2
-                  "
-                >
-                  <span class="block truncate">{{ selectedOrder.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
-                  </span>
-                </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
+          <div class="flex gap-x-8">
+            <div class="inline-flex">
+              <label class="self-center">Sort By</label>
+              <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
+                <div class="relative">
+                  <ListboxButton
                     class="
-                      absolute
+                      min-h-[2rem]
+                      flex
+                      relative
                       w-full
                       py-1
-                      mt-1
-                      overflow-auto
+                      px-2
+                      text-left
+                      capitalize
                       bg-white
                       dark:bg-slate-700
                       energy:bg-gray-700
-                      rounded-md
-                      shadow-lg
-                      max-h-60
-                      ring-1 ring-black ring-opacity-5
+                      border-t border-t-gray-100
+                      dark:border-t-slate-800
+                      energy:border-t-gray-800
+                      rounded-lg
+                      shadow-md
+                      cursor-default
                       focus:outline-none
-                      z-10
+                      focus-visible:ring-2
+                      focus-visible:ring-opacity-75
+                      focus-visible:ring-offset-2
                     "
                   >
-                    <ListboxOption
-                      v-slot="{ active }"
-                      v-for="item in sortOptions"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
+                    <span class="block truncate">{{ selectedOrder.label }}</span>
+                    <span
+                      class="absolute inset-y-0 right-0 flex items-center pr-2"
                     >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
-                            : 'bg-none',
-                        ]"
+                      <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  </ListboxButton>
+                  <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                  >
+                    <ListboxOptions
+                      class="
+                        absolute
+                        w-full
+                        py-1
+                        mt-1
+                        overflow-auto
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-gray-700
+                        rounded-md
+                        shadow-lg
+                        max-h-60
+                        ring-1 ring-black ring-opacity-5
+                        focus:outline-none
+                        z-10
+                      "
+                    >
+                      <ListboxOption
+                        v-slot="{ active }"
+                        v-for="item in sortOptions"
+                        :key="item"
+                        :value="item"
+                        as="template"
+                        class="capitalize px-2 py-1 cursor-pointer"
                       >
-                        {{ item.label }}
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
+                        <li
+                          :class="[
+                            active
+                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              : 'bg-none',
+                          ]"
+                        >
+                          {{ item.label }}
+                        </li>
+                      </ListboxOption>
+                    </ListboxOptions>
+                  </transition>
+                </div>
+              </Listbox>
+            </div>
+            <div class="inline-flex">
+              <label class="self-center">View</label>
+              <Listbox v-model="selectedView" class="ml-3 min-w-[125px]">
+                <div class="relative">
+                  <ListboxButton
+                    class="
+                      min-h-[2rem]
+                      flex
+                      relative
+                      w-full
+                      py-1
+                      px-2
+                      text-left
+                      capitalize
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      border-t border-t-gray-100
+                      dark:border-t-slate-800
+                      energy:border-t-gray-800
+                      rounded-lg
+                      shadow-md
+                      cursor-default
+                      focus:outline-none
+                      focus-visible:ring-2
+                      focus-visible:ring-opacity-75
+                      focus-visible:ring-offset-2
+                    "
+                  >
+                    <span class="block truncate">{{ selectedView.label }}</span>
+                    <span
+                      class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    >
+                      <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  </ListboxButton>
+                  <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                  >
+                    <ListboxOptions
+                      class="
+                        absolute
+                        w-full
+                        py-1
+                        mt-1
+                        overflow-auto
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-gray-700
+                        rounded-md
+                        shadow-lg
+                        max-h-60
+                        ring-1 ring-black ring-opacity-5
+                        focus:outline-none
+                        z-10
+                      "
+                    >
+                      <ListboxOption
+                        v-slot="{ active }"
+                        v-for="item in viewOptions"
+                        :key="item"
+                        :value="item"
+                        as="template"
+                        class="capitalize px-2 py-1 cursor-pointer"
+                      >
+                        <li
+                          :class="[
+                            active
+                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              : 'bg-none',
+                          ]"
+                        >
+                          {{ item.label }}
+                        </li>
+                      </ListboxOption>
+                    </ListboxOptions>
+                  </transition>
+                </div>
+              </Listbox>
+            </div>
           </div>
         </div>
         <!-- Search Results Table -->
@@ -587,6 +674,10 @@ const sortOptions = [
   { label: "Newest", key: "desc" },
   { label: "Oldest", key: "asc" },
 ];
+const viewOptions = [
+  { label: "List", key: "list" },
+  { label: "Grid", key: "grid" },
+];
 
 export default {
   components: {
@@ -619,6 +710,9 @@ export default {
 
     const selectedOrder = ref(
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
+    );
+    const selectedView = ref(
+      route.query.view === "grid" ? viewOptions[1] : viewOptions[0]
     );
     const currentPage = ref(parseInt(route.query.page) || 1);
 
@@ -682,6 +776,17 @@ export default {
       });
     });
 
+    watch([selectedView], () => {
+      router.push({
+        name: "search",
+        query: {
+          ...route.query,
+          page: currentPage.value,
+          view: selectedView.value.key,
+        },
+      });
+    });
+
     watch(
       () => route.query,
       () => {
@@ -700,6 +805,8 @@ export default {
       dayjs,
       selectedOrder,
       sortOptions,
+      selectedView,
+      viewOptions,
       loading,
       results,
       totalCount,
