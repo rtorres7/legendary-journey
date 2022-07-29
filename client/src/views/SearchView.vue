@@ -13,7 +13,7 @@
   </p>
   <!-- Search Form -->
   <BaseCard class="mt-4 p-4">
-    <Disclosure v-slot="{ open }">
+    <Disclosure v-slot="{ open }" defaultOpen>
       <div class="flex flex-col justify-between">
         <div
           class="

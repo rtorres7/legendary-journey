@@ -150,59 +150,13 @@
             </div>
             <div class="flex flex-wrap wrap md:flex-nowrap gap-3">
               <div class="w-full lg:basis-2/3">
-                <label for="title" class="block mb-2">Title</label>
-                <input
-                  type="text"
-                  id="title"
-                  class="
-                    min-h-[2rem]
-                    w-full
-                    py-1
-                    px-2
-                    text-left
-                    bg-white
-                    dark:bg-slate-700
-                    energy:bg-gray-700
-                    border-t border-t-gray-100
-                    dark:border-t-slate-800
-                    energy:border-t-gray-800
-                    rounded-lg
-                    shadow-md
-                    cursor-default
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-opacity-75
-                    focus-visible:ring-offset-2
-                  "
-                />
+                <BaseInput v-model="event.title" label="Title" type="text" />
               </div>
               <div class="w-full lg:basis-1/3">
-                <label for="titlePM" class="block mb-2" required
-                  >Title PM (required)</label
-                >
-                <input
+                <BaseInput
+                  v-model="event.titlePM"
+                  label="Title PM (Required)"
                   type="text"
-                  id="titlePM"
-                  class="
-                    min-h-[2rem]
-                    w-full
-                    py-1
-                    px-2
-                    text-left
-                    bg-white
-                    dark:bg-slate-700
-                    energy:bg-gray-700
-                    border-t border-t-gray-100
-                    dark:border-t-slate-800
-                    energy:border-t-gray-800
-                    rounded-lg
-                    shadow-md
-                    cursor-default
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-opacity-75
-                    focus-visible:ring-offset-2
-                  "
                 />
               </div>
             </div>
@@ -237,32 +191,10 @@
                 ></textarea>
               </div>
               <div class="w-full lg:basis-1/3">
-                <label for="summaryPM" class="block mb-2" required
-                  >Summary PM (required)</label
-                >
-                <input
+                <BaseInput
+                  v-model="event.summaryPM"
+                  label="Summary PM (Required)"
                   type="text"
-                  id="summaryPM"
-                  class="
-                    min-h-[2rem]
-                    w-full
-                    py-1
-                    px-2
-                    text-left
-                    bg-white
-                    dark:bg-slate-700
-                    energy:bg-gray-700
-                    border-t border-t-gray-100
-                    dark:border-t-slate-800
-                    energy:border-t-gray-800
-                    rounded-lg
-                    shadow-md
-                    cursor-default
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-opacity-75
-                    focus-visible:ring-offset-2
-                  "
                 />
               </div>
             </div>
@@ -712,6 +644,7 @@ export default {
     },
   },
   setup() {
+    const event = ref({ title: "", titlePm: "", summaryPM: "" });
     const selectedCountries = ref([]);
     const worldwide = ref(null);
     const selectedTopics = ref([]);
@@ -793,12 +726,12 @@ export default {
       selectedCountries.value = [countries[144], countries[183]];
       selectedTopics.value = [topics[0], topics[1]];
       selectedActors.value = [actors[0], actors[1]];
-      document.getElementById("title").value = articles[0].title;
-      document.getElementById("titlePM").value = articles[0].classification;
-      document.getElementById("summaryPM").value = articles[0].classification;
+      event.value.title = articles[0].title;
+      event.value.titlePM = articles[0].classification;
+      event.value.summaryPM = articles[0].classification;
       document.getElementById("documentClass").value =
         articles[0].classification;
-      document.getElementById("summary").value = articles[0].content[0];
+      event.value.summary = articles[0].content[0];
       document.getElementById("docNum").value = articles[0].id;
       document.getElementById("publicationNumber").value = articles[0].id;
       document.getElementById("classifiedBy").innerHTML = articles[0].author;
@@ -810,6 +743,7 @@ export default {
     });
 
     return {
+      event,
       countries,
       selectedCountries,
       worldwide,
