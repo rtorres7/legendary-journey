@@ -89,10 +89,10 @@
                 <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
                     <ul class="list-disc list-inside ml-4 mt-4">
-                      <template v-for="issue in issuesNavigation" :key="issue">
+                      <template v-for="issue in metadata.issues" :key="issue">
                         <li>
                           <router-link to="/" class="hover:underline">{{
-                            issue.name
+                            issue
                           }}</router-link>
                         </li>
                       </template>
@@ -305,6 +305,8 @@
 
 <script>
 import { ref } from "vue";
+import { metadata } from "@/config";
+import { regions, countries } from "@/data";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
 import {
   Dialog,
@@ -319,21 +321,6 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ChevronDownIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
-
-import { regions, countries } from "@/data";
-
-const issuesNavigation = [
-  { name: "Issue 0", href: "/" },
-  { name: "Issue 1", href: "/" },
-  { name: "Issue 2", href: "/" },
-  { name: "Issue 3", href: "/" },
-  { name: "Issue 4", href: "/" },
-  { name: "Issue 5", href: "/" },
-  { name: "Issue 6", href: "/" },
-  { name: "Issue 7", href: "/" },
-  { name: "Issue 8", href: "/" },
-  { name: "Issue 9", href: "/" },
-];
 
 export default {
   components: {
@@ -361,11 +348,11 @@ export default {
       emit("close");
     };
     return {
+      metadata,
       close,
       regions,
       countries,
       selectedCountry,
-      issuesNavigation,
     };
   },
   methods: {

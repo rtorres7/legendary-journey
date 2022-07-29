@@ -715,7 +715,7 @@ export default {
     const selectedCountries = ref([]);
     const worldwide = ref(null);
     const selectedTopics = ref([]);
-    const selectedActors = ref([actors]);
+    const selectedActors = ref([]);
     const dateValue = ref(null);
     const selectedOffice = ref([]);
     const selectedAnalysisType = ref("");

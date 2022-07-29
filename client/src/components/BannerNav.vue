@@ -126,19 +126,19 @@
                       >
                         <MenuItem
                           as="div"
-                          v-for="item in issuesNavigation"
-                          :key="item.name"
+                          v-for="issue in metadata.issues"
+                          :key="issue"
                           v-slot="{ active }"
                         >
                           <a
-                            :href="item.href"
+                            :href="'/'"
                             :class="[
                               active
                                 ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
                                 : '',
                               'py-1 px-3 flex cursor-pointer',
                             ]"
-                            >{{ item.name }}</a
+                            >{{ issue }}</a
                           >
                         </MenuItem>
                       </MenuItems>
@@ -626,7 +626,8 @@
                       >
                     </MenuItem>
                     <MenuItem>
-                      <router-link to="/publish" 
+                      <router-link
+                        to="/publish"
                         class="
                           py-1
                           px-3
@@ -848,6 +849,18 @@
                     >
                   </li>
                   <li>
+                    <router-link
+                      to="/publish"
+                      class="
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                    >
+                      Publish an Article
+                    </router-link>
+                  </li>
+                  <li>
                     <a
                       class="
                         hover:text-black
@@ -993,6 +1006,7 @@
 <script>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
+import { metadata } from "@/config";
 import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
@@ -1035,18 +1049,6 @@ const mainNavigation = [
   { name: "Searches", href: "/", current: false },
   { name: "Community", href: "/", current: false },
   { name: "Special Editions", href: "/", current: false },
-];
-const issuesNavigation = [
-  { name: "Issue 0", href: "/" },
-  { name: "Issue 1", href: "/" },
-  { name: "Issue 2", href: "/" },
-  { name: "Issue 3", href: "/" },
-  { name: "Issue 4", href: "/" },
-  { name: "Issue 5", href: "/" },
-  { name: "Issue 6", href: "/" },
-  { name: "Issue 7", href: "/" },
-  { name: "Issue 8", href: "/" },
-  { name: "Issue 9", href: "/" },
 ];
 const themeOptions = ["light", "dark", "energy", "system"];
 
@@ -1126,12 +1128,12 @@ export default {
     const selectedCountry = ref(countries[0]);
 
     return {
+      metadata,
       regions,
       countries,
       selectedCountry,
       mainNavigation,
       themeOptions,
-      issuesNavigation,
       isMainMenuOpen,
       isUserMenuOpen,
       isTestConsoleMenuOpen,
