@@ -388,65 +388,109 @@
             />
           </div>
           <!-- Results -->
-          <template v-for="result in results" :key="result">
-            <div
-              class="
-                flex
-                p-4
-                border-b border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-              "
-            >
-              <div class="h-fit px-2 text-center">
-                <span class="block font-semibold">{{
-                  dayjs(result.date_published).format("DD")
-                }}</span>
-                <span class="block text-sm">{{
-                  dayjs(result.date_published).format("MMM")
-                }}</span>
-                <span class="block text-sm">{{
-                  dayjs(result.date_published).format("YYYY")
-                }}</span>
-              </div>
-              <div class="px-2">
-                <div class="flex justify-between">
+          <template v-if="selectedView.label === 'List'">
+            <template v-for="result in results" :key="result">
+              <div
+                class="
+                  flex
+                  p-4
+                  border-b border-slate-900/10
+                  dark:border-slate-50/[0.06]
+                  energy:border-gray-700/25
+                "
+              >
+                <div class="h-fit px-2 text-center">
+                  <span class="block font-semibold">{{
+                    dayjs(result.date_published).format("DD")
+                  }}</span>
+                  <span class="block text-sm">{{
+                    dayjs(result.date_published).format("MMM")
+                  }}</span>
+                  <span class="block text-sm">{{
+                    dayjs(result.date_published).format("YYYY")
+                  }}</span>
+                </div>
+                <div class="px-2">
+                  <div class="flex justify-between">
+                    <div
+                      class="
+                        basis-[768px]
+                        cursor-pointer
+                        hover:underline
+                        line-clamp-2
+                      "
+                    >
+                      <span
+                        class="
+                          text-slate-600
+                          dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                        >{{ `${"(" + result.title_classification + ") "}` }}</span
+                      >
+                      <span
+                        class="text-black dark:text-white energy:text-white"
+                        >{{ result.title }}</span
+                      >
+                    </div>
+                    <div class="text-xs lg:text-sm">
+                      {{ result.doc_num }}
+                    </div>
+                  </div>
                   <div
                     class="
-                      basis-[768px]
-                      cursor-pointer
-                      hover:underline
-                      line-clamp-2
+                      py-2
+                      text-sm text-slate-600
+                      dark:text-slate-300
+                      energy:text-gray-300
                     "
                   >
-                    <span
-                      class="
-                        text-slate-600
-                        dark:text-slate-300
-                        energy:text-gray-300
-                      "
-                      >{{ `${"(" + result.title_classification + ") "}` }}</span
-                    >
-                    <span
-                      class="text-black dark:text-white energy:text-white"
-                      >{{ result.title }}</span
-                    >
+                    <span v-html="result.highlighted_result" />
                   </div>
-                  <div class="text-xs lg:text-sm">
-                    {{ result.doc_num }}
-                  </div>
-                </div>
-                <div
-                  class="
-                    py-2
-                    text-sm text-slate-600
-                    dark:text-slate-300
-                    energy:text-gray-300
-                  "
-                >
-                  <span v-html="result.highlighted_result" />
                 </div>
               </div>
+            </template>
+          </template>
+          <template v-else-if="selectedView.label === 'Grid'">
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 m-4">
+              <template v-for="result in results" :key="result">
+                <div
+                  class=" rounded shadow-lg
+                    flex
+                    p-4
+                    border-b border-slate-900/10
+                    dark:border-slate-50/[0.06]
+                    energy:border-gray-700/25
+                  "
+                >
+                  <div class="px-2">
+                    <div
+                      class="
+                        basis-[768px]
+                        cursor-pointer
+                        hover:underline
+                        line-clamp-2
+                      "
+                    >
+                      <span
+                        class="
+                          text-slate-600
+                          dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                        >{{ `${"(" + result.title_classification + ") "}` }}</span
+                      >
+                      <span
+                        class="text-black dark:text-white energy:text-white"
+                        >{{ result.title }}</span
+                      >
+                    </div>
+                    <div class="mt-2">
+                      {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </template>
           <!-- Bottom Pagination -->
@@ -462,89 +506,176 @@
       <BaseCard class="hidden lg:block basis-1/4 ml-4 h-full">
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
-      <div class="lg:hidden flex justify-between py-4">
-        <div class="inline-flex">
-          <label class="self-center">Sort By</label>
-          <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
-            <div class="relative">
-              <ListboxButton
-                class="
-                  min-h-[2rem]
-                  flex
-                  relative
-                  w-full
-                  py-1
-                  px-2
-                  text-left
-                  capitalize
-                  bg-white
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  border-t border-t-gray-100
-                  dark:border-t-slate-800
-                  energy:border-t-gray-800
-                  rounded-lg
-                  shadow-md
-                  cursor-default
-                  focus:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-opacity-75
-                  focus-visible:ring-offset-2
-                "
-              >
-                <span class="block truncate">{{ selectedOrder.label }}</span>
-                <span class="absolute inset-y-0 right-0 flex items-center pr-2">
-                  <SelectorIcon class="h-5 w-5" aria-hidden="true" />
-                </span>
-              </ListboxButton>
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <ListboxOptions
+      <div class="lg:hidden flex flex-wrap md:flex-nowrap justify-between gap-y-4 py-4">
+        <div class="flex gap-x-4">
+          <div class="inline-flex">
+            <label class="self-center">Sort By</label>
+            <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
+              <div class="relative">
+                <ListboxButton
                   class="
-                    absolute
+                    min-h-[2rem]
+                    flex
+                    relative
                     w-full
                     py-1
-                    mt-1
-                    overflow-auto
+                    px-2
+                    text-left
+                    capitalize
                     bg-white
                     dark:bg-slate-700
                     energy:bg-gray-700
-                    rounded-md
-                    shadow-lg
-                    max-h-60
-                    ring-1 ring-black ring-opacity-5
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
+                    rounded-lg
+                    shadow-md
+                    cursor-default
                     focus:outline-none
-                    z-10
+                    focus-visible:ring-2
+                    focus-visible:ring-opacity-75
+                    focus-visible:ring-offset-2
                   "
                 >
-                  <ListboxOption
-                    v-slot="{ active }"
-                    v-for="item in sortOptions"
-                    :key="item"
-                    :value="item"
-                    as="template"
-                    class="capitalize px-2 py-1 cursor-pointer"
+                  <span class="block truncate">{{ selectedOrder.label }}</span>
+                  <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                  </span>
+                </ListboxButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <ListboxOptions
+                    class="
+                      absolute
+                      w-full
+                      py-1
+                      mt-1
+                      overflow-auto
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      rounded-md
+                      shadow-lg
+                      max-h-60
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
+                      z-10
+                    "
                   >
-                    <li
-                      :class="[
-                        active
-                          ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
-                          : 'bg-none',
-                      ]"
+                    <ListboxOption
+                      v-slot="{ active }"
+                      v-for="item in sortOptions"
+                      :key="item"
+                      :value="item"
+                      as="template"
+                      class="capitalize px-2 py-1 cursor-pointer"
                     >
-                      {{ item.label }}
-                    </li>
-                  </ListboxOption>
-                </ListboxOptions>
-              </transition>
-            </div>
-          </Listbox>
+                      <li
+                        :class="[
+                          active
+                            ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                            : 'bg-none',
+                        ]"
+                      >
+                        {{ item.label }}
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
+          </div>
+          <div class="inline-flex">
+            <label class="self-center">View</label>
+            <Listbox v-model="selectedView" class="ml-3 min-w-[125px]">
+              <div class="relative">
+                <ListboxButton
+                  class="
+                    min-h-[2rem]
+                    flex
+                    relative
+                    w-full
+                    py-1
+                    px-2
+                    text-left
+                    capitalize
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-gray-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-gray-800
+                    rounded-lg
+                    shadow-md
+                    cursor-default
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-opacity-75
+                    focus-visible:ring-offset-2
+                  "
+                >
+                  <span class="block truncate">{{ selectedView.label }}</span>
+                  <span
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
+                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                  </span>
+                </ListboxButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <ListboxOptions
+                    class="
+                      absolute
+                      w-full
+                      py-1
+                      mt-1
+                      overflow-auto
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-gray-700
+                      rounded-md
+                      shadow-lg
+                      max-h-60
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
+                      z-10
+                    "
+                  >
+                    <ListboxOption
+                      v-slot="{ active }"
+                      v-for="item in viewOptions"
+                      :key="item"
+                      :value="item"
+                      as="template"
+                      class="capitalize px-2 py-1 cursor-pointer"
+                    >
+                      <li
+                        :class="[
+                          active
+                            ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                            : 'bg-none',
+                        ]"
+                      >
+                        {{ item.label }}
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
+          </div>
         </div>
         <div
           class="
