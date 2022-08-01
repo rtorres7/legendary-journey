@@ -12,8 +12,8 @@
     Publish Article
   </p>
   <form ref="publishingForm">
-    <div class="py-4">
-      <label class="font-semibold block mb-2" for="dropzoneFile"
+    <div class="my-4 py-4 lg:w-1/2">
+      <label class="font-medium" for="dropzoneFile"
         >Upload a file to publish</label
       >
       <PublishFileUploader
@@ -55,7 +55,7 @@
       <!-- Edit Document -->
       <BaseCard class="lg:basis-8/12 p-6">
         <div class="flex flex-col space-y-6">
-          <h1 class="text-xl">Edit Document</h1>
+          <h1 class="text-lg font-medium">Edit Document</h1>
           <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
             <div class="basis-1/2 space-y-4">
               <BaseListbox
@@ -164,13 +164,15 @@
             </div>
           </div>
           <div>
-            <label for="body" class="font-semibold text-sm">Body</label>
-            <ckeditor
-              :editor="editor"
-              v-model="editorData"
-              :config="editorConfig"
-              id="body"
-            ></ckeditor>
+            <label for="body" class="font-medium text-sm">Body</label>
+            <div class="mt-1">
+              <ckeditor
+                :editor="editor"
+                v-model="editorData"
+                :config="editorConfig"
+                id="body"
+              ></ckeditor>
+            </div>
           </div>
           <div>
             <p
@@ -199,7 +201,7 @@
       <!-- Right Container -->
       <BaseCard class="lg:basis-4/12 p-6">
         <div class="flex flex-col space-y-6">
-          <h1 class="text-xl">Classification</h1>
+          <h1 class="text-lg font-medium">Classification</h1>
           <div>
             <BaseInput
               v-model="event.classification"
@@ -220,7 +222,7 @@
               pb-2
             "
           >
-            <h2 class="text-lg">Attachments</h2>
+            <h2 class="text-lg font-medium">Attachments</h2>
           </div>
           <div>
             <label class="block mb-2" for="attachment_input"
@@ -265,7 +267,7 @@
               pb-2
             "
           >
-            <h2 class="text-lg">Article Images</h2>
+            <h2 class="text-lg font-medium">Article Images</h2>
           </div>
           <div
             class="
@@ -275,7 +277,7 @@
               pb-2
             "
           >
-            <h2 class="text-lg">Supporting Attachments</h2>
+            <h2 class="text-lg font-medium">Supporting Attachments</h2>
           </div>
           <span>{{ attachmentDropzoneFile.name }}</span>
           <div
@@ -286,7 +288,7 @@
               pb-2
             "
           >
-            <h2 class="text-lg">Details</h2>
+            <h2 class="text-lg font-medium">Details</h2>
           </div>
           <div>
             <BaseInput

@@ -28,7 +28,7 @@
           "
         >
           <div class="lg:w-2/5">
-            <label class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
+            <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
               >Keyword Search or Filter
             </label>
             <input
@@ -317,7 +317,7 @@
               "
             >
               <div class="h-fit px-2 text-center">
-                <span class="block font-semibold">{{
+                <span class="block font-medium">{{
                   dayjs(result.date_published).format("DD")
                 }}</span>
                 <span class="block text-sm">{{

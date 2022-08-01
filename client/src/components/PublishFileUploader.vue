@@ -11,6 +11,7 @@
     "
     class="
       w-full
+      mt-2
       p-2
       flex
       justify-center

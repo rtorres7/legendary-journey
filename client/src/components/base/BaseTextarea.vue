@@ -1,5 +1,5 @@
 <template>
-  <label :for="uuid" v-if="label" class="text-sm font-semibold">{{
+  <label :for="uuid" v-if="label" class="text-sm font-medium">{{
     label
   }}</label>
   <textarea
@@ -11,6 +11,7 @@
       w-full
       py-1
       px-2
+      mt-1
       text-left
       bg-white
       dark:bg-slate-700
