@@ -28,6 +28,7 @@
       focus-visible:ring-offset-2
       resize-none
     "
+    :id="uuid"
   ></textarea>
 </template>
 
