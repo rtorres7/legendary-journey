@@ -13,7 +13,7 @@
             leave-from="opacity-100"
             leave-to="opacity-0"
           >
-            <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+            <div class="fixed inset-0 bg-black/25" />
           </TransitionChild>
           <span class="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
@@ -27,7 +27,7 @@
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
-            <div
+            <DialogPanel
               class="
                 inline-block
                 w-full
@@ -274,7 +274,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </DialogPanel>
           </TransitionChild>
         </div>
       </div>
@@ -288,7 +288,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   Dialog,
-  DialogOverlay,
+  DialogPanel,
   Switch,
   SwitchGroup,
   SwitchLabel,
@@ -300,7 +300,7 @@ import { XIcon } from "@heroicons/vue/outline";
 export default {
   components: {
     Dialog,
-    DialogOverlay,
+    DialogPanel,
     Switch,
     SwitchGroup,
     SwitchLabel,

@@ -12,7 +12,7 @@
             leave-from="opacity-100"
             leave-to="opacity-0"
           >
-            <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+            <div class="fixed inset-0 bg-black/25" />
           </TransitionChild>
           <TransitionChild
             as="template"
@@ -23,7 +23,7 @@
             leave-from="translate-x-0"
             leave-to="-translate-x-full"
           >
-            <div
+            <DialogPanel
               class="
                 relative
                 min-h-screen
@@ -295,7 +295,7 @@
                   >
                 </li>
               </ul>
-            </div>
+            </DialogPanel>
           </TransitionChild>
         </div>
       </div>
@@ -310,6 +310,7 @@ import { regions, countries } from "@/data";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
 import {
   Dialog,
+  DialogPanel,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -326,6 +327,7 @@ export default {
   components: {
     MobileSideMenuDisclosure,
     Dialog,
+    DialogPanel,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,

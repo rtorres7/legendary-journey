@@ -783,7 +783,7 @@
               leave-from="opacity-100"
               leave-to="opacity-0"
             >
-              <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+              <div class="fixed inset-0 bg-black/25" />
             </TransitionChild>
             <TransitionChild
               as="template"
@@ -794,7 +794,7 @@
               leave-from="opacity-100 scale-100"
               leave-to="opacity-0 scale-95"
             >
-              <div
+              <DialogPanel
                 class="
                   inline-block
                   w-full
@@ -989,7 +989,7 @@
                     >
                   </li>
                 </ul>
-              </div>
+              </DialogPanel>
             </TransitionChild>
           </div>
         </div>
@@ -1014,7 +1014,7 @@ import MobileSideMenu from "@/components/MobileSideMenu";
 import TestConsoleDialog from "@/components/TestConsoleDialog";
 import {
   Dialog,
-  DialogOverlay,
+  DialogPanel,
   Listbox,
   ListboxButton,
   ListboxOptions,
@@ -1060,7 +1060,7 @@ export default {
     TestConsoleDialog,
     BannerNavMap,
     Dialog,
-    DialogOverlay,
+    DialogPanel,
     Listbox,
     ListboxButton,
     ListboxOptions,

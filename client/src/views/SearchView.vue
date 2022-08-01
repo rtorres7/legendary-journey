@@ -491,7 +491,7 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
               >
-                <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+                <div class="fixed inset-0 bg-black/25" />
               </TransitionChild>
               <span
                 class="inline-block h-screen align-middle"
@@ -508,7 +508,7 @@
                 leave-from="opacity-100 scale-100"
                 leave-to="opacity-0 scale-95"
               >
-                <div
+                <DialogPanel
                   class="
                     inline-block
                     w-full
@@ -555,7 +555,7 @@
                       class="grid grid-cols-2 md:grid-cols-3 gap-4"
                     />
                   </div>
-                </div>
+                </DialogPanel>
               </TransitionChild>
             </div>
           </div>
@@ -572,7 +572,7 @@ import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import {
   Dialog,
-  DialogOverlay,
+  DialogPanel,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -596,7 +596,7 @@ const sortOptions = [
 export default {
   components: {
     Dialog,
-    DialogOverlay,
+    DialogPanel,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
