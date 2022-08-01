@@ -343,7 +343,7 @@
         <BaseButton @click.prevent>Save and Generate PDF</BaseButton>
         <BaseButton @click.prevent>Preview</BaseButton>
         <BaseButton @click.prevent>Cancel</BaseButton>
-        <BaseButton @click.prevent type="danger">Delete</BaseButton>
+        <BaseButton @click.prevent type="danger" disabled>Delete</BaseButton>
         <div class="self-center">
           <input
             type="checkbox"

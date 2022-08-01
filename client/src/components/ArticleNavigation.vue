@@ -1,40 +1,28 @@
 <template>
-  <div 
-    class="
-      flex
-      flex-wrap
-      justify-between
-      p-4
-      mb-8
-      border-b-2
-    "
-  >
+  <div class="flex flex-wrap justify-between p-4 mb-8 border-b-2">
     <div>
-      <ArticleNavigationButton
-        @click="returnHome"
-        @keyup.enter="returnHome"
-        tabIndex="0"
-      >
+      <BaseButton @click="returnHome" @keyup.enter="returnHome" tabIndex="0">
         Home
-      </ArticleNavigationButton>
+      </BaseButton>
     </div>
-    <div class="flex flex-wrap sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2">
+    <div
+      class="
+        flex flex-wrap
+        sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2
+      "
+    >
       <div>
         <template v-if="currentArticle() === 1">
-          <ArticleNavigationButton
-            :disabled="true"
-          >
-            Previous
-          </ArticleNavigationButton>
+          <BaseButton disabled>Previous</BaseButton>
         </template>
         <template v-else>
-          <ArticleNavigationButton
+          <BaseButton
             @click="previousArticle"
             @keyup.enter="previousArticle"
             tabIndex="0"
           >
             Previous
-          </ArticleNavigationButton>
+          </BaseButton>
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
@@ -45,20 +33,16 @@
       </div>
       <div>
         <template v-if="currentArticle() === articles.length">
-          <ArticleNavigationButton
-            :disabled="true"
-          >
-            Next
-          </ArticleNavigationButton>      
+          <BaseButton disabled> Next </BaseButton>
         </template>
         <template v-else>
-          <ArticleNavigationButton
+          <BaseButton
             @click="nextArticle"
             @keyup.enter="nextArticle"
             tabIndex="0"
           >
             Next
-          </ArticleNavigationButton>
+          </BaseButton>
         </template>
       </div>
     </div>
@@ -68,12 +52,8 @@
 <script>
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import ArticleNavigationButton from "./ArticleNavigationButton";
 
 export default {
-  components: {
-    ArticleNavigationButton,
-  },
   props: ["selectedArticle"],
   setup() {
     const store = useStore();
@@ -84,7 +64,7 @@ export default {
     });
     return {
       articles,
-    }
+    };
   },
   methods: {
     currentArticle() {
@@ -92,21 +72,21 @@ export default {
     },
     previousArticle() {
       const currentIndex = this.articles.indexOf(this.selectedArticle);
-      if(currentIndex > 0) {
+      if (currentIndex > 0) {
         this.$router.push(`/article/${this.articles[currentIndex - 1].id}`);
       }
     },
     nextArticle() {
       const currentIndex = this.articles.indexOf(this.selectedArticle);
-      if(currentIndex < this.articles.length - 1) {
+      if (currentIndex < this.articles.length - 1) {
         this.$router.push(`/article/${this.articles[currentIndex + 1].id}`);
       }
     },
     returnHome() {
-      this.$router.push({ name: 'home'});
+      this.$router.push({ name: "home" });
     },
   },
-}
+};
 </script>
 
 <style lang="scss"></style>
