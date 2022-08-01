@@ -1,7 +1,19 @@
 <template>
-  <form ref="publishingForm" class="mb-10 mt-10">
-    <div>
-      <label class="block mb-2" for="dropzoneFile"
+  <p
+    class="
+      font-semibold
+      text-2xl
+      py-4
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-gray-700/25
+    "
+  >
+    Publish Article
+  </p>
+  <form ref="publishingForm">
+    <div class="py-4">
+      <label class="font-semibold block mb-2" for="dropzoneFile"
         >Upload a file to publish</label
       >
       <PublishFileUploader
@@ -39,29 +51,14 @@
       </PublishFileUploader>
       <span>{{ dropzoneFile.name }}</span>
     </div>
-    <BaseCard class="mt-4 p-4">
-      <div class="flex flex-wrap lg:flex-nowrap lg:gap-12 mb-8 mt-8 gap-y-20">
-        <div class="w-full xl:basis-9/12 lg:max-w-[620px] xl:max-w-[850px]">
-          <div class="flex flex-col space-y-8">
-            <div
-              class="
-                border-b-2 border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-                pb-4
-              "
-            >
-              <h1 class="text-2xl">Edit Document</h1>
-            </div>
-            <div class="flex flex-wrap md:flex-nowrap gap-3">
-              <div
-                class="
-                  w-full
-                  md:max-w-[350px]
-                  lg:max-w-[300px]
-                  xl:max-w-[420px]
-                "
-              >
+    <div>
+      <div class="flex flex-col lg:flex-row gap-3">
+        <!-- Edit Document -->
+        <BaseCard class="lg:basis-8/12 p-6">
+          <div class="flex flex-col space-y-6">
+            <h1 class="text-xl">Edit Document</h1>
+            <div class="flex space-x-4">
+              <div class="basis-1/2 space-y-4">
                 <BaseListbox
                   v-model="selectedCountries"
                   :label="'Countries'"
@@ -74,18 +71,10 @@
                   name="worldwide"
                   value="Worldwide"
                   v-model="worldwide"
-                  class="mt-6"
                 />
-                <label for="worldwide" class="text-sm"> Worldwide</label>
+                <label for="worldwide" class="ml-2 text-sm">Worldwide</label>
               </div>
-              <div
-                class="
-                  w-full
-                  md:max-w-[350px]
-                  lg:max-w-[300px]
-                  xl:max-w-[420px]
-                "
-              >
+              <div class="basis-1/2">
                 <BaseListbox
                   v-model="selectedTopics"
                   :label="'Topics'"
@@ -94,14 +83,14 @@
                 />
               </div>
             </div>
-            <div>
-              <BaseListbox
-                v-model="selectedActors"
-                :label="'Non-State Actors'"
-                :items="actors"
-                multiple
-              />
-              <div class="flex mt-6">
+            <div class="flex">
+              <div class="basis-1/2 space-y-4">
+                <BaseListbox
+                  v-model="selectedActors"
+                  :label="'Non-State Actors'"
+                  :items="actors"
+                  multiple
+                />
                 <div>
                   <input
                     type="checkbox"
@@ -110,49 +99,47 @@
                     v-model="checkAllOrgs"
                     @click="toggleAllOrgs()"
                   />
-                  <label for="allOrgs" class="text-sm"> All Orgs</label>
+                  <label for="allOrgs" class="ml-2 text-sm"> All Orgs</label>
                 </div>
-                <div class="ml-8 self-center">
-                  <Disclosure v-slot="{ open }">
-                    <DisclosureButton class="flex text-sm items-center">
-                      <span>Show Dissem Orgs</span>
-                      <ChevronDownIcon
-                        class="h-4 w-4"
-                        :class="open ? 'transform rotate-180' : ''"
-                      />
-                    </DisclosureButton>
-                    <transition
-                      enter-active-class="transition ease-out duration-100"
-                      enter-from-class="transform opacity-0 scale-95"
-                      enter-to-class="transform opacity-100 scale-100"
-                      leave-active-class="transition ease-in duration-75"
-                      leave-from-class="transform opacity-100 scale-100"
-                      leave-to-class="transform opacity-0 scale-95"
-                    >
-                      <DisclosurePanel>
-                        <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4">
-                          <div v-for="(org, index) in dissemOrgs" :key="index">
-                            <input
-                              type="checkbox"
-                              v-model="dissemOrgs[index].model"
-                              class="mt-2"
-                            />
-                            <label :for="org.name" class="text-sm ml-1">
-                              {{ org.name }}
-                            </label>
-                          </div>
+                <Disclosure v-slot="{ open }">
+                  <DisclosureButton class="flex text-sm items-center">
+                    <span>Show Dissem Orgs</span>
+                    <ChevronDownIcon
+                      class="h-4 w-4"
+                      :class="open ? 'transform rotate-180' : ''"
+                    />
+                  </DisclosureButton>
+                  <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                  >
+                    <DisclosurePanel>
+                      <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4">
+                        <div v-for="(org, index) in dissemOrgs" :key="index">
+                          <input
+                            type="checkbox"
+                            v-model="dissemOrgs[index].model"
+                            class="mt-2"
+                          />
+                          <label :for="org.name" class="text-sm ml-1">
+                            {{ org.name }}
+                          </label>
                         </div>
-                      </DisclosurePanel>
-                    </transition>
-                  </Disclosure>
-                </div>
+                      </div>
+                    </DisclosurePanel>
+                  </transition>
+                </Disclosure>
               </div>
             </div>
-            <div class="flex flex-wrap wrap md:flex-nowrap gap-3">
-              <div class="w-full lg:basis-2/3">
+            <div class="flex space-x-4">
+              <div class="basis-2/3">
                 <BaseInput v-model="event.title" label="Title" type="text" />
               </div>
-              <div class="w-full lg:basis-1/3">
+              <div class="basis-1/3">
                 <BaseInput
                   v-model="event.titlePM"
                   label="Title PM (Required)"
@@ -160,9 +147,11 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap wrap md:flex-nowrap gap-3">
-              <div class="w-full lg:basis-2/3">
-                <label for="summary" class="block mb-2">Summary</label>
+            <div class="flex space-x-4">
+              <div class="basis-2/3">
+                <label for="summary" class="text-sm font-semibold"
+                  >Summary</label
+                >
                 <textarea
                   id="summary"
                   maxlength="4000"
@@ -190,7 +179,7 @@
                   "
                 ></textarea>
               </div>
-              <div class="w-full lg:basis-1/3">
+              <div class="basis-1/3">
                 <BaseInput
                   v-model="event.summaryPM"
                   label="Summary PM (Required)"
@@ -198,8 +187,8 @@
                 />
               </div>
             </div>
-            <div class="w-full">
-              <label for="body" class="block mb-2">Body</label>
+            <div>
+              <label for="body" class="font-semibold text-sm">Body</label>
               <ckeditor
                 :editor="editor"
                 v-model="editorData"
@@ -208,18 +197,18 @@
               ></ckeditor>
             </div>
             <div>
-              <h2
+              <p
                 class="
-                  text-xl
+                  text-lg
                   border-b-2 border-slate-900/10
                   dark:border-slate-50/[0.06]
                   energy:border-gray-700/25
-                  pb-4
+                  pb-2
                 "
               >
                 Source Citations
-              </h2>
-              <ol class="list-decimal list-inside ml-4 mt-2 space-y-2">
+              </p>
+              <ol class="list-decimal list-inside ml-4 mt-4 space-y-2">
                 <div
                   v-for="source in articlesData[0].sources"
                   :key="source.name"
@@ -233,49 +222,19 @@
               </ol>
             </div>
           </div>
-        </div>
-        <div class="w-full lg:basis-3/12">
-          <div class="flex flex-col space-y-8">
-            <div
-              class="
-                border-b-2 border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-                pb-4
-              "
-            >
-              <h2 class="text-xl">Classification</h2>
-            </div>
+        </BaseCard>
+        <!-- Right Container -->
+        <BaseCard class="lg:basis-4/12 p-6">
+          <div class="flex flex-col space-y-6">
+            <h1 class="text-xl">Classification</h1>
             <div>
-              <label for="documentClass" class="block mb-2" required
-                >Document Classification (required)</label
-              >
-              <input
+              <BaseInput
+                v-model="event.classification"
+                label="Document Classification (required)"
                 type="text"
-                id="documentClass"
-                class="
-                  min-h-[2rem]
-                  w-full
-                  py-1
-                  px-2
-                  text-left
-                  bg-white
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  border-t border-t-gray-100
-                  dark:border-t-slate-800
-                  energy:border-t-gray-800
-                  rounded-lg
-                  shadow-md
-                  cursor-default
-                  focus:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-opacity-75
-                  focus-visible:ring-offset-2
-                "
               />
             </div>
-            <div>
+            <div class="text-sm">
               <p>Classified By: <span id="classifiedBy"></span></p>
               <p>Derived From: Channel News Asia</p>
               <p>Declassify On: Jun 26, 2032</p>
@@ -285,10 +244,10 @@
                 border-b-2 border-slate-900/10
                 dark:border-slate-50/[0.06]
                 energy:border-gray-700/25
-                pb-4
+                pb-2
               "
             >
-              <h2 class="text-xl">Attachments</h2>
+              <h2 class="text-lg">Attachments</h2>
             </div>
             <div>
               <label class="block mb-2" for="attachment_input"
@@ -330,20 +289,20 @@
                 border-b-2 border-slate-900/10
                 dark:border-slate-50/[0.06]
                 energy:border-gray-700/25
-                pb-4
+                pb-2
               "
             >
-              <h2 class="text-xl">Article Images</h2>
+              <h2 class="text-lg">Article Images</h2>
             </div>
             <div
               class="
                 border-b-2 border-slate-900/10
                 dark:border-slate-50/[0.06]
                 energy:border-gray-700/25
-                pb-4
+                pb-2
               "
             >
-              <h2 class="text-xl">Supporting Attachments</h2>
+              <h2 class="text-lg">Supporting Attachments</h2>
             </div>
             <span>{{ attachmentDropzoneFile.name }}</span>
             <div
@@ -351,96 +310,30 @@
                 border-b-2 border-slate-900/10
                 dark:border-slate-50/[0.06]
                 energy:border-gray-700/25
-                pb-4
+                pb-2
               "
             >
-              <h2 class="text-xl">Details</h2>
+              <h2 class="text-lg">Details</h2>
             </div>
             <div>
-              <label for="docNum" class="block mb-2">Doc Num (Permalink)</label>
-              <input
+              <BaseInput
+                v-model="event.docNum"
+                label="Doc Num (Permalink)"
                 type="text"
-                id="docNum"
-                class="
-                  min-h-[2rem]
-                  w-full
-                  py-1
-                  px-2
-                  text-left
-                  bg-white
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  border-t border-t-gray-100
-                  dark:border-t-slate-800
-                  energy:border-t-gray-800
-                  rounded-lg
-                  shadow-md
-                  cursor-default
-                  focus:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-opacity-75
-                  focus-visible:ring-offset-2
-                "
               />
             </div>
             <div>
-              <label for="publicationNumber" class="block mb-2"
-                >Publication Number</label
-              >
-              <input
+              <BaseInput
+                v-model="event.publicationNumber"
+                label="Publication Number"
                 type="text"
-                id="publicationNumber"
-                class="
-                  min-h-[2rem]
-                  w-full
-                  py-1
-                  px-2
-                  text-left
-                  bg-white
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  border-t border-t-gray-100
-                  dark:border-t-slate-800
-                  energy:border-t-gray-800
-                  rounded-lg
-                  shadow-md
-                  cursor-default
-                  focus:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-opacity-75
-                  focus-visible:ring-offset-2
-                "
               />
             </div>
             <div>
-              <label for="datepicker" class="block mb-2"
-                >Publication Date</label
-              >
-              <input
+              <BaseInput
+                v-model="event.publicationDate"
+                label="Publication Date"
                 type="text"
-                id="datepicker"
-                v-model="dateValue"
-                autocomplete="off"
-                class="
-                  min-h-[2rem]
-                  w-full
-                  py-1
-                  px-2
-                  text-left
-                  bg-white
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  border-t border-t-gray-100
-                  dark:border-t-slate-800
-                  energy:border-t-gray-800
-                  rounded-lg
-                  shadow-md
-                  cursor-default
-                  focus:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-opacity-75
-                  focus-visible:ring-offset-2
-                "
               />
             </div>
             <div>
@@ -451,7 +344,7 @@
                 id="pocInfo"
                 maxlength="4000"
                 rows="4"
-                aria-label="p o c info"
+                aria-label="POC info"
                 class="
                   min-h-[2rem]
                   w-full
@@ -491,7 +384,7 @@
               />
             </div>
           </div>
-        </div>
+        </BaseCard>
       </div>
       <div class="flex gap-20 flex-wrap lg:flex-nowrap gap-y-8 mb-8">
         <div class="flex gap-3">
@@ -589,7 +482,7 @@
           </div>
         </div>
       </div>
-    </BaseCard>
+    </div>
   </form>
 </template>
 
@@ -603,10 +496,11 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import PublishFileUploader from "@/components/PublishFileUploader";
 
 const topics = [
-  { name: "International War" },
-  { name: "Politics" },
-  { name: "Climate Change" },
-  { name: "Space Tourism" },
+  { name: "Russian Invasion" },
+  { name: "Eastern Europe Geopolitics" },
+  { name: "Economic Turmoil" },
+  { name: "Ukraine War" },
+  { name: "Energy Crisis" },
 ];
 const actors = [
   { name: "Person1" },
@@ -644,7 +538,16 @@ export default {
     },
   },
   setup() {
-    const event = ref({ title: "", titlePm: "", summaryPM: "" });
+    const event = ref({
+      title: "",
+      titlePm: "",
+      summaryPM: "",
+      classification: "",
+      docNum: "",
+      publicationNumber: "",
+      publicationDate: "",
+      classifiedBy: "",
+    });
     const selectedCountries = ref([]);
     const worldwide = ref(null);
     const selectedTopics = ref([]);
@@ -729,12 +632,11 @@ export default {
       event.value.title = articles[0].title;
       event.value.titlePM = articles[0].classification;
       event.value.summaryPM = articles[0].classification;
-      document.getElementById("documentClass").value =
-        articles[0].classification;
+      event.value.classification = articles[0].classification;
       event.value.summary = articles[0].content[0];
-      document.getElementById("docNum").value = articles[0].id;
-      document.getElementById("publicationNumber").value = articles[0].id;
-      document.getElementById("classifiedBy").innerHTML = articles[0].author;
+      event.value.docNum = articles[0].id;
+      event.value.publicationNumber = articles[0].id;
+      event.value.classifiedBy = articles[0].author;
     };
 
     onMounted(() => {
