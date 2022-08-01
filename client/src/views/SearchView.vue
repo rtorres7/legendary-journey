@@ -192,9 +192,9 @@
   <template v-if="!loading && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
-      <div class="basis-3/4 h-fit">
+      <div class="h-fit" :class="[ selectedView.label==='Grid' ? 'basis-full' : 'basis-3/4', ]">
         <!-- Search Sorting Listbox -->
-        <div class="hidden lg:flex py-4">
+        <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
             <div class="inline-flex">
               <label class="self-center">Sort By</label>
@@ -366,7 +366,20 @@
                 </div>
               </Listbox>
             </div>
+           
           </div>
+           <div v-show="selectedView.label === 'Grid'"
+              class=" 
+                cursor-pointer
+                text-mission-light-blue
+                dark:text-teal-400
+                energy:text-energy-yellow
+                self-center
+              "
+              @click="openMobileFacetsDialog"
+            >
+              Show Filters
+            </div>
         </div>
         <!-- Search Results Table -->
         <BaseCard>
@@ -452,15 +465,18 @@
             </template>
           </template>
           <template v-else-if="selectedView.label === 'Grid'">
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 m-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
               <template v-for="result in results" :key="result">
                 <div
-                  class=" rounded shadow-lg
+                  class="
                     flex
                     p-4
                     border-b border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-gray-700/25
+                    rounded
+                    shadow-lg
+                    h-36
                   "
                 >
                   <div class="px-2">
@@ -469,7 +485,7 @@
                         basis-[768px]
                         cursor-pointer
                         hover:underline
-                        line-clamp-2
+                        line-clamp-3
                       "
                     >
                       <span
@@ -503,7 +519,7 @@
         </BaseCard>
       </div>
       <!-- Search Results Filters -->
-      <BaseCard class="hidden lg:block basis-1/4 ml-4 h-full">
+      <BaseCard v-show="selectedView.label === 'List'" class="hidden lg:block basis-1/4 ml-4 h-full">
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
       <div class="lg:hidden flex flex-wrap md:flex-nowrap justify-between gap-y-4 py-4">
