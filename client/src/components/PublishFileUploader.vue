@@ -25,7 +25,7 @@
       energy:border-energy-yellow
     "
   >
-    <span>Drag and drop file OR</span>
+    <span class="text-sm xl:text-base line-clamp-1">Drag and Drop or</span>
     <slot />
   </div>
 </template>

@@ -51,435 +51,307 @@
       </PublishFileUploader>
       <span>{{ dropzoneFile.name }}</span>
     </div>
-    <div>
-      <div class="flex flex-col lg:flex-row gap-3">
-        <!-- Edit Document -->
-        <BaseCard class="lg:basis-8/12 p-6">
-          <div class="flex flex-col space-y-6">
-            <h1 class="text-xl">Edit Document</h1>
-            <div class="flex space-x-4">
-              <div class="basis-1/2 space-y-4">
-                <BaseListbox
-                  v-model="selectedCountries"
-                  :label="'Countries'"
-                  :items="countries"
-                  multiple
-                />
-                <input
-                  type="checkbox"
-                  id="worldwide"
-                  name="worldwide"
-                  value="Worldwide"
-                  v-model="worldwide"
-                />
-                <label for="worldwide" class="ml-2 text-sm">Worldwide</label>
-              </div>
-              <div class="basis-1/2">
-                <BaseListbox
-                  v-model="selectedTopics"
-                  :label="'Topics'"
-                  :items="topics"
-                  multiple
-                />
-              </div>
-            </div>
-            <div class="flex">
-              <div class="basis-1/2 space-y-4">
-                <BaseListbox
-                  v-model="selectedActors"
-                  :label="'Non-State Actors'"
-                  :items="actors"
-                  multiple
-                />
-                <div>
-                  <input
-                    type="checkbox"
-                    id="allOrgs"
-                    name="allOrgs"
-                    v-model="checkAllOrgs"
-                    @click="toggleAllOrgs()"
-                  />
-                  <label for="allOrgs" class="ml-2 text-sm"> All Orgs</label>
-                </div>
-                <Disclosure v-slot="{ open }">
-                  <DisclosureButton class="flex text-sm items-center">
-                    <span>Show Dissem Orgs</span>
-                    <ChevronDownIcon
-                      class="h-4 w-4"
-                      :class="open ? 'transform rotate-180' : ''"
-                    />
-                  </DisclosureButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <DisclosurePanel>
-                      <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4">
-                        <div v-for="(org, index) in dissemOrgs" :key="index">
-                          <input
-                            type="checkbox"
-                            v-model="dissemOrgs[index].model"
-                            class="mt-2"
-                          />
-                          <label :for="org.name" class="text-sm ml-1">
-                            {{ org.name }}
-                          </label>
-                        </div>
-                      </div>
-                    </DisclosurePanel>
-                  </transition>
-                </Disclosure>
-              </div>
-            </div>
-            <div class="flex space-x-4">
-              <div class="basis-2/3">
-                <BaseInput v-model="event.title" label="Title" type="text" />
-              </div>
-              <div class="basis-1/3">
-                <BaseInput
-                  v-model="event.titlePM"
-                  label="Title PM (Required)"
-                  type="text"
-                />
-              </div>
-            </div>
-            <div class="flex space-x-4">
-              <div class="basis-2/3">
-                <label for="summary" class="text-sm font-semibold"
-                  >Summary</label
-                >
-                <textarea
-                  id="summary"
-                  maxlength="4000"
-                  rows="4"
-                  class="
-                    min-h-[2rem]
-                    w-full
-                    py-1
-                    px-2
-                    text-left
-                    bg-white
-                    dark:bg-slate-700
-                    energy:bg-gray-700
-                    border-t border-t-gray-100
-                    dark:border-t-slate-800
-                    energy:border-t-gray-800
-                    rounded-lg
-                    shadow-md
-                    cursor-default
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-opacity-75
-                    focus-visible:ring-offset-2
-                    resize-none
-                  "
-                ></textarea>
-              </div>
-              <div class="basis-1/3">
-                <BaseInput
-                  v-model="event.summaryPM"
-                  label="Summary PM (Required)"
-                  type="text"
-                />
-              </div>
-            </div>
-            <div>
-              <label for="body" class="font-semibold text-sm">Body</label>
-              <ckeditor
-                :editor="editor"
-                v-model="editorData"
-                :config="editorConfig"
-                id="body"
-              ></ckeditor>
-            </div>
-            <div>
-              <p
-                class="
-                  text-lg
-                  border-b-2 border-slate-900/10
-                  dark:border-slate-50/[0.06]
-                  energy:border-gray-700/25
-                  pb-2
-                "
-              >
-                Source Citations
-              </p>
-              <ol class="list-decimal list-inside ml-4 mt-4 space-y-2">
-                <div
-                  v-for="source in articlesData[0].sources"
-                  :key="source.name"
-                >
-                  <li class="text-sm">
-                    <router-link to="#" class="hover:underline">
-                      {{ source.name }}
-                    </router-link>
-                  </li>
-                </div>
-              </ol>
-            </div>
-          </div>
-        </BaseCard>
-        <!-- Right Container -->
-        <BaseCard class="lg:basis-4/12 p-6">
-          <div class="flex flex-col space-y-6">
-            <h1 class="text-xl">Classification</h1>
-            <div>
-              <BaseInput
-                v-model="event.classification"
-                label="Document Classification (required)"
-                type="text"
-              />
-            </div>
-            <div class="text-sm">
-              <p>Classified By: <span id="classifiedBy"></span></p>
-              <p>Derived From: Channel News Asia</p>
-              <p>Declassify On: Jun 26, 2032</p>
-            </div>
-            <div
-              class="
-                border-b-2 border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-                pb-2
-              "
-            >
-              <h2 class="text-lg">Attachments</h2>
-            </div>
-            <div>
-              <label class="block mb-2" for="attachment_input"
-                >Upload attachment files</label
-              >
-              <PublishFileUploader
-                id="attachment_input"
-                @drop.prevent="attachmentDrop"
-                @change="attachmentSelectedFile"
-              >
-                <button
-                  @click.prevent="attachmentFileInputButton.click()"
-                  class="
-                    bg-slate-100
-                    hover:bg-slate-200/80
-                    dark:bg-slate-700 dark:hover:bg-slate-700/80
-                    energy:bg-gray-700 energy:hover:bg-gray-700/80
-                    border border-slate-300
-                    p-2
-                    rounded
-                    shadow
-                    text-sm
-                  "
-                >
-                  Select File
-                </button>
-                <input
-                  type="file"
-                  id="attachmentDropzoneFile"
-                  class="attachmentDropzoneFile hidden"
-                  multiple
-                  ref="attachmentFileInputButton"
-                />
-              </PublishFileUploader>
-            </div>
-            <a href="" class="hover:underline">View ****</a>
-            <div
-              class="
-                border-b-2 border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-                pb-2
-              "
-            >
-              <h2 class="text-lg">Article Images</h2>
-            </div>
-            <div
-              class="
-                border-b-2 border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-                pb-2
-              "
-            >
-              <h2 class="text-lg">Supporting Attachments</h2>
-            </div>
-            <span>{{ attachmentDropzoneFile.name }}</span>
-            <div
-              class="
-                border-b-2 border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-gray-700/25
-                pb-2
-              "
-            >
-              <h2 class="text-lg">Details</h2>
-            </div>
-            <div>
-              <BaseInput
-                v-model="event.docNum"
-                label="Doc Num (Permalink)"
-                type="text"
-              />
-            </div>
-            <div>
-              <BaseInput
-                v-model="event.publicationNumber"
-                label="Publication Number"
-                type="text"
-              />
-            </div>
-            <div>
-              <BaseInput
-                v-model="event.publicationDate"
-                label="Publication Date"
-                type="text"
-              />
-            </div>
-            <div>
-              <label for="pocInfo" class="block mb-2" aria-hidden="true"
-                >Poc Info</label
-              >
-              <textarea
-                id="pocInfo"
-                maxlength="4000"
-                rows="4"
-                aria-label="POC info"
-                class="
-                  min-h-[2rem]
-                  w-full
-                  py-1
-                  px-2
-                  text-left
-                  bg-white
-                  dark:bg-slate-700
-                  energy:bg-gray-700
-                  border-t border-t-gray-100
-                  dark:border-t-slate-800
-                  energy:border-t-gray-800
-                  rounded-lg
-                  shadow-md
-                  cursor-default
-                  focus:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-opacity-75
-                  focus-visible:ring-offset-2
-                  resize-none
-                "
-              ></textarea>
-            </div>
-            <div>
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-3">
+      <!-- Edit Document -->
+      <BaseCard class="lg:basis-8/12 p-6">
+        <div class="flex flex-col space-y-6">
+          <h1 class="text-xl">Edit Document</h1>
+          <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
+            <div class="basis-1/2 space-y-4">
               <BaseListbox
-                v-model="selectedOffice"
-                :label="'Producing Office'"
-                :items="producingOffices"
+                v-model="selectedCountries"
+                :label="'Countries'"
+                :items="countries"
+                multiple
+              />
+              <input
+                type="checkbox"
+                id="worldwide"
+                name="worldwide"
+                value="Worldwide"
+                v-model="worldwide"
+              />
+              <label for="worldwide" class="ml-2 text-sm">Worldwide</label>
+            </div>
+            <div class="basis-1/2">
+              <BaseListbox
+                v-model="selectedTopics"
+                :label="'Topics'"
+                :items="topics"
                 multiple
               />
             </div>
-            <div>
+          </div>
+          <div class="md:flex">
+            <div class="basis-1/2 space-y-4">
               <BaseListbox
-                v-model="selectedAnalysisType"
-                :label="'Analysis Type'"
-                :items="analysisTypes"
+                v-model="selectedActors"
+                :label="'Non-State Actors'"
+                :items="actors"
+                multiple
+              />
+              <div>
+                <input
+                  type="checkbox"
+                  id="allOrgs"
+                  name="allOrgs"
+                  v-model="checkAllOrgs"
+                  @click="toggleAllOrgs()"
+                />
+                <label for="allOrgs" class="ml-2 text-sm"> All Orgs</label>
+              </div>
+              <Disclosure v-slot="{ open }">
+                <DisclosureButton class="flex text-sm items-center">
+                  <span>Show Dissem Orgs</span>
+                  <ChevronDownIcon
+                    class="h-4 w-4"
+                    :class="open ? 'transform rotate-180' : ''"
+                  />
+                </DisclosureButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <DisclosurePanel>
+                    <div class="grid grid-cols-3 md:grid-cols-5 gap-3 mt-4">
+                      <div v-for="(org, index) in dissemOrgs" :key="index">
+                        <input
+                          type="checkbox"
+                          v-model="dissemOrgs[index].model"
+                          class="mt-2"
+                        />
+                        <label :for="org.name" class="text-sm ml-1">
+                          {{ org.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </DisclosurePanel>
+                </transition>
+              </Disclosure>
+            </div>
+          </div>
+          <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
+            <div class="basis-2/3">
+              <BaseInput v-model="event.title" label="Title" type="text" />
+            </div>
+            <div class="basis-1/3">
+              <BaseInput
+                v-model="event.titlePM"
+                label="Title PM (Required)"
+                type="text"
               />
             </div>
           </div>
-        </BaseCard>
-      </div>
-      <div class="flex gap-20 flex-wrap lg:flex-nowrap gap-y-8 mb-8">
-        <div class="flex gap-3">
-          <button
-            @click.prevent
-            type="submit"
-            class="
-              bg-slate-100
-              hover:bg-slate-200/80
-              dark:bg-slate-700 dark:hover:bg-slate-700/80
-              energy:bg-gray-700 energy:hover:bg-gray-700/80
-              border border-slate-300
-              p-2
-              rounded
-              shadow
-              text-sm
-            "
-          >
-            Publish
-          </button>
-          <button
-            @click.prevent
-            class="
-              bg-slate-100
-              hover:bg-slate-200/80
-              dark:bg-slate-700 dark:hover:bg-slate-700/80
-              energy:bg-gray-700 energy:hover:bg-gray-700/80
-              border border-slate-300
-              p-2
-              rounded
-              shadow
-              text-sm
-            "
-          >
-            Save and Generate PDF
-          </button>
-          <button
-            @click.prevent
-            class="
-              bg-slate-100
-              hover:bg-slate-200/80
-              dark:bg-slate-700 dark:hover:bg-slate-700/80
-              energy:bg-gray-700 energy:hover:bg-gray-700/80
-              border border-slate-300
-              p-2
-              rounded
-              shadow
-              text-sm
-            "
-          >
-            Preview
-          </button>
-          <button
-            @click.prevent
-            class="
-              bg-slate-100
-              hover:bg-slate-200/80
-              dark:bg-slate-700 dark:hover:bg-slate-700/80
-              energy:bg-gray-700 energy:hover:bg-gray-700/80
-              border border-slate-300
-              p-2
-              rounded
-              shadow
-              text-sm
-            "
-          >
-            Cancel
-          </button>
-        </div>
-        <div class="flex items-end gap-3">
-          <button
-            @click.prevent
-            class="
-              bg-red-800
-              hover:bg-red-900
-              border border-slate-300
-              p-2
-              rounded
-              shadow
-              text-sm text-white
-            "
-          >
-            Delete
-          </button>
-          <div class="flex gap-1">
-            <input
-              type="checkbox"
-              id="revision"
-              name="revision"
-              value="Revision"
-            />
-            <label for="revision" class="text-sm">
-              This edit is a substantive revision</label
-            >
+          <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
+            <div class="basis-2/3">
+              <BaseTextarea
+                maxlength="4000"
+                rows="4"
+                v-model="event.summary"
+                label="Summary"
+              ></BaseTextarea>
+            </div>
+            <div class="basis-1/3">
+              <BaseInput
+                v-model="event.summaryPM"
+                label="Summary PM (Required)"
+                type="text"
+              />
+            </div>
           </div>
+          <div>
+            <label for="body" class="font-semibold text-sm">Body</label>
+            <ckeditor
+              :editor="editor"
+              v-model="editorData"
+              :config="editorConfig"
+              id="body"
+            ></ckeditor>
+          </div>
+          <div>
+            <p
+              class="
+                text-lg
+                border-b-2 border-slate-900/10
+                dark:border-slate-50/[0.06]
+                energy:border-gray-700/25
+                pb-2
+              "
+            >
+              Source Citations
+            </p>
+            <ol class="list-decimal list-inside ml-4 mt-4 space-y-2">
+              <div v-for="source in articlesData[0].sources" :key="source.name">
+                <li class="text-sm">
+                  <router-link to="#" class="hover:underline">
+                    {{ source.name }}
+                  </router-link>
+                </li>
+              </div>
+            </ol>
+          </div>
+        </div>
+      </BaseCard>
+      <!-- Right Container -->
+      <BaseCard class="lg:basis-4/12 p-6">
+        <div class="flex flex-col space-y-6">
+          <h1 class="text-xl">Classification</h1>
+          <div>
+            <BaseInput
+              v-model="event.classification"
+              label="Document Classification (required)"
+              type="text"
+            />
+          </div>
+          <div class="text-sm">
+            <p>Classified By: <span id="classifiedBy"></span></p>
+            <p>Derived From: Channel News Asia</p>
+            <p>Declassify On: Jun 26, 2032</p>
+          </div>
+          <div
+            class="
+              border-b-2 border-slate-900/10
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+              pb-2
+            "
+          >
+            <h2 class="text-lg">Attachments</h2>
+          </div>
+          <div>
+            <label class="block mb-2" for="attachment_input"
+              >Upload attachment files</label
+            >
+            <PublishFileUploader
+              id="attachment_input"
+              @drop.prevent="attachmentDrop"
+              @change="attachmentSelectedFile"
+            >
+              <button
+                @click.prevent="attachmentFileInputButton.click()"
+                class="
+                  bg-slate-100
+                  hover:bg-slate-200/80
+                  dark:bg-slate-700 dark:hover:bg-slate-700/80
+                  energy:bg-gray-700 energy:hover:bg-gray-700/80
+                  border border-slate-300
+                  p-2
+                  rounded
+                  shadow
+                  text-sm
+                "
+              >
+                Select File
+              </button>
+              <input
+                type="file"
+                id="attachmentDropzoneFile"
+                class="attachmentDropzoneFile hidden"
+                multiple
+                ref="attachmentFileInputButton"
+              />
+            </PublishFileUploader>
+          </div>
+          <a href="" class="hover:underline">View ****</a>
+          <div
+            class="
+              border-b-2 border-slate-900/10
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+              pb-2
+            "
+          >
+            <h2 class="text-lg">Article Images</h2>
+          </div>
+          <div
+            class="
+              border-b-2 border-slate-900/10
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+              pb-2
+            "
+          >
+            <h2 class="text-lg">Supporting Attachments</h2>
+          </div>
+          <span>{{ attachmentDropzoneFile.name }}</span>
+          <div
+            class="
+              border-b-2 border-slate-900/10
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/25
+              pb-2
+            "
+          >
+            <h2 class="text-lg">Details</h2>
+          </div>
+          <div>
+            <BaseInput
+              v-model="event.docNum"
+              label="Doc Num (Permalink)"
+              type="text"
+            />
+          </div>
+          <div>
+            <BaseInput
+              v-model="event.publicationNumber"
+              label="Publication Number"
+              type="text"
+            />
+          </div>
+          <div>
+            <BaseInput
+              v-model="event.publicationDate"
+              label="Publication Date"
+              type="text"
+            />
+          </div>
+          <div>
+            <BaseTextarea
+              maxlength="4000"
+              rows="4"
+              v-model="event.pocInfo"
+              label="POC Info"
+            ></BaseTextarea>
+          </div>
+          <div>
+            <BaseListbox
+              v-model="selectedOffice"
+              :label="'Producing Office'"
+              :items="producingOffices"
+              multiple
+            />
+          </div>
+          <div>
+            <BaseListbox
+              v-model="selectedAnalysisType"
+              :label="'Analysis Type'"
+              :items="analysisTypes"
+            />
+          </div>
+        </div>
+      </BaseCard>
+    </div>
+    <div class="flex my-4">
+      <div class="flex flex-wrap gap-4">
+        <BaseButton @click.prevent>Publish</BaseButton>
+        <BaseButton @click.prevent>Save and Generate PDF</BaseButton>
+        <BaseButton @click.prevent>Preview</BaseButton>
+        <BaseButton @click.prevent>Cancel</BaseButton>
+        <BaseButton @click.prevent type="danger">Delete</BaseButton>
+        <div class="self-center">
+          <input
+            type="checkbox"
+            id="revision"
+            name="revision"
+            value="Revision"
+          />
+          <label for="revision" class="text-sm">
+            This edit is a substantive revision</label
+          >
         </div>
       </div>
     </div>
@@ -541,11 +413,13 @@ export default {
     const event = ref({
       title: "",
       titlePm: "",
+      summary: "",
       summaryPM: "",
       classification: "",
       docNum: "",
       publicationNumber: "",
       publicationDate: "",
+      pocInfo: "",
       classifiedBy: "",
     });
     const selectedCountries = ref([]);
@@ -602,7 +476,7 @@ export default {
 
     const changePocInfo = () => {
       var selection = selectedOffice.value;
-      document.getElementById("pocInfo").value = selection.pocInfo;
+      event.value.pocInfo = selection.pocInfo;
     };
 
     const drop = (event) => {
