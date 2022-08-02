@@ -192,13 +192,16 @@
   <template v-if="!loading && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
-      <div class="h-fit" :class="[ selectedView.label==='Grid' ? 'basis-full' : 'basis-3/4', ]">
+      <div
+        class="h-fit"
+        :class="[selectedView.label === 'Grid' ? 'basis-full' : 'basis-3/4']"
+      >
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
             <div class="inline-flex">
               <label class="self-center">Sort By</label>
-              <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
+              <Listbox v-model="selectedOrder" class="ml-3 min-w-[115px]">
                 <div class="relative">
                   <ListboxButton
                     class="
@@ -225,7 +228,9 @@
                       focus-visible:ring-offset-2
                     "
                   >
-                    <span class="block truncate">{{ selectedOrder.label }}</span>
+                    <span class="block truncate">{{
+                      selectedOrder.label
+                    }}</span>
                     <span
                       class="absolute inset-y-0 right-0 flex items-center pr-2"
                     >
@@ -283,7 +288,7 @@
             </div>
             <div class="inline-flex">
               <label class="self-center">View</label>
-              <Listbox v-model="selectedView" class="ml-3 min-w-[125px]">
+              <Listbox v-model="selectedView" class="ml-3 min-w-[100px]">
                 <div class="relative">
                   <ListboxButton
                     class="
@@ -366,20 +371,20 @@
                 </div>
               </Listbox>
             </div>
-           
           </div>
-           <div v-show="selectedView.label === 'Grid'"
-              class=" 
-                cursor-pointer
-                text-mission-light-blue
-                dark:text-teal-400
-                energy:text-energy-yellow
-                self-center
-              "
-              @click="openMobileFacetsDialog"
-            >
-              Show Filters
-            </div>
+          <div
+            v-show="selectedView.label === 'Grid'"
+            class="
+              cursor-pointer
+              text-mission-light-blue
+              dark:text-teal-400
+              energy:text-energy-yellow
+              self-center
+            "
+            @click="openMobileFacetsDialog"
+          >
+            Show Filters
+          </div>
         </div>
         <!-- Search Results Table -->
         <BaseCard>
@@ -439,7 +444,9 @@
                           dark:text-slate-300
                           energy:text-gray-300
                         "
-                        >{{ `${"(" + result.title_classification + ") "}` }}</span
+                        >{{
+                          `${"(" + result.title_classification + ") "}`
+                        }}</span
                       >
                       <span
                         class="text-black dark:text-white energy:text-white"
@@ -465,7 +472,9 @@
             </template>
           </template>
           <template v-else-if="selectedView.label === 'Grid'">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
+            >
               <template v-for="result in results" :key="result">
                 <div
                   class="
@@ -492,7 +501,9 @@
                           dark:text-slate-300
                           energy:text-gray-300
                         "
-                        >{{ `${"(" + result.title_classification + ") "}` }}</span
+                        >{{
+                          `${"(" + result.title_classification + ") "}`
+                        }}</span
                       >
                       <span
                         class="text-black dark:text-white energy:text-white"
@@ -517,14 +528,17 @@
         </BaseCard>
       </div>
       <!-- Search Results Filters -->
-      <BaseCard v-show="selectedView.label === 'List'" class="hidden lg:block basis-1/4 ml-4 h-full">
+      <BaseCard
+        v-show="selectedView.label === 'List'"
+        class="hidden lg:block basis-1/4 ml-4 h-full"
+      >
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
-        <div class="flex gap-x-4">
+        <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
           <div class="inline-flex">
-            <label class="self-center">Sort By</label>
-            <Listbox v-model="selectedOrder" class="ml-3 min-w-[125px]">
+            <label class="self-center min-w-[58px] sm:min-w-0">Sort By</label>
+            <Listbox v-model="selectedOrder" class="ml-3 min-w-[110px]">
               <div class="relative">
                 <ListboxButton
                   class="
@@ -552,7 +566,9 @@
                   "
                 >
                   <span class="block truncate">{{ selectedOrder.label }}</span>
-                  <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <span
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
                     <SelectorIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </ListboxButton>
@@ -606,8 +622,8 @@
             </Listbox>
           </div>
           <div class="inline-flex">
-            <label class="self-center">View</label>
-            <Listbox v-model="selectedView" class="ml-3 min-w-[125px]">
+            <label class="self-center min-w-[58px] sm:min-w-0">View</label>
+            <Listbox v-model="selectedView" class="ml-3 min-w-[110px]">
               <div class="relative">
                 <ListboxButton
                   class="
@@ -937,7 +953,8 @@ export default {
       () => {
         store.dispatch("search/search");
         currentPage.value = parseInt(route.query.page) || 1;
-        selectedView.value = route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
+        selectedView.value =
+          route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
       }
     );
 
