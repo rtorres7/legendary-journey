@@ -31,7 +31,7 @@
       <a
         aria-label="Remove system message"
         @click="removeSystemMessage"
-        class="m-4 text-slate-300 hover:text-white"
+        class="m-4 text-slate-300 energy:text-gray-300 hover:text-white"
       >
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
@@ -48,7 +48,7 @@
         uppercase
       "
     >
-      Unclassified
+      {{ metadata.system_classification }}
     </p>
   </div>
   <BannerNav />
@@ -57,6 +57,7 @@
 <script>
 import { ref } from "vue";
 import BannerNav from "@/components/BannerNav.vue";
+import { metadata } from "@/config";
 import { XIcon } from "@heroicons/vue/outline";
 
 export default {
@@ -68,6 +69,7 @@ export default {
     const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));
     return {
       hasAcknowledged,
+      metadata,
     };
   },
   methods: {

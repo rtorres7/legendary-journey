@@ -5,7 +5,7 @@
       :key="index"
     >
       <div class="py-2">
-        <p class="text-sm font-semibold">{{ displayName }}</p>
+        <p class="text-sm font-medium">{{ displayName }}</p>
         <div class="flex flex-col">
           <template v-for="(facet, index) in rows" :key="facet">
             <div :class="index > 4 && !expand ? 'hidden' : 'block'">

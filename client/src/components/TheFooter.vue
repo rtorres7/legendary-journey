@@ -24,6 +24,9 @@
         >
           logo
         </div>
+        <p class="ml-2 text-slate-300 text-sm italic">
+          {{ metadata.footer_note }}
+        </p>
       </div>
       <ul
         class="
@@ -205,6 +208,7 @@
   </div>
 </template>
 <script>
+import { metadata } from "@/config";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 
@@ -237,6 +241,7 @@ export default {
   },
   setup() {
     return {
+      metadata,
       poaLinks,
       resourceLinks,
     };
