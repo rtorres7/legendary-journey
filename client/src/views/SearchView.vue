@@ -471,11 +471,9 @@
                   class="
                     flex
                     p-4
-                    border-b border-slate-900/10
+                    border border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-gray-700/25
-                    rounded
-                    shadow-lg
                     h-36
                   "
                 >
@@ -501,7 +499,7 @@
                         >{{ result.title }}</span
                       >
                     </div>
-                    <div class="mt-2">
+                    <div class="mt-2 text-sm">
                       {{ dayjs(result.date_published).format("DD MMM YYYY") }}
                     </div>
                   </div>
@@ -522,7 +520,7 @@
       <BaseCard v-show="selectedView.label === 'List'" class="hidden lg:block basis-1/4 ml-4 h-full">
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
-      <div class="lg:hidden flex flex-wrap md:flex-nowrap justify-between gap-y-4 py-4">
+      <div class="lg:hidden flex justify-between gap-4 py-4">
         <div class="flex gap-x-4">
           <div class="inline-flex">
             <label class="self-center">Sort By</label>
@@ -939,6 +937,7 @@ export default {
       () => {
         store.dispatch("search/search");
         currentPage.value = parseInt(route.query.page) || 1;
+        selectedView.value = route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
       }
     );
 
