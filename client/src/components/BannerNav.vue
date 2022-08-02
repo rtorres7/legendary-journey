@@ -126,19 +126,19 @@
                       >
                         <MenuItem
                           as="div"
-                          v-for="item in issuesNavigation"
-                          :key="item.name"
+                          v-for="issue in metadata.issues"
+                          :key="issue"
                           v-slot="{ active }"
                         >
                           <a
-                            :href="item.href"
+                            :href="'/'"
                             :class="[
                               active
                                 ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
                                 : '',
                               'py-1 px-3 flex cursor-pointer',
                             ]"
-                            >{{ item.name }}</a
+                            >{{ issue }}</a
                           >
                         </MenuItem>
                       </MenuItems>
@@ -626,7 +626,8 @@
                       >
                     </MenuItem>
                     <MenuItem>
-                      <router-link to="/publish" 
+                      <router-link
+                        to="/publish"
                         class="
                           py-1
                           px-3
@@ -782,7 +783,7 @@
               leave-from="opacity-100"
               leave-to="opacity-0"
             >
-              <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+              <div class="fixed inset-0 bg-black/25" />
             </TransitionChild>
             <TransitionChild
               as="template"
@@ -793,7 +794,7 @@
               leave-from="opacity-100 scale-100"
               leave-to="opacity-0 scale-95"
             >
-              <div
+              <DialogPanel
                 class="
                   inline-block
                   w-full
@@ -846,6 +847,18 @@
                       href="/"
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
                     >
+                  </li>
+                  <li>
+                    <router-link
+                      to="/publish"
+                      class="
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                    >
+                      Publish an Article
+                    </router-link>
                   </li>
                   <li>
                     <a
@@ -976,7 +989,7 @@
                     >
                   </li>
                 </ul>
-              </div>
+              </DialogPanel>
             </TransitionChild>
           </div>
         </div>
@@ -993,6 +1006,7 @@
 <script>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
+import { metadata } from "@/config";
 import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
@@ -1000,7 +1014,7 @@ import MobileSideMenu from "@/components/MobileSideMenu";
 import TestConsoleDialog from "@/components/TestConsoleDialog";
 import {
   Dialog,
-  DialogOverlay,
+  DialogPanel,
   Listbox,
   ListboxButton,
   ListboxOptions,
@@ -1036,18 +1050,6 @@ const mainNavigation = [
   { name: "Community", href: "/", current: false },
   { name: "Special Editions", href: "/", current: false },
 ];
-const issuesNavigation = [
-  { name: "Issue 0", href: "/" },
-  { name: "Issue 1", href: "/" },
-  { name: "Issue 2", href: "/" },
-  { name: "Issue 3", href: "/" },
-  { name: "Issue 4", href: "/" },
-  { name: "Issue 5", href: "/" },
-  { name: "Issue 6", href: "/" },
-  { name: "Issue 7", href: "/" },
-  { name: "Issue 8", href: "/" },
-  { name: "Issue 9", href: "/" },
-];
 const themeOptions = ["light", "dark", "energy", "system"];
 
 export default {
@@ -1058,7 +1060,7 @@ export default {
     TestConsoleDialog,
     BannerNavMap,
     Dialog,
-    DialogOverlay,
+    DialogPanel,
     Listbox,
     ListboxButton,
     ListboxOptions,
@@ -1126,12 +1128,12 @@ export default {
     const selectedCountry = ref(countries[0]);
 
     return {
+      metadata,
       regions,
       countries,
       selectedCountry,
       mainNavigation,
       themeOptions,
-      issuesNavigation,
       isMainMenuOpen,
       isUserMenuOpen,
       isTestConsoleMenuOpen,

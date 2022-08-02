@@ -13,7 +13,7 @@
   </p>
   <!-- Search Form -->
   <BaseCard class="mt-4 p-4">
-    <Disclosure v-slot="{ open }">
+    <Disclosure v-slot="{ open }" defaultOpen>
       <div class="flex flex-col justify-between">
         <div
           class="
@@ -27,8 +27,8 @@
             w-full
           "
         >
-          <div class="lg:basis-2/5 lg:max-w-none">
-            <label class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
+          <div class="lg:w-2/5">
+            <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
               >Keyword Search or Filter
             </label>
             <input
@@ -53,8 +53,13 @@
             ]"
             :key="n"
           >
-            <div class="lg:basis-1/5 lg:max-w-none">
-              <BaseListbox v-model="n.model" :label="n.label" :items="n.list" />
+            <div class="lg:w-1/5">
+              <BaseListbox
+                v-model="n.model"
+                :label="n.label"
+                :items="n.list"
+                multiple
+              />
             </div>
           </template>
         </div>
@@ -734,7 +739,7 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
               >
-                <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+                <div class="fixed inset-0 bg-black/25" />
               </TransitionChild>
               <span
                 class="inline-block h-screen align-middle"
@@ -751,7 +756,7 @@
                 leave-from="opacity-100 scale-100"
                 leave-to="opacity-0 scale-95"
               >
-                <div
+                <DialogPanel
                   class="
                     inline-block
                     w-full
@@ -798,7 +803,7 @@
                       class="grid grid-cols-2 md:grid-cols-3 gap-4"
                     />
                   </div>
-                </div>
+                </DialogPanel>
               </TransitionChild>
             </div>
           </div>
@@ -815,7 +820,7 @@ import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import {
   Dialog,
-  DialogOverlay,
+  DialogPanel,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -843,7 +848,7 @@ const viewOptions = [
 export default {
   components: {
     Dialog,
-    DialogOverlay,
+    DialogPanel,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -880,17 +885,17 @@ export default {
     const queryFilters = ref({
       regions: {
         label: "Regions & Countries",
-        model: "",
+        model: [],
         list: getItems("regions"),
       },
       issues: {
         label: "Issues & Topics",
-        model: "",
+        model: [],
         list: getItems("issues"),
       },
       reporting: {
         label: "Reporting & Product Types",
-        model: "",
+        model: [],
         list: getItems("reporting"),
       },
       classifications: {
@@ -956,6 +961,14 @@ export default {
         selectedView.value =
           route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
       }
+    );
+
+    watch(
+      () => queryFilters,
+      (newValue) => {
+        console.log("queryFilters changed to: ", newValue);
+      },
+      { deep: true }
     );
 
     const closeMobileFacetsDialog = () =>
