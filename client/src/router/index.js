@@ -61,6 +61,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  //TODO: Handle 403s appropriately for admin-level pages
   if (to.meta.admin) {
     if (store.state.admin) {
       next()
