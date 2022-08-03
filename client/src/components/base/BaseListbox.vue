@@ -138,7 +138,7 @@ export default {
       required: true,
     },
     modelValue: {
-      type: String || Array,
+      type: [String, Array],
       default: "",
     },
   },

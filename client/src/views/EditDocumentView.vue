@@ -14,13 +14,13 @@
   <form ref="publishingForm">
     <div class="flex flex-col lg:flex-row gap-6 lg:gap-3 mt-4">
       <!-- Left Container -->
-      <BaseCard class="flex flex-col lg:w-8/12 p-6 space-y-6 h-fit">
+      <BaseCard class="flex flex-col lg:w-8/12 p-6 space-y-6">
         <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
           <div class="basis-1/2 space-y-4">
             <BaseListbox
-              v-model="selectedCountries"
-              :label="'Countries'"
-              :items="countries"
+              v-model="event.selectedCountries.model"
+              :label="event.selectedCountries.label"
+              :items="event.selectedCountries.items"
               multiple
             />
             <input
@@ -34,9 +34,9 @@
           </div>
           <div class="basis-1/2">
             <BaseListbox
-              v-model="selectedTopics"
-              :label="'Topics'"
-              :items="topics"
+              v-model="event.selectedTopics.model"
+              :label="event.selectedTopics.label"
+              :items="event.selectedTopics.items"
               multiple
             />
           </div>
@@ -44,9 +44,9 @@
         <div class="md:flex">
           <div class="basis-full space-y-4">
             <BaseListbox
-              v-model="selectedActors"
-              :label="'Non-State Actors'"
-              :items="actors"
+              v-model="event.selectedActors.model"
+              :label="event.selectedActors.label"
+              :items="event.selectedActors.items"
               multiple
             />
             <div>
@@ -290,17 +290,16 @@
           </div>
           <div>
             <BaseListbox
-              v-model="selectedOffice"
-              :label="'Producing Office'"
-              :items="producingOffices"
-              multiple
+              v-model="event.selectedOffice.model"
+              :label="event.selectedOffice.label"
+              :items="event.selectedOffice.items"
             />
           </div>
           <div>
             <BaseListbox
-              v-model="selectedAnalysisType"
-              :label="'Analysis Type'"
-              :items="analysisTypes"
+              v-model="event.selectedAnalysisType.model"
+              :label="event.selectedAnalysisType.label"
+              :items="event.selectedAnalysisType.items"
             />
           </div>
         </div>
@@ -310,7 +309,7 @@
       <div class="flex flex-wrap gap-4">
         <BaseButton @click.prevent>Publish</BaseButton>
         <BaseButton @click.prevent>Save and Generate PDF</BaseButton>
-        <BaseButton @click.prevent>Preview</BaseButton>
+        <BaseButton @click.prevent="populateFields">Preview</BaseButton>
         <BaseButton @click.prevent>Cancel</BaseButton>
         <BaseButton @click.prevent type="danger" disabled>Delete</BaseButton>
         <div class="self-center">
@@ -381,24 +380,43 @@ export default {
   },
   setup() {
     const event = ref({
+      selectedCountries: {
+        label: "Countries",
+        model: [],
+        items: countries,
+      },
+      selectedTopics: {
+        label: "Topics",
+        model: [],
+        items: topics,
+      },
+      selectedActors: {
+        label: "Non-State Actors",
+        model: [],
+        items: actors,
+      },
       title: "",
       titlePm: "",
       summary: "",
       summaryPM: "",
       classification: "",
+      classifiedBy: "",
       docNum: "",
       publicationNumber: "",
       publicationDate: "",
       pocInfo: "",
-      classifiedBy: "",
+      selectedOffice: {
+        label: "Producing Office",
+        model: "",
+        items: producingOffices,
+      },
+      selectedAnalysisType: {
+        label: "Analysis Type",
+        model: "",
+        items: analysisTypes,
+      },
     });
-    const selectedCountries = ref([]);
     const worldwide = ref(null);
-    const selectedTopics = ref([]);
-    const selectedActors = ref([]);
-    const dateValue = ref(null);
-    const selectedOffice = ref([]);
-    const selectedAnalysisType = ref("");
     const fileInputButton = ref(null);
     const attachmentFileInputButton = ref(null);
     const dropzoneFile = ref("");
@@ -435,7 +453,7 @@ export default {
     };
 
     const changePocInfo = () => {
-      var selection = selectedOffice.value;
+      var selection = event.value.selectedOffice.model;
       event.value.pocInfo = selection.pocInfo;
     };
 
@@ -460,9 +478,9 @@ export default {
     };
 
     const populateFields = () => {
-      selectedCountries.value = [countries[144], countries[183]];
-      selectedTopics.value = [topics[0], topics[1]];
-      selectedActors.value = [actors[0], actors[1]];
+      event.value.selectedCountries.model = [countries[144], countries[183]];
+      event.value.selectedTopics.model = [topics[0], topics[1]];
+      event.value.selectedActors.model = [actors[0], actors[1]];
       event.value.title = articles[0].title;
       event.value.titlePM = articles[0].classification;
       event.value.summaryPM = articles[0].classification;
@@ -475,19 +493,8 @@ export default {
 
     return {
       event,
-      countries,
-      selectedCountries,
       worldwide,
-      topics,
-      selectedTopics,
-      actors,
-      selectedActors,
-      dateValue,
       dissemOrgs,
-      producingOffices,
-      selectedOffice,
-      analysisTypes,
-      selectedAnalysisType,
       fileInputButton,
       attachmentFileInputButton,
       dropzoneFile,
@@ -508,6 +515,6 @@ export default {
 
 <style>
 .ck-editor__editable_inline {
-  height: 500px;
+  height: 450px;
 }
 </style>

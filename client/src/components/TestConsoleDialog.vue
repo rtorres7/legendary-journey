@@ -387,8 +387,6 @@ export default {
     const adminFromStore = computed(() => store.state.admin);
     const delayFromStore = computed(() => store.state.delay);
 
-    console.log("store: ", store);
-
     watch(
       () => route.name,
       () => {
