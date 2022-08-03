@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
 import SearchView from '../views/SearchView.vue'
-import PublishView from '../views/PublishView.vue'
+import EditDocumentView from '../views/EditDocumentView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 const routes = [
@@ -36,11 +36,11 @@ const routes = [
     }
   },
   {
-    path: '/publish',
-    name: 'publish',
-    component: PublishView,
+    path: '/edit',
+    name: 'edit',
+    component: EditDocumentView,
     meta: {
-      title: 'Publish',
+      title: 'Edit Document',
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },

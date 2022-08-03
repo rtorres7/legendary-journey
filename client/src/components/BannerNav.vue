@@ -627,7 +627,7 @@
                     </MenuItem>
                     <MenuItem>
                       <router-link
-                        to="/publish"
+                        to="/edit"
                         class="
                           py-1
                           px-3
@@ -639,7 +639,7 @@
                           cursor-pointer
                         "
                       >
-                        Publish an Article
+                        Edit Document
                       </router-link>
                     </MenuItem>
                     <MenuItem>
@@ -850,14 +850,14 @@
                   </li>
                   <li>
                     <router-link
-                      to="/publish"
+                      to="/edit"
                       class="
                         hover:text-black
                         dark:hover:text-white
                         energy:text-white
                       "
                     >
-                      Publish an Article
+                      Edit Document
                     </router-link>
                   </li>
                   <li>

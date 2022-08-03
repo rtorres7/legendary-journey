@@ -22,11 +22,9 @@
       dark:bg-slate-700 dark:hover:bg-slate-700/80
       energy:bg-gray-700 energy:hover:bg-gray-700/80
       border border-dashed border-slate-400
-      dark:border-teal-300
-      energy:border-energy-yellow
     "
   >
-    <span class="text-sm xl:text-base line-clamp-1">Drag and Drop or</span>
+    <span class="text-sm line-clamp-1">Drag and Drop or</span>
     <slot />
   </div>
 </template>

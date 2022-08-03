@@ -16,6 +16,14 @@
     @apply bg-gray-700;
   }
 
+  /* .dark .ck.ck-toolbar {
+    @apply bg-slate-800;
+  }
+
+  .dark .ck.ck-button .ck-button__label {
+    @apply text-slate-300;
+  } */
+
   .dark .ck-content {
     @apply text-slate-300;
   }
