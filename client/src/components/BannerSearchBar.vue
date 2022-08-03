@@ -11,8 +11,8 @@
         rounded-md
         shadow-sm
         max-w-[500px]
-        lg:max-w-none lg:w-[400px]
-        xl:w-[370px]
+        lg:max-w-none lg:w-[370px]
+        xl:w-[400px]
         border border-slate-200
         bg-transparent
         leading-6

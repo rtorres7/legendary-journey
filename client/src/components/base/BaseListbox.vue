@@ -2,7 +2,7 @@
   <Listbox v-model="selectedItem" :multiple="multiple">
     <div class="relative mt-1">
       <ListboxLabel
-        class="text-sm font-semibold line-clamp-1 xl:line-clamp-none"
+        class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
         >{{ label }}</ListboxLabel
       >
       <ListboxButton
@@ -13,6 +13,7 @@
           w-full
           py-1
           px-2
+          mt-1
           dark:bg-slate-700
           energy:bg-gray-700
           border-t border-t-gray-100
@@ -137,7 +138,7 @@ export default {
       required: true,
     },
     modelValue: {
-      type: String || Array,
+      type: [String, Array],
       default: "",
     },
   },

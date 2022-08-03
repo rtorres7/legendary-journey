@@ -13,7 +13,7 @@
             leave-from="opacity-100"
             leave-to="opacity-0"
           >
-            <DialogOverlay class="fixed inset-0 bg-black opacity-50" />
+            <div class="fixed inset-0 bg-black/25" />
           </TransitionChild>
           <span class="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
@@ -27,7 +27,7 @@
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
-            <div
+            <DialogPanel
               class="
                 inline-block
                 w-full
@@ -98,6 +98,47 @@
                           <span
                             :class="
                               alertEnabled ? 'translate-x-6' : 'translate-x-1'
+                            "
+                            class="
+                              inline-block
+                              w-4
+                              h-4
+                              transition-transform
+                              transform
+                              bg-white
+                              rounded-full
+                            "
+                          />
+                        </Switch>
+                      </div>
+                    </SwitchGroup>
+                    <SwitchGroup>
+                      <div class="flex items-center justify-between">
+                        <SwitchLabel class="mr-4">Enable Admin</SwitchLabel>
+                        <Switch
+                          v-model="adminEnabled"
+                          :class="
+                            adminEnabled
+                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                          "
+                          class="
+                            relative
+                            inline-flex
+                            items-center
+                            h-6
+                            transition-colors
+                            rounded-full
+                            w-11
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-slate-500
+                          "
+                        >
+                          <span
+                            :class="
+                              adminEnabled ? 'translate-x-6' : 'translate-x-1'
                             "
                             class="
                               inline-block
@@ -274,7 +315,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </DialogPanel>
           </TransitionChild>
         </div>
       </div>
@@ -288,7 +329,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   Dialog,
-  DialogOverlay,
+  DialogPanel,
   Switch,
   SwitchGroup,
   SwitchLabel,
@@ -300,7 +341,7 @@ import { XIcon } from "@heroicons/vue/outline";
 export default {
   components: {
     Dialog,
-    DialogOverlay,
+    DialogPanel,
     Switch,
     SwitchGroup,
     SwitchLabel,
@@ -335,6 +376,7 @@ export default {
 
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
+    const adminEnabled = ref(false);
     const delayEnabled = ref(false);
 
     const loadingArticlesFromStore = computed(
@@ -342,9 +384,8 @@ export default {
     );
 
     const loadingResultsFromStore = computed(() => store.state.search.loading);
+    const adminFromStore = computed(() => store.state.admin);
     const delayFromStore = computed(() => store.state.delay);
-
-    console.log("store: ", store);
 
     watch(
       () => route.name,
@@ -369,6 +410,14 @@ export default {
       }
     });
 
+    watch(adminEnabled, (enabled) => {
+      if (enabled) {
+        store.dispatch("addAdmin");
+      } else {
+        store.dispatch("removeAdmin");
+      }
+    });
+
     watch(delayEnabled, (enabled) => {
       if (enabled) {
         store.dispatch("delay");
@@ -385,6 +434,10 @@ export default {
       loadingResultsEnabled.value = loading;
     });
 
+    watch(adminFromStore, (status) => {
+      adminEnabled.value = status;
+    });
+
     watch(delayFromStore, (status) => {
       delayEnabled.value = status;
     });
@@ -395,6 +448,7 @@ export default {
       alertEnabled,
       loadingArticlesEnabled,
       loadingResultsEnabled,
+      adminEnabled,
       delayEnabled,
     };
   },

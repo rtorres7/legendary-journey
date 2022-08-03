@@ -11,7 +11,7 @@
         items-center
       "
     >
-      <span class="font-semibold">{{ title }}</span>
+      <span class="font-medium">{{ title }}</span>
       <ChevronDownIcon
         class="h-4 w-4"
         :class="open ? 'transform rotate-180' : ''"
