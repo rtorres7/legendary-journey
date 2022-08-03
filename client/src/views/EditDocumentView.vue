@@ -330,11 +330,10 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { articles, countries } from "@/data";
-import flatpickr from "flatpickr";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import PublishFileUploader from "@/components/PublishFileUploader";
 
@@ -473,11 +472,6 @@ export default {
       event.value.publicationNumber = articles[0].id;
       event.value.classifiedBy = articles[0].author;
     };
-
-    onMounted(() => {
-      flatpickr("#datepicker", {});
-      require("flatpickr/dist/flatpickr.css");
-    });
 
     return {
       event,

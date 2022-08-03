@@ -112,6 +112,47 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
+                    <SwitchGroup>
+                      <div class="flex items-center justify-between">
+                        <SwitchLabel class="mr-4">Enable Admin</SwitchLabel>
+                        <Switch
+                          v-model="adminEnabled"
+                          :class="
+                            adminEnabled
+                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                          "
+                          class="
+                            relative
+                            inline-flex
+                            items-center
+                            h-6
+                            transition-colors
+                            rounded-full
+                            w-11
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-slate-500
+                          "
+                        >
+                          <span
+                            :class="
+                              adminEnabled ? 'translate-x-6' : 'translate-x-1'
+                            "
+                            class="
+                              inline-block
+                              w-4
+                              h-4
+                              transition-transform
+                              transform
+                              bg-white
+                              rounded-full
+                            "
+                          />
+                        </Switch>
+                      </div>
+                    </SwitchGroup>
                     <!-- <SwitchGroup>
                       <div class="flex items-center justify-between">
                         <SwitchLabel class="mr-4"
@@ -335,6 +376,7 @@ export default {
 
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
+    const adminEnabled = ref(false);
     const delayEnabled = ref(false);
 
     const loadingArticlesFromStore = computed(
@@ -342,6 +384,7 @@ export default {
     );
 
     const loadingResultsFromStore = computed(() => store.state.search.loading);
+    const adminFromStore = computed(() => store.state.admin);
     const delayFromStore = computed(() => store.state.delay);
 
     console.log("store: ", store);
@@ -369,6 +412,14 @@ export default {
       }
     });
 
+    watch(adminEnabled, (enabled) => {
+      if (enabled) {
+        store.dispatch("addAdmin");
+      } else {
+        store.dispatch("removeAdmin");
+      }
+    });
+
     watch(delayEnabled, (enabled) => {
       if (enabled) {
         store.dispatch("delay");
@@ -385,6 +436,10 @@ export default {
       loadingResultsEnabled.value = loading;
     });
 
+    watch(adminFromStore, (status) => {
+      adminEnabled.value = status;
+    });
+
     watch(delayFromStore, (status) => {
       delayEnabled.value = status;
     });
@@ -395,6 +450,7 @@ export default {
       alertEnabled,
       loadingArticlesEnabled,
       loadingResultsEnabled,
+      adminEnabled,
       delayEnabled,
     };
   },

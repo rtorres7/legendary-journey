@@ -5,6 +5,7 @@ import AttachmentView from '../views/AttachmentView.vue'
 import SearchView from '../views/SearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
+import store from "@/store"
 
 const routes = [
   {
@@ -41,6 +42,7 @@ const routes = [
     component: EditDocumentView,
     meta: {
       title: 'Edit Document',
+      admin: true
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
@@ -59,17 +61,26 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    document.title = `${to.meta.title}`;
-    next();
+  if (to.meta.admin) {
+    if (store.state.admin) {
+      next()
+    } else {
+      next({ name: 'home' })
+    }
+  } else {
+    if (to.meta.title) {
+      document.title = `${to.meta.title}`;
+      next();
+    }
+    else if (to.params.url) {
+      document.title = `${to.params.url}`;
+      next();
+    }
+    else {
+      next();
+    }
   }
-  else if (to.params.url) {
-    document.title = `${to.params.url}`;
-    next();
-  }
-  else {
-    next();
-  }
+
 });
 
 export default router

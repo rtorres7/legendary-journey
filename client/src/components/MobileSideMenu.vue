@@ -65,7 +65,7 @@
                 <li>
                   <a
                     class="
-                      font-semibold
+                      font-medium
                       hover:text-black
                       dark:hover:text-white
                       energy:text-white
@@ -77,7 +77,7 @@
                 <li>
                   <a
                     class="
-                      font-semibold
+                      font-medium
                       hover:text-black
                       dark:hover:text-white
                       energy:text-white
@@ -273,7 +273,7 @@
                 <li>
                   <a
                     class="
-                      font-semibold
+                      font-medium
                       hover:text-black
                       dark:hover:text-white
                       energy:text-white
@@ -285,7 +285,7 @@
                 <li>
                   <a
                     class="
-                      font-semibold
+                      font-medium
                       hover:text-black
                       dark:hover:text-white
                       energy:text-white

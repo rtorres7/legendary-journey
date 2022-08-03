@@ -318,7 +318,7 @@
                     </template>
                   </BannerNavPopover>
                 </li>
-                <li class="hidden xl:block">
+                <li class="hidden 2xl:block">
                   <div
                     class="
                       font-semibold
@@ -333,7 +333,7 @@
                     Community
                   </div>
                 </li>
-                <li class="hidden xl:block">
+                <li class="hidden 2xl:block">
                   <div
                     class="
                       font-semibold
@@ -348,7 +348,7 @@
                     Special Editions
                   </div>
                 </li>
-                <li class="xl:hidden">
+                <li class="2xl:hidden">
                   <Menu as="div" class="relative">
                     <MenuButton
                       class="
@@ -436,6 +436,77 @@
                 xl:ml-4 xl:pl-4
               "
             >
+              <!-- Admin Dropdown -->
+              <Menu v-show="isAdmin" as="div" class="ml-3 relative">
+                <div>
+                  <MenuButton
+                    class="
+                      max-w-xs
+                      bg-gray-800
+                      rounded-full
+                      flex
+                      items-center
+                      text-sm
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-offset-2
+                      focus:ring-offset-gray-800
+                      focus:ring-white
+                    "
+                  >
+                    <span class="sr-only">Admin Menu</span>
+                    <CogIcon class="h-6 w-6" aria-hidden="true" />
+                  </MenuButton>
+                </div>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <MenuItems
+                    class="
+                      origin-top-right
+                      absolute
+                      right-0
+                      mt-2
+                      w-36
+                      rounded-md
+                      shadow-2xl
+                      py-2
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
+                      text-sm
+                      font-semibold
+                      bg-mission-blue/95
+                      dark:bg-dark-space-blue/95
+                      energy:bg-gray-800/95
+                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                      energy:text-gray-300
+                    "
+                  >
+                    <MenuItem>
+                      <router-link
+                        to="/edit"
+                        class="
+                          py-1
+                          px-3
+                          hover:bg-slate-700/80
+                          dark:hover:bg-slate-600/80
+                          energy:hover:bg-gray-600/80
+                          flex
+                          items-center
+                          cursor-pointer
+                        "
+                      >
+                        Edit Document
+                      </router-link>
+                    </MenuItem>
+                  </MenuItems>
+                </transition>
+              </Menu>
               <button
                 disabled
                 type="button"
@@ -624,23 +695,6 @@
                         "
                         >{{ loadingUser ? "Loading..." : currentUsername }}</a
                       >
-                    </MenuItem>
-                    <MenuItem>
-                      <router-link
-                        to="/edit"
-                        class="
-                          py-1
-                          px-3
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                          flex
-                          items-center
-                          cursor-pointer
-                        "
-                      >
-                        Edit Document
-                      </router-link>
                     </MenuItem>
                     <MenuItem>
                       <a
@@ -848,7 +902,7 @@
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
                     >
                   </li>
-                  <li>
+                  <li v-show="isAdmin">
                     <router-link
                       to="/edit"
                       class="
@@ -1028,6 +1082,7 @@ import {
 } from "@headlessui/vue";
 import {
   BellIcon,
+  CogIcon,
   ChevronDownIcon,
   DesktopComputerIcon,
   DotsVerticalIcon,
@@ -1072,6 +1127,7 @@ export default {
     TransitionChild,
     TransitionRoot,
     BellIcon,
+    CogIcon,
     ChevronDownIcon,
     DesktopComputerIcon,
     DotsVerticalIcon,
@@ -1125,6 +1181,7 @@ export default {
     const alertEnabled = ref(false);
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
+    const isAdmin = computed(() => store.state.admin);
     const selectedCountry = ref(countries[0]);
 
     return {
@@ -1143,6 +1200,7 @@ export default {
       alertEnabled,
       currentUsername,
       loadingUser,
+      isAdmin,
     };
   },
   methods: {
