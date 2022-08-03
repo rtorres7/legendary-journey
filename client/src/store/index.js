@@ -7,7 +7,8 @@ export default createStore({
     state: {
         loading: true,
         errors: null,
-        delay: false
+        delay: false,
+        admin: false
     },
     getters: {
     },
@@ -18,6 +19,12 @@ export default createStore({
         removeDelay: ({ commit }) => {
             commit("disableDelay");
         },
+        addAdmin: ({ commit }) => {
+            commit("enableAdmin");
+        },
+        removeAdmin: ({ commit }) => {
+            commit("disableAdmin");
+        },
     },
     mutations: {
         enableDelay(state) {
@@ -25,6 +32,12 @@ export default createStore({
         },
         disableDelay(state) {
             state.delay = false
+        },
+        enableAdmin(state) {
+            state.admin = true
+        },
+        disableAdmin(state) {
+            state.admin = false
         },
     },
     modules: {
