@@ -199,7 +199,7 @@
       <!-- Search Results & Sorting Listbox (Left) -->
       <div
         class="h-fit"
-        :class="[selectedView.label === 'Grid' ? 'basis-full' : 'basis-3/4']"
+        :class="[selectedView.label === 'Grid' || selectedView.label === 'Visuals' ? 'basis-full' : 'basis-3/4']"
       >
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
@@ -378,7 +378,7 @@
             </div>
           </div>
           <div
-            v-show="selectedView.label === 'Grid'"
+            v-show="selectedView.label === 'Grid' || selectedView.label === 'Visuals'"
             class="
               cursor-pointer
               text-mission-light-blue
@@ -517,6 +517,52 @@
                     </div>
                     <div class="mt-2 text-sm">
                       {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
+          <template v-else-if="selectedView.label === 'Visuals'">
+             <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
+            >
+              <template v-for="result in results" :key="result">
+                <div
+                  class="
+                    flex
+                    p-4
+                    border border-slate-900/10
+                    dark:border-slate-50/[0.06]
+                    energy:border-gray-700/25
+                  "
+                >
+                  <div class="px-2">
+                    <div
+                      class="
+                        basis-[768px]
+                        cursor-pointer
+                        hover:underline
+                        line-clamp-3
+                      "
+                    >
+                      <span
+                        class="
+                          text-slate-600
+                          dark:text-slate-300
+                          energy:text-gray-300
+                        "
+                        >{{
+                          `${"(" + result.title_classification + ") "}`
+                        }}</span
+                      >
+                      <span
+                        class="text-black dark:text-white energy:text-white"
+                        >{{ result.title }}</span
+                      >
+                    </div>
+                    <div class="mt-2 text-sm">
+                      <img :src= "getImgUrl(result.images.table.secondary)"/>
                     </div>
                   </div>
                 </div>
@@ -843,6 +889,7 @@ const sortOptions = [
 const viewOptions = [
   { label: "List", key: "list" },
   { label: "Grid", key: "grid" },
+  { label: "Visuals", key: "visuals"},
 ];
 
 export default {
@@ -878,9 +925,13 @@ export default {
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
     );
     const selectedView = ref(
-      route.query.view === "grid" ? viewOptions[1] : viewOptions[0]
+      route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0]
     );
     const currentPage = ref(parseInt(route.query.page) || 1);
+
+    const getImgUrl = (url) => {
+      return require("@/assets/" + url);
+    };
 
     const queryFilters = ref({
       regions: {
@@ -959,7 +1010,7 @@ export default {
         store.dispatch("search/search");
         currentPage.value = parseInt(route.query.page) || 1;
         selectedView.value =
-          route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
+          route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0];
       }
     );
 
@@ -992,6 +1043,7 @@ export default {
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,
+      getImgUrl,
     };
   },
 };

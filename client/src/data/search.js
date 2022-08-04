@@ -26,7 +26,7 @@ const zelenskyResult = {
     "table": {
       "article": null,
       "headline": null,
-      "secondary": null,
+      "secondary": "british-virgin-islands.png",
       "carousel": null
     }
   },
@@ -49,7 +49,7 @@ const UNResult = {
     "table": {
       "article": null,
       "headline": null,
-      "secondary": null,
+      "secondary": "british-virgin-islands.png",
       "carousel": null
     }
   },
