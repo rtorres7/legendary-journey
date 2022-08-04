@@ -279,7 +279,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                               : 'bg-none',
                           ]"
                         >
@@ -364,7 +364,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                               : 'bg-none',
                           ]"
                         >
@@ -614,7 +614,7 @@
                       <li
                         :class="[
                           active
-                            ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                             : 'bg-none',
                         ]"
                       >
@@ -699,7 +699,7 @@
                       <li
                         :class="[
                           active
-                            ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
                             : 'bg-none',
                         ]"
                       >
