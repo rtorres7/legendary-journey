@@ -956,10 +956,12 @@ export default {
     watch(
       () => route.query,
       () => {
-        store.dispatch("search/search");
-        currentPage.value = parseInt(route.query.page) || 1;
-        selectedView.value =
-          route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
+        if (route.name === "search") {
+          store.dispatch("search/search");
+          currentPage.value = parseInt(route.query.page) || 1;
+          selectedView.value =
+            route.query.view === "grid" ? viewOptions[1] : viewOptions[0];
+        }
       }
     );
 
