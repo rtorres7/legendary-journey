@@ -22,7 +22,13 @@
     >
       <button @click="onClickSearch">
         <SearchIcon
-          class="w-6 h-6 text-slate-200 dark:text-slate-300 energy:text-gray-300"
+          class="
+            w-6
+            h-6
+            text-slate-200
+            dark:text-slate-300
+            energy:text-gray-300
+          "
           aria-hidden="true"
         />
       </button>
@@ -132,10 +138,6 @@ export default {
     const onClickSearch = () => {
       router.push({
         name: "search",
-        query: {
-          text: "United Nations",
-          view: "list",
-        },
       });
     };
 
