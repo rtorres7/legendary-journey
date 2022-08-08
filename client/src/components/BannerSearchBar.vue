@@ -20,10 +20,18 @@
         dark:text-slate-300
       "
     >
-      <SearchIcon
-        class="w-6 h-6 text-slate-200 dark:text-slate-300 energy:text-gray-300"
-        aria-hidden="true"
-      />
+      <button @click="onClickSearch">
+        <SearchIcon
+          class="
+            w-6
+            h-6
+            text-slate-200
+            dark:text-slate-300
+            energy:text-gray-300
+          "
+          aria-hidden="true"
+        />
+      </button>
       <vue3-simple-typeahead
         class="
           ml-2
@@ -127,12 +135,19 @@ export default {
       });
     };
 
+    const onClickSearch = () => {
+      router.push({
+        name: "search",
+      });
+    };
+
     return {
       //test,
       searchMatches,
       modalActive,
       selectItemEventHandler,
       onEnter,
+      onClickSearch,
       // onInputEventHandler,
       // onFocusEventHandler,
       //onBlurEventHandler,
