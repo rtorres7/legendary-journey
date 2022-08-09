@@ -524,45 +524,58 @@
             </div>
           </template>
           <template v-else-if="selectedView.label === 'Visuals'">
-             <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <div
-                  class="
-                    flex
-                    p-4
-                    border border-slate-900/10
-                    dark:border-slate-50/[0.06]
-                    energy:border-gray-700/25
-                  "
-                >
-                  <div class="px-2">
-                    <div
-                      class="
-                        basis-[768px]
-                        cursor-pointer
-                        hover:underline
-                        line-clamp-3
-                      "
-                    >
-                      <span
+                <div class="flex p-4">
+                  <div class="group">
+                    <div class="relative">
+                      <div 
                         class="
-                          text-slate-600
-                          dark:text-slate-300
-                          energy:text-gray-300
+                          invisible 
+                          group-hover:visible 
+                          absolute 
+                          h-full
+                          p-2 py-5 
+                          inset-x-0 
+                          text-white
+                          bg-mission-blue/[.90]
+                          dark:bg-dark-space-blue/[.90]
+                          energy:bg-gray-800/[.90]
                         "
-                        >{{
-                          `${"(" + result.title_classification + ") "}`
-                        }}</span
                       >
-                      <span
-                        class="text-black dark:text-white energy:text-white"
-                        >{{ result.title }}</span
-                      >
+                        <div class="flex flex-col">
+                          <div class="line-clamp-3">
+                            <span>{{ `${"(" + result.title_classification + ") "}` }}</span>
+                            <span>{{ result.title }}</span>
+                          </div>
+                          <div class="flex justify-around text-sm absolute inset-x-0 bottom-2">
+                            <button
+                              @click="openMedia(result.images.table.secondary)"
+                              class="hover:underline"
+                            >
+                              VIEW MEDIA
+                              <span class="sr-only">Open media for {{ result.title }}</span>
+                            </button>
+                            <p>|</p>
+                            <!-- <router-link to="" class="hover:underline">VIEW ARTICLE</router-link> -->
+                            <router-link
+                              :to="{ name: 'article', params: { id: result.doc_num } }"
+                            >VIEW ARTICLE
+                            </router-link>
+                          </div>
+                        </div>
+                      </div>
+                      <img :src= "getImgUrl(result.images.table.secondary)" alt="" class="object-cover"/>
                     </div>
-                    <div class="mt-2 text-sm">
-                      <img :src= "getImgUrl(result.images.table.secondary)"/>
+                    <div class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25">
+                      <div>
+                        Regions..
+                      </div>
+                      <div>
+                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1007,10 +1020,12 @@ export default {
     watch(
       () => route.query,
       () => {
-        store.dispatch("search/search");
-        currentPage.value = parseInt(route.query.page) || 1;
-        selectedView.value =
-          route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0];
+        if (route.name === "search") {
+          store.dispatch("search/search");
+          currentPage.value = parseInt(route.query.page) || 1;
+          selectedView.value =
+            route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0];
+        }
       }
     );
 
@@ -1027,6 +1042,11 @@ export default {
 
     const openMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = true);
+    
+    const openMedia = (url) => {
+      let route = getImgUrl(url);
+      window.open(route);
+    };
 
     return {
       dayjs,
@@ -1044,6 +1064,7 @@ export default {
       closeMobileFacetsDialog,
       openMobileFacetsDialog,
       getImgUrl,
+      openMedia,
     };
   },
 };
