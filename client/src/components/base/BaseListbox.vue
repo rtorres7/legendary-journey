@@ -16,9 +16,9 @@
           mt-1
           dark:bg-slate-700
           energy:bg-gray-700
-          border-t border-t-gray-100
-          dark:border-t-slate-800
-          energy:border-t-gray-800
+          border border-gray-200
+          dark:border-slate-800
+          energy:border-gray-800
           rounded-lg
           shadow-md
           cursor-default

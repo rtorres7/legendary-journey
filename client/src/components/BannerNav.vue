@@ -110,7 +110,7 @@
                           absolute
                           right-0
                           mt-2
-                          w-40
+                          w-52
                           rounded-md
                           shadow-2xl
                           py-2
@@ -125,20 +125,20 @@
                         "
                       >
                         <MenuItem
-                          as="div"
+                          as="a"
                           v-for="issue in metadata.issues"
                           :key="issue"
                           v-slot="{ active }"
+                          @click="navigateToIssue(issue)"
                         >
-                          <a
-                            :href="'/'"
+                          <span
                             :class="[
                               active
                                 ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
                                 : '',
                               'py-1 px-3 flex cursor-pointer',
                             ]"
-                            >{{ issue }}</a
+                            >{{ issue.name }}</span
                           >
                         </MenuItem>
                       </MenuItems>
@@ -1060,6 +1060,7 @@
 <script>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { metadata } from "@/config";
 import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
@@ -1143,6 +1144,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const isMainMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
     const isTestConsoleMenuOpen = ref(false);
@@ -1184,6 +1186,21 @@ export default {
     const isAdmin = computed(() => store.state.admin);
     const selectedCountry = ref(countries[0]);
 
+    const navigateToIssue = (issue) => {
+      router.push({
+        name: "issues",
+        params: {
+          name: issue.name,
+        },
+        query: {
+          "issues[]": issue.key,
+          "reporting_types[]": "analysis.all_source",
+          view: "grid",
+          landing: true,
+        },
+      });
+    };
+
     return {
       metadata,
       regions,
@@ -1201,6 +1218,7 @@ export default {
       currentUsername,
       loadingUser,
       isAdmin,
+      navigateToIssue,
     };
   },
   methods: {

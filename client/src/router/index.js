@@ -29,6 +29,14 @@ const routes = [
     props: true
   },
   {
+    path: '/issues/:name',
+    name: 'issues',
+    component: SearchView,
+    meta: {
+      title: 'Issues',
+    }
+  },
+  {
     path: '/search',
     name: 'search',
     component: SearchView,

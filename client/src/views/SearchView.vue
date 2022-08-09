@@ -9,7 +9,7 @@
       energy:border-gray-700/25
     "
   >
-    Search
+    {{ pageHeader }}
   </p>
   <!-- Search Form -->
   <BaseCard class="mt-4 p-4">
@@ -111,6 +111,7 @@
                   v-model="n.model"
                   :label="n.label"
                   :items="n.list"
+                  multiple
                 />
               </div>
             </template>
@@ -141,6 +142,7 @@
                   v-model="n.model"
                   :label="n.label"
                   :items="n.list"
+                  multiple
                 />
               </div>
             </template>
@@ -402,7 +404,7 @@
               items-center
               border-b border-gray-200
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-gray-700/50
             "
           >
             <SearchResultsTablePagination
@@ -486,8 +488,8 @@
                     flex
                     p-4
                     border border-slate-900/10
-                    dark:border-slate-50/[0.06]
-                    energy:border-gray-700/25
+                    dark:border-slate-50/[0.12]
+                    energy:border-gray-700
                     h-36
                   "
                 >
@@ -524,7 +526,17 @@
             </div>
           </template>
           <!-- Bottom Pagination -->
-          <div class="px-4 py-3 flex items-center">
+          <div
+            class="
+              px-4
+              py-3
+              flex
+              items-center
+              border-t border-gray-200
+              dark:border-slate-50/[0.06]
+              energy:border-gray-700/50
+            "
+          >
             <SearchResultsTablePagination
               :totalCount="totalCount"
               :currentPage="currentPage"
@@ -834,6 +846,7 @@ import {
 import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
+import { metadata } from "@/config";
 import { getItems } from "@/data";
 
 const sortOptions = [
@@ -869,6 +882,16 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const getHeaderName = (route) => {
+      if (route.name === "issues") {
+        return route.params.name ? route.params.name : "Search";
+      } else {
+        return "Search";
+      }
+    };
+
+    const pageHeader = ref(getHeaderName(route));
+
     const loading = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
@@ -882,48 +905,69 @@ export default {
     );
     const currentPage = ref(parseInt(route.query.page) || 1);
 
-    const queryFilters = ref({
-      regions: {
-        label: "Regions & Countries",
-        model: [],
-        list: getItems("regions"),
-      },
-      issues: {
-        label: "Issues & Topics",
-        model: [],
-        list: getItems("issues"),
-      },
-      reporting: {
-        label: "Reporting & Product Types",
-        model: [],
-        list: getItems("reporting"),
-      },
-      classifications: {
-        label: "Classifications",
-        model: "",
-        list: getItems("classifications"),
-      },
-      media_types: {
-        label: "Media Types",
-        model: "",
-        list: getItems("media"),
-      },
-      nonstate_actors: {
-        label: "Non State Actors",
-        model: "",
-        list: getItems("non-state"),
-      },
-      producing_offices: {
-        label: "Producing Offices",
-        model: "",
-        list: getItems("producing"),
-      },
-      frontpage_featured: {
-        label: "Front Page Featured",
-        model: "",
-        list: getItems("front-page"),
-      },
-    });
+    const currentModel = (key, list) => {
+      if (key) {
+        if (Array.isArray(key)) {
+          const selectedModels = [];
+          key.forEach((k) => {
+            selectedModels.push(list.find((item) => item.key === k));
+          });
+          return selectedModels;
+        }
+        return [list.find((item) => item.key === key)];
+      }
+      return [];
+    };
+
+    const buildQueryFilters = () => {
+      return {
+        regions: {
+          label: "Regions & Countries",
+          model: [],
+          list: getItems("regions"),
+        },
+        issues: {
+          label: "Issues & Topics",
+          model: currentModel(route.query["issues[]"], metadata.issues),
+          list: metadata.issues,
+        },
+        reporting: {
+          label: "Reporting & Product Types",
+          model: currentModel(
+            route.query["reporting_types[]"],
+            getItems("reporting")
+          ),
+          list: getItems("reporting"),
+        },
+        classifications: {
+          label: "Classifications",
+          model: [],
+          list: getItems("classifications"),
+        },
+        media_types: {
+          label: "Media Types",
+          model: [],
+          list: getItems("media"),
+        },
+        nonstate_actors: {
+          label: "Non State Actors",
+          model: [],
+          list: getItems("non-state"),
+        },
+        producing_offices: {
+          label: "Producing Offices",
+          model: [],
+          list: getItems("producing"),
+        },
+        frontpage_featured: {
+          label: "Front Page Featured",
+          model: [],
+          list: getItems("front-page"),
+        },
+      };
+    };
+
+    const queryFilters = ref(buildQueryFilters());
 
     const isMobileFacetsDialogOpen = ref(false);
 
@@ -952,6 +996,18 @@ export default {
         },
       });
     });
+
+    watch(
+      () => route,
+      () => {
+        if (route.name === "search" || route.name === "issues") {
+          store.dispatch("search/search");
+          pageHeader.value = getHeaderName(route);
+          queryFilters.value = buildQueryFilters();
+        }
+      },
+      { deep: true }
+    );
 
     watch(
       () => route.query,
@@ -985,6 +1041,7 @@ export default {
       sortOptions,
       selectedView,
       viewOptions,
+      pageHeader,
       loading,
       results,
       totalCount,
