@@ -486,8 +486,8 @@ export default {
       event.value.summaryPM = articles[0].classification;
       event.value.classification = articles[0].classification;
       event.value.summary = articles[0].content[0];
-      event.value.docNum = articles[0].id;
-      event.value.publicationNumber = articles[0].id;
+      event.value.docNum = articles[0].doc_num;
+      event.value.publicationNumber = articles[0].doc_num;
       event.value.classifiedBy = articles[0].author;
     };
 

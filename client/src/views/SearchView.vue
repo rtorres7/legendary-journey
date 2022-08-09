@@ -559,9 +559,9 @@
                               <span class="sr-only">Open media for {{ result.title }}</span>
                             </button>
                             <p>|</p>
-                            <!-- <router-link to="" class="hover:underline">VIEW ARTICLE</router-link> -->
                             <router-link
-                              :to="{ name: 'article', params: { id: result.doc_num } }"
+                              class="hover:underline"
+                              :to="{ name: 'article', params: { doc_num: result.doc_num } }"
                             >VIEW ARTICLE
                             </router-link>
                           </div>

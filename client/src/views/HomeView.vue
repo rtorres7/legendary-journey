@@ -103,7 +103,7 @@
             <template v-for="article in articles.slice(1, 3)" :key="article">
               <router-link
                 class="md:w-1/2 xl:w-full"
-                :to="{ name: 'article', params: { id: article.id } }"
+                :to="{ name: 'article', params: { doc_num: article.doc_num } }"
               >
                 <FeaturedArticleCard :article="article" />
               </router-link>
@@ -134,7 +134,7 @@
       </template>
       <template v-else>
         <template v-for="article in articles.slice(3)" :key="article">
-          <router-link :to="{ name: 'article', params: { id: article.id } }">
+          <router-link :to="{ name: 'article', params: { doc_num: article.doc_num } }">
             <FeaturedArticleCard :article="article" />
           </router-link>
         </template>
@@ -165,7 +165,7 @@ import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
   {
-    id: 1,
+    doc_num: 1,
     title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
     summary:
       "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
@@ -174,7 +174,7 @@ const personalArticles = [
     date: "24 April 2022",
   },
   {
-    id: 2,
+    doc_num: 2,
     title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
     summary:
       "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
@@ -183,7 +183,7 @@ const personalArticles = [
     date: "23 April 2022",
   },
   {
-    id: 3,
+    doc_num: 3,
     title:
       "(U) Coronavirus Has Infected Most Americans at Least Once, C.D.C. Says",
     summary:
@@ -193,7 +193,7 @@ const personalArticles = [
     date: "22 April 2022",
   },
   {
-    id: 4,
+    doc_num: 4,
     title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
     summary:
       "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
@@ -202,7 +202,7 @@ const personalArticles = [
     date: "21 April 2022",
   },
   {
-    id: 5,
+    doc_num: 5,
     title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
     summary:
       "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",

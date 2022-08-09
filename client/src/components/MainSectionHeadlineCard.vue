@@ -4,7 +4,7 @@
       :to="
         loading
           ? { name: 'notFound' }
-          : { name: 'article', params: { id: article.id } }
+          : { name: 'article', params: { doc_num: article.doc_num } }
       "
     >
       <BaseCard

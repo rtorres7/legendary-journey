@@ -73,13 +73,13 @@ export default {
     previousArticle() {
       const currentIndex = this.articles.indexOf(this.selectedArticle);
       if (currentIndex > 0) {
-        this.$router.push(`/article/${this.articles[currentIndex - 1].id}`);
+        this.$router.push(`/article/${this.articles[currentIndex - 1].doc_num}`);
       }
     },
     nextArticle() {
       const currentIndex = this.articles.indexOf(this.selectedArticle);
       if (currentIndex < this.articles.length - 1) {
-        this.$router.push(`/article/${this.articles[currentIndex + 1].id}`);
+        this.$router.push(`/article/${this.articles[currentIndex + 1].doc_num}`);
       }
     },
     returnHome() {

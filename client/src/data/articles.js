@@ -1,7 +1,7 @@
 export const articles = [
   /* source - Channel News Asia - https://www.channelnewsasia.com/world/russia-steps-missile-strikes-ukraine-g7-leaders-gather-2771576 */
   {
-    id: "0012419",
+    doc_num: "0012419",
     type: "article",
     title: "(U) Russia steps up missile strikes on Ukraine as G7 leaders gather",
     author: "Reuters",
@@ -38,7 +38,7 @@ export const articles = [
   },
   /* source - TIME Magazine - https://time.com/6171277/volodymyr-zelensky-interview-ukraine-war/ */
   {
-    id: "0017521",
+    doc_num: "BBK303597595551223",
     type: "article",
     title: "(U) Inside Zelensky's World",
     author: "Simon Shuster",
@@ -75,7 +75,7 @@ export const articles = [
   },
   /* source - BBC News-  https://www.bbc.com/news/world-europe-61296851 */
   {
-    id: "0017544",
+    doc_num: "BBK303597595551224",
     type: "article",
     title: "(U) Ukraine war: Hundreds trapped in Mariupol steelworks despite evacuations",
     author: "Ed Jones",
@@ -117,7 +117,7 @@ export const articles = [
   },
   /* source - Al Jazeera -  https://www.aljazeera.com/news/2022/5/2/thousands-flee-after-clashes-erupt-in-iraqis-sinjar-2 */
   {
-    id: "0017570",
+    doc_num: "0017570",
     type: "article",
     title: "(U) Estimated 3,000 people flee armed clashes in northern Iraq.",
     author: "Essam al-Sudani",
@@ -154,7 +154,7 @@ export const articles = [
   },
   /* source - Sky News - https://news.sky.com/story/andrew-fahie-how-us-law-enforcement-stung-british-virgin-islands-premier-in-drugs-and-money-laundering-probe-12601422 */
   {
-    id: "0017670",
+    doc_num: "0017670",
     type: "article",
     title: "(U) Andrew Fahie: How US law enforcement stung British Virgin Islands premier in drugs and money laundering probe.",
     author: "Sky News Team",
@@ -193,7 +193,7 @@ export const articles = [
   },
   /* source - South China Morning Post - https://www.scmp.com/week-asia/politics/article/3176279/north-koreas-possible-nuclear-missile-test-focus-china-envoy */
   {
-    id: "0017672",
+    doc_num: "0017672",
     type: "article",
     title: "(U) North Korea’s ‘possible’ nuclear missile test in focus as China envoy visits Seoul.",
     author: "Park Chan-kyong",
@@ -237,7 +237,7 @@ export const articles = [
   },
   /* source - Channel News Asia - https://www.channelnewsasia.com/world/sanctions-will-not-be-lifted-until-russia-signs-peace-deal-ukraine-germanys-scholz-2660886 */
   {
-    id: "0017985",
+    doc_num: "0017985",
     type: "article",
     title: "(U) Sanctions will not be lifted until Russia signs peace deal with Ukraine: Germany's Scholz.",
     author: "Reuters",
@@ -265,7 +265,7 @@ export const articles = [
   },
   /* source - New York Times - https://www.nytimes.com/2022/04/29/us/politics/isis-beatles-kotey-sentenced.html */
   {
-    id: "0018232",
+    doc_num: "0018232",
     type: "article",
     title: "(U) British Terrorist Receives Life Sentence for Role in Americans’ Deaths.",
     author: "Adam Goldman",
@@ -304,7 +304,7 @@ export const articles = [
   },
   /* source - New York Post - https://nypost.com/2022/04/16/accused-brooklyn-shooter-frank-james-cried-during-manhunt-pizza-worker/ */
   {
-    id: "0019577",
+    doc_num: "0019577",
     type: "article",
     title: "(U) Accused Brooklyn subway shooter Frank James cried ‘like a little baby’ during frenzied manhunt: pizza worker.",
     author: "Angela Barbuti",

@@ -41,7 +41,7 @@ const UNResult = {
   "summary": "Not sure what really goes here. Investigate on low-side.",
   "summary_classification": "U",
   "highlighted_result": "... Those who left Mariupol on Monday were evacuated with the support of the \u003cem\u003eUnited Nations\u003c/em\u003e (UN) and the International Committee of the Red Cross, which organised an official convoy. Russia said some evacuees had been taken to a village controlled by Moscow-backed separatists...",
-  "doc_num": "BBK303597595551223",
+  "doc_num": "BBK303597595551224",
   "id": "87599999",
   "posted_at": "2022-07-05T14:45:58Z",
   "date_published": "2022-05-02",
