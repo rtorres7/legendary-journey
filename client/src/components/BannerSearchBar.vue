@@ -20,7 +20,12 @@
         dark:text-slate-300
       "
     >
-      <button @click="onClickSearch">
+      <button 
+        type="button"
+        tabindex="0"
+        @click="onClickSearch"
+      >
+        <span class="sr-only">Search</span>
         <SearchIcon
           class="
             w-6
