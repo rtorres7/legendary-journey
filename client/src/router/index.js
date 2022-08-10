@@ -29,6 +29,14 @@ const routes = [
     props: true
   },
   {
+    path: '/issues/:name',
+    name: 'issues',
+    component: SearchView,
+    meta: {
+      title: 'Issues'
+    }
+  },
+  {
     path: '/search',
     name: 'search',
     component: SearchView,
@@ -70,7 +78,12 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     if (to.meta.title) {
-      document.title = `${to.meta.title}`;
+      if (to.name === 'issues' && to.params.name) {
+        document.title = to.params.name
+      } else {
+
+        document.title = `${to.meta.title}`;
+      }
       next();
     }
     else if (to.params.url) {

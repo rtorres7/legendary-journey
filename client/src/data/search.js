@@ -445,64 +445,45 @@ export const getSearchDataFromUrl = (url, { query }) => {
   }
 }
 
+const reportingTypes = [
+  {
+    name: 'Analysis: Critical',
+    key: 'analysis.critical'
+  },
+  {
+    name: 'Analysis: All Source',
+    key: 'analysis.all_source'
+  },
+  {
+    name: 'Reporting: Collaboration',
+    key: 'reporting.collaboration'
+  },
+  {
+    name: 'Reporting: Enterprise',
+    key: 'reporting.enterprise'
+  },
+  {
+    name: 'Reporting: Mass',
+    key: 'reporting.mass'
+  },
+  {
+    name: 'Reporting: Mission',
+    key: 'reporting.mission'
+  },
+  {
+    name: 'Reporting: Open Source',
+    key: 'reporting.open_source'
+  },
+  {
+    name: 'Reporting: Operations',
+    key: 'reporting.operations'
+  },
+]
+
 export const getItems = (type) => {
   switch (type) {
     case 'regions': return countries
-    case 'issues': return [
-      {
-        name: 'Eastern Europe Geopolitics'
-      },
-      {
-        name: 'Economic Turmoil'
-      },
-      {
-        name: 'Russian Invasion'
-      },
-      {
-        name: 'Ukraine War Crisis'
-      },
-      {
-        name: 'Ukraine War'
-      }
-    ]
-    case 'reporting': return [
-      {
-        name: 'Analysis: Critical'
-      },
-      {
-        name: 'Analysis: Live'
-      },
-      {
-        name: 'Reporting: Collaboration'
-      },
-      {
-        name: 'Reporting: Enterprise'
-      },
-      {
-        name: 'Reporting: Mass'
-      },
-      {
-        name: 'Reporting: Mission'
-      },
-      {
-        name: 'Reporting: Open Source'
-      },
-      {
-        name: 'Reporting: Operations'
-      },
-      {
-        name: 'Article'
-      },
-      {
-        name: 'Audio'
-      },
-      {
-        name: 'Translation'
-      },
-      {
-        name: 'Video'
-      }
-    ]
+    case 'reporting': return reportingTypes
     case 'classifications': return [
       {
         name: 'UNCLASSIFIED'

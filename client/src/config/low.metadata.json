@@ -1,14 +1,26 @@
 {
   "system_classification": "UNCLASSIFIED",
-  "footer_note": "Built in partnership with Wire",
+  "footer_note": "Built in partnership with WIRe",
   "issues": [
-    "Issue 0",
-    "Issue 1",
-    "Issue 2",
-    "Issue 3",
-    "Issue 4",
-    "Issue 5",
-    "Issue 6",
-    "Issue 7"
+    {
+      "name": "Eastern Europe Geopolitics",
+      "key": "EEG"
+    },
+    {
+      "name": "Economic Turmoil",
+      "key": "ET"
+    },
+    {
+      "name": "Russian Invasion",
+      "key": "RI"
+    },
+    {
+      "name": "Supply Chain Crisis",
+      "key": "SCC"
+    },
+    {
+      "name": "Ukraine War",
+      "key": "UW"
+    }
   ]
 }
