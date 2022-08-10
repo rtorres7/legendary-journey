@@ -17,7 +17,7 @@ const routes = [
     },
   },
   {
-    path: '/article/:id',
+    path: '/article/:doc_num',
     name: 'article',
     component: ArticleView,
     props: true

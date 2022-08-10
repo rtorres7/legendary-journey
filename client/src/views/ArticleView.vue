@@ -281,7 +281,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
   },
-  props: ["id", "title"],
+  props: ["doc_num", "title"],
   setup() {
     const comments = ref([]);
     const articlesData = ref(articles);
@@ -297,7 +297,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.selectedArticle = vm.getArticle(to.params.id);
+      vm.selectedArticle = vm.getArticle(to.params.doc_num);
       if (vm.selectedArticle) {
         vm.routerError = false;
       } else {
@@ -306,7 +306,7 @@ export default {
     });
   },
   beforeRouteUpdate(to) {
-    this.selectedArticle = this.getArticle(to.params.id);
+    this.selectedArticle = this.getArticle(to.params.doc_num);
     if (this.selectedArticle) {
       this.routerError = false;
     } else {
@@ -314,8 +314,8 @@ export default {
     }
   },
   methods: {
-    getArticle(id) {
-      return this.articlesData.find((article) => article.id === id);
+    getArticle(doc_num) {
+      return this.articlesData.find((article) => article.doc_num === doc_num);
     },
     addComment(comment) {
       this.comments.push(comment);
