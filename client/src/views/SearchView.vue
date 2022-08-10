@@ -550,7 +550,7 @@
                             <span>{{ `${"(" + result.title_classification + ") "}` }}</span>
                             <span>{{ result.title }}</span>
                           </div>
-                          <div class="flex justify-around text-sm absolute inset-x-0 bottom-2">
+                          <div class="flex justify-around absolute inset-x-0 bottom-2 text-sm">
                             <button
                               @click="openMedia(result.images.table.secondary)"
                               class="hover:underline"
@@ -569,9 +569,11 @@
                       </div>
                       <img :src= "getImgUrl(result.images.table.secondary)" alt="" class="object-cover"/>
                     </div>
-                    <div class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25">
+                    <div class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25 text-sm">
                       <div>
-                        Regions..
+                        <span v-for="(region, ind) in result.regions" :key="ind">
+                          {{ region }}<span v-if="ind < result.regions.length - 1">,&nbsp;</span>
+                        </span>
                       </div>
                       <div>
                         {{ dayjs(result.date_published).format("DD MMM YYYY") }}
@@ -1007,14 +1009,27 @@ export default {
     });
 
     watch([selectedView], () => {
-      router.push({
-        name: "search",
-        query: {
-          ...route.query,
-          page: currentPage.value,
-          view: selectedView.value.key,
-        },
-      });
+      if (selectedView.value.key === "list" || selectedView.value.key === "grid") {
+        router.push({
+          name: "search",
+          query: {
+            ...route.query,
+            page: currentPage.value,
+            view: selectedView.value.key,
+          },
+        });
+      }
+      else if (selectedView.value.key === "visuals") {
+        router.push({
+          name: "search",
+          query: {
+            ...route.query,
+            page: currentPage.value,
+            view: selectedView.value.key,
+            media_tags: ["audio", "interactive", "graphic", "map", "video"],
+          }
+        });
+      }
     });
 
     watch(

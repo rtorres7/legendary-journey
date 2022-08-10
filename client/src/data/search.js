@@ -32,7 +32,8 @@ const zelenskyResult = {
   },
   "needed": {},
   "metadata": [],
-  "org_restricted": false
+  "org_restricted": false,
+  "regions": ["UKR", "RUS"]
 }
 
 const UNResult = {
@@ -55,7 +56,8 @@ const UNResult = {
   },
   "needed": {},
   "metadata": [],
-  "org_restricted": false
+  "org_restricted": false,
+  "regions": ["UKR", "RUS"]
 }
 
 const paginatedResults = (results, page, total) => {
