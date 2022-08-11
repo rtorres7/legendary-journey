@@ -91,9 +91,11 @@
                     <ul class="list-disc list-inside ml-4 mt-4">
                       <template v-for="issue in metadata.issues" :key="issue">
                         <li>
-                          <router-link to="/" class="hover:underline">{{
-                            issue
-                          }}</router-link>
+                          <a
+                            @click="navigateToIssue(issue)"
+                            class="hover:underline cursor-pointer"
+                            >{{ issue.name }}</a
+                          >
                         </li>
                       </template>
                     </ul>
@@ -305,6 +307,7 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { metadata } from "@/config";
 import { regions, countries } from "@/data";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
@@ -345,16 +348,35 @@ export default {
     isOpen: Boolean,
   },
   setup(props, { emit }) {
+    const router = useRouter();
+
     const selectedCountry = ref(countries[0]);
     const close = () => {
       emit("close");
     };
+
+    const navigateToIssue = (issue) => {
+      router.push({
+        name: "issues",
+        params: {
+          name: issue.name,
+        },
+        query: {
+          "issues[]": issue.key,
+          "reporting_types[]": "analysis.all_source",
+          view: "grid",
+          landing: true,
+        },
+      });
+    };
+
     return {
       metadata,
       close,
       regions,
       countries,
       selectedCountry,
+      navigateToIssue,
     };
   },
   methods: {
