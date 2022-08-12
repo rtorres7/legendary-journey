@@ -1248,9 +1248,11 @@ export default {
     openTestConsoleModal() {
       this.isTestConsoleMenuOpen = true;
     },
+    // NOTE: setTimeout added as a temporary workaround for 
+    // multiple dialog scroll behavior bug
     openTestConsoleModalMobile() {
       this.isUserMenuOpen = false;
-      this.isTestConsoleMenuOpen = true;
+      setTimeout(() =>  this.isTestConsoleMenuOpen = true, 500)
     },
     openPDF() {
       window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
