@@ -445,50 +445,9 @@ export const getSearchDataFromUrl = (url, { query }) => {
   }
 }
 
-const reportingTypes = [
-  {
-    name: 'Analysis: Critical',
-    key: 'analysis.critical'
-  },
-  {
-    name: 'Analysis: All Source',
-    key: 'analysis.all_source'
-  },
-  {
-    name: 'Reporting: Collaboration',
-    key: 'reporting.collaboration'
-  },
-  {
-    name: 'Reporting: Enterprise',
-    key: 'reporting.enterprise'
-  },
-  {
-    name: 'Reporting: Mass',
-    key: 'reporting.mass'
-  },
-  {
-    name: 'Reporting: Mission',
-    key: 'reporting.mission'
-  },
-  {
-    name: 'Reporting: Open Source',
-    key: 'reporting.open_source'
-  },
-  {
-    name: 'Reporting: Operations',
-    key: 'reporting.operations'
-  },
-]
-
 export const getItems = (type) => {
   switch (type) {
     case 'regions': return countries
-    case 'reporting': return reportingTypes
-    case 'classifications': return [
-      {
-        name: 'UNCLASSIFIED'
-      }
-    ]
     case 'media': return [
       {
         name: 'audio'

@@ -1039,7 +1039,27 @@ export default {
       return [];
     };
 
+    const buildListItems = (items, type) => {
+      return items.map((item) => ({ ...item, type }));
+    };
+
     const buildQueryFilters = () => {
+      const issueItems = buildListItems(
+        metadata.issues.items,
+        metadata.issues.type
+      );
+      const reportingItems = buildListItems(
+        metadata.reporting_types.items,
+        metadata.reporting_types.type
+      );
+      const classificationItems = buildListItems(
+        metadata.classifications.items,
+        metadata.classifications.type
+      );
+      const mediaItems = buildListItems(
+        metadata.media.items,
+        metadata.media.type
+      );
       return {
         regions: {
           label: "Regions & Countries",
@@ -1048,27 +1068,33 @@ export default {
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel(route.query["issues[]"], metadata.issues.items),
-          list: metadata.issues.items,
-          type: metadata.issues.type,
+          model: currentModel(route.query[metadata.issues.type], issueItems),
+          list: issueItems,
+          types: [metadata.issues.type],
         },
         reporting: {
           label: "Reporting & Product Types",
           model: currentModel(
-            route.query["reporting_types[]"],
-            getItems("reporting")
+            route.query[metadata.reporting_types.type],
+            reportingItems
           ),
-          list: getItems("reporting"),
+          list: reportingItems,
+          types: [metadata.reporting_types.type],
         },
         classifications: {
           label: "Classifications",
-          model: [],
-          list: getItems("classifications"),
+          model: currentModel(
+            route.query[metadata.classifications.type],
+            classificationItems
+          ),
+          list: classificationItems,
+          types: [metadata.classifications.type],
         },
         media_types: {
           label: "Media Types",
-          model: [],
-          list: getItems("media"),
+          model: currentModel(route.query[metadata.media.type], mediaItems),
+          list: mediaItems,
+          types: [metadata.media.type],
         },
         nonstate_actors: {
           label: "Non State Actors",
@@ -1089,6 +1115,57 @@ export default {
     };
 
     const queryFilters = ref(buildQueryFilters());
+
+    const buildWatcher = (object) => {
+      return watch(
+        () => object,
+        (newValue) => {
+          console.log("local watcher triggered.", newValue);
+          let query = {
+            ...route.query,
+          };
+          newValue.types.forEach((type) => {
+            delete query[type];
+          });
+          if (newValue.model.length > 0) {
+            let selectedOptions = [];
+            for (let i = 0; i < newValue.model.length; i++) {
+              selectedOptions.push(newValue.model[i]);
+            }
+            let uniqueTypes = [];
+            for (let i = 0; i < selectedOptions.length; i++) {
+              uniqueTypes.push(selectedOptions[i].type);
+            }
+            uniqueTypes = [...new Set(uniqueTypes)];
+            for (let i = 0; i < uniqueTypes.length; i++) {
+              let valuesForType = [];
+              for (let j = 0; j < selectedOptions.length; j++) {
+                if (selectedOptions[j].type === uniqueTypes[i]) {
+                  valuesForType.push(selectedOptions[j].key);
+                }
+              }
+              query[uniqueTypes[i]] = valuesForType;
+            }
+          }
+          console.log("query: ", query);
+          router.replace({
+            name: "search",
+            query: query,
+          });
+        },
+        { deep: true }
+      );
+    };
+
+    const buildQueryWatchers = (object) => {
+      let watchers = [];
+      Object.keys(object).forEach((filter) => {
+        watchers.push(buildWatcher(object[filter]));
+      });
+      return watchers;
+    };
+
+    buildQueryWatchers(queryFilters.value);
 
     const isMobileFacetsDialogOpen = ref(false);
 
@@ -1120,12 +1197,18 @@ export default {
           },
         });
       } else if (selectedView.value.key === "visuals") {
+        let query = {
+          ...route.query,
+        };
+        query["media_tags[]"] = [
+          "audio",
+          "interactive",
+          "graphic",
+          "map",
+          "video",
+        ];
         router.push({
-          query: {
-            ...route.query,
-            view: selectedView.value.key,
-            media_tags: ["audio", "interactive", "graphic", "map", "video"],
-          },
+          query,
         });
       }
     });
@@ -1149,41 +1232,10 @@ export default {
       }
     );
 
-    // Object.keys(queryFilters.value).forEach((filter) => {
-    //   console.log("filter: ", filter);
-    //   watch(
-    //     () => queryFilters.value[filter],
-    //     (newValue) => {
-    //       console.log("wtf: ", newValue);
-    //       delete route.query[newValue.type];
-    //       let query = {
-    //         ...route.query,
-    //       };
-    //       if (newValue.model.length > 0) {
-    //         let selectedOptions = [];
-    //         for (let i = 0; i < newValue.model.length; i++) {
-    //           selectedOptions.push(newValue.model[i].key);
-    //         }
-    //         query[newValue.type] = selectedOptions;
-    //       }
-    //       console.log("query: ", query);
-    //       router.push({
-    //         name: "search",
-    //       });
-    //       //console.log("route.query: ", route.query);
-    //       // router.push({
-    //       //   name: "search",
-    //       //   query,
-    //       // });
-    //     },
-    //     { deep: true }
-    //   );
-    // });
-
     watch(
       () => queryFilters,
-      (newValue) => {
-        console.log("queryFilters changed to: ", newValue);
+      () => {
+        buildQueryWatchers(queryFilters.value);
       },
       { deep: true }
     );
