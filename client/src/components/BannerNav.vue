@@ -126,7 +126,7 @@
                       >
                         <MenuItem
                           as="a"
-                          v-for="issue in metadata.issues"
+                          v-for="issue in metadata.issues.items"
                           :key="issue"
                           v-slot="{ active }"
                           @click="navigateToIssue(issue)"
@@ -1187,17 +1187,18 @@ export default {
     const selectedCountry = ref(countries[0]);
 
     const navigateToIssue = (issue) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.issues.type] = issue.key;
       router.push({
         name: "issues",
         params: {
           name: issue.name,
         },
-        query: {
-          "issues[]": issue.key,
-          "reporting_types[]": "analysis.all_source",
-          view: "grid",
-          landing: true,
-        },
+        query,
       });
     };
 

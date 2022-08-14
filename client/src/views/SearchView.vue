@@ -201,7 +201,11 @@
       <!-- Search Results & Sorting Listbox (Left) -->
       <div
         class="h-fit"
-        :class="[selectedView.label === 'Grid' || selectedView.label === 'Visuals' ? 'basis-full' : 'basis-3/4']"
+        :class="[
+          selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+            ? 'basis-full'
+            : 'basis-3/4',
+        ]"
       >
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
@@ -380,7 +384,9 @@
             </div>
           </div>
           <div
-            v-show="selectedView.label === 'Grid' || selectedView.label === 'Visuals'"
+            v-show="
+              selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+            "
             class="
               cursor-pointer
               text-mission-light-blue
@@ -527,20 +533,28 @@
           </template>
           <template v-else-if="selectedView.label === 'Visuals'">
             <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 m-4"
+              class="
+                grid grid-cols-1
+                md:grid-cols-2
+                lg:grid-cols-3
+                xl:grid-cols-4
+                gap-4
+                m-4
+              "
             >
               <template v-for="result in results" :key="result">
                 <div class="flex p-4">
                   <div class="group">
                     <div class="relative">
-                      <div 
+                      <div
                         class="
-                          invisible 
-                          group-hover:visible 
-                          absolute 
+                          invisible
+                          group-hover:visible
+                          absolute
                           h-full
-                          p-2 py-5 
-                          inset-x-0 
+                          p-2
+                          py-5
+                          inset-x-0
                           text-white
                           bg-mission-blue/[.90]
                           dark:bg-dark-space-blue/[.90]
@@ -549,32 +563,68 @@
                       >
                         <div class="flex flex-col">
                           <div class="line-clamp-3">
-                            <span>{{ `${"(" + result.title_classification + ") "}` }}</span>
+                            <span>{{
+                              `${"(" + result.title_classification + ") "}`
+                            }}</span>
                             <span>{{ result.title }}</span>
                           </div>
-                          <div class="flex justify-around absolute inset-x-0 bottom-2 text-sm">
+                          <div
+                            class="
+                              flex
+                              justify-around
+                              absolute
+                              inset-x-0
+                              bottom-2
+                              text-sm
+                            "
+                          >
                             <button
                               @click="openMedia(result.images.table.secondary)"
                               class="hover:underline"
                             >
                               VIEW MEDIA
-                              <span class="sr-only">Open media for {{ result.title }}</span>
+                              <span class="sr-only"
+                                >Open media for {{ result.title }}</span
+                              >
                             </button>
                             <p>|</p>
                             <router-link
                               class="hover:underline"
-                              :to="{ name: 'article', params: { doc_num: result.doc_num } }"
-                            >VIEW ARTICLE
+                              :to="{
+                                name: 'article',
+                                params: { doc_num: result.doc_num },
+                              }"
+                              >VIEW ARTICLE
                             </router-link>
                           </div>
                         </div>
                       </div>
-                      <img :src= "getImgUrl(result.images.table.secondary)" alt="" class="object-cover"/>
+                      <img
+                        :src="getImgUrl(result.images.table.secondary)"
+                        alt=""
+                        class="object-cover"
+                      />
                     </div>
-                    <div class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25 text-sm">
+                    <div
+                      class="
+                        flex
+                        justify-between
+                        p-2
+                        border border-slate-900/10
+                        dark:border-slate-50/[0.06]
+                        energy:border-gray-700/25
+                        text-sm
+                      "
+                    >
                       <div>
-                        <span v-for="(region, ind) in result.regions" :key="ind">
-                          {{ region }}<span v-if="ind < result.regions.length - 1">,&nbsp;</span>
+                        <span
+                          v-for="(region, ind) in result.regions"
+                          :key="ind"
+                        >
+                          {{ region
+                          }}<span v-if="ind < result.regions.length - 1"
+                            >,&nbsp;</span
+                          >
                         </span>
                       </div>
                       <div>
@@ -917,7 +967,7 @@ const sortOptions = [
 const viewOptions = [
   { label: "List", key: "list" },
   { label: "Grid", key: "grid" },
-  { label: "Visuals", key: "visuals"},
+  { label: "Visuals", key: "visuals" },
 ];
 
 export default {
@@ -963,7 +1013,11 @@ export default {
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
     );
     const selectedView = ref(
-      route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0]
+      route.query.view === "grid"
+        ? viewOptions[1]
+        : route.query.view === "visuals"
+        ? viewOptions[2]
+        : viewOptions[0]
     );
     const currentPage = ref(parseInt(route.query.page) || 1);
 
@@ -994,8 +1048,9 @@ export default {
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel(route.query["issues[]"], metadata.issues),
-          list: metadata.issues,
+          model: currentModel(route.query["issues[]"], metadata.issues.items),
+          list: metadata.issues.items,
+          type: metadata.issues.type,
         },
         reporting: {
           label: "Reporting & Product Types",
@@ -1053,52 +1108,77 @@ export default {
     });
 
     watch([selectedView], () => {
-      if (selectedView.value.key === "list" || selectedView.value.key === "grid") {
+      console.log("selectedView watcher triggered.");
+      if (
+        selectedView.value.key === "list" ||
+        selectedView.value.key === "grid"
+      ) {
         router.push({
-          name: "search",
           query: {
             ...route.query,
-            page: currentPage.value,
             view: selectedView.value.key,
           },
         });
-      }
-      else if (selectedView.value.key === "visuals") {
+      } else if (selectedView.value.key === "visuals") {
         router.push({
-          name: "search",
           query: {
             ...route.query,
-            page: currentPage.value,
             view: selectedView.value.key,
             media_tags: ["audio", "interactive", "graphic", "map", "video"],
-          }
+          },
         });
       }
     });
 
     watch(
-      () => route,
+      () => route.query,
       () => {
+        console.log("route.query watcher triggered.");
         if (route.name === "search" || route.name === "issues") {
           store.dispatch("search/search");
           pageHeader.value = getHeaderName(route);
           queryFilters.value = buildQueryFilters();
-        }
-      },
-      { deep: true }
-    );
-
-    watch(
-      () => route.query,
-      () => {
-        if (route.name === "search") {
-          store.dispatch("search/search");
           currentPage.value = parseInt(route.query.page) || 1;
           selectedView.value =
-            route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0];
+            route.query.view === "grid"
+              ? viewOptions[1]
+              : route.query.view === "visuals"
+              ? viewOptions[2]
+              : viewOptions[0];
         }
       }
     );
+
+    // Object.keys(queryFilters.value).forEach((filter) => {
+    //   console.log("filter: ", filter);
+    //   watch(
+    //     () => queryFilters.value[filter],
+    //     (newValue) => {
+    //       console.log("wtf: ", newValue);
+    //       delete route.query[newValue.type];
+    //       let query = {
+    //         ...route.query,
+    //       };
+    //       if (newValue.model.length > 0) {
+    //         let selectedOptions = [];
+    //         for (let i = 0; i < newValue.model.length; i++) {
+    //           selectedOptions.push(newValue.model[i].key);
+    //         }
+    //         query[newValue.type] = selectedOptions;
+    //       }
+    //       console.log("query: ", query);
+    //       router.push({
+    //         name: "search",
+    //       });
+    //       //console.log("route.query: ", route.query);
+    //       // router.push({
+    //       //   name: "search",
+    //       //   query,
+    //       // });
+    //     },
+    //     { deep: true }
+    //   );
+    // });
 
     watch(
       () => queryFilters,
@@ -1113,7 +1193,7 @@ export default {
 
     const openMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = true);
-    
+
     const openMedia = (url) => {
       let route = getImgUrl(url);
       window.open(route);

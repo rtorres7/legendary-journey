@@ -85,7 +85,7 @@
               <span
                 :class="[
                   selected ? 'font-medium' : 'font-normal',
-                  'block truncate',
+                  'block truncate text-sm',
                 ]"
                 >{{ item.name }}</span
               >
