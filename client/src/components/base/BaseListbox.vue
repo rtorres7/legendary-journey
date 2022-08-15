@@ -84,8 +84,13 @@
             >
               <span
                 :class="[
-                  selected ? 'font-medium' : 'font-normal',
-                  'block truncate',
+                  selected
+                    ? 'font-medium'
+                    : item.subitem
+                    ? 'font-light'
+                    : 'font-normal',
+                  item.subitem ? 'pl-2' : '',
+                  'block truncate text-sm',
                 ]"
                 >{{ item.name }}</span
               >

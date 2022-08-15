@@ -1,5 +1,4 @@
 import * as dayjs from "dayjs";
-import { countries } from '@/data'
 
 const buildArray = (item, count, sort_dir) => {
   const array = [];
@@ -110,21 +109,21 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Reporting Types"
           },
-          "topics": {
+          "issues": {
             "rows": [
               {
-                "name": "Ukraine War Crisis",
-                "key": "UWC",
+                "name": "Ukraine War",
+                "key": "UW",
                 "count": 421
               },
               {
                 "name": "Russian Invasion",
-                "key": "RIN",
+                "key": "RI",
                 "count": 338
               },
               {
                 "name": "Economic Turmoil",
-                "key": "ECT",
+                "key": "ET",
                 "count": 80
               },
             ],
@@ -134,7 +133,7 @@ export const getSearchDataFromUrl = (url, { query }) => {
             "rows": [
               {
                 "name": "Ukraine",
-                "key": "URK",
+                "key": "UKR",
                 "count": 421
               },
               {
@@ -144,12 +143,12 @@ export const getSearchDataFromUrl = (url, { query }) => {
               },
               {
                 "name": "Belarus",
-                "key": "BEL",
+                "key": "BLR",
                 "count": 120
               },
               {
                 "name": "Germany",
-                "key": "GER",
+                "key": "DEU",
                 "count": 98
               },
               {
@@ -185,26 +184,11 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Non State Actors"
           },
-          "product_types": {
-            "rows": [
-              {
-                "name": "Article",
-                "key": 10019,
-                "count": 421
-              },
-              {
-                "name": "Video",
-                "key": 10021,
-                "count": 9
-              },
-            ],
-            "displayName": "Product Types"
-          },
-          "classification": {
+          "classifications": {
             "rows": [
               {
                 "name": "UNCLASSIFIED",
-                "key": "UNCLASSIFIED",
+                "key": "UNC",
                 "count": 421
               },
             ],
@@ -214,32 +198,32 @@ export const getSearchDataFromUrl = (url, { query }) => {
             "rows": [
               {
                 "name": "Directorate of Foreign Affairs",
-                "key": "Directorate of Foreign Affairs",
+                "key": "DFA",
                 "count": 271
               },
               {
                 "name": "Directorate of Defense",
-                "key": "Directorate of Defense",
+                "key": "DOD",
                 "count": 248
               },
               {
                 "name": "Surveillance Office",
-                "key": "Surveillance Office",
+                "key": "SVO",
                 "count": 140
               },
               {
                 "name": "Office of Command",
-                "key": "Office of Command",
+                "key": "OOC",
                 "count": 52
               },
               {
                 "name": "Directorate of CounterTerrorism",
-                "key": "Directorate of CounterTerrorism",
+                "key": "DOC",
                 "count": 15
               },
               {
                 "name": "National Office",
-                "key": "National Office",
+                "key": "NAO",
                 "count": 2
               },
             ],
@@ -292,21 +276,21 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Reporting Types"
           },
-          "topics": {
+          "issues": {
             "rows": [
               {
-                "name": "Ukraine War Crisis",
-                "key": "UWC",
+                "name": "Ukraine War",
+                "key": "UW",
                 "count": 235
               },
               {
                 "name": "Russian Invasion",
-                "key": "RIN",
+                "key": "RI",
                 "count": 235
               },
               {
                 "name": "Economic Turmoil",
-                "key": "ECT",
+                "key": "ET",
                 "count": 115
               },
             ],
@@ -326,7 +310,7 @@ export const getSearchDataFromUrl = (url, { query }) => {
               },
               {
                 "name": "Belarus",
-                "key": "BEL",
+                "key": "BLR",
                 "count": 12
               },
             ],
@@ -347,31 +331,11 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Non State Actors"
           },
-          "product_types": {
-            "rows": [
-              {
-                "name": "Article",
-                "key": 10019,
-                "count": 230
-              },
-              {
-                "name": "Audio",
-                "key": 10020,
-                "count": 77
-              },
-              {
-                "name": "Video",
-                "key": 10021,
-                "count": 52
-              },
-            ],
-            "displayName": "Product Types"
-          },
-          "classification": {
+          "classifications": {
             "rows": [
               {
                 "name": "UNCLASSIFIED",
-                "key": "UNCLASSIFIED",
+                "key": "UNC",
                 "count": 421
               },
             ],
@@ -381,32 +345,32 @@ export const getSearchDataFromUrl = (url, { query }) => {
             "rows": [
               {
                 "name": "Directorate of Foreign Affairs",
-                "key": "Directorate of Foreign Affairs",
+                "key": "DOC",
                 "count": 235
               },
               {
                 "name": "Directorate of Defense",
-                "key": "Directorate of Defense",
+                "key": "DOD",
                 "count": 200
               },
               {
                 "name": "Surveillance Office",
-                "key": "Surveillance Office",
+                "key": "SVO",
                 "count": 117
               },
               {
                 "name": "Office of Command",
-                "key": "Office of Command",
+                "key": "OOC",
                 "count": 37
               },
               {
                 "name": "Directorate of CounterTerrorism",
-                "key": "Directorate of CounterTerrorism",
+                "key": "DOC",
                 "count": 14
               },
               {
                 "name": "National Office",
-                "key": "National Office",
+                "key": "NAO",
                 "count": 1
               },
             ],
@@ -442,114 +406,6 @@ export const getSearchDataFromUrl = (url, { query }) => {
         siteEnhancement: []
       }
     }
-  }
-}
-
-const reportingTypes = [
-  {
-    name: 'Analysis: Critical',
-    key: 'analysis.critical'
-  },
-  {
-    name: 'Analysis: All Source',
-    key: 'analysis.all_source'
-  },
-  {
-    name: 'Reporting: Collaboration',
-    key: 'reporting.collaboration'
-  },
-  {
-    name: 'Reporting: Enterprise',
-    key: 'reporting.enterprise'
-  },
-  {
-    name: 'Reporting: Mass',
-    key: 'reporting.mass'
-  },
-  {
-    name: 'Reporting: Mission',
-    key: 'reporting.mission'
-  },
-  {
-    name: 'Reporting: Open Source',
-    key: 'reporting.open_source'
-  },
-  {
-    name: 'Reporting: Operations',
-    key: 'reporting.operations'
-  },
-]
-
-export const getItems = (type) => {
-  switch (type) {
-    case 'regions': return countries
-    case 'reporting': return reportingTypes
-    case 'classifications': return [
-      {
-        name: 'UNCLASSIFIED'
-      }
-    ]
-    case 'media': return [
-      {
-        name: 'audio'
-      },
-      {
-        name: 'interactive'
-      },
-      {
-        name: 'graphic'
-      },
-      {
-        name: 'map'
-      },
-      {
-        name: 'video'
-      },
-    ]
-    case 'non-state': return [
-      {
-        name: 'EU'
-      },
-      {
-        name: 'NATO'
-      },
-      {
-        name: 'UN'
-      },
-    ]
-    case 'producing': return [
-      {
-        name: 'Directorate of CounterTerrorism'
-      },
-      {
-        name: 'Directorate of Defense'
-      },
-      {
-        name: 'Directorate of Foreign Affairs'
-      },
-      {
-        name: 'National Office'
-      },
-      {
-        name: 'Office of Command'
-      },
-      {
-        name: 'Surveillance Office'
-      },
-    ]
-    case 'front-page': return [
-      {
-        name: 'Featured'
-      }
-    ]
-    default:
-      return [
-        "test item 1",
-        "test item 2",
-        "test item 3",
-        "test item 4",
-        "test item 5",
-      ];
   }
 }
 

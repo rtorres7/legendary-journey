@@ -201,7 +201,11 @@
       <!-- Search Results & Sorting Listbox (Left) -->
       <div
         class="h-fit"
-        :class="[selectedView.label === 'Grid' || selectedView.label === 'Visuals' ? 'basis-full' : 'basis-3/4']"
+        :class="[
+          selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+            ? 'basis-full'
+            : 'basis-3/4',
+        ]"
       >
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
@@ -380,7 +384,9 @@
             </div>
           </div>
           <div
-            v-show="selectedView.label === 'Grid' || selectedView.label === 'Visuals'"
+            v-show="
+              selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+            "
             class="
               cursor-pointer
               text-mission-light-blue
@@ -527,20 +533,28 @@
           </template>
           <template v-else-if="selectedView.label === 'Visuals'">
             <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 m-4"
+              class="
+                grid grid-cols-1
+                md:grid-cols-2
+                lg:grid-cols-3
+                xl:grid-cols-4
+                gap-4
+                m-4
+              "
             >
               <template v-for="result in results" :key="result">
                 <div class="flex p-4">
                   <div class="group">
                     <div class="relative">
-                      <div 
+                      <div
                         class="
-                          invisible 
-                          group-hover:visible 
-                          absolute 
+                          invisible
+                          group-hover:visible
+                          absolute
                           h-full
-                          p-2 py-5 
-                          inset-x-0 
+                          p-2
+                          py-5
+                          inset-x-0
                           text-white
                           bg-mission-blue/[.90]
                           dark:bg-dark-space-blue/[.90]
@@ -549,32 +563,68 @@
                       >
                         <div class="flex flex-col">
                           <div class="line-clamp-3">
-                            <span>{{ `${"(" + result.title_classification + ") "}` }}</span>
+                            <span>{{
+                              `${"(" + result.title_classification + ") "}`
+                            }}</span>
                             <span>{{ result.title }}</span>
                           </div>
-                          <div class="flex justify-around absolute inset-x-0 bottom-2 text-sm">
+                          <div
+                            class="
+                              flex
+                              justify-around
+                              absolute
+                              inset-x-0
+                              bottom-2
+                              text-sm
+                            "
+                          >
                             <button
                               @click="openMedia(result.images.table.secondary)"
                               class="hover:underline"
                             >
                               VIEW MEDIA
-                              <span class="sr-only">Open media for {{ result.title }}</span>
+                              <span class="sr-only"
+                                >Open media for {{ result.title }}</span
+                              >
                             </button>
                             <p>|</p>
                             <router-link
                               class="hover:underline"
-                              :to="{ name: 'article', params: { doc_num: result.doc_num } }"
-                            >VIEW ARTICLE
+                              :to="{
+                                name: 'article',
+                                params: { doc_num: result.doc_num },
+                              }"
+                              >VIEW ARTICLE
                             </router-link>
                           </div>
                         </div>
                       </div>
-                      <img :src= "getImgUrl(result.images.table.secondary)" alt="" class="object-cover"/>
+                      <img
+                        :src="getImgUrl(result.images.table.secondary)"
+                        alt=""
+                        class="object-cover"
+                      />
                     </div>
-                    <div class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25 text-sm">
+                    <div
+                      class="
+                        flex
+                        justify-between
+                        p-2
+                        border border-slate-900/10
+                        dark:border-slate-50/[0.06]
+                        energy:border-gray-700/25
+                        text-sm
+                      "
+                    >
                       <div>
-                        <span v-for="(region, ind) in result.regions" :key="ind">
-                          {{ region }}<span v-if="ind < result.regions.length - 1">,&nbsp;</span>
+                        <span
+                          v-for="(region, ind) in result.regions"
+                          :key="ind"
+                        >
+                          {{ region
+                          }}<span v-if="ind < result.regions.length - 1"
+                            >,&nbsp;</span
+                          >
                         </span>
                       </div>
                       <div>
@@ -908,7 +958,6 @@ import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 import { metadata } from "@/config";
-import { getItems } from "@/data";
 
 const sortOptions = [
   { label: "Newest", key: "desc" },
@@ -917,7 +966,7 @@ const sortOptions = [
 const viewOptions = [
   { label: "List", key: "list" },
   { label: "Grid", key: "grid" },
-  { label: "Visuals", key: "visuals"},
+  { label: "Visuals", key: "visuals" },
 ];
 
 export default {
@@ -963,7 +1012,11 @@ export default {
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
     );
     const selectedView = ref(
-      route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0]
+      route.query.view === "grid"
+        ? viewOptions[1]
+        : route.query.view === "visuals"
+        ? viewOptions[2]
+        : viewOptions[0]
     );
     const currentPage = ref(parseInt(route.query.page) || 1);
 
@@ -971,69 +1024,202 @@ export default {
       return require("@/assets/" + url);
     };
 
-    const currentModel = (key, list) => {
-      if (key) {
-        if (Array.isArray(key)) {
-          const selectedModels = [];
-          key.forEach((k) => {
-            selectedModels.push(list.find((item) => item.key === k));
-          });
-          return selectedModels;
+    const currentModel = (types, list) => {
+      const selectedModels = [];
+      types.forEach((type) => {
+        if (route.query[type]) {
+          if (!Array.isArray(route.query[type])) {
+            route.query[type] = [route.query[type]];
+          }
+          for (let i = 0; i < route.query[type].length; i++) {
+            selectedModels.push(
+              list.find((item) => item.key === route.query[type][i])
+            );
+          }
         }
-        return [list.find((item) => item.key === key)];
+      });
+      return selectedModels;
+    };
+
+    const getSubregionForCode = (code) => {
+      return metadata.subregions.items.find(
+        (subregion) => subregion.key === code
+      );
+    };
+
+    const buildRegionsItems = () => {
+      let items = [];
+      for (let i = 0; i < metadata.regions.items.length; i++) {
+        items.push({ ...metadata.regions.items[i], type: "regions[]" });
+        for (let j = 0; j < metadata.regions.items[i].subregions.length; j++) {
+          items.push({
+            ...getSubregionForCode(metadata.regions.items[i].subregions[j]),
+            type: "subregions[]",
+            subitem: true,
+          });
+        }
       }
-      return [];
+      for (let i = 0; i < metadata.countries.items.length; i++) {
+        items.push({ ...metadata.countries.items[i], type: "countries[]" });
+      }
+      return items;
+    };
+
+    const buildListItems = (items, type) => {
+      return items.map((item) => ({ ...item, type }));
     };
 
     const buildQueryFilters = () => {
+      const issueItems = buildListItems(
+        metadata.issues.items,
+        metadata.issues.type
+      );
+      const reportingItems = buildListItems(
+        metadata.reporting_types.items,
+        metadata.reporting_types.type
+      );
+      const classificationItems = buildListItems(
+        metadata.classifications.items,
+        metadata.classifications.type
+      );
+      const mediaItems = buildListItems(
+        metadata.media.items,
+        metadata.media.type
+      );
+      const nonStateItems = buildListItems(
+        metadata.nonstate.items,
+        metadata.nonstate.type
+      );
+      const producingItems = buildListItems(
+        metadata.producing_offices.items,
+        metadata.producing_offices.type
+      );
+      const frontPageItems = buildListItems(
+        metadata.front_page.items,
+        metadata.front_page.type
+      );
+      const regionsItems = buildRegionsItems();
       return {
         regions: {
           label: "Regions & Countries",
-          model: [],
-          list: getItems("regions"),
+          model: currentModel(
+            [
+              metadata.regions.type,
+              metadata.subregions.type,
+              metadata.countries.type,
+            ],
+            regionsItems
+          ),
+          list: regionsItems,
+          types: [
+            metadata.regions.type,
+            metadata.subregions.type,
+            metadata.countries.type,
+          ],
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel(route.query["issues[]"], metadata.issues),
-          list: metadata.issues,
+          model: currentModel([metadata.issues.type], issueItems),
+          list: issueItems,
+          types: [metadata.issues.type],
         },
         reporting: {
           label: "Reporting & Product Types",
-          model: currentModel(
-            route.query["reporting_types[]"],
-            getItems("reporting")
-          ),
-          list: getItems("reporting"),
+          model: currentModel([metadata.reporting_types.type], reportingItems),
+          list: reportingItems,
+          types: [metadata.reporting_types.type],
         },
         classifications: {
           label: "Classifications",
-          model: [],
-          list: getItems("classifications"),
+          model: currentModel(
+            [metadata.classifications.type],
+            classificationItems
+          ),
+          list: classificationItems,
+          types: [metadata.classifications.type],
         },
         media_types: {
           label: "Media Types",
-          model: [],
-          list: getItems("media"),
+          model: currentModel([metadata.media.type], mediaItems),
+          list: mediaItems,
+          types: [metadata.media.type],
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: [],
-          list: getItems("non-state"),
+          model: currentModel([metadata.nonstate.type], nonStateItems),
+          list: nonStateItems,
+          types: [metadata.nonstate.type],
         },
         producing_offices: {
           label: "Producing Offices",
-          model: [],
-          list: getItems("producing"),
+          model: currentModel(
+            [metadata.producing_offices.type],
+            producingItems
+          ),
+          list: producingItems,
+          types: [metadata.producing_offices.type],
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: [],
-          list: getItems("front-page"),
+          model: currentModel([metadata.front_page.type], frontPageItems),
+          list: frontPageItems,
+          types: [metadata.front_page.type],
         },
       };
     };
 
     const queryFilters = ref(buildQueryFilters());
+
+    const buildWatcher = (object) => {
+      return watch(
+        () => object,
+        (newValue) => {
+          console.log("local watcher triggered.", newValue);
+          let query = {
+            ...route.query,
+          };
+          newValue.types.forEach((type) => {
+            delete query[type];
+          });
+          if (newValue.model.length > 0) {
+            let selectedOptions = [];
+            for (let i = 0; i < newValue.model.length; i++) {
+              selectedOptions.push(newValue.model[i]);
+            }
+            let uniqueTypes = [];
+            for (let i = 0; i < selectedOptions.length; i++) {
+              uniqueTypes.push(selectedOptions[i].type);
+            }
+            uniqueTypes = [...new Set(uniqueTypes)];
+            for (let i = 0; i < uniqueTypes.length; i++) {
+              let valuesForType = [];
+              for (let j = 0; j < selectedOptions.length; j++) {
+                if (selectedOptions[j].type === uniqueTypes[i]) {
+                  valuesForType.push(selectedOptions[j].key);
+                }
+              }
+              query[uniqueTypes[i]] = valuesForType;
+            }
+          }
+          console.log("query: ", query);
+          router.replace({
+            name: "search",
+            query: query,
+          });
+        },
+        { deep: true }
+      );
+    };
+
+    const buildQueryWatchers = (object) => {
+      let watchers = [];
+      Object.keys(object).forEach((filter) => {
+        watchers.push(buildWatcher(object[filter]));
+      });
+      return watchers;
+    };
+
+    buildQueryWatchers(queryFilters.value);
 
     const isMobileFacetsDialogOpen = ref(false);
 
@@ -1053,57 +1239,58 @@ export default {
     });
 
     watch([selectedView], () => {
-      if (selectedView.value.key === "list" || selectedView.value.key === "grid") {
+      console.log("selectedView watcher triggered.");
+      if (
+        selectedView.value.key === "list" ||
+        selectedView.value.key === "grid"
+      ) {
         router.push({
-          name: "search",
           query: {
             ...route.query,
-            page: currentPage.value,
             view: selectedView.value.key,
           },
         });
-      }
-      else if (selectedView.value.key === "visuals") {
+      } else if (selectedView.value.key === "visuals") {
+        let query = {
+          ...route.query,
+          view: selectedView.value.key,
+        };
+        query["media_tags[]"] = [
+          "audio",
+          "interactive",
+          "graphic",
+          "map",
+          "video",
+        ];
         router.push({
-          name: "search",
-          query: {
-            ...route.query,
-            page: currentPage.value,
-            view: selectedView.value.key,
-            media_tags: ["audio", "interactive", "graphic", "map", "video"],
-          }
+          query,
         });
       }
     });
 
     watch(
-      () => route,
+      () => route.query,
       () => {
+        console.log("route.query watcher triggered.");
         if (route.name === "search" || route.name === "issues") {
           store.dispatch("search/search");
           pageHeader.value = getHeaderName(route);
           queryFilters.value = buildQueryFilters();
-        }
-      },
-      { deep: true }
-    );
-
-    watch(
-      () => route.query,
-      () => {
-        if (route.name === "search") {
-          store.dispatch("search/search");
           currentPage.value = parseInt(route.query.page) || 1;
           selectedView.value =
-            route.query.view === "grid" ? viewOptions[1] : route.query.view === "visuals" ? viewOptions[2] : viewOptions[0];
+            route.query.view === "grid"
+              ? viewOptions[1]
+              : route.query.view === "visuals"
+              ? viewOptions[2]
+              : viewOptions[0];
         }
       }
     );
 
     watch(
       () => queryFilters,
-      (newValue) => {
-        console.log("queryFilters changed to: ", newValue);
+      () => {
+        buildQueryWatchers(queryFilters.value);
       },
       { deep: true }
     );
@@ -1113,7 +1300,7 @@ export default {
 
     const openMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = true);
-    
+
     const openMedia = (url) => {
       let route = getImgUrl(url);
       window.open(route);
