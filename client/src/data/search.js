@@ -1,5 +1,4 @@
 import * as dayjs from "dayjs";
-import { countries } from '@/data'
 
 const buildArray = (item, count, sort_dir) => {
   const array = [];
@@ -407,20 +406,6 @@ export const getSearchDataFromUrl = (url, { query }) => {
         siteEnhancement: []
       }
     }
-  }
-}
-
-export const getItems = (type) => {
-  switch (type) {
-    case 'regions': return countries
-    default:
-      return [
-        "test item 1",
-        "test item 2",
-        "test item 3",
-        "test item 4",
-        "test item 5",
-      ];
   }
 }
 
