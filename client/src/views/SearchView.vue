@@ -1253,6 +1253,7 @@ export default {
       } else if (selectedView.value.key === "visuals") {
         let query = {
           ...route.query,
+          view: selectedView.value.key,
         };
         query["media_tags[]"] = [
           "audio",
