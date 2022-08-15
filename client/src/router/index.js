@@ -37,6 +37,30 @@ const routes = [
     }
   },
   {
+    path: '/regions/:name',
+    name: 'regions',
+    component: SearchView,
+    meta: {
+      title: 'Regions'
+    }
+  },
+  {
+    path: '/subregions/:name',
+    name: 'subregions',
+    component: SearchView,
+    meta: {
+      title: 'Subregions'
+    }
+  },
+  {
+    path: '/countries/:name',
+    name: 'countries',
+    component: SearchView,
+    meta: {
+      title: 'Countries'
+    }
+  },
+  {
     path: '/search',
     name: 'search',
     component: SearchView,

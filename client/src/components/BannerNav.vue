@@ -162,7 +162,7 @@
                           <div v-for="region in metadata.regions.items" :key="region">
                             <a
                               @click="navigateToRegion(region)"
-                              class="lg:text-lg hover:underline"
+                              class="lg:text-lg hover:underline cursor-pointer"
                             >
                               {{ region.name }}
                             </a>
@@ -170,11 +170,12 @@
                               <template v-for="subregion in region.subregions" :key="subregion">
                                 <template v-for="subregionItem in metadata.subregions.items" :key="subregionItem">
                                   <li v-if="subregionItem.key === subregion">
-                                    <router-link
-                                      to=""
-                                      class="hover:underline font-light"
-                                      >{{ subregionItem.name }}</router-link
+                                    <a
+                                      @click="navigateToSubregion(subregionItem)"
+                                      class="hover:underline cursor-pointer font-light"
                                     >
+                                      {{ subregionItem.name }}
+                                    </a>
                                   </li>
                                 </template>
                               </template>
@@ -298,6 +299,7 @@
                                   :value="country"
                                   as="template"
                                   class="capitalize px-2 py-1 cursor-pointer"
+                                  @click="navigateToCountry(country)"
                                 >
                                   <li
                                     :class="[
@@ -1218,6 +1220,38 @@ export default {
       });
     };
 
+    const navigateToSubregion = (subregion) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.subregions.type] = subregion.key;
+      router.push({
+        name: "subregions",
+        params: {
+          name: subregion.name,
+        },
+        query,
+      });
+    };
+    
+    const navigateToCountry = (country) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.countries.type] = country.key;
+      router.push({
+        name: "countries",
+        params: {
+          name: country.name,
+        },
+        query,
+      });
+    };
+
     return {
       metadata,
       regions,
@@ -1237,6 +1271,8 @@ export default {
       isAdmin,
       navigateToIssue,
       navigateToRegion,
+      navigateToSubregion,
+      navigateToCountry,
     };
   },
   methods: {

@@ -1272,18 +1272,24 @@ export default {
       () => route.query,
       () => {
         console.log("route.query watcher triggered.");
-        if (route.name === "search" || route.name === "issues") {
-          store.dispatch("search/search");
-          pageHeader.value = getHeaderName(route);
-          queryFilters.value = buildQueryFilters();
-          currentPage.value = parseInt(route.query.page) || 1;
-          selectedView.value =
-            route.query.view === "grid"
-              ? viewOptions[1]
-              : route.query.view === "visuals"
-              ? viewOptions[2]
-              : viewOptions[0];
-        }
+        if (
+              route.name === "search" 
+              || route.name === "issues" 
+              || route.name === "regions" 
+              || route.name === "subregions" 
+              || route.name === "countries"
+            ) {
+                store.dispatch("search/search");
+                pageHeader.value = getHeaderName(route);
+                queryFilters.value = buildQueryFilters();
+                currentPage.value = parseInt(route.query.page) || 1;
+                selectedView.value =
+                  route.query.view === "grid"
+                    ? viewOptions[1]
+                    : route.query.view === "visuals"
+                    ? viewOptions[2]
+                    : viewOptions[0];
+              }
       }
     );
 
