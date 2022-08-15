@@ -97,6 +97,61 @@
       }
     ]
   },
+  "nonstate": {
+    "type": "non_state_actors[]",
+    "items": [
+      {
+        "name": "EU",
+        "key": "EU"
+      },
+      {
+        "name": "NATO",
+        "key": "NATO"
+      },
+      {
+        "name": "UN",
+        "key": "UN"
+      }
+    ]
+  },
+  "producing_offices": {
+    "type": "producing_offices[]",
+    "items": [
+      {
+        "name": "Directorate of CounterTerrorism",
+        "key": "DOC"
+      },
+      {
+        "name": "Directorate of Defense",
+        "key": "DOD"
+      },
+      {
+        "name": "Directorate of Foreign Affairs",
+        "key": "DFA"
+      },
+      {
+        "name": "National Office",
+        "key": "NAO"
+      },
+      {
+        "name": "Office of Command",
+        "key": "OOC"
+      },
+      {
+        "name": "Surveillance Office",
+        "key": "SVO"
+      }
+    ]
+  },
+  "front_page": {
+    "type": "selected_for[]",
+    "items": [
+      {
+        "name": "Featured",
+        "key": "featured"
+      }
+    ]
+  },
   "regions": {
     "type": "regions[]",
     "items": [
@@ -1782,6 +1837,11 @@
         "key": "ZMB",
         "name": "Zambia",
         "digraph": "ZA"
+      },
+      {
+        "code": "ZWE",
+        "name": "Zimbabwe",
+        "digraph": "ZI"
       }
     ]
   }

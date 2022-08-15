@@ -448,59 +448,6 @@ export const getSearchDataFromUrl = (url, { query }) => {
 export const getItems = (type) => {
   switch (type) {
     case 'regions': return countries
-    case 'media': return [
-      {
-        name: 'audio'
-      },
-      {
-        name: 'interactive'
-      },
-      {
-        name: 'graphic'
-      },
-      {
-        name: 'map'
-      },
-      {
-        name: 'video'
-      },
-    ]
-    case 'non-state': return [
-      {
-        name: 'EU'
-      },
-      {
-        name: 'NATO'
-      },
-      {
-        name: 'UN'
-      },
-    ]
-    case 'producing': return [
-      {
-        name: 'Directorate of CounterTerrorism'
-      },
-      {
-        name: 'Directorate of Defense'
-      },
-      {
-        name: 'Directorate of Foreign Affairs'
-      },
-      {
-        name: 'National Office'
-      },
-      {
-        name: 'Office of Command'
-      },
-      {
-        name: 'Surveillance Office'
-      },
-    ]
-    case 'front-page': return [
-      {
-        name: 'Featured'
-      }
-    ]
     default:
       return [
         "test item 1",

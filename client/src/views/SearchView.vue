@@ -1060,6 +1060,18 @@ export default {
         metadata.media.items,
         metadata.media.type
       );
+      const nonStateItems = buildListItems(
+        metadata.nonstate.items,
+        metadata.nonstate.type
+      );
+      const producingItems = buildListItems(
+        metadata.producing_offices.items,
+        metadata.producing_offices.type
+      );
+      const frontPageItems = buildListItems(
+        metadata.front_page.items,
+        metadata.front_page.type
+      );
       return {
         regions: {
           label: "Regions & Countries",
@@ -1098,18 +1110,30 @@ export default {
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: [],
-          list: getItems("non-state"),
+          model: currentModel(
+            route.query[metadata.nonstate.type],
+            nonStateItems
+          ),
+          list: nonStateItems,
+          types: [metadata.nonstate.type],
         },
         producing_offices: {
           label: "Producing Offices",
-          model: [],
-          list: getItems("producing"),
+          model: currentModel(
+            route.query[metadata.producing_offices.type],
+            producingItems
+          ),
+          list: producingItems,
+          types: [metadata.producing_offices.type],
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: [],
-          list: getItems("front-page"),
+          model: currentModel(
+            route.query[metadata.front_page.type],
+            frontPageItems
+          ),
+          list: frontPageItems,
+          types: [metadata.front_page.type],
         },
       };
     };
