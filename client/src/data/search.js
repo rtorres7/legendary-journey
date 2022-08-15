@@ -113,7 +113,7 @@ export const getSearchDataFromUrl = (url, { query }) => {
           "issues": {
             "rows": [
               {
-                "name": "Ukraine War Crisis",
+                "name": "Ukraine War",
                 "key": "UC",
                 "count": 421
               },
