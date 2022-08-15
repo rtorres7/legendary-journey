@@ -110,21 +110,21 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Reporting Types"
           },
-          "topics": {
+          "issues": {
             "rows": [
               {
                 "name": "Ukraine War Crisis",
-                "key": "UWC",
+                "key": "UC",
                 "count": 421
               },
               {
                 "name": "Russian Invasion",
-                "key": "RIN",
+                "key": "RI",
                 "count": 338
               },
               {
                 "name": "Economic Turmoil",
-                "key": "ECT",
+                "key": "ET",
                 "count": 80
               },
             ],
@@ -134,7 +134,7 @@ export const getSearchDataFromUrl = (url, { query }) => {
             "rows": [
               {
                 "name": "Ukraine",
-                "key": "URK",
+                "key": "UKR",
                 "count": 421
               },
               {
@@ -144,12 +144,12 @@ export const getSearchDataFromUrl = (url, { query }) => {
               },
               {
                 "name": "Belarus",
-                "key": "BEL",
+                "key": "BLR",
                 "count": 120
               },
               {
                 "name": "Germany",
-                "key": "GER",
+                "key": "DEU",
                 "count": 98
               },
               {
@@ -185,26 +185,11 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Non State Actors"
           },
-          "product_types": {
-            "rows": [
-              {
-                "name": "Article",
-                "key": 10019,
-                "count": 421
-              },
-              {
-                "name": "Video",
-                "key": 10021,
-                "count": 9
-              },
-            ],
-            "displayName": "Product Types"
-          },
-          "classification": {
+          "classifications": {
             "rows": [
               {
                 "name": "UNCLASSIFIED",
-                "key": "UNCLASSIFIED",
+                "key": "UNC",
                 "count": 421
               },
             ],
@@ -214,32 +199,32 @@ export const getSearchDataFromUrl = (url, { query }) => {
             "rows": [
               {
                 "name": "Directorate of Foreign Affairs",
-                "key": "Directorate of Foreign Affairs",
+                "key": "DFA",
                 "count": 271
               },
               {
                 "name": "Directorate of Defense",
-                "key": "Directorate of Defense",
+                "key": "DOD",
                 "count": 248
               },
               {
                 "name": "Surveillance Office",
-                "key": "Surveillance Office",
+                "key": "SVO",
                 "count": 140
               },
               {
                 "name": "Office of Command",
-                "key": "Office of Command",
+                "key": "OOC",
                 "count": 52
               },
               {
                 "name": "Directorate of CounterTerrorism",
-                "key": "Directorate of CounterTerrorism",
+                "key": "DOC",
                 "count": 15
               },
               {
                 "name": "National Office",
-                "key": "National Office",
+                "key": "NAO",
                 "count": 2
               },
             ],
@@ -292,21 +277,21 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Reporting Types"
           },
-          "topics": {
+          "issues": {
             "rows": [
               {
-                "name": "Ukraine War Crisis",
-                "key": "UWC",
+                "name": "Ukraine War",
+                "key": "UW",
                 "count": 235
               },
               {
                 "name": "Russian Invasion",
-                "key": "RIN",
+                "key": "RI",
                 "count": 235
               },
               {
                 "name": "Economic Turmoil",
-                "key": "ECT",
+                "key": "ET",
                 "count": 115
               },
             ],
@@ -326,7 +311,7 @@ export const getSearchDataFromUrl = (url, { query }) => {
               },
               {
                 "name": "Belarus",
-                "key": "BEL",
+                "key": "BLR",
                 "count": 12
               },
             ],
@@ -347,31 +332,11 @@ export const getSearchDataFromUrl = (url, { query }) => {
             ],
             "displayName": "Non State Actors"
           },
-          "product_types": {
-            "rows": [
-              {
-                "name": "Article",
-                "key": 10019,
-                "count": 230
-              },
-              {
-                "name": "Audio",
-                "key": 10020,
-                "count": 77
-              },
-              {
-                "name": "Video",
-                "key": 10021,
-                "count": 52
-              },
-            ],
-            "displayName": "Product Types"
-          },
-          "classification": {
+          "classifications": {
             "rows": [
               {
                 "name": "UNCLASSIFIED",
-                "key": "UNCLASSIFIED",
+                "key": "UNC",
                 "count": 421
               },
             ],
@@ -381,32 +346,32 @@ export const getSearchDataFromUrl = (url, { query }) => {
             "rows": [
               {
                 "name": "Directorate of Foreign Affairs",
-                "key": "Directorate of Foreign Affairs",
+                "key": "DOC",
                 "count": 235
               },
               {
                 "name": "Directorate of Defense",
-                "key": "Directorate of Defense",
+                "key": "DOD",
                 "count": 200
               },
               {
                 "name": "Surveillance Office",
-                "key": "Surveillance Office",
+                "key": "SVO",
                 "count": 117
               },
               {
                 "name": "Office of Command",
-                "key": "Office of Command",
+                "key": "OOC",
                 "count": 37
               },
               {
                 "name": "Directorate of CounterTerrorism",
-                "key": "Directorate of CounterTerrorism",
+                "key": "DOC",
                 "count": 14
               },
               {
                 "name": "National Office",
-                "key": "National Office",
+                "key": "NAO",
                 "count": 1
               },
             ],
