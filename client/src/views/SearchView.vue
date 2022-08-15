@@ -958,7 +958,6 @@ import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 import { metadata } from "@/config";
-import { getItems } from "@/data";
 
 const sortOptions = [
   { label: "Newest", key: "desc" },
@@ -1025,18 +1024,45 @@ export default {
       return require("@/assets/" + url);
     };
 
-    const currentModel = (key, list) => {
-      if (key) {
-        if (Array.isArray(key)) {
-          const selectedModels = [];
-          key.forEach((k) => {
-            selectedModels.push(list.find((item) => item.key === k));
-          });
-          return selectedModels;
+    const currentModel = (types, list) => {
+      const selectedModels = [];
+      types.forEach((type) => {
+        if (route.query[type]) {
+          if (!Array.isArray(route.query[type])) {
+            route.query[type] = [route.query[type]];
+          }
+          for (let i = 0; i < route.query[type].length; i++) {
+            selectedModels.push(
+              list.find((item) => item.key === route.query[type][i])
+            );
+          }
         }
-        return [list.find((item) => item.key === key)];
+      });
+      return selectedModels;
+    };
+
+    const getSubregionForCode = (code) => {
+      return metadata.subregions.items.find(
+        (subregion) => subregion.key === code
+      );
+    };
+
+    const buildRegionsItems = () => {
+      let items = [];
+      for (let i = 0; i < metadata.regions.items.length; i++) {
+        items.push({ ...metadata.regions.items[i], type: "regions[]" });
+        for (let j = 0; j < metadata.regions.items[i].subregions.length; j++) {
+          items.push({
+            ...getSubregionForCode(metadata.regions.items[i].subregions[j]),
+            type: "subregions[]",
+            subitem: true,
+          });
+        }
       }
-      return [];
+      for (let i = 0; i < metadata.countries.items.length; i++) {
+        items.push({ ...metadata.countries.items[i], type: "countries[]" });
+      }
+      return items;
     };
 
     const buildListItems = (items, type) => {
@@ -1072,31 +1098,41 @@ export default {
         metadata.front_page.items,
         metadata.front_page.type
       );
+      const regionsItems = buildRegionsItems();
       return {
         regions: {
           label: "Regions & Countries",
-          model: [],
-          list: getItems("regions"),
+          model: currentModel(
+            [
+              metadata.regions.type,
+              metadata.subregions.type,
+              metadata.countries.type,
+            ],
+            regionsItems
+          ),
+          list: regionsItems,
+          types: [
+            metadata.regions.type,
+            metadata.subregions.type,
+            metadata.countries.type,
+          ],
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel(route.query[metadata.issues.type], issueItems),
+          model: currentModel([metadata.issues.type], issueItems),
           list: issueItems,
           types: [metadata.issues.type],
         },
         reporting: {
           label: "Reporting & Product Types",
-          model: currentModel(
-            route.query[metadata.reporting_types.type],
-            reportingItems
-          ),
+          model: currentModel([metadata.reporting_types.type], reportingItems),
           list: reportingItems,
           types: [metadata.reporting_types.type],
         },
         classifications: {
           label: "Classifications",
           model: currentModel(
-            route.query[metadata.classifications.type],
+            [metadata.classifications.type],
             classificationItems
           ),
           list: classificationItems,
@@ -1104,23 +1140,20 @@ export default {
         },
         media_types: {
           label: "Media Types",
-          model: currentModel(route.query[metadata.media.type], mediaItems),
+          model: currentModel([metadata.media.type], mediaItems),
           list: mediaItems,
           types: [metadata.media.type],
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: currentModel(
-            route.query[metadata.nonstate.type],
-            nonStateItems
-          ),
+          model: currentModel([metadata.nonstate.type], nonStateItems),
           list: nonStateItems,
           types: [metadata.nonstate.type],
         },
         producing_offices: {
           label: "Producing Offices",
           model: currentModel(
-            route.query[metadata.producing_offices.type],
+            [metadata.producing_offices.type],
             producingItems
           ),
           list: producingItems,
@@ -1128,10 +1161,7 @@ export default {
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: currentModel(
-            route.query[metadata.front_page.type],
-            frontPageItems
-          ),
+          model: currentModel([metadata.front_page.type], frontPageItems),
           list: frontPageItems,
           types: [metadata.front_page.type],
         },
