@@ -1,4 +1,7 @@
 <template>
+  <p>
+    {{ pageSubheader }}
+  </p>
   <p
     class="
       font-semibold
@@ -994,14 +997,37 @@ export default {
     const router = useRouter();
 
     const getHeaderName = (route) => {
-      if (route.name === "issues") {
+      if (
+          route.name === "issues" || 
+          route.name === "regions" || 
+          route.name === "subregions" || 
+          route.name === "countries"
+      ) {
         return route.params.name ? route.params.name : "Search";
       } else {
         return "Search";
       }
     };
 
+    const getSubheaderName = (route) => {
+      let subheaderName = '';
+      if (route.name === "countries") {
+        metadata.subregions.items.forEach((subregion) => {
+          subregion.country_codes.forEach((code) => {
+            if(route.params.key === code) {
+              subheaderName = subregion.name;
+            }
+          });
+        });
+        return subheaderName;
+      }
+      else {
+        return;
+      }
+    };
+
     const pageHeader = ref(getHeaderName(route));
+    const pageSubheader = ref(getSubheaderName(route));
 
     const loading = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
@@ -1273,23 +1299,24 @@ export default {
       () => {
         console.log("route.query watcher triggered.");
         if (
-              route.name === "search" 
-              || route.name === "issues" 
-              || route.name === "regions" 
-              || route.name === "subregions" 
-              || route.name === "countries"
-            ) {
-                store.dispatch("search/search");
-                pageHeader.value = getHeaderName(route);
-                queryFilters.value = buildQueryFilters();
-                currentPage.value = parseInt(route.query.page) || 1;
-                selectedView.value =
-                  route.query.view === "grid"
-                    ? viewOptions[1]
-                    : route.query.view === "visuals"
-                    ? viewOptions[2]
-                    : viewOptions[0];
-              }
+          route.name === "search" || 
+          route.name === "issues" ||
+          route.name === "regions" ||
+          route.name === "subregions" ||
+          route.name === "countries"
+        ) {
+          store.dispatch("search/search");
+          pageHeader.value = getHeaderName(route);
+          pageSubheader.value = getSubheaderName(route);
+          queryFilters.value = buildQueryFilters();
+          currentPage.value = parseInt(route.query.page) || 1;
+          selectedView.value =
+            route.query.view === "grid"
+              ? viewOptions[1]
+              : route.query.view === "visuals"
+              ? viewOptions[2]
+              : viewOptions[0];
+        }
       }
     );
 
@@ -1319,6 +1346,7 @@ export default {
       selectedView,
       viewOptions,
       pageHeader,
+      pageSubheader,
       loading,
       results,
       totalCount,
