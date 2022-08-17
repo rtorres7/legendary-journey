@@ -98,7 +98,7 @@
       </div>
       <DisclosurePanel class="my-2">
         <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
-          <div class="lg:basis-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
+          <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
             <template
               v-for="n in [
                 queryFilters.classifications,
@@ -106,7 +106,7 @@
               ]"
               :key="n"
             >
-              <div class="basis-1/2">
+              <div class="w-1/2">
                 <BaseListbox
                   v-model="n.model"
                   :label="n.label"
@@ -124,7 +124,7 @@
               lg:gap-0
               lg:grid-cols-0
               lg:flex
-              lg:basis-3/5
+              lg:w-3/5
               lg:space-x-6
               lg:max-w-none
             "
@@ -137,7 +137,7 @@
               ]"
               :key="n"
             >
-              <div class="lg:basis-1/3 lg:max-w-none">
+              <div class="lg:w-1/3">
                 <BaseListbox
                   v-model="n.model"
                   :label="n.label"
@@ -1024,6 +1024,13 @@ export default {
       return require("@/assets/" + url);
     };
 
+    /* 
+      - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
+      - 1) Looks in the route query if any of types are present there
+      - 2) For each type found in the query, it loops through the values for that query property
+      - 3) Each value is then matched up against the list of list box items and pushed into the 'selectedModels' array
+      - 4) The selectedModels represents the list of currently selected items in the list box
+    */
     const currentModel = (types, list) => {
       const selectedModels = [];
       types.forEach((type) => {
@@ -1069,53 +1076,48 @@ export default {
       return items.map((item) => ({ ...item, type }));
     };
 
+    const issueItems = buildListItems(
+      metadata.issues.items,
+      metadata.issues.type
+    );
+    const reportingItems = buildListItems(
+      metadata.reporting_types.items,
+      metadata.reporting_types.type
+    );
+    const classificationItems = buildListItems(
+      metadata.classifications.items,
+      metadata.classifications.type
+    );
+    const mediaItems = buildListItems(
+      metadata.media.items,
+      metadata.media.type
+    );
+    const nonStateItems = buildListItems(
+      metadata.nonstate.items,
+      metadata.nonstate.type
+    );
+    const producingItems = buildListItems(
+      metadata.producing_offices.items,
+      metadata.producing_offices.type
+    );
+    const frontPageItems = buildListItems(
+      metadata.front_page.items,
+      metadata.front_page.type
+    );
+    const regionsItems = buildRegionsItems();
+    const regionsTypes = [
+      metadata.regions.type,
+      metadata.subregions.type,
+      metadata.countries.type,
+    ];
+
     const buildQueryFilters = () => {
-      const issueItems = buildListItems(
-        metadata.issues.items,
-        metadata.issues.type
-      );
-      const reportingItems = buildListItems(
-        metadata.reporting_types.items,
-        metadata.reporting_types.type
-      );
-      const classificationItems = buildListItems(
-        metadata.classifications.items,
-        metadata.classifications.type
-      );
-      const mediaItems = buildListItems(
-        metadata.media.items,
-        metadata.media.type
-      );
-      const nonStateItems = buildListItems(
-        metadata.nonstate.items,
-        metadata.nonstate.type
-      );
-      const producingItems = buildListItems(
-        metadata.producing_offices.items,
-        metadata.producing_offices.type
-      );
-      const frontPageItems = buildListItems(
-        metadata.front_page.items,
-        metadata.front_page.type
-      );
-      const regionsItems = buildRegionsItems();
       return {
         regions: {
           label: "Regions & Countries",
-          model: currentModel(
-            [
-              metadata.regions.type,
-              metadata.subregions.type,
-              metadata.countries.type,
-            ],
-            regionsItems
-          ),
+          model: currentModel(regionsTypes, regionsItems),
           list: regionsItems,
-          types: [
-            metadata.regions.type,
-            metadata.subregions.type,
-            metadata.countries.type,
-          ],
+          types: regionsTypes,
         },
         issues: {
           label: "Issues & Topics",
@@ -1170,6 +1172,15 @@ export default {
 
     const queryFilters = ref(buildQueryFilters());
 
+    /*
+      - This method builds a watcher for each query filter in order to track changes at the individual listbox level
+      - 1) First, a query value is initialized that contains a copy of the existing query.
+      - 2) The types present in this query filter are then removed from the newly created query object
+      - 3) If the query filter's model values are empty, this skips to step 6
+      - 4) The unique types present in the query filter's model are identified
+      - 5) Each unique type is matched up against the query filter's model values (selected items) and the query is updated for each type
+      - 6) The updated query is sent to the router via a router.replace and this fires off a query update
+    */
     const buildWatcher = (object) => {
       return watch(
         () => object,
@@ -1182,20 +1193,14 @@ export default {
             delete query[type];
           });
           if (newValue.model.length > 0) {
-            let selectedOptions = [];
-            for (let i = 0; i < newValue.model.length; i++) {
-              selectedOptions.push(newValue.model[i]);
-            }
-            let uniqueTypes = [];
-            for (let i = 0; i < selectedOptions.length; i++) {
-              uniqueTypes.push(selectedOptions[i].type);
-            }
-            uniqueTypes = [...new Set(uniqueTypes)];
+            const uniqueTypes = [
+              ...new Set(newValue.model.map((item) => item.type)),
+            ];
             for (let i = 0; i < uniqueTypes.length; i++) {
               let valuesForType = [];
-              for (let j = 0; j < selectedOptions.length; j++) {
-                if (selectedOptions[j].type === uniqueTypes[i]) {
-                  valuesForType.push(selectedOptions[j].key);
+              for (let j = 0; j < newValue.model.length; j++) {
+                if (newValue.model[j].type === uniqueTypes[i]) {
+                  valuesForType.push(newValue.model[j].key);
                 }
               }
               query[uniqueTypes[i]] = valuesForType;
