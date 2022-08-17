@@ -1,19 +1,17 @@
 <template>
-  <p>
-    {{ pageSubheader }}
-  </p>
-  <p
+  <div
     class="
-      font-semibold
-      text-2xl
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-gray-700/25
     "
   >
-    {{ pageHeader }}
-  </p>
+    <p class="pb-2">{{ pageSubheader }}</p>
+    <p class="font-semibold text-2xl">
+      {{ pageHeader }}
+    </p>
+  </div>
   <!-- Search Form -->
   <BaseCard class="mt-4 p-4">
     <Disclosure v-slot="{ open }" defaultOpen>
@@ -998,10 +996,10 @@ export default {
 
     const getHeaderName = (route) => {
       if (
-          route.name === "issues" || 
-          route.name === "regions" || 
-          route.name === "subregions" || 
-          route.name === "countries"
+        route.name === "issues" ||
+        route.name === "regions" ||
+        route.name === "subregions" ||
+        route.name === "countries"
       ) {
         return route.params.name ? route.params.name : "Search";
       } else {
@@ -1010,18 +1008,17 @@ export default {
     };
 
     const getSubheaderName = (route) => {
-      let subheaderName = '';
+      let subheaderName = "";
       if (route.name === "countries") {
         metadata.subregions.items.forEach((subregion) => {
           subregion.country_codes.forEach((code) => {
-            if(route.params.key === code) {
+            if (route.params.key === code) {
               subheaderName = subregion.name;
             }
           });
         });
         return subheaderName;
-      }
-      else {
+      } else {
         return;
       }
     };
@@ -1299,7 +1296,7 @@ export default {
       () => {
         console.log("route.query watcher triggered.");
         if (
-          route.name === "search" || 
+          route.name === "search" ||
           route.name === "issues" ||
           route.name === "regions" ||
           route.name === "subregions" ||

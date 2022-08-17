@@ -13,24 +13,13 @@ import { metadata } from "@/config";
 
 export default {
   setup() {
-   const router = useRouter();
-   const chartdiv = ref(null);
-    
+    const router = useRouter();
+    const chartdiv = ref(null);
+
     const findCountryInMetadata = (dataItem) => {
-      let countryCode;
-      let countryFound = false;
-      metadata.countries.items.forEach((country) => {
-        if (dataItem === country.name) {
-          countryCode = country;
-          countryFound = true;
-        }
-      });
-      if (countryFound) {
-        navigateToCountry(countryCode);
-      }
-      else {
-        alert("Error: country not found");
-      }
+      return metadata.countries.items.find(
+        (country) => country.name === dataItem
+      );
     };
 
     const navigateToCountry = (country) => {
@@ -39,7 +28,6 @@ export default {
         view: "grid",
         landing: true,
       };
-
       query[metadata.countries.type] = country.key;
       router.push({
         name: "countries",
@@ -50,6 +38,7 @@ export default {
         query,
       });
     };
+
     onMounted(() => {
       let root = am5.Root.new(chartdiv.value);
       root.setThemes([am5themes_Animated.new(root)]);
@@ -77,17 +66,12 @@ export default {
         fill: am5.color(0xc2c4cb),
       });
       polygonSeries.mapPolygons.template.events.on("click", function (event) {
-        console.log("clicked on a country", event.target);
         let dataItem = event.target.dataItem.dataContext;
-        console.log(dataItem);
-        findCountryInMetadata(dataItem.name);
+        navigateToCountry(findCountryInMetadata(dataItem.name));
       });
     });
     return {
       chartdiv,
-      metadata,
-      findCountryInMetadata,
-      navigateToCountry,
     };
   },
 };
