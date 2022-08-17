@@ -1,16 +1,17 @@
 <template>
-  <p
+  <div
     class="
-      font-semibold
-      text-2xl
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-gray-700/25
     "
   >
-    {{ pageHeader }}
-  </p>
+    <p class="pb-2">{{ pageSubheader }}</p>
+    <p class="font-semibold text-2xl">
+      {{ pageHeader }}
+    </p>
+  </div>
   <!-- Search Form -->
   <BaseCard class="mt-4 p-4">
     <Disclosure v-slot="{ open }" defaultOpen>
@@ -994,14 +995,36 @@ export default {
     const router = useRouter();
 
     const getHeaderName = (route) => {
-      if (route.name === "issues") {
+      if (
+        route.name === "issues" ||
+        route.name === "regions" ||
+        route.name === "subregions" ||
+        route.name === "countries"
+      ) {
         return route.params.name ? route.params.name : "Search";
       } else {
         return "Search";
       }
     };
 
+    const getSubheaderName = (route) => {
+      let subheaderName = "";
+      if (route.name === "countries") {
+        metadata.subregions.items.forEach((subregion) => {
+          subregion.country_codes.forEach((code) => {
+            if (route.params.key === code) {
+              subheaderName = subregion.name;
+            }
+          });
+        });
+        return subheaderName;
+      } else {
+        return;
+      }
+    };
+
     const pageHeader = ref(getHeaderName(route));
+    const pageSubheader = ref(getSubheaderName(route));
 
     const loading = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
@@ -1277,9 +1300,16 @@ export default {
       () => route.query,
       () => {
         console.log("route.query watcher triggered.");
-        if (route.name === "search" || route.name === "issues") {
+        if (
+          route.name === "search" ||
+          route.name === "issues" ||
+          route.name === "regions" ||
+          route.name === "subregions" ||
+          route.name === "countries"
+        ) {
           store.dispatch("search/search");
           pageHeader.value = getHeaderName(route);
+          pageSubheader.value = getSubheaderName(route);
           queryFilters.value = buildQueryFilters();
           currentPage.value = parseInt(route.query.page) || 1;
           selectedView.value =
@@ -1318,6 +1348,7 @@ export default {
       selectedView,
       viewOptions,
       pageHeader,
+      pageSubheader,
       loading,
       results,
       totalCount,

@@ -159,24 +159,25 @@
                           class="grid grid-cols-3 gap-6 pb-4"
                           aria-label="select a region or subregion"
                         >
-                          <div v-for="region in regions" :key="region">
-                            <router-link
-                              to=""
-                              class="lg:text-lg hover:underline"
-                              >{{ region.name }}</router-link
+                          <div v-for="region in metadata.regions.items" :key="region">
+                            <a
+                              @click="navigateToRegion(region)"
+                              class="lg:text-lg hover:underline cursor-pointer"
                             >
+                              {{ region.name }}
+                            </a>
                             <ul class="pt-2 list-disc list-inside">
-                              <template
-                                v-for="subRegion in region.subRegions"
-                                :key="subRegion"
-                              >
-                                <li v-if="subRegion.name != ''">
-                                  <router-link
-                                    to=""
-                                    class="hover:underline font-light"
-                                    >{{ subRegion.name }}</router-link
-                                  >
-                                </li>
+                              <template v-for="subregion in region.subregions" :key="subregion">
+                                <template v-for="subregionItem in metadata.subregions.items" :key="subregionItem">
+                                  <li v-if="subregionItem.key === subregion">
+                                    <a
+                                      @click="navigateToSubregion(subregionItem)"
+                                      class="hover:underline cursor-pointer font-light"
+                                    >
+                                      {{ subregionItem.name }}
+                                    </a>
+                                  </li>
+                                </template>
                               </template>
                             </ul>
                           </div>
@@ -293,11 +294,12 @@
                               >
                                 <ListboxOption
                                   v-slot="{ active }"
-                                  v-for="country in countries"
+                                  v-for="country in metadata.countries.items"
                                   :key="country"
                                   :value="country"
                                   as="template"
                                   class="capitalize px-2 py-1 cursor-pointer"
+                                  @click="navigateToCountry(country)"
                                 >
                                   <li
                                     :class="[
@@ -1202,6 +1204,55 @@ export default {
       });
     };
 
+    const navigateToRegion = (region) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.regions.type] = region.key;
+      router.push({
+        name: "regions",
+        params: {
+          name: region.name,
+        },
+        query,
+      });
+    };
+
+    const navigateToSubregion = (subregion) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.subregions.type] = subregion.key;
+      router.push({
+        name: "subregions",
+        params: {
+          name: subregion.name,
+        },
+        query,
+      });
+    };
+    
+    const navigateToCountry = (country) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.countries.type] = country.key;
+      router.push({
+        name: "countries",
+        params: {
+          name: country.name,
+          key: country.key,
+        },
+        query,
+      });
+    };
+
     return {
       metadata,
       regions,
@@ -1220,6 +1271,9 @@ export default {
       loadingUser,
       isAdmin,
       navigateToIssue,
+      navigateToRegion,
+      navigateToSubregion,
+      navigateToCountry,
     };
   },
   methods: {

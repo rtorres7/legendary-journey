@@ -8,10 +8,36 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
+import { useRouter } from "vue-router";
+import { metadata } from "@/config";
 
 export default {
   setup() {
+    const router = useRouter();
     const chartdiv = ref(null);
+
+    const findCountryInMetadata = (dataItem) => {
+      return metadata.countries.items.find(
+        (country) => country.name === dataItem
+      );
+    };
+
+    const navigateToCountry = (country) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.countries.type] = country.key;
+      router.push({
+        name: "countries",
+        params: {
+          name: country.name,
+          key: country.key,
+        },
+        query,
+      });
+    };
 
     onMounted(() => {
       let root = am5.Root.new(chartdiv.value);
@@ -38,6 +64,10 @@ export default {
         interactive: true,
         strokeWidth: 1,
         fill: am5.color(0xc2c4cb),
+      });
+      polygonSeries.mapPolygons.template.events.on("click", function (event) {
+        let dataItem = event.target.dataItem.dataContext;
+        navigateToCountry(findCountryInMetadata(dataItem.name));
       });
     });
     return {
