@@ -872,12 +872,12 @@
       },
       {
         "key": "COD",
-        "name": "Congo, Democratic Republic of the",
+        "name": "Democratic Republic of Congo",
         "digraph": "CG"
       },
       {
         "key": "COG",
-        "name": "Congo, Republic of the",
+        "name": "Republic of Congo",
         "digraph": "CF"
       },
       {
@@ -892,7 +892,7 @@
       },
       {
         "key": "CIV",
-        "name": "Cote d'Ivoire",
+        "name": "Côte d'Ivoire",
         "digraph": "IV"
       },
       {
@@ -1232,6 +1232,11 @@
       },
       {
         "key": "LAO",
+        "name": "Lao People's Democratic Republic",
+        "digraph": "LA"
+      },
+      {
+        "key": "LAO",
         "name": "Laos",
         "digraph": "LA"
       },
@@ -1376,6 +1381,11 @@
         "digraph": "MZ"
       },
       {
+        "key": "MMR",
+        "name": "Myanmar",
+        "digraph": "MM"
+      },
+      {
         "key": "NAM",
         "name": "Namibia",
         "digraph": "WA"
@@ -1503,6 +1513,11 @@
         "key": "PRT",
         "name": "Portugal",
         "digraph": "PO"
+      },
+      {
+        "key": "PRI",
+        "name": "Puerto Rico",
+        "digraph": "PR"
       },
       {
         "key": "QAT",
@@ -1676,7 +1691,7 @@
       },
       {
         "key": "SJM",
-        "name": "Svalbard",
+        "name": "Svalbard and Jan Mayen",
         "digraph": "SV"
       },
       {
@@ -1783,6 +1798,16 @@
         "key": "GBR",
         "name": "United Kingdom",
         "digraph": "UK"
+      },
+      {
+        "key": "USA",
+        "name": "United States",
+        "digraph": "US"
+      },
+      {
+        "key": "VIR",
+        "name": "US Virgin Islands",
+        "digraph": "VI"
       },
       {
         "key": "URY",

@@ -53,7 +53,7 @@ const routes = [
     }
   },
   {
-    path: '/countries/:name',
+    path: '/countries/:name/:key',
     name: 'countries',
     component: SearchView,
     meta: {
