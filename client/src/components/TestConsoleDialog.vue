@@ -31,7 +31,8 @@
               class="
                 inline-block
                 w-full
-                min-w-[400px]
+                min-w-[300px]
+                sm:min-w-[400px]
                 max-w-xs
                 p-6
                 my-8
