@@ -124,7 +124,7 @@
               lg:gap-0
               lg:grid-cols-0
               lg:flex
-              lg:basis-3/5
+              lg:w-3/5
               lg:space-x-6
               lg:max-w-none
             "
