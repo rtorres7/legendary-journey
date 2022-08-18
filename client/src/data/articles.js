@@ -1,7 +1,44 @@
 export const articles = [
+  /* source - Wall Street Journal - https://www.wsj.com/articles/china-restarts-military-drills-in-response-to-latest-u-s-lawmakers-visit-to-taiwan-11660565662 */
+  {
+    doc_num: "BBK303597595551226",
+    type: "article",
+    title: "(U) China Restarts Military Drills in Response to Latest U.S. Lawmakers’ Visit to Taiwan",
+    author: "Sha Hua",
+    classification: "Unclassified",
+    content: [
+      '(U) TAIPEI— China’s military responded to the surprise arrival in Taiwan of a new delegation of U.S. lawmakers by announcing a resumption of military drills around the island, in the latest flare-up of tensions in the region.',
+      "(U) The delegation, led by Senate Foreign Relations Committee member Ed Markey (D., Mass.), met with Taiwanese President Tsai Ing-wen on Monday to discuss maintenance of regional stability and deepening U.S.-Taiwan trade, according to Taiwan’s presidential office. The group arrived in Taipei on Sunday without having previously announced the two-day visit.",
+      "(U) “We have a moral obligation to do everything we can to prevent an unnecessary conflict, and Taiwan has demonstrated incredible restraints and discretion during challenging times,” Mr. Markey told Ms. Tsai, according to video footage of the meeting later shared by the presidential office.",
+      "(U) The Chinese military’s Eastern Theater Command published comments by its spokesman, Senior Col. Shi Yi, saying the unit was organizing joint war patrols and combat drills in the sea and airspace around the island of Taiwan in response to the visit.",
+      "(U) Taiwan’s Defense Ministry in turn condemned China’s latest military exercises as “undermining regional peace and stability” in a statement released Monday evening. It said China’s military, the People’s Liberation Army, had sent 30 aircraft on sorties near Taiwan, including 15 that crossed the median line, a notional line that bisects the Taiwan Strait separating Taiwan’s main island from the Chinese mainland, as of 5 p.m."
+    ],
+    image: {
+      // Save image below into /assets directory and change url to that location
+      // url: "https://images.wsj.net/im-604035/?width=700&size=1.5",
+      url: "china-drills.jpg",
+      caption: "(U) China’s state-run Xinhua News Agency released this image of China’s military conducting live-fire drills after U.S. House Speaker Nancy Pelosi’s visit to Taiwan."
+    },
+    attachments: [
+    ],
+    tags: [
+      "china", "taiwan", "tensions", "war"
+    ],
+    sources: [
+      {
+        name: "Explosions rock Kyiv, as Russians 'fully occupy' Sievierodonetsk",
+        url: "https://www.channelnewsasia.com/world/explosions-rock-kyiv-russians-fully-occupy-sievierodonetsk-2771636"
+      },
+      {
+        name: "Biden urges G7 to stay together as leaders target Russian gold, oil price",
+        url: "https://www.channelnewsasia.com/world/biden-urges-g7-stay-together-leaders-target-russian-gold-oil-price-2771846"
+      }
+    ],
+    published_date: "Wed, August 17, 2022"
+  },
   /* source - Channel News Asia - https://www.channelnewsasia.com/world/russia-steps-missile-strikes-ukraine-g7-leaders-gather-2771576 */
   {
-    doc_num: "0012419",
+    doc_num: "BBK303597595551225",
     type: "article",
     title: "(U) Russia steps up missile strikes on Ukraine as G7 leaders gather",
     author: "Reuters",
