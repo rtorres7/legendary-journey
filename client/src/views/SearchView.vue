@@ -1257,7 +1257,6 @@ export default {
 
     watch([selectedOrder], () => {
       router.push({
-        name: "search",
         query: {
           ...route.query,
           page: currentPage.value,

@@ -133,8 +133,10 @@
         </template>
       </template>
       <template v-else>
-        <template v-for="article in articles.slice(3)" :key="article">
-          <router-link :to="{ name: 'article', params: { doc_num: article.doc_num } }">
+        <template v-for="article in articles.slice(3, 9)" :key="article">
+          <router-link
+            :to="{ name: 'article', params: { doc_num: article.doc_num } }"
+          >
             <FeaturedArticleCard :article="article" />
           </router-link>
         </template>
