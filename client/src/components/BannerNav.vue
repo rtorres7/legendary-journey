@@ -161,7 +161,8 @@
                         >
                           <div v-for="region in metadata.regions.items" :key="region">
                             <a
-                              @click="navigateToRegion(region)"
+                              href=""
+                              @click.prevent="navigateToRegion(region)"
                               class="lg:text-lg hover:underline cursor-pointer"
                             >
                               {{ region.name }}
@@ -171,7 +172,8 @@
                                 <template v-for="subregionItem in metadata.subregions.items" :key="subregionItem">
                                   <li v-if="subregionItem.key === subregion">
                                     <a
-                                      @click="navigateToSubregion(subregionItem)"
+                                      href=""
+                                      @click.prevent="navigateToSubregion(subregionItem)"
                                       class="hover:underline cursor-pointer font-light"
                                     >
                                       {{ subregionItem.name }}
@@ -1247,7 +1249,6 @@ export default {
         name: "countries",
         params: {
           name: country.name,
-          key: country.key,
         },
         query,
       });

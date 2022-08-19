@@ -33,7 +33,6 @@ export default {
         name: "countries",
         params: {
           name: country.name,
-          key: country.key,
         },
         query,
       });

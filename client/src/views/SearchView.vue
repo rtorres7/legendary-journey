@@ -1009,10 +1009,11 @@ export default {
 
     const getSubheaderName = (route) => {
       let subheaderName = "";
+      let countryKey = route.query[metadata.countries.type];
       if (route.name === "countries") {
         metadata.subregions.items.forEach((subregion) => {
           subregion.country_codes.forEach((code) => {
-            if (route.params.key === code) {
+            if (countryKey === code) {
               subheaderName = subregion.name;
             }
           });
