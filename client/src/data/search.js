@@ -117,8 +117,6 @@ const paginatedResults = (results, page, total) => {
 }
 
 export const getSearchDataFromUrl = (url, { name, query }) => {
-  console.log('query: ', query)
-  console.log('name: ', name)
   const page = query.page || 1
   if (name === 'issues') {
     return {

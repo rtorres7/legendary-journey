@@ -994,6 +994,24 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const getCodeFromCountryName = (name) => {
+      return metadata.countries.items.find((country) => country.name === name);
+    };
+
+    const getSubregionForCode = (code) => {
+      return metadata.subregions.items.find(
+        (subregion) => subregion.key === code
+      );
+    };
+
+    const getSubregionNameForCountryCode = (code) => {
+      return metadata.subregions.items.find((subregion) => {
+        return subregion.country_codes.find(
+          (countryCode) => countryCode === code
+        );
+      }).name;
+    };
+
     const getHeaderName = (route) => {
       if (
         route.name === "issues" ||
@@ -1007,20 +1025,12 @@ export default {
       }
     };
 
-    const getSubheaderName = (route) => {
-      let subheaderName = "";
-      if (route.name === "countries") {
-        metadata.subregions.items.forEach((subregion) => {
-          subregion.country_codes.forEach((code) => {
-            if (route.params.key === code) {
-              subheaderName = subregion.name;
-            }
-          });
-        });
-        return subheaderName;
-      } else {
-        return;
-      }
+    const getSubheaderName = ({ name, params }) => {
+      return name === "countries"
+        ? getSubregionNameForCountryCode(
+            getCodeFromCountryName(params.name).key
+          )
+        : "";
     };
 
     const pageHeader = ref(getHeaderName(route));
@@ -1069,12 +1079,6 @@ export default {
         }
       });
       return selectedModels;
-    };
-
-    const getSubregionForCode = (code) => {
-      return metadata.subregions.items.find(
-        (subregion) => subregion.key === code
-      );
     };
 
     const buildRegionsItems = () => {
