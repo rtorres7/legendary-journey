@@ -39,9 +39,10 @@
         <h1
           class="
             text-black
-            dark:text-teal-300
-            energy:text-slate-200
+            dark:text-slate-100
+            energy:text-gray-100
             text-center
+            font-medium
             line-clamp-2
           "
         >

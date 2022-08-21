@@ -46,8 +46,8 @@
       <h1
         class="
           text-black
-          dark:text-teal-300
-          energy:text-slate-200
+          dark:text-slate-100
+          energy:text-gray-100
           text-md
           mb-2
           mt-2
@@ -57,17 +57,11 @@
       >
         {{ article.title }}
       </h1>
-
       <p class="text-sm mb-2 lg:mb-4 line-clamp-3">
         {{ article.summary }}
       </p>
       <p
-        class="
-          text-slate-600
-          dark:text-slate-300/80
-          energy:text-slate-300/80
-          text-sm
-        "
+        class="text-slate-600 dark:text-slate-400 energy:text-gray-400 text-sm"
       >
         {{ article.date }}
       </p>

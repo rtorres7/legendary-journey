@@ -5,8 +5,8 @@
         flex
         items-center
         font-semibold
-        hover:text-amber-300
-        dark:hover:text-teal-400
+        hover:text-slate-100
+        dark:hover:text-slate-100
         energy:hover:text-energy-yellow
       "
       tabindex="0"

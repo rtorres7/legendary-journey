@@ -73,9 +73,9 @@
               <h1
                 class="
                   text-black
-                  dark:text-teal-300
-                  energy:text-slate-200
-                  font-semibold
+                  dark:text-slate-100
+                  energy:text-gray-100
+                  font-medium
                   text-center text-lg
                 "
               >
@@ -97,8 +97,8 @@
               class="
                 mb-4
                 text-center text-sm text-slate-600
-                dark:text-slate-300/80
-                energy:text-slate-300/80
+                dark:text-slate-400
+                energy:text-gray-400
               "
             >
               {{ article.published_date }}

@@ -28,9 +28,11 @@
                       aria-hidden="true"
                     ></LockClosedIcon>
                   </template>
-                  <span class="line-clamp-1">{{ item.title }}</span>
+                  <span class="line-clamp-1 font-medium">{{ item.title }}</span>
                 </div>
-                <div>{{ item.date }}</div>
+                <div>
+                  {{ item.date }}
+                </div>
               </div>
             </BaseCard>
           </div>
@@ -66,10 +68,13 @@
                   <LockClosedIcon
                     class="mr-2 h-4 w-4"
                     aria-hidden="true"
-                  ></LockClosedIcon> </template
-                >{{ item.title }}
+                  ></LockClosedIcon>
+                </template>
+                <span class="line-clamp-1 font-medium">{{ item.title }}</span>
               </div>
-              <div>{{ item.date }}</div>
+              <div>
+                {{ item.date }}
+              </div>
             </div>
           </BaseCard>
         </div>
@@ -91,7 +96,7 @@
 </template>
 
 <script>
-import { LockClosedIcon } from "@heroicons/vue/outline";
+import { LockClosedIcon } from "@heroicons/vue/solid";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 
 const sitreps = [

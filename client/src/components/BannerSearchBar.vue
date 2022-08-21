@@ -14,24 +14,21 @@
         lg:max-w-none lg:w-[370px]
         xl:w-[400px]
         border border-slate-200
+        dark:border-slate-700/80
         bg-transparent
         leading-6
         text-sm text-primary
         dark:text-slate-300
       "
     >
-      <button 
-        type="button"
-        tabindex="0"
-        @click="onClickSearch"
-      >
+      <button type="button" tabindex="0" @click="onClickSearch">
         <span class="sr-only">Search</span>
         <SearchIcon
           class="
-            w-6
-            h-6
+            w-5
+            h-5
             text-slate-200
-            dark:text-slate-300
+            dark:text-slate-500/90
             energy:text-gray-300
           "
           aria-hidden="true"

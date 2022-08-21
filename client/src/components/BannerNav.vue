@@ -62,14 +62,14 @@
               xl:block
               ml-4
               uppercase
-              text-2xl text-white
-              dark:text-slate-200
+              text-xl text-white
+              dark:text-slate-100
               energy:text-energy-yellow
               font-semibold
-              tracking-[.25em]
+              tracking-[.05em]
             "
           >
-            logo
+            pegasus
           </div>
         </div>
         <!-- Desktop Nav Bar -->
@@ -85,8 +85,8 @@
                         flex
                         items-center
                         font-semibold
-                        hover:text-amber-300
-                        dark:hover:text-teal-400
+                        hover:text-slate-100
+                        dark:hover:text-slate-100
                         energy:hover:text-energy-yellow
                       "
                       tabindex="0"
@@ -159,7 +159,10 @@
                           class="grid grid-cols-3 gap-6 pb-4"
                           aria-label="select a region or subregion"
                         >
-                          <div v-for="region in metadata.regions.items" :key="region">
+                          <div
+                            v-for="region in metadata.regions.items"
+                            :key="region"
+                          >
                             <a
                               href=""
                               @click.prevent="navigateToRegion(region)"
@@ -168,13 +171,26 @@
                               {{ region.name }}
                             </a>
                             <ul class="pt-2 list-disc list-inside">
-                              <template v-for="subregion in region.subregions" :key="subregion">
-                                <template v-for="subregionItem in metadata.subregions.items" :key="subregionItem">
+                              <template
+                                v-for="subregion in region.subregions"
+                                :key="subregion"
+                              >
+                                <template
+                                  v-for="subregionItem in metadata.subregions
+                                    .items"
+                                  :key="subregionItem"
+                                >
                                   <li v-if="subregionItem.key === subregion">
                                     <a
                                       href=""
-                                      @click.prevent="navigateToSubregion(subregionItem)"
-                                      class="hover:underline cursor-pointer font-light"
+                                      @click.prevent="
+                                        navigateToSubregion(subregionItem)
+                                      "
+                                      class="
+                                        hover:underline
+                                        cursor-pointer
+                                        font-light
+                                      "
                                     >
                                       {{ subregionItem.name }}
                                     </a>
@@ -328,8 +344,8 @@
                       font-semibold
                       flex
                       items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
+                      hover:text-slate-100
+                      dark:hover:text-slate-100
                       energy:hover:text-energy-yellow
                     "
                     tabindex="0"
@@ -343,8 +359,8 @@
                       font-semibold
                       flex
                       items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
+                      hover:text-slate-100
+                      dark:hover:text-slate-100
                       energy:hover:text-energy-yellow
                     "
                     tabindex="0"
@@ -359,8 +375,8 @@
                         flex
                         items-center
                         font-semibold
-                        hover:text-amber-300
-                        dark:hover:text-teal-400
+                        hover:text-slate-100
+                        dark:hover:text-slate-100
                         energy:hover:text-energy-yellow
                       "
                       tabindex="0"
@@ -1237,7 +1253,7 @@ export default {
         query,
       });
     };
-    
+
     const navigateToCountry = (country) => {
       let query = {
         "reporting_types[]": "analysis.all_source",
@@ -1304,11 +1320,11 @@ export default {
     openTestConsoleModal() {
       this.isTestConsoleMenuOpen = true;
     },
-    // NOTE: setTimeout added as a temporary workaround for 
+    // NOTE: setTimeout added as a temporary workaround for
     // multiple dialog scroll behavior bug
     openTestConsoleModalMobile() {
       this.isUserMenuOpen = false;
-      setTimeout(() =>  this.isTestConsoleMenuOpen = true, 500)
+      setTimeout(() => (this.isTestConsoleMenuOpen = true), 500);
     },
     openPDF() {
       window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");

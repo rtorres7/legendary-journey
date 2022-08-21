@@ -19,10 +19,10 @@
             dark:text-slate-200
             energy:text-energy-yellow
             font-semibold
-            tracking-[.25em]
+            tracking-[.05em]
           "
         >
-          logo
+          pegasus
         </div>
         <p class="ml-2 text-slate-300 text-sm italic">
           {{ metadata.footer_note }}

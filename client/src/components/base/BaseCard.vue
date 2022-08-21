@@ -1,5 +1,10 @@
 <template>
-  <div :class="['rounded-lg shadow-md', computedClass]">
+  <div
+    :class="[
+      'rounded-lg shadow-md bg-white dark:bg-slate-800 energy:bg-gray-800',
+      computedClass,
+    ]"
+  >
     <slot />
   </div>
 </template>
@@ -21,22 +26,7 @@ export default {
     const computedClass = computed(() => {
       const classes = [];
       if (props.hoverable) {
-        classes.push("hover:underline");
-      }
-      if (props.locked) {
-        classes.push("bg-slate-200 dark:bg-slate-700 energy:bg-gray-700");
-        if (props.hoverable) {
-          classes.push(
-            "hover:bg-slate-200/80 dark:hover:bg-slate-700/80 energy:hover:bg-gray-700/80"
-          );
-        }
-      } else {
-        classes.push("bg-white dark:bg-slate-800 energy:bg-gray-800");
-        if (props.hoverable) {
-          classes.push(
-            "hover:bg-white/80 dark:hover:bg-slate-700/80 energy:hover:bg-gray-700/80"
-          );
-        }
+        classes.push("hoverable");
       }
       return classes;
     });
@@ -47,5 +37,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-// Empty on Purpose
+.hoverable {
+  @apply hover:underline hover:bg-white/80 dark:hover:bg-slate-800/80 energy:hover:bg-gray-800/80;
+}
 </style>
