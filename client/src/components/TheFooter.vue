@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-mission-blue dark:bg-dark-space-blue energy:bg-gray-800">
+  <div class="bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800">
     <div
       class="max-w-8xl mx-auto px-4 flex justify-center lg:justify-between py-8"
     >
@@ -24,7 +24,16 @@
         >
           pegasus
         </div>
-        <p class="ml-2 text-slate-300 text-sm italic">
+        <p
+          class="
+            ml-2
+            text-slate-300
+            dark:text-slate-300
+            energy:text-zinc-300
+            text-sm
+            italic
+          "
+        >
           {{ metadata.footer_note }}
         </p>
       </div>
@@ -37,7 +46,7 @@
           text-center
           md:text-left md:space-y-0 md:space-x-6
           text-sm text-slate-200
-          energy:text-gray-300
+          energy:text-zinc-300
         "
       >
         <li class="cursor-pointer hover:text-white">NCTC Info</li>

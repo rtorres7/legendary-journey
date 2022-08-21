@@ -5,7 +5,7 @@
     class="
       bg-mission-blue
       dark:bg-dark-space-blue
-      energy:bg-gray-800
+      energy:bg-zinc-800
       justify-center
       p-4
     "
@@ -43,7 +43,7 @@
         text-slate-300
         bg-mission-blue
         dark:text-slate-300 dark:bg-dark-space-blue
-        energy:text-gray-300 energy:bg-gray-800
+        energy:text-gray-300 energy:bg-zinc-800
         text-center text-sm
         uppercase
       "

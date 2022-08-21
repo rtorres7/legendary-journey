@@ -11,6 +11,7 @@
         class="pb-4 h-full"
         :class="loading ? 'animate-pulse' : ''"
         hoverable
+        :rounded="false"
       >
         <template v-if="loading">
           <div
@@ -20,7 +21,7 @@
               w-full
               bg-slate-200
               dark:bg-slate-700
-              energy:bg-gray-700
+              energy:bg-zinc-700
             "
           ></div>
           <div class="flex flex-col justify-between mt-4 px-4 h-1/2">
@@ -30,7 +31,7 @@
                   h-6
                   bg-slate-200
                   dark:bg-slate-700
-                  energy:bg-gray-700
+                  energy:bg-zinc-700
                   rounded
                 "
               ></h1>
@@ -41,7 +42,7 @@
                   xl:h-44
                   bg-slate-200
                   dark:bg-slate-700
-                  energy:bg-gray-700
+                  energy:bg-zinc-700
                   rounded
                 "
               ></p>
@@ -54,7 +55,7 @@
                 self-center
                 bg-slate-200
                 dark:bg-slate-700
-                energy:bg-gray-700
+                energy:bg-zinc-700
                 rounded
               "
             ></p>

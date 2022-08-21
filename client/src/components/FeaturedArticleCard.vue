@@ -3,14 +3,15 @@
     class="h-[300px] xl:max-h-[264px]"
     :class="loading ? 'animate-pulse' : ''"
     hoverable
+    :rounded="false"
   >
     <template v-if="loading">
       <div
-        class="h-2/3 bg-slate-200 dark:bg-slate-700 energy:bg-gray-700"
+        class="h-2/3 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
       ></div>
       <div class="flex flex-col justify-between pt-4 xl:pt-2 px-4 h-1/3">
         <h1
-          class="h-6 bg-slate-200 dark:bg-slate-700 energy:bg-gray-700 rounded"
+          class="h-6 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
         ></h1>
         <p
           class="
@@ -21,7 +22,7 @@
             self-center
             bg-slate-200
             dark:bg-slate-700
-            energy:bg-gray-700
+            energy:bg-zinc-700
             rounded
           "
         ></p>

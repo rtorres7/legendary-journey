@@ -19,7 +19,12 @@
       <div class="lg:flex flex-col justify-between text-sm">
         <template v-for="item in sitreps" :key="item">
           <div class="mb-4">
-            <BaseCard class="px-4 py-4" :locked="item.locked" hoverable>
+            <BaseCard
+              class="px-4 py-4"
+              :locked="item.locked"
+              hoverable
+              :rounded="false"
+            >
               <div class="flex flex-col">
                 <div class="flex items-center pb-1">
                   <template v-if="item.locked">
@@ -87,7 +92,7 @@
             bg-mission-blue
             text-mission-gray
             dark:bg-slate-300 dark:text-dark-navy
-            energy:bg-gray-800 energy:text-gray-300
+            energy:bg-zinc-800 energy:text-zinc-300
           "
         />
       </template>

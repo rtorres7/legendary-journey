@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'rounded-lg shadow-md bg-white dark:bg-slate-800 energy:bg-gray-800',
+      'shadow-md dark:shadow-none energy:shadow-none bg-white dark:bg-slate-800/50 energy:bg-zinc-800',
       computedClass,
     ]"
   >
@@ -13,8 +13,8 @@ import { computed } from "vue";
 
 export default {
   props: {
-    locked: {
-      default: false,
+    rounded: {
+      default: true,
       type: Boolean,
     },
     hoverable: {
@@ -28,6 +28,9 @@ export default {
       if (props.hoverable) {
         classes.push("hoverable");
       }
+      if (props.rounded) {
+        classes.push("rounded");
+      }
       return classes;
     });
     return {
@@ -38,6 +41,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .hoverable {
-  @apply hover:underline hover:bg-white/80 dark:hover:bg-slate-800/80 energy:hover:bg-gray-800/80;
+  @apply hover:underline hover:bg-white/80 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75;
+}
+.rounded {
+  @apply rounded-lg;
 }
 </style>

@@ -4,7 +4,7 @@
       text-slate-200
       bg-mission-blue
       dark:text-slate-300 dark:bg-dark-space-blue
-      energy:text-gray-300 energy:bg-gray-800
+      energy:text-zinc-300 energy:bg-zinc-800
       sticky
       top-0
       z-10
@@ -119,9 +119,9 @@
                           text-sm
                           bg-mission-blue/95
                           dark:bg-dark-space-blue/95
-                          energy:bg-gray-800/95
+                          energy:bg-zinc-800/95
                           dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                          energy:text-gray-300
+                          energy:text-zinc-300
                         "
                       >
                         <MenuItem
@@ -134,7 +134,7 @@
                           <span
                             :class="[
                               active
-                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
                                 : '',
                               'py-1 px-3 flex cursor-pointer',
                             ]"
@@ -205,7 +205,7 @@
                             pt-4
                             border-t border-slate-900/10
                             dark:border-slate-50/[0.06]
-                            energy:border-gray-700/25
+                            energy:border-zinc-700/25
                           "
                         >
                           View a
@@ -248,11 +248,11 @@
                                 text-left
                                 capitalize
                                 text-slate-800
-                                dark:text-gray-300
-                                energy:text-gray-300
+                                dark:text-slate-300
+                                energy:text-zinc-300
                                 bg-slate-100
                                 dark:bg-slate-800
-                                energy:bg-gray-600
+                                energy:bg-zinc-600
                                 rounded-lg
                                 shadow-md
                                 cursor-default
@@ -297,11 +297,11 @@
                                   mt-1
                                   overflow-auto
                                   text-slate-800
-                                  dark:text-gray-300
-                                  energy:text-gray-300
+                                  dark:text-slate-300
+                                  energy:text-zinc-300
                                   bg-slate-100
                                   dark:bg-slate-800
-                                  energy:bg-gray-600
+                                  energy:bg-zinc-600
                                   rounded-md
                                   shadow-lg
                                   max-h-60
@@ -322,7 +322,7 @@
                                   <li
                                     :class="[
                                       active
-                                        ? 'bg-slate-200 dark:bg-slate-700 energy:bg-gray-700'
+                                        ? 'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700'
                                         : 'bg-none',
                                     ]"
                                   >
@@ -409,9 +409,9 @@
                           text-sm
                           bg-mission-blue/95
                           dark:bg-dark-space-blue/95
-                          energy:bg-gray-800/95
+                          energy:bg-zinc-800/95
                           dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                          energy:text-gray-300
+                          energy:text-zinc-300
                         "
                       >
                         <MenuItem as="div" v-slot="{ active }">
@@ -419,7 +419,7 @@
                             href="/"
                             :class="[
                               active
-                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
                                 : '',
                               'py-1 px-3 flex cursor-pointer',
                             ]"
@@ -431,7 +431,7 @@
                             href="/"
                             :class="[
                               active
-                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
+                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
                                 : '',
                               'py-1 px-3 flex cursor-pointer',
                             ]"
@@ -462,7 +462,7 @@
                   <MenuButton
                     class="
                       max-w-xs
-                      bg-gray-800
+                      bg-slate-800
                       rounded-full
                       flex
                       items-center
@@ -502,9 +502,9 @@
                       font-semibold
                       bg-mission-blue/95
                       dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
+                      energy:bg-zinc-800/95
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
+                      energy:text-zinc-300
                     "
                   >
                     <MenuItem>
@@ -515,7 +515,7 @@
                           px-3
                           hover:bg-slate-700/80
                           dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
+                          energy:hover:bg-zinc-600/80
                           flex
                           items-center
                           cursor-pointer
@@ -611,9 +611,9 @@
                       font-semibold
                       bg-mission-blue/95
                       dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
+                      energy:bg-zinc-800/95
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
+                      energy:text-zinc-300
                     "
                   >
                     <MenuItem v-for="item in themeOptions" :key="item">
@@ -624,7 +624,7 @@
                           px-2
                           hover:bg-slate-700/80
                           dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
+                          energy:hover:bg-zinc-600/80
                           flex
                           items-center
                           space-x-2
@@ -697,9 +697,9 @@
                       font-semibold
                       bg-mission-blue/95
                       dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
+                      energy:bg-zinc-800/95
                       dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
+                      energy:text-zinc-300
                     "
                   >
                     <MenuItem>
@@ -711,7 +711,7 @@
                           px-3
                           hover:bg-slate-700/80
                           dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
+                          energy:hover:bg-zinc-600/80
                         "
                         >{{ loadingUser ? "Loading..." : currentUsername }}</a
                       >
@@ -726,7 +726,7 @@
                           px-3
                           hover:bg-slate-700/80
                           dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
+                          energy:hover:bg-zinc-600/80
                         "
                         >Settings</a
                       >
@@ -740,7 +740,7 @@
                           px-3
                           hover:bg-slate-700/80
                           dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
+                          energy:hover:bg-zinc-600/80
                         "
                         @click="openTestConsoleModal"
                         >Test Console</a
@@ -884,10 +884,10 @@
                   transform
                   text-slate-700
                   dark:text-slate-300
-                  energy:text-gray-300
+                  energy:text-zinc-300
                   bg-slate-100
                   dark:bg-slate-700
-                  energy:bg-gray-700
+                  energy:bg-zinc-700
                   shadow-lg
                   rounded-lg
                 "
@@ -953,7 +953,7 @@
                     space-y-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
-                    energy:border-gray-700/25
+                    energy:border-zinc-700/25
                   "
                 >
                   <li class="flex items-center justify-between">
@@ -1046,7 +1046,7 @@
                               cursor-pointer
                               hover:bg-slate-200/80
                               dark:hover:bg-slate-600/80
-                              energy:hover:bg-gray-600/80
+                              energy:hover:bg-zinc-600/80
                             "
                           >
                             {{ theme }}

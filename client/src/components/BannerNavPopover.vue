@@ -35,9 +35,9 @@
             focus:outline-none
             bg-mission-blue/95
             dark:bg-dark-space-blue/95
-            energy:bg-gray-800/95
+            energy:bg-zinc-800/95
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-            energy:text-gray-300
+            energy:text-zinc-300
           "
         >
           <slot name="content" />

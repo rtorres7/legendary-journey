@@ -8,7 +8,7 @@
         text-slate-900
         bg-gray-50
         dark:text-slate-300 dark:bg-dark-navy
-        energy:text-gray-300 energy:bg-gray-900
+        energy:text-zinc-300 energy:bg-zinc-900
       "
     >
       <div

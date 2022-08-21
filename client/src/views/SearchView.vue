@@ -212,7 +212,7 @@
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
             <div class="inline-flex">
-              <label class="self-center">Sort By</label>
+              <label class="self-center font-medium text-sm">Sort By</label>
               <Listbox v-model="selectedOrder" class="ml-3 min-w-[115px]">
                 <div class="relative">
                   <ListboxButton
