@@ -493,7 +493,7 @@
                   >
                     <MenuItem>
                       <router-link
-                        to="/edit"
+                        to="/publish"
                         class="
                           py-1
                           px-3
@@ -505,7 +505,7 @@
                           cursor-pointer
                         "
                       >
-                        Edit Document
+                        Publish an Article
                       </router-link>
                     </MenuItem>
                   </MenuItems>
@@ -908,14 +908,14 @@
                   </li>
                   <li v-show="isAdmin">
                     <router-link
-                      to="/edit"
+                      to="/publish"
                       class="
                         hover:text-black
                         dark:hover:text-white
                         energy:text-white
                       "
                     >
-                      Edit Document
+                      Publish an Article
                     </router-link>
                   </li>
                   <li>

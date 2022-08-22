@@ -6,6 +6,7 @@ import SearchView from '../views/SearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import store from "@/store"
+import PublishArticleView from '../views/PublishArticleView.vue'
 
 const routes = [
   {
@@ -69,7 +70,25 @@ const routes = [
     }
   },
   {
-    path: '/edit',
+    path: '/publish',
+    name: 'publish',
+    component: PublishArticleView,
+    meta: {
+      title: 'Publish an Article',
+      admin: true,
+    },
+  },
+  {
+    path: '/article/new',
+    name: 'new',
+    component: EditDocumentView,
+    meta: {
+      title: 'New Document',
+      admin: true
+    }
+  },
+  {
+    path: '/article/edit/:id',
     name: 'edit',
     component: EditDocumentView,
     meta: {
