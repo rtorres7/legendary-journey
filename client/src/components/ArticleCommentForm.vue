@@ -59,7 +59,7 @@
       class="
         bg-mission-blue
         dark:bg-slate-700/80
-        energy:bg-gray-700/80
+        energy:bg-zinc-700/80
         cursor-pointer
         hover:opacity-80
         mt-8

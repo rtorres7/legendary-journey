@@ -20,7 +20,7 @@
       bg-slate-100
       hover:bg-slate-200/80
       dark:bg-slate-700 dark:hover:bg-slate-700/80
-      energy:bg-gray-700 energy:hover:bg-gray-700/80
+      energy:bg-zinc-700 energy:hover:bg-zinc-700/80
       border border-dashed border-slate-400
     "
   >

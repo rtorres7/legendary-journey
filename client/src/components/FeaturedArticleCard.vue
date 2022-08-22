@@ -41,7 +41,7 @@
           class="
             text-black
             dark:text-slate-100
-            energy:text-gray-100
+            energy:text-zinc-100
             text-center
             font-medium
             line-clamp-2

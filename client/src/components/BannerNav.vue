@@ -2,9 +2,9 @@
   <nav
     class="
       text-slate-200
-      bg-mission-blue
-      dark:text-slate-300 dark:bg-dark-space-blue
-      energy:text-zinc-300 energy:bg-zinc-800
+      bg-mission-blue/95
+      dark:text-slate-300 dark:bg-dark-space-blue/95
+      energy:text-zinc-300 energy:bg-zinc-800/95
       sticky
       top-0
       z-10
@@ -657,7 +657,6 @@
                   <MenuButton
                     class="
                       max-w-xs
-                      bg-gray-800
                       rounded-full
                       flex
                       items-center
@@ -916,7 +915,7 @@
                       class="
                         hover:text-black
                         dark:hover:text-white
-                        energy:text-white
+                        energy:hover:text-white
                       "
                       href="/"
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
@@ -928,7 +927,7 @@
                       class="
                         hover:text-black
                         dark:hover:text-white
-                        energy:text-white
+                        energy:hover:text-white
                       "
                     >
                       Edit Document
@@ -939,7 +938,7 @@
                       class="
                         hover:text-black
                         dark:hover:text-white
-                        energy:text-white
+                        energy:hover:text-white
                       "
                       href="/"
                       >Settings</a
@@ -971,7 +970,7 @@
                             capitalize
                             bg-white
                             dark:bg-dark-navy
-                            energy:bg-slate-800
+                            energy:bg-zinc-800
                             rounded-lg
                             shadow-md
                             cursor-default
@@ -1026,7 +1025,7 @@
                             text-base
                             bg-white
                             dark:bg-dark-navy
-                            energy:bg-slate-800
+                            energy:bg-zinc-800
                             rounded-md
                             shadow-lg
                             max-h-60

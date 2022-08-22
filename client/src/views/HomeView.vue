@@ -18,7 +18,7 @@
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/50
     "
   >
     <div
@@ -43,7 +43,7 @@
             xl:basis-1/3
             border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
           "
         >
           <MainSectionSituationalAwareness />
@@ -75,7 +75,7 @@
           xl:border-t-0 xl:pl-4 xl:border-l
           border-slate-900/10
           dark:border-slate-50/[0.06]
-          energy:border-gray-700/25
+          energy:border-zinc-700/25
         "
       >
         <div
@@ -120,7 +120,7 @@
       pb-6
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/50
     "
   >
     <div class="font-semibold mb-4">More Articles</div>

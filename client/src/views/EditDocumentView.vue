@@ -6,7 +6,7 @@
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/25
     "
   >
     Edit Document
@@ -166,7 +166,7 @@
               pb-2
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
             "
           >
             Classification
@@ -190,7 +190,7 @@
               pb-2
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
             "
           >
             Attachments
@@ -210,7 +210,7 @@
                   bg-slate-100
                   hover:bg-slate-200/80
                   dark:bg-slate-700 dark:hover:bg-slate-700/80
-                  energy:bg-gray-700 energy:hover:bg-gray-700/80
+                  energy:bg-zinc-700 energy:hover:bg-zinc-700/80
                   border border-slate-300
                   p-2
                   rounded
@@ -233,7 +233,7 @@
             class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
               pb-2
             "
           >
@@ -243,7 +243,7 @@
             class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
               pb-2
             "
           >
@@ -253,7 +253,7 @@
             class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
               pb-2
             "
           >

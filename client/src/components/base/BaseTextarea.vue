@@ -15,10 +15,10 @@
       text-left
       bg-white
       dark:bg-slate-700
-      energy:bg-gray-700
+      energy:bg-zinc-700
       border border-gray-200
       dark:border-slate-800
-      energy:border-gray-800
+      energy:border-zinc-800
       rounded-lg
       shadow-md
       cursor-default

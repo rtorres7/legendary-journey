@@ -4,7 +4,7 @@
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/50
     "
   >
     <p class="pb-2">{{ pageSubheader }}</p>
@@ -38,11 +38,9 @@
                 block
                 w-full
                 focus-visible:outline-none
-                border-b
                 bg-transparent
                 border-b border-gray-300
                 energy:text-gray-300
-                border-b border-gray-300
               "
             />
           </div>
@@ -164,7 +162,7 @@
           w-24
           text-mission-blue
           dark:text-slate-300
-          energy:text-gray-300
+          energy:text-zinc-300
         "
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -227,10 +225,10 @@
                       capitalize
                       bg-white
                       dark:bg-slate-700
-                      energy:bg-gray-700
+                      energy:bg-zinc-700
                       border-t border-t-gray-100
                       dark:border-t-slate-800
-                      energy:border-t-gray-800
+                      energy:border-t-zinc-800
                       rounded-lg
                       shadow-md
                       cursor-default
@@ -266,7 +264,7 @@
                         overflow-auto
                         bg-white
                         dark:bg-slate-700
-                        energy:bg-gray-700
+                        energy:bg-zinc-700
                         rounded-md
                         shadow-lg
                         max-h-60
@@ -286,7 +284,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
                               : 'bg-none',
                           ]"
                         >
@@ -314,10 +312,10 @@
                       capitalize
                       bg-white
                       dark:bg-slate-700
-                      energy:bg-gray-700
+                      energy:bg-zinc-700
                       border-t border-t-gray-100
                       dark:border-t-slate-800
-                      energy:border-t-gray-800
+                      energy:border-t-zinc-800
                       rounded-lg
                       shadow-md
                       cursor-default
@@ -351,7 +349,7 @@
                         overflow-auto
                         bg-white
                         dark:bg-slate-700
-                        energy:bg-gray-700
+                        energy:bg-zinc-700
                         rounded-md
                         shadow-lg
                         max-h-60
@@ -371,7 +369,7 @@
                         <li
                           :class="[
                             active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
                               : 'bg-none',
                           ]"
                         >
@@ -411,7 +409,7 @@
               items-center
               border-b border-gray-200
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/50
+              energy:border-zinc-700/50
             "
           >
             <SearchResultsTablePagination
@@ -428,7 +426,7 @@
                   p-4
                   border-b border-slate-900/10
                   dark:border-slate-50/[0.06]
-                  energy:border-gray-700/25
+                  energy:border-zinc-700/50
                 "
               >
                 <div class="h-fit px-2 text-center">
@@ -456,7 +454,7 @@
                         class="
                           text-slate-600
                           dark:text-slate-300
-                          energy:text-gray-300
+                          energy:text-zinc-300
                         "
                         >{{
                           `${"(" + result.title_classification + ") "}`
@@ -476,7 +474,7 @@
                       py-2
                       text-sm text-slate-600
                       dark:text-slate-300
-                      energy:text-gray-300
+                      energy:text-zinc-300
                     "
                   >
                     <span v-html="result.highlighted_result" />
@@ -496,7 +494,7 @@
                     p-4
                     border border-slate-900/10
                     dark:border-slate-50/[0.12]
-                    energy:border-gray-700
+                    energy:border-zinc-700
                     h-36
                   "
                 >
@@ -513,7 +511,7 @@
                         class="
                           text-slate-600
                           dark:text-slate-300
-                          energy:text-gray-300
+                          energy:text-zinc-300
                         "
                         >{{
                           `${"(" + result.title_classification + ") "}`
@@ -559,7 +557,7 @@
                           text-white
                           bg-mission-blue/[.90]
                           dark:bg-dark-space-blue/[.90]
-                          energy:bg-gray-800/[.90]
+                          energy:bg-zinc-800/[.90]
                         "
                       >
                         <div class="flex flex-col">
@@ -613,7 +611,7 @@
                         p-2
                         border border-slate-900/10
                         dark:border-slate-50/[0.06]
-                        energy:border-gray-700/25
+                        energy:border-zinc-700/50
                         text-sm
                       "
                     >
@@ -646,7 +644,7 @@
               items-center
               border-t border-gray-200
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/50
+              energy:border-zinc-700/50
             "
           >
             <SearchResultsTablePagination
@@ -681,10 +679,10 @@
                     capitalize
                     bg-white
                     dark:bg-slate-700
-                    energy:bg-gray-700
+                    energy:bg-zinc-700
                     border-t border-t-gray-100
                     dark:border-t-slate-800
-                    energy:border-t-gray-800
+                    energy:border-t-zinc-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -718,7 +716,7 @@
                       overflow-auto
                       bg-white
                       dark:bg-slate-700
-                      energy:bg-gray-700
+                      energy:bg-zinc-700
                       rounded-md
                       shadow-lg
                       max-h-60
@@ -738,7 +736,7 @@
                       <li
                         :class="[
                           active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
                             : 'bg-none',
                         ]"
                       >
@@ -766,10 +764,10 @@
                     capitalize
                     bg-white
                     dark:bg-slate-700
-                    energy:bg-gray-700
+                    energy:bg-zinc-700
                     border-t border-t-gray-100
                     dark:border-t-slate-800
-                    energy:border-t-gray-800
+                    energy:border-t-zinc-800
                     rounded-lg
                     shadow-md
                     cursor-default
@@ -803,7 +801,7 @@
                       overflow-auto
                       bg-white
                       dark:bg-slate-700
-                      energy:bg-gray-700
+                      energy:bg-zinc-700
                       rounded-md
                       shadow-lg
                       max-h-60
@@ -823,7 +821,7 @@
                       <li
                         :class="[
                           active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
                             : 'bg-none',
                         ]"
                       >
@@ -895,10 +893,10 @@
                     transform
                     text-slate-700
                     dark:text-slate-300
-                    energy:text-gray-300
+                    energy:text-zinc-300
                     bg-slate-100
                     dark:bg-slate-700
-                    energy:bg-gray-700
+                    energy:bg-zinc-700
                     shadow-lg
                     rounded-lg
                   "

@@ -1,5 +1,14 @@
 <template>
-  <div class="min-h-full" ref="topOfApp" tabindex="-1">
+  <div
+    class="
+      min-h-full
+      bg-mission-blue
+      dark:bg-dark-space-blue
+      energy:bg-zinc-800
+    "
+    ref="topOfApp"
+    tabindex="-1"
+  >
     <button @click="skipToMain" class="skipLink">Skip to main content</button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main

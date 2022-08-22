@@ -75,7 +75,7 @@
                 class="
                   text-black
                   dark:text-slate-100
-                  energy:text-gray-100
+                  energy:text-zinc-100
                   font-medium
                   text-center text-lg
                 "
@@ -99,7 +99,7 @@
                 mb-4
                 text-center text-sm text-slate-600
                 dark:text-slate-400
-                energy:text-gray-400
+                energy:text-zinc-400
               "
             >
               {{ article.published_date }}

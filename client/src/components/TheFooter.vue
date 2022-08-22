@@ -96,9 +96,9 @@
                 focus:outline-none
                 bg-mission-blue
                 dark:bg-dark-space-blue
-                energy:bg-gray-700
+                energy:bg-zinc-700
                 dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                energy:text-gray-300
+                energy:text-zinc-300
               "
             >
               <MenuItem v-for="item in poaLinks" :key="item.name">
@@ -109,7 +109,7 @@
                     px-3
                     hover:bg-slate-700/80
                     dark:hover:bg-slate-600/80
-                    energy:hover:bg-gray-600/80
+                    energy:hover:bg-zinc-600/80
                     flex
                     items-center
                     cursor-pointer
@@ -164,9 +164,9 @@
                 focus:outline-none
                 bg-mission-blue
                 dark:bg-dark-space-blue
-                energy:bg-gray-700
+                energy:bg-zinc-700
                 dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                energy:text-gray-300
+                energy:text-zinc-300
               "
             >
               <div
@@ -177,7 +177,7 @@
                   last:border-none
                   border-b border-slate-700
                   dark:border-slate-600
-                  energy:border-gray-600
+                  energy:border-zinc-600
                 "
               >
                 <MenuItem v-for="item in linkGroup" :key="item">
@@ -188,7 +188,7 @@
                       px-3
                       hover:bg-slate-700/80
                       dark:hover:bg-slate-600/80
-                      energy:hover:bg-gray-600/80
+                      energy:hover:bg-zinc-600/80
                       flex
                       items-center
                       cursor-pointer
@@ -208,7 +208,7 @@
           text-center text-sm
           uppercase
           text-slate-300
-          energy:text-gray-300
+          energy:text-zinc-300
         "
       >
         Unclassified
