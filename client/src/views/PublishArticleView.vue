@@ -29,23 +29,8 @@
       <p class="font-semibold">
         Template Upload
       </p>
-      <label class="sr-only" for="dropzoneFile">Upload a file to publish</label>
-      <PublishFileUploader @drop.prevent="drop()" @change="selectedFile()" class="md:w-1/2">
-        <button @click.prevent="fileInputButton.click()"
-          class="
-            bg-slate-100 hover:bg-slate-200/80 
-            dark:bg-slate-700 dark:hover:bg-slate-700/80 
-            energy:bg-gray-700 energy:hover:bg-gray-700/80 border 
-            border-slate-300 
-            p-2 
-            rounded shadow
-            text-sm
-          "
-        >
-          Select File
-        </button>
-        <input type="file" id="dropzoneFile" class="dropzoneFile hidden" ref="fileInputButton" />
-      </PublishFileUploader>
+      <label class="sr-only" for="fileUpload">Upload a file to publish</label>
+      <PublishFileUploader @drop.prevent="drop" @change="selectedFile" ref="fileUpload" class="md:w-1/2" />
     </div>
     <div class="py-8"> 
       <div class="flex gap-x-2 items-center">
@@ -79,21 +64,30 @@ export default {
 
   setup() {
     const router = useRouter();
-    const fileInputButton = ref(null);
-    const dropzoneFile = ref("");
+    let fileUpload = ref("");
     
     const drop = (event) => {
-      router.push({ name: 'edit', params: {id: "BBK303597595551226"}});
-      dropzoneFile.value = event.dataTransfer.files[0];
+      fileUpload.value = event.dataTransfer.files[0];
+      if ( /\.(doc|docx)$/i.test(fileUpload.value.name) === false ) { 
+        alert("File must be of type .doc or .docx"); 
+      } else { 
+        router.push({ name: 'edit', params: {id: "BBK303597595551226"}}); 
+      }
     };
+
     const selectedFile = () => {
-      router.push({ name: 'edit', params: {id: "BBK303597595551226"}});
-      dropzoneFile.value = document.querySelector(".dropzoneFile").files[0];
+      var file = document.querySelector(".fileUpload");
+      if (file) {
+        if ( /\.(doc|docx)$/i.test(file.files[0].name) === false ) { 
+          alert("File must be of type .doc or .docx"); 
+        } else { 
+          router.push({ name: 'edit', params: {id: "BBK303597595551226"}}); 
+        }
+      }
     };
 
     return {
-      fileInputButton,
-      dropzoneFile,
+      fileUpload,
       drop,
       selectedFile,
     };
