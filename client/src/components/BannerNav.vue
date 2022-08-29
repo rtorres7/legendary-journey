@@ -491,22 +491,23 @@
                       energy:text-gray-300
                     "
                   >
-                    <MenuItem>
-                      <router-link
-                        to="/publish"
-                        class="
-                          py-1
-                          px-3
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                          flex
-                          items-center
-                          cursor-pointer
-                        "
-                      >
-                        Publish an Article
-                      </router-link>
+                    <MenuItem 
+                      as="a"
+                      @click="goToPublishPage">
+                        <span
+                          class="
+                            py-1
+                            px-3
+                            hover:bg-slate-700/80
+                            dark:hover:bg-slate-600/80
+                            energy:hover:bg-gray-600/80
+                            flex
+                            items-center
+                            cursor-pointer
+                          "
+                        >
+                          Publish an Article
+                        </span>
                     </MenuItem>
                   </MenuItems>
                 </transition>
@@ -1254,6 +1255,10 @@ export default {
       });
     };
 
+    const goToPublishPage = () => {
+      router.push({ name: 'publish' }); 
+    };
+
     return {
       metadata,
       regions,
@@ -1275,6 +1280,7 @@ export default {
       navigateToRegion,
       navigateToSubregion,
       navigateToCountry,
+      goToPublishPage,
     };
   },
   methods: {

@@ -75,7 +75,7 @@ const routes = [
     component: PublishArticleView,
     meta: {
       title: 'Publish an Article',
-      admin: true,
+      // admin: true,
     },
   },
   {
@@ -84,7 +84,7 @@ const routes = [
     component: EditDocumentView,
     meta: {
       title: 'New Document',
-      admin: true
+      // admin: true
     }
   },
   {
@@ -93,7 +93,7 @@ const routes = [
     component: EditDocumentView,
     meta: {
       title: 'Edit Document',
-      admin: true
+      // admin: true
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },

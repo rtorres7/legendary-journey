@@ -10,12 +10,12 @@
         energy:border-gray-700/25
       "
     >
-      <p class="font-semibold text-2xl">
+      <h1 class="font-semibold text-2xl">
         Publish an Article
-      </p>
-      <p>
+      </h1>
+      <h2>
         Get started by selecting from the following options.
-      </p>
+      </h2>
     </div>
     <div class="
         flex flex-col 
@@ -26,9 +26,9 @@
         energy:border-gray-700/25
       "
     >
-      <p class="font-semibold">
+      <h3 class="font-semibold">
         Template Upload
-      </p>
+      </h3>
       <label class="sr-only" for="fileUpload">Upload a file to publish</label>
       <PublishFileUploader @drop.prevent="drop" @change="selectedFile" ref="fileUpload" class="md:w-1/2" />
     </div>
