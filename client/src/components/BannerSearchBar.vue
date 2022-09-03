@@ -10,16 +10,14 @@
         lg:m-0
         rounded-md
         shadow-sm
-        max-w-[500px]
-        lg:max-w-none lg:w-[370px]
-        xl:w-[400px]
+        lg:w-[600px]
         border border-slate-200
         dark:border-slate-700/80
         energy:border-zinc-700/80
         bg-transparent
         dark:bg-transparent
         energy:bg-zinc-900
-        leading-6
+        leading-8
         text-sm text-primary
         dark:text-slate-300
       "

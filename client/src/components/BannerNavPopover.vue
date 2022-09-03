@@ -23,8 +23,8 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <PopoverPanel
-        class="origin-top-right min-w-[46rem] right-0 mt-3 transform z-10"
-        :class="wideShrunk ? 'w-full fixed xl:absolute ' : 'absolute'"
+        class="origin-top-right min-w-[46rem] right-0 transform z-10"
+        :class="wideShrunk ? 'w-full fixed' : 'absolute'"
       >
         <div
           class="
