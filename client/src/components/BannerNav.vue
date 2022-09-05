@@ -45,7 +45,7 @@
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
     </div>
-    <div class="mx-auto px-6 lg:px-8">
+    <div class="mx-auto pt-1 px-6 lg:px-8">
       <div
         class="
           flex
