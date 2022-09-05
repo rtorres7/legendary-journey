@@ -127,21 +127,12 @@
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 6" :key="n">
-          <router-link :to="{ name: 'notFound' }">
-            <DanielArticleCard :loading="true" />
-          </router-link>
+          <DanielArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
         <template v-for="article in danielArticles.slice(0, 6)" :key="article">
-          <router-link
-            :to="{
-              name: 'article',
-              params: { doc_num: article.attributes.doc_num },
-            }"
-          >
-            <DanielArticleCard :article="article.attributes" />
-          </router-link>
+          <DanielArticleCard :article="article.attributes" />
         </template>
       </template>
     </div>
