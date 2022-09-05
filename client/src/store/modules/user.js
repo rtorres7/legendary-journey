@@ -1,7 +1,5 @@
-import { inject } from 'vue'
 import { user } from '@/data'
-
-const axios = inject('$axios');
+import axios from '@/config/wireAxios'
 
 export default {
   namespaced: true,

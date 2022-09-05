@@ -1,92 +1,89 @@
 <template>
-  <div class="rounded-md pointer-events-auto">
-    <div
-      class="
-        flex
-        items-center
-        pl-2
-        pr-3
-        m-auto
-        lg:m-0
-        rounded-md
-        shadow-sm
-        lg:w-[600px]
-        border border-slate-200
-        dark:border-slate-700/80
-        energy:border-zinc-700/80
-        bg-transparent
-        dark:bg-transparent
-        energy:bg-zinc-900
-        leading-8
-        text-sm text-primary
-        dark:text-slate-300
-      "
-    >
-      <button type="button" tabindex="0" @click="onClickSearch">
-        <span class="sr-only">Search</span>
-        <SearchIcon
-          class="
-            w-5
-            h-5
-            text-slate-200
-            dark:text-slate-500/90
-            energy:text-zinc-500/90
-          "
-          aria-hidden="true"
-        />
-      </button>
-      <vue3-simple-typeahead
+  <div
+    class="
+      flex
+      items-center
+      pointer-events-auto
+      px-3
+      mx-4
+      max-w-[640px]
+      rounded-md
+      shadow-sm
+      w-full
+      border border-slate-400
+      dark:border-slate-700/80
+      energy:border-zinc-700/80
+      bg-transparent
+      dark:bg-transparent
+      energy:bg-zinc-900
+      leading-8
+      text-sm text-primary
+    "
+  >
+    <button type="button" tabindex="0" @click="onClickSearch">
+      <span class="sr-only">Search</span>
+      <SearchIcon
         class="
-          ml-2
-          focus-visible:outline-none
-          bg-transparent
-          w-full
-          text-slate-200
-          dark:text-slate-300
-          energy:text-zinc-300
+          w-5
+          h-5
+          text-slate-400
+          dark:text-slate-500/90
+          energy:text-zinc-500/90
         "
-        id="typeahead_id"
-        placeholder="Search (e.g. Zelensky, United Nations)"
-        :items="searchMatches"
-        :minInputLength="1"
-        :itemProjection="itemProjectionFunction"
-        @selectItem="selectItemEventHandler"
-        @onInput="onInputEventHandler"
-        @onFocus="onFocusEventHandler"
-        @onBlur="onBlurEventHandler"
-        @keyup.enter="onEnter"
-      >
-        <template #list-item-text="slot">
-          <!-- <span
+        aria-hidden="true"
+      />
+    </button>
+    <vue3-simple-typeahead
+      class="
+        ml-2
+        focus-visible:outline-none
+        bg-transparent
+        w-full
+        text-slate-200
+        dark:text-slate-300
+        energy:text-zinc-300
+      "
+      id="typeahead_id"
+      placeholder="Search (e.g. Zelensky, United Nations)"
+      :items="searchMatches"
+      :minInputLength="1"
+      :itemProjection="itemProjectionFunction"
+      @selectItem="selectItemEventHandler"
+      @onInput="onInputEventHandler"
+      @onFocus="onFocusEventHandler"
+      @onBlur="onBlurEventHandler"
+      @keyup.enter="onEnter"
+    >
+      <template #list-item-text="slot">
+        <!-- <span
             class="text-black"
             v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
           ></span> -->
-          <div
-            class="
-              cursor-pointer
-              text-slate-800
-              dark:text-slate-300
-              energy:text-zinc-300
-              bg-slate-100
-              dark:bg-slate-800
-              energy:bg-zinc-600
-              hover:bg-slate-200
-              dark:hover:bg-slate-700
-              energy:hover:bg-zinc-500
-              active:bg-slate-300
-              dark:active:bg-slate-600
-              energy:active:bg-zinc-400
-              px-2
-              py-1
-            "
-          >
-            <span
-              v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
-            ></span>
-          </div>
-        </template>
-      </vue3-simple-typeahead>
-    </div>
+        <div
+          class="
+            cursor-pointer
+            text-slate-800
+            dark:text-slate-300
+            energy:text-zinc-300
+            bg-slate-100
+            dark:bg-slate-800
+            energy:bg-zinc-600
+            hover:bg-slate-200
+            dark:hover:bg-slate-700
+            energy:hover:bg-zinc-500
+            active:bg-slate-300
+            dark:active:bg-slate-600
+            energy:active:bg-zinc-400
+            px-2
+            py-1
+          "
+        >
+          <span
+            v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
+          ></span>
+        </div>
+      </template>
+    </vue3-simple-typeahead>
   </div>
 </template>
 

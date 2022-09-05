@@ -113,6 +113,39 @@
       </div>
     </div>
   </div>
+  <!-- Connected Articles Section -->
+  <div
+    class="
+      pt-4
+      pb-6
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-zinc-700/50
+    "
+  >
+    <div class="font-semibold mb-4">Live Articles</div>
+    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
+      <template v-if="loadingDanielArticles">
+        <template v-for="n in 6" :key="n">
+          <router-link :to="{ name: 'notFound' }">
+            <DanielArticleCard :loading="true" />
+          </router-link>
+        </template>
+      </template>
+      <template v-else>
+        <template v-for="article in danielArticles.slice(0, 6)" :key="article">
+          <router-link
+            :to="{
+              name: 'article',
+              params: { doc_num: article.attributes.doc_num },
+            }"
+          >
+            <DanielArticleCard :article="article.attributes" />
+          </router-link>
+        </template>
+      </template>
+    </div>
+  </div>
   <!-- More (Featured) Articles Section -->
   <div
     class="
@@ -160,6 +193,7 @@ import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import FeaturedArticleCard from "@/components/FeaturedArticleCard";
+import DanielArticleCard from "@/components/DanielArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
 import PersonalSection from "@/components/PersonalSection";
@@ -217,6 +251,7 @@ const personalArticles = [
 export default {
   components: {
     FeaturedArticleCard,
+    DanielArticleCard,
     MainSectionSituationalAwareness,
     MainSectionHeadlineCard,
     PersonalSection,
@@ -226,15 +261,20 @@ export default {
     const store = useStore();
     const articles = computed(() => store.state.articles.featured);
     const loadingArticles = computed(() => store.state.articles.loading);
+    const danielArticles = computed(() => store.state.daniel.articles);
+    const loadingDanielArticles = computed(() => store.state.daniel.loading);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
       store.dispatch("articles/getHomeArticles");
+      store.dispatch("daniel/getDanielArticles");
     });
 
     return {
       articles,
       loadingArticles,
+      danielArticles,
+      loadingDanielArticles,
       personalArticles,
       today,
     };

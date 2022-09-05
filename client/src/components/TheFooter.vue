@@ -11,31 +11,32 @@
             alt="NCTC seal. Link to top of the homepage"
           />
         </router-link>
-        <div
-          class="
-            ml-4
-            uppercase
-            text-xl text-white
-            dark:text-slate-200
-            energy:text-energy-yellow
-            font-semibold
-            tracking-[.05em]
-          "
-        >
-          pegasus
+        <div class="ml-4">
+          <div
+            class="
+              mb-1
+              uppercase
+              text-xl text-white
+              dark:text-slate-200
+              energy:text-energy-yellow
+              font-semibold
+              tracking-[.05em]
+            "
+          >
+            pegasus
+          </div>
+          <p
+            class="
+              text-slate-300
+              dark:text-slate-300
+              energy:text-zinc-300
+              text-xs
+              italic
+            "
+          >
+            {{ metadata.footer_note }}
+          </p>
         </div>
-        <p
-          class="
-            ml-2
-            text-slate-300
-            dark:text-slate-300
-            energy:text-zinc-300
-            text-sm
-            italic
-          "
-        >
-          {{ metadata.footer_note }}
-        </p>
       </div>
       <ul
         class="

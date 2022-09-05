@@ -8,7 +8,6 @@
       sticky
       top-0
       z-10
-      min-h-[72px]
       lg:h-full
       backdrop-filter backdrop-blur
       lg:border-b lg:border-b-zinc-700/75
@@ -46,358 +45,25 @@
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
     </div>
-    <div class="mx-auto lg:px-8 lg:pt-1">
+    <div class="mx-auto px-6 lg:px-8">
       <div
         class="
-          grid
-          lg:flex
+          flex
           items-center
-          lg:justify-between
+          justify-between
           h-14
-          lg:border-b lg:border-b-zinc-700/50
+          pb-2
+          lg:border-b lg:border-slate-700/50 lg:energy:border-zinc-700/50
         "
       >
-        <!-- Desktop Logo -->
+        <!-- Left Nav Bar -->
         <div class="flex h-full items-center">
-          <router-link class="hidden xl:block h-auto" to="/">
-            <img
-              class="h-10 w-10"
-              src="@/assets/NCTCSealcolor.png"
-              alt="NCTC. Seal. Link to homepage."
-            />
-          </router-link>
-          <div
-            class="
-              ml-4
-              uppercase
-              text-xl text-white
-              dark:text-slate-100
-              energy:text-energy-yellow
-              font-semibold
-              tracking-[.05em]
-            "
-          >
-            pegasus
-          </div>
-        </div>
-        <!-- Desktop Nav Bar -->
-        <div class="hidden lg:block">
-          <div class="ml-4 flex items-center md:ml-6 lg:ml-3">
-            <BannerSearchBar />
-          </div>
-        </div>
-        <div class="hidden lg:block">
-          <div
-            class="
-              flex
-              items-center
-              space-x-2
-              xl:space-x-3
-              ml-2
-              pl-2
-              xl:ml-4 xl:pl-4
-            "
-          >
-            <!-- Admin Dropdown -->
-            <Menu v-show="isAdmin" as="div" class="ml-3 relative">
-              <div>
-                <MenuButton
-                  class="
-                    max-w-xs
-                    bg-slate-800
-                    rounded-full
-                    flex
-                    items-center
-                    text-sm
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-gray-800
-                    focus:ring-white
-                  "
-                >
-                  <span class="sr-only">Admin Menu</span>
-                  <CogIcon class="h-6 w-6" aria-hidden="true" />
-                </MenuButton>
-              </div>
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="
-                    origin-top-right
-                    absolute
-                    right-0
-                    mt-2
-                    w-36
-                    rounded-md
-                    shadow-2xl
-                    py-2
-                    ring-1 ring-black ring-opacity-5
-                    focus:outline-none
-                    text-sm
-                    font-semibold
-                    bg-mission-blue/95
-                    dark:bg-dark-space-blue/95
-                    energy:bg-zinc-800/95
-                    dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                    energy:text-zinc-300
-                  "
-                >
-                  <MenuItem>
-                    <router-link
-                      to="/edit"
-                      class="
-                        py-1
-                        px-3
-                        hover:bg-slate-700/80
-                        dark:hover:bg-slate-600/80
-                        energy:hover:bg-zinc-600/80
-                        flex
-                        items-center
-                        cursor-pointer
-                      "
-                    >
-                      Edit Document
-                    </router-link>
-                  </MenuItem>
-                </MenuItems>
-              </transition>
-            </Menu>
-            <button
-              disabled
-              type="button"
-              class="
-                p-1
-                rounded-full
-                hover:text-white
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-gray-800
-                focus:ring-white
-              "
-            >
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
-            <Menu as="div" class="relative">
-              <div>
-                <MenuButton
-                  class="
-                    max-w-xs
-                    flex
-                    items-center
-                    p-1
-                    rounded-full
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-gray-800
-                    focus:ring-white
-                  "
-                  :class="
-                    selectedTheme === 'system'
-                      ? 'text-slate-400'
-                      : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
-                  "
-                >
-                  <span class="sr-only"
-                    >Open menu for toggling color palettes.</span
-                  >
-                  <template v-if="selectedTheme === 'dark'">
-                    <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else-if="selectedTheme === 'energy'">
-                    <LightningBoltIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else-if="selectedTheme === 'system'">
-                    <template v-if="isDark">
-                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <template v-else>
-                      <SunIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                  </template>
-                  <template v-else>
-                    <SunIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                </MenuButton>
-              </div>
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="
-                    origin-top-right
-                    absolute
-                    right-0
-                    mt-2
-                    w-40
-                    rounded-md
-                    shadow-2xl
-                    py-2
-                    ring-1 ring-black ring-opacity-5
-                    focus:outline-none
-                    text-sm
-                    font-semibold
-                    bg-mission-blue/95
-                    dark:bg-dark-space-blue/95
-                    energy:bg-zinc-800/95
-                    dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                    energy:text-zinc-300
-                  "
-                >
-                  <MenuItem v-for="item in themeOptions" :key="item">
-                    <a
-                      :class="isActive(item)"
-                      class="
-                        py-1
-                        px-2
-                        hover:bg-slate-700/80
-                        dark:hover:bg-slate-600/80
-                        energy:hover:bg-zinc-600/80
-                        flex
-                        items-center
-                        space-x-2
-                        cursor-pointer
-                      "
-                      @click="changeTheme(item)"
-                    >
-                      <template v-if="item === 'light'">
-                        <SunIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                      <template v-else-if="item === 'dark'">
-                        <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                      <template v-else-if="item === 'energy'">
-                        <LightningBoltIcon class="h-6 w-6" aria-hidden="true"
-                      /></template>
-                      <template v-else-if="item === 'system'">
-                        <DesktopComputerIcon
-                          class="h-6 w-6"
-                          aria-hidden="true" /></template
-                      ><span class="capitalize">{{ item }}</span></a
-                    >
-                  </MenuItem>
-                </MenuItems>
-              </transition>
-            </Menu>
-            <!-- Profile dropdown -->
-            <Menu as="div" class="ml-3 relative">
-              <div>
-                <MenuButton
-                  class="
-                    max-w-xs
-                    rounded-full
-                    flex
-                    items-center
-                    text-sm
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-gray-800
-                    focus:ring-white
-                  "
-                >
-                  <span class="sr-only">Open user menu.</span>
-                  <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
-                </MenuButton>
-              </div>
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="
-                    origin-top-right
-                    absolute
-                    right-0
-                    mt-2
-                    w-52
-                    rounded-md
-                    shadow-2xl
-                    py-2
-                    ring-1 ring-black ring-opacity-5
-                    focus:outline-none
-                    text-sm
-                    font-semibold
-                    bg-mission-blue/95
-                    dark:bg-dark-space-blue/95
-                    energy:bg-zinc-800/95
-                    dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                    energy:text-zinc-300
-                  "
-                >
-                  <MenuItem>
-                    <a
-                      class="
-                        flex
-                        cursor-pointer
-                        py-1
-                        px-3
-                        hover:bg-slate-700/80
-                        dark:hover:bg-slate-600/80
-                        energy:hover:bg-zinc-600/80
-                      "
-                      >{{ loadingUser ? "Loading..." : currentUsername }}</a
-                    >
-                  </MenuItem>
-                  <MenuItem>
-                    <a
-                      href="/"
-                      class="
-                        flex
-                        cursor-pointer
-                        py-1
-                        px-3
-                        hover:bg-slate-700/80
-                        dark:hover:bg-slate-600/80
-                        energy:hover:bg-zinc-600/80
-                      "
-                      >Settings</a
-                    >
-                  </MenuItem>
-                  <MenuItem>
-                    <a
-                      class="
-                        flex
-                        cursor-pointer
-                        py-1
-                        px-3
-                        hover:bg-slate-700/80
-                        dark:hover:bg-slate-600/80
-                        energy:hover:bg-zinc-600/80
-                      "
-                      @click="openTestConsoleModal"
-                      >Test Console</a
-                    >
-                  </MenuItem>
-                </MenuItems>
-              </transition>
-            </Menu>
-          </div>
-        </div>
-        <!-- Mobile Nav Bar -->
-        <div class="px-2 flex justify-between lg:hidden">
           <button
             type="button"
             @click="openMainMenuModal"
             class="
+              block
+              lg:hidden
               p-1
               m-auto
               rounded-full
@@ -412,58 +78,41 @@
             <span class="sr-only">Open main menu</span>
             <MenuIcon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <BannerSearchBar class="px-2 w-full" />
-          <!-- TODO: Remove this below -->
-          <!-- <div
-              class="
-                flex
-                max-w-[500px]
-                items-center
-                text-sm
-                leading-6
-                text-primary
-                dark:text-slate-300
-                rounded-md
-                shadow-sm
-                py-1.5
-                pl-2
-                pr-3
-                m-auto
-                bg-slate-100
-                dark:bg-slate-800
-                energy:bg-gray-600
-              "
-            >
-              <SearchIcon
-                class="
-                  h-6
-                  w-6
-                  text-slate-800
-                  dark:text-slate-300
-                  energy:text-gray-300
-                "
-                aria-hidden="true"
-              />
-              <input
-                class="
-                  w-full
-                  ml-2
-                  focus-visible:outline-none
-                  text-slate-800
-                  dark:text-gray-300
-                  energy:text-gray-300
-                  bg-slate-100
-                  dark:bg-slate-800
-                  energy:bg-gray-600
-                "
-              />
-            </div> -->
-
-          <!-- Mobile user menu button -->
+          <router-link class="hidden xl:block h-auto" to="/">
+            <img
+              class="h-10 w-10"
+              src="@/assets/NCTCSealcolor.png"
+              alt="NCTC. Seal. Link to homepage."
+            />
+          </router-link>
+          <router-link
+            class="
+              hidden
+              lg:block
+              ml-4
+              uppercase
+              text-xl text-white
+              dark:text-slate-100
+              energy:text-energy-yellow
+              font-semibold
+              tracking-[.05em]
+            "
+            to="/"
+          >
+            pegasus
+          </router-link>
+        </div>
+        <!-- Middle Nav Bar -->
+        <BannerSearchBar />
+        <!-- Right Nav Bar -->
+        <div class="flex items-center space-x-2 xl:space-x-3">
+          <!-- Mobile App Menu -->
           <button
             type="button"
             @click="openUserMenuModal"
             class="
+              block
+              lg:hidden
               p-1
               m-auto
               rounded-full
@@ -478,6 +127,306 @@
             <span class="sr-only">Open user menu</span>
             <DotsVerticalIcon class="h-6 w-6" aria-hidden="true" />
           </button>
+          <!-- Admin Dropdown -->
+          <Menu v-show="isAdmin" as="div" class="hidden lg:block ml-3 relative">
+            <div>
+              <MenuButton
+                class="
+                  max-w-xs
+                  bg-slate-800
+                  rounded-full
+                  flex
+                  items-center
+                  text-sm
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                "
+              >
+                <span class="sr-only">Admin Menu</span>
+                <CogIcon class="h-6 w-6" aria-hidden="true" />
+              </MenuButton>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-36
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  font-semibold
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                  border-x border-b border-slate-700/50
+                  energy:border-zinc-700/50
+                "
+              >
+                <MenuItem>
+                  <router-link
+                    to="/edit"
+                    class="
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                      flex
+                      items-center
+                      cursor-pointer
+                    "
+                  >
+                    Edit Document
+                  </router-link>
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+          <button
+            disabled
+            type="button"
+            class="
+              hidden
+              lg:block
+              p-1
+              rounded-full
+              hover:text-white
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-gray-800
+              focus:ring-white
+            "
+          >
+            <span class="sr-only">View notifications</span>
+            <BellIcon class="h-6 w-6" aria-hidden="true" />
+          </button>
+          <Menu as="div" class="hidden lg:block relative">
+            <div>
+              <MenuButton
+                class="
+                  max-w-xs
+                  flex
+                  items-center
+                  p-1
+                  rounded-full
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                "
+                :class="
+                  selectedTheme === 'system'
+                    ? 'text-slate-400'
+                    : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
+                "
+              >
+                <span class="sr-only"
+                  >Open menu for toggling color palettes.</span
+                >
+                <template v-if="selectedTheme === 'dark'">
+                  <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                </template>
+                <template v-else-if="selectedTheme === 'energy'">
+                  <LightningBoltIcon class="h-6 w-6" aria-hidden="true" />
+                </template>
+                <template v-else-if="selectedTheme === 'system'">
+                  <template v-if="isDark">
+                    <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else>
+                    <SunIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                </template>
+                <template v-else>
+                  <SunIcon class="h-6 w-6" aria-hidden="true" />
+                </template>
+              </MenuButton>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-40
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  font-semibold
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                  border-x border-b border-slate-700/50
+                  energy:border-zinc-700/50
+                "
+              >
+                <MenuItem v-for="item in themeOptions" :key="item">
+                  <a
+                    :class="isActive(item)"
+                    class="
+                      py-1
+                      px-2
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                      flex
+                      items-center
+                      space-x-2
+                      cursor-pointer
+                    "
+                    @click="changeTheme(item)"
+                  >
+                    <template v-if="item === 'light'">
+                      <SunIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'dark'">
+                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'energy'">
+                      <LightningBoltIcon class="h-6 w-6" aria-hidden="true"
+                    /></template>
+                    <template v-else-if="item === 'system'">
+                      <DesktopComputerIcon
+                        class="h-6 w-6"
+                        aria-hidden="true" /></template
+                    ><span class="capitalize">{{ item }}</span></a
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+          <!-- Profile dropdown -->
+          <Menu as="div" class="hidden lg:block ml-3 relative">
+            <div>
+              <MenuButton
+                class="
+                  max-w-xs
+                  rounded-full
+                  flex
+                  items-center
+                  text-sm
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                "
+              >
+                <span class="sr-only">Open user menu.</span>
+                <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
+              </MenuButton>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-52
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  font-semibold
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                  border-x border-b border-slate-700/50
+                  energy:border-zinc-700/50
+                "
+              >
+                <MenuItem>
+                  <a
+                    class="
+                      flex
+                      cursor-pointer
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                    "
+                    >{{ loadingUser ? "Loading..." : currentUsername }}</a
+                  >
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    href="/"
+                    class="
+                      flex
+                      cursor-pointer
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                    "
+                    >Settings</a
+                  >
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    class="
+                      flex
+                      cursor-pointer
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                    "
+                    @click="openTestConsoleModal"
+                    >Test Console</a
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
         </div>
       </div>
       <!-- Desktop Navigation -->
@@ -629,12 +578,12 @@
                   v-model="selectedCountry"
                   aria-label="select a country from the dropdown"
                 >
-                  <div class="relative w-1/2 ml-4">
+                  <div class="relative w-full max-w-[400px] ml-4">
                     <ListboxButton
                       class="
                         flex
                         w-full
-                        p-2
+                        px-2
                         text-left
                         capitalize
                         text-slate-800
@@ -725,7 +674,7 @@
             </template>
           </BannerNavPopover>
         </li>
-        <li class="hidden 2xl:block">
+        <li>
           <div
             class="
               font-semibold
@@ -740,7 +689,7 @@
             Community
           </div>
         </li>
-        <li class="hidden 2xl:block">
+        <li>
           <div
             class="
               font-semibold
@@ -755,7 +704,7 @@
             Special Editions
           </div>
         </li>
-        <li class="2xl:hidden">
+        <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
             <MenuButton
               class="
@@ -825,7 +774,7 @@
               </MenuItems>
             </transition>
           </Menu>
-        </li>
+        </li> -->
       </ul>
     </div>
     <!-- Mobile side menu -->
