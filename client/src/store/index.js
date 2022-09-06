@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import articles from "./modules/articles";
 import search from "./modules/search";
 import user from "./modules/user";
+import document from "./modules/document";
 
 export default createStore({
     state: {
@@ -43,6 +44,7 @@ export default createStore({
     modules: {
         articles,
         search,
-        user
+        user,
+        document,
     }
 })
