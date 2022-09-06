@@ -14,6 +14,7 @@ export default {
 
   actions: {
     getComments({ commit }, { docNum }) {
+      // declare $wireAxios globally?
       let wireAxios = inject('axios')
       wireAxios
         .get(`/documents/${docNum}/comments.json`)
