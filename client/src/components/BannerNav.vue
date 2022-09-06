@@ -163,7 +163,7 @@
                   absolute
                   right-0
                   mt-2
-                  w-36
+                  w-40
                   rounded-md
                   shadow-2xl
                   py-2
@@ -182,7 +182,7 @@
               >
                 <MenuItem>
                   <router-link
-                    to="/edit"
+                    to="/publish"
                     class="
                       py-1
                       px-3
@@ -194,7 +194,7 @@
                       cursor-pointer
                     "
                   >
-                    Edit Document
+                    Publish an Article
                   </router-link>
                 </MenuItem>
               </MenuItems>
@@ -860,14 +860,14 @@
                   </li>
                   <li v-show="isAdmin">
                     <router-link
-                      to="/edit"
+                      to="/publish"
                       class="
                         hover:text-black
                         dark:hover:text-white
                         energy:hover:text-white
                       "
                     >
-                      Edit Document
+                      Publish an Article
                     </router-link>
                   </li>
                   <li>
