@@ -1,5 +1,15 @@
 <template>
-  <div class="flex flex-wrap justify-between p-4 mb-8 border-b-2">
+  <div
+    class="
+      flex flex-wrap
+      justify-between
+      p-4
+      mb-8
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-gray-700/25
+    "
+  >
     <div>
       <BaseButton @click="returnHome" @keyup.enter="returnHome" tabIndex="0">
         Home
@@ -73,13 +83,17 @@ export default {
     previousArticle() {
       const currentIndex = this.articles.indexOf(this.selectedArticle);
       if (currentIndex > 0) {
-        this.$router.push(`/article/${this.articles[currentIndex - 1].id}`);
+        this.$router.push(
+          `/article/${this.articles[currentIndex - 1].doc_num}`
+        );
       }
     },
     nextArticle() {
       const currentIndex = this.articles.indexOf(this.selectedArticle);
       if (currentIndex < this.articles.length - 1) {
-        this.$router.push(`/article/${this.articles[currentIndex + 1].id}`);
+        this.$router.push(
+          `/article/${this.articles[currentIndex + 1].doc_num}`
+        );
       }
     },
     returnHome() {

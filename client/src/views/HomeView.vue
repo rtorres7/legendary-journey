@@ -18,7 +18,7 @@
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/50
     "
   >
     <div
@@ -43,7 +43,7 @@
             xl:basis-1/3
             border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
           "
         >
           <MainSectionSituationalAwareness />
@@ -75,7 +75,7 @@
           xl:border-t-0 xl:pl-4 xl:border-l
           border-slate-900/10
           dark:border-slate-50/[0.06]
-          energy:border-gray-700/25
+          energy:border-zinc-700/25
         "
       >
         <div
@@ -103,7 +103,7 @@
             <template v-for="article in articles.slice(1, 3)" :key="article">
               <router-link
                 class="md:w-1/2 xl:w-full"
-                :to="{ name: 'article', params: { id: article.id } }"
+                :to="{ name: 'article', params: { doc_num: article.doc_num } }"
               >
                 <FeaturedArticleCard :article="article" />
               </router-link>
@@ -113,6 +113,30 @@
       </div>
     </div>
   </div>
+  <!-- Connected Articles Section -->
+  <div
+    class="
+      pt-4
+      pb-6
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-zinc-700/50
+    "
+  >
+    <div class="font-semibold mb-4">Live Articles</div>
+    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
+      <template v-if="loadingDanielArticles">
+        <template v-for="n in 6" :key="n">
+          <DanielArticleCard :loading="true" />
+        </template>
+      </template>
+      <template v-else>
+        <template v-for="article in danielArticles.slice(0, 6)" :key="article">
+          <DanielArticleCard :article="article.attributes" />
+        </template>
+      </template>
+    </div>
+  </div>
   <!-- More (Featured) Articles Section -->
   <div
     class="
@@ -120,7 +144,7 @@
       pb-6
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/50
     "
   >
     <div class="font-semibold mb-4">More Articles</div>
@@ -133,8 +157,10 @@
         </template>
       </template>
       <template v-else>
-        <template v-for="article in articles.slice(3)" :key="article">
-          <router-link :to="{ name: 'article', params: { id: article.id } }">
+        <template v-for="article in articles.slice(3, 9)" :key="article">
+          <router-link
+            :to="{ name: 'article', params: { doc_num: article.doc_num } }"
+          >
             <FeaturedArticleCard :article="article" />
           </router-link>
         </template>
@@ -158,6 +184,7 @@ import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import FeaturedArticleCard from "@/components/FeaturedArticleCard";
+import DanielArticleCard from "@/components/DanielArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
 import PersonalSection from "@/components/PersonalSection";
@@ -165,7 +192,7 @@ import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
   {
-    id: 1,
+    doc_num: 1,
     title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
     summary:
       "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
@@ -174,7 +201,7 @@ const personalArticles = [
     date: "24 April 2022",
   },
   {
-    id: 2,
+    doc_num: 2,
     title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
     summary:
       "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
@@ -183,7 +210,7 @@ const personalArticles = [
     date: "23 April 2022",
   },
   {
-    id: 3,
+    doc_num: 3,
     title:
       "(U) Coronavirus Has Infected Most Americans at Least Once, C.D.C. Says",
     summary:
@@ -193,7 +220,7 @@ const personalArticles = [
     date: "22 April 2022",
   },
   {
-    id: 4,
+    doc_num: 4,
     title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
     summary:
       "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
@@ -202,7 +229,7 @@ const personalArticles = [
     date: "21 April 2022",
   },
   {
-    id: 5,
+    doc_num: 5,
     title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
     summary:
       "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
@@ -215,6 +242,7 @@ const personalArticles = [
 export default {
   components: {
     FeaturedArticleCard,
+    DanielArticleCard,
     MainSectionSituationalAwareness,
     MainSectionHeadlineCard,
     PersonalSection,
@@ -224,15 +252,20 @@ export default {
     const store = useStore();
     const articles = computed(() => store.state.articles.featured);
     const loadingArticles = computed(() => store.state.articles.loading);
+    const danielArticles = computed(() => store.state.daniel.articles);
+    const loadingDanielArticles = computed(() => store.state.daniel.loading);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
       store.dispatch("articles/getHomeArticles");
+      store.dispatch("daniel/getDanielArticles");
     });
 
     return {
       articles,
       loadingArticles,
+      danielArticles,
+      loadingDanielArticles,
       personalArticles,
       today,
     };

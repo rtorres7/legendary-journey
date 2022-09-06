@@ -4,13 +4,14 @@
       :to="
         loading
           ? { name: 'notFound' }
-          : { name: 'article', params: { id: article.id } }
+          : { name: 'article', params: { doc_num: article.doc_num } }
       "
     >
       <BaseCard
         class="pb-4 h-full"
         :class="loading ? 'animate-pulse' : ''"
         hoverable
+        :rounded="false"
       >
         <template v-if="loading">
           <div
@@ -20,7 +21,7 @@
               w-full
               bg-slate-200
               dark:bg-slate-700
-              energy:bg-gray-700
+              energy:bg-zinc-700
             "
           ></div>
           <div class="flex flex-col justify-between mt-4 px-4 h-1/2">
@@ -30,7 +31,7 @@
                   h-6
                   bg-slate-200
                   dark:bg-slate-700
-                  energy:bg-gray-700
+                  energy:bg-zinc-700
                   rounded
                 "
               ></h1>
@@ -41,7 +42,7 @@
                   xl:h-44
                   bg-slate-200
                   dark:bg-slate-700
-                  energy:bg-gray-700
+                  energy:bg-zinc-700
                   rounded
                 "
               ></p>
@@ -54,7 +55,7 @@
                 self-center
                 bg-slate-200
                 dark:bg-slate-700
-                energy:bg-gray-700
+                energy:bg-zinc-700
                 rounded
               "
             ></p>
@@ -73,9 +74,9 @@
               <h1
                 class="
                   text-black
-                  dark:text-teal-300
-                  energy:text-slate-200
-                  font-semibold
+                  dark:text-slate-100
+                  energy:text-zinc-100
+                  font-medium
                   text-center text-lg
                 "
               >
@@ -97,8 +98,8 @@
               class="
                 mb-4
                 text-center text-sm text-slate-600
-                dark:text-slate-300/80
-                energy:text-slate-300/80
+                dark:text-slate-400
+                energy:text-zinc-400
               "
             >
               {{ article.published_date }}

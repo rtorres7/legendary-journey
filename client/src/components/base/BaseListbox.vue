@@ -15,10 +15,10 @@
           px-2
           mt-1
           dark:bg-slate-700
-          energy:bg-gray-700
-          border-t border-t-gray-100
-          dark:border-t-slate-800
-          energy:border-t-gray-800
+          energy:bg-zinc-700
+          border border-gray-200
+          dark:border-slate-800
+          energy:border-zinc-800
           rounded-lg
           shadow-md
           cursor-default
@@ -58,7 +58,7 @@
             overflow-auto
             bg-white
             dark:bg-slate-700
-            energy:bg-gray-700
+            energy:bg-zinc-700
             rounded-md
             shadow-lg
             max-h-60
@@ -77,15 +77,20 @@
             <li
               :class="[
                 active
-                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-gray-600'
+                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
                   : 'bg-none',
                 'relative cursor-default select-none py-2 pl-10 pr-4',
               ]"
             >
               <span
                 :class="[
-                  selected ? 'font-medium' : 'font-normal',
-                  'block truncate',
+                  selected
+                    ? 'font-medium'
+                    : item.subitem
+                    ? 'font-light'
+                    : 'font-normal',
+                  item.subitem ? 'pl-2' : '',
+                  'block truncate text-sm',
                 ]"
                 >{{ item.name }}</span
               >

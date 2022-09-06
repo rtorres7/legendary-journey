@@ -1,7 +1,44 @@
 export const articles = [
+  /* source - Wall Street Journal - https://www.wsj.com/articles/china-restarts-military-drills-in-response-to-latest-u-s-lawmakers-visit-to-taiwan-11660565662 */
+  {
+    doc_num: "BBK303597595551226",
+    type: "article",
+    title: "(U) China Restarts Military Drills in Response to Latest U.S. Lawmakers’ Visit to Taiwan",
+    author: "Sha Hua",
+    classification: "Unclassified",
+    content: [
+      '(U) TAIPEI— China’s military responded to the surprise arrival in Taiwan of a new delegation of U.S. lawmakers by announcing a resumption of military drills around the island, in the latest flare-up of tensions in the region.',
+      "(U) The delegation, led by Senate Foreign Relations Committee member Ed Markey (D., Mass.), met with Taiwanese President Tsai Ing-wen on Monday to discuss maintenance of regional stability and deepening U.S.-Taiwan trade, according to Taiwan’s presidential office. The group arrived in Taipei on Sunday without having previously announced the two-day visit.",
+      "(U) “We have a moral obligation to do everything we can to prevent an unnecessary conflict, and Taiwan has demonstrated incredible restraints and discretion during challenging times,” Mr. Markey told Ms. Tsai, according to video footage of the meeting later shared by the presidential office.",
+      "(U) The Chinese military’s Eastern Theater Command published comments by its spokesman, Senior Col. Shi Yi, saying the unit was organizing joint war patrols and combat drills in the sea and airspace around the island of Taiwan in response to the visit.",
+      "(U) Taiwan’s Defense Ministry in turn condemned China’s latest military exercises as “undermining regional peace and stability” in a statement released Monday evening. It said China’s military, the People’s Liberation Army, had sent 30 aircraft on sorties near Taiwan, including 15 that crossed the median line, a notional line that bisects the Taiwan Strait separating Taiwan’s main island from the Chinese mainland, as of 5 p.m."
+    ],
+    image: {
+      // Save image below into /assets directory and change url to that location
+      // url: "https://images.wsj.net/im-604035/?width=700&size=1.5",
+      url: "china-drills.jpg",
+      caption: "(U) China’s state-run Xinhua News Agency released this image of China’s military conducting live-fire drills after U.S. House Speaker Nancy Pelosi’s visit to Taiwan."
+    },
+    attachments: [
+    ],
+    tags: [
+      "china", "taiwan", "tensions", "war"
+    ],
+    sources: [
+      {
+        name: "Explosions rock Kyiv, as Russians 'fully occupy' Sievierodonetsk",
+        url: "https://www.channelnewsasia.com/world/explosions-rock-kyiv-russians-fully-occupy-sievierodonetsk-2771636"
+      },
+      {
+        name: "Biden urges G7 to stay together as leaders target Russian gold, oil price",
+        url: "https://www.channelnewsasia.com/world/biden-urges-g7-stay-together-leaders-target-russian-gold-oil-price-2771846"
+      }
+    ],
+    published_date: "Wed, August 17, 2022"
+  },
   /* source - Channel News Asia - https://www.channelnewsasia.com/world/russia-steps-missile-strikes-ukraine-g7-leaders-gather-2771576 */
   {
-    id: "0012419",
+    doc_num: "BBK303597595551225",
     type: "article",
     title: "(U) Russia steps up missile strikes on Ukraine as G7 leaders gather",
     author: "Reuters",
@@ -38,7 +75,7 @@ export const articles = [
   },
   /* source - TIME Magazine - https://time.com/6171277/volodymyr-zelensky-interview-ukraine-war/ */
   {
-    id: "0017521",
+    doc_num: "BBK303597595551223",
     type: "article",
     title: "(U) Inside Zelensky's World",
     author: "Simon Shuster",
@@ -75,7 +112,7 @@ export const articles = [
   },
   /* source - BBC News-  https://www.bbc.com/news/world-europe-61296851 */
   {
-    id: "0017544",
+    doc_num: "BBK303597595551224",
     type: "article",
     title: "(U) Ukraine war: Hundreds trapped in Mariupol steelworks despite evacuations",
     author: "Ed Jones",
@@ -117,7 +154,7 @@ export const articles = [
   },
   /* source - Al Jazeera -  https://www.aljazeera.com/news/2022/5/2/thousands-flee-after-clashes-erupt-in-iraqis-sinjar-2 */
   {
-    id: "0017570",
+    doc_num: "0017570",
     type: "article",
     title: "(U) Estimated 3,000 people flee armed clashes in northern Iraq.",
     author: "Essam al-Sudani",
@@ -154,7 +191,7 @@ export const articles = [
   },
   /* source - Sky News - https://news.sky.com/story/andrew-fahie-how-us-law-enforcement-stung-british-virgin-islands-premier-in-drugs-and-money-laundering-probe-12601422 */
   {
-    id: "0017670",
+    doc_num: "0017670",
     type: "article",
     title: "(U) Andrew Fahie: How US law enforcement stung British Virgin Islands premier in drugs and money laundering probe.",
     author: "Sky News Team",
@@ -193,7 +230,7 @@ export const articles = [
   },
   /* source - South China Morning Post - https://www.scmp.com/week-asia/politics/article/3176279/north-koreas-possible-nuclear-missile-test-focus-china-envoy */
   {
-    id: "0017672",
+    doc_num: "0017672",
     type: "article",
     title: "(U) North Korea’s ‘possible’ nuclear missile test in focus as China envoy visits Seoul.",
     author: "Park Chan-kyong",
@@ -237,7 +274,7 @@ export const articles = [
   },
   /* source - Channel News Asia - https://www.channelnewsasia.com/world/sanctions-will-not-be-lifted-until-russia-signs-peace-deal-ukraine-germanys-scholz-2660886 */
   {
-    id: "0017985",
+    doc_num: "0017985",
     type: "article",
     title: "(U) Sanctions will not be lifted until Russia signs peace deal with Ukraine: Germany's Scholz.",
     author: "Reuters",
@@ -265,7 +302,7 @@ export const articles = [
   },
   /* source - New York Times - https://www.nytimes.com/2022/04/29/us/politics/isis-beatles-kotey-sentenced.html */
   {
-    id: "0018232",
+    doc_num: "0018232",
     type: "article",
     title: "(U) British Terrorist Receives Life Sentence for Role in Americans’ Deaths.",
     author: "Adam Goldman",
@@ -304,7 +341,7 @@ export const articles = [
   },
   /* source - New York Post - https://nypost.com/2022/04/16/accused-brooklyn-shooter-frank-james-cried-during-manhunt-pizza-worker/ */
   {
-    id: "0019577",
+    doc_num: "0019577",
     type: "article",
     title: "(U) Accused Brooklyn subway shooter Frank James cried ‘like a little baby’ during frenzied manhunt: pizza worker.",
     author: "Angela Barbuti",

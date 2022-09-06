@@ -5,7 +5,7 @@
     class="
       bg-mission-blue
       dark:bg-dark-space-blue
-      energy:bg-gray-800
+      energy:bg-zinc-800
       justify-center
       p-4
     "
@@ -16,7 +16,7 @@
         items-center
         bg-slate-700/40
         dark:bg-slate-700/30
-        energy:bg-gray-700/40
+        energy:bg-zinc-700/40
         rounded-lg
         p-4
       "
@@ -31,7 +31,7 @@
       <a
         aria-label="Remove system message"
         @click="removeSystemMessage"
-        class="m-4 text-slate-300 energy:text-gray-300 hover:text-white"
+        class="m-4 text-slate-300 energy:text-zinc-300 hover:text-white"
       >
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
@@ -43,7 +43,7 @@
         text-slate-300
         bg-mission-blue
         dark:text-slate-300 dark:bg-dark-space-blue
-        energy:text-gray-300 energy:bg-gray-800
+        energy:text-zinc-300 energy:bg-zinc-800
         text-center text-sm
         uppercase
       "

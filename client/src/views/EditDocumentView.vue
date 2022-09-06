@@ -6,7 +6,7 @@
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
+      energy:border-zinc-700/25
     "
   >
     Edit Document
@@ -166,7 +166,7 @@
               pb-2
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
             "
           >
             Classification
@@ -190,7 +190,7 @@
               pb-2
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
             "
           >
             Attachments
@@ -203,37 +203,13 @@
               id="attachment_input"
               @drop.prevent="attachmentDrop"
               @change="attachmentSelectedFile"
-            >
-              <button
-                @click.prevent="attachmentFileInputButton.click()"
-                class="
-                  bg-slate-100
-                  hover:bg-slate-200/80
-                  dark:bg-slate-700 dark:hover:bg-slate-700/80
-                  energy:bg-gray-700 energy:hover:bg-gray-700/80
-                  border border-slate-300
-                  p-2
-                  rounded
-                  shadow
-                  text-sm
-                "
-              >
-                Select File
-              </button>
-              <input
-                type="file"
-                id="attachmentDropzoneFile"
-                class="attachmentDropzoneFile hidden"
-                multiple
-                ref="attachmentFileInputButton"
-              />
-            </PublishFileUploader>
+            />
           </div>
           <div
             class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
               pb-2
             "
           >
@@ -243,7 +219,7 @@
             class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
               pb-2
             "
           >
@@ -253,7 +229,7 @@
             class="
               border-b-2 border-slate-900/10
               dark:border-slate-50/[0.06]
-              energy:border-gray-700/25
+              energy:border-zinc-700/25
               pb-2
             "
           >
@@ -335,6 +311,7 @@ import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { articles, countries } from "@/data";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import PublishFileUploader from "@/components/PublishFileUploader";
+import { useRoute } from "vue-router";
 
 const topics = [
   { name: "Russian Invasion" },
@@ -374,8 +351,11 @@ export default {
   },
   methods: {
     populateCkEditor() {
-      this.editorData =
-        "(U) There had been no major strikes on Kyiv since early June. In his nightly address, Ukraine President Volodymyr Zelenskyy said a wounded seven-year-old girl was pulled from the rubble of a nine-storey apartment block. The girls father was killed in the strike, he said. A Ukrainian air force spokesperson said the strike was carried out with 4-6 long-range missiles fired from Russian bombers more than 1,000km away in the southern Russian region of Astrakhan.";
+      var content = [];
+      articles[0].content.forEach((item) => {
+        content += item;
+      });
+      this.editorData = content;
     },
   },
   setup() {
@@ -417,9 +397,6 @@ export default {
       },
     });
     const worldwide = ref(null);
-    const fileInputButton = ref(null);
-    const attachmentFileInputButton = ref(null);
-    const dropzoneFile = ref("");
     const attachmentDropzoneFile = ref("");
     const articlesData = ref(articles);
     let checkAllOrgs = ref(false);
@@ -457,37 +434,26 @@ export default {
       event.value.pocInfo = selection.pocInfo;
     };
 
-    const drop = (event) => {
-      dropzoneFile.value = event.dataTransfer.files[0];
-      populateFields();
-    };
-
-    const selectedFile = () => {
-      dropzoneFile.value = document.querySelector(".dropzoneFile").files[0];
-      populateFields();
-    };
-
     const attachmentDrop = (event) => {
       attachmentDropzoneFile.value = event.dataTransfer.files[0];
     };
 
     const attachmentSelectedFile = () => {
-      attachmentDropzoneFile.value = document.querySelector(
-        ".attachmentDropzoneFile"
-      ).files[0];
+      attachmentDropzoneFile.value =
+        document.querySelector(".fileUpload").files[0];
     };
 
     const populateFields = () => {
-      event.value.selectedCountries.model = [countries[144], countries[183]];
-      event.value.selectedTopics.model = [topics[0], topics[1]];
+      event.value.selectedCountries.model = [countries[35]];
+      event.value.selectedTopics.model = [topics[2]];
       event.value.selectedActors.model = [actors[0], actors[1]];
       event.value.title = articles[0].title;
       event.value.titlePM = articles[0].classification;
       event.value.summaryPM = articles[0].classification;
       event.value.classification = articles[0].classification;
       event.value.summary = articles[0].content[0];
-      event.value.docNum = articles[0].id;
-      event.value.publicationNumber = articles[0].id;
+      event.value.docNum = articles[0].doc_num;
+      event.value.publicationNumber = articles[0].doc_num;
       event.value.classifiedBy = articles[0].author;
     };
 
@@ -495,20 +461,21 @@ export default {
       event,
       worldwide,
       dissemOrgs,
-      fileInputButton,
-      attachmentFileInputButton,
-      dropzoneFile,
       attachmentDropzoneFile,
       articlesData,
       checkAllOrgs,
       populateFields,
       toggleAllOrgs,
       changePocInfo,
-      drop,
-      selectedFile,
       attachmentDrop,
       attachmentSelectedFile,
     };
+  },
+  mounted() {
+    if (useRoute().name === "edit" && useRoute().params.id) {
+      this.populateFields();
+      this.populateCkEditor();
+    }
   },
 };
 </script>

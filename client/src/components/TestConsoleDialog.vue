@@ -31,7 +31,8 @@
               class="
                 inline-block
                 w-full
-                min-w-[400px]
+                min-w-[300px]
+                sm:min-w-[400px]
                 max-w-xs
                 p-6
                 my-8
@@ -41,10 +42,10 @@
                 transform
                 text-slate-700
                 dark:text-slate-300
-                energy:text-gray-300
+                energy:text-zinc-300
                 bg-slate-100
                 dark:bg-slate-700
-                energy:bg-gray-700
+                energy:bg-zinc-700
                 shadow-lg
                 rounded-lg
               "
@@ -203,7 +204,7 @@
                     py-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
-                    energy:border-gray-700/25
+                    energy:border-zinc-500/50
                   "
                   v-show="currentRoute === 'home'"
                 >
@@ -261,7 +262,7 @@
                     py-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
-                    energy:border-gray-700/25
+                    energy:border-zinc-500/50
                   "
                   v-show="currentRoute === 'search'"
                 >

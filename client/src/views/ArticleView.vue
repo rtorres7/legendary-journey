@@ -2,7 +2,7 @@
   <template v-if="routerError">
     <NotFound />
   </template>
-  <template v-else>  
+  <template v-else>
     <div>
       <ArticleNavigation :selectedArticle="selectedArticle"></ArticleNavigation>
     </div>
@@ -15,30 +15,33 @@
         lg:space-x-5
         mb-8
       "
-    > 
+    >
       <div class="flex md:flex-col gap-y-4 gap-x-4 mb-4">
         <PrinterIcon class="h-5 w-5 cursor-pointer" />
         <MailIcon class="h-5 w-5 cursor-pointer" />
         <span class="relative inline-block">
           <ChatIcon class="h-5 w-5 cursor-pointer" />
-          <span v-if="(comments.length)" class="
-            absolute
-            top-0 
-            left-0 
-            inline-flex 
-            items-center 
-            justify-center 
-            p-1
-            text-[.5rem]
-            font-bold 
-            leading-none 
-            text-red-100 
-            transform 
-            -translate-x-1/2 
-            -translate-y-1/2 
-            bg-blue-600 
-            rounded-full">
-              {{ comments.length }}
+          <span
+            v-if="comments.length"
+            class="
+              absolute
+              top-0
+              left-0
+              inline-flex
+              items-center
+              justify-center
+              p-1
+              text-[.5rem]
+              font-bold
+              leading-none
+              text-red-100
+              transform
+              -translate-x-1/2 -translate-y-1/2
+              bg-blue-600
+              rounded-full
+            "
+          >
+            {{ comments.length }}
           </span>
         </span>
         <FolderOpenIcon class="h-5 w-5 cursor-pointer" />
@@ -70,7 +73,7 @@
             italic
             border-t-2 border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             pt-4
           "
         >
@@ -88,7 +91,7 @@
             font-semibold
             border-t-2 border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             pt-4
           "
         >
@@ -150,7 +153,7 @@
           class="
             border-t-2 border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             pt-4
           "
         />
@@ -159,7 +162,7 @@
           class="
             border-t-2 border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             pt-4
           "
         />
@@ -173,7 +176,7 @@
             pb-4
             border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             flex flex-col
             space-y-3
           "
@@ -198,19 +201,19 @@
             pb-4
             border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             flex flex-col
             space-y-3
           "
         >
           <div class="flex flex-col space-y-3">
-              <p class="font-semibold">Related Products</p>
-              <router-link to="#" class="hover:underline text-sm"
-                >(U) This is a related product title</router-link
-              >
-              <router-link to="#" class="hover:underline text-sm"
-                >(U) Sample title of another related product</router-link
-              >
+            <p class="font-semibold">Related Products</p>
+            <router-link to="#" class="hover:underline text-sm"
+              >(U) This is a related product title</router-link
+            >
+            <router-link to="#" class="hover:underline text-sm"
+              >(U) Sample title of another related product</router-link
+            >
           </div>
         </div>
         <div
@@ -221,28 +224,31 @@
             pb-4
             border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             flex flex-col
             space-y-3
           "
         >
-         <p class="font-semibold">Tags</p>
-          <p class="font-medium text-sm">{{ selectedArticle.tags.join(", ") }}</p>
+          <p class="font-semibold">Tags</p>
+          <p class="font-medium text-sm">
+            {{ selectedArticle.tags.join(", ") }}
+          </p>
         </div>
         <div
-         class="
+          class="
             border-t-2
             md:border-t-0
             border-b-2
             pb-4
             border-slate-900/10
             dark:border-slate-50/[0.06]
-            energy:border-gray-700/25
+            energy:border-zinc-700/25
             flex flex-col
             space-y-3
-          ">
-            <p class="font-semibold">Metrics</p>
-            <p class="font-medium text-sm">Unique Readers (2608)</p>
+          "
+        >
+          <p class="font-semibold">Metrics</p>
+          <p class="font-medium text-sm">Unique Readers (2608)</p>
           <div>
             <ArticleMetrics></ArticleMetrics>
           </div>
@@ -254,12 +260,19 @@
 
 <script>
 import { ref } from "vue";
-import ArticleNavigation from "@/components/ArticleNavigation.vue"
+import ArticleNavigation from "@/components/ArticleNavigation.vue";
 import ArticleCommentForm from "@/components/ArticleCommentForm.vue";
 import ArticleCommentList from "@/components/ArticleCommentList.vue";
 import ArticleMetrics from "@/components/ArticleMetrics.vue";
 import NotFound from "@/components/NotFound";
-import { PrinterIcon, MailIcon, ChatIcon, FolderOpenIcon, TagIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import {
+  PrinterIcon,
+  MailIcon,
+  ChatIcon,
+  FolderOpenIcon,
+  TagIcon,
+  ChevronDownIcon,
+} from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { articles } from "@/data";
 
@@ -281,7 +294,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
   },
-  props: ["id", "title"],
+  props: ["doc_num", "title"],
   setup() {
     const comments = ref([]);
     const articlesData = ref(articles);
@@ -297,7 +310,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.selectedArticle = vm.getArticle(to.params.id);
+      vm.selectedArticle = vm.getArticle(to.params.doc_num);
       if (vm.selectedArticle) {
         vm.routerError = false;
       } else {
@@ -306,7 +319,7 @@ export default {
     });
   },
   beforeRouteUpdate(to) {
-    this.selectedArticle = this.getArticle(to.params.id);
+    this.selectedArticle = this.getArticle(to.params.doc_num);
     if (this.selectedArticle) {
       this.routerError = false;
     } else {
@@ -314,8 +327,8 @@ export default {
     }
   },
   methods: {
-    getArticle(id) {
-      return this.articlesData.find((article) => article.id === id);
+    getArticle(doc_num) {
+      return this.articlesData.find((article) => article.doc_num === doc_num);
     },
     addComment(comment) {
       this.comments.push(comment);

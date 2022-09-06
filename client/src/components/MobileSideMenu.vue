@@ -36,10 +36,10 @@
                 transform
                 text-slate-700
                 dark:text-slate-300
-                energy:text-gray-300
+                energy:text-zinc-300
                 bg-slate-100
                 dark:bg-slate-700
-                energy:bg-gray-700
+                energy:bg-zinc-700
                 shadow-lg
               "
             >
@@ -89,11 +89,16 @@
                 <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
                     <ul class="list-disc list-inside ml-4 mt-4">
-                      <template v-for="issue in metadata.issues" :key="issue">
+                      <template
+                        v-for="issue in metadata.issues.items"
+                        :key="issue"
+                      >
                         <li>
-                          <router-link to="/" class="hover:underline">{{
-                            issue
-                          }}</router-link>
+                          <a
+                            @click="navigateToIssue(issue)"
+                            class="hover:underline cursor-pointer"
+                            >{{ issue.name }}</a
+                          >
                         </li>
                       </template>
                     </ul>
@@ -153,7 +158,7 @@
                           pt-4
                           border-t border-slate-900/10
                           dark:border-slate-50/[0.06]
-                          energy:border-gray-700/25
+                          energy:border-zinc-700/25
                         "
                       >
                         View a
@@ -190,7 +195,7 @@
                               capitalize
                               bg-white
                               dark:bg-slate-600
-                              energy:bg-gray-600
+                              energy:bg-zinc-600
                               rounded-lg
                               shadow-md
                               cursor-default
@@ -236,7 +241,7 @@
                                 overflow-auto
                                 bg-white
                                 dark:bg-slate-600
-                                energy:bg-gray-600
+                                energy:bg-zinc-600
                                 rounded-md
                                 shadow-lg
                                 max-h-60
@@ -256,7 +261,7 @@
                                 <li
                                   :class="[
                                     active
-                                      ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-gray-700'
+                                      ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-zinc-700'
                                       : 'bg-none',
                                   ]"
                                 >
@@ -305,6 +310,7 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { metadata } from "@/config";
 import { regions, countries } from "@/data";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
@@ -345,16 +351,35 @@ export default {
     isOpen: Boolean,
   },
   setup(props, { emit }) {
+    const router = useRouter();
+
     const selectedCountry = ref(countries[0]);
     const close = () => {
       emit("close");
     };
+
+    const navigateToIssue = (issue) => {
+      router.push({
+        name: "issues",
+        params: {
+          name: issue.name,
+        },
+        query: {
+          "issues[]": issue.key,
+          "reporting_types[]": "analysis.all_source",
+          view: "grid",
+          landing: true,
+        },
+      });
+    };
+
     return {
       metadata,
       close,
       regions,
       countries,
       selectedCountry,
+      navigateToIssue,
     };
   },
   methods: {
