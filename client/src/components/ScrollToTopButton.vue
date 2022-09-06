@@ -27,7 +27,7 @@
           p-1
           bg-mission-blue
           dark:bg-slate-700
-          energy:bg-gray-700
+          energy:bg-zinc-700
           text-mission-gray
           dark:text-teal-300
           energy:text-energy-yellow

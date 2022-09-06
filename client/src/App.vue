@@ -1,5 +1,14 @@
 <template>
-  <div class="min-h-full" ref="topOfApp" tabindex="-1">
+  <div
+    class="
+      min-h-full
+      bg-mission-blue
+      dark:bg-dark-space-blue
+      energy:bg-zinc-800
+    "
+    ref="topOfApp"
+    tabindex="-1"
+  >
     <button @click="skipToMain" class="skipLink">Skip to main content</button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
@@ -8,11 +17,21 @@
         text-slate-900
         bg-gray-50
         dark:text-slate-300 dark:bg-dark-navy
-        energy:text-gray-300 energy:bg-gray-900
+        energy:text-zinc-300 energy:bg-zinc-900
       "
     >
       <div
-        class="max-w-8xl min-h-[85vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
+        class="
+          max-w-8xl
+          min-h-[80vh]
+          md:min-h-[88vh]
+          lg:min-h-[82vh]
+          mx-auto
+          py-3
+          px-4
+          sm:px-6
+          lg:px-8
+        "
         ref="mainContent"
         tabindex="-1"
       >

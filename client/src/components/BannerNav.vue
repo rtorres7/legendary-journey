@@ -2,15 +2,15 @@
   <nav
     class="
       text-slate-200
-      bg-mission-blue
-      dark:text-slate-300 dark:bg-dark-space-blue
-      energy:text-gray-300 energy:bg-gray-800
+      bg-mission-blue/95
+      dark:text-slate-300 dark:bg-dark-space-blue/95
+      energy:text-zinc-300 energy:bg-zinc-800/95
       sticky
       top-0
       z-10
-      min-h-[72px]
       lg:h-full
       backdrop-filter backdrop-blur
+      lg:border-b lg:border-b-zinc-700/75
     "
   >
     <div
@@ -45,704 +45,25 @@
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
     </div>
-    <div class="mx-auto lg:px-8 lg:pt-2">
-      <div class="grid lg:flex items-center lg:justify-between h-16">
-        <!-- Desktop Logo -->
-        <div class="hidden lg:flex h-full items-center">
-          <router-link class="h-full" to="/">
-            <img
-              class="h-14 w-14"
-              src="@/assets/NCTCSealcolor.png"
-              alt="NCTC. Seal. Link to homepage."
-            />
-          </router-link>
-          <div
-            class="
-              hidden
-              xl:block
-              ml-4
-              uppercase
-              text-2xl text-white
-              dark:text-slate-200
-              energy:text-energy-yellow
-              font-semibold
-              tracking-[.25em]
-            "
-          >
-            logo
-          </div>
-        </div>
-        <!-- Desktop Nav Bar -->
-        <div class="hidden lg:block">
-          <div class="ml-4 flex items-center md:ml-6 lg:ml-3">
-            <BannerSearchBar />
-            <div class="text-sm leading-6 pl-6 pr-3">
-              <ul class="flex space-x-3 xl:space-x-4">
-                <li>
-                  <Menu as="div" class="relative">
-                    <MenuButton
-                      class="
-                        flex
-                        items-center
-                        font-semibold
-                        hover:text-amber-300
-                        dark:hover:text-teal-400
-                        energy:hover:text-energy-yellow
-                      "
-                      tabindex="0"
-                    >
-                      Issues<ChevronDownIcon
-                        class="h-3 w-3 ml-1"
-                        aria-hidden="true"
-                      />
-                    </MenuButton>
-                    <transition
-                      enter-active-class="transition ease-out duration-100"
-                      enter-from-class="transform opacity-0 scale-95"
-                      enter-to-class="transform opacity-100 scale-100"
-                      leave-active-class="transition ease-in duration-75"
-                      leave-from-class="transform opacity-100 scale-100"
-                      leave-to-class="transform opacity-0 scale-95"
-                    >
-                      <MenuItems
-                        class="
-                          origin-top-right
-                          absolute
-                          right-0
-                          mt-2
-                          w-52
-                          rounded-md
-                          shadow-2xl
-                          py-2
-                          ring-1 ring-black ring-opacity-5
-                          focus:outline-none
-                          text-sm
-                          bg-mission-blue/95
-                          dark:bg-dark-space-blue/95
-                          energy:bg-gray-800/95
-                          dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                          energy:text-gray-300
-                        "
-                      >
-                        <MenuItem
-                          as="a"
-                          v-for="issue in metadata.issues.items"
-                          :key="issue"
-                          v-slot="{ active }"
-                          @click="navigateToIssue(issue)"
-                        >
-                          <span
-                            :class="[
-                              active
-                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
-                                : '',
-                              'py-1 px-3 flex cursor-pointer',
-                            ]"
-                            >{{ issue.name }}</span
-                          >
-                        </MenuItem>
-                      </MenuItems>
-                    </transition>
-                  </Menu>
-                </li>
-                <li>
-                  <BannerNavPopover :wideShrunk="true">
-                    <template #heading>
-                      Regions<ChevronDownIcon
-                        class="h-3 w-3 ml-1"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    <template #content>
-                      <div class="hidden lg:block lg:max-w-[768px] lg:m-auto">
-                        <div
-                          class="grid grid-cols-3 gap-6 pb-4"
-                          aria-label="select a region or subregion"
-                        >
-                          <div v-for="region in metadata.regions.items" :key="region">
-                            <a
-                              href=""
-                              @click.prevent="navigateToRegion(region)"
-                              class="lg:text-lg hover:underline cursor-pointer"
-                            >
-                              {{ region.name }}
-                            </a>
-                            <ul class="pt-2 list-disc list-inside">
-                              <template v-for="subregion in region.subregions" :key="subregion">
-                                <template v-for="subregionItem in metadata.subregions.items" :key="subregionItem">
-                                  <li v-if="subregionItem.key === subregion">
-                                    <a
-                                      href=""
-                                      @click.prevent="navigateToSubregion(subregionItem)"
-                                      class="hover:underline cursor-pointer font-light"
-                                    >
-                                      {{ subregionItem.name }}
-                                    </a>
-                                  </li>
-                                </template>
-                              </template>
-                            </ul>
-                          </div>
-                        </div>
-                        <p
-                          class="
-                            pt-4
-                            border-t border-slate-900/10
-                            dark:border-slate-50/[0.06]
-                            energy:border-gray-700/25
-                          "
-                        >
-                          View a
-                          <button
-                            @click="openPDF"
-                            class="underline"
-                            aria-label="View a PDF document with a list of countries that fall under each region and subregion"
-                          >
-                            list of countries
-                          </button>
-                          that fall under each region and subregion
-                        </p>
-                      </div>
-                    </template>
-                  </BannerNavPopover>
-                </li>
-                <li>
-                  <BannerNavPopover>
-                    <template #heading>
-                      Countries<ChevronDownIcon
-                        class="h-3 w-3 ml-1"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    <template #content>
-                      <div class="flex items-center mb-4">
-                        <label for="country" aria-hidden="true"
-                          >Select a country from the map or the dropdown</label
-                        >
-                        <Listbox
-                          v-model="selectedCountry"
-                          aria-label="select a country from the dropdown"
-                        >
-                          <div class="relative w-1/2 ml-4">
-                            <ListboxButton
-                              class="
-                                flex
-                                w-full
-                                p-2
-                                text-left
-                                capitalize
-                                text-slate-800
-                                dark:text-gray-300
-                                energy:text-gray-300
-                                bg-slate-100
-                                dark:bg-slate-800
-                                energy:bg-gray-600
-                                rounded-lg
-                                shadow-md
-                                cursor-default
-                                focus:outline-none
-                                focus-visible:ring-2
-                                focus-visible:ring-opacity-75
-                                focus-visible:ring-offset-2
-                              "
-                            >
-                              <span class="block truncate">{{
-                                selectedCountry.name
-                              }}</span>
-                              <span
-                                class="
-                                  absolute
-                                  inset-y-0
-                                  right-0
-                                  flex
-                                  items-center
-                                  pr-2
-                                "
-                              >
-                                <SelectorIcon
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </ListboxButton>
-                            <transition
-                              enter-active-class="transition ease-out duration-100"
-                              enter-from-class="transform opacity-0 scale-95"
-                              enter-to-class="transform opacity-100 scale-100"
-                              leave-active-class="transition ease-in duration-75"
-                              leave-from-class="transform opacity-100 scale-100"
-                              leave-to-class="transform opacity-0 scale-95"
-                            >
-                              <ListboxOptions
-                                class="
-                                  absolute
-                                  w-full
-                                  py-1
-                                  mt-1
-                                  overflow-auto
-                                  text-slate-800
-                                  dark:text-gray-300
-                                  energy:text-gray-300
-                                  bg-slate-100
-                                  dark:bg-slate-800
-                                  energy:bg-gray-600
-                                  rounded-md
-                                  shadow-lg
-                                  max-h-60
-                                  ring-1 ring-black ring-opacity-5
-                                  focus:outline-none
-                                  z-10
-                                "
-                              >
-                                <ListboxOption
-                                  v-slot="{ active }"
-                                  v-for="country in metadata.countries.items"
-                                  :key="country"
-                                  :value="country"
-                                  as="template"
-                                  class="capitalize px-2 py-1 cursor-pointer"
-                                  @click="navigateToCountry(country)"
-                                >
-                                  <li
-                                    :class="[
-                                      active
-                                        ? 'bg-slate-200 dark:bg-slate-700 energy:bg-gray-700'
-                                        : 'bg-none',
-                                    ]"
-                                  >
-                                    {{ country.name }}
-                                  </li>
-                                </ListboxOption>
-                              </ListboxOptions>
-                            </transition>
-                          </div>
-                        </Listbox>
-                      </div>
-                      <BannerNavMap aria-hidden="true" />
-                    </template>
-                  </BannerNavPopover>
-                </li>
-                <li class="hidden 2xl:block">
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Community
-                  </div>
-                </li>
-                <li class="hidden 2xl:block">
-                  <div
-                    class="
-                      font-semibold
-                      flex
-                      items-center
-                      hover:text-amber-300
-                      dark:hover:text-teal-400
-                      energy:hover:text-energy-yellow
-                    "
-                    tabindex="0"
-                  >
-                    Special Editions
-                  </div>
-                </li>
-                <li class="2xl:hidden">
-                  <Menu as="div" class="relative">
-                    <MenuButton
-                      class="
-                        flex
-                        items-center
-                        font-semibold
-                        hover:text-amber-300
-                        dark:hover:text-teal-400
-                        energy:hover:text-energy-yellow
-                      "
-                      tabindex="0"
-                    >
-                      More<ChevronDownIcon
-                        class="h-3 w-3 ml-1"
-                        aria-hidden="true"
-                      />
-                    </MenuButton>
-                    <transition
-                      enter-active-class="transition ease-out duration-100"
-                      enter-from-class="transform opacity-0 scale-95"
-                      enter-to-class="transform opacity-100 scale-100"
-                      leave-active-class="transition ease-in duration-75"
-                      leave-from-class="transform opacity-100 scale-100"
-                      leave-to-class="transform opacity-0 scale-95"
-                    >
-                      <MenuItems
-                        class="
-                          origin-top-right
-                          absolute
-                          right-0
-                          mt-2
-                          w-40
-                          rounded-md
-                          shadow-2xl
-                          py-2
-                          ring-1 ring-black ring-opacity-5
-                          focus:outline-none
-                          text-sm
-                          bg-mission-blue/95
-                          dark:bg-dark-space-blue/95
-                          energy:bg-gray-800/95
-                          dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                          energy:text-gray-300
-                        "
-                      >
-                        <MenuItem as="div" v-slot="{ active }">
-                          <a
-                            href="/"
-                            :class="[
-                              active
-                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
-                                : '',
-                              'py-1 px-3 flex cursor-pointer',
-                            ]"
-                            >Community</a
-                          >
-                        </MenuItem>
-                        <MenuItem as="div" v-slot="{ active }">
-                          <a
-                            href="/"
-                            :class="[
-                              active
-                                ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-gray-600/80'
-                                : '',
-                              'py-1 px-3 flex cursor-pointer',
-                            ]"
-                            >Special Editions</a
-                          >
-                        </MenuItem>
-                      </MenuItems>
-                    </transition>
-                  </Menu>
-                </li>
-              </ul>
-            </div>
-            <div
-              class="
-                border-l border-slate-700
-                flex
-                items-center
-                space-x-2
-                xl:space-x-3
-                ml-2
-                pl-2
-                xl:ml-4 xl:pl-4
-              "
-            >
-              <!-- Admin Dropdown -->
-              <Menu v-show="isAdmin" as="div" class="ml-3 relative">
-                <div>
-                  <MenuButton
-                    class="
-                      max-w-xs
-                      bg-gray-800
-                      rounded-full
-                      flex
-                      items-center
-                      text-sm
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-offset-gray-800
-                      focus:ring-white
-                    "
-                  >
-                    <span class="sr-only">Admin Menu</span>
-                    <CogIcon class="h-6 w-6" aria-hidden="true" />
-                  </MenuButton>
-                </div>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="
-                      origin-top-right
-                      absolute
-                      right-0
-                      mt-2
-                      w-36
-                      rounded-md
-                      shadow-2xl
-                      py-2
-                      ring-1 ring-black ring-opacity-5
-                      focus:outline-none
-                      text-sm
-                      font-semibold
-                      bg-mission-blue/95
-                      dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
-                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
-                    "
-                  >
-                    <MenuItem 
-                      as="a"
-                      @click="goToPublishPage">
-                        <span
-                          class="
-                            py-1
-                            px-3
-                            hover:bg-slate-700/80
-                            dark:hover:bg-slate-600/80
-                            energy:hover:bg-gray-600/80
-                            flex
-                            items-center
-                            cursor-pointer
-                          "
-                        >
-                          Publish an Article
-                        </span>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-              <button
-                disabled
-                type="button"
-                class="
-                  p-1
-                  rounded-full
-                  hover:text-white
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-offset-gray-800
-                  focus:ring-white
-                "
-              >
-                <span class="sr-only">View notifications</span>
-                <BellIcon class="h-6 w-6" aria-hidden="true" />
-              </button>
-              <Menu as="div" class="relative">
-                <div>
-                  <MenuButton
-                    class="
-                      max-w-xs
-                      flex
-                      items-center
-                      p-1
-                      rounded-full
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-offset-gray-800
-                      focus:ring-white
-                    "
-                    :class="
-                      selectedTheme === 'system'
-                        ? 'text-slate-400'
-                        : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
-                    "
-                  >
-                    <span class="sr-only"
-                      >Open menu for toggling color palettes.</span
-                    >
-                    <template v-if="selectedTheme === 'dark'">
-                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <template v-else-if="selectedTheme === 'energy'">
-                      <LightningBoltIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <template v-else-if="selectedTheme === 'system'">
-                      <template v-if="isDark">
-                        <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                      <template v-else>
-                        <SunIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                    </template>
-                    <template v-else>
-                      <SunIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                  </MenuButton>
-                </div>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="
-                      origin-top-right
-                      absolute
-                      right-0
-                      mt-2
-                      w-40
-                      rounded-md
-                      shadow-2xl
-                      py-2
-                      ring-1 ring-black ring-opacity-5
-                      focus:outline-none
-                      text-sm
-                      font-semibold
-                      bg-mission-blue/95
-                      dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
-                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
-                    "
-                  >
-                    <MenuItem v-for="item in themeOptions" :key="item">
-                      <a
-                        :class="isActive(item)"
-                        class="
-                          py-1
-                          px-2
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                          flex
-                          items-center
-                          space-x-2
-                          cursor-pointer
-                        "
-                        @click="changeTheme(item)"
-                      >
-                        <template v-if="item === 'light'">
-                          <SunIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else-if="item === 'dark'">
-                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else-if="item === 'energy'">
-                          <LightningBoltIcon class="h-6 w-6" aria-hidden="true"
-                        /></template>
-                        <template v-else-if="item === 'system'">
-                          <DesktopComputerIcon
-                            class="h-6 w-6"
-                            aria-hidden="true" /></template
-                        ><span class="capitalize">{{ item }}</span></a
-                      >
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-              <!-- Profile dropdown -->
-              <Menu as="div" class="ml-3 relative">
-                <div>
-                  <MenuButton
-                    class="
-                      max-w-xs
-                      bg-gray-800
-                      rounded-full
-                      flex
-                      items-center
-                      text-sm
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-offset-gray-800
-                      focus:ring-white
-                    "
-                  >
-                    <span class="sr-only">Open user menu.</span>
-                    <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
-                  </MenuButton>
-                </div>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="
-                      origin-top-right
-                      absolute
-                      right-0
-                      mt-2
-                      w-52
-                      rounded-md
-                      shadow-2xl
-                      py-2
-                      ring-1 ring-black ring-opacity-5
-                      focus:outline-none
-                      text-sm
-                      font-semibold
-                      bg-mission-blue/95
-                      dark:bg-dark-space-blue/95
-                      energy:bg-gray-800/95
-                      dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                      energy:text-gray-300
-                    "
-                  >
-                    <MenuItem>
-                      <a
-                        class="
-                          flex
-                          cursor-pointer
-                          py-1
-                          px-3
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                        "
-                        >{{ loadingUser ? "Loading..." : currentUsername }}</a
-                      >
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        href="/"
-                        class="
-                          flex
-                          cursor-pointer
-                          py-1
-                          px-3
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                        "
-                        >Settings</a
-                      >
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        class="
-                          flex
-                          cursor-pointer
-                          py-1
-                          px-3
-                          hover:bg-slate-700/80
-                          dark:hover:bg-slate-600/80
-                          energy:hover:bg-gray-600/80
-                        "
-                        @click="openTestConsoleModal"
-                        >Test Console</a
-                      >
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-            </div>
-          </div>
-        </div>
-        <!-- Mobile Nav Bar -->
-        <div class="px-2 flex justify-between lg:hidden">
+    <div class="mx-auto pt-1 px-6 lg:px-8">
+      <div
+        class="
+          flex
+          items-center
+          justify-between
+          h-14
+          pb-2
+          lg:border-b lg:border-slate-700/50 lg:energy:border-zinc-700/50
+        "
+      >
+        <!-- Left Nav Bar -->
+        <div class="flex h-full items-center">
           <button
             type="button"
             @click="openMainMenuModal"
             class="
+              block
+              lg:hidden
               p-1
               m-auto
               rounded-full
@@ -757,58 +78,41 @@
             <span class="sr-only">Open main menu</span>
             <MenuIcon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <BannerSearchBar class="px-2 w-full" />
-          <!-- TODO: Remove this below -->
-          <!-- <div
-              class="
-                flex
-                max-w-[500px]
-                items-center
-                text-sm
-                leading-6
-                text-primary
-                dark:text-slate-300
-                rounded-md
-                shadow-sm
-                py-1.5
-                pl-2
-                pr-3
-                m-auto
-                bg-slate-100
-                dark:bg-slate-800
-                energy:bg-gray-600
-              "
-            >
-              <SearchIcon
-                class="
-                  h-6
-                  w-6
-                  text-slate-800
-                  dark:text-slate-300
-                  energy:text-gray-300
-                "
-                aria-hidden="true"
-              />
-              <input
-                class="
-                  w-full
-                  ml-2
-                  focus-visible:outline-none
-                  text-slate-800
-                  dark:text-gray-300
-                  energy:text-gray-300
-                  bg-slate-100
-                  dark:bg-slate-800
-                  energy:bg-gray-600
-                "
-              />
-            </div> -->
-
-          <!-- Mobile user menu button -->
+          <router-link class="hidden xl:block h-auto" to="/">
+            <img
+              class="h-10 w-10"
+              src="@/assets/NCTCSealcolor.png"
+              alt="NCTC. Seal. Link to homepage."
+            />
+          </router-link>
+          <router-link
+            class="
+              hidden
+              lg:block
+              ml-4
+              uppercase
+              text-xl text-white
+              dark:text-slate-100
+              energy:text-energy-yellow
+              font-semibold
+              tracking-[.05em]
+            "
+            to="/"
+          >
+            pegasus
+          </router-link>
+        </div>
+        <!-- Middle Nav Bar -->
+        <BannerSearchBar />
+        <!-- Right Nav Bar -->
+        <div class="flex items-center space-x-2 xl:space-x-3">
+          <!-- Mobile App Menu -->
           <button
             type="button"
             @click="openUserMenuModal"
             class="
+              block
+              lg:hidden
               p-1
               m-auto
               rounded-full
@@ -823,8 +127,655 @@
             <span class="sr-only">Open user menu</span>
             <DotsVerticalIcon class="h-6 w-6" aria-hidden="true" />
           </button>
+          <!-- Admin Dropdown -->
+          <Menu v-show="isAdmin" as="div" class="hidden lg:block ml-3 relative">
+            <div>
+              <MenuButton
+                class="
+                  max-w-xs
+                  bg-slate-800
+                  rounded-full
+                  flex
+                  items-center
+                  text-sm
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                "
+              >
+                <span class="sr-only">Admin Menu</span>
+                <CogIcon class="h-6 w-6" aria-hidden="true" />
+              </MenuButton>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-40
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  font-semibold
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                  border-x border-b border-slate-700/50
+                  energy:border-zinc-700/50
+                "
+              >
+                <MenuItem>
+                  <router-link
+                    to="/publish"
+                    class="
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                      flex
+                      items-center
+                      cursor-pointer
+                    "
+                  >
+                    Publish an Article
+                  </router-link>
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+          <button
+            disabled
+            type="button"
+            class="
+              hidden
+              lg:block
+              p-1
+              rounded-full
+              hover:text-white
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-gray-800
+              focus:ring-white
+            "
+          >
+            <span class="sr-only">View notifications</span>
+            <BellIcon class="h-6 w-6" aria-hidden="true" />
+          </button>
+          <Menu as="div" class="hidden lg:block relative">
+            <div>
+              <MenuButton
+                class="
+                  max-w-xs
+                  flex
+                  items-center
+                  p-1
+                  rounded-full
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                "
+                :class="
+                  selectedTheme === 'system'
+                    ? 'text-slate-400'
+                    : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
+                "
+              >
+                <span class="sr-only"
+                  >Open menu for toggling color palettes.</span
+                >
+                <template v-if="selectedTheme === 'dark'">
+                  <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                </template>
+                <template v-else-if="selectedTheme === 'energy'">
+                  <LightningBoltIcon class="h-6 w-6" aria-hidden="true" />
+                </template>
+                <template v-else-if="selectedTheme === 'system'">
+                  <template v-if="isDark">
+                    <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else>
+                    <SunIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                </template>
+                <template v-else>
+                  <SunIcon class="h-6 w-6" aria-hidden="true" />
+                </template>
+              </MenuButton>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-40
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  font-semibold
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                  border-x border-b border-slate-700/50
+                  energy:border-zinc-700/50
+                "
+              >
+                <MenuItem v-for="item in themeOptions" :key="item">
+                  <a
+                    :class="isActive(item)"
+                    class="
+                      py-1
+                      px-2
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                      flex
+                      items-center
+                      space-x-2
+                      cursor-pointer
+                    "
+                    @click="changeTheme(item)"
+                  >
+                    <template v-if="item === 'light'">
+                      <SunIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'dark'">
+                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'energy'">
+                      <LightningBoltIcon class="h-6 w-6" aria-hidden="true"
+                    /></template>
+                    <template v-else-if="item === 'system'">
+                      <DesktopComputerIcon
+                        class="h-6 w-6"
+                        aria-hidden="true" /></template
+                    ><span class="capitalize">{{ item }}</span></a
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+          <!-- Profile dropdown -->
+          <Menu as="div" class="hidden lg:block ml-3 relative">
+            <div>
+              <MenuButton
+                class="
+                  max-w-xs
+                  rounded-full
+                  flex
+                  items-center
+                  text-sm
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                "
+              >
+                <span class="sr-only">Open user menu.</span>
+                <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
+              </MenuButton>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-52
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  font-semibold
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                  border-x border-b border-slate-700/50
+                  energy:border-zinc-700/50
+                "
+              >
+                <MenuItem>
+                  <a
+                    class="
+                      flex
+                      cursor-pointer
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                    "
+                    >{{ loadingUser ? "Loading..." : currentUsername }}</a
+                  >
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    href="/"
+                    class="
+                      flex
+                      cursor-pointer
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                    "
+                    >Settings</a
+                  >
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    class="
+                      flex
+                      cursor-pointer
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                    "
+                    @click="openTestConsoleModal"
+                    >Test Console</a
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
         </div>
       </div>
+      <!-- Desktop Navigation -->
+      <ul class="hidden lg:flex space-x-8 text-sm leading-10 justify-center">
+        <li>
+          <Menu as="div" class="relative">
+            <MenuButton
+              class="
+                flex
+                items-center
+                font-semibold
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Issues<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </MenuButton>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-52
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                "
+              >
+                <MenuItem
+                  as="a"
+                  v-for="issue in metadata.issues.items"
+                  :key="issue"
+                  v-slot="{ active }"
+                  @click="navigateToIssue(issue)"
+                >
+                  <span
+                    :class="[
+                      active
+                        ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
+                        : '',
+                      'py-1 px-3 flex cursor-pointer',
+                    ]"
+                    >{{ issue.name }}</span
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+        </li>
+        <li>
+          <BannerNavPopover :wideShrunk="true">
+            <template #heading>
+              Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </template>
+            <template #content>
+              <div class="hidden lg:block lg:max-w-[768px] lg:m-auto">
+                <div
+                  class="grid grid-cols-3 gap-6 pb-4"
+                  aria-label="select a region or subregion"
+                >
+                  <div v-for="region in metadata.regions.items" :key="region">
+                    <a
+                      href=""
+                      @click.prevent="navigateToRegion(region)"
+                      class="lg:text-lg hover:underline cursor-pointer"
+                    >
+                      {{ region.name }}
+                    </a>
+                    <ul class="pt-2 list-disc list-inside">
+                      <template
+                        v-for="subregion in region.subregions"
+                        :key="subregion"
+                      >
+                        <template
+                          v-for="subregionItem in metadata.subregions.items"
+                          :key="subregionItem"
+                        >
+                          <li v-if="subregionItem.key === subregion">
+                            <a
+                              href=""
+                              @click.prevent="
+                                navigateToSubregion(subregionItem)
+                              "
+                              class="hover:underline cursor-pointer font-light"
+                            >
+                              {{ subregionItem.name }}
+                            </a>
+                          </li>
+                        </template>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
+                <p
+                  class="
+                    pt-4
+                    border-t border-slate-900/10
+                    dark:border-slate-50/[0.06]
+                    energy:border-zinc-700/25
+                  "
+                >
+                  View a
+                  <button
+                    @click="openPDF"
+                    class="underline"
+                    aria-label="View a PDF document with a list of countries that fall under each region and subregion"
+                  >
+                    list of countries
+                  </button>
+                  that fall under each region and subregion
+                </p>
+              </div>
+            </template>
+          </BannerNavPopover>
+        </li>
+        <li>
+          <BannerNavPopover :wideShrunk="true">
+            <template #heading>
+              Countries<ChevronDownIcon
+                class="h-3 w-3 ml-1"
+                aria-hidden="true"
+              />
+            </template>
+            <template #content>
+              <div class="flex items-center mb-4">
+                <label for="country" aria-hidden="true"
+                  >Select a country from the map or the dropdown</label
+                >
+                <Listbox
+                  v-model="selectedCountry"
+                  aria-label="select a country from the dropdown"
+                >
+                  <div class="relative w-full max-w-[400px] ml-4">
+                    <ListboxButton
+                      class="
+                        flex
+                        w-full
+                        px-2
+                        text-left
+                        capitalize
+                        text-slate-800
+                        dark:text-slate-300
+                        energy:text-zinc-300
+                        bg-slate-100
+                        dark:bg-slate-800
+                        energy:bg-zinc-600
+                        rounded-lg
+                        shadow-md
+                        cursor-default
+                        focus:outline-none
+                        focus-visible:ring-2
+                        focus-visible:ring-opacity-75
+                        focus-visible:ring-offset-2
+                      "
+                    >
+                      <span class="block truncate">{{
+                        selectedCountry.name
+                      }}</span>
+                      <span
+                        class="
+                          absolute
+                          inset-y-0
+                          right-0
+                          flex
+                          items-center
+                          pr-2
+                        "
+                      >
+                        <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    </ListboxButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <ListboxOptions
+                        class="
+                          absolute
+                          w-full
+                          py-1
+                          mt-1
+                          overflow-auto
+                          text-slate-800
+                          dark:text-slate-300
+                          energy:text-zinc-300
+                          bg-slate-100
+                          dark:bg-slate-800
+                          energy:bg-zinc-600
+                          rounded-md
+                          shadow-lg
+                          max-h-60
+                          ring-1 ring-black ring-opacity-5
+                          focus:outline-none
+                          z-10
+                        "
+                      >
+                        <ListboxOption
+                          v-slot="{ active }"
+                          v-for="country in metadata.countries.items"
+                          :key="country"
+                          :value="country"
+                          as="template"
+                          class="capitalize px-2 py-1 cursor-pointer"
+                          @click="navigateToCountry(country)"
+                        >
+                          <li
+                            :class="[
+                              active
+                                ? 'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700'
+                                : 'bg-none',
+                            ]"
+                          >
+                            {{ country.name }}
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+              </div>
+              <BannerNavMap aria-hidden="true" />
+            </template>
+          </BannerNavPopover>
+        </li>
+        <li>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            Community
+          </div>
+        </li>
+        <li>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            Special Editions
+          </div>
+        </li>
+        <!-- <li class="2xl:hidden">
+          <Menu as="div" class="relative">
+            <MenuButton
+              class="
+                flex
+                items-center
+                font-semibold
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              More<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </MenuButton>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="
+                  origin-top-right
+                  absolute
+                  right-0
+                  mt-2
+                  w-40
+                  rounded-md
+                  shadow-2xl
+                  py-2
+                  ring-1 ring-black ring-opacity-5
+                  focus:outline-none
+                  text-sm
+                  bg-mission-blue/95
+                  dark:bg-dark-space-blue/95
+                  energy:bg-zinc-800/95
+                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
+                  energy:text-zinc-300
+                "
+              >
+                <MenuItem as="div" v-slot="{ active }">
+                  <a
+                    href="/"
+                    :class="[
+                      active
+                        ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
+                        : '',
+                      'py-1 px-3 flex cursor-pointer',
+                    ]"
+                    >Community</a
+                  >
+                </MenuItem>
+                <MenuItem as="div" v-slot="{ active }">
+                  <a
+                    href="/"
+                    :class="[
+                      active
+                        ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
+                        : '',
+                      'py-1 px-3 flex cursor-pointer',
+                    ]"
+                    >Special Editions</a
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+        </li> -->
+      </ul>
     </div>
     <!-- Mobile side menu -->
     <MobileSideMenu :isOpen="isMainMenuOpen" @close="closeMainMenuModal" />
@@ -869,10 +820,10 @@
                   transform
                   text-slate-700
                   dark:text-slate-300
-                  energy:text-gray-300
+                  energy:text-zinc-300
                   bg-slate-100
                   dark:bg-slate-700
-                  energy:bg-gray-700
+                  energy:bg-zinc-700
                   shadow-lg
                   rounded-lg
                 "
@@ -901,7 +852,7 @@
                       class="
                         hover:text-black
                         dark:hover:text-white
-                        energy:text-white
+                        energy:hover:text-white
                       "
                       href="/"
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
@@ -913,7 +864,7 @@
                       class="
                         hover:text-black
                         dark:hover:text-white
-                        energy:text-white
+                        energy:hover:text-white
                       "
                     >
                       Publish an Article
@@ -924,7 +875,7 @@
                       class="
                         hover:text-black
                         dark:hover:text-white
-                        energy:text-white
+                        energy:hover:text-white
                       "
                       href="/"
                       >Settings</a
@@ -938,7 +889,7 @@
                     space-y-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
-                    energy:border-gray-700/25
+                    energy:border-zinc-700/25
                   "
                 >
                   <li class="flex items-center justify-between">
@@ -956,7 +907,7 @@
                             capitalize
                             bg-white
                             dark:bg-dark-navy
-                            energy:bg-slate-800
+                            energy:bg-zinc-800
                             rounded-lg
                             shadow-md
                             cursor-default
@@ -1011,7 +962,7 @@
                             text-base
                             bg-white
                             dark:bg-dark-navy
-                            energy:bg-slate-800
+                            energy:bg-zinc-800
                             rounded-md
                             shadow-lg
                             max-h-60
@@ -1031,7 +982,7 @@
                               cursor-pointer
                               hover:bg-slate-200/80
                               dark:hover:bg-slate-600/80
-                              energy:hover:bg-gray-600/80
+                              energy:hover:bg-zinc-600/80
                             "
                           >
                             {{ theme }}
@@ -1238,7 +1189,7 @@ export default {
         query,
       });
     };
-    
+
     const navigateToCountry = (country) => {
       let query = {
         "reporting_types[]": "analysis.all_source",
@@ -1253,10 +1204,6 @@ export default {
         },
         query,
       });
-    };
-
-    const goToPublishPage = () => {
-      router.push({ name: 'publish' }); 
     };
 
     return {
@@ -1280,7 +1227,6 @@ export default {
       navigateToRegion,
       navigateToSubregion,
       navigateToCountry,
-      goToPublishPage,
     };
   },
   methods: {
@@ -1310,11 +1256,11 @@ export default {
     openTestConsoleModal() {
       this.isTestConsoleMenuOpen = true;
     },
-    // NOTE: setTimeout added as a temporary workaround for 
+    // NOTE: setTimeout added as a temporary workaround for
     // multiple dialog scroll behavior bug
     openTestConsoleModalMobile() {
       this.isUserMenuOpen = false;
-      setTimeout(() =>  this.isTestConsoleMenuOpen = true, 500)
+      setTimeout(() => (this.isTestConsoleMenuOpen = true), 500);
     },
     openPDF() {
       window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");

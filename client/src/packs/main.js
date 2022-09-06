@@ -1,17 +1,17 @@
-//TODO: Everytime this file changes, make sure to copy it to /packs/main.js as well in order to guarantee a smooth build with Shakapacker.
+//TODO: Shakapacker version of this file. 
 import { createApp } from 'vue'
 import SimpleTypeahead from 'vue3-simple-typeahead';
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import App from '../App.vue'
+import router from '../router'
+import store from '../store'
 import "vue3-carousel/dist/carousel.css";
-import './index.css'
+import '../index.css'
 import * as CKEditor from '@ckeditor/ckeditor5-vue';
 
 const requireComponent = require.context(
-  './components/base',
+  '../components/base',
   false,
   /Base[A-Z]\w+\.(vue|js)$/
 )

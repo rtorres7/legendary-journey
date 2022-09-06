@@ -10,16 +10,16 @@
         <div
           class="
             flex-col
-            bg-gray-200
-            text-gray-800 text-xs
+            bg-slate-200
+            text-slate-800 text-xs
             font-medium
             mr-2
             px-2.5
             py-1
             rounded-3xl
             shadow-lg
-            dark:bg-gray-600 dark:text-gray-300
-            energy:bg-gray-700/40 energy:text-energy-yellow
+            dark:bg-slate-600 dark:text-slate-300
+            energy:bg-zinc-700/40 energy:text-zinc-100
           "
         >
           #{{ article.tag1 }}
@@ -27,16 +27,16 @@
         <div
           class="
             flex-col
-            bg-gray-200
-            text-gray-800 text-xs
+            bg-slate-200
+            text-slate-800 text-xs
             font-medium
             mr-2
             px-2.5
             py-1
             rounded-3xl
             shadow-lg
-            dark:bg-gray-600 dark:text-gray-300
-            energy:bg-gray-700/40 energy:text-energy-yellow
+            dark:bg-slate-600 dark:text-slate-300
+            energy:bg-zinc-700/40 energy:text-zinc-100
           "
         >
           #{{ article.tag2 }}
@@ -46,8 +46,8 @@
       <h1
         class="
           text-black
-          dark:text-teal-300
-          energy:text-slate-200
+          dark:text-slate-100
+          energy:text-zinc-100
           text-md
           mb-2
           mt-2
@@ -57,17 +57,11 @@
       >
         {{ article.title }}
       </h1>
-
       <p class="text-sm mb-2 lg:mb-4 line-clamp-3">
         {{ article.summary }}
       </p>
       <p
-        class="
-          text-slate-600
-          dark:text-slate-300/80
-          energy:text-slate-300/80
-          text-sm
-        "
+        class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
       >
         {{ article.date }}
       </p>

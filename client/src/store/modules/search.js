@@ -1,4 +1,3 @@
-//import axios from "axios";
 import { getSearchDataFromUrl } from "@/data"
 import router from "@/router"
 

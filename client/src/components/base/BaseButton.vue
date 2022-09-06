@@ -45,12 +45,12 @@ export default {
           break;
         default:
           classes.push(
-            "bg-white dark:bg-slate-800 energy:bg-gray-800 hover:bg-slate-50/80 dark:hover:bg-slate-700/80 energy:hover:bg-gray-700/80",
-            "border border-gray-300 dark:border-slate-600 energy:border-gray-600"
+            "bg-white dark:bg-slate-800 energy:bg-zinc-800 hover:bg-slate-50/80 dark:hover:bg-slate-700/80 energy:hover:bg-zinc-700/80",
+            "border border-gray-300 dark:border-slate-600 energy:border-zinc-600"
           );
           if (props.disabled) {
             classes.push(
-              "text-gray-300 dark:text-slate-500 energy:text-gray-500"
+              "text-gray-300 dark:text-slate-500 energy:text-zinc-500"
             );
           }
       }
