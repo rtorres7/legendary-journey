@@ -32,7 +32,7 @@
       <div class="h-2/3">
         <img
           class="max-h-full w-full object-cover"
-          :src="getImgUrl(article.image.url)"
+          src="@/assets/coming_soon.png"
           alt=""
         />
       </div>
@@ -58,7 +58,7 @@
             energy:text-slate-300/80
           "
         >
-          {{ article.published_date }}
+          {{ dayjs(article.publication_date).format("ddd, MMMM D, YYYY") }}
         </p>
       </div>
     </template>
@@ -66,15 +66,16 @@
 </template>
 
 <script>
+import * as dayjs from "dayjs";
 export default {
   props: {
     article: Object,
     loading: Boolean,
   },
-  methods: {
-    getImgUrl(url) {
-      return require("@/assets/" + url);
-    },
+  setup() {
+    return {
+      dayjs,
+    };
   },
 };
 </script>

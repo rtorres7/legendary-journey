@@ -13,7 +13,7 @@
   }
 
   .energy em {
-    @apply bg-gray-700;
+    @apply bg-zinc-700;
   }
 
   /* .dark .ck.ck-toolbar {
@@ -29,7 +29,7 @@
   }
 
   .energy .ck-content {
-    @apply text-gray-300;
+    @apply text-zinc-300;
   }
 
   .dark .ck.ck-editor__main>.ck-editor__editable {
@@ -37,6 +37,6 @@
   }
 
   .energy .ck.ck-editor__main>.ck-editor__editable {
-    @apply bg-gray-700;
+    @apply bg-zinc-700;
   }
 }

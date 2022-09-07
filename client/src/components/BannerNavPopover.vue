@@ -5,8 +5,8 @@
         flex
         items-center
         font-semibold
-        hover:text-amber-300
-        dark:hover:text-teal-400
+        hover:text-slate-100
+        dark:hover:text-slate-100
         energy:hover:text-energy-yellow
       "
       tabindex="0"
@@ -23,8 +23,8 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <PopoverPanel
-        class="origin-top-right min-w-[46rem] right-0 mt-3 transform z-10"
-        :class="wideShrunk ? 'w-full fixed xl:absolute ' : 'absolute'"
+        class="origin-top-right min-w-[46rem] right-0 transform z-10"
+        :class="wideShrunk ? 'w-full fixed' : 'absolute'"
       >
         <div
           class="
@@ -35,9 +35,9 @@
             focus:outline-none
             bg-mission-blue/95
             dark:bg-dark-space-blue/95
-            energy:bg-gray-800/95
+            energy:bg-zinc-800/95
             dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-            energy:text-gray-300
+            energy:text-zinc-300
           "
         >
           <slot name="content" />
