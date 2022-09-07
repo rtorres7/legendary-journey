@@ -217,7 +217,9 @@
             "
           >
             <span class="sr-only">View notifications</span>
-            <BellIcon class="h-6 w-6" aria-hidden="true" />
+            <BaseTooltip>
+              <BellIcon class="h-6 w-6" aria-hidden="true" />
+            </BaseTooltip>
           </button>
           <Menu as="div" class="hidden lg:block relative">
             <div>
@@ -675,34 +677,38 @@
           </BannerNavPopover>
         </li>
         <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Community
-          </div>
+          <BaseTooltip>
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Community
+            </div>
+          </BaseTooltip>
         </li>
         <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Special Editions
-          </div>
+          <BaseTooltip>
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Special Editions
+            </div>
+          </BaseTooltip>
         </li>
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
