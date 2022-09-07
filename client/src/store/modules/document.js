@@ -1,4 +1,4 @@
-import { inject } from "vue";
+import axios from '@/config/wireAxios'
 
 export default {
   namespaced: true,
@@ -13,12 +13,11 @@ export default {
   },
 
   actions: {
-    getComments({ commit }, { docNum }) {
-      // declare $wireAxios globally?
-      let wireAxios = inject('axios')
-      wireAxios
+    getComments({ state, commit }, { docNum }) {
+      axios
         .get(`/documents/${docNum}/comments.json`)
         .then((response) => {
+          state.loading = false;
           commit("setComments", response.data);
           commit("setSubscribed", response.data.subscribed);
         })
@@ -27,22 +26,21 @@ export default {
         });
     },
     toggleSubscription({ state, commit }, { docNum, caller }) {
-      let wireAxios = inject('axios');
-      wireAxios
+      axios
         .put(`/documents/${docNum}/comment_subscription`)
         .then(() => {
+          state.loading = false;
           commit("setSubscribed", !state.subscribed),
-          caller.$wireNotification({
-            title: "Article Subscription Updated",
-            duration: 5000,
-            text: "Your subscription to this article has been updated.",
-            type: "success",
-          });
+            caller.$wireNotification({
+              title: "Article Subscription Updated",
+              duration: 5000,
+              text: "Your subscription to this article has been updated.",
+              type: "success",
+            });
         });
     },
     getTags({ commit }, { docNum }) {
-      let wireAxios = inject('axios');
-      wireAxios
+      axios
         .get(`/documents/${docNum}/tags.json`)
         .then((response) => {
           commit("setTags", response.data);
@@ -62,12 +60,6 @@ export default {
   mutations: {
     setComments(state, data) {
       state.comments = data.comments;
-    },
-    setLoadingOff(state) {
-      state.loading = false;
-    },
-    setLoadingOn(state) {
-      state.loading = true;
     },
     setSubscribed(state, isSubscribed) {
       state.subscribed = isSubscribed;
