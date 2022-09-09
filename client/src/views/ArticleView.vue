@@ -17,16 +17,10 @@
       "
     >
       <div class="flex md:flex-col gap-y-4 gap-x-4 mb-4">
-        <BaseTooltip placement="right">
-          <PrinterIcon class="h-5 w-5 cursor-pointer" />
-        </BaseTooltip>
-        <BaseTooltip placement="right">
-          <MailIcon class="h-5 w-5 cursor-pointer" />
-        </BaseTooltip>
+        <PrinterIcon class="h-5 w-5 cursor-pointer" />
+        <MailIcon class="h-5 w-5 cursor-pointer" />
         <span class="relative inline-block">
-          <BaseTooltip placement="right">
-            <ChatIcon class="h-5 w-5 cursor-pointer" />
-          </BaseTooltip>
+          <ChatIcon class="h-5 w-5 cursor-pointer" />
           <span
             v-if="comments.length"
             class="
@@ -50,12 +44,8 @@
             {{ comments.length }}
           </span>
         </span>
-        <BaseTooltip placement="right">
-          <FolderOpenIcon class="h-5 w-5 cursor-pointer" />
-        </BaseTooltip>
-        <BaseTooltip placement="right">
-          <TagIcon class="h-5 w-5 cursor-pointer" />
-        </BaseTooltip>
+        <FolderOpenIcon class="h-5 w-5 cursor-pointer" />
+        <TagIcon class="h-5 w-5 cursor-pointer" />
       </div>
       <div class="md:basis-9/12 flex flex-col space-y-4">
         <p class="font-semibold text-sm lg:text-md uppercase">article</p>

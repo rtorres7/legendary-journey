@@ -217,7 +217,7 @@
             "
           >
             <span class="sr-only">View notifications</span>
-            <BaseTooltip>
+            <BaseTooltip placement="left">
               <BellIcon class="h-6 w-6" aria-hidden="true" />
             </BaseTooltip>
           </button>
@@ -397,19 +397,21 @@
                   >
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="/"
-                    class="
-                      flex
-                      cursor-pointer
-                      py-1
-                      px-3
-                      hover:bg-slate-700/80
-                      dark:hover:bg-slate-600/80
-                      energy:hover:bg-zinc-600/80
-                    "
-                    >Settings</a
-                  >
+                  <BaseTooltip placement="left">
+                    <a
+                      href="/"
+                      class="
+                        flex
+                        cursor-pointer
+                        py-1
+                        px-3
+                        hover:bg-slate-700/80
+                        dark:hover:bg-slate-600/80
+                        energy:hover:bg-zinc-600/80
+                      "
+                    >Settings
+                    </a>
+                  </BaseTooltip>
                 </MenuItem>
                 <MenuItem>
                   <a

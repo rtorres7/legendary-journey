@@ -50,8 +50,8 @@
           energy:text-zinc-300
         "
       >
-        <BaseTooltip><li class="cursor-pointer hover:text-white">NCTC Info</li></BaseTooltip>
-        <BaseTooltip><li class="cursor-pointer hover:text-white">Revisions</li></BaseTooltip>
+        <li class="cursor-pointer hover:text-white">NCTC Info</li>
+        <li class="cursor-pointer hover:text-white">Revisions</li>
         <Menu as="li" class="relative">
           <div>
             <MenuButton
