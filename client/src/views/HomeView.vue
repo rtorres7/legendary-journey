@@ -58,15 +58,17 @@
             lg:px-4
           "
         >
-          <template v-if="loadingArticles">
-            <MainSectionHeadlineCard :loading="true" />
+          <template v-if="loadingDanielArticles">
+            <MainSectionPublishedArticleCard :loading="true" />
           </template>
           <template v-else>
-            <MainSectionHeadlineCard :article="articles[0]" />
+            <MainSectionPublishedArticleCard
+              :article="danielArticles[0].attributes"
+            />
           </template>
         </div>
       </div>
-      <!-- Main Section Featured Articles -->
+      <!-- Main Section Published Articles -->
       <div
         class="
           pt-4
@@ -89,24 +91,21 @@
             xl:space-y-4 xl:space-x-0
           "
         >
-          <template v-if="loadingArticles">
+          <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <router-link
-                class="md:w-1/2 xl:w-full"
-                :to="{ name: 'notFound' }"
-              >
-                <FeaturedArticleCard :loading="true" />
-              </router-link>
+              <div class="md:w-1/2 xl:w-full">
+                <PublishedArticleCard :loading="true" />
+              </div>
             </template>
           </template>
           <template v-else>
-            <template v-for="article in articles.slice(1, 3)" :key="article">
-              <router-link
-                class="md:w-1/2 xl:w-full"
-                :to="{ name: 'article', params: { doc_num: article.doc_num } }"
-              >
-                <FeaturedArticleCard :article="article" />
-              </router-link>
+            <template
+              v-for="article in danielArticles.slice(1, 3)"
+              :key="article"
+            >
+              <div class="md:w-1/2 xl:w-full">
+                <PublishedArticleCard :article="article.attributes" />
+              </div>
             </template>
           </template>
         </div>
@@ -123,16 +122,16 @@
       energy:border-zinc-700/50
     "
   >
-    <div class="font-semibold mb-4">Live Articles</div>
+    <div class="font-semibold mb-4">More Published Articles</div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 6" :key="n">
-          <DanielArticleCard :loading="true" />
+          <PublishedArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
-        <template v-for="article in danielArticles.slice(0, 6)" :key="article">
-          <DanielArticleCard :article="article.attributes" />
+        <template v-for="article in danielArticles.slice(3, 6)" :key="article">
+          <PublishedArticleCard :article="article.attributes" />
         </template>
       </template>
     </div>
@@ -147,7 +146,7 @@
       energy:border-zinc-700/50
     "
   >
-    <div class="font-semibold mb-4">More Articles</div>
+    <div class="font-semibold mb-4">Offline Articles</div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingArticles">
         <template v-for="n in 6" :key="n">
@@ -157,7 +156,7 @@
         </template>
       </template>
       <template v-else>
-        <template v-for="article in articles.slice(3, 9)" :key="article">
+        <template v-for="article in articles.slice(0, 6)" :key="article">
           <router-link
             :to="{ name: 'article', params: { doc_num: article.doc_num } }"
           >
@@ -184,9 +183,9 @@ import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import FeaturedArticleCard from "@/components/FeaturedArticleCard";
-import DanielArticleCard from "@/components/DanielArticleCard";
+import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
-import MainSectionHeadlineCard from "@/components/MainSectionHeadlineCard";
+import MainSectionPublishedArticleCard from "@/components/MainSectionPublishedArticleCard";
 import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
@@ -242,9 +241,9 @@ const personalArticles = [
 export default {
   components: {
     FeaturedArticleCard,
-    DanielArticleCard,
+    PublishedArticleCard,
     MainSectionSituationalAwareness,
-    MainSectionHeadlineCard,
+    MainSectionPublishedArticleCard,
     PersonalSection,
     CalendarIcon,
   },

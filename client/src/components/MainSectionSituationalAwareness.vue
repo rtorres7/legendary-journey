@@ -1,11 +1,22 @@
 <template>
   <div class="flex flex-col h-full">
-    <div class="hidden lg:block font-semibold mb-4">Situational Awareness</div>
+    <div class="hidden lg:block font-semibold mb-4">
+      Situational Awareness<span
+        class="pl-2 text-sm font-light italic"
+        title="This feature is not available yet."
+        >(offline)</span
+      >
+    </div>
     <div class="flex lg:hidden justify-between mb-4">
-      <div class="font-semibold">Situational Awareness</div>
+      <div class="font-semibold">
+        Situational Awareness<span
+          class="pl-2 text-sm font-light italic"
+          title="This feature is not available yet."
+          >(offline)</span
+        >
+      </div>
       <div
         class="
-          cursor-pointer
           text-sm
           hover:text-black
           dark:hover:text-white
@@ -46,7 +57,6 @@
       <p
         class="
           text-sm text-right
-          cursor-pointer
           hover:text-black
           dark:hover:text-white
           energy:hover:text-white
