@@ -3,7 +3,6 @@
     <p class="pr-3">{{ today }}</p>
     <CalendarIcon
       class="
-        cursor-pointer
         hover:text-black
         dark:hover:text-white
         energy:hover:text-white
@@ -112,7 +111,7 @@
       </div>
     </div>
   </div>
-  <!-- Connected Articles Section -->
+  <!-- More Published Articles Section -->
   <div
     class="
       pt-4
@@ -146,7 +145,13 @@
       energy:border-zinc-700/50
     "
   >
-    <div class="font-semibold mb-4">Offline Articles</div>
+    <div class="font-semibold mb-4">
+      Other Articles<span
+        class="pl-2 text-sm font-light italic"
+        title="This feature is not available yet."
+        >(offline)</span
+      >
+    </div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingArticles">
         <template v-for="n in 6" :key="n">

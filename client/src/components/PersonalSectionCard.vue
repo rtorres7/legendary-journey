@@ -6,7 +6,6 @@
   >
     <div class="p-6 flex flex-col justify-between h-full">
       <div class="flex flex-wrap gap-y-2 mb-2 lg:mb-4">
-        <!-- <template v-for="index in 2" :key="index"> -->
         <div
           class="
             flex-col
@@ -41,7 +40,6 @@
         >
           #{{ article.tag2 }}
         </div>
-        <!-- </template> -->
       </div>
       <h1
         class="

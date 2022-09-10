@@ -1,16 +1,25 @@
 <template>
   <div class="mb-4">
     <div class="hidden lg:block font-semibold mb-4">
-      {{ title }}
+      {{ title
+      }}<span
+        class="pl-2 text-sm font-light italic"
+        title="This feature is not available yet."
+        >(offline)</span
+      >
     </div>
     <div class="flex lg:hidden justify-between mb-4">
       <div class="basis-3/4 font-semibold">
-        {{ title }}
+        {{ title
+        }}<span
+          class="pl-2 text-sm font-light italic"
+          title="This feature is not available yet."
+          >(offline)</span
+        >
       </div>
       <div
         class="
           basis-1/4
-          cursor-pointer
           text-sm text-right
           hover:text-black
           dark:hover:text-white
@@ -30,7 +39,6 @@
         hidden
         lg:block
         mt-2
-        cursor-pointer
         text-sm text-right
         hover:text-black
         dark:hover:text-white
