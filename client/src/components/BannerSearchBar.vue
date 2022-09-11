@@ -52,7 +52,8 @@
       @onInput="onInputEventHandler"
       @onFocus="onFocusEventHandler"
       @onBlur="onBlurEventHandler"
-      @keyup.enter="onEnter"
+      @keydown.enter.prevent="onEnter"
+      :selectOnTab="false"
     >
       <template #list-item-text="slot">
         <!-- <span
@@ -103,7 +104,7 @@ export default {
     const modalActive = ref(false);
 
     const selectItemEventHandler = (item) => {
-      //console.log("selected: ", item);
+      console.log("selected item: ", item);
       router.push({
         name: "search",
         query: {
@@ -117,15 +118,17 @@ export default {
     //   console.log("focus event: ", event);
     // };
 
-    // const onInputEventHandler = (event) => {
-    //   console.log("input event: ", event);
-    // };
+    const onInputEventHandler = (event) => {
+      console.log("input event: ", event);
+      //searchMatches.push("haha");
+    };
 
     // const onBlurEventHandler = (event) => {
     //   console.log("blur event: ", event);
     // };
 
     const onEnter = (e) => {
+      console.log("event: ", e);
       router.push({
         name: "search",
         query: {
@@ -133,6 +136,11 @@ export default {
           view: "list",
         },
       });
+      // e.srcElement.innerHtml = "monka";
+      // e.target.value = "primeape";
+      // e.target.innerHtml = "monkey";
+      // console.log("e.target.value: ", e.target.value);
+      console.log("after enter reroute");
     };
 
     const onClickSearch = () => {
@@ -148,7 +156,7 @@ export default {
       selectItemEventHandler,
       onEnter,
       onClickSearch,
-      // onInputEventHandler,
+      onInputEventHandler,
       // onFocusEventHandler,
       //onBlurEventHandler,
     };
@@ -156,16 +164,16 @@ export default {
 };
 </script>
 <style>
-.simple-typeahead[data-v-0ccb6f26] {
+.simple-typeahead {
   position: relative;
   width: 100%;
 }
-.simple-typeahead > input[data-v-0ccb6f26] {
+.simple-typeahead > input {
   margin-bottom: 0;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-.simple-typeahead .simple-typeahead-list[data-v-0ccb6f26] {
+.simple-typeahead .simple-typeahead-list {
   position: absolute;
   width: 100%;
   border: none;

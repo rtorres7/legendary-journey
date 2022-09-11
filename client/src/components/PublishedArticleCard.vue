@@ -30,20 +30,11 @@
     </template>
     <template v-else>
       <div class="h-2/3">
-        <template v-if="hasArticleImage(article)">
-          <img
-            class="max-h-full w-full object-cover"
-            :src="getImgUrl(article)"
-            alt=""
-          />
-        </template>
-        <template v-else>
-          <img
-            class="max-h-full w-full object-cover"
-            src="@/assets/coming_soon.png"
-            alt=""
-          />
-        </template>
+        <img
+          class="max-h-full w-full object-cover max-w-[450px] m-auto"
+          :src="getImgUrl(article)"
+          alt=""
+        />
       </div>
       <div class="flex flex-col justify-between pt-4 xl:pt-2 px-4 h-1/3">
         <h1
@@ -86,25 +77,28 @@ export default {
       return article.images?.length > 0;
     };
     const getImgUrl = (article) => {
-      let updatedAt;
-      if (Array.isArray(article.images)) {
-        updatedAt = article.images.filter(
-          (image) => image.usage == "article"
-        )[0].updated_at;
-      } else if (article.images && article.images.table.article) {
-        updatedAt = article.images.table.article.table.updated_at;
+      if (hasArticleImage(article)) {
+        let updatedAt;
+        if (Array.isArray(article.images)) {
+          updatedAt = article.images.filter(
+            (image) => image.usage == "article"
+          )[0].updated_at;
+        } else if (article.images && article.images.table.article) {
+          updatedAt = article.images.table.article.table.updated_at;
+        } else {
+          updatedAt = "";
+        }
+        return (
+          "/documents/" +
+          article.doc_num +
+          "/images/article?updated_at=" +
+          updatedAt
+        );
       } else {
-        updatedAt = "";
+        return require("@/assets/image-not-available-wire-size.png");
       }
-      return (
-        "/documents/" +
-        article.doc_num +
-        "/images/article?updated_at=" +
-        updatedAt
-      );
     };
     return {
-      hasArticleImage,
       getImgUrl,
       dayjs,
     };

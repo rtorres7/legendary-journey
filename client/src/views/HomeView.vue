@@ -61,9 +61,16 @@
             <MainSectionPublishedArticleCard :loading="true" />
           </template>
           <template v-else>
-            <MainSectionPublishedArticleCard
-              :article="danielArticles[0].attributes"
-            />
+            <router-link
+              :to="{
+                name: 'article',
+                params: { doc_num: danielArticles[0].attributes.doc_num },
+              }"
+            >
+              <MainSectionPublishedArticleCard
+                :article="danielArticles[0].attributes"
+              />
+            </router-link>
           </template>
         </div>
       </div>
@@ -102,9 +109,15 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="md:w-1/2 xl:w-full">
+              <router-link
+                class="md:w-1/2 xl:w-full"
+                :to="{
+                  name: 'article',
+                  params: { doc_num: article.attributes.doc_num },
+                }"
+              >
                 <PublishedArticleCard :article="article.attributes" />
-              </div>
+              </router-link>
             </template>
           </template>
         </div>
@@ -130,7 +143,14 @@
       </template>
       <template v-else>
         <template v-for="article in danielArticles.slice(3, 6)" :key="article">
-          <PublishedArticleCard :article="article.attributes" />
+          <router-link
+            :to="{
+              name: 'article',
+              params: { doc_num: article.attributes.doc_num },
+            }"
+          >
+            <PublishedArticleCard :article="article.attributes" />
+          </router-link>
         </template>
       </template>
     </div>
@@ -155,15 +175,16 @@
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingArticles">
         <template v-for="n in 6" :key="n">
-          <router-link :to="{ name: 'notFound' }">
-            <FeaturedArticleCard :loading="true" />
-          </router-link>
+          <FeaturedArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
         <template v-for="article in articles.slice(0, 6)" :key="article">
           <router-link
-            :to="{ name: 'article', params: { doc_num: article.doc_num } }"
+            :to="{
+              name: 'offline-article',
+              params: { doc_num: article.doc_num },
+            }"
           >
             <FeaturedArticleCard :article="article" />
           </router-link>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
+import OfflineArticleView from '../views/OfflineArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
 import SearchView from '../views/SearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
@@ -21,6 +22,12 @@ const routes = [
     path: '/article/:doc_num',
     name: 'article',
     component: ArticleView,
+    props: true
+  },
+  {
+    path: '/offline-article/:doc_num',
+    name: 'offline-article',
+    component: OfflineArticleView,
     props: true
   },
   {
@@ -79,7 +86,7 @@ const routes = [
     },
   },
   {
-    path: '/article/new',
+    path: '/offline-article/new',
     name: 'new',
     component: EditDocumentView,
     meta: {
@@ -88,7 +95,7 @@ const routes = [
     }
   },
   {
-    path: '/article/edit/:id',
+    path: '/offline-article/edit/:id',
     name: 'edit',
     component: EditDocumentView,
     meta: {
@@ -122,11 +129,11 @@ router.beforeEach((to, from, next) => {
   } else {
     if (to.meta.title) {
       if (
-          to.name === 'issues' || 
-          to.name === 'regions' || 
-          to.name === 'subregions' || 
-          to.name === 'countries' && 
-          to.params.name
+        to.name === 'issues' ||
+        to.name === 'regions' ||
+        to.name === 'subregions' ||
+        to.name === 'countries' &&
+        to.params.name
       ) {
         document.title = to.params.name
       } else {

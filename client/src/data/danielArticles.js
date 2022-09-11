@@ -59,10 +59,11 @@ export const danielArticles = [
       "restriction": {},
       "cache_key": "0",
       "images": [
-        {
+        /*{
           "usage": "article",
           "updated_at": "2022-09-01T00:00:00Z"
         }
+        */
       ],
       "countries": [],
       "date_published": "2022-09-01",

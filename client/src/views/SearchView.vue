@@ -590,7 +590,7 @@
                             <router-link
                               class="hover:underline"
                               :to="{
-                                name: 'article',
+                                name: 'offline-article',
                                 params: { doc_num: result.doc_num },
                               }"
                               >VIEW ARTICLE
