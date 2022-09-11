@@ -45,7 +45,7 @@
       "
       id="typeahead_id"
       placeholder="Search (e.g. Zelensky, United Nations)"
-      :items="searchMatches"
+      :items="metadata.search_suggestions"
       :minInputLength="1"
       :itemProjection="itemProjectionFunction"
       @selectItem="selectItemEventHandler"
@@ -54,6 +54,7 @@
       @onBlur="onBlurEventHandler"
       @keydown.enter.prevent="onEnter"
       :selectOnTab="false"
+      :value="modelValue"
     >
       <template #list-item-text="slot">
         <!-- <span
@@ -92,6 +93,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { SearchIcon } from "@heroicons/vue/outline";
+import { metadata } from "@/config";
 
 let searchMatches = ["United Nations", "Zelensky"];
 
@@ -101,7 +103,9 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const modalActive = ref(false);
+    const modelValue = ref("");
+    //This value is part of a hack to override some of the default behavior from vue3-simple-typeahead
+    const recentlyPressedEnter = ref(false);
 
     const selectItemEventHandler = (item) => {
       console.log("selected item: ", item);
@@ -112,6 +116,10 @@ export default {
           view: "list",
         },
       });
+      if (recentlyPressedEnter.value) {
+        modelValue.value = item;
+      }
+      recentlyPressedEnter.value = false;
     };
 
     // const onFocusEventHandler = (event) => {
@@ -119,8 +127,7 @@ export default {
     // };
 
     const onInputEventHandler = (event) => {
-      console.log("input event: ", event);
-      //searchMatches.push("haha");
+      modelValue.value = event.input;
     };
 
     // const onBlurEventHandler = (event) => {
@@ -128,7 +135,7 @@ export default {
     // };
 
     const onEnter = (e) => {
-      console.log("event: ", e);
+      recentlyPressedEnter.value = true;
       router.push({
         name: "search",
         query: {
@@ -136,23 +143,22 @@ export default {
           view: "list",
         },
       });
-      // e.srcElement.innerHtml = "monka";
-      // e.target.value = "primeape";
-      // e.target.innerHtml = "monkey";
-      // console.log("e.target.value: ", e.target.value);
-      console.log("after enter reroute");
     };
 
     const onClickSearch = () => {
       router.push({
         name: "search",
+        query: {
+          text: modelValue.value,
+          view: "list",
+        },
       });
     };
 
     return {
-      //test,
+      metadata,
+      modelValue,
       searchMatches,
-      modalActive,
       selectItemEventHandler,
       onEnter,
       onClickSearch,

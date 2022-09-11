@@ -1,6 +1,10 @@
 {
   "system_classification": "UNCLASSIFIED",
   "footer_note": "Built in partnership with WIRe",
+  "search_suggestions": [
+    "Zelensky",
+    "United Nations"
+  ],
   "issues": {
     "type": "issues[]",
     "items": [
