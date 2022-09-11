@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { SearchIcon } from "@heroicons/vue/outline";
 import { metadata } from "@/config";
 
@@ -103,12 +103,20 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const modelValue = ref("");
-    //This value is part of a hack to override some of the default behavior from vue3-simple-typeahead
-    const recentlyPressedEnter = ref(false);
+
+    watch(
+      () => route.query,
+      () => {
+        if (route.name === "search") {
+          modelValue.value = route.query.text;
+        }
+      }
+    );
 
     const selectItemEventHandler = (item) => {
-      console.log("selected item: ", item);
+      //console.log("selectItemEventHandler: ", item);
       router.push({
         name: "search",
         query: {
@@ -116,10 +124,7 @@ export default {
           view: "list",
         },
       });
-      if (recentlyPressedEnter.value) {
-        modelValue.value = item;
-      }
-      recentlyPressedEnter.value = false;
+      modelValue.value = item;
     };
 
     // const onFocusEventHandler = (event) => {
@@ -127,6 +132,7 @@ export default {
     // };
 
     const onInputEventHandler = (event) => {
+      //console.log("onInputEventHandler: ", event);
       modelValue.value = event.input;
     };
 
@@ -135,7 +141,8 @@ export default {
     // };
 
     const onEnter = (e) => {
-      recentlyPressedEnter.value = true;
+      //console.log("onEnter: ", e);
+      modelValue.value = e.target.value;
       router.push({
         name: "search",
         query: {

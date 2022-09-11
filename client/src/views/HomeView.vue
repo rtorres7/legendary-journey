@@ -166,7 +166,7 @@
     "
   >
     <div class="font-semibold mb-4">
-      Other Articles<span
+      Demo Articles<span
         class="pl-2 text-sm font-light italic"
         title="This feature is not available yet."
         >(offline)</span
@@ -182,7 +182,7 @@
         <template v-for="article in articles.slice(0, 6)" :key="article">
           <router-link
             :to="{
-              name: 'offline-article',
+              name: 'demo-article',
               params: { doc_num: article.doc_num },
             }"
           >

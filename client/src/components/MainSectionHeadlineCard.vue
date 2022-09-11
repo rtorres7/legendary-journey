@@ -4,7 +4,7 @@
       :to="
         loading
           ? { name: 'notFound' }
-          : { name: 'offline-article', params: { doc_num: article.doc_num } }
+          : { name: 'demo-article', params: { doc_num: article.doc_num } }
       "
     >
       <BaseCard

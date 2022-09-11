@@ -12,6 +12,144 @@
       {{ pageHeader }}
     </p>
   </div>
+  <!-- Search Form -->
+  <BaseCard class="mt-4 p-4">
+    <Disclosure v-slot="{ open }" defaultOpen>
+      <div class="flex flex-col justify-between">
+        <div
+          class="
+            grid-cols-1
+            md:grid md:grid-cols-2 md:gap-4
+            space-y-3
+            md:space-y-0
+            lg:flex lg:space-x-6 lg:gap-0
+            flex-col
+            lg:flex-row
+            w-full
+          "
+        >
+          <div class="lg:w-2/5">
+            <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
+              >Keyword Search or Filter
+            </label>
+            <input
+              class="
+                mt-1
+                block
+                w-full
+                focus-visible:outline-none
+                bg-transparent
+                border-b border-gray-300
+                energy:text-gray-300
+              "
+            />
+          </div>
+          <template
+            v-for="n in [
+              queryFilters.regions,
+              queryFilters.issues,
+              queryFilters.reporting,
+            ]"
+            :key="n"
+          >
+            <div class="lg:w-1/5">
+              <BaseListbox
+                v-model="n.model"
+                :label="n.label"
+                :items="n.list"
+                multiple
+              />
+            </div>
+          </template>
+        </div>
+        <DisclosureButton
+          class="
+            py-3
+            lg:py-1
+            max-w-fit
+            hover:text-black
+            dark:hover:text-white
+            energy:hover:text-whit
+          "
+        >
+          <span
+            class="
+              text-sm text-mission-light-blue
+              dark:text-teal-400
+              energy:text-energy-yellow
+              mr-2
+              inline-block
+            "
+            >{{ open ? "Less" : "More" }}</span
+          >
+          <ChevronUpIcon
+            :class="open ? '' : 'rotate-180 transform'"
+            class="
+              text-mission-light-blue
+              dark:text-teal-400
+              energy:text-energy-yellow
+              h-5
+              w-5
+              inline-block
+            "
+          />
+        </DisclosureButton>
+      </div>
+      <DisclosurePanel class="my-2">
+        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
+          <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
+            <template
+              v-for="n in [
+                queryFilters.classifications,
+                queryFilters.media_types,
+              ]"
+              :key="n"
+            >
+              <div class="w-1/2">
+                <BaseListbox
+                  v-model="n.model"
+                  :label="n.label"
+                  :items="n.list"
+                  multiple
+                />
+              </div>
+            </template>
+          </div>
+          <div
+            class="
+              grid grid-cols-2
+              md:grid-cols-3
+              gap-4
+              lg:gap-0
+              lg:grid-cols-0
+              lg:flex
+              lg:w-3/5
+              lg:space-x-6
+              lg:max-w-none
+            "
+          >
+            <template
+              v-for="n in [
+                queryFilters.nonstate_actors,
+                queryFilters.producing_offices,
+                queryFilters.frontpage_featured,
+              ]"
+              :key="n"
+            >
+              <div class="lg:w-1/3">
+                <BaseListbox
+                  v-model="n.model"
+                  :label="n.label"
+                  :items="n.list"
+                  multiple
+                />
+              </div>
+            </template>
+          </div>
+        </div>
+      </DisclosurePanel>
+    </Disclosure>
+  </BaseCard>
   <!-- Results Container -->
   <template v-if="loading">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -517,6 +655,12 @@
         </BaseCard>
       </div>
       <!-- Search Results Filters -->
+      <BaseCard
+        v-show="selectedView.label === 'List'"
+        class="hidden lg:block basis-1/4 ml-4 h-full"
+      >
+        <SearchResultsFacets :facets="aggregations" />
+      </BaseCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
         <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
           <div class="inline-flex">
@@ -690,7 +834,103 @@
             </Listbox>
           </div>
         </div>
+        <div
+          class="
+            cursor-pointer
+            text-mission-light-blue
+            dark:text-teal-400
+            energy:text-energy-yellow
+            self-center
+          "
+          @click="openMobileFacetsDialog"
+        >
+          Show Filters
+        </div>
       </div>
+      <!-- Mobile Result Facets Dialog -->
+      <TransitionRoot appear :show="isMobileFacetsDialogOpen" as="template">
+        <Dialog as="div" @close="closeMobileFacetsDialog">
+          <div class="fixed inset-0 z-20 overflow-y-auto w-full">
+            <div class="min-h-screen px-4 text-center">
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <div class="fixed inset-0 bg-black/25" />
+              </TransitionChild>
+              <span
+                class="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0 scale-95"
+                enter-to="opacity-100 scale-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100 scale-100"
+                leave-to="opacity-0 scale-95"
+              >
+                <DialogPanel
+                  class="
+                    inline-block
+                    w-full
+                    max-w-xl
+                    md:max-w-[700px]
+                    lg:max-w-[900px]
+                    p-6
+                    my-8
+                    text-left
+                    align-middle
+                    transition-all
+                    transform
+                    text-slate-700
+                    dark:text-slate-300
+                    energy:text-zinc-300
+                    bg-slate-100
+                    dark:bg-slate-700
+                    energy:bg-zinc-700
+                    shadow-lg
+                    rounded-lg
+                  "
+                >
+                  <div class="mt-6">
+                    <button
+                      type="button"
+                      class="
+                        absolute
+                        top-5
+                        right-5
+                        w-8
+                        h-8
+                        flex
+                        items-center
+                        justify-center
+                      "
+                      tabindex="0"
+                      @click="closeMobileFacetsDialog"
+                    >
+                      <span class="sr-only">Close navigation</span
+                      ><XIcon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <SearchResultsFacets
+                      :facets="aggregations"
+                      class="grid grid-cols-2 md:grid-cols-3 gap-4"
+                    />
+                  </div>
+                </DialogPanel>
+              </TransitionChild>
+            </div>
+          </div>
+        </Dialog>
+      </TransitionRoot>
     </div>
   </template>
 </template>
@@ -701,13 +941,22 @@ import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import {
+  Dialog,
+  DialogPanel,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
   Listbox,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
+  TransitionChild,
+  TransitionRoot,
 } from "@headlessui/vue";
-import { SelectorIcon } from "@heroicons/vue/outline";
+import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
+import SearchResultsFacets from "@/components/SearchResultsFacets";
+import { metadata } from "@/config";
 
 const sortOptions = [
   { label: "Newest", key: "desc" },
@@ -721,17 +970,45 @@ const viewOptions = [
 
 export default {
   components: {
+    Dialog,
+    DialogPanel,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
     Listbox,
     ListboxButton,
     ListboxOptions,
     ListboxOption,
+    TransitionChild,
+    TransitionRoot,
+    ChevronUpIcon,
     SelectorIcon,
+    XIcon,
     SearchResultsTablePagination,
+    SearchResultsFacets,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+
+    const getCodeFromCountryName = (name) => {
+      return metadata.countries.items.find((country) => country.name === name);
+    };
+
+    const getSubregionForCode = (code) => {
+      return metadata.subregions.items.find(
+        (subregion) => subregion.key === code
+      );
+    };
+
+    const getSubregionNameForCountryCode = (code) => {
+      return metadata.subregions.items.find((subregion) => {
+        return subregion.country_codes.find(
+          (countryCode) => countryCode === code
+        );
+      }).name;
+    };
 
     const getHeaderName = (route) => {
       if (
@@ -746,7 +1023,16 @@ export default {
       }
     };
 
+    const getSubheaderName = ({ name, params }) => {
+      return name === "countries"
+        ? getSubregionNameForCountryCode(
+            getCodeFromCountryName(params.name).key
+          )
+        : "";
+    };
+
     const pageHeader = ref(getHeaderName(route));
+    const pageSubheader = ref(getSubheaderName(route));
 
     const loading = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
@@ -768,6 +1054,202 @@ export default {
     const getImgUrl = (url) => {
       return require("@/assets/" + url);
     };
+
+    /* 
+      - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
+      - 1) Looks in the route query if any of types are present there
+      - 2) For each type found in the query, it loops through the values for that query property
+      - 3) Each value is then matched up against the list of list box items and pushed into the 'selectedModels' array
+      - 4) The selectedModels represents the list of currently selected items in the list box
+    */
+    const currentModel = (types, list) => {
+      const selectedModels = [];
+      types.forEach((type) => {
+        if (route.query[type]) {
+          if (!Array.isArray(route.query[type])) {
+            route.query[type] = [route.query[type]];
+          }
+          for (let i = 0; i < route.query[type].length; i++) {
+            selectedModels.push(
+              list.find((item) => item.key === route.query[type][i])
+            );
+          }
+        }
+      });
+      return selectedModels;
+    };
+
+    const buildRegionsItems = () => {
+      let items = [];
+      for (let i = 0; i < metadata.regions.items.length; i++) {
+        items.push({ ...metadata.regions.items[i], type: "regions[]" });
+        for (let j = 0; j < metadata.regions.items[i].subregions.length; j++) {
+          items.push({
+            ...getSubregionForCode(metadata.regions.items[i].subregions[j]),
+            type: "subregions[]",
+            subitem: true,
+          });
+        }
+      }
+      for (let i = 0; i < metadata.countries.items.length; i++) {
+        items.push({ ...metadata.countries.items[i], type: "countries[]" });
+      }
+      return items;
+    };
+
+    const buildListItems = (items, type) => {
+      return items.map((item) => ({ ...item, type }));
+    };
+
+    const issueItems = buildListItems(
+      metadata.issues.items,
+      metadata.issues.type
+    );
+    const reportingItems = buildListItems(
+      metadata.reporting_types.items,
+      metadata.reporting_types.type
+    );
+    const classificationItems = buildListItems(
+      metadata.classifications.items,
+      metadata.classifications.type
+    );
+    const mediaItems = buildListItems(
+      metadata.media.items,
+      metadata.media.type
+    );
+    const nonStateItems = buildListItems(
+      metadata.nonstate.items,
+      metadata.nonstate.type
+    );
+    const producingItems = buildListItems(
+      metadata.producing_offices.items,
+      metadata.producing_offices.type
+    );
+    const frontPageItems = buildListItems(
+      metadata.front_page.items,
+      metadata.front_page.type
+    );
+    const regionsItems = buildRegionsItems();
+    const regionsTypes = [
+      metadata.regions.type,
+      metadata.subregions.type,
+      metadata.countries.type,
+    ];
+
+    const buildQueryFilters = () => {
+      return {
+        regions: {
+          label: "Regions & Countries",
+          model: currentModel(regionsTypes, regionsItems),
+          list: regionsItems,
+          types: regionsTypes,
+        },
+        issues: {
+          label: "Issues & Topics",
+          model: currentModel([metadata.issues.type], issueItems),
+          list: issueItems,
+          types: [metadata.issues.type],
+        },
+        reporting: {
+          label: "Reporting & Product Types",
+          model: currentModel([metadata.reporting_types.type], reportingItems),
+          list: reportingItems,
+          types: [metadata.reporting_types.type],
+        },
+        classifications: {
+          label: "Classifications",
+          model: currentModel(
+            [metadata.classifications.type],
+            classificationItems
+          ),
+          list: classificationItems,
+          types: [metadata.classifications.type],
+        },
+        media_types: {
+          label: "Media Types",
+          model: currentModel([metadata.media.type], mediaItems),
+          list: mediaItems,
+          types: [metadata.media.type],
+        },
+        nonstate_actors: {
+          label: "Non State Actors",
+          model: currentModel([metadata.nonstate.type], nonStateItems),
+          list: nonStateItems,
+          types: [metadata.nonstate.type],
+        },
+        producing_offices: {
+          label: "Producing Offices",
+          model: currentModel(
+            [metadata.producing_offices.type],
+            producingItems
+          ),
+          list: producingItems,
+          types: [metadata.producing_offices.type],
+        },
+        frontpage_featured: {
+          label: "Front Page Featured",
+          model: currentModel([metadata.front_page.type], frontPageItems),
+          list: frontPageItems,
+          types: [metadata.front_page.type],
+        },
+      };
+    };
+
+    const queryFilters = ref(buildQueryFilters());
+
+    /*
+      - This method builds a watcher for each query filter in order to track changes at the individual listbox level
+      - 1) First, a query value is initialized that contains a copy of the existing query.
+      - 2) The types present in this query filter are then removed from the newly created query object
+      - 3) If the query filter's model values are empty, this skips to step 6
+      - 4) The unique types present in the query filter's model are identified
+      - 5) Each unique type is matched up against the query filter's model values (selected items) and the query is updated for each type
+      - 6) The updated query is sent to the router via a router.replace and this fires off a query update
+    */
+    const buildWatcher = (object) => {
+      return watch(
+        () => object,
+        (newValue) => {
+          console.log("local watcher triggered.", newValue);
+          let query = {
+            ...route.query,
+          };
+          newValue.types.forEach((type) => {
+            delete query[type];
+          });
+          if (newValue.model.length > 0) {
+            const uniqueTypes = [
+              ...new Set(newValue.model.map((item) => item.type)),
+            ];
+            for (let i = 0; i < uniqueTypes.length; i++) {
+              let valuesForType = [];
+              for (let j = 0; j < newValue.model.length; j++) {
+                if (newValue.model[j].type === uniqueTypes[i]) {
+                  valuesForType.push(newValue.model[j].key);
+                }
+              }
+              query[uniqueTypes[i]] = valuesForType;
+            }
+          }
+          console.log("query: ", query);
+          router.replace({
+            name: "search",
+            query: query,
+          });
+        },
+        { deep: true }
+      );
+    };
+
+    const buildQueryWatchers = (object) => {
+      let watchers = [];
+      Object.keys(object).forEach((filter) => {
+        watchers.push(buildWatcher(object[filter]));
+      });
+      return watchers;
+    };
+
+    buildQueryWatchers(queryFilters.value);
 
     const isMobileFacetsDialogOpen = ref(false);
 
@@ -828,6 +1310,8 @@ export default {
         ) {
           store.dispatch("search/search");
           pageHeader.value = getHeaderName(route);
+          pageSubheader.value = getSubheaderName(route);
+          queryFilters.value = buildQueryFilters();
           currentPage.value = parseInt(route.query.page) || 1;
           selectedView.value =
             route.query.view === "grid"
@@ -837,6 +1321,14 @@ export default {
               : viewOptions[0];
         }
       }
+    );
+
+    watch(
+      () => queryFilters,
+      () => {
+        buildQueryWatchers(queryFilters.value);
+      },
+      { deep: true }
     );
 
     const closeMobileFacetsDialog = () =>
@@ -857,11 +1349,13 @@ export default {
       selectedView,
       viewOptions,
       pageHeader,
+      pageSubheader,
       loading,
       results,
       totalCount,
       aggregations,
       currentPage,
+      queryFilters,
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,

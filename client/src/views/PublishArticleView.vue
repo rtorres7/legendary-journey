@@ -34,7 +34,7 @@
     </div>
     <div class="py-8">
       <div class="flex gap-x-2 items-center">
-        <router-link to="/offline-article/new" class="font-semibold">
+        <router-link to="/demo-article/new" class="font-semibold">
           Create a New Article
         </router-link>
         <ArrowRightIcon class="h-5 w-5" />
