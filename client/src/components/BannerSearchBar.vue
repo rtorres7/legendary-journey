@@ -44,7 +44,7 @@
         energy:text-zinc-300
       "
       id="typeahead_id"
-      placeholder="Search (e.g. Zelensky, United Nations)"
+      :placeholder="`Search (e.g. ${metadata.search_suggestions[0]}, ${metadata.search_suggestions[1]})`"
       :items="metadata.search_suggestions"
       :minInputLength="1"
       :itemProjection="itemProjectionFunction"

@@ -72,10 +72,10 @@
               text-center text-lg
             "
           >
-            {{ article.title }}
+            {{ `(${article.title_classification}) ${article.title}` }}
           </h1>
           <p class="mt-4 text-md line-clamp-3 md:line-clamp-4 lg:line-clamp-6">
-            {{ article.summary }}
+            {{ `(${article.summary_classification}) ${article.summary}` }}
           </p>
         </div>
         <p

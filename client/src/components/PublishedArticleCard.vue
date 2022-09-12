@@ -47,7 +47,7 @@
             line-clamp-2
           "
         >
-          {{ article.title }}
+          {{ `(${article.title_classification}) ${article.title}` }}
         </h1>
         <p
           class="

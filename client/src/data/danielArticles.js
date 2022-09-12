@@ -67,7 +67,7 @@ export const danielArticles = [
       ],
       "countries": [],
       "date_published": "2022-09-01",
-      "doc_num": "WIReWIRe_sample_",
+      "doc_num": "WIReWIRe_sample_2",
       "featured_category": "daily_wire",
       "featured_timestamp": "2022-09-01T00:00:00Z",
       "issue_names": [
@@ -93,13 +93,13 @@ export const danielArticles = [
       "subregions": [
         "AFce"
       ],
-      "summary": "Summary: This is the test.",
+      "summary": "The Russians abandoned next to no artillery or armoured vehicles, and their retreat from the heavily-fortified area did not look like a panicked flight that followed heavy fighting, according to videos from the area and Ukrainian military reports.",
       "summary_classification": "U",
       "summary_sci": 0,
-      "title": "Worldwide: COVID-19 Update as of 16 November",
+      "title": "Questions loom over Ukraine’s counteroffensive in Kharkiv",
       "title_classification": "U",
       "title_sci": 0,
-      "to_param": "WIReWIRe_sample_",
+      "to_param": "WIReWIRe_sample_2",
       "to_param_feature": "20",
       "to_param_wire": "2022-09-01",
       "topics": [
@@ -121,7 +121,7 @@ export const danielArticles = [
       "images": [],
       "countries": [],
       "date_published": "2022-09-01",
-      "doc_num": "WIReWIRe_sample_",
+      "doc_num": "WIReWIRe_sample_3",
       "featured_category": "daily_wire",
       "featured_timestamp": "2022-09-01T00:00:00Z",
       "issue_names": [
@@ -147,13 +147,13 @@ export const danielArticles = [
       "subregions": [
         "AFce"
       ],
-      "summary": "Summary: This is the test.",
+      "summary": "Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.",
       "summary_classification": "U",
       "summary_sci": 0,
-      "title": "Worldwide: COVID-19 Update as of 15 November",
+      "title": "Russia Strikes Power Plants, Vowing to Counter Ukraine’s Advance",
       "title_classification": "U",
       "title_sci": 0,
-      "to_param": "WIReWIRe_sample_",
+      "to_param": "WIReWIRe_sample_3",
       "to_param_feature": "20",
       "to_param_wire": "2022-09-01",
       "topics": [
@@ -175,7 +175,7 @@ export const danielArticles = [
       "images": [],
       "countries": [],
       "date_published": "2022-09-01",
-      "doc_num": "WIReWIRe_sample_",
+      "doc_num": "WIReWIRe_sample_4",
       "featured_category": "daily_wire",
       "featured_timestamp": "2022-09-01T00:00:00Z",
       "issue_names": [
@@ -201,13 +201,13 @@ export const danielArticles = [
       "subregions": [
         "AFce"
       ],
-      "summary": "Summary: This is the test.",
+      "summary": "Summary: There isn't any major update regarding covid numbers in today's report.",
       "summary_classification": "U",
       "summary_sci": 0,
       "title": "Worldwide: COVID-19 Update as of 14 November",
       "title_classification": "U",
       "title_sci": 0,
-      "to_param": "WIReWIRe_sample_",
+      "to_param": "WIReWIRe_sample_4",
       "to_param_feature": "20",
       "to_param_wire": "2022-09-01",
       "topics": [
@@ -229,7 +229,7 @@ export const danielArticles = [
       "images": [],
       "countries": [],
       "date_published": "2022-09-01",
-      "doc_num": "WIReWIRe_sample_",
+      "doc_num": "WIReWIRe_sample_5",
       "featured_category": "daily_wire",
       "featured_timestamp": "2022-09-01T00:00:00Z",
       "issue_names": [
@@ -255,13 +255,13 @@ export const danielArticles = [
       "subregions": [
         "AFce"
       ],
-      "summary": "Summary: This is the test.",
+      "summary": "Events to commemorate Queen Elizabeth II are continuing across the U.K. this week, after King Charles III was proclaimed monarch at a ceremony in London over the weekend. King Charles III visited Parliament on Monday, where he made his first address there as monarch and lawmakers expressed their condolences for the death of his mother, before flying with the queen consort to Edinburgh. That the King has chosen to begin his reign with visits to Edinburgh, Belfast and Cardiff is telling. It suggests that the future of the Union is at the heart of his concerns. The early decades of his late mother's reign were characterised by the long, slow contraction of British Imperial power around the world. He will be alert to the possibility that his own reign could come to be defined by the continuation of that process here - and the eventual dissolution of the United Kingdom itself.",
       "summary_classification": "U",
       "summary_sci": 0,
-      "title": "Worldwide: COVID-19 Update as of 13 November",
+      "title": "King Charles III Leads Commemorations for Queen Elizabeth II",
       "title_classification": "U",
       "title_sci": 0,
-      "to_param": "WIReWIRe_sample_",
+      "to_param": "WIReWIRe_sample_5",
       "to_param_feature": "20",
       "to_param_wire": "2022-09-01",
       "topics": [

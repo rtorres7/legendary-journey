@@ -10,7 +10,7 @@
     <p class="font-semibold text-2xl">Search</p>
   </div>
   <!-- Results Container -->
-  <template v-if="loadingSearch">
+  <template v-if="loading">
     <div class="max-w-fit m-auto mt-[20vh]">
       <svg
         class="
@@ -43,7 +43,7 @@
       </svg>
     </div>
   </template>
-  <template v-if="!loadingSearch && totalCount === 0">
+  <template v-if="!loading && totalCount === 0">
     <div class="mt-6">
       <p class="text-xl text-center font-semibold">
         Sorry, we didn't find any results.
@@ -54,7 +54,7 @@
       </p>
     </div>
   </template>
-  <template v-if="!loadingSearch && totalCount > 0">
+  <template v-if="!loading && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
       <div class="h-fit basis-4/5">
@@ -170,7 +170,7 @@
             />
           </div>
           <!-- Results -->
-          <template v-for="result in searchResults" :key="result">
+          <template v-for="result in results" :key="result">
             <div
               class="
                 flex
@@ -192,40 +192,47 @@
                 }}</span>
               </div>
               <div class="px-2 w-full">
-                <div class="flex justify-between">
-                  <div
-                    class="
-                      basis-[768px]
-                      cursor-pointer
-                      hover:underline
-                      line-clamp-2
-                    "
+                <div class="flex justify-between mb-2">
+                  <router-link
+                    :to="{
+                      name: 'article',
+                      params: { doc_num: result.item.doc_num },
+                    }"
                   >
-                    <span
+                    <div
                       class="
-                        text-slate-600
-                        dark:text-slate-300
-                        energy:text-zinc-300
+                        basis-[768px]
+                        cursor-pointer
+                        hover:underline
+                        line-clamp-2
                       "
-                      >{{
-                        `${"(" + result.item.title_classification + ") "}`
-                      }}</span
                     >
-                    <span
-                      class="text-black dark:text-white energy:text-white"
-                      >{{ result.item.title }}</span
-                    >
-                  </div>
+                      <span
+                        class="
+                          text-slate-600
+                          dark:text-slate-300
+                          energy:text-zinc-300
+                        "
+                        >{{
+                          `${"(" + result.item.title_classification + ") "}`
+                        }}</span
+                      >
+                      <span
+                        class="text-black dark:text-white energy:text-white"
+                        >{{ result.item.title }}</span
+                      >
+                    </div>
+                  </router-link>
                   <div class="text-xs lg:text-sm">
                     {{ result.item.doc_num }}
                   </div>
                 </div>
                 <div
                   class="
-                    py-2
                     text-sm text-slate-600
                     dark:text-slate-300
                     energy:text-zinc-300
+                    line-clamp-3
                   "
                 >
                   {{ result.item.summary }}
@@ -348,7 +355,6 @@
 
 <script>
 import * as dayjs from "dayjs";
-import Fuse from "fuse.js";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -380,65 +386,24 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    const extractAttributes = (articles) => {
-      console.log("wasap");
-      return articles.map((article) => {
-        if (article.attributes) {
-          return article.attributes;
-        }
-        return article;
-      });
-    };
-
-    const loadingSearch = ref(true);
-
-    const performSearch = (articles) => {
-      console.log("performsearch: ", articles);
-      const fuseSearch = new Fuse(articles.value, {
-        keys: ["title"],
-      });
-      loadingSearch.value = false;
-      return fuseSearch.search(route.query.text);
-    };
-
-    const danielArticles = computed(() =>
-      extractAttributes(store.state.daniel.articles)
-    );
-
-    const searchResults = ref(performSearch(danielArticles));
-
-    const loadingDanielArticles = computed(() => store.state.daniel.loading);
-    const totalCount = ref(null);
+    const loading = computed(() => store.state.danielSearch.loading);
+    const results = computed(() => store.state.danielSearch.results);
+    const totalCount = computed(() => store.state.danielSearch.totalCount);
 
     const selectedOrder = ref(
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
     );
+
     const currentPage = ref(parseInt(route.query.page) || 1);
 
     onMounted(() => {
-      console.log("this is definetly happening");
-      store.dispatch("daniel/getDanielArticles");
-      //searchResults.value = [{ item: { title: "lol" } }];
-    });
-
-    watch([danielArticles], () => {
-      loadingSearch.value = true;
-      console.log("does this happen");
-      const fuseSearch = new Fuse(danielArticles.value, {
-        keys: ["title"],
-      });
-      let results = fuseSearch.search(route.query.text);
-      console.log("search results: ", results[0].item);
-      searchResults.value = results;
-      totalCount.value = searchResults.value.length;
-      loadingSearch.value = false;
+      store.dispatch("danielSearch/search");
     });
 
     watch([selectedOrder], () => {
       router.push({
         query: {
           ...route.query,
-          page: currentPage.value,
           sort_dir: selectedOrder.value.key,
         },
       });
@@ -449,19 +414,17 @@ export default {
       () => {
         console.log("route.query watcher triggered.");
         if (route.name === "search") {
-          store.dispatch("daniel/getDanielArticles");
+          store.dispatch("danielSearch/search");
           currentPage.value = parseInt(route.query.page) || 1;
         }
       }
     );
 
     return {
-      danielArticles,
-      loadingDanielArticles,
-      loadingSearch,
       dayjs,
+      loading,
+      results,
       selectedOrder,
-      searchResults,
       sortOptions,
       totalCount,
       currentPage,
