@@ -14,13 +14,15 @@ const extractAttributes = (articles) => {
 
 const search = (articles) => {
   const fuseSearch = new Fuse(articles, {
+    includeScore: true,
+    useExtendedSearch: true,
     keys: ["title", {
       name: 'summary',
       weight: 2
     }],
   });
   let route = router.currentRoute.value
-  let results = fuseSearch.search(route.query.text);
+  let results = fuseSearch.search(`'${route.query.text}`);
   return route.query.sort_dir === 'asc' ? results.reverse() : results;
 };
 
