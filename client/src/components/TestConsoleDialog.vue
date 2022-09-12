@@ -257,7 +257,7 @@
                     </SwitchGroup>
                   </div>
                 </div>
-                <div
+                <!-- <div
                   class="
                     py-4
                     border-t border-slate-900/10
@@ -314,7 +314,7 @@
                       </div>
                     </SwitchGroup>
                   </div>
-                </div>
+                </div> -->
               </div>
             </DialogPanel>
           </TransitionChild>
