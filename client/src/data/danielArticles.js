@@ -81,7 +81,7 @@ export const danielArticles = [
       "posted?": false,
       "posted_at": "2022-09-01T18:42:30Z",
       "product_type": "WIRe Article",
-      "publication_date": "2022-09-01",
+      "publication_date": "2022-08-31",
       "region_names": [
         "Africa"
       ],
@@ -135,7 +135,7 @@ export const danielArticles = [
       "posted?": false,
       "posted_at": "2022-09-01T18:42:30Z",
       "product_type": "WIRe Article",
-      "publication_date": "2022-09-01",
+      "publication_date": "2022-08-30",
       "region_names": [
         "Africa"
       ],
@@ -189,7 +189,7 @@ export const danielArticles = [
       "posted?": false,
       "posted_at": "2022-09-01T18:42:30Z",
       "product_type": "WIRe Article",
-      "publication_date": "2022-09-01",
+      "publication_date": "2022-08-29",
       "region_names": [
         "Africa"
       ],
@@ -243,7 +243,7 @@ export const danielArticles = [
       "posted?": false,
       "posted_at": "2022-09-01T18:42:30Z",
       "product_type": "WIRe Article",
-      "publication_date": "2022-09-01",
+      "publication_date": "2022-08-28",
       "region_names": [
         "Africa"
       ],

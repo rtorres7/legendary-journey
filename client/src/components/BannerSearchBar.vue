@@ -121,7 +121,6 @@ export default {
         name: "search",
         query: {
           text: item,
-          view: "list",
         },
       });
       modelValue.value = item;
@@ -147,7 +146,6 @@ export default {
         name: "search",
         query: {
           text: e.target.value,
-          view: "list",
         },
       });
     };
@@ -157,7 +155,6 @@ export default {
         name: "search",
         query: {
           text: modelValue.value,
-          view: "list",
         },
       });
     };
