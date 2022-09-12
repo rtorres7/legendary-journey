@@ -217,7 +217,7 @@
             "
           >
             <span class="sr-only">View notifications</span>
-            <BaseTooltip placement="left">
+            <BaseTooltip placement="bottom">
               <BellIcon class="h-6 w-6" aria-hidden="true" />
             </BaseTooltip>
           </button>
@@ -409,7 +409,7 @@
                         dark:hover:bg-slate-600/80
                         energy:hover:bg-zinc-600/80
                       "
-                    >Settings
+                      >Settings
                     </a>
                   </BaseTooltip>
                 </MenuItem>
@@ -679,7 +679,7 @@
           </BannerNavPopover>
         </li>
         <li>
-          <BaseTooltip>
+          <BaseTooltip :placement="'bottom'">
             <div
               class="
                 font-semibold
@@ -696,7 +696,7 @@
           </BaseTooltip>
         </li>
         <li>
-          <BaseTooltip>
+          <BaseTooltip placement="bottom">
             <div
               class="
                 font-semibold
