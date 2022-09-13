@@ -1,5 +1,6 @@
 import { danielArticles } from "@/data";
 import axios from '@/config/wireAxios'
+//import router from "@/router"
 
 
 export default {

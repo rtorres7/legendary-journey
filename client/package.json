@@ -19,12 +19,13 @@
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.1",
+    "fuse.js": "^6.6.2",
     "inter-ui": "^3.19.3",
     "lodash": "^4.17.21",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue3-carousel": "^0.1.38",
-    "vue3-simple-typeahead": "^1.0.9",
+    "vue3-simple-typeahead": "^1.0.11",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
