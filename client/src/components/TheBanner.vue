@@ -22,11 +22,7 @@
       "
     >
       <p class="text-sm text-amber-300 dark:text-teal-400">
-        Use of this system message content placeholder message. Sit an qualisque
-        appellantur. Eu clita omnesque elaboraret usu, semper dictas vim ea. Nam
-        ea ipsum sonet. Volumus fabellas expetendis no quo, ei pro commodo
-        pertinax. Diam doming inimicus ex est, ex his audiam fastidii
-        persequeris. No has nihil electram.
+        {{ metadata.system_message }}
       </p>
       <a
         aria-label="Remove system message"

@@ -44,15 +44,17 @@
         energy:text-zinc-300
       "
       id="typeahead_id"
-      placeholder="Search (e.g. Zelensky, United Nations)"
-      :items="searchMatches"
+      :placeholder="`Search (e.g. ${metadata.search_suggestions[0]}, ${metadata.search_suggestions[1]})`"
+      :items="metadata.search_suggestions"
       :minInputLength="1"
       :itemProjection="itemProjectionFunction"
       @selectItem="selectItemEventHandler"
       @onInput="onInputEventHandler"
       @onFocus="onFocusEventHandler"
       @onBlur="onBlurEventHandler"
-      @keyup.enter="onEnter"
+      @keydown.enter.prevent="onEnter"
+      :selectOnTab="false"
+      :value="modelValue"
     >
       <template #list-item-text="slot">
         <!-- <span
@@ -88,9 +90,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { SearchIcon } from "@heroicons/vue/outline";
+import { metadata } from "@/config";
 
 let searchMatches = ["United Nations", "Zelensky"];
 
@@ -100,37 +103,49 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const modalActive = ref(false);
+    const route = useRoute();
+    const modelValue = ref("");
+
+    watch(
+      () => route.query,
+      () => {
+        if (route.name === "search") {
+          modelValue.value = route.query.text;
+        }
+      }
+    );
 
     const selectItemEventHandler = (item) => {
-      //console.log("selected: ", item);
+      //console.log("selectItemEventHandler: ", item);
       router.push({
         name: "search",
         query: {
           text: item,
-          view: "list",
         },
       });
+      modelValue.value = item;
     };
 
     // const onFocusEventHandler = (event) => {
     //   console.log("focus event: ", event);
     // };
 
-    // const onInputEventHandler = (event) => {
-    //   console.log("input event: ", event);
-    // };
+    const onInputEventHandler = (event) => {
+      //console.log("onInputEventHandler: ", event);
+      modelValue.value = event.input;
+    };
 
     // const onBlurEventHandler = (event) => {
     //   console.log("blur event: ", event);
     // };
 
     const onEnter = (e) => {
+      //console.log("onEnter: ", e);
+      modelValue.value = e.target.value;
       router.push({
         name: "search",
         query: {
           text: e.target.value,
-          view: "list",
         },
       });
     };
@@ -138,17 +153,20 @@ export default {
     const onClickSearch = () => {
       router.push({
         name: "search",
+        query: {
+          text: modelValue.value,
+        },
       });
     };
 
     return {
-      //test,
+      metadata,
+      modelValue,
       searchMatches,
-      modalActive,
       selectItemEventHandler,
       onEnter,
       onClickSearch,
-      // onInputEventHandler,
+      onInputEventHandler,
       // onFocusEventHandler,
       //onBlurEventHandler,
     };
@@ -156,16 +174,16 @@ export default {
 };
 </script>
 <style>
-.simple-typeahead[data-v-0ccb6f26] {
+.simple-typeahead {
   position: relative;
   width: 100%;
 }
-.simple-typeahead > input[data-v-0ccb6f26] {
+.simple-typeahead > input {
   margin-bottom: 0;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-.simple-typeahead .simple-typeahead-list[data-v-0ccb6f26] {
+.simple-typeahead .simple-typeahead-list {
   position: absolute;
   width: 100%;
   border: none;
