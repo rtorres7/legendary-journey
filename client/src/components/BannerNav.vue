@@ -217,7 +217,9 @@
             "
           >
             <span class="sr-only">View notifications</span>
-            <BellIcon class="h-6 w-6" aria-hidden="true" />
+            <BaseTooltip placement="bottom" icon>
+              <BellIcon class="h-6 w-6" aria-hidden="true" />
+            </BaseTooltip>
           </button>
           <Menu as="div" class="hidden lg:block relative">
             <div>
@@ -395,19 +397,21 @@
                   >
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="/"
-                    class="
-                      flex
-                      cursor-pointer
-                      py-1
-                      px-3
-                      hover:bg-slate-700/80
-                      dark:hover:bg-slate-600/80
-                      energy:hover:bg-zinc-600/80
-                    "
-                    >Settings</a
-                  >
+                  <BaseTooltip placement="left">
+                    <a
+                      href="/"
+                      class="
+                        flex
+                        cursor-pointer
+                        py-1
+                        px-3
+                        hover:bg-slate-700/80
+                        dark:hover:bg-slate-600/80
+                        energy:hover:bg-zinc-600/80
+                      "
+                      >Settings
+                    </a>
+                  </BaseTooltip>
                 </MenuItem>
                 <MenuItem>
                   <a
@@ -675,34 +679,38 @@
           </BannerNavPopover>
         </li>
         <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Community
-          </div>
+          <BaseTooltip :placement="'bottom'">
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Community
+            </div>
+          </BaseTooltip>
         </li>
         <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Special Editions
-          </div>
+          <BaseTooltip placement="bottom">
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Special Editions
+            </div>
+          </BaseTooltip>
         </li>
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
