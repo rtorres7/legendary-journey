@@ -1,8 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
+import DemoArticleView from '../views/DemoArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
 import SearchView from '../views/SearchView.vue'
+import DemoSearchView from '../views/DemoSearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import store from "@/store"
@@ -24,6 +26,12 @@ const routes = [
     props: true
   },
   {
+    path: '/demo-article/:doc_num',
+    name: 'demo-article',
+    component: DemoArticleView,
+    props: true
+  },
+  {
     path: '/attachment/:url?',
     name: 'attachment',
     component: AttachmentView,
@@ -32,7 +40,7 @@ const routes = [
   {
     path: '/issues/:name',
     name: 'issues',
-    component: SearchView,
+    component: DemoSearchView,
     meta: {
       title: 'Issues'
     }
@@ -40,7 +48,7 @@ const routes = [
   {
     path: '/regions/:name',
     name: 'regions',
-    component: SearchView,
+    component: DemoSearchView,
     meta: {
       title: 'Regions'
     }
@@ -48,7 +56,7 @@ const routes = [
   {
     path: '/subregions/:name',
     name: 'subregions',
-    component: SearchView,
+    component: DemoSearchView,
     meta: {
       title: 'Subregions'
     }
@@ -56,7 +64,7 @@ const routes = [
   {
     path: '/countries/:name',
     name: 'countries',
-    component: SearchView,
+    component: DemoSearchView,
     meta: {
       title: 'Countries'
     }
@@ -79,7 +87,7 @@ const routes = [
     },
   },
   {
-    path: '/article/new',
+    path: '/demo-article/new',
     name: 'new',
     component: EditDocumentView,
     meta: {
@@ -88,7 +96,7 @@ const routes = [
     }
   },
   {
-    path: '/article/edit/:id',
+    path: '/demo-article/edit/:id',
     name: 'edit',
     component: EditDocumentView,
     meta: {
@@ -122,11 +130,11 @@ router.beforeEach((to, from, next) => {
   } else {
     if (to.meta.title) {
       if (
-          to.name === 'issues' || 
-          to.name === 'regions' || 
-          to.name === 'subregions' || 
-          to.name === 'countries' && 
-          to.params.name
+        to.name === 'issues' ||
+        to.name === 'regions' ||
+        to.name === 'subregions' ||
+        to.name === 'countries' &&
+        to.params.name
       ) {
         document.title = to.params.name
       } else {

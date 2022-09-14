@@ -139,6 +139,7 @@
                                   v-for="subRegion in region.subRegions"
                                   :key="subRegion"
                                 >
+                                  <!-- TODO: These mobile links aren't working for regions/subregions/countries -->
                                   <li v-if="subRegion.name != ''">
                                     <router-link
                                       to=""

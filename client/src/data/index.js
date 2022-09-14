@@ -5,4 +5,4 @@ export const user = {
 export { articles } from './articles'
 export { danielArticles } from './danielArticles'
 export { countries, regions } from './regions'
-export { getSearchDataFromUrl, getItems } from './search'
+export { getSearchDataFromUrl } from './search'
