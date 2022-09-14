@@ -217,7 +217,7 @@
             "
           >
             <span class="sr-only">View notifications</span>
-            <BaseTooltip placement="bottom">
+            <BaseTooltip placement="bottom" icon>
               <BellIcon class="h-6 w-6" aria-hidden="true" />
             </BaseTooltip>
           </button>
