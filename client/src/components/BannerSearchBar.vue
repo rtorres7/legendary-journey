@@ -162,6 +162,7 @@ export default {
 
     // const onFocusEventHandler = (event) => {
     //   console.log("focus event: ", event);
+    //   store.dispatch("savedSearches/getAllSearches");
     // };
 
     const onInputEventHandler = (event) => {

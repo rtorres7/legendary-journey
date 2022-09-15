@@ -4,7 +4,19 @@
   "footer_note": "Built in partnership with WIRe",
   "search_suggestions": [
     {
+      "text": "Australia",
+      "type": "system"
+    },
+    {
       "text": "Covid",
+      "type": "system"
+    },
+    {
+      "text": "Covid Crisis",
+      "type": "system"
+    },
+    {
+      "text": "Colombian Election",
       "type": "system"
     },
     {
