@@ -113,11 +113,11 @@ export default {
     article: Object,
     loading: Boolean,
   },
-  setup() {
+  setup(props) {
     const hasArticleImage = (article) => {
       return article.images?.length > 0;
     };
-    const getImgUrl = (article) => {
+    const getImgUrl = (article, stringOnly) => {
       if (hasArticleImage(article)) {
         let updatedAt;
         if (Array.isArray(article.images)) {
@@ -136,13 +136,16 @@ export default {
           updatedAt
         );
       } else {
+        if (stringOnly) {
+          return "@/assets/image-not-available-wire-size.png";
+        }
         return require("@/assets/image-not-available-wire-size.png");
       }
     };
     const computedBgClass = computed(() => {
       const classes = [];
-      //const imgUrl = getImgUrl(props.article);
-      //console.log("imgUrl: ", props.article);
+      const imgUrl = getImgUrl(props.article, true);
+      classes.push("bg-[url('" + imgUrl + "')]");
       return classes;
     });
     return {
