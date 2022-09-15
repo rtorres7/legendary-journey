@@ -712,6 +712,23 @@
             </div>
           </BaseTooltip>
         </li>
+        <li>
+          <BaseTooltip placement="bottom">
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Foreign
+            </div>
+          </BaseTooltip>
+        </li>
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
             <MenuButton
@@ -1064,12 +1081,6 @@ import {
 
 import { regions, countries } from "@/data";
 
-const mainNavigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Searches", href: "/", current: false },
-  { name: "Community", href: "/", current: false },
-  { name: "Special Editions", href: "/", current: false },
-];
 const themeOptions = ["light", "dark", "energy", "system"];
 
 export default {
@@ -1219,7 +1230,6 @@ export default {
       regions,
       countries,
       selectedCountry,
-      mainNavigation,
       themeOptions,
       isMainMenuOpen,
       isUserMenuOpen,

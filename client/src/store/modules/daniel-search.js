@@ -12,6 +12,18 @@ const extractAttributes = (articles) => {
   });
 };
 
+const sortByDate = (a, b) => {
+  const dateA = new Date(a.item.publication_date)
+  const dateB = new Date(b.item.publication_date)
+  if (dateA > dateB) {
+    return -1;
+  }
+  if (dateA < dateB) {
+    return 1;
+  }
+  return 0;
+}
+
 const search = (articles) => {
   const fuseSearch = new Fuse(articles, {
     includeScore: true,
@@ -23,7 +35,14 @@ const search = (articles) => {
   });
   let route = router.currentRoute.value
   let results = fuseSearch.search(`'${route.query.text}`);
-  return route.query.sort_dir === 'asc' ? results.reverse() : results;
+  switch (route.query.sort_dir) {
+    case 'asc':
+      return results.sort(sortByDate).reverse()
+    case 'desc':
+      return results.sort(sortByDate)
+    default:
+      return results
+  }
 };
 
 export default {
