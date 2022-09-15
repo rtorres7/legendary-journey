@@ -87,7 +87,7 @@
             v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
           ></span>
           <template v-if="slot.item.type === 'user'">
-            <button @click="test(slot)">
+            <button @click="deleteSearch(slot.item)">
               <XIcon
                 class="
                   h-5
@@ -197,10 +197,9 @@ export default {
       });
     };
 
-    const test = (slot) => {
-      console.log("slot: ", slot);
+    const deleteSearch = (item) => {
       removeSearch.value = true;
-      console.log("haha");
+      store.dispatch("savedSearches/deleteSearch", item);
     };
 
     return {
@@ -213,7 +212,7 @@ export default {
       onEnter,
       onClickSearch,
       onInputEventHandler,
-      test,
+      deleteSearch,
       // onFocusEventHandler,
       //onBlurEventHandler,
     };

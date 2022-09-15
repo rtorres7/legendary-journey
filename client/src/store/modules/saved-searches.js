@@ -27,7 +27,6 @@ export default {
   actions: {
     getAllSearches: ({ commit, state }) => {
       let searches = state.cachedSearches.concat(state.systemSearches)
-      console.log('searches: ', searches)
       commit("saveSearches", searches)
     },
     addSearch: ({ commit, state }, search) => {
@@ -44,8 +43,16 @@ export default {
         //searches.sort(sortByText)
         commit("saveSearches", cachedSearches.concat(state.systemSearches))
       }
-
     },
+    deleteSearch: ({ commit, state }, search) => {
+      console.log('search to be deleted: ', search)
+      let cachedSearches = state.cachedSearches
+      cachedSearches = cachedSearches.filter(cachedSearch => cachedSearch.text !== search.text)
+      console.log('filtered out cached searches: ', cachedSearches)
+      commit("saveCachedSearches", cachedSearches)
+      localStorage.setItem("cachedSearches", JSON.stringify(cachedSearches))
+      commit("saveSearches", cachedSearches.concat(state.systemSearches))
+    }
   },
 
   getters: {
