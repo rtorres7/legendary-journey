@@ -45,7 +45,7 @@ export default {
         axios.get("/home/daniel").then(response => {
           console.log('/home/daniel (response):', response);
           let articles = extractAttributes([response?.data?.woah?.featured, response?.data?.woah?.secondary].flat())
-          commit("saveArticles", search(articles))
+          commit("importData", search(articles))
         })
       }
     },
