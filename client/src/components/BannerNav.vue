@@ -505,9 +505,9 @@
               Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
             </template>
             <template #content>
-              <div class="hidden lg:block lg:max-w-[900px] lg:m-auto">
+              <div class="hidden lg:block lg:m-auto">
                 <div
-                  class="grid grid-cols-4 gap-4 pb-4"
+                  class="grid lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 pb-4"
                   aria-label="select a region or subregion"
                 >
                   <div v-for="region in metadata.regions.items" :key="region">
@@ -574,7 +574,7 @@
               />
             </template>
             <template #content>
-              <div class="flex items-center mb-4">
+              <div class="flex justify-center mb-4 m-auto">
                 <label for="country" aria-hidden="true"
                   >Select a country from the map or the dropdown</label
                 >
