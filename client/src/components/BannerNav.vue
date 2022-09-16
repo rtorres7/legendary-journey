@@ -217,7 +217,9 @@
             "
           >
             <span class="sr-only">View notifications</span>
-            <BellIcon class="h-6 w-6" aria-hidden="true" />
+            <BaseTooltip placement="bottom" icon>
+              <BellIcon class="h-6 w-6" aria-hidden="true" />
+            </BaseTooltip>
           </button>
           <Menu as="div" class="hidden lg:block relative">
             <div>
@@ -395,19 +397,21 @@
                   >
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="/"
-                    class="
-                      flex
-                      cursor-pointer
-                      py-1
-                      px-3
-                      hover:bg-slate-700/80
-                      dark:hover:bg-slate-600/80
-                      energy:hover:bg-zinc-600/80
-                    "
-                    >Settings</a
-                  >
+                  <BaseTooltip placement="left">
+                    <a
+                      href="/"
+                      class="
+                        flex
+                        cursor-pointer
+                        py-1
+                        px-3
+                        hover:bg-slate-700/80
+                        dark:hover:bg-slate-600/80
+                        energy:hover:bg-zinc-600/80
+                      "
+                      >Settings
+                    </a>
+                  </BaseTooltip>
                 </MenuItem>
                 <MenuItem>
                   <a
@@ -501,9 +505,9 @@
               Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
             </template>
             <template #content>
-              <div class="hidden lg:block lg:max-w-[900px] lg:m-auto">
+              <div class="hidden lg:block lg:m-auto">
                 <div
-                  class="grid grid-cols-4 gap-4 pb-4"
+                  class="grid lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 pb-4"
                   aria-label="select a region or subregion"
                 >
                   <div v-for="region in metadata.regions.items" :key="region">
@@ -570,7 +574,7 @@
               />
             </template>
             <template #content>
-              <div class="flex items-center mb-4">
+              <div class="flex justify-center mb-4 m-auto">
                 <label for="country" aria-hidden="true"
                   >Select a country from the map or the dropdown</label
                 >
@@ -675,34 +679,55 @@
           </BannerNavPopover>
         </li>
         <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Community
-          </div>
+          <BaseTooltip :placement="'bottom'">
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Community
+            </div>
+          </BaseTooltip>
         </li>
         <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Special Editions
-          </div>
+          <BaseTooltip placement="bottom">
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Special Editions
+            </div>
+          </BaseTooltip>
+        </li>
+        <li>
+          <BaseTooltip placement="bottom">
+            <div
+              class="
+                font-semibold
+                flex
+                items-center
+                hover:text-slate-100
+                dark:hover:text-slate-100
+                energy:hover:text-energy-yellow
+              "
+              tabindex="0"
+            >
+              Foreign
+            </div>
+          </BaseTooltip>
         </li>
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
@@ -1056,12 +1081,6 @@ import {
 
 import { regions, countries } from "@/data";
 
-const mainNavigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Searches", href: "/", current: false },
-  { name: "Community", href: "/", current: false },
-  { name: "Special Editions", href: "/", current: false },
-];
 const themeOptions = ["light", "dark", "energy", "system"];
 
 export default {
@@ -1211,7 +1230,6 @@ export default {
       regions,
       countries,
       selectedCountry,
-      mainNavigation,
       themeOptions,
       isMainMenuOpen,
       isUserMenuOpen,
