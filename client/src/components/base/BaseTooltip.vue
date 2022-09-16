@@ -22,6 +22,7 @@
         text-center text-sm text-slate-900
         dark:text-slate-200
         energy:text-zinc-200
+        z-10
       "
       :class="
         icon && placement === 'bottom'
