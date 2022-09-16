@@ -44,10 +44,14 @@
         energy:text-zinc-300
       "
       id="typeahead_id"
-      :placeholder="`Search (e.g. ${metadata.search_suggestions[0]}, ${metadata.search_suggestions[1]})`"
-      :items="metadata.search_suggestions"
+      :placeholder="`Search (e.g. ${metadata.search_suggestions[0].text}, ${metadata.search_suggestions[1].text})`"
+      :items="searches"
       :minInputLength="1"
-      :itemProjection="itemProjectionFunction"
+      :itemProjection="
+        (item) => {
+          return item.text;
+        }
+      "
       @selectItem="selectItemEventHandler"
       @onInput="onInputEventHandler"
       @onFocus="onFocusEventHandler"
@@ -57,16 +61,8 @@
       :value="modelValue"
     >
       <template #list-item-text="slot">
-        <!-- <span
-            class="text-black"
-            v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
-          ></span> -->
         <div
           class="
-            cursor-pointer
-            text-slate-800
-            dark:text-slate-300
-            energy:text-zinc-300
             bg-slate-100
             dark:bg-slate-800
             energy:bg-zinc-600
@@ -78,11 +74,32 @@
             energy:active:bg-zinc-400
             px-2
             py-1
+            flex
+            justify-between
+          "
+          :class="
+            slot.item.type === 'user'
+              ? 'text-purple-800 dark:text-purple-300 energy:text-purple-300'
+              : 'text-slate-800 dark:text-slate-300 energy:text-zinc-300'
           "
         >
           <span
             v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
           ></span>
+          <template v-if="slot.item.type === 'user'">
+            <button @click="deleteSearch(slot.item)">
+              <XIcon
+                class="
+                  h-5
+                  w-5
+                  text-slate-800
+                  dark:text-slate-300
+                  energy:text-zinc-300
+                "
+                aria-hidden="true"
+              />
+            </button>
+          </template>
         </div>
       </template>
     </vue3-simple-typeahead>
@@ -90,9 +107,10 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { SearchIcon } from "@heroicons/vue/outline";
+import { SearchIcon, XIcon } from "@heroicons/vue/outline";
 import { metadata } from "@/config";
 
 let searchMatches = ["United Nations", "Zelensky"];
@@ -100,11 +118,22 @@ let searchMatches = ["United Nations", "Zelensky"];
 export default {
   components: {
     SearchIcon,
+    XIcon,
   },
   setup() {
+    const store = useStore();
     const router = useRouter();
     const route = useRoute();
     const modelValue = ref("");
+    const removeSearch = ref(false);
+
+    const searches = computed(() => store.state.savedSearches.searches);
+    const loading = computed(() => store.state.savedSearches.loading);
+
+    onMounted(() => {
+      store.dispatch("savedSearches/getAllSearches");
+      console.log("searches: ", searches);
+    });
 
     watch(
       () => route.query,
@@ -116,18 +145,24 @@ export default {
     );
 
     const selectItemEventHandler = (item) => {
-      //console.log("selectItemEventHandler: ", item);
-      router.push({
-        name: "search",
-        query: {
-          text: item,
-        },
-      });
-      modelValue.value = item;
+      console.log("selectItemEventHandler: ", item);
+      if (removeSearch.value) {
+        console.log("no routing");
+        removeSearch.value = false;
+      } else {
+        router.push({
+          name: "search",
+          query: {
+            text: item.text,
+          },
+        });
+        modelValue.value = item.text;
+      }
     };
 
     // const onFocusEventHandler = (event) => {
     //   console.log("focus event: ", event);
+    //   store.dispatch("savedSearches/getAllSearches");
     // };
 
     const onInputEventHandler = (event) => {
@@ -141,6 +176,10 @@ export default {
 
     const onEnter = (e) => {
       //console.log("onEnter: ", e);
+      store.dispatch("savedSearches/addSearch", {
+        text: e.target.value,
+        type: "user",
+      });
       modelValue.value = e.target.value;
       router.push({
         name: "search",
@@ -159,14 +198,22 @@ export default {
       });
     };
 
+    const deleteSearch = (item) => {
+      removeSearch.value = true;
+      store.dispatch("savedSearches/deleteSearch", item);
+    };
+
     return {
       metadata,
+      searches,
+      loading,
       modelValue,
       searchMatches,
       selectItemEventHandler,
       onEnter,
       onClickSearch,
       onInputEventHandler,
+      deleteSearch,
       // onFocusEventHandler,
       //onBlurEventHandler,
     };

@@ -63,7 +63,7 @@
           <div class="flex gap-x-8">
             <div class="inline-flex">
               <label class="self-center font-medium text-sm">Sort By</label>
-              <Listbox v-model="selectedOrder" class="ml-3 min-w-[115px]">
+              <Listbox v-model="selectedOrder" class="ml-3 min-w-[120px]">
                 <div class="relative">
                   <ListboxButton
                     class="
@@ -368,6 +368,7 @@ import { SelectorIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 
 const sortOptions = [
+  { label: "Relevance", key: "rel" },
   { label: "Newest", key: "desc" },
   { label: "Oldest", key: "asc" },
 ];

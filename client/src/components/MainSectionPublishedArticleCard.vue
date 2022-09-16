@@ -54,9 +54,21 @@
       </div>
     </template>
     <template v-else>
-      <div class="h-1/2">
+      <div class="h-1/2 relative">
+        <div
+          v-show="hasArticleImage"
+          :class="[
+            'h-full w-full absolute',
+            computedBgClass,
+            'blur bg-center bg-no-repeat bg-cover',
+          ]"
+        ></div>
         <img
-          class="max-h-full w-full object-cover max-w-[600px] m-auto"
+          :class="
+            hasArticleImage
+              ? 'absolute h-full max-w-[350px] inset-x-0 mx-auto z-10'
+              : ' max-h-full object-cover w-full max-w-[600px] m-auto'
+          "
           :src="getImgUrl(article)"
           alt=""
         />
@@ -94,17 +106,18 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import * as dayjs from "dayjs";
 export default {
   props: {
     article: Object,
     loading: Boolean,
   },
-  setup() {
+  setup(props) {
     const hasArticleImage = (article) => {
       return article.images?.length > 0;
     };
-    const getImgUrl = (article) => {
+    const getImgUrl = (article, stringOnly) => {
       if (hasArticleImage(article)) {
         let updatedAt;
         if (Array.isArray(article.images)) {
@@ -123,10 +136,20 @@ export default {
           updatedAt
         );
       } else {
+        if (stringOnly) {
+          return "@/assets/image-not-available-wire-size.png";
+        }
         return require("@/assets/image-not-available-wire-size.png");
       }
     };
+    const computedBgClass = computed(() => {
+      const classes = [];
+      const imgUrl = getImgUrl(props.article, true);
+      classes.push("bg-[url('" + imgUrl + "')]");
+      return classes;
+    });
     return {
+      computedBgClass,
       getImgUrl,
       dayjs,
     };

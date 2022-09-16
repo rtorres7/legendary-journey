@@ -51,6 +51,7 @@
           class="
             py-4
             lg:py-0
+            max-w-[650px]
             h-[425px]
             lg:h-full lg:basis-2/3
             xl:basis-2/3

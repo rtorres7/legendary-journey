@@ -300,6 +300,18 @@
                     >Special Editions</a
                   >
                 </li>
+                <li>
+                  <a
+                    class="
+                      font-medium
+                      hover:text-black
+                      dark:hover:text-white
+                      energy:text-white
+                    "
+                    href="/"
+                    >Foreign</a
+                  >
+                </li>
               </ul>
             </DialogPanel>
           </TransitionChild>
