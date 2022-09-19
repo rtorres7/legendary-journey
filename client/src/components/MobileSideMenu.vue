@@ -276,7 +276,7 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
-                <BaseTooltip placement="bottom">
+                <BaseTooltip placement="top">
                   <li>
                     <a
                       class="
@@ -291,7 +291,7 @@
                   </li>
                 </BaseTooltip>
                 <li>
-                  <BaseTooltip placement="bottom">
+                  <BaseTooltip placement="top">
                     <a
                       class="
                         font-medium
@@ -305,7 +305,7 @@
                   </BaseTooltip>
                 </li>
                 <li>
-                  <BaseTooltip placement="bottom">
+                  <BaseTooltip placement="top">
                     <a
                       class="
                         font-medium
