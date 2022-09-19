@@ -3,7 +3,7 @@
     class="
       flex flex-wrap
       justify-between
-      p-4
+      py-4
       mb-8
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
@@ -22,13 +22,13 @@
       "
     >
       <div>
-        <template v-if="currentArticle() === 1">
+        <template v-if="currentArticleIndex === 1">
           <BaseButton disabled>Previous</BaseButton>
         </template>
         <template v-else>
           <BaseButton
-            @click="previousArticle"
-            @keyup.enter="previousArticle"
+            @click="goToPreviousArticle"
+            @keyup.enter="goToPreviousArticle"
             tabIndex="0"
           >
             Previous
@@ -36,19 +36,20 @@
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Article {{ currentArticle() }} of {{ danielArticles.length }}
+        Featured Article {{ currentArticleIndex }} of
+        {{ totalArticles.length }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
-        {{ currentArticle() }} of {{ danielArticles.length }}
+        {{ currentArticleIndex }} of {{ totalArticles.length }}
       </div>
       <div>
-        <template v-if="currentArticle() === danielArticles.length">
+        <template v-if="currentArticleIndex === totalArticles.length">
           <BaseButton disabled> Next </BaseButton>
         </template>
         <template v-else>
           <BaseButton
-            @click="nextArticle"
-            @keyup.enter="nextArticle"
+            @click="goToNextArticle"
+            @keyup.enter="goToNextArticle"
             tabIndex="0"
           >
             Next
@@ -60,45 +61,51 @@
 </template>
 
 <script>
-import { onMounted, computed } from "vue";
-import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
-  props: ["selectedArticle"],
-  setup() {
-    const store = useStore();
-    const danielArticles = computed(() => store.state.daniel.articles);
+  props: [
+    "currentArticleIndex",
+    "previousArticle",
+    "nextArticle",
+    "totalArticles",
+  ],
+  setup(props) {
+    const router = useRouter();
 
-    onMounted(() => {
-      store.dispatch("daniel/getDanielArticles");
-    });
-    return {
-      danielArticles,
+    console.log("totalArticles: ", props.totalArticles);
+
+    const returnHome = () => {
+      router.push({ name: "home" });
     };
-  },
-  methods: {
-    currentArticle() {
-      return this.danielArticles.indexOf(this.selectedArticle) + 1;
-    },
-    previousArticle() {
-      const currentIndex = this.danielArticles.indexOf(this.selectedArticle);
-      if (currentIndex > 0) {
-        this.$router.push(
-          `/article/${this.danielArticles[currentIndex - 1].doc_num}`
-        );
-      }
-    },
-    nextArticle() {
-      const currentIndex = this.danielArticles.indexOf(this.selectedArticle);
-      if (currentIndex < this.danielArticles.length - 1) {
-        this.$router.push(
-          `/article/${this.danielArticles[currentIndex + 1].doc_num}`
-        );
-      }
-    },
-    returnHome() {
-      this.$router.push({ name: "home" });
-    },
+
+    const goToPreviousArticle = () => {
+      let doc_num = props.previousArticle.attributes.doc_num;
+      console.log("doc_num: ", doc_num);
+      router.push({
+        name: "article",
+        params: {
+          doc_num,
+        },
+      });
+    };
+
+    const goToNextArticle = () => {
+      let doc_num = props.nextArticle.attributes.doc_num;
+      console.log("doc_num: ", doc_num);
+      router.push({
+        name: "article",
+        params: {
+          doc_num,
+        },
+      });
+    };
+
+    return {
+      returnHome,
+      goToPreviousArticle,
+      goToNextArticle,
+    };
   },
 };
 </script>
