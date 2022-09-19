@@ -507,7 +507,13 @@
             <template #content>
               <div class="hidden lg:block lg:m-auto">
                 <div
-                  class="grid lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 pb-4"
+                  class="
+                    grid
+                    lg:grid-cols-5
+                    xl:grid-cols-7
+                    gap-x-4 gap-y-2
+                    pb-4
+                  "
                   aria-label="select a region or subregion"
                 >
                   <div v-for="region in metadata.regions.items" :key="region">
@@ -545,7 +551,7 @@
                 </div>
                 <p
                   class="
-                    pt-4
+                    pt-2
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-zinc-700/25
