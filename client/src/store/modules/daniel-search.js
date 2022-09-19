@@ -27,6 +27,7 @@ const sortByDate = (a, b) => {
 const search = (articles) => {
   const fuseSearch = new Fuse(articles, {
     includeScore: true,
+    includeMatches: true,
     useExtendedSearch: true,
     keys: ["title", {
       name: 'summary',
