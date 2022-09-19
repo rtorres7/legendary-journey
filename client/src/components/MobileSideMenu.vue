@@ -276,41 +276,47 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
+                <BaseTooltip placement="top">
+                  <li>
+                    <a
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Community</a
+                    >
+                  </li>
+                </BaseTooltip>
                 <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Community</a
-                  >
+                  <BaseTooltip placement="top">
+                    <a
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Special Editions</a
+                    >
+                  </BaseTooltip>
                 </li>
                 <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Special Editions</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Foreign</a
-                  >
+                  <BaseTooltip placement="top">
+                    <a
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Foreign</a
+                    >
+                  </BaseTooltip>
                 </li>
               </ul>
             </DialogPanel>

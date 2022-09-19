@@ -896,15 +896,17 @@
                     </router-link>
                   </li>
                   <li>
-                    <a
-                      class="
-                        hover:text-black
-                        dark:hover:text-white
-                        energy:hover:text-white
-                      "
-                      href="/"
-                      >Settings</a
-                    >
+                    <BaseTooltip placement="left">
+                      <a
+                        class="
+                          hover:text-black
+                          dark:hover:text-white
+                          energy:hover:text-white
+                        "
+                        href="/"
+                        >Settings</a
+                      >
+                    </BaseTooltip>
                   </li>
                 </ul>
                 <ul
