@@ -36,13 +36,13 @@
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Article {{ currentArticle() }} of {{ articles.length }}
+        Featured Article {{ currentArticle() }} of {{ danielArticles.length }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
-        {{ currentArticle() }} of {{ articles.length }}
+        {{ currentArticle() }} of {{ danielArticles.length }}
       </div>
       <div>
-        <template v-if="currentArticle() === articles.length">
+        <template v-if="currentArticle() === danielArticles.length">
           <BaseButton disabled> Next </BaseButton>
         </template>
         <template v-else>
@@ -67,32 +67,32 @@ export default {
   props: ["selectedArticle"],
   setup() {
     const store = useStore();
-    const articles = computed(() => store.state.articles.featured);
+    const danielArticles = computed(() => store.state.daniel.articles);
 
     onMounted(() => {
-      store.dispatch("articles/getHomeArticles");
+      store.dispatch("daniel/getDanielArticles");
     });
     return {
-      articles,
+      danielArticles,
     };
   },
   methods: {
     currentArticle() {
-      return this.articles.indexOf(this.selectedArticle) + 1;
+      return this.danielArticles.indexOf(this.selectedArticle) + 1;
     },
     previousArticle() {
-      const currentIndex = this.articles.indexOf(this.selectedArticle);
+      const currentIndex = this.danielArticles.indexOf(this.selectedArticle);
       if (currentIndex > 0) {
         this.$router.push(
-          `/article/${this.articles[currentIndex - 1].doc_num}`
+          `/article/${this.danielArticles[currentIndex - 1].doc_num}`
         );
       }
     },
     nextArticle() {
-      const currentIndex = this.articles.indexOf(this.selectedArticle);
-      if (currentIndex < this.articles.length - 1) {
+      const currentIndex = this.danielArticles.indexOf(this.selectedArticle);
+      if (currentIndex < this.danielArticles.length - 1) {
         this.$router.push(
-          `/article/${this.articles[currentIndex + 1].doc_num}`
+          `/article/${this.danielArticles[currentIndex + 1].doc_num}`
         );
       }
     },
