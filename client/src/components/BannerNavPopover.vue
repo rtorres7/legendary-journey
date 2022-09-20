@@ -29,7 +29,8 @@
         <div
           class="
             shadow-2xl
-            p-6
+            py-4
+            px-6
             w-full
             ring-1 ring-black ring-opacity-5
             focus:outline-none
