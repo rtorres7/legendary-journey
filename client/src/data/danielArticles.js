@@ -174,10 +174,10 @@ export const danielArticles = [
       "cache_key": "0",
       "images": [],
       "countries": [],
-      "date_published": "2022-09-01",
+      "date_published": "2022-08-29",
       "doc_num": "WIReWIRe_sample_4",
       "featured_category": "daily_wire",
-      "featured_timestamp": "2022-09-01T00:00:00Z",
+      "featured_timestamp": "2022-08-29T00:00:00Z",
       "issue_names": [
         "Health \u0026 Natural Disasters"
       ],

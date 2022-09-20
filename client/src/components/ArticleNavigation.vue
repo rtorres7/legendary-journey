@@ -22,7 +22,7 @@
       "
     >
       <div>
-        <template v-if="currentArticleIndex === 1">
+        <template v-if="currentArticleIndex + 1 === 1">
           <BaseButton disabled>Previous</BaseButton>
         </template>
         <template v-else>
@@ -36,14 +36,14 @@
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Article {{ currentArticleIndex }} of
+        Featured Article {{ currentArticleIndex + 1 }} of
         {{ totalArticles.length }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
-        {{ currentArticleIndex }} of {{ totalArticles.length }}
+        {{ currentArticleIndex + 1 }} of {{ totalArticles.length }}
       </div>
       <div>
-        <template v-if="currentArticleIndex === totalArticles.length">
+        <template v-if="currentArticleIndex + 1 === totalArticles.length">
           <BaseButton disabled> Next </BaseButton>
         </template>
         <template v-else>
@@ -72,8 +72,6 @@ export default {
   ],
   setup(props) {
     const router = useRouter();
-
-    console.log("totalArticles: ", props.totalArticles);
 
     const returnHome = () => {
       router.push({ name: "home" });

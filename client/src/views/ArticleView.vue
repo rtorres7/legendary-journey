@@ -3,15 +3,17 @@
     <NotFound />
   </template>
   <template v-else>
-    <template v-if="loadingDanielArticlesDetails"> Loading... </template>
+    <template v-if="loadingDanielArticlesDetails && loadingDanielArticles">
+      Loading...
+    </template>
     <template v-else>
       <div>
-        <!-- <ArticleNavigation
+        <ArticleNavigation
           :currentArticleIndex="currentArticleIndex"
           :previousArticle="previousArticle"
           :nextArticle="nextArticle"
           :totalArticles="danielArticles"
-        ></ArticleNavigation> -->
+        ></ArticleNavigation>
       </div>
       <div
         class="
@@ -152,7 +154,7 @@
 import { onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-//import ArticleNavigation from "@/components/ArticleNavigation.vue";
+import ArticleNavigation from "@/components/ArticleNavigation.vue";
 import NotFound from "@/components/NotFound";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
@@ -160,7 +162,7 @@ import * as dayjs from "dayjs";
 
 export default {
   components: {
-    //ArticleNavigation,
+    ArticleNavigation,
     NotFound,
     ChevronDownIcon,
     Disclosure,
@@ -173,58 +175,60 @@ export default {
     const route = useRoute();
 
     const articleDetails = computed(() => store.state.danielDetails.document);
-    // const danielArticles = computed(() => store.state.daniel.articles);
+    const danielArticles = computed(() => store.state.daniel.articles);
+
     const loadingDanielArticlesDetails = computed(
       () => store.state.danielDetails.loading
     );
-    //const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const loadingDanielArticles = computed(() => store.state.daniel.loading);
 
     onMounted(() => {
-      //store.dispatch("daniel/getDanielArticles");
+      store.dispatch("daniel/getDanielArticles");
       store.dispatch("danielDetails/getDanielArticlesDetails");
     });
 
-    // const currentArticleIndex = computed(
-    //   () =>
-    //     danielArticles.value.findIndex((article) => {
-    //       if (article.attributes.doc_num === articleDetails.value.doc_num) {
-    //         return true;
-    //       }
-    //     }) + 1
-    // );
+    const currentArticleIndex = computed(() =>
+      danielArticles.value.findIndex((article) => {
+        if (article.attributes.doc_num === articleDetails.value.doc_num) {
+          return true;
+        }
+      })
+    );
 
-    // const previousArticle = computed(() =>
-    //   danielArticles.value.find((article, index) => {
-    //     if (index === currentArticleIndex.value - 2) {
-    //       return true;
-    //     }
-    //   })
-    // );
+    const previousArticle = computed(() =>
+      danielArticles.value.find((article, index) => {
+        if (index === currentArticleIndex.value - 1) {
+          return true;
+        }
+      })
+    );
 
-    // const nextArticle = computed(() =>
-    //   danielArticles.value.find((article, index) => {
-    //     if (index === currentArticleIndex.value + 2) {
-    //       return true;
-    //     }
-    //   })
-    // );
+    const nextArticle = computed(() =>
+      danielArticles.value.find((article, index) => {
+        if (index === currentArticleIndex.value + 1) {
+          return true;
+        }
+      })
+    );
 
     watch(
       () => route.params,
       () => {
-        store.dispatch("danielDetails/getDanielArticlesDetails");
+        if (route.name === "article") {
+          store.dispatch("danielDetails/getDanielArticlesDetails");
+        }
       }
     );
 
     return {
       dayjs,
       articleDetails,
-      // danielArticles,
+      danielArticles,
       loadingDanielArticlesDetails,
-      // loadingDanielArticles,
-      // currentArticleIndex,
-      // previousArticle,
-      // nextArticle,
+      loadingDanielArticles,
+      currentArticleIndex,
+      previousArticle,
+      nextArticle,
     };
   },
 };

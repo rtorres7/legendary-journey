@@ -4,9 +4,9 @@
   </template>
   <template v-else>
     <div>
-      <DemoArticleNavigation
+      <!-- <DemoArticleNavigation
         :selectedArticle="selectedArticle"
-      ></DemoArticleNavigation>
+      ></DemoArticleNavigation> -->
     </div>
     <div
       class="
@@ -262,7 +262,7 @@
 
 <script>
 import { ref } from "vue";
-import DemoArticleNavigation from "@/components/DemoArticleNavigation.vue";
+//import DemoArticleNavigation from "@/components/DemoArticleNavigation.vue";
 import ArticleCommentForm from "@/components/ArticleCommentForm.vue";
 import ArticleCommentList from "@/components/ArticleCommentList.vue";
 import ArticleMetrics from "@/components/ArticleMetrics.vue";
@@ -281,7 +281,7 @@ import { articles } from "@/data";
 export default {
   name: "ArticlePageView",
   components: {
-    DemoArticleNavigation,
+    //DemoArticleNavigation,
     ArticleCommentForm,
     ArticleCommentList,
     ArticleMetrics,
