@@ -6,3 +6,4 @@ export { articles } from './articles'
 export { danielArticles } from './danielArticles'
 export { countries, regions } from './regions'
 export { getSearchDataFromUrl } from './search'
+export { danielArticlesDetails } from "./danielArticlesDetails"

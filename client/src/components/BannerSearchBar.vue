@@ -236,7 +236,7 @@ export default {
   border: none;
   max-height: 400px;
   overflow-y: auto;
-  z-index: 9;
+  z-index: 11;
   box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%), 0 4px 8px 3px rgb(60 64 67 / 15%);
   border-width: 1px;
 }

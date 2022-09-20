@@ -5,7 +5,8 @@ import danielSearch from "./modules/daniel-search"
 import search from "./modules/search";
 import user from "./modules/user";
 import document from "./modules/document";
-import savedSearches from "./modules/saved-searches"
+import savedSearches from "./modules/saved-searches";
+import danielDetails from "./modules/danielDetails";
 
 export default createStore({
     state: {
@@ -51,6 +52,7 @@ export default createStore({
         search,
         user,
         document,
-        savedSearches
-    }
+        savedSearches,
+        danielDetails,
+    },
 })

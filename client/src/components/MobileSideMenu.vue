@@ -107,7 +107,7 @@
                 <li>
                   <MobileSideMenuDisclosure :title="'Regions'">
                     <div class="ml-4 mt-4 space-y-4">
-                      <div v-for="region in regions" :key="region">
+                      <div v-for="region in metadata.regions.items" :key="region">
                         <Disclosure v-slot="{ open }">
                           <DisclosureButton
                             class="
@@ -135,18 +135,33 @@
                           >
                             <DisclosurePanel>
                               <ul class="list-disc list-inside ml-4 my-2">
-                                <template
-                                  v-for="subRegion in region.subRegions"
-                                  :key="subRegion"
+                                <a
+                                  href=""
+                                  @click.prevent="navigateToRegion(region)"
+                                  class="lg:text-lg hover:underline cursor-pointer"
                                 >
-                                  <!-- TODO: These mobile links aren't working for regions/subregions/countries -->
-                                  <li v-if="subRegion.name != ''">
-                                    <router-link
-                                      to=""
-                                      class="font-light hover:underline"
-                                      >{{ subRegion.name }}</router-link
-                                    >
-                                  </li>
+                                  {{ region.name }}
+                                </a>
+                                <template
+                                  v-for="subregion in region.subregions"
+                                  :key="subregion"
+                                >
+                                  <template
+                                    v-for="subregionItem in metadata.subregions.items"
+                                    :key="subregionItem"
+                                  >
+                                    <li v-if="subregionItem.key === subregion">
+                                      <a
+                                        href=""
+                                        @click.prevent="
+                                          navigateToSubregion(subregionItem)
+                                        "
+                                        class="hover:underline cursor-pointer font-light"
+                                      >
+                                        {{ subregionItem.name }}
+                                      </a>
+                                    </li>
+                                  </template>
                                 </template>
                               </ul>
                             </DisclosurePanel>
@@ -253,11 +268,12 @@
                             >
                               <ListboxOption
                                 v-slot="{ active }"
-                                v-for="country in countries"
+                                v-for="country in metadata.countries.items"
                                 :key="country"
                                 :value="country"
                                 as="template"
                                 class="capitalize px-2 py-1 cursor-pointer"
+                                @click="navigateToCountry(country)"
                               >
                                 <li
                                   :class="[
@@ -276,41 +292,47 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
+                <BaseTooltip placement="top">
+                  <li>
+                    <a
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Community</a
+                    >
+                  </li>
+                </BaseTooltip>
                 <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Community</a
-                  >
+                  <BaseTooltip placement="top">
+                    <a
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Special Editions</a
+                    >
+                  </BaseTooltip>
                 </li>
                 <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Special Editions</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Foreign</a
-                  >
+                  <BaseTooltip placement="top">
+                    <a
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                      href="/"
+                      >Foreign</a
+                    >
+                  </BaseTooltip>
                 </li>
               </ul>
             </DialogPanel>
@@ -386,6 +408,54 @@ export default {
       });
     };
 
+    const navigateToCountry = (country) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.countries.type] = country.key;
+      router.push({
+        name: "countries",
+        params: {
+          name: country.name,
+        },
+        query,
+      });
+    };
+
+    const navigateToRegion = (region) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.regions.type] = region.key;
+      router.push({
+        name: "regions",
+        params: {
+          name: region.name,
+        },
+        query,
+      });
+    };
+
+    const navigateToSubregion = (subregion) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query[metadata.subregions.type] = subregion.key;
+      router.push({
+        name: "subregions",
+        params: {
+          name: subregion.name,
+        },
+        query,
+      });
+    };
+
     return {
       metadata,
       close,
@@ -393,6 +463,9 @@ export default {
       countries,
       selectedCountry,
       navigateToIssue,
+      navigateToCountry,
+      navigateToRegion,
+      navigateToSubregion,
     };
   },
   methods: {

@@ -31,17 +31,17 @@
     <template v-else>
       <div class="h-2/3 relative">
         <div
-          v-show="hasArticleImage"
+          v-show="hasArticleImage(article)"
           :class="[
             'h-full w-full absolute',
-            computedBgClass,
             'blur bg-center bg-no-repeat bg-cover',
           ]"
+          :style="{ background: 'url(' + getImgUrl(article) + ')' }"
         ></div>
         <img
           :class="
-            hasArticleImage
-              ? 'absolute h-full max-w-[350px] inset-x-0 mx-auto z-10'
+            hasArticleImage(article)
+              ? 'absolute h-full max-w-[350px] inset-x-0 mx-auto z-[5]'
               : ' max-h-full object-cover w-full max-w-[450px] m-auto'
           "
           :src="getImgUrl(article)"
@@ -78,14 +78,14 @@
 </template>
 
 <script>
-import { computed } from "vue";
+//import { computed } from "vue";
 import * as dayjs from "dayjs";
 export default {
   props: {
     article: Object,
     loading: Boolean,
   },
-  setup(props) {
+  setup() {
     const hasArticleImage = (article) => {
       return article.images?.length > 0;
     };
@@ -102,6 +102,7 @@ export default {
           updatedAt = "";
         }
         return (
+          window.location.origin +
           "/documents/" +
           article.doc_num +
           "/images/article?updated_at=" +
@@ -114,14 +115,15 @@ export default {
         return require("@/assets/image-not-available-wire-size.png");
       }
     };
-    const computedBgClass = computed(() => {
-      const classes = [];
-      const imgUrl = getImgUrl(props.article, true);
-      classes.push("bg-[url('" + imgUrl + "')]");
-      return classes;
-    });
+    // const computedBgClass = computed(() => {
+    //   const classes = [];
+    //   const imgUrl = getImgUrl(props.article, true);
+    //   classes.push("bg-[url('" + imgUrl + "')]");
+    //   return classes;
+    // });
     return {
-      computedBgClass,
+      //computedBgClass,
+      hasArticleImage,
       getImgUrl,
       dayjs,
     };
