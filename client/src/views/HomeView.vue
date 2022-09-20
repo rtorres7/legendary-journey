@@ -87,21 +87,11 @@
           energy:border-zinc-700/25
         "
       >
-        <div
-          class="
-            flex flex-col
-            md:flex-row
-            xl:flex-col
-            h-full
-            space-y-4
-            md:space-y-0 md:space-x-4
-            xl:space-y-4 xl:space-x-0
-          "
-        >
+        <div class="md:grid md:grid-cols-2 xl:grid-cols-none gap-6">
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <div class="md:w-1/2 xl:w-full">
-                <PublishedArticleCard :loading="true" />
+              <div class="w-full h-[264px] max-w-[450px]">
+                <NewPublishedArticleCard :loading="true" />
               </div>
             </template>
           </template>
@@ -110,15 +100,16 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <router-link
-                class="md:w-1/2 xl:w-full"
-                :to="{
-                  name: 'article',
-                  params: { doc_num: article.attributes.doc_num },
-                }"
-              >
-                <PublishedArticleCard :article="article.attributes" />
-              </router-link>
+              <div class="w-full h-[264px] max-w-[450px]">
+                <router-link
+                  :to="{
+                    name: 'article',
+                    params: { doc_num: article.attributes.doc_num },
+                  }"
+                >
+                  <NewPublishedArticleCard :article="article.attributes" />
+                </router-link>
+              </div>
             </template>
           </template>
         </div>
@@ -139,19 +130,21 @@
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 6" :key="n">
-          <PublishedArticleCard :loading="true" />
+          <NewPublishedArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
         <template v-for="article in danielArticles.slice(3, 6)" :key="article">
-          <router-link
-            :to="{
-              name: 'article',
-              params: { doc_num: article.attributes.doc_num },
-            }"
-          >
-            <PublishedArticleCard :article="article.attributes" />
-          </router-link>
+          <div class="w-full h-[264px] max-w-[450px]">
+            <router-link
+              :to="{
+                name: 'article',
+                params: { doc_num: article.attributes.doc_num },
+              }"
+            >
+              <NewPublishedArticleCard :article="article.attributes" />
+            </router-link>
+          </div>
         </template>
       </template>
     </div>
@@ -210,7 +203,8 @@ import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import FeaturedArticleCard from "@/components/FeaturedArticleCard";
-import PublishedArticleCard from "@/components/PublishedArticleCard";
+import NewPublishedArticleCard from "@/components/NewPublishedArticleCard";
+//import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import MainSectionPublishedArticleCard from "@/components/MainSectionPublishedArticleCard";
 import PersonalSection from "@/components/PersonalSection";
@@ -268,7 +262,8 @@ const personalArticles = [
 export default {
   components: {
     FeaturedArticleCard,
-    PublishedArticleCard,
+    NewPublishedArticleCard,
+    //PublishedArticleCard,
     MainSectionSituationalAwareness,
     MainSectionPublishedArticleCard,
     PersonalSection,
