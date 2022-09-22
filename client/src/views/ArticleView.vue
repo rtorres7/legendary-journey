@@ -42,6 +42,15 @@
               {{ articleDetails.authors.join(", ") }}
             </p>
           </div>
+          <template v-if="article">
+            <div v-show="hasArticleImage" class="lg:w-5/6 max-h-96">
+              <img
+                class="max-h-full w-full object-cover"
+                :src="getImgUrl(article)"
+                alt="article image"
+              />
+            </div> 
+          </template>
           <p class="italic text-sm">
             {{ articleDetails.image_caption }}
           </p>
@@ -211,6 +220,48 @@ export default {
       })
     );
 
+    const article = computed(() => 
+      danielArticles.value.find((article) => {
+        if (article.attributes.doc_num === articleDetails.value.doc_num) {
+          return true;
+        }
+      })
+    );
+
+    const hasArticleImage = (article) => {
+      console.log('article: ', article)
+      return article.images?.length > 0;
+    };
+
+    const getImgUrl = (article, stringOnly) => {
+      if (hasArticleImage(article)) {
+        let updatedAt;
+        if (Array.isArray(article.images)) {
+          updatedAt = article.images.filter(
+            (image) => image.usage == "article"
+          )[0].updated_at;
+        } else if (article.images && article.images.table.article) {
+          updatedAt = article.images.table.article.table.updated_at;
+        } else {
+          updatedAt = "";
+        }
+        return (
+          "/documents/" +
+          article.doc_num +
+          "/images/article?updated_at=" +
+          updatedAt
+        );
+      } else {
+          if (stringOnly) {
+          //   return "@/assets/image-not-available-wire-size.png";
+          // }
+          // return require("@/assets/image-not-available-wire-size.png");
+            return "@/assets/lion_wire_size.jpg";
+          }
+          return require("@/assets/lion_wire_size.jpg");
+        }
+    };   
+
     watch(
       () => route.params,
       () => {
@@ -229,6 +280,9 @@ export default {
       currentArticleIndex,
       previousArticle,
       nextArticle,
+      article,
+      hasArticleImage,
+      getImgUrl,
     };
   },
 };
