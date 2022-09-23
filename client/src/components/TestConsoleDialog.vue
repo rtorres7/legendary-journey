@@ -213,7 +213,7 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4"
-                          >Enable Loading Articles</SwitchLabel
+                          >Enable Loading Demo Articles</SwitchLabel
                         >
                         <Switch
                           v-model="loadingArticlesEnabled"

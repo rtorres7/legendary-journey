@@ -15,7 +15,8 @@
   <div
     class="
       py-4
-      border-b-2 border-slate-900/10
+      xl:border-b-2
+      border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
     "
@@ -51,15 +52,15 @@
           class="
             py-4
             lg:py-0
-            max-w-[650px]
             h-[425px]
             lg:h-full lg:basis-2/3
             xl:basis-2/3
-            lg:px-4
+            lg:pl-4
+            xl:pr-4
           "
         >
           <template v-if="loadingDanielArticles">
-            <MainSectionPublishedArticleCard :loading="true" />
+            <PublishedArticleCard loading headline />
           </template>
           <template v-else>
             <router-link
@@ -68,8 +69,9 @@
                 params: { doc_num: danielArticles[0].attributes.doc_num },
               }"
             >
-              <MainSectionPublishedArticleCard
+              <PublishedArticleCard
                 :article="danielArticles[0].attributes"
+                headline
               />
             </router-link>
           </template>
@@ -87,11 +89,25 @@
           energy:border-zinc-700/25
         "
       >
-        <div class="md:grid md:grid-cols-2 xl:grid-cols-none gap-6">
+        <!-- Only shows in screens smaller than XL -->
+        <div class="block xl:hidden font-semibold mb-4">
+          More Published Articles
+        </div>
+        <div
+          class="
+            flex flex-col
+            md:flex-row
+            xl:flex-col
+            h-full
+            space-y-4
+            md:space-y-0 md:space-x-4
+            xl:space-y-4 xl:space-x-0
+          "
+        >
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <div class="w-full h-[264px] max-w-[450px]">
-                <NewPublishedArticleCard :loading="true" />
+              <div class="w-full h-[264px]">
+                <PublishedArticleCard :loading="true" />
               </div>
             </template>
           </template>
@@ -100,14 +116,14 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="w-full h-[264px] max-w-[450px]">
+              <div class="w-full h-[264px]">
                 <router-link
                   :to="{
                     name: 'article',
                     params: { doc_num: article.attributes.doc_num },
                   }"
                 >
-                  <NewPublishedArticleCard :article="article.attributes" />
+                  <PublishedArticleCard :article="article.attributes" />
                 </router-link>
               </div>
             </template>
@@ -116,33 +132,35 @@
       </div>
     </div>
   </div>
-  <!-- More Published Articles Section -->
+  <!-- More Published Articles Section (Large Screen Devices) -->
   <div
     class="
-      pt-4
+      xl:pt-4
       pb-6
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
     "
   >
-    <div class="font-semibold mb-4">More Published Articles</div>
+    <div class="hidden xl:block font-semibold mb-4">
+      More Published Articles
+    </div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 6" :key="n">
-          <NewPublishedArticleCard :loading="true" />
+          <PublishedArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
         <template v-for="article in danielArticles.slice(3, 6)" :key="article">
-          <div class="w-full h-[264px] max-w-[450px]">
+          <div class="w-full h-[264px]">
             <router-link
               :to="{
                 name: 'article',
                 params: { doc_num: article.attributes.doc_num },
               }"
             >
-              <NewPublishedArticleCard :article="article.attributes" />
+              <PublishedArticleCard :article="article.attributes" />
             </router-link>
           </div>
         </template>
@@ -203,10 +221,8 @@ import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import FeaturedArticleCard from "@/components/FeaturedArticleCard";
-import NewPublishedArticleCard from "@/components/NewPublishedArticleCard";
-//import PublishedArticleCard from "@/components/PublishedArticleCard";
+import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
-import MainSectionPublishedArticleCard from "@/components/MainSectionPublishedArticleCard";
 import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
@@ -262,10 +278,8 @@ const personalArticles = [
 export default {
   components: {
     FeaturedArticleCard,
-    NewPublishedArticleCard,
-    //PublishedArticleCard,
+    PublishedArticleCard,
     MainSectionSituationalAwareness,
-    MainSectionPublishedArticleCard,
     PersonalSection,
     CalendarIcon,
   },

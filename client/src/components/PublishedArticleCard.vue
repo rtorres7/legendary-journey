@@ -1,74 +1,98 @@
 <template>
   <BaseCard
-    class="h-[300px] xl:max-h-[264px]"
-    :class="loading ? 'animate-pulse' : ''"
+    :class="['h-full', loading ? 'animate-pulse' : '']"
     hoverable
     :rounded="false"
   >
     <template v-if="loading">
       <div
-        class="h-2/3 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+        :class="[
+          headline ? 'h-3/5' : 'h-2/3',
+          'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700',
+        ]"
       ></div>
-      <div class="flex flex-col justify-between pt-4 xl:pt-2 px-4 h-1/3">
-        <h1
-          class="h-6 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
-        ></h1>
+      <div
+        :class="[
+          headline ? 'h-2/5 mt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
+          'flex flex-col justify-between ',
+        ]"
+      >
+        <div>
+          <h1
+            :class="[
+              headline ? 'h-24 md:h-20' : 'h-6',
+              'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded',
+            ]"
+          ></h1>
+          <p
+            v-show="headline"
+            class="
+              hidden
+              lg:block
+              mt-4
+              h-12
+              xl:h-16
+              bg-slate-200
+              dark:bg-slate-700
+              energy:bg-zinc-700
+              rounded
+            "
+          ></p>
+        </div>
         <p
-          class="
-            mb-2
-            xl:mt-1
-            h-5
-            w-1/2
-            self-center
-            bg-slate-200
-            dark:bg-slate-700
-            energy:bg-zinc-700
-            rounded
-          "
+          :class="[
+            headline ? 'mb-4' : 'mb-2 xl:mt-1',
+            'h-5 w-1/2 self-center bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded',
+          ]"
         ></p>
       </div>
     </template>
     <template v-else>
-      <div class="h-2/3 relative">
+      <div :class="[headline ? 'h-3/5' : 'h-2/3', 'relative overflow-hidden']">
         <div
           v-show="hasArticleImage(article)"
-          :class="[
-            'h-full w-full absolute',
-            'blur bg-center bg-no-repeat bg-cover',
-          ]"
+          class="h-full w-full absolute blur bg-center bg-no-repeat bg-cover"
           :style="{ background: 'url(' + getImgUrl(article) + ')' }"
         ></div>
         <img
           :class="
             hasArticleImage(article)
-              ? 'absolute h-full max-w-[350px] inset-x-0 mx-auto z-[5]'
-              : ' max-h-full object-cover w-full max-w-[450px] m-auto'
+              ? 'absolute h-full inset-x-0 mx-auto z-[5]'
+              : ' max-h-full w-full m-auto object-contain bg-[#f1f1f1]'
           "
           :src="getImgUrl(article)"
           alt=""
         />
       </div>
-      <div class="flex flex-col justify-between pt-4 xl:pt-2 px-4 h-1/3">
-        <h1
-          class="
-            text-black
-            dark:text-slate-100
-            energy:text-zinc-100
-            text-center
-            font-medium
-            line-clamp-2
-          "
-        >
-          {{ `(${article.title_classification}) ${article.title}` }}
-        </h1>
+      <div
+        :class="[
+          headline ? 'h-2/5' : 'h-1/3',
+          'flex flex-col justify-between pt-2 px-4',
+        ]"
+      >
+        <div>
+          <h1
+            :class="[
+              headline
+                ? 'text-lg line-clamp-4 md:line-clamp-3'
+                : 'line-clamp-2',
+              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium',
+            ]"
+          >
+            {{ `(${article.title_classification}) ${article.title}` }}
+          </h1>
+          <p
+            v-show="headline"
+            class="hidden mt-3 text-md lg:line-clamp-2 xl:line-clamp-3"
+          >
+            {{ `(${article.summary_classification}) ${article.summary}` }}
+          </p>
+        </div>
         <p
-          class="
-            mb-2
-            xl:mt-1
-            text-center text-sm text-slate-600
-            dark:text-slate-300/80
-            energy:text-slate-300/80
-          "
+          :class="[
+            headline ? '' : 'xl:mt-1',
+            'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
+          ]"
         >
           {{ dayjs(article.publication_date).format("ddd, MMMM D, YYYY") }}
         </p>
@@ -76,14 +100,22 @@
     </template>
   </BaseCard>
 </template>
-
 <script>
-//import { computed } from "vue";
 import * as dayjs from "dayjs";
 export default {
   props: {
-    article: Object,
-    loading: Boolean,
+    article: {
+      type: Object,
+      required: true,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    headline: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const hasArticleImage = (article) => {
@@ -112,17 +144,11 @@ export default {
         if (stringOnly) {
           return "@/assets/image-not-available-wire-size.png";
         }
+        //return require("@/assets/ukraine.jpg");
         return require("@/assets/image-not-available-wire-size.png");
       }
     };
-    // const computedBgClass = computed(() => {
-    //   const classes = [];
-    //   const imgUrl = getImgUrl(props.article, true);
-    //   classes.push("bg-[url('" + imgUrl + "')]");
-    //   return classes;
-    // });
     return {
-      //computedBgClass,
       hasArticleImage,
       getImgUrl,
       dayjs,
