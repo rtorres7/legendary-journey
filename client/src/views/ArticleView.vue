@@ -38,8 +38,10 @@
               }}
             </p>
             <p aria-hidden="true">●</p>
-            <p v-if="articleDetails.authors">
-              {{ articleDetails.authors.join(", ") }}
+            <p v-if="articleDetails.authors?.length > 0">
+              <template v-for="author, index in articleDetails.authors" :key="index">
+                {{ author.name }}<span v-if="articleDetails.authors?.length > 1 && index < articleDetails.authors?.length - 1">, </span>
+              </template>
             </p>
           </div>
           <template v-if="article">
@@ -55,27 +57,22 @@
             {{ articleDetails.image_caption }}
           </p>
           <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-            {{ articleDetails.html_body.join("\n\n") }}
+            <!-- {{ articleDetails.html_body.join("\n\n") }} -->
+            <span v-html="articleDetails.html_body"></span>
           </p>
-          <p
-            class="
-              italic
-              border-t-2 border-slate-900/10
-              dark:border-slate-50/[0.06]
-              energy:border-zinc-700/25
-              pt-4
-            "
-          >
-            (U) For additional information:
-          </p>
-          <ul class="list-disc list-inside">
-            <li v-for="index in 2" :key="index" class="italic text-sm">
-              <router-link to="#" class="hover:underline">
-                (U) This is the title for an article with additional
-                information.
-              </router-link>
-            </li>
-          </ul>
+          <!-- <div class="digression">
+            <p class="italic">
+              (U) For additional information:
+            </p>
+            <ul class="list-disc list-inside">
+              <li v-for="index in 2" :key="index" class="italic text-sm">
+                <router-link to="#" class="hover:underline">
+                  (U) This is the title for an article with additional
+                  information.
+                </router-link>
+              </li>
+            </ul>
+          </div> -->
           <p
             class="
               font-semibold
@@ -142,11 +139,11 @@
               <ol class="list-decimal list-inside ml-4 space-y-2">
                 <div
                   v-for="source in articleDetails.sources"
-                  :key="source.name"
+                  :key="source"
                 >
                   <li class="text-sm">
                     <router-link to="#" class="hover:underline">
-                      {{ source.name }}
+                      {{ source }}
                     </router-link>
                   </li>
                 </div>
@@ -288,4 +285,29 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  ::v-deep .digression {
+    display: table;
+    width: auto;
+    padding: 2em;
+    margin: 2em 0;
+    background: #F7F7F8;
+    border: none;
+  }
+  ::v-deep .portion_marked_field {
+    color: #6A737B !important;
+    font-size: 85% !important;
+  }
+  ::v-deep p {
+    display: block;
+    margin-block-start: 1em !important;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+  ::v-deep .source-reference {
+    display: none;
+    font-size: 0.65625rem;
+    vertical-align: top;
+  }
+</style>
