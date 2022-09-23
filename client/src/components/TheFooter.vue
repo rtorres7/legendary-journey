@@ -171,7 +171,7 @@
               "
             >
               <div
-                v-for="linkGroup in resourceLinks"
+                v-for="linkGroup in metadata.footer_links.resources_links"
                 :key="linkGroup"
                 class="
                   py-2
@@ -212,7 +212,7 @@
           energy:text-zinc-300
         "
       >
-        Unclassified
+        {{ metadata.system_classification }}
       </p>
     </div>
   </div>

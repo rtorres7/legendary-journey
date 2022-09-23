@@ -1,6 +1,42 @@
 {
   "system_classification": "UNCLASSIFIED",
   "system_message": "Use of this system message content placeholder message. Sit an qualisque appellantur. Eu clita omnesque elaboraret usu, semper dictas vim ea. Nam ea ipsum sonet. Volumus fabellas expetendis no quo, ei pro commodo pertinax. Diam doming inimicus ex est, ex his audiam fastidii persequeris. No has nihil electram.",
+  "footer_links": {
+    "resources_links": [
+      [
+        {
+          "name": "DI Tradecraft",
+          "href": "/"
+        },
+        {
+          "name": "NCTC/DI Artforms",
+          "href": "/"
+        },
+        {
+          "name": "NCTC Additional Resources",
+          "href": "/"
+        },
+        {
+          "name": "Production Processes",
+          "href": "/"
+        }
+      ],
+      [
+        {
+          "name": "Website Overview",
+          "href": "/"
+        },
+        {
+          "name": "World Factbook",
+          "href": "/"
+        },
+        {
+          "name": "Accessibility Help",
+          "href": "/"
+        }
+      ]
+    ]
+  },
   "footer_note": "Built in partnership with WIRe",
   "search_suggestions": [
     {

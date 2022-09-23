@@ -102,6 +102,9 @@
 </template>
 <script>
 import * as dayjs from "dayjs";
+import { computed } from "vue";
+import { useStore } from "vuex";
+
 export default {
   props: {
     article: {
@@ -118,10 +121,21 @@ export default {
     },
   },
   setup() {
+    const store = useStore();
+
+    const forcedBlurred = computed(() => store.state.testConsole.blurredImages);
+
     const hasArticleImage = (article) => {
+      if (forcedBlurred.value) {
+        return true;
+      }
       return article.images?.length > 0;
     };
-    const getImgUrl = (article, stringOnly) => {
+
+    const getImgUrl = (article) => {
+      if (forcedBlurred.value) {
+        return require("@/assets/ukraine.jpg");
+      }
       if (hasArticleImage(article)) {
         let updatedAt;
         if (Array.isArray(article.images)) {
@@ -141,10 +155,6 @@ export default {
           updatedAt
         );
       } else {
-        if (stringOnly) {
-          return "@/assets/image-not-available-wire-size.png";
-        }
-        //return require("@/assets/ukraine.jpg");
         return require("@/assets/image-not-available-wire-size.png");
       }
     };
