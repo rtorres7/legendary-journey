@@ -154,6 +154,49 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
+                    <SwitchGroup>
+                      <div class="flex items-center justify-between mt-2">
+                        <SwitchLabel class="mr-4"
+                          >Blurred Published Article Images</SwitchLabel
+                        >
+                        <Switch
+                          v-model="blurredEnabled"
+                          :class="
+                            blurredEnabled
+                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                          "
+                          class="
+                            relative
+                            inline-flex
+                            items-center
+                            h-6
+                            transition-colors
+                            rounded-full
+                            w-11
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-slate-500
+                          "
+                        >
+                          <span
+                            :class="
+                              blurredEnabled ? 'translate-x-6' : 'translate-x-1'
+                            "
+                            class="
+                              inline-block
+                              w-4
+                              h-4
+                              transition-transform
+                              transform
+                              bg-white
+                              rounded-full
+                            "
+                          />
+                        </Switch>
+                      </div>
+                    </SwitchGroup>
                     <!-- <SwitchGroup>
                       <div class="flex items-center justify-between">
                         <SwitchLabel class="mr-4"
@@ -211,47 +254,6 @@
                   <p class="font-medium">Home Options</p>
                   <div class="py-2">
                     <SwitchGroup>
-                      <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4"
-                          >Blurred Published Article Images</SwitchLabel
-                        >
-                        <Switch
-                          v-model="blurredEnabled"
-                          :class="
-                            blurredEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
-                        >
-                          <span
-                            :class="
-                              blurredEnabled ? 'translate-x-6' : 'translate-x-1'
-                            "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
-                          />
-                        </Switch>
-                      </div>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4"
                           >Enable Loading Demo Articles</SwitchLabel

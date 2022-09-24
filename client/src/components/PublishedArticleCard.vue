@@ -48,22 +48,10 @@
       </div>
     </template>
     <template v-else>
-      <div :class="[headline ? 'h-3/5' : 'h-2/3', 'relative overflow-hidden']">
-        <div
-          v-show="hasArticleImage(article)"
-          class="h-full w-full absolute blur bg-center bg-no-repeat bg-cover"
-          :style="{ background: 'url(' + getImgUrl(article) + ')' }"
-        ></div>
-        <img
-          :class="
-            hasArticleImage(article)
-              ? 'absolute h-full inset-x-0 mx-auto z-[5]'
-              : ' max-h-full w-full m-auto object-contain bg-[#f1f1f1]'
-          "
-          :src="getImgUrl(article)"
-          alt=""
-        />
-      </div>
+      <ArticleImage
+        :class="[headline ? 'h-3/5' : 'h-2/3']"
+        :article="article"
+      />
       <div
         :class="[
           headline ? 'h-2/5' : 'h-1/3',
@@ -102,10 +90,12 @@
 </template>
 <script>
 import * as dayjs from "dayjs";
-import { computed } from "vue";
-import { useStore } from "vuex";
+import ArticleImage from "@/components/ArticleImage";
 
 export default {
+  components: {
+    ArticleImage,
+  },
   props: {
     article: {
       type: Object,
@@ -121,46 +111,7 @@ export default {
     },
   },
   setup() {
-    const store = useStore();
-
-    const forcedBlurred = computed(() => store.state.testConsole.blurredImages);
-
-    const hasArticleImage = (article) => {
-      if (forcedBlurred.value) {
-        return true;
-      }
-      return article.images?.length > 0;
-    };
-
-    const getImgUrl = (article) => {
-      if (forcedBlurred.value) {
-        return require("@/assets/ukraine.jpg");
-      }
-      if (hasArticleImage(article)) {
-        let updatedAt;
-        if (Array.isArray(article.images)) {
-          updatedAt = article.images.filter(
-            (image) => image.usage == "article"
-          )[0].updated_at;
-        } else if (article.images && article.images.table.article) {
-          updatedAt = article.images.table.article.table.updated_at;
-        } else {
-          updatedAt = "";
-        }
-        return (
-          window.location.origin +
-          "/documents/" +
-          article.doc_num +
-          "/images/article?updated_at=" +
-          updatedAt
-        );
-      } else {
-        return require("@/assets/image-not-available-wire-size.png");
-      }
-    };
     return {
-      hasArticleImage,
-      getImgUrl,
       dayjs,
     };
   },
