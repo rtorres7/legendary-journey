@@ -154,6 +154,49 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
+                    <SwitchGroup>
+                      <div class="flex items-center justify-between mt-2">
+                        <SwitchLabel class="mr-4"
+                          >Blurred Published Article Images</SwitchLabel
+                        >
+                        <Switch
+                          v-model="blurredEnabled"
+                          :class="
+                            blurredEnabled
+                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                          "
+                          class="
+                            relative
+                            inline-flex
+                            items-center
+                            h-6
+                            transition-colors
+                            rounded-full
+                            w-11
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-slate-500
+                          "
+                        >
+                          <span
+                            :class="
+                              blurredEnabled ? 'translate-x-6' : 'translate-x-1'
+                            "
+                            class="
+                              inline-block
+                              w-4
+                              h-4
+                              transition-transform
+                              transform
+                              bg-white
+                              rounded-full
+                            "
+                          />
+                        </Switch>
+                      </div>
+                    </SwitchGroup>
                     <!-- <SwitchGroup>
                       <div class="flex items-center justify-between">
                         <SwitchLabel class="mr-4"
@@ -213,7 +256,7 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4"
-                          >Enable Loading Articles</SwitchLabel
+                          >Enable Loading Demo Articles</SwitchLabel
                         >
                         <Switch
                           v-model="loadingArticlesEnabled"
@@ -377,16 +420,18 @@ export default {
 
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
+    const blurredEnabled = ref(false);
     const adminEnabled = ref(false);
-    const delayEnabled = ref(false);
 
     const loadingArticlesFromStore = computed(
       () => store.state.articles.loading
     );
 
     const loadingResultsFromStore = computed(() => store.state.search.loading);
-    const adminFromStore = computed(() => store.state.admin);
-    const delayFromStore = computed(() => store.state.delay);
+    const adminFromStore = computed(() => store.state.testConsole.admin);
+    const blurredFromStore = computed(
+      () => store.state.testConsole.blurredImages
+    );
 
     watch(
       () => route.name,
@@ -412,19 +457,11 @@ export default {
     });
 
     watch(adminEnabled, (enabled) => {
-      if (enabled) {
-        store.dispatch("addAdmin");
-      } else {
-        store.dispatch("removeAdmin");
-      }
+      store.dispatch("testConsole/setAdmin", enabled);
     });
 
-    watch(delayEnabled, (enabled) => {
-      if (enabled) {
-        store.dispatch("delay");
-      } else {
-        store.dispatch("removeDelay");
-      }
+    watch(blurredEnabled, (enabled) => {
+      store.dispatch("testConsole/setBlurredImages", enabled);
     });
 
     watch(loadingArticlesFromStore, (loading) => {
@@ -439,8 +476,8 @@ export default {
       adminEnabled.value = status;
     });
 
-    watch(delayFromStore, (status) => {
-      delayEnabled.value = status;
+    watch(blurredFromStore, (status) => {
+      blurredEnabled.value = status;
     });
 
     return {
@@ -450,7 +487,7 @@ export default {
       loadingArticlesEnabled,
       loadingResultsEnabled,
       adminEnabled,
-      delayEnabled,
+      blurredEnabled,
     };
   },
 };

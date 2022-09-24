@@ -85,6 +85,14 @@ const routes = [
     }
   },
   {
+    path: '/demo-search',
+    name: 'demo-search',
+    component: DemoSearchView,
+    meta: {
+      title: 'Search (Demo)',
+    }
+  },
+  {
     path: '/publish',
     name: 'publish',
     component: PublishArticleView,

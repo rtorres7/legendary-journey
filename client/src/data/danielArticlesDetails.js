@@ -2,7 +2,7 @@ export const danielArticlesDetails = [
   {
     data: {
       id: "20",
-      title: "Worldwide: COVID-19 Update as of 17 November",
+      title: "COVID-19: Many people in the United States have some protection, or immunity, against COVID-19 due to vaccination, previous infection, or both. This immunity, combined with the availability of tests and treatments, has greatly reduced the risk of severe illness, hospitalization, and death from COVID-19 for many people.",
       classification: "U",
       date_published: "2022/09/01",
       created_at: "2022/09/01 13:16:43 -0400",
@@ -17,7 +17,7 @@ export const danielArticlesDetails = [
       title_sci: 0,
       summary_sci: 0,
       summary:
-        "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system.",
+        "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
       xml_schema_ver: null,
       multimedia: false,
       producing_office: "East Asia",
@@ -79,7 +79,7 @@ export const danielArticlesDetails = [
       reporting_type: "analysis.all_source",
       reporting_type_value: "analysis_all_source",
       product_image: false,
-      display_title: "Worldwide: COVID-19 Update as of 17 November",
+      display_title: "COVID-19: Many people in the United States have some protection, or immunity, against COVID-19 due to vaccination, previous infection, or both. This immunity, combined with the availability of tests and treatments, has greatly reduced the risk of severe illness, hospitalization, and death from COVID-19 for many people.",
     },
   },
   {
