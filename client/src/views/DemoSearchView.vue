@@ -1233,7 +1233,7 @@ export default {
           }
           console.log("query: ", query);
           router.replace({
-            name: "search",
+            name: "demo-search",
             query: query,
           });
         },
@@ -1302,7 +1302,7 @@ export default {
       () => {
         console.log("route.query watcher triggered.");
         if (
-          route.name === "search" ||
+          route.name === "demo-search" ||
           route.name === "issues" ||
           route.name === "regions" ||
           route.name === "subregions" ||

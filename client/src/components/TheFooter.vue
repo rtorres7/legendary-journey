@@ -7,7 +7,7 @@
         <router-link class="h-full" to="/">
           <img
             class="h-full w-14"
-            src="@/assets/NCTCSealcolor.png"
+            src="@/assets/nctc_seal_color.svg"
             alt="NCTC seal. Link to top of the homepage"
           />
         </router-link>
@@ -102,7 +102,10 @@
                 energy:text-zinc-300
               "
             >
-              <MenuItem v-for="item in poaLinks" :key="item.name">
+              <MenuItem
+                v-for="item in metadata.footer_links.poa_links"
+                :key="item.name"
+              >
                 <a
                   :href="item.href"
                   class="
@@ -171,7 +174,7 @@
               "
             >
               <div
-                v-for="linkGroup in resourceLinks"
+                v-for="linkGroup in metadata.footer_links.resources_links"
                 :key="linkGroup"
                 class="
                   py-2
@@ -212,7 +215,7 @@
           energy:text-zinc-300
         "
       >
-        Unclassified
+        {{ metadata.system_classification }}
       </p>
     </div>
   </div>
@@ -221,25 +224,6 @@
 import { metadata } from "@/config";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
-
-const poaLinks = [
-  { name: "2022 Program of Analysis", href: "/" },
-  { name: "2021 Program of Analysis", href: "/" },
-  { name: "2020 Program of Analysis", href: "/" },
-];
-const resourceLinks = [
-  [
-    { name: "DI Tradecraft", href: "/" },
-    { name: "NCTC/DI Artforms", href: "/" },
-    { name: "NCTC Additional Resources", href: "/" },
-    { name: "Production Processes", href: "/" },
-  ],
-  [
-    { name: "Website Overview", href: "/" },
-    { name: "World Factbook", href: "/" },
-    { name: "Accessibility Help", href: "/" },
-  ],
-];
 
 export default {
   components: {
@@ -252,8 +236,6 @@ export default {
   setup() {
     return {
       metadata,
-      poaLinks,
-      resourceLinks,
     };
   },
 };
