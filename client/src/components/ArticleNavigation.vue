@@ -4,7 +4,7 @@
       flex flex-wrap
       justify-between
       py-4
-      mb-8
+      mb-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-gray-700/25

@@ -25,7 +25,7 @@
           mb-8
         "
       >
-        <div class="flex flex-col space-y-4">
+        <div class="flex flex-col space-y-2">
           <p class="font-semibold text-sm lg:text-md uppercase">article</p>
           <h1 class="font-semibold text-2xl lg:text-3xl">
             {{ articleDetails.title }}
@@ -39,28 +39,43 @@
             </p>
             <p aria-hidden="true">●</p>
             <p v-if="articleDetails.authors?.length > 0">
-              <template v-for="author, index in articleDetails.authors" :key="index">
-                {{ author.name }}<span v-if="articleDetails.authors?.length > 1 && index < articleDetails.authors?.length - 1">, </span>
+              <template
+                v-for="(author, index) in articleDetails.authors"
+                :key="index"
+              >
+                {{ author.name
+                }}<span
+                  v-if="
+                    articleDetails.authors?.length > 1 &&
+                    index < articleDetails.authors?.length - 1
+                  "
+                  >,
+                </span>
               </template>
             </p>
           </div>
           <div>
             <template v-if="article">
-              <div v-show="hasArticleImage" class="m-4 w-48 max-h-96 flex flex-col float-right items-center">
-                <img
-                  class="max-h-full object-cover"
-                  :src="getImgUrl(article)"
-                  alt="article image"
-                />
+              <div
+                class="
+                  h-full
+                  w-full
+                  h-[350px]
+                  max-h-[250px]
+                  md:max-h-[350px]
+                  flex flex-col
+                "
+              >
+                <ArticleImage class="max-w-[950px] h-full" :article="article" />
                 <p class="italic text-sm">
                   {{ articleDetails.image_caption }}
                 </p>
-              </div> 
+              </div>
             </template>
-            <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-              <span v-html="articleDetails.html_body"></span>
-            </p>
           </div>
+          <p class="whitespace-pre-line" v-if="articleDetails.html_body">
+            <span v-html="articleDetails.html_body"></span>
+          </p>
           <p
             class="
               font-semibold
@@ -125,10 +140,7 @@
             </DisclosureButton>
             <DisclosurePanel>
               <ol class="list-decimal list-inside ml-4 space-y-2">
-                <div
-                  v-for="source in articleDetails.sources"
-                  :key="source"
-                >
+                <div v-for="source in articleDetails.sources" :key="source">
                   <li class="text-sm">
                     <router-link to="#" class="hover:underline">
                       {{ source }}
@@ -145,23 +157,25 @@
 </template>
 
 <script>
+import * as dayjs from "dayjs";
 import { onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import ArticleNavigation from "@/components/ArticleNavigation.vue";
-import NotFound from "@/components/NotFound";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import * as dayjs from "dayjs";
+import ArticleNavigation from "@/components/ArticleNavigation";
+import ArticleImage from "@/components/ArticleImage";
+import NotFound from "@/components/NotFound";
 
 export default {
   components: {
-    ArticleNavigation,
-    NotFound,
     ChevronDownIcon,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+    ArticleNavigation,
+    ArticleImage,
+    NotFound,
   },
   props: ["doc_num", "title"],
   setup() {
@@ -205,47 +219,13 @@ export default {
       })
     );
 
-    const article = computed(() => 
+    const article = computed(() =>
       danielArticles.value.find((article) => {
         if (article.attributes.doc_num === articleDetails.value.doc_num) {
           return true;
         }
       })
     );
-
-    const hasArticleImage = (article) => {
-      console.log('article: ', article)
-      return article.images?.length > 0;
-    };
-
-    const getImgUrl = (article, stringOnly) => {
-      if (hasArticleImage(article)) {
-        let updatedAt;
-        if (Array.isArray(article.images)) {
-          updatedAt = article.images.filter(
-            (image) => image.usage == "article"
-          )[0].updated_at;
-        } else if (article.images && article.images.table.article) {
-          updatedAt = article.images.table.article.table.updated_at;
-        } else {
-          updatedAt = "";
-        }
-        return (
-          "/documents/" +
-          article.doc_num +
-          "/images/article?updated_at=" +
-          updatedAt
-        );
-      } else {
-          if (stringOnly) {
-          //   return "@/assets/image-not-available-wire-size.png";
-          // }
-          // return require("@/assets/image-not-available-wire-size.png");
-            return "@/assets/lion_wire_size.jpg";
-          }
-          return require("@/assets/lion_wire_size.jpg");
-        }
-    };   
 
     watch(
       () => route.params,
@@ -266,36 +246,19 @@ export default {
       previousArticle,
       nextArticle,
       article,
-      hasArticleImage,
-      getImgUrl,
     };
   },
 };
 </script>
 
-<style lang="scss" scoped>
-  ::v-deep .digression {
-    display: table;
-    width: auto;
-    padding: 2em;
-    margin: 2em 0;
-    background: #F7F7F8;
-    border: none;
-  }
-  ::v-deep .portion_marked_field {
-    color: #6A737B !important;
-    font-size: 85% !important;
-  }
-  ::v-deep p {
-    display: block;
-    margin-block-start: 1em !important;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-  }
-  ::v-deep .source-reference {
-    display: none;
-    font-size: 0.65625rem;
-    vertical-align: top;
-  }
+<style scoped>
+::v-deep .digression {
+  @apply table w-auto p-8 mt-8 bg-white shadow-md;
+}
+::v-deep p {
+  @apply block my-4;
+}
+::v-deep .source-reference {
+  @apply hidden align-top;
+}
 </style>

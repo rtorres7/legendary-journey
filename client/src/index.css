@@ -43,7 +43,7 @@
   .dark .digression {
     @apply bg-slate-800;
   }
-  
+
   .energy .digression {
     @apply bg-zinc-800;
   }
