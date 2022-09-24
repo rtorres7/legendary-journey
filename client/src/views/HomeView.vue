@@ -167,7 +167,7 @@
       </template>
     </div>
   </div>
-  <!-- More (Featured) Articles Section -->
+  <!-- Demo Articles Section -->
   <div
     class="
       pt-4
@@ -187,7 +187,7 @@
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingArticles">
         <template v-for="n in 6" :key="n">
-          <FeaturedArticleCard :loading="true" />
+          <DemoArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
@@ -198,7 +198,7 @@
               params: { doc_num: article.doc_num },
             }"
           >
-            <FeaturedArticleCard :article="article" />
+            <DemoArticleCard :article="article" />
           </router-link>
         </template>
       </template>
@@ -220,7 +220,7 @@
 import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import FeaturedArticleCard from "@/components/FeaturedArticleCard";
+import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import PersonalSection from "@/components/PersonalSection";
@@ -277,7 +277,7 @@ const personalArticles = [
 
 export default {
   components: {
-    FeaturedArticleCard,
+    DemoArticleCard,
     PublishedArticleCard,
     MainSectionSituationalAwareness,
     PersonalSection,

@@ -7,7 +7,7 @@
         <router-link class="h-full" to="/">
           <img
             class="h-full w-14"
-            src="@/assets/NCTCSealcolor.png"
+            src="@/assets/nctc_seal_color.svg"
             alt="NCTC seal. Link to top of the homepage"
           />
         </router-link>
