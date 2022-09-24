@@ -44,35 +44,23 @@
               </template>
             </p>
           </div>
-          <template v-if="article">
-            <div v-show="hasArticleImage" class="lg:w-5/6 max-h-96">
-              <img
-                class="max-h-full w-full object-cover"
-                :src="getImgUrl(article)"
-                alt="article image"
-              />
-            </div> 
-          </template>
-          <p class="italic text-sm">
-            {{ articleDetails.image_caption }}
-          </p>
-          <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-            <!-- {{ articleDetails.html_body.join("\n\n") }} -->
-            <span v-html="articleDetails.html_body"></span>
-          </p>
-          <!-- <div class="digression">
-            <p class="italic">
-              (U) For additional information:
+          <div>
+            <template v-if="article">
+              <div v-show="hasArticleImage" class="m-4 w-48 max-h-96 flex flex-col float-right items-center">
+                <img
+                  class="max-h-full object-cover"
+                  :src="getImgUrl(article)"
+                  alt="article image"
+                />
+                <p class="italic text-sm">
+                  {{ articleDetails.image_caption }}
+                </p>
+              </div> 
+            </template>
+            <p class="whitespace-pre-line" v-if="articleDetails.html_body">
+              <span v-html="articleDetails.html_body"></span>
             </p>
-            <ul class="list-disc list-inside">
-              <li v-for="index in 2" :key="index" class="italic text-sm">
-                <router-link to="#" class="hover:underline">
-                  (U) This is the title for an article with additional
-                  information.
-                </router-link>
-              </li>
-            </ul>
-          </div> -->
+          </div>
           <p
             class="
               font-semibold

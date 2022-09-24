@@ -29,7 +29,7 @@ export const danielArticlesDetails = [
       created_by_id: null,
       published_by_id: null,
       producer: "Center",
-      image_caption: null,
+      image_caption: "A beautiful lion yawning because he is very sleepy",
       created_on: "2022/09/01",
       posted_at: "2022-09-01T18:42:30Z",
       posted_on: "2022/09/01",
