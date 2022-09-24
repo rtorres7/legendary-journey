@@ -35,6 +35,20 @@
           "href": "/"
         }
       ]
+    ],
+    "poa_links": [
+      {
+        "name": "2022 Program of Analysis",
+        "href": "/"
+      },
+      {
+        "name": "2021 Program of Analysis",
+        "href": "/"
+      },
+      {
+        "name": "2020 Program of Analysis",
+        "href": "/"
+      }
     ]
   },
   "footer_note": "Built in partnership with WIRe",

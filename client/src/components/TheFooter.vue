@@ -102,7 +102,10 @@
                 energy:text-zinc-300
               "
             >
-              <MenuItem v-for="item in poaLinks" :key="item.name">
+              <MenuItem
+                v-for="item in metadata.footer_links.poa_links"
+                :key="item.name"
+              >
                 <a
                   :href="item.href"
                   class="
@@ -222,25 +225,6 @@ import { metadata } from "@/config";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 
-const poaLinks = [
-  { name: "2022 Program of Analysis", href: "/" },
-  { name: "2021 Program of Analysis", href: "/" },
-  { name: "2020 Program of Analysis", href: "/" },
-];
-const resourceLinks = [
-  [
-    { name: "DI Tradecraft", href: "/" },
-    { name: "NCTC/DI Artforms", href: "/" },
-    { name: "NCTC Additional Resources", href: "/" },
-    { name: "Production Processes", href: "/" },
-  ],
-  [
-    { name: "Website Overview", href: "/" },
-    { name: "World Factbook", href: "/" },
-    { name: "Accessibility Help", href: "/" },
-  ],
-];
-
 export default {
   components: {
     ChevronDownIcon,
@@ -252,8 +236,6 @@ export default {
   setup() {
     return {
       metadata,
-      poaLinks,
-      resourceLinks,
     };
   },
 };

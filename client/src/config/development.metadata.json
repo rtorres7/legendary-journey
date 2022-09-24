@@ -2,7 +2,7 @@
   "system_classification": "UNCLASSIFIED",
   "system_message": "Use of this system message content placeholder message. Sit an qualisque appellantur. Eu clita omnesque elaboraret usu, semper dictas vim ea. Nam ea ipsum sonet. Volumus fabellas expetendis no quo, ei pro commodo pertinax. Diam doming inimicus ex est, ex his audiam fastidii persequeris. No has nihil electram.",
   "footer_links": {
-    "resource_links": [
+    "resources_links": [
       [
         {
           "name": "DI Tradecraft",
@@ -35,6 +35,20 @@
           "href": "/"
         }
       ]
+    ],
+    "poa_links": [
+      {
+        "name": "2022 Program of Analysis",
+        "href": "/"
+      },
+      {
+        "name": "2021 Program of Analysis",
+        "href": "/"
+      },
+      {
+        "name": "2020 Program of Analysis",
+        "href": "/"
+      }
     ]
   },
   "footer_note": "Built in partnership with WIRe",
