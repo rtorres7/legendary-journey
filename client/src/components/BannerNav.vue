@@ -81,7 +81,7 @@
           <router-link class="hidden xl:block h-auto" to="/">
             <img
               class="h-10 w-10"
-              src="@/assets/NCTCSealcolor.png"
+              src="@/assets/nctc_seal_color.svg"
               alt="NCTC. Seal. Link to homepage."
             />
           </router-link>
@@ -1166,7 +1166,7 @@ export default {
     const alertEnabled = ref(false);
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
-    const isAdmin = computed(() => store.state.admin);
+    const isAdmin = computed(() => store.state.testConsole.admin);
     const selectedCountry = ref(countries[0]);
 
     const navigateToIssue = (issue) => {

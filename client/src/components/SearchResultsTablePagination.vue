@@ -158,21 +158,21 @@ export default {
 
     const navigatePrevious = (current) => {
       router.push({
-        name: "search",
+        name: "demo-search",
         query: { ...route.query, page: current - 1 },
       });
     };
 
     const navigateNext = (current) => {
       router.push({
-        name: "search",
+        name: "demo-search",
         query: { ...route.query, page: current + 1 },
       });
     };
 
     const navigatePage = (page) => {
       router.push({
-        name: "search",
+        name: "demo-search",
         query: { ...route.query, page },
       });
     };

@@ -33,10 +33,10 @@ export const danielArticles = [
       "subregions": [
         "AFce"
       ],
-      "summary": "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system.",
+      "summary": "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
       "summary_classification": "U",
       "summary_sci": 0,
-      "title": "Worldwide: COVID-19 Update as of 17 November",
+      "title": "COVID-19: Many people in the United States have some protection, or immunity, against COVID-19 due to vaccination, previous infection, or both. This immunity, combined with the availability of tests and treatments, has greatly reduced the risk of severe illness, hospitalization, and death from COVID-19 for many people.",
       "title_classification": "U",
       "title_sci": 0,
       "to_param": "WIReWIRe_sample_",
