@@ -1,21 +1,4 @@
 <template>
-  <div v-show="showDemoPageNotification">
-    <div
-      class="
-        flex
-        justify-center
-        items-center
-        bg-slate-700/40
-        dark:bg-slate-700/30
-        energy:bg-zinc-700/40
-        p-4
-      "
-    >
-      <p class="text-sm text-amber-300 dark:text-teal-400">
-        DEMO PAGE
-      </p>
-    </div>
-  </div>
   <div
     v-if="!hasAcknowledged"
     id="system-message"
@@ -68,8 +51,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import { useRoute } from "vue-router";
+import { ref } from "vue";
 import BannerNav from "@/components/BannerNav.vue";
 import { metadata } from "@/config";
 import { XIcon } from "@heroicons/vue/outline";
@@ -80,20 +62,18 @@ export default {
     XIcon,
   },
   setup() {
-    const route = useRoute();
-    const showDemoPageNotification = computed(() => { return route.meta.demo ? true : false });
     const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));
-    return {
-      hasAcknowledged,
-      metadata,
-      showDemoPageNotification,
-    };
-  },
-  methods: {
-    removeSystemMessage() {
+
+    const removeSystemMessage = () => {
       document.querySelector("#system-message").remove();
       sessionStorage.setItem("acknowledged", true);
-    },
+    };
+
+    return {
+      hasAcknowledged,
+      removeSystemMessage,
+      metadata,
+    };
   },
 };
 </script>

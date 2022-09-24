@@ -20,6 +20,25 @@
         energy:text-zinc-300 energy:bg-zinc-900
       "
     >
+      <!-- <div
+        v-show="isLiveDemo"
+        class="
+          flex
+          justify-center
+          items-center
+          bg-emerald-600/80
+          p-2
+          sticky
+          z-10
+          top-[101px]
+        "
+      >
+        <p class="text-sm text-white">
+          Note: This page is represents a live preview. The contents of this
+          page are meant to showcase future capabilities and gather user
+          feedback.
+        </p>
+      </div> -->
       <div
         class="
           max-w-8xl
@@ -43,7 +62,7 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import TheBanner from "@/components/TheBanner";
@@ -57,9 +76,14 @@ export default {
     // ScrollToTopBtn,
   },
   setup() {
+    const route = useRoute();
     const store = useStore();
     const topOfApp = ref(null);
     const mainContent = ref(null);
+
+    const isLiveDemo = computed(() => {
+      return route.meta.demo ? true : false;
+    });
 
     watch(useRoute(), () => {
       topOfApp.value.focus();
@@ -88,6 +112,7 @@ export default {
       }
     });
     return {
+      isLiveDemo,
       topOfApp,
       mainContent,
     };
