@@ -29,7 +29,10 @@ const routes = [
     path: '/demo-article/:doc_num',
     name: 'demo-article',
     component: DemoArticleView,
-    props: true
+    props: true,
+    meta: {
+      demo: true
+    }
   },
   {
     path: '/attachment/:url?',
@@ -42,7 +45,8 @@ const routes = [
     name: 'issues',
     component: DemoSearchView,
     meta: {
-      title: 'Issues'
+      title: 'Issues',
+      demo: true
     }
   },
   {
@@ -50,7 +54,8 @@ const routes = [
     name: 'regions',
     component: DemoSearchView,
     meta: {
-      title: 'Regions'
+      title: 'Regions',
+      demo: true
     }
   },
   {
@@ -58,7 +63,8 @@ const routes = [
     name: 'subregions',
     component: DemoSearchView,
     meta: {
-      title: 'Subregions'
+      title: 'Subregions',
+      demo: true
     }
   },
   {
@@ -66,7 +72,8 @@ const routes = [
     name: 'countries',
     component: DemoSearchView,
     meta: {
-      title: 'Countries'
+      title: 'Countries',
+      demo: true
     }
   },
   {
@@ -100,7 +107,8 @@ const routes = [
     component: EditDocumentView,
     meta: {
       title: 'New Document',
-      // admin: true
+      // admin: true,
+      demo: true
     }
   },
   {
@@ -109,7 +117,8 @@ const routes = [
     component: EditDocumentView,
     meta: {
       title: 'Edit Document',
-      // admin: true
+      // admin: true,
+      demo: true
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
