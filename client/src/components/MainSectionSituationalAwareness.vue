@@ -116,27 +116,27 @@ import { Carousel, Navigation, Slide } from "vue3-carousel";
 
 const sitreps = [
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample SITREP Title",
     date: "04/24/22, 0100 EDT",
     locked: false,
   },
   {
-    title: "(U) Sample Threat TItle",
+    title: "(U) Sample Threat Title",
     date: "04/23/22, 0100 EDT",
     locked: true,
   },
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample SITREP Title",
     date: "04/22/22, 0100 EDT",
     locked: false,
   },
   {
-    title: "(U) Sample Threat TItle",
+    title: "(U) Sample Threat Title",
     date: "04/21/22, 0100 EDT",
     locked: false,
   },
   {
-    title: "(U) Sample SITREP TItle",
+    title: "(U) Sample SITREP Title",
     date: "04/20/22, 0100 EDT",
     locked: true,
   },

@@ -15,7 +15,8 @@
   <div
     class="
       py-4
-      border-b-2 border-slate-900/10
+      xl:border-b-2
+      border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
     "
@@ -51,15 +52,15 @@
           class="
             py-4
             lg:py-0
-            max-w-[650px]
             h-[425px]
             lg:h-full lg:basis-2/3
             xl:basis-2/3
-            lg:px-4
+            lg:pl-4
+            xl:pr-4
           "
         >
           <template v-if="loadingDanielArticles">
-            <MainSectionPublishedArticleCard :loading="true" />
+            <PublishedArticleCard loading headline />
           </template>
           <template v-else>
             <router-link
@@ -68,8 +69,9 @@
                 params: { doc_num: danielArticles[0].attributes.doc_num },
               }"
             >
-              <MainSectionPublishedArticleCard
+              <PublishedArticleCard
                 :article="danielArticles[0].attributes"
+                headline
               />
             </router-link>
           </template>
@@ -87,6 +89,10 @@
           energy:border-zinc-700/25
         "
       >
+        <!-- Only shows in screens smaller than XL -->
+        <div class="block xl:hidden font-semibold mb-4">
+          More Published Articles
+        </div>
         <div
           class="
             flex flex-col
@@ -100,7 +106,7 @@
         >
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <div class="md:w-1/2 xl:w-full">
+              <div class="w-full h-[264px]">
                 <PublishedArticleCard :loading="true" />
               </div>
             </template>
@@ -110,32 +116,35 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <router-link
-                class="md:w-1/2 xl:w-full"
-                :to="{
-                  name: 'article',
-                  params: { doc_num: article.attributes.doc_num },
-                }"
-              >
-                <PublishedArticleCard :article="article.attributes" />
-              </router-link>
+              <div class="w-full h-[264px]">
+                <router-link
+                  :to="{
+                    name: 'article',
+                    params: { doc_num: article.attributes.doc_num },
+                  }"
+                >
+                  <PublishedArticleCard :article="article.attributes" />
+                </router-link>
+              </div>
             </template>
           </template>
         </div>
       </div>
     </div>
   </div>
-  <!-- More Published Articles Section -->
+  <!-- More Published Articles Section (Large Screen Devices) -->
   <div
     class="
-      pt-4
+      xl:pt-4
       pb-6
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
     "
   >
-    <div class="font-semibold mb-4">More Published Articles</div>
+    <div class="hidden xl:block font-semibold mb-4">
+      More Published Articles
+    </div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 6" :key="n">
@@ -144,19 +153,21 @@
       </template>
       <template v-else>
         <template v-for="article in danielArticles.slice(3, 6)" :key="article">
-          <router-link
-            :to="{
-              name: 'article',
-              params: { doc_num: article.attributes.doc_num },
-            }"
-          >
-            <PublishedArticleCard :article="article.attributes" />
-          </router-link>
+          <div class="w-full h-[264px]">
+            <router-link
+              :to="{
+                name: 'article',
+                params: { doc_num: article.attributes.doc_num },
+              }"
+            >
+              <PublishedArticleCard :article="article.attributes" />
+            </router-link>
+          </div>
         </template>
       </template>
     </div>
   </div>
-  <!-- More (Featured) Articles Section -->
+  <!-- Demo Articles Section -->
   <div
     class="
       pt-4
@@ -176,7 +187,7 @@
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingArticles">
         <template v-for="n in 6" :key="n">
-          <FeaturedArticleCard :loading="true" />
+          <DemoArticleCard :loading="true" />
         </template>
       </template>
       <template v-else>
@@ -187,7 +198,7 @@
               params: { doc_num: article.doc_num },
             }"
           >
-            <FeaturedArticleCard :article="article" />
+            <DemoArticleCard :article="article" />
           </router-link>
         </template>
       </template>
@@ -209,10 +220,9 @@
 import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import FeaturedArticleCard from "@/components/FeaturedArticleCard";
+import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
-import MainSectionPublishedArticleCard from "@/components/MainSectionPublishedArticleCard";
 import PersonalSection from "@/components/PersonalSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
@@ -267,10 +277,9 @@ const personalArticles = [
 
 export default {
   components: {
-    FeaturedArticleCard,
+    DemoArticleCard,
     PublishedArticleCard,
     MainSectionSituationalAwareness,
-    MainSectionPublishedArticleCard,
     PersonalSection,
     CalendarIcon,
   },

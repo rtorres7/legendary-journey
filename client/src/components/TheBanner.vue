@@ -63,16 +63,17 @@ export default {
   },
   setup() {
     const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));
-    return {
-      hasAcknowledged,
-      metadata,
-    };
-  },
-  methods: {
-    removeSystemMessage() {
+
+    const removeSystemMessage = () => {
       document.querySelector("#system-message").remove();
       sessionStorage.setItem("acknowledged", true);
-    },
+    };
+
+    return {
+      hasAcknowledged,
+      removeSystemMessage,
+      metadata,
+    };
   },
 };
 </script>

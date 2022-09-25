@@ -7,6 +7,7 @@ import user from "./modules/user";
 import document from "./modules/document";
 import savedSearches from "./modules/saved-searches";
 import danielDetails from "./modules/danielDetails";
+import testConsole from "./modules/test-console";
 
 export default createStore({
     state: {
@@ -18,32 +19,8 @@ export default createStore({
     getters: {
     },
     actions: {
-        delay: ({ commit }) => {
-            commit("enableDelay");
-        },
-        removeDelay: ({ commit }) => {
-            commit("disableDelay");
-        },
-        addAdmin: ({ commit }) => {
-            commit("enableAdmin");
-        },
-        removeAdmin: ({ commit }) => {
-            commit("disableAdmin");
-        },
     },
     mutations: {
-        enableDelay(state) {
-            state.delay = true
-        },
-        disableDelay(state) {
-            state.delay = false
-        },
-        enableAdmin(state) {
-            state.admin = true
-        },
-        disableAdmin(state) {
-            state.admin = false
-        },
     },
     modules: {
         articles,
@@ -54,5 +31,6 @@ export default createStore({
         document,
         savedSearches,
         danielDetails,
+        testConsole
     },
 })

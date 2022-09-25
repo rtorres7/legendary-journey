@@ -39,4 +39,12 @@
   .energy .ck.ck-editor__main>.ck-editor__editable {
     @apply bg-zinc-700;
   }
+
+  .dark .digression {
+    @apply bg-slate-800;
+  }
+
+  .energy .digression {
+    @apply bg-zinc-800;
+  }
 }

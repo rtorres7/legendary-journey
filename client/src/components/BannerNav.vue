@@ -14,6 +14,15 @@
     "
   >
     <div
+      v-show="isLiveDemo"
+      class="flex justify-center items-center bg-emerald-600/80 p-2"
+    >
+      <p class="text-sm text-white">
+        Note: This page is a live preview. The contents of this page are meant
+        to showcase future capabilities and gather user feedback.
+      </p>
+    </div>
+    <div
       v-if="alertEnabled"
       id="alert-message"
       class="flex justify-between items-center bg-red-800 text-white p-2 lg:p-1"
@@ -81,7 +90,7 @@
           <router-link class="hidden xl:block h-auto" to="/">
             <img
               class="h-10 w-10"
-              src="@/assets/NCTCSealcolor.png"
+              src="@/assets/nctc_seal_color.svg"
               alt="NCTC. Seal. Link to homepage."
             />
           </router-link>
@@ -1049,7 +1058,7 @@
 <script>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { metadata } from "@/config";
 import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
@@ -1127,7 +1136,11 @@ export default {
   },
   setup() {
     const store = useStore();
+    const route = useRoute();
     const router = useRouter();
+    const isLiveDemo = computed(() => {
+      return route.meta.demo ? true : false;
+    });
     const isMainMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
     const isTestConsoleMenuOpen = ref(false);
@@ -1166,8 +1179,54 @@ export default {
     const alertEnabled = ref(false);
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
-    const isAdmin = computed(() => store.state.admin);
+    const isAdmin = computed(() => store.state.testConsole.admin);
     const selectedCountry = ref(countries[0]);
+
+    const removeAlertMessage = () => {
+      alertEnabled.value = false;
+    };
+
+    const isActive = (selection) => {
+      if (selection === localStorage.theme) {
+        return "text-amber-300 dark:text-teal-400 energy:text-energy-yellow";
+      }
+    };
+
+    const closeMainMenuModal = () => {
+      isMainMenuOpen.value = false;
+    };
+
+    const openMainMenuModal = () => {
+      isMainMenuOpen.value = true;
+    };
+
+    const closeUserMenuModal = () => {
+      isUserMenuOpen.value = false;
+    };
+
+    const openUserMenuModal = () => {
+      isUserMenuOpen.value = true;
+    };
+
+    const closeTestConsoleModal = () => {
+      isTestConsoleMenuOpen.value = false;
+    };
+
+    const openTestConsoleModal = () => {
+      isTestConsoleMenuOpen.value = true;
+    };
+
+    // NOTE: setTimeout added as a temporary workaround for
+    // multiple dialog scroll behavior bug
+    const openTestConsoleModalMobile = () => {
+      isUserMenuOpen.value = false;
+      setTimeout(() => (isTestConsoleMenuOpen.value = true), 500);
+    };
+
+    const openPDF = () => {
+      //TODO: figure the right approach to PDF referencing
+      //window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
+    };
 
     const navigateToIssue = (issue) => {
       let query = {
@@ -1237,6 +1296,7 @@ export default {
       metadata,
       regions,
       countries,
+      isLiveDemo,
       selectedCountry,
       themeOptions,
       isMainMenuOpen,
@@ -1249,48 +1309,21 @@ export default {
       currentUsername,
       loadingUser,
       isAdmin,
+      isActive,
+      closeMainMenuModal,
+      openMainMenuModal,
+      closeUserMenuModal,
+      openUserMenuModal,
+      closeTestConsoleModal,
+      openTestConsoleModal,
+      openTestConsoleModalMobile,
+      openPDF,
+      removeAlertMessage,
       navigateToIssue,
       navigateToRegion,
       navigateToSubregion,
       navigateToCountry,
     };
-  },
-  methods: {
-    removeAlertMessage() {
-      this.alertEnabled = false;
-    },
-    isActive(selection) {
-      if (selection === localStorage.theme) {
-        return "text-amber-300 dark:text-teal-400 energy:text-energy-yellow";
-      }
-    },
-    closeMainMenuModal() {
-      this.isMainMenuOpen = false;
-    },
-    openMainMenuModal() {
-      this.isMainMenuOpen = true;
-    },
-    closeUserMenuModal() {
-      this.isUserMenuOpen = false;
-    },
-    openUserMenuModal() {
-      this.isUserMenuOpen = true;
-    },
-    closeTestConsoleModal() {
-      this.isTestConsoleMenuOpen = false;
-    },
-    openTestConsoleModal() {
-      this.isTestConsoleMenuOpen = true;
-    },
-    // NOTE: setTimeout added as a temporary workaround for
-    // multiple dialog scroll behavior bug
-    openTestConsoleModalMobile() {
-      this.isUserMenuOpen = false;
-      setTimeout(() => (this.isTestConsoleMenuOpen = true), 500);
-    },
-    openPDF() {
-      window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
-    },
   },
 };
 </script>

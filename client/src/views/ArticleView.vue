@@ -38,35 +38,44 @@
               }}
             </p>
             <p aria-hidden="true">●</p>
-            <p v-if="articleDetails.authors">
-              {{ articleDetails.authors.join(", ") }}
+            <p v-if="articleDetails.authors?.length > 0">
+              <template
+                v-for="(author, index) in articleDetails.authors"
+                :key="index"
+              >
+                {{ author.name
+                }}<span
+                  v-if="
+                    articleDetails.authors?.length > 1 &&
+                    index < articleDetails.authors?.length - 1
+                  "
+                  >,
+                </span>
+              </template>
             </p>
           </div>
-          <p class="italic text-sm">
-            {{ articleDetails.image_caption }}
-          </p>
+          <div>
+            <template v-if="article">
+              <div
+                class="
+                  h-full
+                  w-full
+                  h-[350px]
+                  max-h-[250px]
+                  md:max-h-[350px]
+                  flex flex-col
+                "
+              >
+                <ArticleImage class="max-w-[950px] h-full" :article="article" />
+                <p class="italic text-sm pt-2">
+                  {{ articleDetails.image_caption }}
+                </p>
+              </div>
+            </template>
+          </div>
           <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-            {{ articleDetails.html_body.join("\n\n") }}
+            <span class="summary" v-html="articleDetails.html_body"></span>
           </p>
-          <p
-            class="
-              italic
-              border-t-2 border-slate-900/10
-              dark:border-slate-50/[0.06]
-              energy:border-zinc-700/25
-              pt-4
-            "
-          >
-            (U) For additional information:
-          </p>
-          <ul class="list-disc list-inside">
-            <li v-for="index in 2" :key="index" class="italic text-sm">
-              <router-link to="#" class="hover:underline">
-                (U) This is the title for an article with additional
-                information.
-              </router-link>
-            </li>
-          </ul>
           <p
             class="
               font-semibold
@@ -131,13 +140,10 @@
             </DisclosureButton>
             <DisclosurePanel>
               <ol class="list-decimal list-inside ml-4 space-y-2">
-                <div
-                  v-for="source in articleDetails.sources"
-                  :key="source.name"
-                >
+                <div v-for="source in articleDetails.sources" :key="source">
                   <li class="text-sm">
                     <router-link to="#" class="hover:underline">
-                      {{ source.name }}
+                      {{ source }}
                     </router-link>
                   </li>
                 </div>
@@ -151,23 +157,25 @@
 </template>
 
 <script>
+import * as dayjs from "dayjs";
 import { onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import ArticleNavigation from "@/components/ArticleNavigation.vue";
-import NotFound from "@/components/NotFound";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import * as dayjs from "dayjs";
+import ArticleNavigation from "@/components/ArticleNavigation";
+import ArticleImage from "@/components/ArticleImage";
+import NotFound from "@/components/NotFound";
 
 export default {
   components: {
-    ArticleNavigation,
-    NotFound,
     ChevronDownIcon,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+    ArticleNavigation,
+    ArticleImage,
+    NotFound,
   },
   props: ["doc_num", "title"],
   setup() {
@@ -211,6 +219,14 @@ export default {
       })
     );
 
+    const article = computed(() =>
+      danielArticles.value.find((article) => {
+        if (article.attributes.doc_num === articleDetails.value.doc_num) {
+          return true;
+        }
+      })
+    );
+
     watch(
       () => route.params,
       () => {
@@ -229,9 +245,23 @@ export default {
       currentArticleIndex,
       previousArticle,
       nextArticle,
+      article,
     };
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+::v-deep .digression {
+  @apply table w-auto p-8 mt-8 bg-white shadow-md;
+}
+::v-deep .digression-content > p {
+  @apply my-4;
+}
+::v-deep .summary > p {
+  @apply block my-4;
+}
+::v-deep .source-reference {
+  @apply hidden align-top;
+}
+</style>
