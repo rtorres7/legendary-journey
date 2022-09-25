@@ -25,7 +25,7 @@
           mb-8
         "
       >
-        <div class="flex flex-col space-y-2">
+        <div class="flex flex-col space-y-4">
           <p class="font-semibold text-sm lg:text-md uppercase">article</p>
           <h1 class="font-semibold text-2xl lg:text-3xl">
             {{ articleDetails.title }}
@@ -67,14 +67,14 @@
                 "
               >
                 <ArticleImage class="max-w-[950px] h-full" :article="article" />
-                <p class="italic text-sm">
+                <p class="italic text-sm pt-2">
                   {{ articleDetails.image_caption }}
                 </p>
               </div>
             </template>
           </div>
           <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-            <span v-html="articleDetails.html_body"></span>
+            <span class="summary" v-html="articleDetails.html_body"></span>
           </p>
           <p
             class="
@@ -255,7 +255,10 @@ export default {
 ::v-deep .digression {
   @apply table w-auto p-8 mt-8 bg-white shadow-md;
 }
-::v-deep p {
+::v-deep .digression-content > p {
+  @apply my-4;
+}
+::v-deep .summary > p {
   @apply block my-4;
 }
 ::v-deep .source-reference {
