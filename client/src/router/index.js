@@ -90,6 +90,7 @@ const routes = [
     component: DemoSearchView,
     meta: {
       title: 'Search (Demo)',
+      demo: true
     }
   },
   {
@@ -98,6 +99,7 @@ const routes = [
     component: PublishArticleView,
     meta: {
       title: 'Publish an Article',
+      demo: true
       // admin: true,
     },
   },
