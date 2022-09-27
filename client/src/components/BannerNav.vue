@@ -89,7 +89,7 @@
           </button>
           <router-link class="hidden xl:block h-auto" to="/">
             <img
-              class="h-10 w-10"
+              class="h-12 w-12"
               src="@/assets/nctc_seal_color.svg"
               alt="NCTC. Seal. Link to homepage."
             />
