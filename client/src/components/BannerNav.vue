@@ -694,55 +694,55 @@
           </BannerNavPopover>
         </li>
         <li>
-          <BaseTooltip :placement="'bottom'">
-            <div
-              class="
-                font-semibold
-                flex
-                items-center
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
-              Community
-            </div>
-          </BaseTooltip>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip :placement="'bottom'">
+                Community
+            </BaseTooltip>
+          </div>
         </li>
         <li>
-          <BaseTooltip placement="bottom">
-            <div
-              class="
-                font-semibold
-                flex
-                items-center
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip placement="bottom">  
               Special Editions
-            </div>
-          </BaseTooltip>
+            </BaseTooltip>
+          </div>
         </li>
         <li>
-          <BaseTooltip placement="bottom">
-            <div
-              class="
-                font-semibold
-                flex
-                items-center
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip placement="bottom">  
               Foreign
-            </div>
-          </BaseTooltip>
+            </BaseTooltip>
+          </div>
         </li>
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
