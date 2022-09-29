@@ -167,6 +167,22 @@
       </template>
     </div>
   </div>
+  <!-- Ose Feeds Section -->
+  <div
+    class="
+      pt-4
+      pb-6
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-zinc-700/50
+    "
+  >
+    <FeedSection
+      :title="'Open Source Highlights'"
+      :items="oseFeeds"
+      :loading="loadingOseFeeds"
+    />
+  </div>
   <!-- Demo Articles Section -->
   <div
     class="
@@ -224,6 +240,7 @@ import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import PersonalSection from "@/components/PersonalSection";
+import FeedSection from "@/components/FeedSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
@@ -281,6 +298,7 @@ export default {
     PublishedArticleCard,
     MainSectionSituationalAwareness,
     PersonalSection,
+    FeedSection,
     CalendarIcon,
   },
   setup() {
@@ -289,11 +307,15 @@ export default {
     const loadingArticles = computed(() => store.state.articles.loading);
     const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const oseFeeds = computed(() => store.state.search.results);
+    const loadingOseFeeds = computed(() => store.state.search.loading);
+
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
       store.dispatch("articles/getHomeArticles");
       store.dispatch("daniel/getDanielArticles");
+      store.dispatch("search/getOseFeeds");
     });
 
     return {
@@ -302,6 +324,8 @@ export default {
       danielArticles,
       loadingDanielArticles,
       personalArticles,
+      oseFeeds,
+      loadingOseFeeds,
       today,
     };
   },
