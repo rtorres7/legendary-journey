@@ -2,7 +2,15 @@
   <div class="font-semibold mb-4">
     {{ title }}
   </div>
-  <template v-if="loading">Loading... </template>
+  <template v-if="loading">
+    <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+      <template v-for="n in 3" :key="n">
+        <div class="w-full h-[236px]">
+          <FeedItemCard loading />
+        </div>
+      </template>
+    </div>
+  </template>
   <template v-else>
     <div class="hidden lg:grid xl:grid-cols-3 grid-cols-2 gap-6">
       <template v-for="(item, index) in items.length" :key="item">
@@ -11,7 +19,7 @@
     </div>
     <Carousel :settings="settings" :breakpoints="breakpoints" class="lg:hidden">
       <Slide v-for="item in items" :key="item" class="p-2 pb-10">
-        <FeedItemCard :feed="item" :carousel="true" />
+        <FeedItemCard :feed="item" class="h-64" />
       </Slide>
     </Carousel>
   </template>

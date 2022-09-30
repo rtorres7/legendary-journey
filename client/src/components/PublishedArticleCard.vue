@@ -13,7 +13,7 @@
       ></div>
       <div
         :class="[
-          headline ? 'h-2/5 mt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
+          headline ? 'h-2/5 pt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
           'flex flex-col justify-between ',
         ]"
       >
@@ -41,7 +41,7 @@
         </div>
         <p
           :class="[
-            headline ? 'mb-4' : 'mb-2 xl:mt-1',
+            headline ? 'mb-2' : 'mb-2 xl:mt-1',
             'h-5 w-1/2 self-center bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded',
           ]"
         ></p>
