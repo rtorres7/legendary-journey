@@ -422,21 +422,23 @@
                     </a>
                   </BaseTooltip>
                 </MenuItem>
-                <MenuItem>
-                  <a
-                    class="
-                      flex
-                      cursor-pointer
-                      py-1
-                      px-3
-                      hover:bg-slate-700/80
-                      dark:hover:bg-slate-600/80
-                      energy:hover:bg-zinc-600/80
-                    "
-                    @click="openTestConsoleModal"
-                    >Test Console</a
-                  >
-                </MenuItem>
+                <template v-if="environment === 'low'">
+                  <MenuItem>
+                    <a
+                      class="
+                        flex
+                        cursor-pointer
+                        py-1
+                        px-3
+                        hover:bg-slate-700/80
+                        dark:hover:bg-slate-600/80
+                        energy:hover:bg-zinc-600/80
+                      "
+                      @click="openTestConsoleModal"
+                      >Test Console</a
+                    >
+                  </MenuItem>
+                </template>
               </MenuItems>
             </transition>
           </Menu>
@@ -705,9 +707,7 @@
             "
             tabindex="0"
           >
-            <BaseTooltip :placement="'bottom'">
-                Community
-            </BaseTooltip>
+            <BaseTooltip :placement="'bottom'"> Community </BaseTooltip>
           </div>
         </li>
         <li>
@@ -722,9 +722,7 @@
             "
             tabindex="0"
           >
-            <BaseTooltip placement="bottom">  
-              Special Editions
-            </BaseTooltip>
+            <BaseTooltip placement="bottom"> Special Editions </BaseTooltip>
           </div>
         </li>
         <li>
@@ -739,9 +737,7 @@
             "
             tabindex="0"
           >
-            <BaseTooltip placement="bottom">  
-              Foreign
-            </BaseTooltip>
+            <BaseTooltip placement="bottom"> Foreign </BaseTooltip>
           </div>
         </li>
         <!-- <li class="2xl:hidden">
@@ -1138,6 +1134,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const environment = ref(process.env.NODE_ENV);
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
     });
@@ -1296,6 +1293,7 @@ export default {
       metadata,
       regions,
       countries,
+      environment,
       isLiveDemo,
       selectedCountry,
       themeOptions,
