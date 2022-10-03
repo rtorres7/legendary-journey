@@ -373,6 +373,72 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
+                    <div class="flex items-center justify-between mt-2">
+                      <label id="article-counter" class="mr-4"
+                        >Open Source Feeds (max. 4)</label
+                      >
+                      <div
+                        class="
+                          inline-flex
+                          items-center
+                          rounded
+                          shadow-md
+                          bg-mission-blue/30
+                          dark:bg-dark-navy/30
+                          energy:bg-zinc-900/30
+                        "
+                      >
+                        <button
+                          @click="changeFeedCount(feedCountFromStore - 1)"
+                          class="
+                            rounded-l
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            hover:bg-mission-blue/70
+                            dark:hover:bg-slate-900/70
+                            energy:hover:bg-zinc-900/50
+                            text-gray-100
+                            dark:text-slate-300
+                            energy:text-zinc-300
+                          "
+                        >
+                          -
+                        </button>
+                        <div
+                          class="
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            bg-gray-100
+                            dark:bg-slate-700
+                            energy:bg-zinc-700
+                          "
+                        >
+                          {{ feedCountFromStore }}
+                        </div>
+                        <button
+                          @click="changeFeedCount(feedCountFromStore + 1)"
+                          class="
+                            rounded-r
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            hover:bg-mission-blue/70
+                            dark:hover:bg-slate-900/70
+                            energy:hover:bg-zinc-900/50
+                            text-gray-100
+                            dark:text-slate-300
+                            energy:text-zinc-300
+                          "
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4"
@@ -601,6 +667,7 @@ export default {
       () => store.state.daniel.loading
     );
     const loadingOseFeedsFromStore = computed(() => store.state.feeds.loading);
+    const feedCountFromStore = computed(() => store.state.feeds.results.length);
     const adminFromStore = computed(() => store.state.testConsole.admin);
     const blurredFromStore = computed(
       () => store.state.testConsole.blurredImages
@@ -631,6 +698,10 @@ export default {
 
     const changePublishedArticleCount = (count) => {
       store.dispatch("daniel/setDanielArticles", count);
+    };
+
+    const changeFeedCount = (count) => {
+      store.dispatch("feeds/setFeeds", count);
     };
 
     watch(loadingPublishedArticlesEnabled, (enabled) => {
@@ -682,7 +753,9 @@ export default {
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
       changePublishedArticleCount,
+      feedCountFromStore,
       loadingOseFeedsEnabled,
+      changeFeedCount,
       adminEnabled,
       blurredEnabled,
     };

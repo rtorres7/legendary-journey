@@ -37,6 +37,10 @@ export default {
         })
       }
     },
+    //Test Console Feature Only
+    setFeeds({ commit }, count) {
+      commit("saveFeeds", count <= 0 ? [] : getOseFeeds.results.slice(0, count))
+    },
     setLoading({ commit }, value) {
       commit("toggleLoading", value)
     },
@@ -54,6 +58,10 @@ export default {
       state.totalCount = data.totalCount;
       state.siteEnhancement = data.siteEnhancement;
       state.daClassifError = data.daClassifError;
+    },
+    saveFeeds(state, feeds) {
+      state.results = feeds;
+      state.loading = false;
     },
     toggleLoading(state, value) {
       state.loading = value;
