@@ -392,7 +392,8 @@
                 "
               >
                 <MenuItem>
-                  <a
+                  <router-link
+                    to="/"
                     class="
                       flex
                       cursor-pointer
@@ -402,13 +403,14 @@
                       dark:hover:bg-slate-600/80
                       energy:hover:bg-zinc-600/80
                     "
-                    >{{ loadingUser ? "Loading..." : currentUsername }}</a
+                    >{{
+                      loadingUser ? "Loading..." : currentUsername
+                    }}</router-link
                   >
                 </MenuItem>
                 <MenuItem>
                   <BaseTooltip placement="left">
                     <a
-                      href="/"
                       class="
                         flex
                         cursor-pointer
@@ -890,7 +892,6 @@
                         dark:hover:text-white
                         energy:hover:text-white
                       "
-                      href="/"
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
                     >
                   </li>
@@ -914,7 +915,6 @@
                           dark:hover:text-white
                           energy:hover:text-white
                         "
-                        href="/"
                         >Settings</a
                       >
                     </BaseTooltip>

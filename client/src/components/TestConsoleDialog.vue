@@ -37,7 +37,8 @@
                 max-w-xs
                 p-6
                 my-8
-                text-left
+                text-left text-sm
+                md:text-base
                 align-middle
                 transition-all
                 transform
@@ -158,12 +159,12 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4"
-                          >Blurred Published Article Images</SwitchLabel
+                          >Toggle Sample Article Image</SwitchLabel
                         >
                         <Switch
-                          v-model="blurredEnabled"
+                          v-model="sampleImageEnabled"
                           :class="
-                            blurredEnabled
+                            sampleImageEnabled
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
@@ -183,7 +184,9 @@
                         >
                           <span
                             :class="
-                              blurredEnabled ? 'translate-x-6' : 'translate-x-1'
+                              sampleImageEnabled
+                                ? 'translate-x-6'
+                                : 'translate-x-1'
                             "
                             class="
                               inline-block
@@ -198,6 +201,70 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
+                    <div class="flex items-center justify-between">
+                      <label id="article-counter" class="mr-4"
+                        >Upload Your Own Article Image</label
+                      >
+                      <div
+                        class="
+                          rounded
+                          shadow-md
+                          text-xs
+                          md:text-sm
+                          bg-mission-blue/30
+                          dark:bg-dark-navy/30
+                          energy:bg-zinc-900/30
+                        "
+                      >
+                        <label
+                          for="image-input"
+                          class="
+                            relative
+                            cursor-pointer
+                            focus-within:ring-2
+                            font-medium
+                          "
+                        >
+                          <div
+                            class="
+                              px-2
+                              md:px-4
+                              py-2
+                              text-white
+                              dark:text-slate-300
+                              energy:text-zinc-300
+                            "
+                          >
+                            Choose File
+                          </div>
+                          <input
+                            id="image-input"
+                            name="image-input"
+                            type="file"
+                            class="sr-only"
+                            accept="image/jpeg, image/png, image/jpg"
+                            @change="changeArticleImage"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      v-show="uploadFileName"
+                      class="flex flex-row-reverse text-sm"
+                    >
+                      <div class="line-clamp-1">
+                        <span class="font-medium">Current File: </span
+                        ><span
+                          class="
+                            ml-1
+                            text-slate-900
+                            dark:text-slate-400
+                            energy:text-zinc-400
+                          "
+                          >{{ uploadFileName }}</span
+                        >
+                      </div>
+                    </div>
                     <!-- <SwitchGroup>
                       <div class="flex items-center justify-between">
                         <SwitchLabel class="mr-4"
@@ -653,7 +720,8 @@ export default {
     const loadingResultsEnabled = ref(false);
     const loadingPublishedArticlesEnabled = ref(false);
     const loadingOseFeedsEnabled = ref(false);
-    const blurredEnabled = ref(false);
+    const sampleImageEnabled = ref(false);
+    const uploadFileName = ref(null);
     const adminEnabled = ref(false);
 
     const loadingArticlesFromStore = computed(
@@ -669,8 +737,8 @@ export default {
     const loadingOseFeedsFromStore = computed(() => store.state.feeds.loading);
     const feedCountFromStore = computed(() => store.state.feeds.results.length);
     const adminFromStore = computed(() => store.state.testConsole.admin);
-    const blurredFromStore = computed(
-      () => store.state.testConsole.blurredImages
+    const sampleImageFromStore = computed(
+      () => store.state.testConsole.sampleImage
     );
 
     watch(
@@ -696,6 +764,15 @@ export default {
       }
     });
 
+    const changeArticleImage = (event) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        store.dispatch("testConsole/setUploadBinary", reader.result);
+      });
+      uploadFileName.value = event.target.files[0].name;
+      reader.readAsDataURL(event.target.files[0]);
+    };
+
     const changePublishedArticleCount = (count) => {
       store.dispatch("daniel/setDanielArticles", count);
     };
@@ -716,8 +793,8 @@ export default {
       store.dispatch("testConsole/setAdmin", enabled);
     });
 
-    watch(blurredEnabled, (enabled) => {
-      store.dispatch("testConsole/setBlurredImages", enabled);
+    watch(sampleImageEnabled, (enabled) => {
+      store.dispatch("testConsole/setSampleImage", enabled);
     });
 
     watch(loadingArticlesFromStore, (loading) => {
@@ -740,8 +817,8 @@ export default {
       adminEnabled.value = status;
     });
 
-    watch(blurredFromStore, (value) => {
-      blurredEnabled.value = value;
+    watch(sampleImageFromStore, (value) => {
+      sampleImageEnabled.value = value;
     });
 
     return {
@@ -752,12 +829,14 @@ export default {
       loadingResultsEnabled,
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
+      changeArticleImage,
       changePublishedArticleCount,
       feedCountFromStore,
       loadingOseFeedsEnabled,
       changeFeedCount,
+      uploadFileName,
       adminEnabled,
-      blurredEnabled,
+      sampleImageEnabled,
     };
   },
 };

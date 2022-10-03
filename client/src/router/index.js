@@ -6,6 +6,7 @@ import AttachmentView from '../views/AttachmentView.vue'
 import SearchView from '../views/SearchView.vue'
 import DemoSearchView from '../views/DemoSearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
+import ProfileView from '../views/ProfileView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import store from "@/store"
 import PublishArticleView from '../views/PublishArticleView.vue'
@@ -121,6 +122,15 @@ const routes = [
       title: 'Edit Document',
       // admin: true,
       demo: true
+    },
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView,
+    meta: {
+      title: 'Profile',
+      // admin: true,
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
