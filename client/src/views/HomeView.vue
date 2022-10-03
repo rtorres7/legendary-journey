@@ -63,17 +63,19 @@
             <PublishedArticleCard loading headline />
           </template>
           <template v-else>
-            <router-link
-              :to="{
-                name: 'article',
-                params: { doc_num: danielArticles[0].attributes.doc_num },
-              }"
-            >
-              <PublishedArticleCard
-                :article="danielArticles[0].attributes"
-                headline
-              />
-            </router-link>
+            <template v-if="danielArticles.length > 0">
+              <router-link
+                :to="{
+                  name: 'article',
+                  params: { doc_num: danielArticles[0].attributes.doc_num },
+                }"
+              >
+                <PublishedArticleCard
+                  :article="danielArticles[0].attributes"
+                  headline
+                />
+              </router-link>
+            </template>
           </template>
         </div>
       </div>
@@ -116,7 +118,7 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="w-full h-[264px]">
+              <div class="w-full h-[264px] max-w-[591px]">
                 <router-link
                   :to="{
                     name: 'article',
@@ -154,17 +156,27 @@
         </template>
       </template>
       <template v-else>
-        <template v-for="article in danielArticles.slice(3, 6)" :key="article">
-          <div class="w-full h-[264px]">
-            <router-link
-              :to="{
-                name: 'article',
-                params: { doc_num: article.attributes.doc_num },
-              }"
-            >
-              <PublishedArticleCard :article="article.attributes" />
-            </router-link>
-          </div>
+        <template v-if="danielArticles.length > 3">
+          <template
+            v-for="article in danielArticles.slice(3, 6)"
+            :key="article"
+          >
+            <div class="w-full h-[264px]">
+              <router-link
+                :to="{
+                  name: 'article',
+                  params: { doc_num: article.attributes.doc_num },
+                }"
+              >
+                <PublishedArticleCard :article="article.attributes" />
+              </router-link>
+            </div>
+          </template>
+        </template>
+        <template v-else>
+          <p class="hidden xl:block italic">
+            No additional published articles were found.
+          </p>
         </template>
       </template>
     </div>
@@ -309,15 +321,15 @@ export default {
     const loadingArticles = computed(() => store.state.articles.loading);
     const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
-    const oseFeeds = computed(() => store.state.search.results);
-    const loadingOseFeeds = computed(() => store.state.search.loading);
+    const oseFeeds = computed(() => store.state.feeds.results);
+    const loadingOseFeeds = computed(() => store.state.feeds.loading);
 
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
       store.dispatch("articles/getHomeArticles");
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("search/getOseFeeds");
+      store.dispatch("feeds/getOseFeeds");
     });
 
     return {

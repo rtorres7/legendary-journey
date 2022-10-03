@@ -38,7 +38,7 @@
               text-black
               dark:text-slate-100
               energy:text-zinc-100
-              text-md
+              text-md text-center
               mb-2
               mt-2
               lg:mb-4
@@ -47,7 +47,7 @@
           >
             {{ feed.title }}
           </h1>
-          <p class="text-sm mb-2 lg:mb-4 line-clamp-4">
+          <p class="text-sm mb-2 lg:mb-4 line-clamp-5 lg:line-clamp-4">
             {{ feed.summary }}
           </p>
         </div>

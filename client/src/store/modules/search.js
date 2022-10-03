@@ -1,5 +1,4 @@
-import { getOseFeeds, getSearchDataFromUrl } from "@/data"
-import axios from "@/config/wireAxios"
+import { getSearchDataFromUrl } from "@/data"
 import router from "@/router"
 
 export default {
@@ -24,28 +23,13 @@ export default {
 
   actions: {
     search: ({ state, dispatch }) => {
+      console.log("search triggered")
       state.loading = true;
       const route = router.currentRoute.value
       let url = route ? route.fullPath : "";
       if (route.query) {
         dispatch("standardSearch", url);
       }
-    },
-
-    getOseFeeds: ({ state, commit }) => {
-      state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        commit("importData", getOseFeeds)
-        state.loading = false;
-      } else {
-        const params = { "view": "list", "producing_offices[]": "Directorate of Digital Innovation/Open Source Enterprise" }
-        axios.get("/search", { params }).then(response => {
-          console.log("response: ", response)
-          commit("importData", response.data)
-          state.loading = false;
-        })
-      }
-
     },
 
     standardSearch({ dispatch }, url) {
@@ -64,7 +48,11 @@ export default {
 
     removeSearch({ commit }) {
       commit("resetSearch");
-    }
+    },
+
+    setLoading({ commit }, value) {
+      commit("toggleLoading", value)
+    },
   },
 
   mutations: {
@@ -89,6 +77,9 @@ export default {
       state.siteEnhancement = []
       state.daClassifError = false
       state.loading = true
-    }
+    },
+    toggleLoading(state, value) {
+      state.loading = value;
+    },
   },
 };
