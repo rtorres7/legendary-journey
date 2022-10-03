@@ -34,18 +34,22 @@ export default {
   setup() {
     const store = useStore();
 
-    const forcedBlurred = computed(() => store.state.testConsole.blurredImages);
+    const sampleImage = computed(() => store.state.testConsole.sampleImage);
+    const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
 
     const hasArticleImage = (article) => {
-      if (forcedBlurred.value) {
+      if (sampleImage.value || uploadBinary.value) {
         return true;
       }
       return article.images?.length > 0;
     };
 
     const getImgUrl = (article) => {
-      if (forcedBlurred.value) {
+      if (sampleImage.value) {
         return require("@/assets/ukraine.jpg");
+      }
+      if (uploadBinary.value) {
+        return uploadBinary.value;
       }
       let updatedAt;
       if (Array.isArray(article.images)) {

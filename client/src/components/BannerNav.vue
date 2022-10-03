@@ -89,7 +89,7 @@
           </button>
           <router-link class="hidden xl:block h-auto" to="/">
             <img
-              class="h-10 w-10"
+              class="h-12 w-12"
               src="@/assets/nctc_seal_color.svg"
               alt="NCTC. Seal. Link to homepage."
             />
@@ -392,7 +392,8 @@
                 "
               >
                 <MenuItem>
-                  <a
+                  <router-link
+                    to="/"
                     class="
                       flex
                       cursor-pointer
@@ -402,13 +403,14 @@
                       dark:hover:bg-slate-600/80
                       energy:hover:bg-zinc-600/80
                     "
-                    >{{ loadingUser ? "Loading..." : currentUsername }}</a
+                    >{{
+                      loadingUser ? "Loading..." : currentUsername
+                    }}</router-link
                   >
                 </MenuItem>
                 <MenuItem>
                   <BaseTooltip placement="left">
                     <a
-                      href="/"
                       class="
                         flex
                         cursor-pointer
@@ -422,21 +424,23 @@
                     </a>
                   </BaseTooltip>
                 </MenuItem>
-                <MenuItem>
-                  <a
-                    class="
-                      flex
-                      cursor-pointer
-                      py-1
-                      px-3
-                      hover:bg-slate-700/80
-                      dark:hover:bg-slate-600/80
-                      energy:hover:bg-zinc-600/80
-                    "
-                    @click="openTestConsoleModal"
-                    >Test Console</a
-                  >
-                </MenuItem>
+                <template v-if="environment === 'low'">
+                  <MenuItem>
+                    <a
+                      class="
+                        flex
+                        cursor-pointer
+                        py-1
+                        px-3
+                        hover:bg-slate-700/80
+                        dark:hover:bg-slate-600/80
+                        energy:hover:bg-zinc-600/80
+                      "
+                      @click="openTestConsoleModal"
+                      >Test Console</a
+                    >
+                  </MenuItem>
+                </template>
               </MenuItems>
             </transition>
           </Menu>
@@ -694,55 +698,49 @@
           </BannerNavPopover>
         </li>
         <li>
-          <BaseTooltip :placement="'bottom'">
-            <div
-              class="
-                font-semibold
-                flex
-                items-center
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
-              Community
-            </div>
-          </BaseTooltip>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip :placement="'bottom'"> Community </BaseTooltip>
+          </div>
         </li>
         <li>
-          <BaseTooltip placement="bottom">
-            <div
-              class="
-                font-semibold
-                flex
-                items-center
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
-              Special Editions
-            </div>
-          </BaseTooltip>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip placement="bottom"> Special Editions </BaseTooltip>
+          </div>
         </li>
         <li>
-          <BaseTooltip placement="bottom">
-            <div
-              class="
-                font-semibold
-                flex
-                items-center
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
-              Foreign
-            </div>
-          </BaseTooltip>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip placement="bottom"> Foreign </BaseTooltip>
+          </div>
         </li>
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
@@ -894,7 +892,6 @@
                         dark:hover:text-white
                         energy:hover:text-white
                       "
-                      href="/"
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
                     >
                   </li>
@@ -918,7 +915,6 @@
                           dark:hover:text-white
                           energy:hover:text-white
                         "
-                        href="/"
                         >Settings</a
                       >
                     </BaseTooltip>
@@ -1138,6 +1134,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const environment = ref(process.env.NODE_ENV);
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
     });
@@ -1296,6 +1293,7 @@ export default {
       metadata,
       regions,
       countries,
+      environment,
       isLiveDemo,
       selectedCountry,
       themeOptions,

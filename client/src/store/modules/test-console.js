@@ -2,24 +2,31 @@ export default {
   namespaced: true,
   state: {
     admin: false,
-    blurredImages: false,
+    sampleImage: false,
+    uploadBinary: null,
   },
 
   actions: {
-    setBlurredImages({ commit }, value) {
-      commit("toggleBlurredImages", value)
+    setSampleImage({ commit }, value) {
+      commit("toggleSampleImage", value)
     },
     setAdmin({ commit }, value) {
       commit("toggleAdmin", value)
     },
+    setUploadBinary({ commit }, value) {
+      commit("saveUploadBinary", value)
+    }
   },
 
   mutations: {
-    toggleBlurredImages(state, value) {
-      state.blurredImages = value
+    toggleSampleImage(state, value) {
+      state.sampleImage = value
     },
     toggleAdmin(state, value) {
       state.admin = value
     },
+    saveUploadBinary(state, value) {
+      state.uploadBinary = value
+    }
   },
 };

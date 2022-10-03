@@ -63,17 +63,19 @@
             <PublishedArticleCard loading headline />
           </template>
           <template v-else>
-            <router-link
-              :to="{
-                name: 'article',
-                params: { doc_num: danielArticles[0].attributes.doc_num },
-              }"
-            >
-              <PublishedArticleCard
-                :article="danielArticles[0].attributes"
-                headline
-              />
-            </router-link>
+            <template v-if="danielArticles.length > 0">
+              <router-link
+                :to="{
+                  name: 'article',
+                  params: { doc_num: danielArticles[0].attributes.doc_num },
+                }"
+              >
+                <PublishedArticleCard
+                  :article="danielArticles[0].attributes"
+                  headline
+                />
+              </router-link>
+            </template>
           </template>
         </div>
       </div>
@@ -116,7 +118,7 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="w-full h-[264px]">
+              <div class="w-full h-[264px] max-w-[591px]">
                 <router-link
                   :to="{
                     name: 'article',
@@ -148,24 +150,52 @@
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 6" :key="n">
-          <PublishedArticleCard :loading="true" />
-        </template>
-      </template>
-      <template v-else>
-        <template v-for="article in danielArticles.slice(3, 6)" :key="article">
           <div class="w-full h-[264px]">
-            <router-link
-              :to="{
-                name: 'article',
-                params: { doc_num: article.attributes.doc_num },
-              }"
-            >
-              <PublishedArticleCard :article="article.attributes" />
-            </router-link>
+            <PublishedArticleCard loading />
           </div>
         </template>
       </template>
+      <template v-else>
+        <template v-if="danielArticles.length > 3">
+          <template
+            v-for="article in danielArticles.slice(3, 6)"
+            :key="article"
+          >
+            <div class="w-full h-[264px]">
+              <router-link
+                :to="{
+                  name: 'article',
+                  params: { doc_num: article.attributes.doc_num },
+                }"
+              >
+                <PublishedArticleCard :article="article.attributes" />
+              </router-link>
+            </div>
+          </template>
+        </template>
+        <template v-else>
+          <p class="hidden xl:block italic">
+            No additional published articles were found.
+          </p>
+        </template>
+      </template>
     </div>
+  </div>
+  <!-- Ose Feeds Section -->
+  <div
+    class="
+      pt-4
+      pb-6
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-zinc-700/50
+    "
+  >
+    <FeedSection
+      :title="'Open Source Highlights'"
+      :items="oseFeeds"
+      :loading="loadingOseFeeds"
+    />
   </div>
   <!-- Demo Articles Section -->
   <div
@@ -224,6 +254,7 @@ import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import PersonalSection from "@/components/PersonalSection";
+import FeedSection from "@/components/FeedSection";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
@@ -281,6 +312,7 @@ export default {
     PublishedArticleCard,
     MainSectionSituationalAwareness,
     PersonalSection,
+    FeedSection,
     CalendarIcon,
   },
   setup() {
@@ -289,11 +321,15 @@ export default {
     const loadingArticles = computed(() => store.state.articles.loading);
     const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const oseFeeds = computed(() => store.state.feeds.results);
+    const loadingOseFeeds = computed(() => store.state.feeds.loading);
+
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
       store.dispatch("articles/getHomeArticles");
       store.dispatch("daniel/getDanielArticles");
+      store.dispatch("feeds/getOseFeeds");
     });
 
     return {
@@ -302,6 +338,8 @@ export default {
       danielArticles,
       loadingDanielArticles,
       personalArticles,
+      oseFeeds,
+      loadingOseFeeds,
       today,
     };
   },

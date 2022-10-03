@@ -2,7 +2,6 @@ import { danielArticles } from "@/data";
 import axios from '@/config/wireAxios'
 //import router from "@/router"
 
-
 export default {
   namespaced: true,
   state: {
@@ -24,12 +23,22 @@ export default {
         })
       }
     },
+    //Test Console Feature Only
+    setDanielArticles({ commit }, count) {
+      commit("saveArticles", count <= 0 ? [] : danielArticles.slice(0, count))
+    },
+    setLoading({ commit }, value) {
+      commit("toggleLoading", value)
+    },
   },
 
   mutations: {
     saveArticles(state, articles) {
       state.articles = articles;
       state.loading = false;
+    },
+    toggleLoading(state, value) {
+      state.loading = value;
     },
   },
 };

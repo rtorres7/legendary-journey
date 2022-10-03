@@ -1,5 +1,5 @@
-import { getSearchDataFromUrl } from "@/data"
-import router from "@/router"
+import { getOseFeeds } from "@/data"
+import axios from "@/config/wireAxios"
 
 export default {
   namespaced: true,
@@ -22,34 +22,25 @@ export default {
   },
 
   actions: {
-    search: ({ state, dispatch }) => {
-      console.log("search triggered")
+    getOseFeeds: ({ state, commit }) => {
+      console.log("getOseFeeds triggered")
       state.loading = true;
-      const route = router.currentRoute.value
-      let url = route ? route.fullPath : "";
-      if (route.query) {
-        dispatch("standardSearch", url);
-      }
-    },
-
-    standardSearch({ dispatch }, url) {
-      if (url && url !== "/search") {
-        url = "/search?" + url.split("?")[1];
+      if (process.env.NODE_ENV === 'low') {
+        commit("importData", getOseFeeds)
+        state.loading = false;
       } else {
-        url = "/search";
+        const params = { "view": "list", "producing_offices[]": "Directorate of Digital Innovation/Open Source Enterprise" }
+        axios.get("/search", { params }).then(response => {
+          console.log("response: ", response)
+          commit("importData", response.data)
+          state.loading = false;
+        })
       }
-      dispatch("debouncedSearch", url);
     },
-
-    debouncedSearch: ({ commit, state }, url) => {
-      commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
-      state.loading = false;
+    //Test Console Feature Only
+    setFeeds({ commit }, count) {
+      commit("saveFeeds", count <= 0 ? [] : getOseFeeds.results.slice(0, count))
     },
-
-    removeSearch({ commit }) {
-      commit("resetSearch");
-    },
-
     setLoading({ commit }, value) {
       commit("toggleLoading", value)
     },
@@ -57,7 +48,7 @@ export default {
 
   mutations: {
     importData(state, data) {
-      console.log('search data: ', data);
+      console.log('feed (search) data: ', data);
       state.searchId = data.searchId;
       state.results = data.results.map((article) => {
         return article;
@@ -68,15 +59,9 @@ export default {
       state.siteEnhancement = data.siteEnhancement;
       state.daClassifError = data.daClassifError;
     },
-    resetSearch(state) {
-      state.searchId = null
-      state.results = []
-      state.aggregations = []
-      state.pages = 1
-      state.totalCount = null
-      state.siteEnhancement = []
-      state.daClassifError = false
-      state.loading = true
+    saveFeeds(state, feeds) {
+      state.results = feeds;
+      state.loading = false;
     },
     toggleLoading(state, value) {
       state.loading = value;
