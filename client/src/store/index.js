@@ -5,6 +5,7 @@ import danielSearch from "./modules/daniel-search"
 import search from "./modules/search";
 import user from "./modules/user";
 import document from "./modules/document";
+import feeds from "./modules/feeds"
 import savedSearches from "./modules/saved-searches";
 import danielDetails from "./modules/danielDetails";
 import testConsole from "./modules/test-console";
@@ -29,6 +30,7 @@ export default createStore({
         search,
         user,
         document,
+        feeds,
         savedSearches,
         danielDetails,
         testConsole
