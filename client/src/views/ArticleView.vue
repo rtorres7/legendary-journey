@@ -69,6 +69,7 @@
                 <ArticleImage
                   class="max-w-[950px] h-full"
                   :article="article.attributes"
+                  smartRender
                 />
                 <p class="italic text-sm pt-2">
                   {{ articleDetails.image_caption }}
