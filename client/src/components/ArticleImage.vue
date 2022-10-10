@@ -76,7 +76,12 @@ export default {
     };
 
     onMounted(() => {
-      if (props.smartRender && hasArticleImage(props.article)) {
+      //A hacky attempt at rendering images smarter, only available on large screen sizes
+      if (
+        window.innerWidth >= 1280 &&
+        props.smartRender &&
+        hasArticleImage(props.article)
+      ) {
         const imageContainerWidth =
           document.getElementById("img-container").clientWidth;
         const renderedImageWidth =
@@ -96,3 +101,6 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+/* Empty on Purpose */
+</style>

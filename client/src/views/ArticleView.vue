@@ -60,14 +60,14 @@
                 class="
                   h-full
                   w-full
-                  h-[350px]
+                  h-[375px]
                   max-h-[250px]
-                  md:max-h-[350px]
+                  md:max-h-[375px]
                   flex flex-col
                 "
               >
                 <ArticleImage
-                  class="max-w-[950px] h-full"
+                  class="max-w-[450px] md:max-w-[950px] h-full"
                   :article="article.attributes"
                   smartRender
                 />
