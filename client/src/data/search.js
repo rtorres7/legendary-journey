@@ -833,7 +833,7 @@ export const getOseFeeds = {
       "date_published": "2022-09-29",
     },
     {
-      "title": "OSE Feed Alert #3",
+      "title": "OSE Feed Alert with a much longer title for testing purposes #3",
       "title_classification": "U",
       "summary": "This is the summary of the most recent OSE feed alert #3. The following text is sample latin Lorem Ipsum text to fill the available space with test data. Donec in sem elit. Donec at eleifend nisi. Integer accumsan non magna et vulputate. Donec id enim tincidunt, vestibulum urna nec, vulputate velit. Mauris in ex sed mi egestas maximus. Mauris laoreet lectus urna, eget venenatis nibh porttitor varius. Maecenas pulvinar felis id nunc feugiat ornare ut nec nunc. Donec fermentum malesuada luctus. Vestibulum nec orci ligula. Cras ultricies ornare leo eu placerat. Vestibulum interdum gravida varius. Suspendisse sit amet augue aliquam, malesuada nulla eget, aliquam ex.",
       "summary_classification": "U",
