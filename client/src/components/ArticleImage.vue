@@ -77,6 +77,7 @@ export default {
 
     onMounted(() => {
       //A hacky attempt at rendering images smarter, only available on large screen sizes
+      //TODO: Add more reactivity to support all sizes - https://stackoverflow.com/questions/47219272/how-can-i-use-window-size-in-vue-how-do-i-detect-the-soft-keyboard
       if (
         window.innerWidth >= 1280 &&
         props.smartRender &&
