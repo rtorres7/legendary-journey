@@ -2,12 +2,17 @@
   <div id="img-container" class="relative overflow-hidden">
     <template v-if="hasArticleImage(article)">
       <div
+        v-show="!smartRender"
+        id="article-blur"
         class="h-full w-full absolute blur bg-center bg-no-repeat bg-cover"
         :style="{ background: 'url(' + getImgUrl(article) + ')' }"
       ></div>
       <img
         id="article-img"
-        class="absolute h-full inset-x-0 mx-auto z-[5]"
+        :class="[
+          smartRender ? '' : 'inset-x-0',
+          'absolute h-full mx-auto z-[5]',
+        ]"
         :src="getImgUrl(article)"
         alt=""
       />
@@ -36,7 +41,8 @@ export default {
       default: false,
     },
   },
-  setup(props) {
+  emits: ["imageLoaded"],
+  setup(props, { emit }) {
     const store = useStore();
 
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
@@ -76,22 +82,10 @@ export default {
     };
 
     onMounted(() => {
-      //A hacky attempt at rendering images smarter, only available on large screen sizes
-      //TODO: Add more reactivity to support all sizes - https://stackoverflow.com/questions/47219272/how-can-i-use-window-size-in-vue-how-do-i-detect-the-soft-keyboard
-      if (
-        window.innerWidth >= 1280 &&
-        props.smartRender &&
-        hasArticleImage(props.article)
-      ) {
-        const imageContainerWidth =
-          document.getElementById("img-container").clientWidth;
-        const renderedImageWidth =
-          document.getElementById("article-img").clientWidth;
-        if (imageContainerWidth > renderedImageWidth) {
-          document
-            .getElementById("img-container")
-            .setAttribute("style", `width:${renderedImageWidth}px`);
-        }
+      if (props.smartRender && hasArticleImage(props.article)) {
+        const articleImgWidth =
+          document.getElementById("article-img")?.clientWidth;
+        emit("imageLoaded", articleImgWidth);
       }
     });
 
