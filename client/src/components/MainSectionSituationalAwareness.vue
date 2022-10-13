@@ -160,6 +160,16 @@ const settings = {
 };
 // carousel breakpoints
 const breakpoints = {
+  //Custom Size
+  280: {
+    itemsToShow: 1.1,
+    snapAlign: "start",
+  },
+  //Custom Size
+  350: {
+    itemsToShow: 1.33,
+    snapAlign: "start",
+  },
   //iPhone 12 Pro
   390: {
     itemsToShow: 1.5,
