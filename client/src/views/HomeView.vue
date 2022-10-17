@@ -76,6 +76,12 @@
                 />
               </router-link>
             </template>
+            <template v-else>
+              <div class="text-sm italic">
+                No featured article was found. This could be due to access
+                control or a network error.
+              </div>
+            </template>
           </template>
         </div>
       </div>

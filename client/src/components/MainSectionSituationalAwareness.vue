@@ -27,27 +27,37 @@
       </div>
     </div>
     <div class="hidden h-full lg:flex flex-col justify-between">
-      <div class="lg:flex flex-col justify-between text-sm">
+      <div class="lg:flex flex-col justify-between">
         <template v-for="item in sitreps" :key="item">
           <div class="mb-4">
             <BaseCard
-              class="px-4 py-4"
+              class="h-36 px-4 py-4"
               :locked="item.locked"
               hoverable
               :rounded="false"
             >
-              <div class="flex flex-col">
-                <div class="flex items-center pb-1">
-                  <template v-if="item.locked">
-                    <LockClosedIcon
-                      class="mr-2 h-4 w-4"
-                      aria-hidden="true"
-                    ></LockClosedIcon>
-                  </template>
-                  <span class="line-clamp-1 font-medium">{{ item.title }}</span>
-                </div>
+              <div class="flex flex-col h-full justify-between">
                 <div>
-                  {{ item.date }}
+                  <div class="flex items-center text-sm mb-2">
+                    <template v-if="item.locked">
+                      <LockClosedIcon
+                        class="mr-2 h-4 w-4"
+                        aria-hidden="true"
+                      ></LockClosedIcon>
+                    </template>
+                    <span class="line-clamp-2">{{ item.type }}</span>
+                  </div>
+                  <div class="line-clamp-2 font-medium">{{ item.title }}</div>
+                </div>
+                <div
+                  class="
+                    text-slate-600
+                    dark:text-slate-400
+                    energy:text-zinc-400
+                    text-sm
+                  "
+                >
+                  Posted {{ item.date }}
                 </div>
               </div>
             </BaseCard>
@@ -87,9 +97,7 @@
                 </template>
                 <span class="line-clamp-1 font-medium">{{ item.title }}</span>
               </div>
-              <div>
-                {{ item.date }}
-              </div>
+              <div>Posted {{ item.date }}</div>
             </div>
           </BaseCard>
         </div>
@@ -116,30 +124,33 @@ import { Carousel, Navigation, Slide } from "vue3-carousel";
 
 const sitreps = [
   {
-    title: "(U) Sample SITREP Title",
-    date: "04/24/22, 0100 EDT",
+    title: "(U) Latest Sample SITREP Publication Heading",
+    type: "SITREP",
+    date: "yesterday",
     locked: false,
   },
   {
-    title: "(U) Sample Threat Title",
-    date: "04/23/22, 0100 EDT",
+    title: "(U) Latest Sample Threat Publication Heading",
+    type: "Threat",
+    date: "2 days ago",
     locked: true,
   },
   {
-    title: "(U) Sample SITREP Title",
-    date: "04/22/22, 0100 EDT",
+    title: "(U) Another Sample SITREP Publication Heading #2",
+    type: "SITREP",
+    date: "1 week ago",
     locked: false,
   },
-  {
-    title: "(U) Sample Threat Title",
-    date: "04/21/22, 0100 EDT",
-    locked: false,
-  },
-  {
-    title: "(U) Sample SITREP Title",
-    date: "04/20/22, 0100 EDT",
-    locked: true,
-  },
+  // {
+  //   title: "(U) Sample Threat Title",
+  //   date: "04/21/22, 0100 EDT",
+  //   locked: false,
+  // },
+  // {
+  //   title: "(U) Sample SITREP Title",
+  //   date: "04/20/22, 0100 EDT",
+  //   locked: true,
+  // },
 ];
 
 // carousel settings
@@ -149,6 +160,16 @@ const settings = {
 };
 // carousel breakpoints
 const breakpoints = {
+  //Custom Size
+  280: {
+    itemsToShow: 1.1,
+    snapAlign: "start",
+  },
+  //Custom Size
+  350: {
+    itemsToShow: 1.33,
+    snapAlign: "start",
+  },
   //iPhone 12 Pro
   390: {
     itemsToShow: 1.5,

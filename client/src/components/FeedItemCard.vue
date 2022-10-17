@@ -42,8 +42,9 @@
               mb-2
               mt-2
               lg:mb-4
-              line-clamp-2
+              line-clamp-1
             "
+            :title="feed.title"
           >
             {{ feed.title }}
           </h1>

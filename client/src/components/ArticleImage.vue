@@ -1,12 +1,18 @@
 <template>
-  <div class="relative overflow-hidden">
+  <div id="img-container" class="relative overflow-hidden">
     <template v-if="hasArticleImage(article)">
       <div
+        v-show="!smartRender"
+        id="article-blur"
         class="h-full w-full absolute blur bg-center bg-no-repeat bg-cover"
         :style="{ background: 'url(' + getImgUrl(article) + ')' }"
       ></div>
       <img
-        class="absolute h-full inset-x-0 mx-auto z-[5]"
+        id="article-img"
+        :class="[
+          smartRender ? '' : 'inset-x-0',
+          'absolute h-full mx-auto z-[5]',
+        ]"
         :src="getImgUrl(article)"
         alt=""
       />
@@ -21,7 +27,7 @@
   </div>
 </template>
 <script>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -30,8 +36,13 @@ export default {
       type: Object,
       required: true,
     },
+    smartRender: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup() {
+  emits: ["imageLoaded"],
+  setup(props, { emit }) {
     const store = useStore();
 
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
@@ -69,6 +80,15 @@ export default {
         updatedAt
       );
     };
+
+    onMounted(() => {
+      if (props.smartRender && hasArticleImage(props.article)) {
+        const articleImgWidth =
+          document.getElementById("article-img")?.clientWidth;
+        emit("imageLoaded", articleImgWidth);
+      }
+    });
+
     return {
       hasArticleImage,
       getImgUrl,
@@ -76,3 +96,6 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+/* Empty on Purpose */
+</style>

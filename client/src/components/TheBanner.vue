@@ -14,6 +14,7 @@
       class="
         flex
         items-center
+        justify-center
         bg-slate-700/40
         dark:bg-slate-700/30
         energy:bg-zinc-700/40
@@ -27,7 +28,7 @@
       <a
         aria-label="Remove system message"
         @click="removeSystemMessage"
-        class="m-4 text-slate-300 energy:text-zinc-300 hover:text-white"
+        class="ml-2 text-slate-300 energy:text-zinc-300 hover:text-white"
       >
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
@@ -40,7 +41,7 @@
         bg-mission-blue
         dark:text-slate-300 dark:bg-dark-space-blue
         energy:text-zinc-300 energy:bg-zinc-800
-        text-center text-sm
+        text-center text-xs
         uppercase
       "
     >

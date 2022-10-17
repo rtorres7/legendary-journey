@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import store from "@/store"
+import { metadata } from "@/config";
 import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
 import DemoArticleView from '../views/DemoArticleView.vue'
@@ -8,8 +10,8 @@ import DemoSearchView from '../views/DemoSearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
-import store from "@/store"
 import PublishArticleView from '../views/PublishArticleView.vue'
+
 
 const routes = [
   {
@@ -17,7 +19,7 @@ const routes = [
     name: 'home',
     component: HomeView,
     meta: {
-      title: 'Home',
+      title: metadata.application_name,
     },
   },
   {

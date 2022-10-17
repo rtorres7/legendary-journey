@@ -54,31 +54,28 @@
               </template>
             </p>
           </div>
-          <div>
-            <template v-if="article">
-              <div
-                class="
-                  h-full
-                  w-full
-                  h-[350px]
-                  max-h-[250px]
-                  md:max-h-[350px]
-                  flex flex-col
-                "
-              >
-                <ArticleImage
-                  class="max-w-[950px] h-full"
-                  :article="article.attributes"
-                />
-                <p class="italic text-sm pt-2">
-                  {{ articleDetails.image_caption }}
-                </p>
-              </div>
-            </template>
+          <div :class="['flex flex-col', computedArticleLayout]">
+            <div :class="adjustLayout ? 'w-[350px]' : ''">
+              <template v-if="article">
+                <div class="h-full w-full h-[300px] sm:h-[375px] flex flex-col">
+                  <ArticleImage
+                    class="max-w-[400px] sm:max-w-full h-full"
+                    :article="article.attributes"
+                    smartRender
+                    @imageLoaded="calculateLayout"
+                  />
+                  <p class="italic text-sm pt-2">
+                    {{ articleDetails.image_caption }}
+                  </p>
+                </div>
+              </template>
+            </div>
+            <div class="w-full pr-2">
+              <p class="whitespace-pre-line" v-if="articleDetails.html_body">
+                <span class="summary" v-html="articleDetails.html_body"></span>
+              </p>
+            </div>
           </div>
-          <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-            <span class="summary" v-html="articleDetails.html_body"></span>
-          </p>
           <p
             class="
               font-semibold
@@ -161,7 +158,7 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { onMounted, computed, watch } from "vue";
+import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
@@ -188,15 +185,29 @@ export default {
     const articleDetails = computed(() => store.state.danielDetails.document);
     const danielArticles = computed(() => store.state.daniel.articles);
 
+    const adjustLayout = ref(false);
+
     const loadingDanielArticlesDetails = computed(
       () => store.state.danielDetails.loading
     );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
 
+    const computedArticleLayout = computed(() => {
+      const classes = [];
+      return classes;
+    });
+
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");
       store.dispatch("danielDetails/getDanielArticlesDetails");
     });
+
+    const calculateLayout = (imageWidth) => {
+      if (imageWidth <= 350) {
+        computedArticleLayout.value.push("lg:flex-row-reverse");
+        adjustLayout.value = true;
+      }
+    };
 
     const currentArticleIndex = computed(() =>
       danielArticles.value.findIndex((article) => {
@@ -249,6 +260,9 @@ export default {
       previousArticle,
       nextArticle,
       article,
+      computedArticleLayout,
+      calculateLayout,
+      adjustLayout,
     };
   },
 };
