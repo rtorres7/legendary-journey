@@ -18,7 +18,16 @@ export default {
       } else {
         axios.get("/home/daniel").then(response => {
           console.log('/home/daniel (response):', response);
-          let articles = [response?.data?.woah?.featured, response?.data?.woah?.secondary].flat();
+          const data = response.data.woah;
+          let articles = []
+          if (data) {
+            if (data.featured) {
+              articles = articles.concat(data.featured)
+            }
+            if (data.secondary) {
+              articles = articles.concat(data.secondary)
+            }
+          }
           commit("saveArticles", articles)
         })
       }

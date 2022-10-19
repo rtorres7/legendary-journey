@@ -1,22 +1,31 @@
 <template>
-  <div class="relative overflow-hidden">
+  <div id="img-container" class="relative overflow-hidden">
     <template v-if="hasArticleImage(article)">
       <div
+        v-show="!smartRender"
+        id="article-blur"
         class="h-full w-full absolute blur bg-center bg-no-repeat bg-cover"
         :style="{ background: 'url(' + getImgUrl(article) + ')' }"
       ></div>
       <img
-        class="absolute h-full inset-x-0 mx-auto z-[5]"
+        id="article-img"
+        :class="[
+          smartRender ? '' : 'inset-x-0',
+          'absolute h-full mx-auto z-[5]',
+        ]"
         :src="getImgUrl(article)"
         alt=""
+        @load="onImgLoad"
       />
     </template>
     <template v-else>
-      <img
-        class="max-h-full w-full m-auto object-contain bg-[#f1f1f1]"
-        src="@/assets/image-not-available-wire-size.png"
-        alt=""
-      />
+      <template v-if="!smartRender">
+        <img
+          class="max-h-full w-full m-auto object-contain bg-[#f1f1f1]"
+          src="@/assets/image-not-available-wire-size.png"
+          alt=""
+        />
+      </template>
     </template>
   </div>
 </template>
@@ -30,8 +39,13 @@ export default {
       type: Object,
       required: true,
     },
+    smartRender: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup() {
+  emits: ["imageLoaded", "imageNotFound"],
+  setup(props, { emit }) {
     const store = useStore();
 
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
@@ -41,7 +55,11 @@ export default {
       if (sampleImage.value || uploadBinary.value) {
         return true;
       }
-      return article.images?.length > 0;
+      const hasImages = article.images?.length > 0;
+      if (props.smartRender && !hasImages) {
+        emit("imageNotFound");
+      }
+      return hasImages;
     };
 
     const getImgUrl = (article) => {
@@ -69,10 +87,23 @@ export default {
         updatedAt
       );
     };
+
+    const onImgLoad = () => {
+      if (props.smartRender) {
+        const articleImgWidth =
+          document.getElementById("article-img")?.clientWidth;
+        emit("imageLoaded", articleImgWidth);
+      }
+    };
+
     return {
       hasArticleImage,
+      onImgLoad,
       getImgUrl,
     };
   },
 };
 </script>
+<style lang="scss">
+/* Empty on Purpose */
+</style>

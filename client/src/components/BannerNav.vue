@@ -25,7 +25,7 @@
     <div
       v-if="alertEnabled"
       id="alert-message"
-      class="flex justify-between items-center bg-red-800 text-white p-2 lg:p-1"
+      class="flex justify-between items-center bg-red-800 text-white p-2"
     >
       <div class="flex items-center">
         <ExclamationCircleIcon class="h-6 w-1/3 md:w-20 lg:w-6 mx-3 my-2" />
@@ -39,7 +39,7 @@
       <a
         @click="removeAlertMessage"
         class="
-          m-4
+          mx-2
           text-slate-300
           hover:text-white
           focus:outline-none
@@ -54,7 +54,7 @@
         <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
     </div>
-    <div class="mx-auto pt-1 px-6 lg:px-8">
+    <div class="mx-auto pt-2 px-6 lg:px-8">
       <div
         class="
           flex
@@ -108,7 +108,7 @@
             "
             to="/"
           >
-            pegasus
+            {{ metadata.application_name }}
           </router-link>
         </div>
         <!-- Middle Nav Bar -->
@@ -709,7 +709,22 @@
             "
             tabindex="0"
           >
-            <BaseTooltip :placement="'bottom'"> Community </BaseTooltip>
+            <BaseTooltip :placement="'bottom'"> Foreign </BaseTooltip>
+          </div>
+        </li>
+        <li>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip placement="bottom"> Community </BaseTooltip>
           </div>
         </li>
         <li>
@@ -725,21 +740,6 @@
             tabindex="0"
           >
             <BaseTooltip placement="bottom"> Special Editions </BaseTooltip>
-          </div>
-        </li>
-        <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            <BaseTooltip placement="bottom"> Foreign </BaseTooltip>
           </div>
         </li>
         <!-- <li class="2xl:hidden">

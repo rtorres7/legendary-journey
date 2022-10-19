@@ -23,7 +23,7 @@
               tracking-[.05em]
             "
           >
-            pegasus
+            {{ metadata.application_name }}
           </div>
           <p
             class="
@@ -209,7 +209,7 @@
     <div id="classification">
       <p
         class="
-          text-center text-sm
+          text-center text-xs
           uppercase
           text-slate-300
           energy:text-zinc-300

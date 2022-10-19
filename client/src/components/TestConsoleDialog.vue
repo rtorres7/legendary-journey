@@ -250,8 +250,17 @@
                     </div>
                     <div
                       v-show="uploadFileName"
-                      class="flex flex-row-reverse text-sm"
+                      class="flex flex-row-reverse items-center text-sm"
                     >
+                      <button
+                        type="button"
+                        class="w-8 h-8 flex items-center justify-center"
+                        tabindex="0"
+                        @click="removeArticleImage"
+                      >
+                        <span class="sr-only">Remove Current Image</span
+                        ><XIcon class="h-5 w-5" aria-hidden="true" />
+                      </button>
                       <div class="line-clamp-1">
                         <span class="font-medium">Current File: </span
                         ><span
@@ -764,13 +773,20 @@ export default {
       }
     });
 
+    const removeArticleImage = () => {
+      store.dispatch("testConsole/setUploadBinary", null);
+      uploadFileName.value = null;
+    };
+
     const changeArticleImage = (event) => {
+      console.log("does this happen: ", event);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         store.dispatch("testConsole/setUploadBinary", reader.result);
       });
       uploadFileName.value = event.target.files[0].name;
       reader.readAsDataURL(event.target.files[0]);
+      event.target.value = null;
     };
 
     const changePublishedArticleCount = (count) => {
@@ -829,6 +845,7 @@ export default {
       loadingResultsEnabled,
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
+      removeArticleImage,
       changeArticleImage,
       changePublishedArticleCount,
       feedCountFromStore,
