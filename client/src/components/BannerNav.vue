@@ -709,7 +709,22 @@
             "
             tabindex="0"
           >
-            <BaseTooltip :placement="'bottom'"> Community </BaseTooltip>
+            <BaseTooltip :placement="'bottom'"> Foreign </BaseTooltip>
+          </div>
+        </li>
+        <li>
+          <div
+            class="
+              font-semibold
+              flex
+              items-center
+              hover:text-slate-100
+              dark:hover:text-slate-100
+              energy:hover:text-energy-yellow
+            "
+            tabindex="0"
+          >
+            <BaseTooltip placement="bottom"> Community </BaseTooltip>
           </div>
         </li>
         <li>
@@ -725,21 +740,6 @@
             tabindex="0"
           >
             <BaseTooltip placement="bottom"> Special Editions </BaseTooltip>
-          </div>
-        </li>
-        <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            <BaseTooltip placement="bottom"> Foreign </BaseTooltip>
           </div>
         </li>
         <!-- <li class="2xl:hidden">

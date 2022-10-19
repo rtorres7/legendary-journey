@@ -55,7 +55,10 @@
             </p>
           </div>
           <div :class="['flex flex-col', computedArticleLayout]">
-            <div :class="adjustLayout ? 'w-[350px]' : ''">
+            <div
+              v-show="showImgContainer"
+              :class="adjustLayout ? 'w-[350px]' : ''"
+            >
               <template v-if="article">
                 <div class="h-full w-full h-[300px] sm:h-[375px] flex flex-col">
                   <ArticleImage
@@ -63,6 +66,7 @@
                     :article="article.attributes"
                     smartRender
                     @imageLoaded="calculateLayout"
+                    @imageNotFound="disableImgContainer"
                   />
                   <p class="italic text-sm pt-2">
                     {{ articleDetails.image_caption }}
@@ -192,6 +196,8 @@ export default {
     );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
 
+    const showImgContainer = ref(true);
+
     const computedArticleLayout = computed(() => {
       const classes = [];
       return classes;
@@ -203,10 +209,15 @@ export default {
     });
 
     const calculateLayout = (imageWidth) => {
+      console.log("calculateLayout called: ", imageWidth);
       if (imageWidth <= 350) {
         computedArticleLayout.value.push("lg:flex-row-reverse");
         adjustLayout.value = true;
       }
+    };
+
+    const disableImgContainer = () => {
+      showImgContainer.value = false;
     };
 
     const currentArticleIndex = computed(() =>
@@ -260,6 +271,8 @@ export default {
       previousArticle,
       nextArticle,
       article,
+      disableImgContainer,
+      showImgContainer,
       computedArticleLayout,
       calculateLayout,
       adjustLayout,
