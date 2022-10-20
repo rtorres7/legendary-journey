@@ -7,7 +7,21 @@ export default {
     loading: true,
     agency: "",
     contactEmail: "",
-    criteria: {},
+    criteria: {
+      classification: [],
+      countries: [],
+      domestic_regions: [],
+      fisa_role: [],
+      issues: [],
+      media_tags: [],
+      non_state_actors: [],
+      product_types: [],
+      regions: [],
+      reporting_types: [],
+      selected_for: [],
+      subregions: [],
+      topics: []
+    },
     featuresAvailable: {},
     highlightsBanner: "",
     highlightsNavHeader: "",
@@ -37,7 +51,21 @@ export default {
       state.loading = false
       state.agency = metadata.agency
       state.contactEmail = metadata.contactEmail
-      state.criteria = metadata.criteria
+      state.criteria = {
+        classification: metadata.criteria.classification.values,
+        countries: metadata.criteria.countries.values,
+        domestic_regions: metadata.criteria.domestic_regions.values,
+        fisa_role: metadata.criteria.fisa_role.values,
+        issues: metadata.criteria.issues.values,
+        media_tags: metadata.criteria.media_tags.values,
+        non_state_actors: metadata.criteria.non_state_actors.values,
+        product_types: metadata.criteria.product_types.values,
+        regions: metadata.criteria.regions.values,
+        reporting_types: metadata.criteria.reporting_types.values,
+        selected_for: metadata.criteria.selected_for.values,
+        subregions: metadata.criteria.subregions.values,
+        topics: metadata.criteria.topics.values
+      }
       state.featuresAvailable = metadata.features_available
       state.highlightsBanner = metadata.highlightsBanner
       state.highlightsNavHeader = metadata.highlightsNavHeader

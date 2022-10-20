@@ -1268,22 +1268,68 @@ export const metadata = {
       ]
     },
     domestic_regions: {
-      displayName: "Domestic Regions"
+      displayName: "Domestic Regions",
+      values: []
     },
     fisa_role: {
-      displayname: "FISA Role"
+      displayname: "FISA Role",
+      values: []
     },
     issues: {
       displayName: "Issues",
       values: [
         {
           "name": "Eastern Europe Geopolitics",
-          "code": "EEG"
+          "code": "EEG",
+          "topics": [
+            {
+              "name": "Belarus Relations",
+              "codes": ["BRL"]
+            },
+            {
+              "name": "Energy Crisis",
+              "codes": ["ENC"]
+            }
+          ]
         },
         {
           "name": "Economic Turmoil",
-          "code": "ET"
+          "code": "ET",
+          "topics": [
+            {
+              "name": "Global Inflation",
+              "codes": ["GLI"]
+            },
+            {
+              "name": "Interest Rates",
+              "codes": ["INR"]
+            }
+          ]
         },
+        {
+          "name": "Supply Chain Crisis",
+          "code": "SCC",
+          "topics": [
+            {
+              "name": "Resource Scarcity",
+              "codes": ["RSC"]
+            },
+          ]
+        },
+        {
+          "name": "Ukraine War",
+          "code": "UW",
+          "topics": [
+            {
+              "name": "Annexation of Crimea",
+              "codes": ["ACR"]
+            },
+            {
+              "name": "Russian Invation",
+              "codes": ["RI"]
+            }
+          ]
+        }
       ]
     },
     media_tags: {
@@ -1328,13 +1374,13 @@ export const metadata = {
         }
       ]
     },
-    producing_offices: {
-      displayName: "Producing Offices",
-      values: [
-        "The Center",
-        [["Africa", "China", "Russia"], ["Test 1", "Test 2", "Test 3"]]
-      ]
-    },
+    // producing_offices: {
+    //   displayName: "Producing Offices",
+    //   values: [
+    //     "The Center",
+    //     [["Africa", "China", "Russia"], ["Test 1", "Test 2", "Test 3"]]
+    //   ]
+    // },
     product_types: {
       displayName: "Product Types",
       values: [
@@ -1852,17 +1898,33 @@ export const metadata = {
       displayName: "Topics",
       values: [
         {
+          "name": "Annexation of Crimea",
+          "code": "ACR"
+        },
+        {
+          "name": "Belarus Relations",
+          "code": "BRL"
+        },
+        {
+          "name": "Energy Crisis",
+          "code": "ENC"
+        },
+        {
+          "name": "Global Inflation",
+          "code": "GLI"
+        },
+        {
+          "name": "Interest Rates",
+          "code": "INR"
+        },
+        {
+          "name": "Resource Scarcity",
+          "code": "RSC"
+        },
+        {
           "name": "Russian Invasion",
           "code": "RI"
         },
-        {
-          "name": "Supply Chain Crisis",
-          "code": "SCC"
-        },
-        {
-          "name": "Ukraine War",
-          "code": "UW"
-        }
       ]
     }
   },

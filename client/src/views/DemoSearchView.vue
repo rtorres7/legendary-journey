@@ -98,21 +98,23 @@
       <DisclosurePanel class="my-2">
         <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
           <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
-            <template
-              v-for="n in [
-                queryFilters.classifications,
-                queryFilters.media_types,
-              ]"
-              :key="n"
-            >
-              <div class="w-1/2">
-                <BaseListbox
-                  v-model="n.model"
-                  :label="n.label"
-                  :items="n.list"
-                  multiple
-                />
-              </div>
+            <template v-if="!loadingMetadata">
+              <template
+                v-for="n in [
+                  queryFilters.classifications,
+                  queryFilters.media_types,
+                ]"
+                :key="n"
+              >
+                <div class="w-1/2">
+                  <BaseListbox
+                    v-model="n.model"
+                    :label="n.label"
+                    :items="n.list"
+                    multiple
+                  />
+                </div>
+              </template>
             </template>
           </div>
           <div
@@ -141,6 +143,7 @@
                   v-model="n.model"
                   :label="n.label"
                   :items="n.list"
+                  :disabled="n.disabled || false"
                   multiple
                 />
               </div>
@@ -1039,6 +1042,18 @@ export default {
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
 
+    const loadingMetadata = computed(() => store.state.metadata.loading);
+
+    const criteriaClassifications = computed(
+      () => store.state.metadata.criteria.classification
+    );
+    const criteriaMediaTypes = computed(
+      () => store.state.metadata.criteria.media_tags
+    );
+    const criteriaNonStateActors = computed(
+      () => store.state.metadata.criteria.non_state_actors
+    );
+
     const selectedOrder = ref(
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
     );
@@ -1076,6 +1091,27 @@ export default {
           }
         }
       });
+      //TODO: Delete console.log("selectedModels: ", selectedModels);
+      //console.log("selectedModels: ", selectedModels);
+      return selectedModels;
+    };
+
+    const currentModelCode = (types, list) => {
+      const selectedModels = [];
+      types.forEach((type) => {
+        if (route.query[type]) {
+          if (!Array.isArray(route.query[type])) {
+            route.query[type] = [route.query[type]];
+          }
+          for (let i = 0; i < route.query[type].length; i++) {
+            selectedModels.push(
+              list.find((item) => item.code === route.query[type][i])
+            );
+          }
+        }
+      });
+      //TODO: Delete console.log("selectedModels: ", selectedModels);
+      console.log("CODE: selectedModels: ", selectedModels);
       return selectedModels;
     };
 
@@ -1110,20 +1146,13 @@ export default {
       metadata.reporting_types.type
     );
     const classificationItems = buildListItems(
-      metadata.classifications.items,
-      metadata.classifications.type
+      criteriaClassifications.value,
+      "classifications[]"
     );
-    const mediaItems = buildListItems(
-      metadata.media.items,
-      metadata.media.type
-    );
+    const mediaItems = buildListItems(criteriaMediaTypes.value, "media_tags[]");
     const nonStateItems = buildListItems(
-      metadata.nonstate.items,
-      metadata.nonstate.type
-    );
-    const producingItems = buildListItems(
-      metadata.producing_offices.items,
-      metadata.producing_offices.type
+      criteriaNonStateActors.value,
+      "non_state_actors[]"
     );
     const frontPageItems = buildListItems(
       metadata.front_page.items,
@@ -1158,33 +1187,28 @@ export default {
         },
         classifications: {
           label: "Classifications",
-          model: currentModel(
-            [metadata.classifications.type],
-            classificationItems
-          ),
+          model: currentModelCode(["classifications[]"], classificationItems),
           list: classificationItems,
-          types: [metadata.classifications.type],
+          types: ["classifications[]"],
         },
         media_types: {
           label: "Media Types",
-          model: currentModel([metadata.media.type], mediaItems),
+          model: currentModelCode(["media_tags[]"], mediaItems),
           list: mediaItems,
-          types: [metadata.media.type],
+          types: ["media_tags[]"],
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: currentModel([metadata.nonstate.type], nonStateItems),
+          model: currentModelCode(["non_state_actors[]"], nonStateItems),
           list: nonStateItems,
-          types: [metadata.nonstate.type],
+          types: ["non_state_actors[]"],
         },
         producing_offices: {
           label: "Producing Offices",
-          model: currentModel(
-            [metadata.producing_offices.type],
-            producingItems
-          ),
-          list: producingItems,
-          types: [metadata.producing_offices.type],
+          model: [],
+          list: [],
+          types: ["producing_offices[]"],
+          disabled: true,
         },
         frontpage_featured: {
           label: "Front Page Featured",
@@ -1221,13 +1245,16 @@ export default {
             const uniqueTypes = [
               ...new Set(newValue.model.map((item) => item.type)),
             ];
+            console.log("uniqueTypes: ", uniqueTypes);
             for (let i = 0; i < uniqueTypes.length; i++) {
               let valuesForType = [];
               for (let j = 0; j < newValue.model.length; j++) {
+                console.log("newValue.model: ", newValue.model);
                 if (newValue.model[j].type === uniqueTypes[i]) {
-                  valuesForType.push(newValue.model[j].key);
+                  valuesForType.push(newValue.model[j].code);
                 }
               }
+              console.log("valuesForType after: ", valuesForType);
               query[uniqueTypes[i]] = valuesForType;
             }
           }
@@ -1351,6 +1378,8 @@ export default {
       pageHeader,
       pageSubheader,
       loading,
+      //TODO: organize below
+      loadingMetadata,
       results,
       totalCount,
       aggregations,
