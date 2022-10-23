@@ -1003,12 +1003,6 @@ export default {
       return list.find((item) => item.code === code);
     };
 
-    const getSubregionForCode = (code) => {
-      return metadata.subregions.items.find(
-        (subregion) => subregion.key === code
-      );
-    };
-
     const getSubregionNameForCountryCode = (code) => {
       return metadata.subregions.items.find((subregion) => {
         return subregion.country_codes.find(
@@ -1048,6 +1042,15 @@ export default {
 
     const loadingMetadata = computed(() => store.state.metadata.loading);
 
+    const criteriaRegions = computed(
+      () => store.state.metadata.criteria.regions
+    );
+    const criteriaSubregions = computed(
+      () => store.state.metadata.criteria.subregions
+    );
+    const criteriaCountries = computed(
+      () => store.state.metadata.criteria.countries
+    );
     const criteriaClassifications = computed(
       () => store.state.metadata.criteria.classification
     );
@@ -1066,6 +1069,7 @@ export default {
     const criteriaProductTypes = computed(
       () => store.state.metadata.criteria.product_types
     );
+    const criteriaIssues = computed(() => store.state.metadata.criteria.issues);
 
     const selectedOrder = ref(
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
@@ -1092,25 +1096,6 @@ export default {
     */
     const currentModel = (types, list) => {
       const selectedModels = [];
-      types.forEach((type) => {
-        if (route.query[type]) {
-          if (!Array.isArray(route.query[type])) {
-            route.query[type] = [route.query[type]];
-          }
-          for (let i = 0; i < route.query[type].length; i++) {
-            selectedModels.push(
-              list.find((item) => item.key === route.query[type][i])
-            );
-          }
-        }
-      });
-      //TODO: Delete console.log("selectedModels: ", selectedModels);
-      //console.log("selectedModels: ", selectedModels);
-      return selectedModels;
-    };
-
-    const currentModelCode = (types, list) => {
-      const selectedModels = [];
       console.log("CODE: list: ", list);
       types.forEach((type) => {
         console.log("CODE: types: ", types);
@@ -1132,26 +1117,48 @@ export default {
       return selectedModels;
     };
 
-    const buildRegionsItems = () => {
+    const buildListItems = (items, type) => {
+      return items.map((item) => ({ ...item, type }));
+    };
+
+    const buildRegions = () => {
       let items = [];
-      for (let i = 0; i < metadata.regions.items.length; i++) {
-        items.push({ ...metadata.regions.items[i], type: "regions[]" });
-        for (let j = 0; j < metadata.regions.items[i].subregions.length; j++) {
-          items.push({
-            ...getSubregionForCode(metadata.regions.items[i].subregions[j]),
-            type: "subregions[]",
-            subitem: true,
+      criteriaRegions.value.forEach((region) => {
+        items.push({ ...region, type: "regions[]" });
+        if (region.subregions.length > 1) {
+          region.subregions.forEach((subregionCode) => {
+            const subregion = getValueForCode(
+              criteriaSubregions.value,
+              subregionCode
+            );
+            items.push({
+              ...subregion,
+              type: "subregions[]",
+              subitem: true,
+            });
           });
         }
-      }
-      for (let i = 0; i < metadata.countries.items.length; i++) {
-        items.push({ ...metadata.countries.items[i], type: "countries[]" });
-      }
+      });
+      criteriaCountries.value.forEach((country) => {
+        items.push({ ...country, type: "countries[]" });
+      });
       return items;
     };
 
-    const buildListItems = (items, type) => {
-      return items.map((item) => ({ ...item, type }));
+    const buildIssues = () => {
+      let items = [];
+      criteriaIssues.value.forEach((issue) => {
+        items.push({ ...issue, type: "issues[]" });
+        issue.topics.forEach((topic) => {
+          items.push({
+            ...topic,
+            code: topic.codes[0],
+            type: "topics[]",
+            subitem: true,
+          });
+        });
+      });
+      return items;
     };
 
     const buildReportingTypes = () => {
@@ -1175,10 +1182,7 @@ export default {
       return items;
     };
 
-    const issueItems = buildListItems(
-      metadata.issues.items,
-      metadata.issues.type
-    );
+    const issueItems = buildIssues();
     const reportingItems = buildReportingTypes();
     const classificationItems = buildListItems(
       criteriaClassifications.value,
@@ -1193,30 +1197,28 @@ export default {
       criteriaFrontPageFeatured.value,
       "selected_for[]"
     );
-    const regionsItems = buildRegionsItems();
-    const regionsTypes = [
-      metadata.regions.type,
-      metadata.subregions.type,
-      metadata.countries.type,
-    ];
+    const regionsItems = buildRegions();
 
     const buildQueryFilters = () => {
       return {
         regions: {
           label: "Regions & Countries",
-          model: currentModel(regionsTypes, regionsItems),
+          model: currentModel(
+            ["regions[]", "subregions[]", "countries[]"],
+            regionsItems
+          ),
           list: regionsItems,
-          types: regionsTypes,
+          types: ["regions[]", "subregions[]", "countries[]"],
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel([metadata.issues.type], issueItems),
+          model: currentModel(["issues[]", "topics[]"], issueItems),
           list: issueItems,
-          types: [metadata.issues.type],
+          types: ["issues[]", "topics[]"],
         },
         reporting: {
           label: "Reporting & Product Types",
-          model: currentModelCode(
+          model: currentModel(
             ["reporting_types[]", "product_types[]"],
             reportingItems
           ),
@@ -1225,19 +1227,19 @@ export default {
         },
         classifications: {
           label: "Classifications",
-          model: currentModelCode(["classifications[]"], classificationItems),
+          model: currentModel(["classifications[]"], classificationItems),
           list: classificationItems,
           types: ["classifications[]"],
         },
         media_types: {
           label: "Media Types",
-          model: currentModelCode(["media_tags[]"], mediaItems),
+          model: currentModel(["media_tags[]"], mediaItems),
           list: mediaItems,
           types: ["media_tags[]"],
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: currentModelCode(["non_state_actors[]"], nonStateItems),
+          model: currentModel(["non_state_actors[]"], nonStateItems),
           list: nonStateItems,
           types: ["non_state_actors[]"],
         },
@@ -1250,7 +1252,7 @@ export default {
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: currentModelCode(["selected_for[]"], frontPageItems),
+          model: currentModel(["selected_for[]"], frontPageItems),
           list: frontPageItems,
           types: ["selected_for[]"],
         },
