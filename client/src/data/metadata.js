@@ -1385,12 +1385,36 @@ export const metadata = {
       displayName: "Product Types",
       values: [
         {
+          "name": "Analysis: Group",
+          "code": 1000
+        },
+        {
+          "name": "Analysis: Cross",
+          "code": 1001
+        },
+        {
           "name": "Analysis: Critical",
-          "code": "analysis.critical"
+          "code": 1002
         },
         {
           "name": "Analysis: All Source",
-          "code": "analysis.all_source"
+          "code": 1003
+        },
+        {
+          "name": "Analysis: Worldwide",
+          "code": 1004
+        },
+        {
+          "name": "Analysis: Surveillance",
+          "code": 1005
+        },
+        {
+          "name": "Analysis: Counterterrorism",
+          "code": 1006
+        },
+        {
+          "name": "Analysis: Targeting",
+          "code": 1007
         },
       ]
     },
@@ -1473,28 +1497,24 @@ export const metadata = {
       values: [
         {
           "name": "Reporting: Collaboration",
-          "code": "reporting.collaboration"
+          "code": "reporting.collaboration",
+          "productTypes": [1000, 1001]
         },
         {
           "name": "Reporting: Enterprise",
-          "code": "reporting.enterprise"
+          "code": "reporting.enterprise",
+          "productTypes": [1002, 1003]
         },
         {
           "name": "Reporting: Mass",
-          "code": "reporting.mass"
+          "code": "reporting.mass",
+          "productTypes": [1004, 1005]
         },
         {
           "name": "Reporting: Mission",
-          "code": "reporting.mission"
+          "code": "reporting.mission",
+          "productTypes": [1006, 1007]
         },
-        {
-          "name": "Reporting: Open Source",
-          "code": "reporting.open_source"
-        },
-        {
-          "name": "Reporting: Operations",
-          "code": "reporting.operations"
-        }
       ]
     },
     selected_for: {

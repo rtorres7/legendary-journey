@@ -999,6 +999,10 @@ export default {
       return metadata.countries.items.find((country) => country.name === name);
     };
 
+    const getValueForCode = (list, code) => {
+      return list.find((item) => item.code === code);
+    };
+
     const getSubregionForCode = (code) => {
       return metadata.subregions.items.find(
         (subregion) => subregion.key === code
@@ -1053,6 +1057,15 @@ export default {
     const criteriaNonStateActors = computed(
       () => store.state.metadata.criteria.non_state_actors
     );
+    const criteriaFrontPageFeatured = computed(
+      () => store.state.metadata.criteria.selected_for
+    );
+    const criteriaReportingTypes = computed(
+      () => store.state.metadata.criteria.reporting_types
+    );
+    const criteriaProductTypes = computed(
+      () => store.state.metadata.criteria.product_types
+    );
 
     const selectedOrder = ref(
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
@@ -1098,11 +1111,15 @@ export default {
 
     const currentModelCode = (types, list) => {
       const selectedModels = [];
+      console.log("CODE: list: ", list);
       types.forEach((type) => {
+        console.log("CODE: types: ", types);
+        console.log("CODE route: ", route);
         if (route.query[type]) {
           if (!Array.isArray(route.query[type])) {
             route.query[type] = [route.query[type]];
           }
+          console.log("CODE route.query[type]: ", route.query[type]);
           for (let i = 0; i < route.query[type].length; i++) {
             selectedModels.push(
               list.find((item) => item.code === route.query[type][i])
@@ -1137,14 +1154,32 @@ export default {
       return items.map((item) => ({ ...item, type }));
     };
 
+    const buildReportingTypes = () => {
+      let items = [];
+      criteriaReportingTypes.value.forEach((reportingType) => {
+        items.push({ ...reportingType, type: "reporting_types[]" });
+        reportingType.productTypes.forEach((productTypeCode) => {
+          const productType = getValueForCode(
+            criteriaProductTypes.value,
+            productTypeCode
+          );
+          console.log("productType: ", productType);
+          items.push({
+            ...productType,
+            code: productType.code.toString(),
+            type: "product_types[]",
+            subitem: true,
+          });
+        });
+      });
+      return items;
+    };
+
     const issueItems = buildListItems(
       metadata.issues.items,
       metadata.issues.type
     );
-    const reportingItems = buildListItems(
-      metadata.reporting_types.items,
-      metadata.reporting_types.type
-    );
+    const reportingItems = buildReportingTypes();
     const classificationItems = buildListItems(
       criteriaClassifications.value,
       "classifications[]"
@@ -1155,8 +1190,8 @@ export default {
       "non_state_actors[]"
     );
     const frontPageItems = buildListItems(
-      metadata.front_page.items,
-      metadata.front_page.type
+      criteriaFrontPageFeatured.value,
+      "selected_for[]"
     );
     const regionsItems = buildRegionsItems();
     const regionsTypes = [
@@ -1181,9 +1216,12 @@ export default {
         },
         reporting: {
           label: "Reporting & Product Types",
-          model: currentModel([metadata.reporting_types.type], reportingItems),
+          model: currentModelCode(
+            ["reporting_types[]", "product_types[]"],
+            reportingItems
+          ),
           list: reportingItems,
-          types: [metadata.reporting_types.type],
+          types: ["reporting_types[]", "product_types[]"],
         },
         classifications: {
           label: "Classifications",
@@ -1212,9 +1250,9 @@ export default {
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: currentModel([metadata.front_page.type], frontPageItems),
+          model: currentModelCode(["selected_for[]"], frontPageItems),
           list: frontPageItems,
-          types: [metadata.front_page.type],
+          types: ["selected_for[]"],
         },
       };
     };
