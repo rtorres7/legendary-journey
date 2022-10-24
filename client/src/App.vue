@@ -91,6 +91,7 @@ export default {
 
     onMounted(() => {
       store.dispatch("user/loadUser");
+      store.dispatch("metadata/loadMetadata");
 
       document.documentElement.classList.remove(
         ...document.documentElement.classList

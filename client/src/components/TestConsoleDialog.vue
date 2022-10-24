@@ -117,6 +117,51 @@
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between">
+                        <SwitchLabel class="mr-4"
+                          >Enable Loading Metadata</SwitchLabel
+                        >
+                        <Switch
+                          v-model="loadingMetadataEnabled"
+                          :class="
+                            loadingMetadataEnabled
+                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                          "
+                          class="
+                            relative
+                            inline-flex
+                            items-center
+                            h-6
+                            transition-colors
+                            rounded-full
+                            w-11
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-slate-500
+                          "
+                        >
+                          <span
+                            :class="
+                              loadingMetadataEnabled
+                                ? 'translate-x-6'
+                                : 'translate-x-1'
+                            "
+                            class="
+                              inline-block
+                              w-4
+                              h-4
+                              transition-transform
+                              transform
+                              bg-white
+                              rounded-full
+                            "
+                          />
+                        </Switch>
+                      </div>
+                    </SwitchGroup>
+                    <SwitchGroup>
+                      <div class="flex items-center justify-between">
                         <SwitchLabel class="mr-4">Enable Admin</SwitchLabel>
                         <Switch
                           v-model="adminEnabled"
@@ -607,14 +652,14 @@
                     </SwitchGroup>
                   </div>
                 </div>
-                <!-- <div
+                <div
                   class="
                     py-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-zinc-500/50
                   "
-                  v-show="currentRoute === 'search'"
+                  v-show="currentRoute === 'demo-search'"
                 >
                   <p class="font-medium">Search Options</p>
                   <div class="py-2">
@@ -664,7 +709,7 @@
                       </div>
                     </SwitchGroup>
                   </div>
-                </div> -->
+                </div>
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -725,6 +770,7 @@ export default {
       },
     });
 
+    const loadingMetadataEnabled = ref(false);
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
     const loadingPublishedArticlesEnabled = ref(false);
@@ -733,6 +779,9 @@ export default {
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
 
+    const loadingMetadataFromStore = computed(
+      () => store.state.metadata.loading
+    );
     const loadingArticlesFromStore = computed(
       () => store.state.articles.loading
     );
@@ -756,6 +805,14 @@ export default {
         currentRoute.value = route.name;
       }
     );
+
+    watch(loadingMetadataEnabled, (enabled) => {
+      if (enabled) {
+        store.dispatch("metadata/removeMetadata");
+      } else {
+        store.dispatch("metadata/loadMetadata");
+      }
+    });
 
     watch(loadingArticlesEnabled, (enabled) => {
       if (enabled) {
@@ -813,6 +870,10 @@ export default {
       store.dispatch("testConsole/setSampleImage", enabled);
     });
 
+    watch(loadingMetadataFromStore, (loading) => {
+      loadingMetadataEnabled.value = loading;
+    });
+
     watch(loadingArticlesFromStore, (loading) => {
       loadingArticlesEnabled.value = loading;
     });
@@ -841,6 +902,7 @@ export default {
       currentRoute,
       close,
       alertEnabled,
+      loadingMetadataEnabled,
       loadingArticlesEnabled,
       loadingResultsEnabled,
       publishedArticleCountFromStore,
