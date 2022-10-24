@@ -7,7 +7,7 @@
       energy:border-zinc-700/50
     "
   >
-    <p class="pb-2">{{ pageSubheader }}</p>
+    <p v-show="!loadingMetadata" class="pb-2">{{ pageSubheader }}</p>
     <p class="font-semibold text-2xl">
       {{ pageHeader }}
     </p>
@@ -37,19 +37,12 @@
             "
           >
             <div class="lg:w-2/5">
-              <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
-                >Keyword Search or Filter
-              </label>
-              <input
-                class="
-                  mt-1
-                  block
-                  w-full
-                  focus-visible:outline-none
-                  bg-transparent
-                  border-b border-gray-300
-                  energy:text-gray-300
-                "
+              <BaseInput
+                v-model="queryText"
+                label="Keyword Search or Filter"
+                type="text"
+                autocomplete="off"
+                @keyup.enter="searchQueryText"
               />
             </div>
             <template
@@ -968,8 +961,6 @@ import {
 import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
-import { metadata } from "@/config";
-
 const sortOptions = [
   { label: "Newest", key: "desc" },
   { label: "Oldest", key: "asc" },
@@ -1004,16 +995,21 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    const getCodeFromCountryName = (name) => {
-      return metadata.countries.items.find((country) => country.name === name);
-    };
+    const loadingMetadata = computed(() => store.state.metadata.loading);
+    const criteria = computed(() => store.state.metadata.criteria);
+    const loadingResults = computed(() => store.state.search.loading);
+    const results = computed(() => store.state.search.results);
+    const totalCount = computed(() => store.state.search.totalCount);
+    const aggregations = computed(() => store.state.search.aggregations);
 
     const getValueForCode = (list, code) => {
       return list.find((item) => item.code === code);
     };
-
+    const getValueForName = (list, name) => {
+      return list.find((item) => item.name === name);
+    };
     const getSubregionNameForCountryCode = (code) => {
-      return metadata.subregions.items.find((subregion) => {
+      return criteria.value.subregions.find((subregion) => {
         return subregion.country_codes.find(
           (countryCode) => countryCode === code
         );
@@ -1032,41 +1028,24 @@ export default {
         return "Search";
       }
     };
-
     const getSubheaderName = ({ name, params }) => {
-      return name === "countries"
-        ? getSubregionNameForCountryCode(
-            getCodeFromCountryName(params.name).key
-          )
-        : "";
+      if (name === "countries") {
+        const countryValue = getValueForName(
+          criteria.value.countries,
+          params.name
+        );
+        let subregionName = "";
+        if (countryValue) {
+          subregionName = getSubregionNameForCountryCode(countryValue.code);
+        }
+        return subregionName;
+      } else {
+        return "";
+      }
     };
 
     const pageHeader = ref(getHeaderName(route));
     const pageSubheader = ref(getSubheaderName(route));
-
-    const loadingResults = computed(() => store.state.search.loading);
-    const results = computed(() => store.state.search.results);
-    const totalCount = computed(() => store.state.search.totalCount);
-    const aggregations = computed(() => store.state.search.aggregations);
-
-    const loadingMetadata = computed(() => store.state.metadata.loading);
-    const criteria = computed(() => store.state.metadata.criteria);
-
-    const selectedOrder = ref(
-      route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
-    );
-    const selectedView = ref(
-      route.query.view === "grid"
-        ? viewOptions[1]
-        : route.query.view === "visuals"
-        ? viewOptions[2]
-        : viewOptions[0]
-    );
-    const currentPage = ref(parseInt(route.query.page) || 1);
-
-    const getImgUrl = (url) => {
-      return require("@/assets/" + url);
-    };
 
     /* 
       - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
@@ -1076,19 +1055,22 @@ export default {
       - 4) The selectedModels represents the list of currently selected items in the list box
     */
     const currentModel = ({ items, types }) => {
+      console.log("currentModel: ", items, types);
       const selectedModels = [];
-      types.forEach((type) => {
-        if (route.query[type]) {
-          if (!Array.isArray(route.query[type])) {
-            route.query[type] = [route.query[type]];
+      if (items.length > 0) {
+        types.forEach((type) => {
+          if (route.query[type]) {
+            if (!Array.isArray(route.query[type])) {
+              route.query[type] = [route.query[type]];
+            }
+            for (let i = 0; i < route.query[type].length; i++) {
+              selectedModels.push(
+                items.find((item) => item.code === route.query[type][i])
+              );
+            }
           }
-          for (let i = 0; i < route.query[type].length; i++) {
-            selectedModels.push(
-              items.find((item) => item.code === route.query[type][i])
-            );
-          }
-        }
-      });
+        });
+      }
       console.log("selectedModels: ", selectedModels);
       return selectedModels;
     };
@@ -1096,7 +1078,6 @@ export default {
     const buildItems = (items, type) => {
       return items.map((item) => ({ ...item, type }));
     };
-
     const buildRegions = () => {
       let items = [];
       criteria.value.regions.forEach((region) => {
@@ -1120,7 +1101,6 @@ export default {
       });
       return items;
     };
-
     const buildIssues = () => {
       let items = [];
       criteria.value.issues.forEach((issue) => {
@@ -1136,7 +1116,6 @@ export default {
       });
       return items;
     };
-
     const buildReportingTypes = () => {
       let items = [];
       criteria.value.reporting_types.forEach((reportingType) => {
@@ -1157,39 +1136,38 @@ export default {
       return items;
     };
 
-    const regions = {
-      items: buildRegions(),
-      types: ["regions[]", "subregions[]", "countries[]"],
-    };
-    const issues = {
-      items: buildIssues(),
-      types: ["issues[]", "topics[]"],
-    };
-    const reportings = {
-      items: buildReportingTypes(),
-      types: ["reporting_types[]", "product_types[]"],
-    };
-    const classifications = {
-      items: buildItems(criteria.value.classification, "classifications[]"),
-      types: ["classifications[]"],
-    };
-
-    const mediaTypes = {
-      items: buildItems(criteria.value.media_tags, "media_tags[]"),
-      types: ["media_tags[]"],
-    };
-
-    const nonStateActors = {
-      items: buildItems(criteria.value.non_state_actors, "non_state_actors[]"),
-      types: ["non_state_actors[]"],
-    };
-
-    const frontPageFeatured = {
-      items: buildItems(criteria.value.selected_for, "selected_for[]"),
-      types: ["selected_for[]"],
-    };
-
     const buildQueryFilters = () => {
+      const regions = {
+        items: buildRegions(),
+        types: ["regions[]", "subregions[]", "countries[]"],
+      };
+      const issues = {
+        items: buildIssues(),
+        types: ["issues[]", "topics[]"],
+      };
+      const reportings = {
+        items: buildReportingTypes(),
+        types: ["reporting_types[]", "product_types[]"],
+      };
+      const classifications = {
+        items: buildItems(criteria.value.classification, "classifications[]"),
+        types: ["classifications[]"],
+      };
+      const mediaTypes = {
+        items: buildItems(criteria.value.media_tags, "media_tags[]"),
+        types: ["media_tags[]"],
+      };
+      const nonStateActors = {
+        items: buildItems(
+          criteria.value.non_state_actors,
+          "non_state_actors[]"
+        ),
+        types: ["non_state_actors[]"],
+      };
+      const frontPageFeatured = {
+        items: buildItems(criteria.value.selected_for, "selected_for[]"),
+        types: ["selected_for[]"],
+      };
       return {
         regions: {
           label: "Regions & Countries",
@@ -1242,9 +1220,8 @@ export default {
         },
       };
     };
-
+    const queryText = ref(route.query.text || "");
     const queryFilters = ref(buildQueryFilters());
-
     /*
       - This method builds a watcher for each query filter in order to track changes at the individual listbox level
       - 1) First, a query value is initialized that contains a copy of the existing query.
@@ -1291,7 +1268,6 @@ export default {
         { deep: true }
       );
     };
-
     const buildQueryWatchers = (object) => {
       let watchers = [];
       Object.keys(object).forEach((filter) => {
@@ -1299,14 +1275,92 @@ export default {
       });
       return watchers;
     };
-
     buildQueryWatchers(queryFilters.value);
 
+    const selectedOrder = ref(
+      route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
+    );
+    const selectedView = ref(
+      route.query.view === "grid"
+        ? viewOptions[1]
+        : route.query.view === "visuals"
+        ? viewOptions[2]
+        : viewOptions[0]
+    );
+    const currentPage = ref(parseInt(route.query.page) || 1);
+
+    const getImgUrl = (url) => {
+      return require("@/assets/" + url);
+    };
     const isMobileFacetsDialogOpen = ref(false);
 
     onMounted(() => {
       store.dispatch("search/search");
     });
+
+    const searchQueryText = () => {
+      let query = {
+        ...route.query,
+      };
+      if (!queryText.value) {
+        delete query["text"];
+      } else {
+        query = { ...query, text: queryText.value };
+      }
+      router.replace({
+        name: "demo-search",
+        query: query,
+      });
+    };
+
+    watch(
+      () => route.query,
+      () => {
+        console.log("route.query watcher triggered.");
+        if (
+          route.name === "demo-search" ||
+          route.name === "issues" ||
+          route.name === "regions" ||
+          route.name === "subregions" ||
+          route.name === "countries"
+        ) {
+          store.dispatch("search/search");
+          pageHeader.value = getHeaderName(route);
+          pageSubheader.value = getSubheaderName(route);
+
+          queryText.value = route.query.text || "";
+          queryFilters.value = buildQueryFilters();
+          currentPage.value = parseInt(route.query.page) || 1;
+          selectedView.value =
+            route.query.view === "grid"
+              ? viewOptions[1]
+              : route.query.view === "visuals"
+              ? viewOptions[2]
+              : viewOptions[0];
+        }
+      }
+    );
+
+    /*
+      Metadata needs to load first before building the query filters.
+      Countries subheader relies on Metadata so we load that as well.
+    */
+    watch([loadingMetadata], () => {
+      if (!loadingMetadata.value) {
+        queryFilters.value = buildQueryFilters();
+      }
+      if (route.name === "countries") {
+        pageSubheader.value = getSubheaderName(route);
+      }
+    });
+
+    watch(
+      () => queryFilters,
+      () => {
+        buildQueryWatchers(queryFilters.value);
+      },
+      { deep: true }
+    );
 
     watch([selectedOrder], () => {
       router.push({
@@ -1349,40 +1403,6 @@ export default {
       }
     });
 
-    watch(
-      () => route.query,
-      () => {
-        console.log("route.query watcher triggered.");
-        if (
-          route.name === "demo-search" ||
-          route.name === "issues" ||
-          route.name === "regions" ||
-          route.name === "subregions" ||
-          route.name === "countries"
-        ) {
-          store.dispatch("search/search");
-          pageHeader.value = getHeaderName(route);
-          pageSubheader.value = getSubheaderName(route);
-          queryFilters.value = buildQueryFilters();
-          currentPage.value = parseInt(route.query.page) || 1;
-          selectedView.value =
-            route.query.view === "grid"
-              ? viewOptions[1]
-              : route.query.view === "visuals"
-              ? viewOptions[2]
-              : viewOptions[0];
-        }
-      }
-    );
-
-    watch(
-      () => queryFilters,
-      () => {
-        buildQueryWatchers(queryFilters.value);
-      },
-      { deep: true }
-    );
-
     const closeMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = false);
 
@@ -1396,24 +1416,25 @@ export default {
 
     return {
       dayjs,
-      selectedOrder,
-      sortOptions,
-      selectedView,
-      viewOptions,
-      pageHeader,
-      pageSubheader,
-      loadingResults,
-      //TODO: organize below
       loadingMetadata,
+      loadingResults,
       results,
       totalCount,
       aggregations,
-      currentPage,
+      pageHeader,
+      pageSubheader,
+      queryText,
+      searchQueryText,
       queryFilters,
+      sortOptions,
+      selectedOrder,
+      viewOptions,
+      selectedView,
+      currentPage,
+      getImgUrl,
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,
-      getImgUrl,
       openMedia,
     };
   },

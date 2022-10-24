@@ -37,7 +37,7 @@ export default {
   actions: {
     loadMetadata({ commit }) {
       if (process.env.NODE_ENV === 'low') {
-        commit("importMetadata", metadata);
+        setTimeout(() => commit("importMetadata", metadata), 5000)
       } else {
         axios.get("/metadata").then((response) => {
           commit("importMetadata", response.data.metadata);
@@ -51,6 +51,7 @@ export default {
 
   mutations: {
     importMetadata(state, metadata) {
+      console.log('inside mutation: ', metadata)
       state.loading = false
       state.agency = metadata.agency
       state.contactEmail = metadata.contactEmail

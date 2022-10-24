@@ -39,6 +39,7 @@ export default {
       } else {
         url = "/search";
       }
+      console.log("search url: ", url)
       dispatch("debouncedSearch", url);
     },
 
