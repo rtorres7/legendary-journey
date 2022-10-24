@@ -13,148 +13,157 @@
     </p>
   </div>
   <!-- Search Form -->
-  <BaseCard class="mt-4 p-4">
-    <Disclosure v-slot="{ open }" defaultOpen>
-      <div class="flex flex-col justify-between">
-        <div
-          class="
-            grid-cols-1
-            md:grid md:grid-cols-2 md:gap-4
-            space-y-3
-            md:space-y-0
-            lg:flex lg:space-x-6 lg:gap-0
-            flex-col
-            lg:flex-row
-            w-full
-          "
-        >
-          <div class="lg:w-2/5">
-            <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
-              >Keyword Search or Filter
-            </label>
-            <input
-              class="
-                mt-1
-                block
-                w-full
-                focus-visible:outline-none
-                bg-transparent
-                border-b border-gray-300
-                energy:text-gray-300
-              "
-            />
-          </div>
-          <template
-            v-for="n in [
-              queryFilters.regions,
-              queryFilters.issues,
-              queryFilters.reporting,
-            ]"
-            :key="n"
-          >
-            <div class="lg:w-1/5">
-              <BaseListbox
-                v-model="n.model"
-                :label="n.label"
-                :items="n.list"
-                multiple
-              />
-            </div>
-          </template>
-        </div>
-        <DisclosureButton
-          class="
-            py-3
-            lg:py-1
-            max-w-fit
-            hover:text-black
-            dark:hover:text-white
-            energy:hover:text-whit
-          "
-        >
-          <span
-            class="
-              text-sm text-mission-light-blue
-              dark:text-teal-400
-              energy:text-energy-yellow
-              mr-2
-              inline-block
-            "
-            >{{ open ? "Less" : "More" }}</span
-          >
-          <ChevronUpIcon
-            :class="open ? '' : 'rotate-180 transform'"
-            class="
-              text-mission-light-blue
-              dark:text-teal-400
-              energy:text-energy-yellow
-              h-5
-              w-5
-              inline-block
-            "
-          />
-        </DisclosureButton>
-      </div>
-      <DisclosurePanel class="my-2">
-        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
-          <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
-            <template v-if="!loadingMetadata">
-              <template
-                v-for="n in [
-                  queryFilters.classifications,
-                  queryFilters.media_types,
-                ]"
-                :key="n"
-              >
-                <div class="w-1/2">
-                  <BaseListbox
-                    v-model="n.model"
-                    :label="n.label"
-                    :items="n.list"
-                    multiple
-                  />
-                </div>
-              </template>
-            </template>
-          </div>
+  <BaseCard
+    :class="[
+      'mt-4 p-4',
+      loadingMetadata
+        ? 'animate-pulse h-[35rem] md:h-[23rem] lg:h-[12.5rem]'
+        : '',
+    ]"
+  >
+    <div v-show="!loadingMetadata">
+      <Disclosure v-slot="{ open }" defaultOpen>
+        <div class="flex flex-col justify-between">
           <div
             class="
-              grid grid-cols-2
-              md:grid-cols-3
-              gap-4
-              lg:gap-0
-              lg:grid-cols-0
-              lg:flex
-              lg:w-3/5
-              lg:space-x-6
-              lg:max-w-none
+              grid-cols-1
+              md:grid md:grid-cols-2 md:gap-4
+              space-y-3
+              md:space-y-0
+              lg:flex lg:space-x-6 lg:gap-0
+              flex-col
+              lg:flex-row
+              w-full
             "
           >
+            <div class="lg:w-2/5">
+              <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
+                >Keyword Search or Filter
+              </label>
+              <input
+                class="
+                  mt-1
+                  block
+                  w-full
+                  focus-visible:outline-none
+                  bg-transparent
+                  border-b border-gray-300
+                  energy:text-gray-300
+                "
+              />
+            </div>
             <template
               v-for="n in [
-                queryFilters.nonstate_actors,
-                queryFilters.producing_offices,
-                queryFilters.frontpage_featured,
+                queryFilters.regions,
+                queryFilters.issues,
+                queryFilters.reporting,
               ]"
               :key="n"
             >
-              <div class="lg:w-1/3">
+              <div class="lg:w-1/5">
                 <BaseListbox
                   v-model="n.model"
                   :label="n.label"
                   :items="n.list"
-                  :disabled="n.disabled || false"
                   multiple
                 />
               </div>
             </template>
           </div>
+          <DisclosureButton
+            class="
+              py-3
+              lg:py-1
+              max-w-fit
+              hover:text-black
+              dark:hover:text-white
+              energy:hover:text-whit
+            "
+          >
+            <span
+              class="
+                text-sm text-mission-light-blue
+                dark:text-teal-400
+                energy:text-energy-yellow
+                mr-2
+                inline-block
+              "
+              >{{ open ? "Less" : "More" }}</span
+            >
+            <ChevronUpIcon
+              :class="open ? '' : 'rotate-180 transform'"
+              class="
+                text-mission-light-blue
+                dark:text-teal-400
+                energy:text-energy-yellow
+                h-5
+                w-5
+                inline-block
+              "
+            />
+          </DisclosureButton>
         </div>
-      </DisclosurePanel>
-    </Disclosure>
+        <DisclosurePanel class="my-2">
+          <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
+            <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
+              <template v-if="!loadingMetadata">
+                <template
+                  v-for="n in [
+                    queryFilters.classifications,
+                    queryFilters.media_types,
+                  ]"
+                  :key="n"
+                >
+                  <div class="w-1/2">
+                    <BaseListbox
+                      v-model="n.model"
+                      :label="n.label"
+                      :items="n.list"
+                      multiple
+                    />
+                  </div>
+                </template>
+              </template>
+            </div>
+            <div
+              class="
+                grid grid-cols-2
+                md:grid-cols-3
+                gap-4
+                lg:gap-0
+                lg:grid-cols-0
+                lg:flex
+                lg:w-3/5
+                lg:space-x-6
+                lg:max-w-none
+              "
+            >
+              <template
+                v-for="n in [
+                  queryFilters.nonstate_actors,
+                  queryFilters.producing_offices,
+                  queryFilters.frontpage_featured,
+                ]"
+                :key="n"
+              >
+                <div class="lg:w-1/3">
+                  <BaseListbox
+                    v-model="n.model"
+                    :label="n.label"
+                    :items="n.list"
+                    :disabled="n.disabled || false"
+                    multiple
+                  />
+                </div>
+              </template>
+            </div>
+          </div>
+        </DisclosurePanel>
+      </Disclosure>
+    </div>
   </BaseCard>
   <!-- Results Container -->
-  <template v-if="loading">
+  <template v-if="loadingResults">
     <div class="max-w-fit m-auto mt-[20vh]">
       <svg
         class="
@@ -187,7 +196,7 @@
       </svg>
     </div>
   </template>
-  <template v-if="!loading && totalCount === 0">
+  <template v-if="!loadingResults && totalCount === 0">
     <div class="mt-6">
       <p class="text-xl text-center font-semibold">
         Sorry, we didn't find any results.
@@ -198,7 +207,7 @@
       </p>
     </div>
   </template>
-  <template v-if="!loading && totalCount > 0">
+  <template v-if="!loadingResults && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
       <div
@@ -1035,41 +1044,13 @@ export default {
     const pageHeader = ref(getHeaderName(route));
     const pageSubheader = ref(getSubheaderName(route));
 
-    const loading = computed(() => store.state.search.loading);
+    const loadingResults = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
 
     const loadingMetadata = computed(() => store.state.metadata.loading);
-
-    const criteriaRegions = computed(
-      () => store.state.metadata.criteria.regions
-    );
-    const criteriaSubregions = computed(
-      () => store.state.metadata.criteria.subregions
-    );
-    const criteriaCountries = computed(
-      () => store.state.metadata.criteria.countries
-    );
-    const criteriaClassifications = computed(
-      () => store.state.metadata.criteria.classification
-    );
-    const criteriaMediaTypes = computed(
-      () => store.state.metadata.criteria.media_tags
-    );
-    const criteriaNonStateActors = computed(
-      () => store.state.metadata.criteria.non_state_actors
-    );
-    const criteriaFrontPageFeatured = computed(
-      () => store.state.metadata.criteria.selected_for
-    );
-    const criteriaReportingTypes = computed(
-      () => store.state.metadata.criteria.reporting_types
-    );
-    const criteriaProductTypes = computed(
-      () => store.state.metadata.criteria.product_types
-    );
-    const criteriaIssues = computed(() => store.state.metadata.criteria.issues);
+    const criteria = computed(() => store.state.metadata.criteria);
 
     const selectedOrder = ref(
       route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
@@ -1094,41 +1075,36 @@ export default {
       - 3) Each value is then matched up against the list of list box items and pushed into the 'selectedModels' array
       - 4) The selectedModels represents the list of currently selected items in the list box
     */
-    const currentModel = (types, list) => {
+    const currentModel = ({ items, types }) => {
       const selectedModels = [];
-      console.log("CODE: list: ", list);
       types.forEach((type) => {
-        console.log("CODE: types: ", types);
-        console.log("CODE route: ", route);
         if (route.query[type]) {
           if (!Array.isArray(route.query[type])) {
             route.query[type] = [route.query[type]];
           }
-          console.log("CODE route.query[type]: ", route.query[type]);
           for (let i = 0; i < route.query[type].length; i++) {
             selectedModels.push(
-              list.find((item) => item.code === route.query[type][i])
+              items.find((item) => item.code === route.query[type][i])
             );
           }
         }
       });
-      //TODO: Delete console.log("selectedModels: ", selectedModels);
-      console.log("CODE: selectedModels: ", selectedModels);
+      console.log("selectedModels: ", selectedModels);
       return selectedModels;
     };
 
-    const buildListItems = (items, type) => {
+    const buildItems = (items, type) => {
       return items.map((item) => ({ ...item, type }));
     };
 
     const buildRegions = () => {
       let items = [];
-      criteriaRegions.value.forEach((region) => {
+      criteria.value.regions.forEach((region) => {
         items.push({ ...region, type: "regions[]" });
         if (region.subregions.length > 1) {
           region.subregions.forEach((subregionCode) => {
             const subregion = getValueForCode(
-              criteriaSubregions.value,
+              criteria.value.subregions,
               subregionCode
             );
             items.push({
@@ -1139,7 +1115,7 @@ export default {
           });
         }
       });
-      criteriaCountries.value.forEach((country) => {
+      criteria.value.countries.forEach((country) => {
         items.push({ ...country, type: "countries[]" });
       });
       return items;
@@ -1147,7 +1123,7 @@ export default {
 
     const buildIssues = () => {
       let items = [];
-      criteriaIssues.value.forEach((issue) => {
+      criteria.value.issues.forEach((issue) => {
         items.push({ ...issue, type: "issues[]" });
         issue.topics.forEach((topic) => {
           items.push({
@@ -1163,14 +1139,13 @@ export default {
 
     const buildReportingTypes = () => {
       let items = [];
-      criteriaReportingTypes.value.forEach((reportingType) => {
+      criteria.value.reporting_types.forEach((reportingType) => {
         items.push({ ...reportingType, type: "reporting_types[]" });
         reportingType.productTypes.forEach((productTypeCode) => {
           const productType = getValueForCode(
-            criteriaProductTypes.value,
+            criteria.value.product_types,
             productTypeCode
           );
-          console.log("productType: ", productType);
           items.push({
             ...productType,
             code: productType.code.toString(),
@@ -1182,66 +1157,75 @@ export default {
       return items;
     };
 
-    const issueItems = buildIssues();
-    const reportingItems = buildReportingTypes();
-    const classificationItems = buildListItems(
-      criteriaClassifications.value,
-      "classifications[]"
-    );
-    const mediaItems = buildListItems(criteriaMediaTypes.value, "media_tags[]");
-    const nonStateItems = buildListItems(
-      criteriaNonStateActors.value,
-      "non_state_actors[]"
-    );
-    const frontPageItems = buildListItems(
-      criteriaFrontPageFeatured.value,
-      "selected_for[]"
-    );
-    const regionsItems = buildRegions();
+    const regions = {
+      items: buildRegions(),
+      types: ["regions[]", "subregions[]", "countries[]"],
+    };
+    const issues = {
+      items: buildIssues(),
+      types: ["issues[]", "topics[]"],
+    };
+    const reportings = {
+      items: buildReportingTypes(),
+      types: ["reporting_types[]", "product_types[]"],
+    };
+    const classifications = {
+      items: buildItems(criteria.value.classification, "classifications[]"),
+      types: ["classifications[]"],
+    };
+
+    const mediaTypes = {
+      items: buildItems(criteria.value.media_tags, "media_tags[]"),
+      types: ["media_tags[]"],
+    };
+
+    const nonStateActors = {
+      items: buildItems(criteria.value.non_state_actors, "non_state_actors[]"),
+      types: ["non_state_actors[]"],
+    };
+
+    const frontPageFeatured = {
+      items: buildItems(criteria.value.selected_for, "selected_for[]"),
+      types: ["selected_for[]"],
+    };
 
     const buildQueryFilters = () => {
       return {
         regions: {
           label: "Regions & Countries",
-          model: currentModel(
-            ["regions[]", "subregions[]", "countries[]"],
-            regionsItems
-          ),
-          list: regionsItems,
-          types: ["regions[]", "subregions[]", "countries[]"],
+          model: currentModel(regions),
+          list: regions.items,
+          types: regions.types,
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel(["issues[]", "topics[]"], issueItems),
-          list: issueItems,
-          types: ["issues[]", "topics[]"],
+          model: currentModel(issues),
+          list: issues.items,
+          types: issues.types,
         },
         reporting: {
           label: "Reporting & Product Types",
-          model: currentModel(
-            ["reporting_types[]", "product_types[]"],
-            reportingItems
-          ),
-          list: reportingItems,
-          types: ["reporting_types[]", "product_types[]"],
+          model: currentModel(reportings),
+          list: reportings.items,
+          types: reportings.types,
         },
         classifications: {
           label: "Classifications",
-          model: currentModel(["classifications[]"], classificationItems),
-          list: classificationItems,
-          types: ["classifications[]"],
+          model: currentModel(classifications),
+          list: classifications.items,
+          types: classifications.types,
         },
         media_types: {
           label: "Media Types",
-          model: currentModel(["media_tags[]"], mediaItems),
-          list: mediaItems,
-          types: ["media_tags[]"],
+          model: currentModel(mediaTypes),
+          list: mediaTypes.items,
+          types: mediaTypes.types,
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: currentModel(["non_state_actors[]"], nonStateItems),
-          list: nonStateItems,
-          types: ["non_state_actors[]"],
+          model: currentModel(nonStateActors),
+          list: nonStateActors.items,
+          types: nonStateActors.types,
         },
         producing_offices: {
           label: "Producing Offices",
@@ -1252,9 +1236,9 @@ export default {
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: currentModel(["selected_for[]"], frontPageItems),
-          list: frontPageItems,
-          types: ["selected_for[]"],
+          model: currentModel(frontPageFeatured),
+          list: frontPageFeatured.items,
+          types: frontPageFeatured.types,
         },
       };
     };
@@ -1351,6 +1335,7 @@ export default {
           ...route.query,
           view: selectedView.value.key,
         };
+        //TODO: Align these values with thats on the backend
         query["media_tags[]"] = [
           "audio",
           "interactive",
@@ -1417,7 +1402,7 @@ export default {
       viewOptions,
       pageHeader,
       pageSubheader,
-      loading,
+      loadingResults,
       //TODO: organize below
       loadingMetadata,
       results,

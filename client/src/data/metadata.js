@@ -1397,7 +1397,7 @@ export const metadata = {
           "code": 1002
         },
         {
-          "name": "Analysis: All Source",
+          "name": "Analysis: Review",
           "code": 1003
         },
         {
@@ -1496,8 +1496,8 @@ export const metadata = {
       displayName: "Reporting Types",
       values: [
         {
-          "name": "Reporting: Collaboration",
-          "code": "reporting.collaboration",
+          "name": "Analysis: All Source",
+          "code": "analysis.all_source",
           "productTypes": [1000, 1001]
         },
         {

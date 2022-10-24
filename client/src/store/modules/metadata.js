@@ -44,6 +44,9 @@ export default {
         });
       }
     },
+    removeMetadata({ commit }) {
+      commit("resetMetadata");
+    }
   },
 
   mutations: {
@@ -77,5 +80,23 @@ export default {
       state.siteClassification = metadata.siteClassification
       state.siteDefaultTitle = metadata.siteDefaultTitle
     },
+    resetMetadata(state) {
+      state.loading = true;
+      state.criteria = {
+        classification: [],
+        countries: [],
+        domestic_regions: [],
+        fisa_role: [],
+        issues: [],
+        media_tags: [],
+        non_state_actors: [],
+        product_types: [],
+        regions: [],
+        reporting_types: [],
+        selected_for: [],
+        subregions: [],
+        topics: []
+      }
+    }
   },
 };

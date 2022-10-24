@@ -156,7 +156,6 @@ export default {
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    console.log("disabled: ", props);
     const selectedItem = computed({
       get: () => props.modelValue,
       set: (value) => {
