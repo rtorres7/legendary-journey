@@ -1,4 +1,5 @@
 import { getSearchDataFromUrl } from "@/data"
+import axios from '@/config/wireAxios'
 import router from "@/router"
 
 export default {
@@ -38,12 +39,18 @@ export default {
       } else {
         url = "/search";
       }
+      console.log("search url: ", url)
       dispatch("debouncedSearch", url);
     },
 
-    debouncedSearch: ({ commit, state }, url) => {
-      commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
-      state.loading = false;
+    debouncedSearch: ({ commit }, url) => {
+      if (process.env.NODE_ENV === 'low') {
+        commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
+      } else {
+        axios.get(url).then((response) => {
+          commit("importData", response.data);
+        });
+      }
     },
 
     removeSearch({ commit }) {
@@ -58,6 +65,7 @@ export default {
   mutations: {
     importData(state, data) {
       console.log('search data: ', data);
+      state.loading = false;
       state.searchId = data.searchId;
       state.results = data.results.map((article) => {
         return article;

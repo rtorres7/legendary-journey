@@ -1,14 +1,15 @@
 import { createStore } from 'vuex'
-import articles from "./modules/articles";
-import daniel from "./modules/daniel";
+import articles from "./modules/articles"
+import daniel from "./modules/daniel"
 import danielSearch from "./modules/daniel-search"
-import search from "./modules/search";
-import user from "./modules/user";
-import document from "./modules/document";
+import search from "./modules/search"
+import user from "./modules/user"
+import document from "./modules/document"
 import feeds from "./modules/feeds"
-import savedSearches from "./modules/saved-searches";
-import danielDetails from "./modules/danielDetails";
-import testConsole from "./modules/test-console";
+import savedSearches from "./modules/saved-searches"
+import danielDetails from "./modules/danielDetails"
+import testConsole from "./modules/test-console"
+import metadata from "./modules/metadata"
 
 export default createStore({
     state: {
@@ -33,6 +34,7 @@ export default createStore({
         feeds,
         savedSearches,
         danielDetails,
-        testConsole
+        testConsole,
+        metadata
     },
 })

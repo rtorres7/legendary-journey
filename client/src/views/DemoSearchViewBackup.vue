@@ -7,53 +7,105 @@
       energy:border-zinc-700/50
     "
   >
-    <p v-show="!loadingMetadata" class="pb-2">{{ pageSubheader }}</p>
+    <p class="pb-2">{{ pageSubheader }}</p>
     <p class="font-semibold text-2xl">
       {{ pageHeader }}
     </p>
   </div>
   <!-- Search Form -->
-  <BaseCard
-    :class="[
-      'mt-4 p-4',
-      loadingMetadata
-        ? 'animate-pulse h-[35rem] md:h-[23rem] lg:h-[12.5rem]'
-        : '',
-    ]"
-  >
-    <div v-show="!loadingMetadata">
-      <Disclosure v-slot="{ open }" defaultOpen>
-        <div class="flex flex-col justify-between">
-          <div
-            class="
-              grid-cols-1
-              md:grid md:grid-cols-2 md:gap-4
-              space-y-3
-              md:space-y-0
-              lg:flex lg:space-x-6 lg:gap-0
-              flex-col
-              lg:flex-row
-              w-full
-            "
+  <BaseCard class="mt-4 p-4">
+    <Disclosure v-slot="{ open }" defaultOpen>
+      <div class="flex flex-col justify-between">
+        <div
+          class="
+            grid-cols-1
+            md:grid md:grid-cols-2 md:gap-4
+            space-y-3
+            md:space-y-0
+            lg:flex lg:space-x-6 lg:gap-0
+            flex-col
+            lg:flex-row
+            w-full
+          "
+        >
+          <div class="lg:w-2/5">
+            <label class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
+              >Keyword Search or Filter
+            </label>
+            <input
+              class="
+                mt-1
+                block
+                w-full
+                focus-visible:outline-none
+                bg-transparent
+                border-b border-gray-300
+                energy:text-gray-300
+              "
+            />
+          </div>
+          <template
+            v-for="n in [
+              queryFilters.regions,
+              queryFilters.issues,
+              queryFilters.reporting,
+            ]"
+            :key="n"
           >
-            <div class="lg:w-2/5">
-              <BaseInput
-                v-model="queryText"
-                label="Keyword Search or Filter"
-                type="text"
-                autocomplete="off"
-                @keyup.enter="searchQueryText"
+            <div class="lg:w-1/5">
+              <BaseListbox
+                v-model="n.model"
+                :label="n.label"
+                :items="n.list"
+                multiple
               />
             </div>
+          </template>
+        </div>
+        <DisclosureButton
+          class="
+            py-3
+            lg:py-1
+            max-w-fit
+            hover:text-black
+            dark:hover:text-white
+            energy:hover:text-whit
+          "
+        >
+          <span
+            class="
+              text-sm text-mission-light-blue
+              dark:text-teal-400
+              energy:text-energy-yellow
+              mr-2
+              inline-block
+            "
+            >{{ open ? "Less" : "More" }}</span
+          >
+          <ChevronUpIcon
+            :class="open ? '' : 'rotate-180 transform'"
+            class="
+              text-mission-light-blue
+              dark:text-teal-400
+              energy:text-energy-yellow
+              h-5
+              w-5
+              inline-block
+            "
+          />
+        </DisclosureButton>
+      </div>
+      <DisclosurePanel class="my-2">
+        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
+          <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
             <template
               v-for="n in [
-                queryFilters.regions,
-                queryFilters.issues,
-                queryFilters.reporting,
+                queryFilters.classifications,
+                queryFilters.media_types,
               ]"
               :key="n"
             >
-              <div class="lg:w-1/5">
+              <div class="w-1/2">
                 <BaseListbox
                   v-model="n.model"
                   :label="n.label"
@@ -63,100 +115,43 @@
               </div>
             </template>
           </div>
-          <DisclosureButton
+          <div
             class="
-              py-3
-              lg:py-1
-              max-w-fit
-              hover:text-black
-              dark:hover:text-white
-              energy:hover:text-whit
+              grid grid-cols-2
+              md:grid-cols-3
+              gap-4
+              lg:gap-0
+              lg:grid-cols-0
+              lg:flex
+              lg:w-3/5
+              lg:space-x-6
+              lg:max-w-none
             "
           >
-            <span
-              class="
-                text-sm text-mission-light-blue
-                dark:text-teal-400
-                energy:text-energy-yellow
-                mr-2
-                inline-block
-              "
-              >{{ open ? "Less" : "More" }}</span
+            <template
+              v-for="n in [
+                queryFilters.nonstate_actors,
+                queryFilters.producing_offices,
+                queryFilters.frontpage_featured,
+              ]"
+              :key="n"
             >
-            <ChevronUpIcon
-              :class="open ? '' : 'rotate-180 transform'"
-              class="
-                text-mission-light-blue
-                dark:text-teal-400
-                energy:text-energy-yellow
-                h-5
-                w-5
-                inline-block
-              "
-            />
-          </DisclosureButton>
-        </div>
-        <DisclosurePanel class="my-2">
-          <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
-            <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
-              <template v-if="!loadingMetadata">
-                <template
-                  v-for="n in [
-                    queryFilters.classifications,
-                    queryFilters.media_types,
-                  ]"
-                  :key="n"
-                >
-                  <div class="w-1/2">
-                    <BaseListbox
-                      v-model="n.model"
-                      :label="n.label"
-                      :items="n.list"
-                      multiple
-                    />
-                  </div>
-                </template>
-              </template>
-            </div>
-            <div
-              class="
-                grid grid-cols-2
-                md:grid-cols-3
-                gap-4
-                lg:gap-0
-                lg:grid-cols-0
-                lg:flex
-                lg:w-3/5
-                lg:space-x-6
-                lg:max-w-none
-              "
-            >
-              <template
-                v-for="n in [
-                  queryFilters.nonstate_actors,
-                  queryFilters.producing_offices,
-                  queryFilters.frontpage_featured,
-                ]"
-                :key="n"
-              >
-                <div class="lg:w-1/3">
-                  <BaseListbox
-                    v-model="n.model"
-                    :label="n.label"
-                    :items="n.list"
-                    :disabled="n.disabled || false"
-                    multiple
-                  />
-                </div>
-              </template>
-            </div>
+              <div class="lg:w-1/3">
+                <BaseListbox
+                  v-model="n.model"
+                  :label="n.label"
+                  :items="n.list"
+                  multiple
+                />
+              </div>
+            </template>
           </div>
-        </DisclosurePanel>
-      </Disclosure>
-    </div>
+        </div>
+      </DisclosurePanel>
+    </Disclosure>
   </BaseCard>
   <!-- Results Container -->
-  <template v-if="loadingResults">
+  <template v-if="loading">
     <div class="max-w-fit m-auto mt-[20vh]">
       <svg
         class="
@@ -189,7 +184,7 @@
       </svg>
     </div>
   </template>
-  <template v-if="!loadingResults && totalCount === 0">
+  <template v-if="!loading && totalCount === 0">
     <div class="mt-6">
       <p class="text-xl text-center font-semibold">
         Sorry, we didn't find any results.
@@ -200,7 +195,7 @@
       </p>
     </div>
   </template>
-  <template v-if="!loadingResults && totalCount > 0">
+  <template v-if="!loading && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
       <div
@@ -961,6 +956,8 @@ import {
 import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
+import { metadata } from "@/config";
+
 const sortOptions = [
   { label: "Newest", key: "desc" },
   { label: "Oldest", key: "asc" },
@@ -995,21 +992,18 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    const loadingMetadata = computed(() => store.state.metadata.loading);
-    const criteria = computed(() => store.state.metadata.criteria);
-    const loadingResults = computed(() => store.state.search.loading);
-    const results = computed(() => store.state.search.results);
-    const totalCount = computed(() => store.state.search.totalCount);
-    const aggregations = computed(() => store.state.search.aggregations);
+    const getCodeFromCountryName = (name) => {
+      return metadata.countries.items.find((country) => country.name === name);
+    };
 
-    const getValueForCode = (list, code) => {
-      return list.find((item) => item.code === code);
+    const getSubregionForCode = (code) => {
+      return metadata.subregions.items.find(
+        (subregion) => subregion.key === code
+      );
     };
-    const getValueForName = (list, name) => {
-      return list.find((item) => item.name === name);
-    };
+
     const getSubregionNameForCountryCode = (code) => {
-      return criteria.value.subregions.find((subregion) => {
+      return metadata.subregions.items.find((subregion) => {
         return subregion.country_codes.find(
           (countryCode) => countryCode === code
         );
@@ -1028,24 +1022,38 @@ export default {
         return "Search";
       }
     };
+
     const getSubheaderName = ({ name, params }) => {
-      if (name === "countries") {
-        const countryValue = getValueForName(
-          criteria.value.countries,
-          params.name
-        );
-        let subregionName = "";
-        if (countryValue) {
-          subregionName = getSubregionNameForCountryCode(countryValue.code);
-        }
-        return subregionName;
-      } else {
-        return "";
-      }
+      return name === "countries"
+        ? getSubregionNameForCountryCode(
+            getCodeFromCountryName(params.name).key
+          )
+        : "";
     };
 
     const pageHeader = ref(getHeaderName(route));
     const pageSubheader = ref(getSubheaderName(route));
+
+    const loading = computed(() => store.state.search.loading);
+    const results = computed(() => store.state.search.results);
+    const totalCount = computed(() => store.state.search.totalCount);
+    const aggregations = computed(() => store.state.search.aggregations);
+
+    const selectedOrder = ref(
+      route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
+    );
+    const selectedView = ref(
+      route.query.view === "grid"
+        ? viewOptions[1]
+        : route.query.view === "visuals"
+        ? viewOptions[2]
+        : viewOptions[0]
+    );
+    const currentPage = ref(parseInt(route.query.page) || 1);
+
+    const getImgUrl = (url) => {
+      return require("@/assets/" + url);
+    };
 
     /* 
       - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
@@ -1054,174 +1062,141 @@ export default {
       - 3) Each value is then matched up against the list of list box items and pushed into the 'selectedModels' array
       - 4) The selectedModels represents the list of currently selected items in the list box
     */
-    const currentModel = ({ items, types }) => {
-      console.log("currentModel: ", items, types);
+    const currentModel = (types, list) => {
       const selectedModels = [];
-      if (items.length > 0) {
-        types.forEach((type) => {
-          if (route.query[type]) {
-            if (!Array.isArray(route.query[type])) {
-              route.query[type] = [route.query[type]];
-            }
-            for (let i = 0; i < route.query[type].length; i++) {
-              selectedModels.push(
-                items.find((item) => item.code === route.query[type][i])
-              );
-            }
+      types.forEach((type) => {
+        if (route.query[type]) {
+          if (!Array.isArray(route.query[type])) {
+            route.query[type] = [route.query[type]];
           }
-        });
-      }
-      console.log("selectedModels: ", selectedModels);
+          for (let i = 0; i < route.query[type].length; i++) {
+            selectedModels.push(
+              list.find((item) => item.key === route.query[type][i])
+            );
+          }
+        }
+      });
       return selectedModels;
     };
 
-    const buildItems = (items, type) => {
-      return items.map((item) => ({ ...item, type }));
-    };
-    const buildRegions = () => {
+    const buildRegionsItems = () => {
       let items = [];
-      criteria.value.regions.forEach((region) => {
-        items.push({ ...region, type: "regions[]" });
-        if (region.subregions.length > 1) {
-          region.subregions.forEach((subregionCode) => {
-            const subregion = getValueForCode(
-              criteria.value.subregions,
-              subregionCode
-            );
-            items.push({
-              ...subregion,
-              type: "subregions[]",
-              subitem: true,
-            });
+      for (let i = 0; i < metadata.regions.items.length; i++) {
+        items.push({ ...metadata.regions.items[i], type: "regions[]" });
+        for (let j = 0; j < metadata.regions.items[i].subregions.length; j++) {
+          items.push({
+            ...getSubregionForCode(metadata.regions.items[i].subregions[j]),
+            type: "subregions[]",
+            subitem: true,
           });
         }
-      });
-      criteria.value.countries.forEach((country) => {
-        items.push({ ...country, type: "countries[]" });
-      });
-      return items;
-    };
-    const buildIssues = () => {
-      let items = [];
-      criteria.value.issues.forEach((issue) => {
-        items.push({ ...issue, type: "issues[]" });
-        issue.topics.forEach((topic) => {
-          items.push({
-            ...topic,
-            code: topic.codes[0],
-            type: "topics[]",
-            subitem: true,
-          });
-        });
-      });
-      return items;
-    };
-    const buildReportingTypes = () => {
-      let items = [];
-      criteria.value.reporting_types.forEach((reportingType) => {
-        items.push({ ...reportingType, type: "reporting_types[]" });
-        reportingType.productTypes.forEach((productTypeCode) => {
-          const productType = getValueForCode(
-            criteria.value.product_types,
-            productTypeCode
-          );
-          items.push({
-            ...productType,
-            code: productType.code.toString(),
-            type: "product_types[]",
-            subitem: true,
-          });
-        });
-      });
+      }
+      for (let i = 0; i < metadata.countries.items.length; i++) {
+        items.push({ ...metadata.countries.items[i], type: "countries[]" });
+      }
       return items;
     };
 
+    const buildListItems = (items, type) => {
+      return items.map((item) => ({ ...item, type }));
+    };
+
+    const issueItems = buildListItems(
+      metadata.issues.items,
+      metadata.issues.type
+    );
+    const reportingItems = buildListItems(
+      metadata.reporting_types.items,
+      metadata.reporting_types.type
+    );
+    const classificationItems = buildListItems(
+      metadata.classifications.items,
+      metadata.classifications.type
+    );
+    const mediaItems = buildListItems(
+      metadata.media.items,
+      metadata.media.type
+    );
+    const nonStateItems = buildListItems(
+      metadata.nonstate.items,
+      metadata.nonstate.type
+    );
+    const producingItems = buildListItems(
+      metadata.producing_offices.items,
+      metadata.producing_offices.type
+    );
+    const frontPageItems = buildListItems(
+      metadata.front_page.items,
+      metadata.front_page.type
+    );
+    const regionsItems = buildRegionsItems();
+    const regionsTypes = [
+      metadata.regions.type,
+      metadata.subregions.type,
+      metadata.countries.type,
+    ];
+
     const buildQueryFilters = () => {
-      const regions = {
-        items: buildRegions(),
-        types: ["regions[]", "subregions[]", "countries[]"],
-      };
-      const issues = {
-        items: buildIssues(),
-        types: ["issues[]", "topics[]"],
-      };
-      const reportings = {
-        items: buildReportingTypes(),
-        types: ["reporting_types[]", "product_types[]"],
-      };
-      const classifications = {
-        items: buildItems(criteria.value.classification, "classifications[]"),
-        types: ["classifications[]"],
-      };
-      const mediaTypes = {
-        items: buildItems(criteria.value.media_tags, "media_tags[]"),
-        types: ["media_tags[]"],
-      };
-      const nonStateActors = {
-        items: buildItems(
-          criteria.value.non_state_actors,
-          "non_state_actors[]"
-        ),
-        types: ["non_state_actors[]"],
-      };
-      const frontPageFeatured = {
-        items: buildItems(criteria.value.selected_for, "selected_for[]"),
-        types: ["selected_for[]"],
-      };
       return {
         regions: {
           label: "Regions & Countries",
-          model: currentModel(regions),
-          list: regions.items,
-          types: regions.types,
+          model: currentModel(regionsTypes, regionsItems),
+          list: regionsItems,
+          types: regionsTypes,
         },
         issues: {
           label: "Issues & Topics",
-          model: currentModel(issues),
-          list: issues.items,
-          types: issues.types,
+          model: currentModel([metadata.issues.type], issueItems),
+          list: issueItems,
+          types: [metadata.issues.type],
         },
         reporting: {
           label: "Reporting & Product Types",
-          model: currentModel(reportings),
-          list: reportings.items,
-          types: reportings.types,
+          model: currentModel([metadata.reporting_types.type], reportingItems),
+          list: reportingItems,
+          types: [metadata.reporting_types.type],
         },
         classifications: {
           label: "Classifications",
-          model: currentModel(classifications),
-          list: classifications.items,
-          types: classifications.types,
+          model: currentModel(
+            [metadata.classifications.type],
+            classificationItems
+          ),
+          list: classificationItems,
+          types: [metadata.classifications.type],
         },
         media_types: {
           label: "Media Types",
-          model: currentModel(mediaTypes),
-          list: mediaTypes.items,
-          types: mediaTypes.types,
+          model: currentModel([metadata.media.type], mediaItems),
+          list: mediaItems,
+          types: [metadata.media.type],
         },
         nonstate_actors: {
           label: "Non State Actors",
-          model: currentModel(nonStateActors),
-          list: nonStateActors.items,
-          types: nonStateActors.types,
+          model: currentModel([metadata.nonstate.type], nonStateItems),
+          list: nonStateItems,
+          types: [metadata.nonstate.type],
         },
         producing_offices: {
           label: "Producing Offices",
-          model: [],
-          list: [],
-          types: ["producing_offices[]"],
-          disabled: true,
+          model: currentModel(
+            [metadata.producing_offices.type],
+            producingItems
+          ),
+          list: producingItems,
+          types: [metadata.producing_offices.type],
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: currentModel(frontPageFeatured),
-          list: frontPageFeatured.items,
-          types: frontPageFeatured.types,
+          model: currentModel([metadata.front_page.type], frontPageItems),
+          list: frontPageItems,
+          types: [metadata.front_page.type],
         },
       };
     };
-    const queryText = ref(route.query.text || "");
+
     const queryFilters = ref(buildQueryFilters());
+
     /*
       - This method builds a watcher for each query filter in order to track changes at the individual listbox level
       - 1) First, a query value is initialized that contains a copy of the existing query.
@@ -1246,16 +1221,13 @@ export default {
             const uniqueTypes = [
               ...new Set(newValue.model.map((item) => item.type)),
             ];
-            console.log("uniqueTypes: ", uniqueTypes);
             for (let i = 0; i < uniqueTypes.length; i++) {
               let valuesForType = [];
               for (let j = 0; j < newValue.model.length; j++) {
-                console.log("newValue.model: ", newValue.model);
                 if (newValue.model[j].type === uniqueTypes[i]) {
-                  valuesForType.push(newValue.model[j].code);
+                  valuesForType.push(newValue.model[j].key);
                 }
               }
-              console.log("valuesForType after: ", valuesForType);
               query[uniqueTypes[i]] = valuesForType;
             }
           }
@@ -1268,6 +1240,7 @@ export default {
         { deep: true }
       );
     };
+
     const buildQueryWatchers = (object) => {
       let watchers = [];
       Object.keys(object).forEach((filter) => {
@@ -1275,92 +1248,14 @@ export default {
       });
       return watchers;
     };
+
     buildQueryWatchers(queryFilters.value);
 
-    const selectedOrder = ref(
-      route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
-    );
-    const selectedView = ref(
-      route.query.view === "grid"
-        ? viewOptions[1]
-        : route.query.view === "visuals"
-        ? viewOptions[2]
-        : viewOptions[0]
-    );
-    const currentPage = ref(parseInt(route.query.page) || 1);
-
-    const getImgUrl = (url) => {
-      return require("@/assets/" + url);
-    };
     const isMobileFacetsDialogOpen = ref(false);
 
     onMounted(() => {
       store.dispatch("search/search");
     });
-
-    const searchQueryText = () => {
-      let query = {
-        ...route.query,
-      };
-      if (!queryText.value) {
-        delete query["text"];
-      } else {
-        query = { ...query, text: queryText.value };
-      }
-      router.replace({
-        name: "demo-search",
-        query: query,
-      });
-    };
-
-    watch(
-      () => route.query,
-      () => {
-        console.log("route.query watcher triggered.");
-        if (
-          route.name === "demo-search" ||
-          route.name === "issues" ||
-          route.name === "regions" ||
-          route.name === "subregions" ||
-          route.name === "countries"
-        ) {
-          store.dispatch("search/search");
-          pageHeader.value = getHeaderName(route);
-          pageSubheader.value = getSubheaderName(route);
-
-          queryText.value = route.query.text || "";
-          queryFilters.value = buildQueryFilters();
-          currentPage.value = parseInt(route.query.page) || 1;
-          selectedView.value =
-            route.query.view === "grid"
-              ? viewOptions[1]
-              : route.query.view === "visuals"
-              ? viewOptions[2]
-              : viewOptions[0];
-        }
-      }
-    );
-
-    /*
-      Metadata needs to load first before building the query filters.
-      Countries subheader relies on Metadata so we load that as well.
-    */
-    watch([loadingMetadata], () => {
-      if (!loadingMetadata.value) {
-        queryFilters.value = buildQueryFilters();
-      }
-      if (route.name === "countries") {
-        pageSubheader.value = getSubheaderName(route);
-      }
-    });
-
-    watch(
-      () => queryFilters,
-      () => {
-        buildQueryWatchers(queryFilters.value);
-      },
-      { deep: true }
-    );
 
     watch([selectedOrder], () => {
       router.push({
@@ -1389,7 +1284,6 @@ export default {
           ...route.query,
           view: selectedView.value.key,
         };
-        //TODO: Align these values with thats on the backend
         query["media_tags[]"] = [
           "audio",
           "interactive",
@@ -1402,6 +1296,40 @@ export default {
         });
       }
     });
+
+    watch(
+      () => route.query,
+      () => {
+        console.log("route.query watcher triggered.");
+        if (
+          route.name === "demo-search" ||
+          route.name === "issues" ||
+          route.name === "regions" ||
+          route.name === "subregions" ||
+          route.name === "countries"
+        ) {
+          store.dispatch("search/search");
+          pageHeader.value = getHeaderName(route);
+          pageSubheader.value = getSubheaderName(route);
+          queryFilters.value = buildQueryFilters();
+          currentPage.value = parseInt(route.query.page) || 1;
+          selectedView.value =
+            route.query.view === "grid"
+              ? viewOptions[1]
+              : route.query.view === "visuals"
+              ? viewOptions[2]
+              : viewOptions[0];
+        }
+      }
+    );
+
+    watch(
+      () => queryFilters,
+      () => {
+        buildQueryWatchers(queryFilters.value);
+      },
+      { deep: true }
+    );
 
     const closeMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = false);
@@ -1416,25 +1344,22 @@ export default {
 
     return {
       dayjs,
-      loadingMetadata,
-      loadingResults,
+      selectedOrder,
+      sortOptions,
+      selectedView,
+      viewOptions,
+      pageHeader,
+      pageSubheader,
+      loading,
       results,
       totalCount,
       aggregations,
-      pageHeader,
-      pageSubheader,
-      queryText,
-      searchQueryText,
-      queryFilters,
-      sortOptions,
-      selectedOrder,
-      viewOptions,
-      selectedView,
       currentPage,
-      getImgUrl,
+      queryFilters,
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,
+      getImgUrl,
       openMedia,
     };
   },

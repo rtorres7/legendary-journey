@@ -1,5 +1,5 @@
 <template>
-  <Listbox v-model="selectedItem" :multiple="multiple">
+  <Listbox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
     <div class="relative mt-1">
       <ListboxLabel
         class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
@@ -14,8 +14,6 @@
           py-1
           px-2
           mt-1
-          dark:bg-slate-700
-          energy:bg-zinc-700
           border border-gray-200
           dark:border-slate-800
           energy:border-zinc-800
@@ -26,6 +24,11 @@
           focus-visible:ring-2
           focus-visible:ring-opacity-75
           focus-visible:ring-offset-2
+        "
+        :class="
+          disabled
+            ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
+            : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
         "
       >
         <span class="block truncate max-w-[calc(100%-20px)]">{{
@@ -58,7 +61,7 @@
             overflow-auto
             bg-white
             dark:bg-slate-700
-            energy:bg-zinc-700
+            energy:bg-zinc-600
             rounded-md
             shadow-lg
             max-h-60
@@ -145,6 +148,10 @@ export default {
     modelValue: {
       type: [String, Array],
       default: "",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["update:modelValue"],
