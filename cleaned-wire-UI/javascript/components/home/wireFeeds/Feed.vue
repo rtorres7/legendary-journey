@@ -4,15 +4,15 @@
     class="px-5 custom-gutter-col"
   >
     <b-card class="feed pt-5 h-100 d-flex flex-column">
-      <b-card-title class="my-3 _temp_488-7 font-size-6" title-tag="h3">
+      <b-card-title class="my-3 pl-7 font-size-6" title-tag="h3">
         <div class="d-flex justify-content-between">
           <a
             v-if="!confirmDelete"
-            _temp_576="blank"
+            target="blank"
             class="title-link"
-            :href="portlet.url"
+            :href="portlet._temp_1"
           >
-            <span class="sr-only">Visit portlet </span>{{ feed.portlet.title }}
+            <span class="sr-only">Visit portlet </span>{{ portlet.title }}
           </a>
 
           <div class="mr-5">
@@ -25,6 +25,7 @@
                 <img
                   :src="require('@assets/reset.svg')"
                   class="reset-icon mr-1 mb-2"
+                  :alt="`delete ${portlet.title} portlet`"
                 />
                 <span class="sr-only"
                   >Delete portlet titled {{ portlet.title }}. You will have 5
@@ -50,18 +51,7 @@
       </b-card-title>
       <div v-if="feed.items">
         <PortletItem
-          v-if="portlet.portlet_type === 'search'"
-          v-for="(article, ind) in feed.articles"
-          :item="article"
-          :ptype="portlet.portlet_type"
-          ref="item"
-          :key="ind"
-          :data-usage="dataUsage"
-        >
-        </PortletItem>
-        <PortletItem
-          v-if="portlet.portlet_type != 'search'"
-          v-for="(item, ind) in feed.items"
+          v-for="(item, ind) in feedItems"
           :item="item"
           :ptype="portlet.portlet_type"
           ref="item"
@@ -75,17 +65,7 @@
         </div>
       </div>
       <div v-else>
-        <div class="text-center font-size-3 pt-5">
-          Error loading this portlet
-        </div>
-      </div>
-      <div class="mt-auto d-flex justify-content-end">
-        <router-link
-          v-if="portlet.portlet_type === 'search'"
-          class="ml-auto"
-          :to="'/search/' + portlet.search_id"
-        >
-        </router-link>
+        <div class="text-center font-size-3 pt-5">Error loading this feed</div>
       </div>
     </b-card>
   </b-col>
@@ -94,6 +74,8 @@
 <script>
 import PortletItem from "./PortletItem";
 import axios from "axios";
+import { kebabCase } from "lodash";
+
 export default {
   name: "Feed",
   components: { PortletItem },
@@ -111,10 +93,16 @@ export default {
     },
 
     dataUsage() {
-      // returns something similar to front-page-wire-feeds-_temp_327-wire-afghanistan
-      return _.kebabCase(
-        "front-page-wire-feeds-" + this.feed.portlet.title.toLowerCase()
+      // returns something similar to front-page-wire-feeds-cia-wire-afghanistan
+      return kebabCase(
+        "front-page-wire-feeds-" + this.portlet.title.toLowerCase()
       );
+    },
+
+    feedItems() {
+      return this.portlet.portlet_type === "search"
+        ? this.feed.articles
+        : this.feed.items;
     },
   },
 
@@ -154,14 +142,14 @@ export default {
     removeFeed() {
       this.confirmDelete = false;
       axios
-        .delete("/my_wire/portlets/" + this.feed.portlet.id)
+        .delete("/my_wire/portlets/" + this.portlet.id)
         .then(() => {
           this.$store.dispatch("portlets/loadPortlets");
           this.$wireNotification({
             group: "main",
             title: "Portlet Deleted",
             duration: 5000,
-            text: this.feed.portlet.title + " deleted",
+            text: this.portlet.title + " deleted",
             type: "success",
           });
         })
@@ -206,7 +194,7 @@ export default {
   font-size: $font-size-5;
 }
 
-/deep/ .card-body {
+::v-deep .card-body {
   padding: 0;
 }
 </style>

@@ -16,7 +16,7 @@ export default {
   name: "DeleteButton",
   components: { DeleteButtonBase },
   props: {
-    url: {
+    _temp_1: {
       type: String,
       required: true,
     },
@@ -40,7 +40,7 @@ export default {
     confirmedDelete() {
       let self = this;
       axios
-        .delete(this.url)
+        .delete(this._temp_1)
         .then((response) => {
           // the parent component must implement deleted method.
           // e.g. this method may refresh/reload data in the parent

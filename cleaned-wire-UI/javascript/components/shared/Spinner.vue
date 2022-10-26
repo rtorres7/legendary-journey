@@ -1,5 +1,8 @@
 <template>
-  <div v-if="project">
+  <div
+    v-if="project"
+    class="d-flex justify-content-center align-items-center loading-area"
+  >
     <img
       :src="require(`../../assets/${project}-spinner.gif`)"
       :width="size"

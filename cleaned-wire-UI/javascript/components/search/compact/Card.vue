@@ -28,7 +28,7 @@
             />
           </b-card-title>
           <b-card-sub-title
-            class="_temp_488-5 mt-3"
+            class="pl-5 mt-3"
             sub-title-text-variant="black"
             sub-title-tag="div"
             >{{ subtitle }}</b-card-sub-title
@@ -50,14 +50,14 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapState } from "vuex";
 import Date from "@shared/Date";
 import DocumentLink from "@shared/DocumentLink";
 import PortionMarkedString from "@shared/PortionMarkedString";
 import { isEmpty } from "lodash";
 
 export default {
-  name: "card",
+  name: "Card",
   components: { Date, DocumentLink, PortionMarkedString },
   props: ["article", "returnPath", "section", "index"],
 
@@ -91,18 +91,15 @@ export default {
   animation: bounce-in 0.5s;
 }
 
-.bounce-leave-active {
-}
-
 .card-subtitle {
   white-space: nowrap;
 }
 
-/deep/ .document_link {
+::v-deep .document_link {
   font-size: $font-size-5;
 }
 
-/deep/ .wire-date {
+::v-deep .wire-date {
   margin-top: 9px;
 }
 

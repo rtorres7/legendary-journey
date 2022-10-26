@@ -8,6 +8,8 @@ export default {
   state: {
     agency: "",
     contactEmail: "",
+    defaultExportFormat: "",
+    exportFormatOptions: "",
     featuresAvailable: {},
     highlightsBanner: "",
     highlightsNavHeader: "",
@@ -34,6 +36,8 @@ export default {
       assign(state, {
         agency: data.agency,
         contactEmail: data.contactEmail,
+        defaultExportFormat: data.defaultExportFormat,
+        exportFormatOptions: data.exportFormatOptions,
         featuresAvailable: data.features_available,
         highlightsBanner: data.highlightsBanner,
         highlightsNavHeader: data.highlightsNavHeader,

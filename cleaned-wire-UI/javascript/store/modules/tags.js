@@ -74,13 +74,13 @@ export default {
 
       axios({
         method: "post",
-        url: exportUrl,
+        _temp_1: exportUrl,
         data: data,
       })
         .then((response) => {
           state.showSpinner = false;
           let notice =
-            "Started export job. An email will be sent when the export is " +
+            "Started export job. An _temp_37 will be sent when the export is " +
             'complete. Existing exports can be seen on the <a href="/exports">My Exports</a> page.';
           notifySuccessToUser(caller, "Export started", notice);
         })
@@ -105,7 +105,7 @@ export default {
 
       axios({
         method: "delete",
-        url: `/users/${currentUser.id}/tags/${tagName}`,
+        _temp_1: `/users/${currentUser.id}/tags/${tagName}`,
         data: { docs: tagsList },
       })
         .then((response) => {
@@ -240,9 +240,6 @@ export default {
     setDocsForTag(state, { articles, tagName }) {
       let tag = fetchTag(state, tagName);
       tag.articles = articles;
-    },
-    setLoadingTrue(state) {
-      state.loading = true;
     },
   },
 };

@@ -10,7 +10,8 @@
       {{ description }}<span v-if="href">, </span>
       <router-link v-if="href" :to="href">
         read more
-        <span class="sr-only">{{ highlightsBanner }}</span>
+        <span v-if="readMoreSRText" class="sr-only">{{ readMoreSRText }}</span>
+        <span v-else class="sr-only">{{ highlightsBanner }}</span>
         <span class="aria-hidden">></span>
       </router-link>
     </span>
@@ -21,7 +22,7 @@
 import { mapState } from "vuex";
 export default {
   name: "SectionHeader",
-  props: ["title", "description", "href"],
+  props: ["title", "description", "href", "readMoreSRText"],
   computed: {
     ...mapState("metadata", ["highlightsBanner"]),
   },
@@ -35,7 +36,7 @@ export default {
     font-size: $font-size-8;
   }
   .description {
-    color: $alt-700;
+    color: $alt-800;
     font-size: $font-size-3;
     font-weight: 400;
   }

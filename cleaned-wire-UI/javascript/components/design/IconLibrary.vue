@@ -150,7 +150,7 @@
           <b-col>
             <img
               class="vanity-icons"
-              :src="require('@assets/intelligence-icon.svg')"
+              :src="require('@assets/_temp_536-icon.svg')"
             />
           </b-col>
           <b-col>

@@ -1,5 +1,5 @@
 <template>
-  <b-col class="pt-6 _temp_488-6" cols="24" md="6">
+  <b-col class="pt-6 pl-6" cols="24" md="6">
     <b-row
       tabindex="0"
       @click="gotoLink(bluekeyFaqs)"
@@ -8,7 +8,7 @@
       <b-col class="mr-auto"><h3>FAQs</h3></b-col>
       <b-col cols="auto"
         ><img
-          class="blog-icon _temp_488-4"
+          class="blog-icon pl-4"
           alt="frequently asked questions"
           :src="require('@assets/faqs-icon-bk.svg')"
       /></b-col>
@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       bluekeyFaqs:
-        "https://intellipedia._temp_430.ic.gov/wiki/FBI_BlueKey_Frequently_Asked_Questions",
+        "_temp_525intellipedia.intelink._temp_0/wiki/FBI_BlueKey_Frequently_Asked_Questions",
     };
   },
   methods: {

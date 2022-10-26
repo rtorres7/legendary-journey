@@ -10,13 +10,13 @@ export default {
   actions: {
     getLeadersForCountry({ state, commit }, country) {
       state.loading = true;
-      var url = "/leadership_profiles/search.json?";
-      url += "per_page=5&";
-      url += "page=1&";
-      url += "country[]=" + country + "&";
-      url += "sort_column=posted_on&";
-      url += "sort_direction=desc";
-      axios.get(url).then((response) => {
+      var _temp_1 = "/leadership_profiles/search.json?";
+      _temp_1 += "per_page=5&";
+      _temp_1 += "page=1&";
+      _temp_1 += "country[]=" + country + "&";
+      _temp_1 += "sort_column=posted_on&";
+      _temp_1 += "sort_direction=desc";
+      axios.get(_temp_1).then((response) => {
         commit("importLeadershipProfiles", response.data);
       });
     },

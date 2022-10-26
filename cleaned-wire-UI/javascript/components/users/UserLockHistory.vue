@@ -1,10 +1,7 @@
 <template>
   <div>
     <h2 class="info-title d-flex separator mt-8 pb-2">Lock History</h2>
-    <div
-      v-if="processing"
-      class="d-flex justify-content-center align-items-center loading-area"
-    >
+    <div v-if="processing">
       <spinner />
     </div>
     <p

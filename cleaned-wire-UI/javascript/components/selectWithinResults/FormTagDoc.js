@@ -10,7 +10,7 @@ export default {
     makeRequest(params) {
       axios({
         method: "post",
-        url: "/my_wire/folder_tag_documents.json",
+        _temp_1: "/my_wire/folder_tag_documents.json",
         data: params,
         config: {
           headers: {

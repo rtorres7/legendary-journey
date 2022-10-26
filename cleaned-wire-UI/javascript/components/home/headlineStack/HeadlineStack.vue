@@ -13,11 +13,14 @@
         :headline="headline"
       />
     </span>
-    <div class="ml-auto _temp_488-5">
+    <div class="ml-auto pl-5">
       <router-link
         :to="{
           name: 'search',
-          query: { 'selected_for[]': headlineTitle },
+          query: {
+            'selected_for[]': headlineTitle,
+            search_title: headlineTitle,
+          },
         }"
         class="all-executive-updates"
         data-usage="more-link"

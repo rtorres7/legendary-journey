@@ -31,7 +31,7 @@ export default {
       }
       axios({
         method: "PATCH",
-        url: "/my_wire/preferences/got_it",
+        _temp_1: "/my_wire/preferences/got_it",
         data: {
           doc_num: this.doc_num,
         },

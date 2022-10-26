@@ -1,11 +1,11 @@
 import axios from "axios";
-import { capitalize, map } from "lodash";
+import { capitalize, find, map } from "lodash";
 
 function notifyErrorToUser(caller, action, error_message) {
   caller.$wireNotification({
     type: "error",
     title: `Error on ${action}`,
-    text: `Error on ${action}, please try again. ${error_message}`,
+    text: `Failed to ${action}, please try again. ${error_message}`,
   });
 }
 
@@ -55,6 +55,15 @@ export default {
     userLockHistory: (state) => {
       return state.userLockHistory;
     },
+    roleForSelect: (state) => (roleName) => {
+      let _temp_20 = find(state.assignableRoles, ["name", roleName]);
+      return {
+        text:
+          _temp_20.name === "wire_editor" ? "WIRe Editor" : titleCase(_temp_20.name),
+        value: _temp_20.name,
+        description: _temp_20.description,
+      };
+    },
   },
 
   actions: {
@@ -74,7 +83,21 @@ export default {
         });
     },
 
-    loadTopTenUsers({ state, commit }) {
+    loadAssignableRoles({ state, commit }) {
+      state.loading = true;
+      axios
+        .get("/admin/roles")
+        .then((response) => {
+          state.loading = false;
+          commit("setAssignableRoles", response.data.assignableRoles);
+        })
+        .catch((error) => {
+          state.loading = false;
+          notifyErrorToUser(caller, "loading assignable roles", error.message);
+        });
+    },
+
+    loadTopTenUsers({ state, commit }, { caller }) {
       state.loading = true;
       axios
         .get("/admin/document_views")
@@ -127,13 +150,13 @@ export default {
 
       axios({
         method: "post",
-        url: "/admin/users/" + userId + "/roles",
-        data: { role: { name: userRole.name } },
+        _temp_1: "/admin/users/" + userId + "/roles",
+        data: { _temp_20: { name: userRole.name } },
       })
         .then(() => {
           caller.$wireNotification({
             group: "main",
-            title: "Role Added",
+            title: "_temp_20 Added",
             duration: 5000,
             text: titleCase(userRole.name) + " added",
             type: "success",
@@ -143,7 +166,7 @@ export default {
         })
         .catch((error) => {
           state.processing = false;
-          notifyErrorToUser(caller, "adding role", error.message);
+          notifyErrorToUser(caller, "adding _temp_20", error.message);
         });
     },
 
@@ -160,7 +183,7 @@ export default {
           });
           caller.$wireNotification({
             group: "main",
-            title: "Role Removed",
+            title: "_temp_20 Removed",
             duration: 5000,
             text: titleCase(userRole.name) + " removed",
             type: "success",
@@ -169,7 +192,7 @@ export default {
         })
         .catch((error) => {
           state.processing = false;
-          notifyErrorToUser(caller, "removing role", error.message);
+          notifyErrorToUser(caller, "removing _temp_20", error.message);
         });
     },
 
@@ -194,14 +217,20 @@ export default {
     ) {
       axios({
         method: "post",
-        url: "/admin/users/" + userId + "/locks",
+        _temp_1: "/admin/users/" + userId + "/locks",
         data: {
           lock_event: lockEvent,
           lock_action: lockAction,
           user_id: userId,
         },
       })
-        .then(() => {
+        .then((response) => {
+          caller.$wireNotification({
+            title: response.data.success === true ? "Notice" : "Error",
+            duration: 5000,
+            text: response.data.details,
+            type: response.data.success === true ? "success" : "error",
+          });
           dispatch("loadUserLockHistory", {
             userId: userId,
             caller: caller,

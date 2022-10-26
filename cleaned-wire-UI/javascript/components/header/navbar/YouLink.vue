@@ -7,11 +7,11 @@
     <template slot="button-content">
       <img
         :src="require('@assets/person-icon.svg')"
-        alt="profile"
+        alt=""
         class="person-icon"
         data-usage="my-wire"
       />
-      <span class="sr-only">drop down</span>
+      <span class="sr-only">Profile drop down</span>
       <span v-if="pretend" data-usage="my-wire">
         <span class="aria-hidden">(</span>
         <span class="sr-only">in mode</span>

@@ -31,11 +31,12 @@ const getDynamicMapping = (rootState) => {
   let valueName = rootState.route.params[nameMappings[metadataName]];
   let mapping = landingPageMappings[metadataName];
   let values = rootState.metadata.criteria[metadataName]?.values;
-  let value = values.find((metadata) => {
+  let metadataValue = values.find((metadata) => {
     if (metadata.name === valueName) {
       return metadata;
     }
-  }).code;
+  });
+  let value = metadataValue ? metadataValue.code : "";
   mapping[`${metadataName}[]`] = value;
   return mapping;
 };
@@ -51,6 +52,7 @@ export default {
     previousSearchQuery: {},
     showFilters: true,
     searchId: null,
+    searchName: null,
     selecting: false,
     aggregations: [],
     pages: 1,
@@ -62,7 +64,7 @@ export default {
 
   actions: {
     search: debounce(({ state, commit, dispatch, rootState }) => {
-      let url = rootState.route ? rootState.route.fullPath : "";
+      let _temp_1 = rootState.route ? rootState.route.fullPath : "";
       let currentQuery = Object.assign({}, rootState.route.query);
       let mappedQuery;
       if (rootState.route.name === "search") {
@@ -81,7 +83,7 @@ export default {
       delete mappedQuery.view;
       delete currentQuery.view;
       if (isEqual(currentQuery, mappedQuery)) {
-        url += "&landing=true";
+        _temp_1 += "&landing=true";
       }
 
       if (state.searchId) {
@@ -92,48 +94,49 @@ export default {
         delete newQuery.page;
         delete newQuery.view;
         if (isEqual(newQuery, oldQuery)) {
-          url += `&id=${state.searchId}`;
+          _temp_1 += `&id=${state.searchId}`;
         }
       }
       if (rootState.route.query && rootState.route.query.visuals) {
         commit("clearSearch");
-        dispatch("multimediaSearch", url);
+        dispatch("multimediaSearch", _temp_1);
       } else {
         if (rootState.route.query?.view === "visuals") {
           commit("clearSearch");
-          dispatch("multimediaSearch", url);
+          dispatch("multimediaSearch", _temp_1);
         } else {
-          dispatch("standardSearch", url);
+          dispatch("standardSearch", _temp_1);
         }
       }
     }, 250),
 
-    standardSearch({ state, commit, dispatch, rootState }, url) {
+    standardSearch({ state, commit, dispatch, rootState }, _temp_1) {
       commit("savePreviousSearch", rootState.route);
-      if (url && url !== "/search") {
-        url = "/search?" + url.split("?")[1];
+      if (_temp_1 && _temp_1 !== "/search") {
+        _temp_1 = "/search?" + _temp_1.split("?")[1];
       } else {
-        url = "/search";
+        _temp_1 = "/search";
       }
-      if (state.previousSearch.replace("_temp_369=true&", "") !== url) {
+      if (state.previousSearch.replace("cozy=true&", "") !== _temp_1) {
         commit("clearSearch");
-        dispatch("debouncedSearch", url);
+        dispatch("debouncedSearch", _temp_1);
       }
     },
 
-    debouncedSearch: debounce(({ state, commit }, url) => {
+    debouncedSearch: debounce(({ state, commit }, _temp_1) => {
       state.loading = true;
-      axios.get(url).then((response) => {
+      axios.get(_temp_1).then((response) => {
         commit("importData", response.data);
         state.loading = false;
       });
-      state.previousSearch = url.replace("_temp_369=true&", "");
+      state.previousSearch = _temp_1.replace("cozy=true&", "");
     }, 300),
 
-    multimediaSearch: debounce(({ state, commit }, url) => {
+    multimediaSearch: debounce(({ state, commit }, _temp_1) => {
       state.loading = true;
-      url = "/visuals?" + url.split("?")[1];
-      axios.get(url).then((response) => {
+      state.previousSearch = _temp_1;
+      _temp_1 = "/visuals?" + _temp_1.split("?")[1];
+      axios.get(_temp_1).then((response) => {
         commit("importMultimedia", response.data);
         state.loading = false;
       });
@@ -144,6 +147,9 @@ export default {
     rssLink(state) {
       return state.previousSearch.replace("search", "search.rss");
     },
+    searchName(state) {
+      return state.searchName;
+    },
   },
 
   mutations: {
@@ -153,6 +159,7 @@ export default {
 
     importData(state, data) {
       state.searchId = data.searchId;
+      state.searchName = data.searchName;
       state.results = data.results.map((article) => {
         return article;
       });
@@ -200,10 +207,6 @@ export default {
 
     clearSearchId(state) {
       state.searchId = null;
-    },
-
-    setPage(state, value) {
-      state.page = value;
     },
 
     clearSearch(state) {

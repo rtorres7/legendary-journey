@@ -7,7 +7,7 @@
       :blank-src="require('@assets/WIRe-BG-image-TOP.jpg')"
       class="rounded-0"
       :class="hero ? 'hero-image' : 'image'"
-      role="presentation"
+      _temp_20="presentation"
     ></b-card-img-lazy>
   </div>
 </template>

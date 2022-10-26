@@ -14,10 +14,7 @@
           </p>
         </b-col>
       </b-row>
-      <div
-        v-if="loading"
-        class="d-flex justify-content-center align-items-center loading-area"
-      >
+      <div v-if="loading">
         <spinner />
       </div>
       <b-row v-else class="export-list">

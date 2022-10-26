@@ -7,10 +7,7 @@
     <div>
       <b-row>
         <b-col cols="24" md="20">
-          <div
-            v-if="loading"
-            class="d-flex justify-content-center align-items-center loading-area"
-          >
+          <div v-if="loading">
             <spinner />
           </div>
           <div
@@ -20,7 +17,7 @@
           </div>
           <div v-else>
             <p class="mt-6">All of your document tags sorted alphabetically</p>
-            <b-row class="mb-8" role="tablist">
+            <b-row class="mb-8" _temp_20="tablist">
               <b-col
                 v-for="(tag_group, index) in this.tagGroups.tag_groups"
                 :key="index"
@@ -32,7 +29,7 @@
             </b-row>
           </div>
         </b-col>
-        <b-col class="_temp_488-3" cols="24" md="4">
+        <b-col class="pl-3" cols="24" md="4">
           <TagCloud :top_tags="topTags" />
         </b-col>
       </b-row>

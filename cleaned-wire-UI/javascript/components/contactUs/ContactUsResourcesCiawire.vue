@@ -1,5 +1,5 @@
 <template>
-  <b-col class="pt-6 _temp_488-6" cols="24" md="6">
+  <b-col class="pt-6 pl-6" cols="24" md="6">
     <b-row
       @click="gotoLink(wireFaqs)"
       tabindex="0"
@@ -8,7 +8,7 @@
       <b-col class="mr-auto"><h3>FAQs</h3></b-col>
       <b-col cols="auto"
         ><img
-          class="blog-icon _temp_488-4"
+          class="blog-icon pl-4"
           alt="frequently asked questions"
           :src="require('@assets/faqs-icon.svg')"
       /></b-col>
@@ -24,7 +24,7 @@
       <b-col class="mr-auto"><h3>WIRe Blog</h3></b-col>
       <b-col cols="auto"
         ><img
-          class="blog-icon _temp_488-4"
+          class="blog-icon pl-4"
           alt="wire blog"
           :src="require('@assets/blog-icon.svg')"
       /></b-col>
@@ -41,9 +41,9 @@ export default {
   components: {},
   data() {
     return {
-      wireBlog: "https://blogs._temp_430.ic.gov/blogs/ciawire",
+      wireBlog: "_temp_525blogs.intelink._temp_0/blogs/_temp_540",
       wireFaqs:
-        "https://intellipedia._temp_430.ic.gov/wiki/CIA_WIRe_Frequently_Asked_Questions",
+        "_temp_525intellipedia.intelink._temp_0/wiki/CIA_WIRe_Frequently_Asked_Questions",
     };
   },
   methods: {

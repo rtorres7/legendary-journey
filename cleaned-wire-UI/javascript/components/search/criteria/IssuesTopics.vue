@@ -11,6 +11,9 @@ export default {
   name: "IssuesTopics",
   components: { WireSelect },
   props: {
+    hideForFSS: {
+      default: false,
+    },
     label: {
       type: String,
       default: "Issues & Topics",
@@ -25,12 +28,20 @@ export default {
     options() {
       let options = [];
       this.issues.forEach((issue) => {
-        options.push({
-          value: issue.code,
-          text: issue.name,
-          type: "issues[]",
-          children: true,
-        });
+        if (!this.hideForFSS) {
+          options.push({
+            value: issue.code,
+            text: issue.name,
+            type: "issues[]",
+            children: true,
+          });
+        } else {
+          options.push({
+            text: issue.name,
+            value: "",
+            header: true,
+          });
+        }
         issue.topics.forEach((topic) =>
           options.push({
             value: topic.codes[0],
@@ -39,6 +50,12 @@ export default {
             indent: true,
           })
         );
+      });
+      options.push({
+        text: "Not Available",
+        value: "XXXX",
+        type: "topics[]",
+        children: true,
       });
       return options;
     },

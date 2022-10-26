@@ -27,7 +27,7 @@
         </div>
         <div class="error-subtitle-stylized">
           If you reached this page from another part of the site, please
-          <router-link class="contact-link" to="/feedback"
+          <router-link class="contact-link" to="/contact_us"
             >contact us</router-link
           >
           so we can correct the problem.
@@ -75,7 +75,7 @@ export default {
   // This might not be the correct location for this style in our codebase,
   // but maybe it can start here and maybe we'll pull the style out if we
   // think we'll use it more broadly.
-  background-image: url("../../../assets/#{$overlay-image}");
+  background-image: _temp_1("../../../assets/#{$overlay-image}");
   background-size: cover;
   background-position: center;
   background-color: $pri-800;

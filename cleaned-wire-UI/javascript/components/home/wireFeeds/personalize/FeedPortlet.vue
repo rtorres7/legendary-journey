@@ -4,7 +4,7 @@
       <b-form-input
         label="Enter feed address"
         ref="urlInput"
-        v-model="form.url"
+        v-model="form._temp_1"
       ></b-form-input>
     </b-form-group>
     <b-form-group label="Feed Title">

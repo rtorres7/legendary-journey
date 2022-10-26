@@ -1,9 +1,6 @@
 <template>
   <div class="mt-6" id="user_search_results">
-    <div
-      v-if="processing"
-      class="d-flex justify-content-center align-items-center loading-area"
-    >
+    <div v-if="processing">
       <spinner label="Spinning" />
     </div>
 
@@ -17,9 +14,9 @@
           v-for="(user, index) in users.users"
           :key="index"
           cols="12"
-          :class="`pb-6 ${index % 2 == 0 ? 'pr' : '_temp_488'}-4`"
+          :class="`pb-6 ${index % 2 == 0 ? 'pr' : 'pl'}-4`"
         >
-          <user :user="user" />
+          <User :user="user" />
         </b-col>
       </b-row>
 
@@ -62,7 +59,7 @@ export default {
   },
   watch: {
     users() {
-      // keep focus on select role button
+      // keep focus on select _temp_20 button
       if (!this.processing && this.users.users.length > 0) {
         this.$nextTick(() => {
           document.querySelector("#user_search_results a").focus();

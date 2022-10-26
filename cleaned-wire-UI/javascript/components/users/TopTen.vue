@@ -2,10 +2,7 @@
   <div class="user-search">
     <h2 class="ten-title mb-6">Top 10 Users by Document Views for Today</h2>
 
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center align-items-center loading-area"
-    >
+    <div v-if="loading">
       <spinner />
     </div>
     <b-row>
@@ -13,12 +10,11 @@
         v-for="(user, index) in topUsers"
         :key="index"
         cols="12"
-        :class="`pb-6 ${index % 2 == 0 ? 'pr' : '_temp_488'}-4`"
+        :class="`pb-6 ${index % 2 == 0 ? 'pr' : 'pl'}-4`"
       >
-        <user
+        <User
           :user="user.user"
-          :totalUniqDocsViewed="user.total_uniq_docs_viewed"
-          :uniqClassifiedDocsViewed="user.uniq_classified_docs_viewed"
+          :additionalDetails="docViewSummary(user)"
           topTen
         />
       </b-col>
@@ -50,6 +46,9 @@ export default {
       this.$store.dispatch("users/loadTopTenUsers", {
         caller: this,
       });
+    },
+    docViewSummary(user) {
+      return `| ${user.total_uniq_docs_viewed} documents viewed (${user.uniq_classified_docs_viewed} classified)`;
     },
   },
 };

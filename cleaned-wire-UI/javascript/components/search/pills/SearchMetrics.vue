@@ -18,6 +18,7 @@
       ref="search-metrics-modal"
       size="lg"
       hide-footer
+      title-class="modal-header-title"
     >
       <template #modal-title> {{ name }} Search {{ modalTitle }} </template>
       <ExtendedMetrics
@@ -120,3 +121,9 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+::v-deep .modal-header-title {
+  color: $pri-800;
+  font-size: $font-size-5;
+}
+</style>

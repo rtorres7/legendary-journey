@@ -31,7 +31,7 @@ Vue.config.errorHandler = function (err, vm, info) {
   axios
     .post("/client_side_error", {
       message: "vue error: " + err.toString(),
-      url: window.location.href,
+      _temp_1: window.location.href,
     })
     .catch(function (error) {
       console.error(
@@ -55,7 +55,7 @@ window.addEventListener("unhandledrejection", function (event) {
     });
 });
 
-window.onerror = function (msg, url, line, col, error) {
+window.onerror = function (msg, _temp_1, line, col, error) {
   console.log("Error detected in JS");
 };
 
@@ -81,6 +81,10 @@ import VueFlatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 Vue.use(VueFlatPickr);
 
+import "vue-multiselect/dist/vue-multiselect.min.css";
+
+import "tree-component/dist/tree.min.css";
+
 import router from "../router";
 
 router.beforeEach((to, from, next) => {
@@ -88,6 +92,11 @@ router.beforeEach((to, from, next) => {
   const localVue = new Vue();
   let announcement = to.name;
   const toMetadata = to.metadata;
+  const toMeta = to.meta;
+
+  if (toMeta && toMeta.title && toMeta.title(to)) {
+    announcement = toMeta.title(to);
+  }
   if (toMetadata && toMetadata.announce) {
     announcement = toMetadata.announce;
   }
@@ -131,7 +140,7 @@ router.afterEach((to, from) => {
     // this filter helps to call matomo only once
     // This double call (at least in the case of navigating to Issues) is caused
     // by the call to this.$router.replace in updateCriteria method in vanityPage.js
-    // The custom url is logged in matomo below page title for each request
+    // The custom _temp_1 is logged in matomo below page title for each request
     if (_.isEmpty(toQuery) && matomoTitle.length > 0) {
       trackPageView(matomoTitle, toPath);
     } else {

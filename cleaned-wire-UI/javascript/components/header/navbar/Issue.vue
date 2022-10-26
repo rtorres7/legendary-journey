@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { kebabCase } from "lodash";
+
 export default {
   name: "Issue",
   props: ["display"],
@@ -14,7 +16,7 @@ export default {
     },
     dataUsage() {
       // returns something similar to nav-issues-issue-terrorism-homeland-security
-      return _.kebabCase("nav-issues-issue" + this.display);
+      return kebabCase("nav-issues-issue" + this.display);
     },
   },
 };

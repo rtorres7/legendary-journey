@@ -2,7 +2,7 @@
   <div>
     <div v-if="articles.length > 0" class="d-flex mb-5">
       <span v-if="removeable" class="ml-auto">
-        <span class="_temp_488-0" v-if="confirm">
+        <span class="pl-0" v-if="confirm">
           <b-button
             :disabled="confirmClicked"
             :id="`confirm-delete-${entityId}`"
@@ -40,38 +40,24 @@
         data-usage="export-documents"
       >
         <span class="sr-only"> documents</span>
-        <b-dropdown-item
-          class="export-option"
-          @click="$emit('exportDocs', 'pdf_book')"
-          title="A single PDF of these articles"
-        >
-          <span class="fa fa-file-pdf-o fa-fw"></span> PDF Book
-        </b-dropdown-item>
-        <b-dropdown-item
-          @click="$emit('exportDocs', 'pdf_list')"
-          title="A ZIP file of PDFs for each article"
-        >
-          <span class="fa fa-file-pdf-o fa-fw"></span> PDF Files
-        </b-dropdown-item>
-        <b-dropdown-item
-          @click="$emit('exportDocs', 'csv')"
-          title="Metadata for each article"
-        >
-          <span class="fa fa-file-excel-o fa-fw"></span> CSV File
-        </b-dropdown-item>
-        <b-dropdown-item
-          @click="$emit('exportDocs', 'zip')"
-          title="Each article in iPad-compliant format"
-        >
-          <span class="fa fa-file-zip-o fa-fw"></span> ZIP File
-        </b-dropdown-item>
+        <template v-for="(exportOpt, idx) in exportFormatOptions">
+          <b-dropdown-item
+            class="export-option"
+            @click="$emit('exportDocs', exportOpt.value)"
+            :title="optionTitle[exportOpt.value]"
+            :key="idx"
+          >
+            <span
+              class="fa fa-fw"
+              :class="optionCssClass[exportOpt.value]"
+            ></span>
+            {{ exportOpt.text }}
+          </b-dropdown-item>
+        </template>
       </b-dropdown>
     </div>
     <div v-else>{{ noItems }}</div>
-    <div
-      v-if="showSpinner"
-      class="d-flex justify-content-center align-items-center loading-area"
-    >
+    <div v-if="showSpinner">
       <spinner size="32" label="Processing Request" />
       <span class="sr-only">Processing Request</span>
     </div>
@@ -80,6 +66,7 @@
 
 <script>
 import Spinner from "../shared/Spinner";
+import { mapState } from "vuex";
 
 export default {
   name: "DocumentsActionBar",
@@ -110,9 +97,23 @@ export default {
     return {
       confirm: false,
       confirmClicked: false,
+      optionTitle: {
+        csv: "Metadata for each article",
+        pdf_book: "A single PDF of these articles",
+        pdf_list: "A ZIP file of PDFs for each article",
+        zip: "Each article in iPad-compliant format",
+      },
+      optionCssClass: {
+        csv: "fa-file-excel-o",
+        pdf_book: "fa-file-pdf-o",
+        pdf_list: "fa-file-pdf-o",
+        zip: "fa-file-zip-o",
+      },
     };
   },
+  mounted() {},
   computed: {
+    ...mapState("metadata", ["exportFormatOptions"]),
     noDocSelected() {
       return this.articles.filter((doc) => doc.selected == true).length == 0;
     },

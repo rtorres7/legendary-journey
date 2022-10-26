@@ -27,10 +27,7 @@
               </b-btn>
             </span>
           </div>
-          <div
-            v-if="loading"
-            class="d-flex justify-content-center align-items-center loading-area"
-          >
+          <div v-if="loading">
             <spinner />
           </div>
           <div
@@ -76,7 +73,7 @@
             </div>
           </div>
         </b-col>
-        <b-col class="_temp_488-3" cols="24" md="4">
+        <b-col class="pl-3" cols="24" md="4">
           <TagCloud :top_tags="topTags" />
         </b-col>
       </b-row>

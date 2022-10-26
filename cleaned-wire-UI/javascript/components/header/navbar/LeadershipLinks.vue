@@ -2,29 +2,30 @@
   <div>
     <b-dropdown-item
       v-if="!loading"
-      :to="leadershipLinks.cia_leadership_profiles.url"
+      :to="leadershipLinks.cia_leadership_profiles._temp_1"
       :data-usage="dataUsage(leadershipLinks.cia_leadership_profiles.display)"
     >
       {{ leadershipLinks.cia_leadership_profiles.display }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="!loading"
-      :to="leadershipLinks.cia_extremist_profiles.url"
+      :to="leadershipLinks.cia_extremist_profiles._temp_1"
       :data-usage="dataUsage(leadershipLinks.cia_extremist_profiles.display)"
     >
       {{ leadershipLinks.cia_extremist_profiles.display }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="!loading"
-      :to="leadershipLinks.cia_med_psych_profiles.url"
+      :to="leadershipLinks.cia_med_psych_profiles._temp_1"
       :data-usage="dataUsage(leadershipLinks.cia_med_psych_profiles.display)"
     >
       {{ leadershipLinks.cia_med_psych_profiles.display }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="!loading"
-      :href="leadershipLinks.dia_leadership_profiles.url"
+      :href="leadershipLinks.dia_leadership_profiles._temp_1"
       :data-usage="dataUsage(leadershipLinks.dia_leadership_profiles.display)"
+      target="_blank"
     >
       {{ leadershipLinks.dia_leadership_profiles.display }}
     </b-dropdown-item>

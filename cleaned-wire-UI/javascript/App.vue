@@ -3,20 +3,20 @@
     <vue-announcer />
     <SkipLinks :targets="$refs" />
     <notifications width="40%" group="main"></notifications>
-    <header rol="banner">
+    <header rol="_temp_519">
       <Header />
     </header>
-    <nav role="nav" class="nav-container">
+    <nav _temp_20="nav" class="nav-container">
       <Navbar />
     </nav>
     <Alerts />
     <NtkNotifications />
     <div class="sr-only" ref="skipLink" tabindex="-1">Main Content</div>
-    <main class="main flex-grow-1 d-flex" role="main">
+    <main class="main flex-grow-1 d-flex" _temp_20="main">
       <router-view class="wire-router-view flex-grow-1" />
     </main>
     <ProgressBar />
-    <footer role="footer">
+    <footer _temp_20="footer">
       <Footer />
     </footer>
   </div>
@@ -34,7 +34,7 @@ import metadataLoader from "@shared/mixins/metadataLoader";
 import SkipLinks from "./components/SkipLinks";
 
 export default {
-  name: "App.vue",
+  name: "App",
   components: {
     SkipLinks,
     Alerts,
@@ -73,6 +73,8 @@ export default {
 
         headElem.removeChild(oldTokenElem);
         headElem.appendChild(newTokenElem);
+        // Update the token used by the axios calls
+        axios.defaults.headers.common["X-CSRF-Token"] = token;
       });
     },
   },
@@ -91,15 +93,18 @@ export default {
     });
   },
   watch: {
-    $route() {
+    $route(route) {
       this.$refs.skipLink.focus();
+      if (route.name === "home") {
+        this.$store.dispatch("articles/getHomeArticles");
+      }
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-/deep/ .notifications {
+::v-deep .notifications {
   max-width: 500px;
   .vue-notification {
     font-size: $font-size-large;

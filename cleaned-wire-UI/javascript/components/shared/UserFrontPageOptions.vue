@@ -15,39 +15,17 @@
 </template>
 
 <script>
-import axios from "axios";
 import Print from "./print/Print";
 import ExportFrontPage from "./ExportFrontPage";
 import PrintModal from "./print/PrintModal";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "UserFrontPageOptions",
   components: { PrintModal, Print, ExportFrontPage },
   computed: {
+    ...mapGetters("user", ["canExportZip"]),
     ...mapState("metadata", ["featuresAvailable"]),
-  },
-  data() {
-    return {
-      canExportZip: false,
-    };
-  },
-
-  mounted() {
-    this.getRights();
-  },
-
-  methods: {
-    getRights() {
-      axios
-        .get("/my_wire/permitted_to?permissions=export_zip&category=exports")
-        .then((response) => {
-          this.canExportZip = response.data.allowed || false;
-        })
-        .catch((response) => {
-          this.canExportZip = false;
-        });
-    },
   },
 };
 </script>

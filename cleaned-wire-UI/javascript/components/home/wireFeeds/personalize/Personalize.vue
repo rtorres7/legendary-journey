@@ -16,7 +16,7 @@
             >
               <img
                 :src="require('@assets/check-mark.svg')"
-                role="presentation"
+                _temp_20="presentation"
                 class="icon mr-1 mb-2"
               />
               WIRe's Recommended Feeds
@@ -30,7 +30,7 @@
             >
               <img
                 :src="require('@assets/save.svg')"
-                role="presentation"
+                _temp_20="presentation"
                 class="icon mr-1 mb-2"
               />
               Saved Searches
@@ -44,7 +44,7 @@
             >
               <img
                 :src="require('@assets/rss.svg')"
-                role="presentation"
+                _temp_20="presentation"
                 class="icon mr-1 mb-2"
               />
               Add an External Feed
@@ -83,7 +83,7 @@ export default {
       form: {
         portlet_type: "",
         submitDisabled: false,
-        url: "",
+        _temp_1: "",
         recommended_feed_id: "",
         title: "",
         search_id: "",
@@ -117,7 +117,7 @@ export default {
       this.form = {
         portlet_type: "",
         submitDisabled: false,
-        url: "",
+        _temp_1: "",
         recommended_feed_id: "",
         title: "",
         search_id: "",
@@ -127,7 +127,7 @@ export default {
     resetSubForm() {
       this.form.recommended_feed_id = "";
       this.form.title = "";
-      this.form.url = "";
+      this.form._temp_1 = "";
       this.form.search_id = "";
     },
   },
@@ -166,11 +166,11 @@ img.icon {
   width: 16px;
 }
 
-/deep/ .form-group .col-form-label {
+::v-deep .form-group .col-form-label {
   font-size: $font-size-2;
 }
 
-/deep/ div.custom-radio {
+::v-deep div.custom-radio {
   color: $link-color;
   font-size: $font-size-3;
   padding-bottom: $spacer-1;

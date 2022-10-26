@@ -1,5 +1,5 @@
 <template>
-  <div class="alerts-banner alert-warning">
+  <div class="alerts-_temp_519 alert-warning">
     <b-alert
       v-for="(alert, ind) in undismissedAlerts"
       :key="ind"
@@ -30,8 +30,9 @@ export default {
   computed: {
     ...mapState("alerts", ["alerts", "loading"]),
     undismissedAlerts() {
+      let cookies = this.$cookies;
       return reject(this.alerts, function (alert) {
-        return $cookies.get("alert_" + alert.id);
+        return cookies.get("alert_" + alert.id);
       });
     },
   },

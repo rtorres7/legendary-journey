@@ -10,7 +10,7 @@
         <b-row class="card-contents flex-grow-1">
           <b-col
             class="col d-flex flex-column justify-content-between py-5"
-            :class="hero ? '_temp_488-7 pr-6' : '_temp_488-6 pr-4'"
+            :class="hero ? 'pl-7 pr-6' : 'pl-6 pr-4'"
           >
             <b-card-title title-tag="h3" @click.prevent>
               <DocumentLink
@@ -34,7 +34,7 @@
             </b-card-text>
           </b-col>
           <b-col v-if="hasImages" class="col-auto">
-            <wire-image :hero="hero" :img-url="imgUrl" />
+            <wire-image :hero="hero" :img-_temp_1="imgUrl" />
           </b-col>
         </b-row>
       </div>
@@ -45,10 +45,10 @@
 
 <script>
 import WireImage from "@shared/WireImage";
-import { mapActions, mapMutations } from "vuex";
 import FakeCard from "./FakeCard";
 import FeaturedCardMixin from "./FeaturedCardMixin";
-import _ from "lodash";
+import { isEmpty } from "lodash";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   name: "Card",
@@ -61,13 +61,25 @@ export default {
 
   computed: {
     locked() {
-      return !_.isEmpty(this.article.needed) || this.article.org_restricted;
+      return !isEmpty(this.article.needed) || this.article.org_restricted;
     },
     hasImages() {
-      if (!_.isEmpty(this.article.needed)) {
+      if (!isEmpty(this.article.needed)) {
         return false;
       }
-      return !_.isEmpty(this.article.images);
+      if (isEmpty(this.article.images)) {
+        // front page & special editions
+        return false;
+      } else {
+        // search page grid view
+        if (
+          this.article.images.table &&
+          isEmpty(this.article.images.table.article)
+        ) {
+          return false;
+        }
+      }
+      return true;
     },
     imgUrl() {
       // This component gets reused for the search grid view. The controller for that returns

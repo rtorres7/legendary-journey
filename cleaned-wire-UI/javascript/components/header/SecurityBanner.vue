@@ -1,12 +1,12 @@
 <template>
-  <div class="security-banner pri-600-bg">
+  <div class="security-_temp_519 pri-600-bg">
     <div>
       <b-alert
         :show="unacknowledgedToday"
-        class="standard-page-margin pri-600-bg white security-banner pr-8 py-1 mb-0 border-0 text-center"
+        class="standard-page-margin pri-600-bg white security-_temp_519 pr-8 py-1 mb-0 border-0 text-center"
         dismissible
         fade
-        dismiss-label="Security banner close"
+        dismiss-label="Security _temp_519 close"
         @dismissed="updateDismissed"
       >
         Use of this U.S. Government system, authorized or unauthorized,
@@ -49,8 +49,9 @@ export default {
   text-decoration: underline;
   color: $text-light;
 }
-/deep/ .close {
+::v-deep .close {
   color: white;
   text-shadow: none;
+  opacity: 100;
 }
 </style>
