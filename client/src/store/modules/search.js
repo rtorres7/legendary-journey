@@ -45,7 +45,8 @@ export default {
 
     debouncedSearch: ({ commit }, url) => {
       if (process.env.NODE_ENV === 'low') {
-        commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
+        setTimeout(() => commit("importData", getSearchDataFromUrl(url, router.currentRoute.value)), 750)
+        //commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
       } else {
         axios.get(url).then((response) => {
           commit("importData", response.data);
