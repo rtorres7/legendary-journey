@@ -6,7 +6,7 @@ import ArticleView from '../views/ArticleView.vue'
 import DemoArticleView from '../views/DemoArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
 import SearchView from '../views/SearchView.vue'
-import DemoSearchView from '../views/DemoSearchView.vue'
+//import DemoSearchView from '../views/SearchView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
@@ -46,37 +46,33 @@ const routes = [
   {
     path: '/issues/:name',
     name: 'issues',
-    component: DemoSearchView,
+    component: SearchView,
     meta: {
       title: 'Issues',
-      demo: true
     }
   },
   {
     path: '/regions/:name',
     name: 'regions',
-    component: DemoSearchView,
+    component: SearchView,
     meta: {
       title: 'Regions',
-      demo: true
     }
   },
   {
     path: '/subregions/:name',
     name: 'subregions',
-    component: DemoSearchView,
+    component: SearchView,
     meta: {
       title: 'Subregions',
-      demo: true
     }
   },
   {
     path: '/countries/:name',
     name: 'countries',
-    component: DemoSearchView,
+    component: SearchView,
     meta: {
       title: 'Countries',
-      demo: true
     }
   },
   {
@@ -87,15 +83,15 @@ const routes = [
       title: 'Search',
     }
   },
-  {
-    path: '/demo-search',
-    name: 'demo-search',
-    component: DemoSearchView,
-    meta: {
-      title: 'Search (Demo)',
-      demo: true
-    }
-  },
+  // {
+  //   path: '/demo-search',
+  //   name: 'demo-search',
+  //   component: DemoSearchView,
+  //   meta: {
+  //     title: 'Search (Demo)',
+  //     demo: true
+  //   }
+  // },
   {
     path: '/publish',
     name: 'publish',

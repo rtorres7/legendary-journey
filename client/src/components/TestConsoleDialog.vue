@@ -659,7 +659,7 @@
                     dark:border-slate-50/[0.06]
                     energy:border-zinc-500/50
                   "
-                  v-show="currentRoute === 'demo-search'"
+                  v-show="currentRoute === 'search'"
                 >
                   <p class="font-medium">Search Options</p>
                   <div class="py-2">
@@ -815,6 +815,7 @@ export default {
     });
 
     watch(loadingArticlesEnabled, (enabled) => {
+      console.log("loadingArticlesEnabled: ", enabled);
       if (enabled) {
         store.dispatch("articles/removeHomeArticles");
       } else {
@@ -822,11 +823,12 @@ export default {
       }
     });
 
+    //TODO: BUG Enabling this triggers an infinite loop
     watch(loadingResultsEnabled, (enabled) => {
       if (enabled) {
-        store.dispatch("search/removeSearch");
+        //store.dispatch("search/removeSearch");
       } else {
-        store.dispatch("search/search");
+        //store.dispatch("search/search");
       }
     });
 
@@ -836,7 +838,6 @@ export default {
     };
 
     const changeArticleImage = (event) => {
-      console.log("does this happen: ", event);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         store.dispatch("testConsole/setUploadBinary", reader.result);
@@ -879,6 +880,7 @@ export default {
     });
 
     watch(loadingResultsFromStore, (loading) => {
+      console.log("loading results from store triggered: ", loading);
       loadingResultsEnabled.value = loading;
     });
 

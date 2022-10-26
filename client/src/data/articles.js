@@ -3,7 +3,7 @@ export const articles = [
   {
     doc_num: "BBK303597595551226",
     type: "article",
-    title: "(U) China Restarts Military Drills in Response to Latest U.S. Lawmakers’ Visit to Taiwan",
+    title: "(U) China Restarts Military Drills in Response to Latest U.S. Lawmakers’ Visit to Taiwan. Taiwan Tensions Escalate as a Result and U.S. is closely watching the situation. Stay tuned to find out more about the tensions that are rising in the continent.",
     author: "Sha Hua",
     classification: "Unclassified",
     content: [
