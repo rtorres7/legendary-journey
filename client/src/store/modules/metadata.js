@@ -37,6 +37,7 @@ export default {
   actions: {
     loadMetadata({ commit }) {
       if (process.env.NODE_ENV === 'low') {
+        //TODO: Remove setTimeout
         setTimeout(() => commit("importMetadata", metadata), 5000)
       } else {
         axios.get("/metadata").then((response) => {
