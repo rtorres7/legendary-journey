@@ -1,6 +1,7 @@
 <template>
-  <div class="border-top emulation-type pt-3 mt-2 px-6">
-    <b-form-group label="Emulation Type">
+  <div class="border-top emulation-type">
+    <b-dropdown-header>Emulation Type</b-dropdown-header>
+    <b-form-group class="px-6 mb-2">
       <b-form-radio
         v-if="featuresAvailable.emulateCongressionalUser"
         v-model="selected"
@@ -11,19 +12,19 @@
       <b-form-radio
         v-if="featuresAvailable.emulateFbiUser"
         v-model="selected"
-        value="fbi"
-        >FBI</b-form-radio
+        value="_temp_537"
+        >_temp_537</b-form-radio
       >
       <b-form-radio v-model="selected" value="normal">Normal</b-form-radio>
+      <b-button
+        size="sm"
+        @click="applyEmulator"
+        :disabled="selected === null"
+        class="mt-4 w-100"
+        variant="secondary"
+        >Apply</b-button
+      >
     </b-form-group>
-    <b-button
-      size="sm"
-      @click="applyEmulator"
-      :disabled="selected === null"
-      class="w-100"
-      variant="secondary"
-      >Apply</b-button
-    >
   </div>
 </template>
 
@@ -46,13 +47,12 @@ export default {
 
     applyEmulator() {
       this.pretendUser(this.selected);
-      location.reload();
     },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .form-group {
   margin-bottom: 0.75rem;
 }

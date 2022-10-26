@@ -1,21 +1,50 @@
 <template>
-  <div>
-    <VanityHeader title="Search" class="standard-page-margin" />
-    <Pills />
-    <ResultsWithNav class="standard-page-margin" />
+  <div v-if="!metadataLoading">
+    <VanityHeader
+      :showTabs="hasSDSAccess && featuresAvailable.sensitive_features"
+      :startOnFss="fssTab"
+      title="Search"
+      class="standard-page-margin"
+    />
+    <div v-if="hasSDSAccess && featuresAvailable.sensitive_features">
+      <div :hidden="fssTab">
+        <Pills />
+        <ResultsWithNav class="standard-page-margin" />
+      </div>
+      <div :hidden="!fssTab">
+        <Pills :hideForFSS="true" />
+        <CompartmentedSection />
+      </div>
+    </div>
+    <div v-else>
+      <Pills />
+      <ResultsWithNav class="standard-page-margin" />
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
-
+import CompartmentedSection from "./CompartmentedSection";
 import ResultsWithNav from "./ResultsWithNav";
 import Pills from "./pills/Pills";
 import VanityHeader from "../shared/VanityHeader";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
-  name: "Search.vue",
+  name: "Search",
 
+  data() {
+    return {
+      fssTab: false,
+    };
+  },
+  computed: {
+    ...mapGetters("user", { currentUser: "user" }),
+    ...mapState("metadata", ["metadataLoading", "featuresAvailable"]),
+    hasSDSAccess() {
+      return this.currentUser.sds_access;
+    },
+  },
   methods: {
     ...mapActions("search", ["search"]),
   },
@@ -24,9 +53,16 @@ export default {
     VanityHeader,
     Pills,
     ResultsWithNav,
+    CompartmentedSection,
   },
 
   mounted() {
+    this.$bus.$on("onTab", (index) => {
+      this.fssTab = index != 0;
+    });
+    if (this.$route.query?.sensitive) {
+      this.fssTab = this.$route.query.sensitive == "true";
+    }
     if (!this.$route.query?.view) {
       let query = Object.assign({}, this.$route.query);
       query["view"] = "list";
@@ -75,7 +111,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .invalid-feedback {
+::v-deep .invalid-feedback {
   text-align: right;
 }
 </style>

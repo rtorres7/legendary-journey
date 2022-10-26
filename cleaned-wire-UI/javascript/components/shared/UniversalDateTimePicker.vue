@@ -2,17 +2,27 @@
   <div class="d-flex flex-column">
     <div>
       <b-form-input
+        v-if="includeTime"
         type="text"
         v-model="timestampEntry"
-        aria-label="Date/Time input box, use format YYYY-MM-DD HH:mm"
+        :aria-label="`Date/Time input box, use format ${timestampFormat}`"
         @change="entryChange()"
-        :placeholder="'YYYY-MM-DD HH:mm'"
+        :placeholder="timestampFormat"
+      >
+      </b-form-input>
+      <b-form-input
+        v-else
+        type="text"
+        v-model="theDate"
+        :aria-label="`Date input box, use format ${dateFormat}`"
+        @change="entryChange()"
+        :placeholder="dateFormat"
       >
       </b-form-input>
     </div>
     <div>
       <b-calendar
-        width="320px"
+        block
         label-help="Tab to enter calendar, arrow keys to navigate, enter to select a date"
         v-model="theDate"
         :max="null"
@@ -24,11 +34,12 @@
     </div>
     <div class="pt-2">
       <b-time
+        v-if="includeTime"
         v-model="theTime"
         locale="en"
         hide-header
         style="showmeridian: false"
-        :value="timePart(timestamp)"
+        :value="formattedTime"
         @input="timestampChange()"
       />
     </div>
@@ -38,68 +49,77 @@
 <script>
 export default {
   name: "UniversalDateTimePicker",
-  props: ["timestamp"],
-  components: {},
+  props: {
+    timestamp: {
+      require: true,
+    },
+    includeTime: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
+      dateFormat: "YYYY-MM-DD",
+      timeFormat: "HH:mm",
+      timestampFormat: "YYYY-MM-DD HH:mm",
       theDate: null,
       theTime: null,
       timestampEntry: null,
     };
   },
-  computed: {},
+  computed: {
+    formattedDate() {
+      return this.$moment(this.timestamp).format(this.dateFormat);
+    },
+    formattedTime() {
+      return this.$moment(this.timestamp).format(this.timeFormat);
+    },
+  },
   methods: {
-    datePart(timestamp) {
-      return this.$moment(timestamp).format("YYYY-MM-DD");
-    },
-    timePart(timestamp) {
-      return this.$moment(timestamp).format("HH:mm");
-    },
     currentStamp() {
       return this.theDate + " " + this.theTime.slice(0, 5);
     },
-    // time will always be in the format HH:mm:_temp_568
+    // time will always be in the format HH:mm
     timestampChange() {
       this.timestampEntry = this.currentStamp();
     },
     entryChange() {
-      let savedTimestamp = this.currentStamp();
-      if (
-        this.$moment(this.timestampEntry, "YYYY-MM-DD HH:mm", true).isValid()
-      ) {
-        this.theTime = this.$moment(
-          this.timestampEntry,
-          "YYYY-MM-DD HH:mm"
-        ).format("HH:mm:_temp_568");
-        this.theDate = this.$moment(
-          this.timestampEntry,
-          "YYYY-MM-DD HH:mm"
-        ).format("YYYY-MM-DD");
-      } else {
-        this.theTime = this.$moment(savedTimestamp, "YYYY-MM-DD HH:mm").format(
-          "HH:mm:_temp_568"
-        );
-        this.theDate = this.$moment(savedTimestamp, "YYYY-MM-DD HH:mm").format(
-          "YYYY-MM-DD"
-        );
+      let aTimestamp = this.$moment(
+        this.timestampEntry,
+        this.timestampFormat,
+        true
+      );
+      if (!aTimestamp.isValid()) {
+        aTimestamp = this.$moment(this.currentStamp(), this.timestampFormat);
       }
+
+      this.theTime = aTimestamp.format(this.timeFormat);
+      this.theDate = aTimestamp.format(this.dateFormat);
     },
   },
   mounted() {
-    this.theTime = this.timePart(this.timestamp);
-    this.theDate = this.datePart(this.timestamp);
+    this.theTime = this.formattedTime;
+    this.theDate = this.formattedDate;
     this.timestampChange();
   },
   watch: {
     timestampEntry() {
-      this.$emit("newTimestamp", this.timestampEntry);
+      let dateVal = this.includeTime ? this.timestampEntry : this.theDate;
+      if (dateVal !== this.timestamp) {
+        this.$emit("newTimestamp", dateVal);
+      }
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-/deep/ .dropdown-toggle-no-caret::after {
+::v-deep .dropdown-toggle-no-caret::after {
   display: none;
+}
+
+::v-deep .btn-outline-secondary {
+  color: $text-dark;
 }
 </style>

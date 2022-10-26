@@ -5,7 +5,9 @@ Vue.use(Vuex);
 
 import articles from "./modules/articles";
 import alerts from "./modules/alerts";
+import document from "./modules/document";
 import exports from "./modules/exports";
+import features from "./modules/features";
 import leadershipLinks from "./modules/leadershipLinks";
 import logo from "./modules/logo";
 import programOfAnalysisLinks from "./modules/programOfAnalysisLinks";
@@ -19,6 +21,9 @@ import users from "./modules/users";
 import portlets from "./modules/portlets";
 import folders from "./modules/folders";
 import tags from "./modules/tags";
+import documentFeedbacks from "./modules/documentFeedbacks";
+import feeds from "./modules/feeds";
+import producingOffices from "./modules/producingOffices";
 
 export default new Vuex.Store({
   state: {
@@ -30,8 +35,10 @@ export default new Vuex.Store({
     articles,
     alerts,
     concepts,
-    folders,
+    document,
     exports,
+    features,
+    folders,
     leadershipLinks,
     logo,
     programOfAnalysisLinks,
@@ -43,6 +50,9 @@ export default new Vuex.Store({
     user,
     users,
     portlets,
+    documentFeedbacks,
+    feeds,
+    producingOffices,
   },
 
   actions: {

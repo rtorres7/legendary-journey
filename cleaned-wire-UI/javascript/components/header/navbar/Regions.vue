@@ -36,20 +36,22 @@
         </div>
       </div>
       <div class="region-map-container map-subtext px-6 mb-5 d-none d-md-block">
-        <div>Select your country from the map or the dropdown</div>
+        <label>Select your country from the map or the dropdown</label>
         <div id="countries-dropdown-sr" class="sr-only">
           For a more pleasant keyboard experience press alt + s to to jump to
           our omni-search to quickly find your countries landing page.
         </div>
-        <b-form-select
-          v-if="!loading"
-          @change="goToCountry"
-          :options="countryList"
-          class="country-select"
-          v-model="country"
-          aria-label="Country selection"
-          aria-describedby="countries-dropdown-sr"
-        ></b-form-select>
+        <b-row>
+          <b-form-select
+            v-if="!loading"
+            @change="goToCountry"
+            :options="countryList"
+            class="country-select"
+            v-model="country"
+            aria-label="Country selection"
+            aria-describedby="countries-dropdown-sr"
+          ></b-form-select>
+        </b-row>
         <RegionMap
           @countrySelected="closeDropdown"
           :inNav="true"
@@ -61,10 +63,9 @@
         >
           View a
           <a
-            class="faq-link"
-            _temp_576="blank"
-            href="https://blogs._temp_430.ic.gov/blogs/ciawire/files/2021/10/2020-08793-_temp_28-DA-vis-01_noSourced.pdf"
-            >list of countries</a
+            target="blank"
+            href="_temp_525blogs.intelink._temp_0/blogs/_temp_540/files/2021/10/2020-08793-_temp_6-DA-vis-01_noSourced.pdf"
+            ><span class="faq-link">list of countries</span></a
           >
           that fall under each region and subregion
         </div>
@@ -151,6 +152,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+label {
+  color: $dropdown-link-color;
+  font-style: italic;
+  justify-content: left;
+}
+
 .faq-link {
   color: $faq-link;
 }
@@ -159,7 +166,7 @@ export default {
   position: static;
 }
 
-/deep/ .dropdown-menu {
+::v-deep .dropdown-menu {
   width: 100%;
   padding: 2rem 3rem;
 }
@@ -182,6 +189,6 @@ export default {
   padding-bottom: 0.75rem;
 }
 .country-select {
-  max-width: 500px;
+  max-width: 400px;
 }
 </style>

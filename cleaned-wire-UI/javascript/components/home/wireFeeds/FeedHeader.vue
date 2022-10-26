@@ -10,12 +10,12 @@
           v-if="!showPersonalize"
           variant="link"
           @click="togglePersonalize"
-          class="ml-6 _temp_488-6 mb-1"
+          class="ml-6 pl-6 mb-1"
         >
           <div class="font-size-2">
             <img
               :src="require('@assets/edit.svg')"
-              alt="add a feed"
+              alt=""
               class="edit-icon mr-1 mb-2"
             />
             Add a feed
@@ -25,7 +25,7 @@
           v-else
           variant="link"
           @click="resetFeedForm"
-          class="ml-6 _temp_488-6 mb-1"
+          class="ml-6 pl-6 mb-1"
         >
           <div class="font-size-2">Close</div>
         </b-button>

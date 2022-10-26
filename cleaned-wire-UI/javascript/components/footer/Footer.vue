@@ -1,6 +1,6 @@
 <template>
   <div id="pageFooter">
-    <div id="bottomBanner" class="banner">
+    <div id="bottomBanner" class="_temp_519">
       <div class="standard-page-margin pt-5">
         <b-nav class="row pb-3">
           <b-col lg="5">
@@ -80,7 +80,7 @@ export default {
     color: $text-light;
   }
 }
-/deep/ .nav-link {
+::v-deep .nav-link {
   color: $text-light;
   .dropdown-toggle {
     padding: unset;

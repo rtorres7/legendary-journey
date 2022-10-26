@@ -1,9 +1,6 @@
 <template>
   <div>
-    <VanityHeader
-      :title="$route.params.profileType"
-      class="standard-page-margin"
-    >
+    <VanityHeader :title="profileType" class="standard-page-margin">
     </VanityHeader>
     <Pills />
     <ResultsWithNav class="standard-page-margin" />
@@ -17,6 +14,7 @@ import VanityHeader from "@shared/VanityHeader";
 import ResultsNav from "@shared/ResultsNav";
 import ResultsWithNav from "../search/ResultsWithNav";
 import Pills from "../search/pills/Pills";
+import { merge } from "lodash";
 
 export default {
   name: "Leadership",
@@ -30,14 +28,13 @@ export default {
   computed: {
     ...mapState("metadata/criteria", ["loading"]),
     ...mapState("search", ["showFilters"]),
-
+    profileType() {
+      return this.$route.params.profileType;
+    },
     query() {
-      return _.merge(
-        this.getSearchHashForLeadership(this.$route.params.profileType),
-        {
-          view: "grid",
-        }
-      );
+      return merge(this.getSearchHashForLeadership(this.profileType), {
+        view: "grid",
+      });
     },
   },
 };

@@ -18,13 +18,12 @@
         />
       </b-button>
       <span v-else>
-        <span
-          v-for="(value, ind) in valueAsArray"
-          :key="ind"
-          v-if="pillData.name !== 'dateRange'"
-          class="pill-container"
-        >
-          <div class="d-inline-flex">
+        <span v-if="pillData.name !== 'dateRange'" class="pill-container">
+          <div
+            class="d-inline-flex"
+            v-for="(value, ind) in valueAsArray"
+            :key="ind"
+          >
             <Pill
               :query="pillData.query"
               :queryValue="value"
@@ -63,10 +62,12 @@
 import Pill from "./Pill";
 import { mapState } from "vuex";
 import { camelCase, startCase } from "lodash";
+import navigationErrorHandlerMixin from "@shared/mixins/navigationErrorHandlerMixin";
 
 export default {
   name: "PillGroup",
   components: { Pill },
+  mixins: [navigationErrorHandlerMixin],
   computed: {
     ...mapState("metadata", ["criteria"]),
     ...mapState("metadata/criteria", ["loading"]),
@@ -94,8 +95,22 @@ export default {
       return "or";
     },
 
+    criteriaValue() {
+      return this.criteria[camelCase(this.pillData.name)];
+    },
+
     andable() {
-      return this.criteria[camelCase(this.pillData.name)].andable;
+      if (this.criteriaValue) {
+        return this.criteriaValue.andable;
+      }
+    },
+
+    defaultBool() {
+      if (this.criteriaValue) {
+        return this.criteriaValue.andOrDefault;
+      } else {
+        return "or";
+      }
     },
   },
   data() {
@@ -132,10 +147,6 @@ export default {
       });
       this.$store.dispatch("search/search", this.$route);
     },
-
-    defaultBool() {
-      return this.criteria[camelCase(this.pillData.name)].andOrDefault || "or";
-    },
   },
 
   watch: {
@@ -143,12 +154,16 @@ export default {
       if (pills.length > 1) {
         if (!this.$route.query[this.boolName]) {
           var query = Object.assign({}, this.$route.query);
-          query[this.boolName] = this.defaultBool();
-          this.$router.replace({
-            name: this.$route.name,
-            params: this.$route.params,
-            query,
-          });
+          query[this.boolName] = this.defaultBool;
+          this.$router
+            .replace({
+              name: this.$route.name,
+              params: this.$route.params,
+              query,
+            })
+            .catch((failure) => {
+              this.handleNavigationErrors(failure);
+            });
         }
       }
     },
@@ -163,18 +178,18 @@ export default {
   border-right: 1px solid $alt-700;
 }
 
-/deep/ .pill-container:only-child {
+::v-deep .pill-container:only-child {
   .badge-pill {
     min-width: 70px;
   }
 }
-/deep/ .badge-pill {
+::v-deep .badge-pill {
   border-color: $alt-700;
   .fa {
     margin-left: 1px;
   }
 }
-/deep/ .double-emphasis {
+::v-deep .double-emphasis {
   font-weight: 500;
   font-style: italic;
 }
@@ -182,7 +197,7 @@ export default {
 .multiple-selection-pill {
   text-transform: capitalize;
 }
-/deep/ .btn-light:focus {
+::v-deep .btn-light:focus {
   box-shadow: 0 0 0 0.2rem $alt-500;
 }
 

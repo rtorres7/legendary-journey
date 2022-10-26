@@ -3,9 +3,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { reject } from "lodash";
-
 export default {
   name: "AlertIcon",
   props: ["type"],

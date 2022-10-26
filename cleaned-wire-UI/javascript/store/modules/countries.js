@@ -51,11 +51,11 @@ export default {
 
     sendToMetaData(state) {
       var values = {};
-      for (const_temp_19in state.countries) {
-        const country = state.countries[C];
-        values[C] = country.name;
+      for (const c in state.countries) {
+        const country = state.countries[c];
+        values[c] = country.name;
         state.countryArray.push({
-          code: C,
+          code: c,
           name: country.name,
         });
       }

@@ -2,7 +2,15 @@
   <b-col md="12" class="custom-gutter-col" v-if="item.articles.length > 0">
     <div class="additional-content-card white-bg h-100 d-flex flex-column">
       <b-card-title class="ml-7 mb-4 mt-6 card-title" title-tag="h3">
-        <router-link :to="item.path">
+        <router-link
+          :to="
+            item.path +
+            '&search_title=' +
+            item.content_heading +
+            '&search_reporting_type=' +
+            searchReportingType()
+          "
+        >
           {{ item.content_heading }}
         </router-link>
       </b-card-title>
@@ -42,7 +50,7 @@ export default {
   computed: {
     ...mapState("metadata", ["agency"]),
     dataUsage() {
-      // returns something similar to front-page-across-the-_temp_327-_temp_337-reporting
+      // returns something similar to front-page-across-the-cia-clandestine-reporting
       return kebabCase(
         "front-page-across-the-" + this.agency + "-" + this.item.content_heading
       );
@@ -51,6 +59,9 @@ export default {
   methods: {
     locked(article) {
       return !isEmpty(article.needed) || article.org_restricted;
+    },
+    searchReportingType() {
+      return this.item.path.replace(/.*=/, "");
     },
   },
 };

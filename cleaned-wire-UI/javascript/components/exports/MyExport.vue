@@ -2,7 +2,7 @@
   <div class="mr-auto pr-7 mt-3 recent-export">
     <div class="d-flex separator">
       <b-btn
-        class="my-export-title _temp_488-0 text-lg-left"
+        class="my-export-title pl-0 text-lg-left"
         @click="toggleCollapse"
         variant="link"
         size="lg"
@@ -22,7 +22,7 @@
         <div
           v-for="volume in documentsExport.volumes"
           :key="documentsExport.id + '-' + volume"
-          class="_temp_488-2"
+          class="pl-2"
         >
           <a
             :href="`/exports/${documentsExport.id}/${volume}`"
@@ -52,7 +52,7 @@
         </div>
         <div class="d-flex text-right ml-auto">
           <DeleteButton
-            :url="'/exports/' + documentsExport.id"
+            :_temp_1="'/exports/' + documentsExport.id"
             :label="documentsExport.name"
             type="export"
             :caller="this"
@@ -140,10 +140,10 @@ export default {
     exportFormat(type) {
       let format = "";
       switch (type) {
-        case "PdfBookExport":
+        case "PDFBookExport":
           format = "PDF Book";
           break;
-        case "PdfListExport":
+        case "PDFListExport":
           format = "PDF Files";
           break;
         case "CsvExport":

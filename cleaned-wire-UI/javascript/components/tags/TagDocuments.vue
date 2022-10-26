@@ -27,7 +27,7 @@
             :to="`/users/${user.id}/tags?user_name=${user.name}`"
             variant="link"
             size="md"
-            class="_temp_488-0 text-left"
+            class="pl-0 text-left"
           >
             {{ user.name }}{{ addSeparator(idx, document.tagged_by.length) }}
           </b-btn>

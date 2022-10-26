@@ -8,11 +8,11 @@
         <b-col class="my-3">
           <a
             :href="`${linkPath}/metrics/extended.csv?${csvParams}`"
-            _temp_576="_blank"
+            target="_blank"
             >View Raw Numbers</a
           ></b-col
         >
-        <b-form-group class="_temp_369-compact-selector">
+        <b-form-group class="cozy-compact-selector">
           <b-dropdown variant="link" :text="'View by ' + grouping">
             <b-dropdown-item
               v-for="option in DATE_GROUPINGS"
@@ -95,9 +95,9 @@ export default {
   },
   computed: {
     linkPath() {
-      return this.$route.name === "search"
-        ? `/search`
-        : `/documents/${this.$route.params.docNum}`;
+      return this.$route.name === "document"
+        ? `/documents/${this.$route.params.docNum}`
+        : "/search";
     },
     csvParams() {
       let metricsParams = this.queryParams;
@@ -193,7 +193,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .btn,
+::v-deep .btn,
 .btn:focus {
   border-radius: unset;
 }
@@ -203,7 +203,7 @@ export default {
 .form-group {
   margin: 0;
 }
-/deep/ .b-calendar {
+::v-deep .b-calendar {
   background-color: $pri-800;
 }
 </style>

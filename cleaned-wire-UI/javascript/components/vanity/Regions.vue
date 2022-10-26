@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-
 import ResultsWithNav from "../search/ResultsWithNav";
 import vanityPage from "@shared/mixins/vanityPage";
 import Pills from "../search/pills/Pills";
 import VanityHeader from "../shared/VanityHeader";
+import { mapState } from "vuex";
+import { orderBy } from "lodash";
 
 export default {
   name: "Regions",
@@ -52,28 +52,15 @@ export default {
       if (!this.loading) {
         for (const s in this.region.subregions) {
           const subregion = this.region.subregions[s];
-          for (const_temp_19in subregion.country_codes) {
-            var country = this.storeCountries[subregion.country_codes[C]];
-            country["code"] = subregion.country_codes[C];
+          for (const c in subregion.country_codes) {
+            var country = this.storeCountries[subregion.country_codes[c]];
+            country["code"] = subregion.country_codes[c];
             countries.push(country);
           }
         }
       }
-      countries = _.orderBy(countries, ["name"], ["asc"]);
-      return countries;
-    },
-  },
 
-  methods: {
-    ...mapGetters("countries", ["getCountryFromCode"]),
-
-    moreFilters() {
-      var query = this.$route.query;
-      query["regions[]"] = [this.region.code];
-      this.$router.push({
-        name: "advanced_search",
-        query: query,
-      });
+      return orderBy(countries, ["name"], ["asc"]);
     },
   },
 };

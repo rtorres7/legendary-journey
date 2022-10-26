@@ -2,11 +2,11 @@
   <div v-if="!metadataLoading && !featuresAvailable.tags">
     <NotFound />
   </div>
-  <div v-else class="mr-7 mt-6 ml-5">
+  <div v-else class="standard-page-margin mt-6">
     <vanity-title :title="`All Tags`"></vanity-title>
     <b-row>
-      <b-col cols="24" md="20" class="px-8">
-        <h4 class="d-flex pt-6 px-6">
+      <b-col cols="24" md="20">
+        <h4 class="d-flex pt-6">
           {{ tag ? tag.document_count : 0 }} Documents Tagged With "{{
             tagName
           }}"
@@ -15,7 +15,7 @@
           <TagDocuments :tag="tag" @loadTagDocs="loadTagByName" />
         </div>
       </b-col>
-      <b-col class="_temp_488-3" cols="24" md="4">
+      <b-col class="pl-3" cols="24" md="4">
         <TagCloud :top_tags="topTags" />
       </b-col>
     </b-row>

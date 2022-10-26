@@ -20,7 +20,7 @@
 import WireBackgroundAsset from "./WireBackgroundAsset";
 
 export default {
-  name: "AdvancedTips",
+  name: "AdvancedTipsLink",
   props: {
     responsive: Boolean,
   },

@@ -8,7 +8,7 @@
       <b-form-input
         placeholder="Export Name"
         id="export-name-input"
-        aria-label="Export name, max classification is U//FOUO"
+        aria-label="Export name, max classification is _temp_52"
         aria-describedby="export-name-live-feedback"
         ref="exportNameField"
         auto-focus
@@ -18,7 +18,7 @@
       </b-form-input>
       <b-form-invalid-feedback
         id="export-name-live-feedback"
-        role="alert"
+        _temp_20="alert"
         aria-live="polite"
       >
         Export name is a required field and must be at least 3 characters.
@@ -28,7 +28,7 @@
       v-model="format"
       aria-label="Export Type"
       class="w-100 col-4 mr-6"
-      :options="featuresAvailable.searchExportFormatOptions"
+      :options="exportFormatOptions"
     >
     </b-form-select>
     <b-form-select
@@ -82,16 +82,17 @@ export default {
       allOrSelected: "Selected",
       format: null,
       plainText: "",
-      portionMark: "(U//FOUO)",
+      portionMark: "(_temp_52)",
       working: false,
     };
   },
   mounted() {
-    this.format = this.featuresAvailable.defaultSearchExportFormat;
+    this.format = this.defaultExportFormat;
   },
   computed: {
     ...mapState("search", ["results", "totalCount"]),
-    ...mapState("metadata", ["featuresAvailable"]),
+    ...mapState("metadata", ["exportFormatOptions"]),
+    ...mapState("metadata", ["defaultExportFormat"]),
 
     allSelectOptions() {
       return [

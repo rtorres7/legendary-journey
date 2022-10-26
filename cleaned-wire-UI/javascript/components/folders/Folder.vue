@@ -2,7 +2,7 @@
   <div class="mr-7 mt-6">
     <div class="d-flex separator">
       <b-btn
-        class="folder-title _temp_488-0"
+        class="folder-title pl-0"
         variant="link"
         :id="'folder-contents-' + folder.id + '_btn'"
         v-b-toggle="'folder-contents-' + folder.id"
@@ -16,7 +16,7 @@
       </b-btn>
       <div class="d-flex align-items-center ml-auto">
         <DeleteButton
-          :url="'/my_wire/folders/' + folder.id"
+          :_temp_1="'/my_wire/folders/' + folder.id"
           :label="folder.name"
           type="folder"
           :caller="this"
@@ -186,13 +186,13 @@ export default {
 .fa-times-circle {
   color: $alt-500;
 }
-/deep/ .disabled {
+::v-deep .disabled {
   color: $alt-900;
 }
-/deep/ .dropdown-menu {
+::v-deep .dropdown-menu {
   min-width: 7rem;
 }
-/deep/ a.dropdown-item {
+::v-deep a.dropdown-item {
   padding-left: 5px;
 }
 img {

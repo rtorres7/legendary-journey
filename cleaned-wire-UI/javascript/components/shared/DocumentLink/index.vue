@@ -17,7 +17,7 @@
       />
       <PortionMarkedString
         v-else
-        portionMark="(U//FOUO)"
+        portionMark="U//_temp_220"
         :class="styleClass"
         :textString="document.doc_num"
       />
@@ -53,7 +53,7 @@
         />
         <PortionMarkedString
           v-else
-          portionMark="U//FOUO"
+          portionMark="U//_temp_220"
           class="document_link"
           :textString="document.doc_num + ' is Locked'"
         />
@@ -82,7 +82,7 @@
 <script>
 import LockedModal from "./LockedModal";
 import PortionMarkedString from "../PortionMarkedString";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 
 export default {
   name: "DocumentLink",
@@ -98,15 +98,22 @@ export default {
   computed: {
     locked() {
       const locked =
-        !_.isEmpty(this.document.needed) || this.document.org_restricted;
+        !isEmpty(this.document.needed) || this.document.org_restricted;
       if (locked) {
         this.$emit("locked");
       }
       return locked;
     },
+    routeName() {
+      // Staged documents are only viewable by wire_editors
+      return (this.document.state && this.document.state !== "posted") ||
+        (this.document.featured_timestamp && !this.document.posted_at)
+        ? "documentPreview"
+        : "document";
+    },
     routeTo() {
       return {
-        name: "document",
+        name: this.routeName,
         params: {
           docNum: this.document.doc_num.replace("/", "!"),
           section: this.section,

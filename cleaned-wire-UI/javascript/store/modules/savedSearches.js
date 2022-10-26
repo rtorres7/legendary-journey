@@ -20,17 +20,17 @@ export default {
       const query = props.query;
       const formData = props.formData;
       state.loading = true;
-      let url = "/search?";
+      let _temp_1 = "/search?";
       for (const q in query) {
         if (Array.isArray(query[q])) {
-          url = addToQueryFromArray(url, query[q], q);
+          _temp_1 = addToQueryFromArray(_temp_1, query[q], q);
         } else {
-          url += q + "=" + query[q] + "&";
+          _temp_1 += q + "=" + query[q] + "&";
         }
       }
       axios({
         method: "post",
-        url: url,
+        _temp_1: _temp_1,
         config: {
           headers: {
             "Content-Type": "multipart/form-data",

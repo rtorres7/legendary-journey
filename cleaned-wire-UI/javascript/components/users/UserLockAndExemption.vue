@@ -5,28 +5,28 @@
       variant="secondary"
       @click="selectEvent('lock')"
       v-if="!locked"
-      :disabled="!canManageUser"
+      :disabled="!canManageLocks"
       >Lock User</b-btn
     >
     <b-btn
       variant="secondary"
       @click="selectEvent('unlock')"
       v-if="locked"
-      :disabled="!canManageUser"
+      :disabled="!canManageLocks"
       >Unlock User</b-btn
     >
     <b-btn
       variant="secondary"
       @click="selectEvent('exempt')"
       v-if="!locked"
-      :disabled="!canManageUser"
+      :disabled="!canManageLocks"
       >{{ exempted ? "Replace" : "Add" }} Exemption</b-btn
     >
     <b-btn
       variant="secondary"
       @click="selectEvent('cancel_exemption')"
       v-if="exempted"
-      :disabled="!canManageUser"
+      :disabled="!canManageLocks"
       >Cancel Exemption</b-btn
     >
     <div v-if="eventType !== ''" class="event-form">
@@ -119,7 +119,7 @@ export default {
     this.loadUserLockHistory();
   },
   computed: {
-    ...mapGetters("user", { currentUser: "user" }),
+    ...mapGetters("user", ["canManageLocks"]),
     ...mapGetters("users", ["user"]),
     ...mapState("metadata", ["name"]),
     userId() {
@@ -158,12 +158,6 @@ export default {
           this.event.expires_on === ""
         );
       }
-    },
-    canManageUser() {
-      if (this.currentUser.roles) {
-        return this.currentUser.roles.includes("user_support");
-      }
-      return false;
     },
   },
   methods: {
@@ -236,8 +230,8 @@ label {
   background-color: white;
 }
 
-.b-calendar {
-  /deep/ .btn-secondary {
+::v-deep .b-calendar {
+  .btn-secondary {
     color: $text-dark;
     background-color: unset;
     border: unset;
@@ -248,7 +242,7 @@ label {
       box-shadow: 0 0 0 0.2rem $alt-500;
     }
   }
-  /deep/.btn-outline-secondary {
+  ::v-deep .btn-outline-secondary {
     color: $text-dark;
   }
 }

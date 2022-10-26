@@ -91,6 +91,8 @@ export default {
 
       polygonSeries.useGeodata = true;
 
+      map.zoomControl = new am4maps.ZoomControl();
+
       map.geodata = am4geodata_worldLow;
       map.projection = new am4maps.projections.Miller();
       polygonSeries.exclude = ["ATA"];
@@ -106,7 +108,7 @@ export default {
       hs.properties.fill = am4core.color("#6a737b");
 
       polygonTemplate.events.on("hit", function (event) {
-        _this.goToCountry(event._temp_576.dataItem.dataContext.name);
+        _this.goToCountry(event.target.dataItem.dataContext.name);
       });
 
       map.series.push(polygonSeries);

@@ -15,7 +15,7 @@
       ></b-form-input>
       <b-form-invalid-feedback
         id="tag-name-live-feedback"
-        role="alert"
+        _temp_20="alert"
         aria-live="polite"
       >
         Tags name is a required field and must be at least 3 characters.
@@ -43,7 +43,6 @@
 
 <script>
 import SelectAll from "./SelectAll";
-import _ from "lodash";
 import Cancel from "./Cancel";
 import FormTagDoc from "./FormTagDoc";
 import { validationMixin } from "vuelidate";

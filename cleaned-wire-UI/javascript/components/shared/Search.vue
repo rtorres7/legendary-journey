@@ -20,7 +20,7 @@
         :screen-reader-text-serializer="
           (s) =>
             s.screen_reader_text ||
-            `${s.findable} ${s.filter_display_type} filter`
+            `${s.findable} ${s.filter_display_type || ''} filter`
         "
         @hit="typeAheadHit($event)"
         placeholder="search for keywords, documents, or pages"
@@ -55,6 +55,9 @@
             <div v-else-if="data.kind === 'title'">
               <TitleResult :htmlText="htmlText" />
             </div>
+            <div v-else-if="data.kind === '_temp_39'">
+              <IdentifierResult :htmlText="htmlText" />
+            </div>
             <div v-else-if="data.kind === 'doc_num'">
               <DocNumResult :htmlText="htmlText" />
             </div>
@@ -81,6 +84,7 @@ import FilterableResult from "./omniSearchResultTypes/FilterableResult";
 import KeywordResult from "./omniSearchResultTypes/KeywordResult";
 import PageResult from "./omniSearchResultTypes/PageResult";
 import TitleResult from "./omniSearchResultTypes/TitleResult";
+import IdentifierResult from "./omniSearchResultTypes/IdentifierResult";
 import WireBackgroundAsset from "./WireBackgroundAsset";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
@@ -90,6 +94,7 @@ export default {
   components: {
     DocNumResult,
     FilterableResult,
+    IdentifierResult,
     KeywordResult,
     PageResult,
     TitleResult,
@@ -98,6 +103,9 @@ export default {
   mixins: [urlStore],
   props: {
     header: {
+      default: false,
+    },
+    hideForFSS: {
       default: false,
     },
   },
@@ -131,9 +139,9 @@ export default {
 
       const wireDocNumRegExp = "wire[0-9]{4}-[0-9a-z]{4,}"; //WIRe2020-01469, WIRe2020-01468a
       const oseDocNumRegExp = "[a-z]{3}[0-9]{15,17}"; //SAW2020021758249098
-      const daDocNumRegExp = "_temp_28-[a-z]{2,3}-(.*?-)?[0-9]{4}-[0-9a-z]{4,}"; //_temp_28-DA-2020-00042, _temp_28-DA-MFAC-2020-00042
+      const daDocNumRegExp = "_temp_6-[a-z]{2,3}-(.*?-)?[0-9]{4}-[0-9a-z]{4,}"; //_temp_6-DA-2020-00042, _temp_6-DA-MFAC-2020-00042
       const doDocNumRegExp = "tdx?-[0-9]{2,4}[!\/][0-9]{6,}-?[0-9]*"; //TDX-335/001835-20, TD-335/001835-20
-      const fbiDocNumRegExp = "FBI-[A-Z]{2,}-[0-9]{4}-[0-9]{5,}-?[A-Z]?"; // FBI-DDBX-2022-66796, FBI-DDBX-2022-66793-A
+      const fbiDocNumRegExp = "_temp_537-[A-Z]{2,}-[0-9]{4}-[0-9]{5,}-?[A-Z]?"; // _temp_537-DDBX-2022-66796, _temp_537-DDBX-2022-66793-A
 
       const docNumRegExp = new RegExp(
         "^(" +
@@ -179,16 +187,6 @@ export default {
       }
     }, 250),
 
-    getQuery(kind) {
-      if (kind === "country") {
-        return "countries[]";
-      } else if (kind === "region") {
-        return "regions[]";
-      } else if (kind === "subregion") {
-        return "subregions[]";
-      }
-    },
-
     navToTypeAhead(value) {
       var page = "";
       var params = {};
@@ -205,10 +203,14 @@ export default {
         params["subregionName"] = value.findable;
       } else if (value.kind === "doc_num" || value.kind === "leadership") {
         page = "document";
-        params["docNum"] = value.code.replace("/", "!");
-      } else if (value.kind === "keyword" || value.kind === "title") {
+        params["docNum"] = value.code.replace("/", "!").replace(".", "");
+      } else if (
+        value.kind === "keyword" ||
+        value.kind === "title" ||
+        value.kind === "_temp_39"
+      ) {
         let kind = value.kind.replace("keyword", "text");
-        query[kind] = value.code.replace("/", "!");
+        query[kind] = value.code.replace("/", "!").replace(".", "");
         page = "search";
       } else if (value.kind === "issue") {
         page = "issues";
@@ -228,6 +230,7 @@ export default {
         subregion: "subregions[]",
         title: "title",
         keyword: "text",
+        _temp_39: "_temp_39",
         product_type: "product_types[]",
         reporting_type: "reporting_types[]",
         issue: "issues[]",
@@ -270,7 +273,7 @@ export default {
           screen_reader_text: `${this.keyword} keyword search`,
           subtext: null,
           kind: "keyword",
-          code: this.keyword,
+          code: this.keyword.replace(".", ""),
           filterable: !this.header,
         },
       ];
@@ -286,7 +289,22 @@ export default {
           screen_reader_text: `${this.keyword} title search`,
           subtext: null,
           kind: "title",
-          code: this.keyword,
+          code: this.keyword.replace(".", ""),
+          filterable: true,
+        },
+      ];
+    },
+    identifierTypeAhead() {
+      if (this.header) {
+        return [];
+      }
+      return [
+        {
+          findable: this.keyword,
+          screen_reader_text: `${this.keyword} _temp_39 search`,
+          subtext: null,
+          kind: "_temp_39",
+          code: this.keyword.replace(".", ""),
           filterable: true,
         },
       ];
@@ -298,6 +316,10 @@ export default {
         this.keywordTypeAhead,
         this.titleTypeAhead
       );
+
+      if (this.hideForFSS) {
+        allTypeAheads = allTypeAheads.concat(this.identifierTypeAhead);
+      }
 
       return allTypeAheads;
     },
@@ -315,13 +337,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .search-omni input {
+::v-deep .search-omni input {
   border: none;
   height: calc(1.64844rem + 2px);
   border-bottom: 6px solid $alt-400;
 }
 
-/deep/ .omni-search {
+::v-deep .omni-search {
   .omni-search-icon {
     height: 16px !important;
     width: 16px !important;
@@ -375,18 +397,6 @@ export default {
 
 .advanced-search-link {
   color: $text-light;
-}
-
-.btn,
-.fa-lg {
-  height: 100%;
-}
-
-.tiny-top-padding {
-  //this feels awful, but for some reason an anchor tag using flexbox to vertically align
-  //items inside it doesn't work when a button tag does. But, we need an anchor tag here because
-  //clicking this takes you to a search result. Ugh.
-  padding-top: 0.5rem;
 }
 
 .search-icon {

@@ -62,16 +62,6 @@ export default {
       return countries;
     },
   },
-  methods: {
-    moreFilters() {
-      var query = this.$route.query;
-      query["regions[]"] = [this.region.code];
-      this.$router.push({
-        name: "advanced_search",
-        query: query,
-      });
-    },
-  },
 };
 </script>
 

@@ -4,13 +4,13 @@
       {{ user.full_name
       }}<span class="user-card-details">
         ({{ agencyOrg }})
-        <span class="user-card-subtitle _temp_488-4"
-          ><span class="fa fa-envelope pr-2" /> {{ user.email }}</span
+        <span class="user-card-subtitle pl-4"
+          ><span class="fa fa-envelope pr-2" /> {{ user._temp_37 }}</span
         ></span
       >
 
       <div class="user-card-body mt-3 mb-2">
-        Last Login: {{ lastLogin }} {{ docViewSummary }}
+        Last Login: {{ lastLogin }} {{ additionalDetails }}
       </div>
       <div class="user-card-subtitle">
         {{ user.dn }}
@@ -32,12 +32,8 @@ export default {
       type: Boolean,
       default: false,
     },
-    totalUniqDocsViewed: {
-      type: Number,
-      required: false,
-    },
-    uniqClassifiedDocsViewed: {
-      type: Number,
+    additionalDetails: {
+      type: String,
       required: false,
     },
   },
@@ -58,11 +54,6 @@ export default {
     cardTitleStyle() {
       return this.topTen ? "ten-card-title" : "user-card-title";
     },
-    docViewSummary() {
-      if (this.topTen) {
-        return `| ${this.totalUniqDocsViewed} documents viewed (${this.uniqClassifiedDocsViewed} classified)`;
-      }
-    },
     lastLogin() {
       if (this.user.last_login) {
         return this.$moment(this.user.last_login).format("MMMM DD, YYYY HH:mm");
@@ -71,7 +62,9 @@ export default {
   },
   methods: {
     goToUserDetails() {
-      this.$router.push({ name: "userdetails", params: { id: this.user.id } });
+      this.$router
+        .push({ name: "userdetails", params: { id: this.user.id } })
+        .catch(() => {});
     },
   },
 };

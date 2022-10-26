@@ -183,7 +183,7 @@ export default class VisualEditing extends Plugin {
       view: (modelElement, { writer: viewWriter }) => {
         const attrs = {
           class: "inline-media",
-          _temp_576: "_blank",
+          target: "_blank",
         };
 
         if (
@@ -240,7 +240,7 @@ export default class VisualEditing extends Plugin {
         name: "visual",
         key: "linkTarget",
       },
-      view: "data-link-_temp_576",
+      view: "data-link-target",
     });
     conversion.attributeToAttribute({
       model: {

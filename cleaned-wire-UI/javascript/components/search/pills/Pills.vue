@@ -31,8 +31,8 @@
         <b-button
           class="py-0 d-inline-flex search-action"
           :to="rssLink"
-          v-if="featuresAvailable.searchRssLinksEnabled"
-          _temp_576="_blank"
+          v-if="featuresAvailable.searchRssLinksEnabled && !hideForFSS"
+          target="_blank"
           variant="link"
         >
           <WireBackgroundAsset
@@ -47,7 +47,7 @@
           @click="setUpSaveForm"
           :active="selecting === 'saveSearch'"
           variant="link"
-          v-if="!visualsPage"
+          v-if="!visualsPage && !hideForFSS"
           data-usage="save-search"
         >
           <WireBackgroundAsset
@@ -58,7 +58,7 @@
           <div class="pill-button-text" aria-hidden="true">Save</div>
           <div class="sr-only">save search</div>
         </b-button>
-        <SearchMetrics />
+        <SearchMetrics v-if="!hideForFSS" />
       </div>
     </div>
   </div>
@@ -74,25 +74,50 @@ import SearchMetrics from "./SearchMetrics";
 export default {
   name: "Pills",
   components: { PillGroup, SearchMetrics, WireBackgroundAsset },
+  props: ["hideForFSS"],
   computed: {
     ...mapState("search", {
       getCompact: "compact",
       selecting: "selecting",
       previousSearch: "previousSearch",
     }),
-    ...mapGetters("search", ["rssLink"]),
     ...mapState("metadata", ["featuresAvailable"]),
+    ...mapGetters("search", ["rssLink"]),
     pills() {
       let values = [];
       const blackList = [
         "utf8",
         "_bool",
         "sort_by",
+        "fsort_dir",
         "tags[]",
         "id",
         "page",
+        "fpage",
         "view",
+        "sensitive",
+        "search_title",
+        "search_reporting_type",
       ];
+      if (this.hideForFSS) {
+        const FssBlackList = [
+          "regions[]",
+          "subregions[]",
+          "issues[]",
+          "reporting_types[]",
+          "product_types[]",
+          "media_tags[]",
+          "non_state_actors[]",
+          "producing_offices[]",
+          "selected_for[]",
+          "classification[]",
+        ];
+        FssBlackList.forEach(function (param) {
+          blackList.push(param);
+        });
+      } else {
+        blackList.push("_temp_39");
+      }
       forEach(this.$route.query, (value, query) => {
         if (!blackList.includes(query) && !isEmpty(value)) {
           values.push({
@@ -184,16 +209,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .pill-row-icon {
+::v-deep .pill-row-icon {
   height: 14px;
   width: 14px;
 }
-/deep/ .reset-icon,
-/deep/ .save-icon {
+::v-deep .reset-icon,
+::v-deep .save-icon {
   width: 14px;
   height: 14px;
 }
-/deep/ .pill-button-text {
+::v-deep .pill-button-text {
   margin-left: 4px;
   font-size: $font-size-1;
   color: $pri-800;
@@ -210,7 +235,7 @@ export default {
     top: 0px;
   }
 }
-/deep/ .badge {
+::v-deep .badge {
   font-size: 100%;
   padding-top: 1px;
   padding-bottom: 1px;

@@ -4,15 +4,16 @@
     text="Your Searches"
     data-usage="saved-searches"
   >
-    <SavedSearch
-      v-for="(search, ind) in savedSearches.search"
-      :key="ind"
-      v-if="!loading && hasSearches"
-      :loading="loading"
-      :dropdown="$refs.dropdown"
-      :search="search"
-    ></SavedSearch>
-    <div v-if="!loading && !hasSearches" class="p-5">
+    <template v-if="!loading && hasSearches">
+      <SavedSearch
+        v-for="(search, ind) in savedSearches.search"
+        :key="ind"
+        :loading="loading"
+        :dropdown="$refs.dropdown"
+        :search="search"
+      ></SavedSearch>
+    </template>
+    <div v-if="!loading && !hasSearches" class="p-5 no-saved-search">
       You have no saved searches.
     </div>
     <spinner label="Spinning" v-if="loading"></spinner>
@@ -20,9 +21,10 @@
 </template>
 
 <script>
+import SavedSearch from "./SavedSearch";
+import Spinner from "@shared/Spinner";
+import { isEmpty } from "lodash";
 import { mapState } from "vuex";
-import SavedSearch from "./savedSearches/SavedSearch";
-import Spinner from "../../shared/Spinner";
 
 export default {
   name: "SavedSearches",
@@ -31,16 +33,19 @@ export default {
     ...mapState("savedSearches", ["savedSearches", "loading"]),
 
     hasSearches() {
-      return !_.isEmpty(this.savedSearches);
+      return !isEmpty(this.savedSearches.search);
     },
   },
 };
 </script>
 
-<style scoped>
-/deep/ .dropdown-menu {
+<style scoped lang="scss">
+::v-deep .dropdown-menu {
   height: auto;
   max-height: 500px;
   overflow-y: scroll;
+}
+::v-deep .btn-link {
+  color: $dropdown-link-color;
 }
 </style>

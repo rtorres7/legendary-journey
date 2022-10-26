@@ -1,24 +1,24 @@
 <template>
   <div>
-    <b-button v-b-modal.fisa-security-reminder variant="link">
-      FISA, Security & Copyright
+    <b-button v-b-modal._temp_214-security-reminder variant="link">
+      _temp_214, Security & Copyright
     </b-button>
     <b-modal
-      class="fisa-security-reminder"
-      id="fisa-security-reminder"
+      class="_temp_214-security-reminder"
+      id="_temp_214-security-reminder"
       ok-only
       ok-title="Close"
       :static="true"
     >
-      <h2>FISA Material</h2>
+      <h2>_temp_214 Material</h2>
       <p>
         Such information, and any information derived therefrom, may only be
         used in a US legal or administrative proceeding with the advance
         authorization of the Attorney General. Any recipient interested in
         obtaining authorization for such use in a US legal or administrative
-        proceeding should contact FBI Headquarters. Any further dissemination
-        outside of intelligence channels and/or for law enforcement purposes
-        must be made through FBI Headquarters. Any reproduction, dissemination,
+        proceeding should contact _temp_537 Headquarters. Any further dissemination
+        outside of _temp_536 channels and/or for law enforcement purposes
+        must be made through _temp_537 Headquarters. Any reproduction, dissemination,
         or communication (including, but not limited to oral briefings) of this
         information must be accompanied by a statement of these restrictions.
       </p>
@@ -32,26 +32,27 @@
       </p>
       <h2>Copyright Material</h2>
       <p>
-        Material used within this site may be subject to copyright laws. Further
-        reproduction and dissemination by any means, for any purpose other than
-        official business, may be subject to copyright restrictions and is
-        generally prohibited without the permission of the copyright holder.
+        <Copyright />
       </p>
     </b-modal>
   </div>
 </template>
 
 <script>
+import Copyright from "../shared/Copyright";
 export default {
   name: "FisaSecurityReminder",
+  components: {
+    Copyright,
+  },
 };
 </script>
 
 <style scoped lang="scss">
-/deep/ .btn-link {
+::v-deep .btn-link {
   color: $text-light;
 }
-.fisa-security-reminder {
+._temp_214-security-reminder {
   color: $pri-800;
 }
 </style>

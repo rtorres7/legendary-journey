@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style scoped>
->>> .dropdown-menu {
+.dropdown-menu {
   width: 570px;
 }
 </style>

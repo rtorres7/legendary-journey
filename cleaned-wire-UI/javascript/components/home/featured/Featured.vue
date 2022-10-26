@@ -31,17 +31,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import CardViewRow from "@shared/CardViewRow";
-import preloader from "@shared/mixins/preloader";
 import Card from "./Card";
-import { isEmpty } from "lodash";
 import SiteEnhancementCard from "../SiteEnhancementCard";
+import { isEmpty } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   name: "Featured",
   components: { SiteEnhancementCard, Card, CardViewRow },
-  mixins: [preloader],
   computed: {
     ...mapState("articles", ["featured", "more", "siteEnhancement"]),
     all_articles() {
@@ -76,12 +74,6 @@ export default {
         }
       }
       return false;
-    },
-  },
-
-  watch: {
-    featured() {
-      this.preloadResults(_.concat(this.featured, this.more));
     },
   },
 };

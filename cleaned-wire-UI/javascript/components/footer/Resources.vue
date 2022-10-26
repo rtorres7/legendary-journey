@@ -9,8 +9,9 @@
     <template v-for="(resource, ind) in resourceLinks">
       <template v-for="(menuItem, menuId) in resource">
         <b-dropdown-item
-          :href="menuItem.url"
+          :href="menuItem._temp_1"
           :key="`resource_menu_${ind}_${menuId}`"
+          :target="menuItem._temp_1.includes('http') ? '_blank' : '_self'"
         >
           {{ menuItem.label }}
         </b-dropdown-item>

@@ -1,9 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <div
-      v-if="loading && !preloaded"
-      class="d-flex justify-content-center align-items-center loading-area"
-    >
+    <div v-if="loading && !preloaded">
       <spinner />
     </div>
     <div
@@ -24,7 +21,13 @@
 <script>
 import axios from "axios";
 import { mapState } from "vuex";
+import Forbidden from "@shared/errors/Forbidden";
 import NotFound from "@shared/errors/NotFound";
+import NotAcceptable from "@shared/errors/NotAcceptable";
+import RequestTimeout from "@shared/errors/RequestTimeout";
+import InternalServer from "@shared/errors/InternalServer";
+import BadGateway from "@shared/errors/BadGateway";
+import ServiceUnavailable from "@shared/errors/ServiceUnavailable";
 import DisplayRailsError from "@shared/DisplayRailsError";
 import Spinner from "./shared/Spinner";
 
@@ -55,10 +58,25 @@ export default {
     ...mapState("navmodal", ["preload"]),
 
     errorView() {
-      if (this.errored === 404) {
-        return NotFound;
+      switch (this.errored) {
+        case 403:
+          return Forbidden;
+        case 404:
+          return NotFound;
+        case 406:
+          return NotAcceptable;
+        case 408:
+          return RequestTimeout;
+        case 500:
+          return InternalServer;
+        case 502:
+          return BadGateway;
+        case 503:
+          return ServiceUnavailable;
+
+        default:
+          return DisplayRailsError;
       }
-      return DisplayRailsError;
     },
   },
 
@@ -91,7 +109,7 @@ export default {
           this.id = response.headers["x-page-id"]
             ? response.headers["x-page-id"]
             : "railsView";
-          document.title = response.headers["x-page-title"];
+          document.title = response.headers["x-page-title"] || "";
           this.html = response.data;
           this.$Progress.finish();
           this.loading = false;
@@ -138,11 +156,11 @@ export default {
           globalThis.documentEditor.updateSourceElement();
 
           let formData = new FormData($("form#edit_wire_document").get(0));
-          formData.append("commit", event._temp_576.value);
+          formData.append("commit", event.target.value);
 
           axios({
             method: "post",
-            url: that.$route.fullPath.split("/edit")[0],
+            _temp_1: that.$route.fullPath.split("/edit")[0],
             data: formData,
           }).then((response) => {
             that.$Progress.finish();

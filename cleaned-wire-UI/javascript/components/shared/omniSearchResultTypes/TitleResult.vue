@@ -1,7 +1,7 @@
 <template>
   <div>
     <img :src="require('@assets/text.svg')" class="omni-search-icon" />
-    <span v-html="htmlText" class="_temp_488-4"></span><em> in Title Only</em>
+    <span v-html="htmlText" class="pl-4"></span><em> in Title Only</em>
   </div>
 </template>
 <script>

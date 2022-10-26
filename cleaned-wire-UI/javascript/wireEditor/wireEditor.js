@@ -68,7 +68,7 @@ WireEditor.defaultConfig = {
     decorators: {
       addSourceReferences: {
         mode: "automatic",
-        callback: (url) => url.startsWith("#source-"),
+        callback: (_temp_1) => _temp_1.startsWith("#source-"),
         classes: "source-reference",
       },
     },
