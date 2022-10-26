@@ -12,12 +12,12 @@ const buildArray = (item, count, sort_dir) => {
 }
 
 const chinaResult = {
-  "title": "China Restarts Military Drills in Response to Latest U.S. Lawmakers’ Visit to Taiwan",
+  "title": "China Restarts Military Drills in Response to Latest U.S. Lawmakers’ Visit to Taiwan. Taiwan Tensions Escalate as a Result and U.S. is closely watching the situation. Stay tuned to find out more about the tensions that are rising in the continent.",
   "title_classification": "U",
-  "summary": "Not sure what really goes here. Investigate.",
+  "summary": "China’s military responded to the surprise arrival in Taiwan of a new delegation of U.S. lawmakers by announcing a resumption of military drills around the island, in the latest flare-up of tensions in the region. The delegation, led by Senate Foreign Relations Committee member Ed Markey (D., Mass.), met with Taiwanese President Tsai Ing-wen on Monday to discuss maintenance of regional stability and deepening U.S.-Taiwan trade, according to Taiwan’s presidential office. The group arrived in Taipei on Sunday without having...",
   "summary_classification": "U",
-  "highlighted_result": '... Defense Ministry in turn condemned \u003cem\u003eChina\u003c/em\u003e’s latest military exercises as “undermining regional peace and stability” in a statement released Monday evening. It said \u003cem\u003eChina\u003c/em\u003e’s military, the People’s Liberation Army, had sent 30 aircraft on sorties near Taiwan, including 15 that crossed ...',
-  "doc_num": "BBK303597595551226",
+  "highlighted_result": '',
+  "doc_num": "WIReWIRe_sample_",
   "id": "87599999",
   "posted_at": "2022-08-17T14:45:58Z",
   "date_published": "2022-08-17",

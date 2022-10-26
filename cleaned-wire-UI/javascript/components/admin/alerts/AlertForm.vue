@@ -12,11 +12,12 @@
             class="label"
             label="Title"
             aria-live="polite"
-            invalid-feedback="Title cannot be blank."
+            :invalid-feedback="invalidTitleFeedback"
             aria-label="Alert title, cannot be blank"
           >
             <b-input
               ref="titleInput"
+              :maxLength="titleMaxLength + 1"
               :state="notBlank($v.workingForm.title)"
               v-model="$v.workingForm.title.$model"
             />
@@ -28,11 +29,12 @@
             label="Message"
             aria-label="Message text, cannot be blank"
             aria-live="polite"
-            invalid-feedback="Message cannot be blank."
+            :invalid-feedback="invalidMessageFeedback"
           >
             <b-form-textarea
               aria-live="polite"
               :state="notBlank($v.workingForm.message)"
+              :maxLength="messageMaxLength + 1"
               v-model="$v.workingForm.message.$model"
               class="form-control"
               rows="8"
@@ -90,7 +92,7 @@
 import UniversalRangePicker from "@shared/UniversalRangePicker";
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "AlertForm",
@@ -99,13 +101,10 @@ export default {
   props: ["form"],
   data() {
     return {
-      title: "",
-      message: "",
       workingForm: {
         title: "",
         message: "",
       },
-      p: {},
     };
   },
   computed: {
@@ -147,14 +146,36 @@ export default {
         return "Create an Alert";
       }
     },
+    invalidMessageFeedback() {
+      return this.invalidFeedback(
+        this.workingForm.message.length,
+        this.messageMaxLength,
+        "Message"
+      );
+    },
+    invalidTitleFeedback() {
+      return this.invalidFeedback(
+        this.workingForm.title.length,
+        this.titleMaxLength,
+        "Title"
+      );
+    },
+    titleMaxLength() {
+      return this.$v.workingForm.title.$params.maxLength.max;
+    },
+    messageMaxLength() {
+      return this.$v.workingForm.message.$params.maxLength.max;
+    },
   },
   validations: {
     workingForm: {
       title: {
         required,
+        maxLength: maxLength(30),
       },
       message: {
         required,
+        maxLength: maxLength(4000),
       },
     },
   },
@@ -176,8 +197,26 @@ export default {
         .add(7, "days")
         .set({ hour: 23, minute: 59, second: 0 });
     },
+    invalidFeedback(fieldLength, fieldMax, fieldName) {
+      if (fieldLength > fieldMax) {
+        return `${fieldName} cannot exceed ${fieldMax} characters.`;
+      }
+      if (fieldLength === 0) {
+        return `${fieldName} cannot be blank.`;
+      }
+    },
     setFocus() {
       this.$refs.titleInput.focus();
+    },
+    handleError(action, text) {
+      this.$wireNotification({
+        duration: 5000,
+        title: `Error ${action} alert`,
+        text: text
+          ? text
+          : `Unexpected error occurred.  Please refresh page and retry action.`,
+        type: "error",
+      });
     },
     createAlert() {
       axios
@@ -188,20 +227,24 @@ export default {
           message: this.workingForm.message,
         })
         .then((response) => {
-          this.$wireNotification({
-            title: "Create Alert",
-            duration: 5000,
-            text: "Alert successfully created",
-            type: "success",
-          });
-          setTimeout(() => {
-            this.$bus.$emit("repopulateAlertEvent");
-            this.reloadForm(null);
-            this.setFocus();
-          }, 1000);
+          if (response.data.success === true) {
+            this.$wireNotification({
+              title: "Create Alert",
+              duration: 5000,
+              text: "Alert successfully created",
+              type: "success",
+            });
+            this.$nextTick(() => {
+              this.$bus.$emit("repopulateAlertEvent");
+              this.reloadForm(null);
+              this.setFocus();
+            });
+          } else {
+            this.handleError("creating", response.data.details);
+          }
         })
         .catch(() => {
-          throw new Error("Error creating alert");
+          this.handleError("creating");
         });
     },
     updateAlert() {
@@ -213,20 +256,24 @@ export default {
           title: this.workingForm.title,
           message: this.workingForm.message,
         })
-        .then(() => {
-          this.$wireNotification({
-            title: "Update Alert",
-            duration: 5000,
-            text: "Alert successfully Updated",
-            type: "success",
-          });
-          setTimeout(() => {
-            this.$bus.$emit("repopulateAlertEvent");
-            this.reloadForm(null);
-          }, 1000);
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$wireNotification({
+              title: "Update Alert",
+              duration: 5000,
+              text: "Alert successfully Updated",
+              type: "success",
+            });
+            this.$nextTick(() => {
+              this.$bus.$emit("repopulateAlertEvent");
+              this.reloadForm(null);
+            });
+          } else {
+            this.handleError("updating", response.data.details);
+          }
         })
         .catch(() => {
-          throw new Error("Error updating alert");
+          this.handleError("updating");
         });
     },
     onSubmit(evt) {

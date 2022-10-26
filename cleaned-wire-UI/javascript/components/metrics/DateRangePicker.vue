@@ -85,7 +85,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .btn,
+::v-deep .btn,
 .btn:focus {
   border-radius: unset;
 }
@@ -95,7 +95,7 @@ export default {
 .form-group {
   margin: 0;
 }
-/deep/ .b-calendar {
+::v-deep .b-calendar {
   background-color: $pri-800;
 }
 </style>

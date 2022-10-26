@@ -15,10 +15,61 @@
         </div>
       </b-col>
       <b-col class="ml-4 mr-4 card-header card contact-card-title">
-        <h2 class="title-text">Foreign Release</h2>
+        <h2 class="title-text">Product Support</h2>
+        <div class="contact-card-body">For support regarding:</div>
+        <ul>
+          <li>
+            <div class="contact-card-body">
+              _temp_537 analytic products, to include locating _temp_38 contact
+              information:
+            </div>
+            <div class="contact-card-subtitle">
+              <span class="fa fa-envelope-o pr-2" /><a
+                href="mailto:DI_DISSEMINATION_TEAM@_temp_537.IC_temp_54"
+                >DI_DISSEMINATION_TEAM@_temp_537.IC_temp_54</a
+              >
+            </div>
+          </li>
+          <li>
+            <div class="contact-card-body">
+              _temp_537 IIR comments, evaluations, SDRs, and RFIs (to include IDENT
+              requests):
+            </div>
+
+            <div class="contact-card-subtitle">
+              <span class="fa fa-envelope-o pr-2" /><a
+                href="mailto:_temp_537-DIV19-IIRS@_temp_537.IC_temp_54"
+                >_temp_537-DIV19-IIRS@_temp_537.IC_temp_54</a
+              >
+            </div>
+          </li>
+          <li>
+            <div class="contact-card-body">
+              _temp_537 IIR requests for direct declassification:
+            </div>
+            <div class="contact-card-subtitle">
+              <span class="fa fa-envelope-o pr-2" /><a
+                href="mailto:SM_FBI_INTELBRANCH@_temp_537.IC_temp_54"
+                >SM_FBI_INTELBRANCH@_temp_537.IC_temp_54</a
+              >
+            </div>
+          </li>
+          <li>
+            <div class="contact-card-body">
+              _temp_537 IIR requests concerning foreign disclosure and _temp_371 release:
+            </div>
+            <div class="contact-card-subtitle">
+              <span class="fa fa-envelope-o pr-2" /><a
+                href="mailto:_temp_537-FOREIGN-DISCLOSURE-IIRS@_temp_537.IC_temp_54"
+                >_temp_537-FOREIGN-DISCLOSURE-IIRS@_temp_537.IC_temp_54</a
+              >
+            </div>
+          </li>
+        </ul>
         <div class="contact-card-body">
-          Please refer to the product endnotes for proper guidance on foreign
-          release.
+          Please include the serial number and subject line of the report in all
+          correspondence, and advise if the request is time-sensitive and
+          include a date or time frame required for a response.
         </div>
       </b-col>
     </b-row>

@@ -4,13 +4,13 @@
       >{{ roleName }}
       <div
         class="d-flex align-items-center ml-auto"
-        :id="`${role.name}_btn_div`"
+        :id="`${_temp_20.name}_btn_div`"
       >
         <DeleteButton
           v-if="userRole && canManageUserRoles"
-          :url="`/admin/users/${user.id}/roles/${userRole.id}`"
+          :_temp_1="`/admin/users/${user.id}/roles/${userRole.id}`"
           :label="roleName"
-          type="role"
+          type="_temp_20"
           :caller="this"
         />
         <b-button
@@ -18,19 +18,19 @@
           variant="link"
           @click="addRole"
         >
-          Add <span class="sr-only">{{ roleName }} </span>Role</b-button
+          Add <span class="sr-only">{{ roleName }} </span>_temp_20</b-button
         >
       </div>
     </b-row>
     <div :class="`user-card-body mt-3 mb-${userRole ? '2' : '5'}`">
-      {{ role.description }}
+      {{ _temp_20.description }}
     </div>
     <div class="user-card-subtitle" v-if="userRole">
       Granted By: {{ userRole.assigned_by }} on {{ grantDate }}
     </div>
     <div
       class="user-card-subtitle"
-      v-if="role.subroles && role.subroles.length > 0"
+      v-if="_temp_20.subroles && _temp_20.subroles.length > 0"
     >
       Grants these subroles: {{ subRoles }}
     </div>
@@ -55,19 +55,19 @@ export default {
       type: Object,
       required: true,
     },
-    role: {
+    _temp_20: {
       type: Object,
       required: true,
     },
   },
 
   computed: {
-    ...mapGetters("user", { currentUser: "user" }),
+    ...mapGetters("user", ["canManageUserRoles"]),
     userRole() {
-      return find(this.user.roles, ["name", this.role.name]);
+      return find(this.user.roles, ["name", this._temp_20.name]);
     },
     roleName() {
-      return this.properCase(this.role.name);
+      return this.properCase(this._temp_20.name);
     },
     grantDate() {
       return this.$moment(this.userRole.updated_at).format(
@@ -75,15 +75,9 @@ export default {
       );
     },
     subRoles() {
-      return this.role.subroles
+      return this._temp_20.subroles
         .map((subrole) => this.properCase(subrole))
         .join(", ");
-    },
-    canManageUserRoles() {
-      if (this.currentUser.roles) {
-        return this.currentUser.roles.includes("role_manager");
-      }
-      return false;
     },
   },
   methods: {
@@ -92,13 +86,13 @@ export default {
     },
     addRole() {
       this.$store.dispatch("users/addUserRole", {
-        userRole: { user_id: this.user.id, name: this.role.name },
+        userRole: { user_id: this.user.id, name: this._temp_20.name },
         caller: this,
       });
     },
     deleted() {
       this.$wireNotification({
-        title: "Role Deleted",
+        title: "_temp_20 Deleted",
         duration: 5000,
         text: this.roleName + " removed",
         type: "success",
@@ -107,9 +101,9 @@ export default {
     },
     deletionFailed() {
       this.$wireNotification({
-        title: "Removing User Role Failed",
+        title: "Removing User _temp_20 Failed",
         duration: 5000,
-        text: "Failed to remove role '" + this.roleName + "'",
+        text: "Failed to remove _temp_20 '" + this.roleName + "'",
         type: "error",
       });
       this.$emit("roleUpdated");

@@ -7,17 +7,17 @@
       </div>
     </div>
 
-    <UserState :user="user" v-if="canManageUser || canManageUserRoles" />
+    <UserState :user="user" v-if="canViewUserDetails" />
 
     <b-container class="standard-page-margin mt-8">
-      <b-row class="_temp_488-0 mr-auto" v-if="canManageUser || canManageUserRoles">
-        <b-col cols="8" class="pb-8">
+      <b-row class="pl-0" v-if="canViewUserDetails">
+        <b-col cols="12" xl="8" class="pb-8">
           <h2 class="info-title d-flex separator pb-2">Personal Info</h2>
           <div class="info-details">
             <label>Rank:</label> {{ user.rank }}<br />
             <label>Full Name:</label> {{ user.name }}<br />
-            <label>Secure Phone:</label> {{ user.secure_phone }}<br />
-            <label>Email:</label> {{ user.email }}<br />
+            <label>Secure _temp_36:</label> {{ user.secure_phone }}<br />
+            <label>_temp_37:</label> {{ user._temp_37 }}<br />
             <label>Nationality:</label> {{ user.nationality }}<br />
             <label>ID:</label> {{ user.id }}<br />
             <label>Employee Type:</label> {{ user.employee_type }}<br />
@@ -25,8 +25,18 @@
             <label>Category:</label> {{ user.category }}<br />
           </div>
         </b-col>
-        <b-col cols="8" class="_temp_488-6">
-          <h2 class="info-title d-flex separator pb-2">Need-To-Know</h2>
+
+        <b-col cols="12" xl="8" class="pl-6">
+          <h2 class="info-title d-flex separator pb-2">
+            Need-To-Know
+            <b-btn
+              v-if="hasUserSupportRole"
+              variant="secondary"
+              class="d-flex ml-auto"
+              @click="fsdLookup(null, user.dn)"
+              >FSD Lookup</b-btn
+            >
+          </h2>
           <div class="info-details">
             <label>Home Org:</label> {{ user.home_org_path }}<br />
             <label>NTK Lock:</label>
@@ -39,13 +49,14 @@
             {{ yesOrNo(user.ntk_expiration_exemption) }}<br />
           </div>
         </b-col>
-        <b-col cols="8" class="_temp_488-6">
+
+        <b-col cols="12" xl="8" class="pl-6">
           <h2 class="info-title d-flex separator pb-2">
             User Roles<b-button
               class="d-flex ml-auto"
-              variant="secondary"
+              variant="primary"
               v-if="canManageUserRoles"
-              role="button"
+              _temp_20="button"
               :to="`/admin/users/${userId}/roles`"
               >Manage Roles</b-button
             >
@@ -53,12 +64,12 @@
           <b-button
             variant="light"
             class="pill badge badge-pill mb-2 mr-2"
-            v-for="role in user.roles"
-            :key="role.id"
+            v-for="_temp_20 in user.roles"
+            :key="_temp_20.id"
             :disabled="!canManageUserRoles"
-            @click="removeRole(role)"
+            @click="removeRole(_temp_20)"
           >
-            {{ titleCase(role.name) }}<span class="sr-only"> delete</span>
+            {{ titleCase(_temp_20.name) }}<span class="sr-only"> delete</span>
             <img
               :src="require('@assets/delete-icon.svg')"
               class="delete-icon mr-1"
@@ -67,10 +78,12 @@
             />
           </b-button>
         </b-col>
-        <b-col cols="8">
+
+        <b-col cols="12" xl="8">
           <UserLockAndExemption />
         </b-col>
-        <b-col cols="8" class="_temp_488-6">
+
+        <b-col cols="12" xl="8" class="pl-6">
           <h2 class="info-title d-flex separator mt-6 pb-2">Recent Activity</h2>
           <div class="info-details">
             <label>First Daily Login:</label>
@@ -85,7 +98,8 @@
             }}<br />
           </div>
         </b-col>
-        <b-col cols="8" class="_temp_488-6">
+
+        <b-col cols="12" xl="8" class="pl-6">
           <h2 class="info-title d-flex separator mt-6 pb-2">Subscriptions</h2>
           <div class="info-details">
             <label>Revisions Subscription:</label>
@@ -95,6 +109,7 @@
           </div>
         </b-col>
       </b-row>
+
       <b-row v-else> You are not authorized to view the user's details. </b-row>
     </b-container>
   </div>
@@ -123,59 +138,63 @@ export default {
   },
   computed: {
     ...mapGetters("user", { currentUser: "user" }),
-    ...mapGetters("users", ["loading"]),
-    ...mapGetters("users", ["user"]),
+    ...mapGetters("user", ["canManageUser", "canManageUserRoles"]),
+    ...mapGetters("users", ["loading", "user"]),
     ...mapState("metadata", ["name"]),
     userId() {
       return this.$route.params.id;
     },
-    canManageUser() {
-      if (this.currentUser.roles) {
-        return this.currentUser.roles.includes("user_support");
-      }
-      return false;
+    canViewUserDetails() {
+      return this.canManageUser || this.canManageUserRoles;
     },
-    canManageUserRoles() {
-      if (this.currentUser.roles) {
-        return this.currentUser.roles.includes("role_manager");
-      }
-      return false;
+    hasUserSupportRole() {
+      return this.canManageUser;
     },
   },
   methods: {
+    fsdLookup(cert, cn) {
+      this.$router.push({ name: "FSDTool", params: { cn: cn, cert: cert } });
+    },
     formattedDate(value) {
       if (value) {
         return this.$moment(value).format("MMMM DD, YYYY HH:mm");
       }
     },
-    titleCase(role) {
-      return map(role.split("_"), capitalize).join(" ");
+    titleCase(_temp_20) {
+      return map(_temp_20.split("_"), capitalize).join(" ");
     },
     yesOrNo(value) {
       return value ? "Yes" : "No";
     },
     loadUser() {
-      if (this.canManageUser || this.canManageUserRoles) {
-        this.$store.dispatch("users/loadUser", {
-          userId: this.userId,
-          caller: this,
-        });
-      }
+      this.$store.dispatch("users/loadUser", {
+        userId: this.userId,
+        caller: this,
+      });
     },
     removeRole(userRole) {
       if (this.canManageUserRoles) {
-        this.$store.dispatch("users/removeUserRole", {
-          userRole: userRole,
-          caller: this,
-        });
+        this.$store
+          .dispatch("users/removeUserRole", {
+            userRole: userRole,
+            caller: this,
+          })
+          .then(() => {
+            if (this.currentUser.id === this.user.id) {
+              setTimeout(
+                function () {
+                  this.$bus.$emit("reloadAdminOptions");
+                  this.$store.dispatch("user/loadUser");
+                }.bind(this),
+                1000
+              );
+            }
+          });
       }
     },
   },
   watch: {
     userId() {
-      this.loadUser();
-    },
-    currentUser() {
       this.loadUser();
     },
   },
@@ -186,16 +205,16 @@ export default {
 .user-search {
   padding-bottom: 6rem;
 }
-/deep/ .pill-row-icon {
+::v-deep .pill-row-icon {
   height: 14px;
   width: 14px;
 }
-/deep/ .reset-icon,
-/deep/ .save-icon {
+::v-deep .reset-icon,
+::v-deep .save-icon {
   width: 16px;
   height: 16px;
 }
-/deep/ .pill-button-text {
+::v-deep .pill-button-text {
   margin-left: 4px;
   font-size: $font-size-1;
   color: $pri-800;
@@ -232,22 +251,22 @@ label {
 .pill {
   font-size: $font-size-1;
 }
-/deep/ .pill-container:only-child {
+::v-deep .pill-container:only-child {
   .badge-pill {
     min-width: 70px;
   }
 }
-/deep/ .badge-pill {
+::v-deep .badge-pill {
   border-color: $alt-700;
   .fa {
     margin-left: 1px;
   }
 }
-/deep/ .double-emphasis {
+::v-deep .double-emphasis {
   font-weight: 500;
   font-style: italic;
 }
-/deep/ .btn-light:focus {
+::v-deep .btn-light:focus {
   box-shadow: 0 0 0 0.2rem $alt-500;
 }
 .delete-icon {

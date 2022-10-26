@@ -57,8 +57,5 @@ export default {
     setExports(state, data) {
       state.exports = data;
     },
-    setLoadingTrue(state, data) {
-      state.exports = data;
-    },
   },
 };

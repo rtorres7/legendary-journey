@@ -1,10 +1,7 @@
 <template>
   <div ref="results">
     <h3 class="sr-only">Results</h3>
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center align-items-center loading-area"
-    >
+    <div v-if="loading">
       <spinner />
     </div>
     <div v-if="totalCount === 0">
@@ -30,9 +27,9 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapState } from "vuex";
 import Compact from "./compact/Compact";
-import _temp_369 from "./_temp_369/_temp_369";
+import Cozy from "./cozy/Cozy";
 import Visuals from "./visuals";
 import NoResults from "./NoResults";
 import Spinner from "../shared/Spinner";
@@ -46,10 +43,11 @@ export default {
     componentToShow() {
       let viewMap = {
         list: Compact,
-        grid: _temp_369,
+        grid: Cozy,
         visuals: Visuals,
       };
-      let urlView = this.$store.state.route.query?.view;
+
+      let urlView = this.$route.query?.view;
       return urlView ? viewMap[urlView] : Compact;
     },
 
@@ -59,8 +57,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations("search", "setPage"),
-
     paginationLink(pageNum) {
       var query = Object.assign({}, this.$route.query);
       query.page = pageNum;

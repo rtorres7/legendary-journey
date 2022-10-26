@@ -6,8 +6,13 @@
     @mouseleave="focused = false"
   >
     <div id="overlay-box">
-      <img :src="imageUrl" class="image-style p-2" />
-
+      <img :src="imageUrl" class="image-style p-2" v-if="article.thumbnail" />
+      <img
+        v-else
+        :src="require('@/assets/WIRe-BG-image-TOP.jpg')"
+        width="64px"
+        height="64px"
+      />
       <div class="d-flex flex-column image-box" :class="{ overlay: focused }">
         <div :id="article.doc_num + '-title'" class="m-auto title">
           {{ article.label }}
@@ -15,8 +20,6 @@
         <div class="mt-auto mx-0 py-3 d-flex links">
           <div class="ml-auto pr-3">
             <a
-              @focus.native="focused = true"
-              @blur.native="focused = false"
               @click.stop.prevent
               @click="openWindow"
               :href="routerLink()"
@@ -27,7 +30,7 @@
             </a>
           </div>
           <div>|</div>
-          <div class="_temp_488-3 mr-auto">
+          <div class="pl-3 mr-auto">
             <router-link
               @focus.native="focused = true"
               @blur.native="focused = false"
@@ -67,11 +70,7 @@ export default {
   methods: {
     routerLink() {
       return this.$router.resolve(
-        "/documents/" +
-          this.article.doc_num +
-          "/attachments/" +
-          this.article.file_name +
-          "?popup=true"
+        this.attachmentsPath + this.article.file_name + "?popup=true"
       ).href;
     },
 
@@ -94,14 +93,12 @@ export default {
   },
 
   computed: {
+    attachmentsPath() {
+      return `/documents/${this.article.doc_num}/attachments/`;
+    },
+
     imageUrl() {
-      return (
-        "/documents/" +
-        this.article.doc_num +
-        "/attachments/" +
-        this.article.id +
-        "/thumbnail"
-      );
+      return this.attachmentsPath + this.article.id + "/thumbnail";
     },
   },
 };
@@ -148,20 +145,20 @@ export default {
   color: transparent;
 }
 
-.overlay {
+::v-deep .overlay {
   background-color: $pri-900-transparent;
   color: $text-light;
 
-  /deep/ a {
+  a {
     color: $text-light;
   }
 
-  /deep/ a:focus {
+  a:focus {
     text-decoration: underline;
     outline: 0;
   }
 
-  /deep/ a:visited {
+  a:visited {
     color: $alt-600;
   }
 
@@ -169,7 +166,7 @@ export default {
     background-color: $pri-900-transparent;
   }
 }
-/deep/ a {
+::v-deep a {
   color: transparent;
 }
 </style>

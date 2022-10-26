@@ -8,16 +8,13 @@
       <b-row class="standard-page-margin">
         <b-col class="mb-8">
           <b-row class="d-flex justify-content-start separator mt-6 mb-4">
-            <h2 class="form-title">Reach Out</h2>
+            <h2 class="form-title">Questions and Concerns</h2>
           </b-row>
           <p class="mb-6">
-            For questions or support please fill out the form below and our
-            support team will reach out within 24-48 hours.
+            For any other questions, please complete the form below, and our
+            support team will reach out within one or two business days.
           </p>
-          <div
-            v-if="this.loading"
-            class="d-flex justify-content-center align-items-center loading-area"
-          >
+          <div v-if="this.loading">
             <spinner />
           </div>
           <b-form v-else @submit.prevent="onSubmit">
@@ -34,13 +31,13 @@
               <b-col class="pr-4 pb-4" cols="12">
                 <b-form-group
                   class="label"
-                  aria-label="Contact Email"
-                  label="Email"
-                  invalid-feedback="Contact Email is required."
+                  aria-label="Contact _temp_37"
+                  label="_temp_37"
+                  invalid-feedback="Contact _temp_37 is required."
                 >
                   <b-input
-                    v-model="$v.feedback.email.$model"
-                    :state="notBlank($v.feedback.email)"
+                    v-model="$v.feedback._temp_37.$model"
+                    :state="notBlank($v.feedback._temp_37)"
                   />
                 </b-form-group>
               </b-col>
@@ -56,10 +53,10 @@
               <b-col class="pr-4 pb-4" cols="12">
                 <b-form-group
                   class="label"
-                  aria-label="Contact Phone Number"
-                  label="Phone"
+                  aria-label="Contact _temp_36 Number"
+                  label="_temp_36"
                 >
-                  <b-input v-model="feedback.phone" />
+                  <b-input v-model="feedback._temp_36" />
                 </b-form-group>
               </b-col>
               <b-col class="pr-4 pb-4" cols="24">
@@ -67,7 +64,7 @@
                   class="label"
                   label="Comments"
                   aria-live="polite"
-                  invalid-feedback="Comment cannot be blank."
+                  :invalid-feedback="invalidFeedback"
                 >
                   <b-form-textarea
                     aria-label="Comment text, cannot be blank"
@@ -100,7 +97,12 @@
                     </b-form-group>
                   </b-col>
                   <b-col class="ml-auto justify-content-end" cols="auto">
-                    <b-btn variant="primary" type="submit">Submit</b-btn>
+                    <b-btn
+                      variant="primary"
+                      type="submit"
+                      :disabled="$v.$invalid"
+                      >Submit</b-btn
+                    >
                   </b-col>
                 </b-row>
               </b-col>
@@ -119,24 +121,21 @@
 <script>
 import Spinner from "../shared/Spinner";
 import VanityTitle from "../vanity/VanityTitle";
-import SelectAll from "../selectWithinResults/SelectAll";
-import { capitalize } from "lodash";
 import Classify from "@shared/Classify";
 import ContactUsDetailsCiawire from "./ContactUsDetailsCiawire";
 import ContactUsResourcesCiawire from "./ContactUsResourcesCiawire";
 import ContactUsDetailsBluekey from "./ContactUsDetailsBluekey";
 import ContactUsResourcesBluekey from "./ContactUsResourcesBluekey";
 import axios from "axios";
+import { capitalize } from "lodash";
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
-import { mapGetters } from "vuex";
-import { mapState } from "vuex";
+import { required, maxLength } from "vuelidate/lib/validators";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "ContactUs",
   mixins: [validationMixin],
   components: {
-    SelectAll,
     VanityTitle,
     Spinner,
     Classify,
@@ -149,7 +148,7 @@ export default {
     return {
       commentClassification: this.blankClassification(),
       feedback: {
-        email: "",
+        _temp_37: "",
         comment: "",
       },
     };
@@ -167,13 +166,33 @@ export default {
     capitalizedProject() {
       return capitalize(this.project);
     },
+    commentMaxLength() {
+      return this.$v.feedback.comment.$params.maxLength.max;
+    },
+    invalidFeedback() {
+      if (this.feedback.comment.length > this.commentMaxLength) {
+        return `Comment cannot exceed ${this.commentMaxLength} characters.`;
+      }
+      if (this.feedback.comment.length === 0) {
+        return "Comment cannot be blank.";
+      }
+    },
   },
   validations: {
     feedback: {
       comment: {
         required,
+        maxLength: maxLength(4000),
       },
-      email: {
+      _temp_37: {
+        required,
+      },
+    },
+    commentClassification: {
+      classification_string: {
+        required,
+      },
+      classification_xml: {
         required,
       },
     },
@@ -198,9 +217,9 @@ export default {
         .post("/feedback", {
           body: this.feedback.comment,
           name: this.feedback.name,
-          email: this.feedback.email,
+          _temp_37: this.feedback._temp_37,
           organization: this.feedback.organization,
-          phone: this.feedback.phone,
+          _temp_36: this.feedback._temp_36,
           classification: this.commentClassification.classification_string,
           classification_xml: this.commentClassification.classification_xml,
           priority: 0,
@@ -237,8 +256,8 @@ export default {
     },
     loadFeedback() {
       this.feedback.name = this.currentUser.name;
-      this.feedback.email = this.currentUser.email;
-      this.feedback.phone = this.currentUser.phone_number;
+      this.feedback._temp_37 = this.currentUser._temp_37;
+      this.feedback._temp_36 = this.currentUser.phone_number;
       this.feedback.organization = this.currentUser.organization;
     },
   },

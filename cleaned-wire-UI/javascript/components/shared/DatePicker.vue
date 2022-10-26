@@ -83,7 +83,12 @@ export default {
     ...mapState("metadata", ["featuresAvailable"]),
     date: {
       get() {
-        return this.$route.params.date ? this.$route.params.date : new Date();
+        if (this.$route.params.date) {
+          return this.$route.params.date;
+        } else {
+          this.selectedDate = this.inputDate = null;
+          return new Date();
+        }
       },
       set(val) {
         this.$router.push({
@@ -119,7 +124,7 @@ export default {
     },
 
     getDates() {
-      axios.get("wires/get_valid_dates").then((result) => {
+      axios.get("/wires/get_valid_dates").then((result) => {
         this.validDates = result.data.wires.map((wire) => {
           return Date.parse(wire.publication_date);
         });
@@ -140,19 +145,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .flatpickr-wrapper {
+::v-deep .flatpickr-wrapper {
   position: absolute;
 }
 .cursor-pointer {
   cursor: pointer;
 }
-
 #page-date-title h2 {
   margin-bottom: 0;
 }
-
 .btn-secondary {
-  color: $text-dark;
   background-color: unset;
   border: unset;
   padding-top: 0;
@@ -162,15 +164,14 @@ export default {
     box-shadow: 0 0 0 0.2rem $alt-500;
   }
 }
-
-/deep/.btn-outline-secondary {
+::v-deep .btn-outline-secondary {
   color: $text-dark;
 }
 .calendar-icon {
   height: 20px;
   width: 20px;
 }
-/deep/ .modal-header-title {
+::v-deep .modal-header-title {
   color: $pri-800;
   font-size: $font-size-5;
 }

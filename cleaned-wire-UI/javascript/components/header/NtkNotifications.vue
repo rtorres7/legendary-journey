@@ -2,7 +2,7 @@
   <div
     v-if="!this.loading && this.notificationActive"
     id="ntk_advert"
-    class="alerts-banner"
+    class="alerts-_temp_519"
     :class="'alert-' + ntkNotification.type"
   >
     <b-alert
@@ -23,8 +23,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import AlertIcon from "@shared/AlertIcon";
+import { isEmpty } from "lodash";
+import { mapState } from "vuex";
 
 export default {
   name: "NtkNotifications",
@@ -38,7 +39,9 @@ export default {
       }
     },
     notificationActive() {
-      return !_.isEmpty(this.ntkNotification) && !$cookies.get(this.cookieText);
+      return (
+        !isEmpty(this.ntkNotification) && !this.$cookies.get(this.cookieText)
+      );
     },
     cookieText() {
       return (

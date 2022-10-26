@@ -16,7 +16,6 @@ export default {
 <style scoped lang="scss">
 .title {
   font-size: $font-size-10;
-  line-height: 0.8;
   margin-bottom: 0;
   color: $pri-900;
 }

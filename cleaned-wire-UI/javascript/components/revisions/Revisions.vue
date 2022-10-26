@@ -24,17 +24,14 @@
                 {{ revisionYear }}
               </b-dropdown-item>
             </b-dropdown>
-            <SubscribeRevisions class="_temp_488-3" />
+            <SubscribeRevisions class="pl-3" />
           </b-row>
 
           <div class="results d-flex justify-content-center" aria-live="polite">
             <div v-if="loading">Loading results ...</div>
             <div v-else>{{ resultsDisplay() }}</div>
           </div>
-          <div
-            v-if="loading"
-            class="d-flex justify-content-center align-items-center loading-area"
-          >
+          <div v-if="loading">
             <spinner />
           </div>
           <b-row
@@ -67,11 +64,11 @@
           </b-row>
         </b-col>
         <b-col cols="24" md="6">
-          <div class="_temp_488-6 revision-policy">
+          <div class="pl-6 revision-policy">
             <h2 class="d-flex justify-content-center">Revision Policy</h2>
             <span class="d-flex justify-content-center">&mdash;</span>
             <p>
-              Excellence and integrity are core _temp_28 values. If we fail to
+              Excellence and integrity are core _temp_6 values. If we fail to
               acknowledge and correct our mistakes, we harm the Agency's
               credibility as a trusted information provider. The WIRe staff is
               committed to—and accountable for—accuracy in our featured (front
@@ -90,7 +87,7 @@
               We welcome your assistance in identifying errors in our featured
               content; if you spot a mistake please use the private comment
               feature or
-              <a class="contact-link" href="mailto:ciawire-Mailbox@_temp_28.ic.gov"
+              <a class="contact-link" href="mailto:_temp_540-Mailbox@_temp_6._temp_0"
                 >send us a note</a
               >.
             </p>
@@ -205,24 +202,24 @@ export default {
   font-family: $heading-stylized;
   font-size: $font-size-4;
 }
-/deep/ .after-link-text {
+::v-deep .after-link-text {
   font-family: $font-family-heading;
   color: $pri-600;
   font-size: $font-size-4;
   white-space: normal;
   white-space: pre;
 }
-/deep/ .after-link-text-locked {
+::v-deep .after-link-text-locked {
   font-family: $font-family-heading;
   color: $alt-900;
   font-size: $font-size-4;
   white-space: normal;
   white-space: pre;
 }
-/deep/ .locked {
+::v-deep .locked {
   padding-left: 5px;
 }
-/deep/ .document_link {
+::v-deep .document_link {
   // for locked document link
   font-size: $font-size-4;
   padding-left: 5px;
@@ -231,7 +228,7 @@ export default {
   color: $alt-800;
   text-transform: uppercase;
 }
-/deep/ .dropdown-menu {
+::v-deep .dropdown-menu {
   min-width: 0rem;
 }
 </style>

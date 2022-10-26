@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex my-4">
-    <h2 class="sr-only">Main Search Criteria</h2>
+    <h2 class="sr-only">SDS Search Criteria</h2>
     <b-row class="flex-grow-1">
       <template v-for="(searchFilter, index) in searchFilters">
         <component
@@ -108,7 +108,7 @@ export default {
   methods: {
     columnProperties(componentName, index) {
       if (componentName === "KeywordAndDate") {
-        // reduce columns size to make room for fisa/_temp_489/usper
+        // reduce columns size to make room for fisa/poa/usper
         let properties = Object.assign({}, this.keywordSizes);
         if (this.useAlternateLayout) {
           properties["lg"] = 7;
@@ -135,7 +135,7 @@ export default {
           properties["offset-xl"] = 0;
         }
 
-        // adjust columns to make room for fisa/_temp_489/usper
+        // adjust columns to make room for fisa/poa/usper
         if (this.useAlternateLayout) {
           // make classification and producing division smaller
           if (colNum === 5 || colNum === 6) {
@@ -176,7 +176,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ label {
+::v-deep label {
   font-size: $font-size-3;
   font-family: $font-family-heading;
   font-weight: 700;
@@ -196,7 +196,7 @@ export default {
   transform: rotate(180deg);
 }
 
-/deep/ legend.col-form-label {
+::v-deep legend.col-form-label {
   font-size: $font-size-3;
   font-family: $font-family-heading;
   font-weight: 700;

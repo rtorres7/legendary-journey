@@ -3,14 +3,14 @@
     <div v-if="!loading" class="d-flex flex-column flex-md-row">
       <div>
         <Issue
-          v-for="(issue, ind) in issues.slice(0, 6)"
+          v-for="(issue, ind) in issues.slice(0, 5)"
           :key="ind"
           :display="issue.name"
         />
       </div>
       <div>
         <Issue
-          v-for="(issue, ind) in issues.slice(6, issues.length)"
+          v-for="(issue, ind) in issues.slice(5, issues.length)"
           :key="ind"
           :display="issue.name"
         />
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style scoped>
->>> .dropdown-menu {
-  width: 570px;
+.dropdown-menu {
+  width: 500px;
 }
 </style>

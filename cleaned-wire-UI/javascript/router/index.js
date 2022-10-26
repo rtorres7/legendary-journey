@@ -1,35 +1,51 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import Exports from "../components/exports/Exports";
-import Accessibility from "../components/accessibility/Accessibility";
 import RailsView from "../components/RailsView";
-import Search from "../components/search/Search";
-import Regions from "../components/vanity/Regions";
-import Subregions from "../components/vanity/Subregions";
-import Countries from "../components/vanity/Countries";
-import Leadership from "../components/vanity/Leadership";
-import Home from "../components/home/Home";
-import Issues from "../components/vanity/Issues";
-import NotFound from "../components/shared/errors/NotFound";
-import Forbidden from "../components/shared/errors/Forbidden";
-import NotAcceptable from "../components/shared/errors/NotAcceptable";
-import RequestTimeout from "../components/shared/errors/RequestTimeout";
-import InternalServer from "../components/shared/errors/InternalServer";
-import BadGateway from "../components/shared/errors/BadGateway";
-import ServiceUnavailable from "../components/shared/errors/ServiceUnavailable";
-import NavModal from "../components/navmodal/NavModal";
+import Accessibility from "../components/accessibility/Accessibility";
+import ContactUs from "../components/contactUs/ContactUs";
+import DocumentPreview from "../components/document/DocumentPreview";
+import ReviewDocumentFeedback from "../components/documentFeedback/ReviewDocumentFeedback";
+import Exports from "../components/exports/Exports";
 import Folders from "../components/folders/Folders";
+import Home from "../components/home/Home";
+import NavModal from "../components/navmodal/NavModal";
+import Revisions from "../components/revisions/Revisions";
+import Search from "../components/search/Search";
+import BadGateway from "../components/shared/errors/BadGateway";
+import Forbidden from "../components/shared/errors/Forbidden";
+import InternalServer from "../components/shared/errors/InternalServer";
+import NotAcceptable from "../components/shared/errors/NotAcceptable";
+import NotFound from "../components/shared/errors/NotFound";
+import RequestTimeout from "../components/shared/errors/RequestTimeout";
+import ServiceUnavailable from "../components/shared/errors/ServiceUnavailable";
 import MyTags from "../components/tags/MyTags";
 import Tag from "../components/tags/Tag";
 import Tags from "../components/tags/Tags";
 import TagResults from "../components/tags/TagResults";
-import UserSearch from "../components/users/UserSearch";
 import UserDetails from "../components/users/UserDetails";
 import UserRoles from "../components/users/UserRoles";
-import Revisions from "../components/revisions/Revisions";
+import UserSearch from "../components/users/UserSearch";
+import Countries from "../components/vanity/Countries";
+import Issues from "../components/vanity/Issues";
+import Leadership from "../components/vanity/Leadership";
+import Regions from "../components/vanity/Regions";
+import Subregions from "../components/vanity/Subregions";
 import ManageAlerts from "../components/admin/alerts/ManageAlerts";
-import ContactUs from "../components/contactUs/ContactUs";
+import AuthenticationFailureDetails from "../components/admin/authenticationFailures/AuthenticationFailureDetails";
+import AuthenticationFailures from "../components/admin/authenticationFailures/AuthenticationFailures";
+import BackgroundJob from "../components/admin/BackgroundJob";
+import BackgroundJobs from "../components/admin/BackgroundJobs";
+import ProductTypes from "../components/admin/productTypes/ProductTypes";
+import FSDTool from "../components/admin/FSDTool/FSDTool";
+import RoleMembership from "../components/roles/RoleMembership";
+import IngestStatus from "../components/admin/IngestStatus";
+import Feeds from "../components/admin/feeds/Feeds";
+import ProducingOffices from "../components/admin/producingOffices/ProducingOffices";
+import SpecialEdition from "../components/specialEditions/SpecialEdition";
+import SpecialEditions from "../components/specialEditions/SpecialEditions";
+import SystemFeedback from "../components/admin/feedback/SystemFeedback";
+import WireBook from "../components/wires/WireBook";
 
 Vue.use(Router);
 
@@ -47,9 +63,21 @@ export default new Router({
     {
       path: "/wires/new",
       name: "new_wire",
-      component: RailsView,
-      metadata: {
-        announce: "new wire",
+      component: WireBook,
+      meta: {
+        title: (route) => {
+          return "Table of Contents";
+        },
+      },
+    },
+    {
+      path: "/wires/:date/edit",
+      name: "edit_wire",
+      component: WireBook,
+      meta: {
+        title: (route) => {
+          return `Table of Contents for ${route.params.date}`;
+        },
       },
     },
     {
@@ -83,6 +111,16 @@ export default new Router({
       },
     },
     {
+      path: "/feedback_reviews",
+      name: "feedback_reviews",
+      component: ReviewDocumentFeedback,
+      meta: {
+        title: (route) => {
+          return "Review Document Feedback";
+        },
+      },
+    },
+    {
       path: "/my_wire/folders",
       name: "folders",
       component: Folders,
@@ -103,12 +141,52 @@ export default new Router({
       },
     },
     {
+      path: "/admin/authentication_failures",
+      name: "authenticationFailures",
+      component: AuthenticationFailures,
+      meta: {
+        title: (route) => {
+          return "Review Authentication Failures";
+        },
+      },
+    },
+    {
+      path: "/admin/authentication_failures/:id",
+      name: "authenticationFailureDetails",
+      component: AuthenticationFailureDetails,
+      meta: {
+        title: (route) => {
+          return "Authentication Failure Report";
+        },
+      },
+    },
+    {
+      path: "/admin/fsd",
+      name: "FSDTool",
+      component: FSDTool,
+      meta: {
+        title: (route) => {
+          return "Admin FSD";
+        },
+      },
+    },
+    {
+      path: "/admin/recommended_feeds",
+      name: "feeds",
+      component: Feeds,
+      meta: {
+        title: (route) => {
+          return "Manage Recommended Feeds";
+        },
+      },
+    },
+    {
       path: "/admin/users",
       name: "usersearch",
       component: UserSearch,
       meta: {
         title: (route) => {
-          return "User Search";
+          return "Manage User Accounts";
         },
       },
     },
@@ -118,7 +196,7 @@ export default new Router({
       component: UserDetails,
       meta: {
         title: (route) => {
-          return "User Details";
+          return "Manage User Details";
         },
       },
     },
@@ -128,7 +206,37 @@ export default new Router({
       component: UserRoles,
       meta: {
         title: (route) => {
-          return "User Roles";
+          return "Manage User Roles";
+        },
+      },
+    },
+    {
+      path: "/admin/ingest",
+      name: "ingestStatus",
+      component: IngestStatus,
+      meta: {
+        title: (route) => {
+          return "Ingest Status";
+        },
+      },
+    },
+    {
+      path: "/admin/jobs",
+      name: "backgroundJobs",
+      component: BackgroundJobs,
+      meta: {
+        title: (route) => {
+          return "Background Jobs Status";
+        },
+      },
+    },
+    {
+      path: "/admin/jobs/:id",
+      name: "jobDetails",
+      component: BackgroundJob,
+      meta: {
+        title: (route) => {
+          return "Background Job Details";
         },
       },
     },
@@ -143,12 +251,53 @@ export default new Router({
       },
     },
     {
+      path: "/admin/product_types",
+      name: "productTypes",
+      component: ProductTypes,
+      meta: {
+        title: (route) => {
+          return "Manage Product Types";
+        },
+      },
+    },
+    {
+      path: "/admin/producing_offices",
+      name: "producingOffices",
+      component: ProducingOffices,
+      meta: {
+        title: (route) => {
+          return "Manage Producing Offices";
+        },
+      },
+    },
+    {
       path: "/contact_us",
       name: "contact_us",
       component: ContactUs,
       meta: {
         title: (route) => {
           return "Contact Us";
+        },
+      },
+    },
+
+    {
+      path: "/admin/roles",
+      name: "role_membership",
+      component: RoleMembership,
+      meta: {
+        title: (route) => {
+          return "Review _temp_20 Membership";
+        },
+      },
+    },
+    {
+      path: "/system_feedback",
+      name: "systemFeedback",
+      component: SystemFeedback,
+      meta: {
+        title: (route) => {
+          return "Review System Feedback";
         },
       },
     },
@@ -340,6 +489,27 @@ export default new Router({
       pathToRegexpOptions: { strict: true },
     },
     {
+      path: "/documents/:docNum/preview",
+      name: "documentPreview",
+      component: DocumentPreview,
+      meta: {
+        title: (route) => {
+          return `Document Preview for ${route.params.docNum}`;
+        },
+      },
+    },
+    {
+      path: "/documents/:docNum/preview.html",
+      //redirect: to => { return "/documents/:docNum/preview" },
+      name: "icpsDocPreview",
+      component: DocumentPreview,
+      meta: {
+        title: (route) => {
+          return `Document Preview for ${route.params.docNum}`;
+        },
+      },
+    },
+    {
       path: "/accessibility",
       name: "accessibility",
       component: Accessibility,
@@ -349,7 +519,7 @@ export default new Router({
       name: "notFound",
       component: NotFound,
       metadata: {
-        announce: "not found",
+        announce: "not found error",
       },
     },
     {
@@ -357,47 +527,47 @@ export default new Router({
       name: "forbidden",
       component: Forbidden,
       metadata: {
-        announce: "forbidden",
+        announce: "forbidden error",
       },
     },
     {
-      path: "/notacceptable",
-      name: "notacceptable",
+      path: "/not_acceptable",
+      name: "not_acceptable",
       component: NotAcceptable,
       metadata: {
-        announce: "notacceptable",
+        announce: "not acceptable error",
       },
     },
     {
-      path: "/requesttimeout",
-      name: "requesttimeout",
+      path: "/request_timeout",
+      name: "request_timeout",
       component: RequestTimeout,
       metadata: {
-        announce: "requesttimeout",
+        announce: "request timeout error",
       },
     },
     {
-      path: "/internalserver",
-      name: "internalserver",
+      path: "/internal_server",
+      name: "internal_server",
       component: InternalServer,
       metadata: {
-        announce: "internalserver",
+        announce: "internal server error",
       },
     },
     {
-      path: "/badgateway",
-      name: "badgateway",
+      path: "/bad_gateway",
+      name: "bad_gateway",
       component: BadGateway,
       metadata: {
-        announce: "badgateway",
+        announce: "bad gateway error",
       },
     },
     {
-      path: "/serviceunavailable",
-      name: "serviceunavailable",
+      path: "/service_unavailable",
+      name: "service_unavailable",
       component: ServiceUnavailable,
       metadata: {
-        announce: "serviceunavailable",
+        announce: "service unavailable error",
       },
     },
     {
@@ -410,6 +580,26 @@ export default new Router({
       },
       metadata: {
         announce: "new",
+      },
+    },
+    {
+      path: "/special_editions/:id(\\d+)",
+      name: "specialEdition",
+      component: SpecialEdition,
+      meta: {
+        title: (route) => {
+          return "Special Edition";
+        },
+      },
+    },
+    {
+      path: "/special_editions",
+      name: "specialEditions",
+      component: SpecialEditions,
+      meta: {
+        title: (route) => {
+          return "Manage Special Editions";
+        },
       },
     },
   ],

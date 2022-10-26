@@ -17,13 +17,13 @@
     >
       <template slot="suggestion" slot-scope="{ data, htmlText }">
         <div
-          class="_temp_488-4 py-1 font-size-2"
+          class="pl-4 py-1 font-size-2"
           :class="{
-            '_temp_488-6': data.indent,
+            'pl-6': data.indent,
             'text-bold': data.children || data.header,
             disabled: data.header,
           }"
-          :data-usage="`wire-select-${data.type}-${data.value}(${htmlText})`"
+          :data-usage="dataUsageMetricsInfo(data)"
         >
           <span v-html="htmlText"></span>
         </div>
@@ -77,12 +77,9 @@ export default {
     },
 
     disabledValues() {
-      // This method needs to parse the url to find strings that are selected so we can disable them
+      // This method needs to parse the _temp_1 to find strings that are selected so we can disable them
 
-      if (isEmpty(this.options)) {
-        return [];
-      }
-      if (this.metadataLoading) {
+      if (isEmpty(this.options) || this.metadataLoading) {
         return [];
       }
 
@@ -101,13 +98,15 @@ export default {
           // if there is only 1 item for a type it is a string not an array by default
           items = [items];
         }
+        // exclude selected option so that vue-typeahead-bootstrap does not autoselect first option
+        items = items.filter((i) => i !== this.selectedOption);
 
         // some metatypes do not match our criteria exactly for instance selected_for and selectedFor
         const metadata = this.criteria[camelCase(type.replace("[]", ""))]
           .values;
 
-        // for each item in the url, lets grab the appropriate item from our stores criteria, so we can get the
-        // correct name
+        // for each item in the _temp_1, lets grab the appropriate item from our stores criteria,
+        // so we can get the correct name
         return items.map((item) => {
           try {
             return metadata.find((metaItem) => item === metaItem.code).name;
@@ -127,9 +126,21 @@ export default {
       if (!selectedOpt.header) {
         this.addToQueryParams(selectedOpt.type, selectedOpt.value);
       }
+
       this.$nextTick(() => {
-        this.selectedOption = "";
+        // Delay clearing value for a second so that the first option
+        // is not autoselected on hitting enter key after typing ahead
+        setTimeout(() => {
+          this.selectedOption = "";
+        }, 1000);
       });
+    },
+    dataUsageMetricsInfo(data) {
+      // Slashes in the _temp_1 causes problems and text after a dot is consider the format type by rails
+      let encodedText = encodeURIComponent(
+        `${data.value}(${data.text})`.replace(/\//g, "|")
+      );
+      return `wire-select-${data.type}-${encodedText}`.replace(/\./g, "_");
     },
   },
 };
@@ -140,15 +151,15 @@ export default {
   white-space: nowrap;
 }
 
-/deep/ .list-group {
+::v-deep .list-group {
   margin-top: 12px;
 }
 
-/deep/ .list-group-item {
+::v-deep .list-group-item {
   padding: 0;
 }
 
-/deep/ input::placeholder {
+::v-deep input::placeholder {
   color: $text-light;
 }
 

@@ -75,22 +75,30 @@ export default {
     },
 
     noAsOfTitle() {
-      if (this.headline.title.indexOf("as of") > -1) {
-        return this.headline.title.substring(
-          0,
-          this.headline.title.indexOf("as of")
-        );
+      if (this.headline.title !== null) {
+        if (this.headline.title.indexOf("as of") > -1) {
+          return this.headline.title.substring(
+            0,
+            this.headline.title.indexOf("as of")
+          );
+        } else {
+          return this.headline.title;
+        }
       } else {
-        return this.headline.title;
+        return "";
       }
     },
 
     asOf() {
-      if (this.headline.title.indexOf("as of") > -1) {
-        return this.headline.title.substring(
-          this.headline.title.indexOf("as of") + 5,
-          this.headline.title.length
-        );
+      if (this.headline.title !== null) {
+        if (this.headline.title.indexOf("as of") > -1) {
+          return this.headline.title.substring(
+            this.headline.title.indexOf("as of") + 5,
+            this.headline.title.length
+          );
+        }
+      } else {
+        return "";
       }
     },
 

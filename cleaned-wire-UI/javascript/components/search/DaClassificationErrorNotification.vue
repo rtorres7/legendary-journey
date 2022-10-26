@@ -15,8 +15,8 @@
           date. This does not affect the substance of the product. Please refer
           to the
           <a
-            href="https://blogs._temp_430.ic.gov/blogs/ciawire/?p=23015"
-            _temp_576="_blank"
+            href="_temp_525blogs.intelink._temp_0/blogs/_temp_540/?p=23015"
+            target="_blank"
             >{{ this.name }} blog</a
           >
           for more information.

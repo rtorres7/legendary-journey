@@ -22,8 +22,11 @@
       <span v-if="criteriaName === 'title'" class="double-emphasis"
         >Title:</span
       >
+      <span v-if="criteriaName === '_temp_39'" class="double-emphasis"
+        >_temp_39:</span
+      >
       <span v-if="criteriaName === 'poa_product'" class="double-emphasis"
-        >_temp_190:</span
+        >_temp_384:</span
       >
       <span v-if="criteriaName === 'us_person_info'" class="double-emphasis"
         >USPER:</span
@@ -120,6 +123,7 @@ export default {
       return ![
         "text",
         "title",
+        "_temp_39",
         "dateRange",
         "doc_num",
         "classifications[]",

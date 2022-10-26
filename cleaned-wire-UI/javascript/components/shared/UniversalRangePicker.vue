@@ -20,14 +20,14 @@
       :ok-disabled="!rangeValid"
     >
       <div class="d-flex flex-wrap flex-md-nowrap justify-content-around">
-        <div class="b-col">
+        <div class="b-col flex-grow-1 mx-8 my-5">
           <h6>Select Starting Date and Time</h6>
           <UniversalDateTimePicker
             :timestamp="this.range.start"
             @newTimestamp="startDateEvent"
           />
         </div>
-        <div class="b-col">
+        <div class="b-col flex-grow-1 mx-8 my-5">
           <h6>Select Ending Date and Time</h6>
           <UniversalDateTimePicker
             :timestamp="this.range.end"
@@ -92,22 +92,23 @@ export default {
   height: 30px;
   width: 30px;
 }
-/deep/ .dropdown-toggle-no-caret::after {
+::v-deep .dropdown-toggle-no-caret::after {
   display: none;
 }
+
 #date-range-modal {
   background-color: white;
 }
-/deep/ .modal-dialog {
+::v-deep .modal-dialog {
   max-width: 60rem;
 }
-/deep/.btn-outline-secondary {
+::v-deep .btn-outline-secondary {
   color: $text-dark;
 }
 .warning {
   text-align: right;
 }
-/deep/ .modal-header-title {
+::v-deep .modal-header-title {
   color: $pri-800;
   font-size: $font-size-5;
 }

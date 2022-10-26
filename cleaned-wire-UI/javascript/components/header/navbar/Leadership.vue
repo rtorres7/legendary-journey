@@ -2,7 +2,7 @@
   <div>
     <b-nav-item
       v-if="!user.loading && restricted"
-      :to="leadershipLinks.cia_leadership_profiles.url"
+      :to="leadershipLinks.cia_leadership_profiles._temp_1"
       data-usage="nav-front-page"
     >
       <div class="d-flex">

@@ -3,7 +3,7 @@
     <h1>Design System</h1>
     <h2 class="mb-5 description">
       These are the principles that shape how we design all the experiences
-      across _temp_28 WIRe.
+      across _temp_6 WIRe.
     </h2>
     <b>Fresh visual style</b>
     <p>A clean, simple style makes things feel approachable and efficient.</p>

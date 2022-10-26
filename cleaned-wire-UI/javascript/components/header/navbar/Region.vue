@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { kebabCase } from "lodash";
 import { mapGetters } from "vuex";
 
 export default {
@@ -40,14 +41,14 @@ export default {
     dataUsage() {
       // returns something similar to nav-regions-subregion-africa-central
       let region_subregion = this.subregion ? "subregion" : "region";
-      return _.kebabCase("nav-regions-" + region_subregion + this.display);
+      return kebabCase("nav-regions-" + region_subregion + this.display);
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.region /deep/ a {
+::v-deep .region a {
   font-size: $font-size-6;
   color: $region-label;
 }
@@ -56,7 +57,7 @@ export default {
   padding-bottom: 0.125rem;
 }
 
-/deep/ .dropdown-item {
+::v-deep .dropdown-item {
   font-size: $font-size-3;
 }
 </style>

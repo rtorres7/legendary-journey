@@ -3,12 +3,12 @@
     <b-button v-b-modal.subscribe-revisions data-usage="daily-subscription">
       <template v-if="isSubscribed">
         <span class="fa fa-star mr-2"></span> Unsubscribe<span class="sr-only">
-          from {{ this.name }} revision email notifications</span
+          from {{ this.name }} revision _temp_37 notifications</span
         >
       </template>
       <template v-else>
         <span class="fa fa-star-o mr-2"></span> Subscribe<span class="sr-only">
-          to {{ this.name }} revision email notifications</span
+          to {{ this.name }} revision _temp_37 notifications</span
         >
       </template>
     </b-button>
@@ -22,14 +22,14 @@
     >
       <div id="subscribe-modal-text">
         <p>
-          Email subscribers receive a notification when a new revision takes
+          _temp_37 subscribers receive a notification when a new revision takes
           place.
         </p>
         <p>
           Choose the "{{ this.buttonText }}" button below to
           <span v-if="this.isSubscribed">stop receiving</span>
           <span v-else>receive</span>
-          email at <span class="text-bold">{{ this.user.email }}</span>
+          _temp_37 at <span class="text-bold">{{ this.user._temp_37 }}</span>
         </p>
       </div>
     </b-modal>
@@ -73,7 +73,7 @@ export default {
 .fa-star-o {
   font-size: $font-size-3;
 }
-/deep/ .modal-header-title {
+::v-deep .modal-header-title {
   color: $pri-800;
   font-size: $font-size-5;
 }

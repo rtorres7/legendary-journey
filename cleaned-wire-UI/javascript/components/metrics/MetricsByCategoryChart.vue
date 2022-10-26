@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-2">
+  <div :class="chartType === 'pie' ? 'py-2' : 'px-6 py-2'">
     <div class="chart-no-data" v-if="this.chartData.length === 0">
       <h3>{{ chartTitle }}</h3>
       No data available to display.
@@ -74,7 +74,13 @@ export default {
         chart: {
           type: this.chartType,
         },
-        colors: ["#7ac3fa", "#256AAA", "#021C50", "#8e929f", "#b8e2ff"],
+        colors: [
+          "rgba(21, 27, 84, 0.6)",
+          "rgba(98, 148, 44, 0.6)",
+          "rgba(142, 42, 79, 0.6)",
+          "rgba(163, 132, 49, 0.6)",
+          "rgba(204, 204, 204, 0.6)",
+        ],
         credits: {
           enabled: false,
         },
@@ -103,7 +109,6 @@ export default {
             enabled: true,
             style: {
               fontWeight: "bold",
-              color: "gray",
             },
           },
         },
@@ -141,9 +146,15 @@ export default {
           pie: {
             enableMouseTracking: false,
             dataLabels: {
+              distance: 15,
               enabled: true,
-              format: "<b>{point.name}</b>: {point.percentage: .2f} %",
+              format:
+                "<span class='text-normal'>{point.name}<br> {point.percentage: .2f} %</span>",
+              overflow: "allow",
+              style: { textOverflow: "clip" },
             },
+            size: "40%",
+            startAngle: 75,
           },
         },
         series: [{ data: this.chartData }],

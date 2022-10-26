@@ -2,12 +2,26 @@
   <div class="pills container-fluid pt-6 pb-4">
     <div class="align-items-center d-flex">
       <b-row class="standard-page-margin d-inline-flex align-self-stretch mb-4">
-        <b-col class="mr-4 card-header card user-card-title">
+        <b-col class="ml-4 mr-4 card-header card user-card-title">
           <h2 class="title-text">WIRe Customer Support</h2>
-          WIRe Customer Support
           <div class="user-card-body">
-            For questions or feedback on WIRe features or to request a site
-            tutorial:
+            For immediate assistance with access to WIRe, clearances, IC/PKI
+            certificates, or other access issues, please contact the Agency
+            Operations Branch or fill out the form below:
+          </div>
+          <div class="user-card-subtitle">
+            <span class="fa fa-_temp_36 pr-2" />SEC: 935-7155 DSN: 345-0504 COMM:
+            571-204-4775 <span class="fa fa-envelope-o pr-2" /><a
+              href="mailto:DPOSERVCNTR@_temp_6.IC_temp_54"
+              >DPOSERVCNTR@_temp_6.IC_temp_54</a
+            >
+          </div>
+        </b-col>
+        <b-col class="mr-4 card-header card user-card-title">
+          <h2 class="title-text">WIRe Customer Engagement and Outreach</h2>
+          <div class="user-card-body">
+            For questions or feedback on WIRe articles or to request a site
+            tutorial, please contact the WIRe staff:
           </div>
           <div class="user-card-subtitle">
             <span class="fa fa-envelope-o pr-2" /><a
@@ -17,35 +31,24 @@
           </div>
         </b-col>
         <b-col class="ml-4 mr-4 card-header card user-card-title">
-          <h2 class="title-text">Access Support</h2>
+          <h2 class="title-text">_temp_6 Authors</h2>
           <div class="user-card-body">
-            For immediate assistance regarding access to WIRe, contact Agency
-            Operations Branch or fill out the form below:
-          </div>
-          <div class="user-card-subtitle">
-            <span class="fa fa-phone pr-2" />SEC: 935-7155 DSN: 345-0504 COMM:
-            571-204-4775 <span class="fa fa-envelope-o pr-2" /><a
-              href="mailto:DPOSERVCNTR@_temp_28.IC.GOV"
-              >DPOSERVCNTR@_temp_28.IC.GOV</a
-            >
-          </div>
-        </b-col>
-        <b-col class="ml-4 mr-4 card-header card user-card-title">
-          <h2 class="title-text">_temp_28 Authors</h2>
-          <div class="user-card-body">For help with WIRe articles:</div>
-          <div class="user-card-subtitle">
-            <span class="fa fa-envelope-o pr-2" /><a
-              href="mailto:DA_APD_WIRE_Team"
-              >DA_APD_WIRE_TEAM</a
-            >
-          </div>
-          <div class="user-card-body">
-            For questions about Executive Updates and noncurrent production:
+            For help with WIRe articles, please reach out to the WIRe staff:
           </div>
           <div class="user-card-subtitle">
             <span class="fa fa-envelope-o pr-2" /><a
-              href="mailto:DA_APD_PDG_EDT_All"
-              >DA_APD_PDG_EDT_All</a
+              href="mailto:DA_APD_WIRE_Team@_temp_6.IC_temp_54"
+              >DA_APD_WIRE_TEAM@_temp_6.IC_temp_54</a
+            >
+          </div>
+          <div class="user-card-body">
+            For questions about Executive Updates and noncurrent production,
+            please contact the Electronic Dissemination Team:
+          </div>
+          <div class="user-card-subtitle">
+            <span class="fa fa-envelope-o pr-2" /><a
+              href="mailto:DA_APD_PDG_EDT_All@_temp_6.IC_temp_54"
+              >DA_APD_PDG_EDT_All@_temp_6.IC_temp_54</a
             >
           </div>
         </b-col>

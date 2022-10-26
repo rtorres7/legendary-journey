@@ -62,7 +62,7 @@ export default {
       if (this.section === "featured") {
         layout = "featured";
       } else if (this.$route.query.grid) {
-        layout = "_temp_369"; // grid
+        layout = "cozy"; // grid
       }
       return layout;
     },
@@ -126,7 +126,7 @@ export default {
     }
   }
 
-  ._temp_369 {
+  .cozy {
     padding-top: $spacer-5;
     padding-bottom: $spacer-5;
 
@@ -141,7 +141,7 @@ export default {
     }
   }
 
-  /deep/ .portion_marked_field {
+  ::v-deep .portion_marked_field {
     color: $text-light !important;
   }
 }
@@ -150,11 +150,11 @@ export default {
   padding: 24px 24px 24px 36px;
 }
 
-/deep/ .selectable {
+::v-deep .selectable {
   cursor: pointer;
 }
 
-/deep/ .card-body {
+::v-deep .card-body {
   padding: 0;
 }
 </style>

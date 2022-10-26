@@ -10,8 +10,6 @@
       ref="showFilterButton"
       id="modal-toggle"
     >
-      <span v-if="!modalShown">Show </span>
-      <span v-else>Hide </span>
       Quick Filters
     </b-button>
     <b-modal

@@ -1,6 +1,6 @@
 import codeConverter from "./codeConverter";
-import { mapGetters, mapState, mapActions, mapMutations } from "vuex";
-import _ from "lodash";
+import { mapGetters, mapState, mapMutations } from "vuex";
+import { isEqual } from "lodash";
 
 export default {
   mixins: [codeConverter],
@@ -83,10 +83,7 @@ export default {
   },
 
   beforeRouteUpdate(to, from, next) {
-    if (
-      _.isEqual(from.params, to.params) &&
-      to.query.clearSearch === undefined
-    ) {
+    if (isEqual(from.params, to.params) && to.query.clearSearch === undefined) {
       // visiting the page from itself, likely updating search criteria on the page. Do nothing
       next();
       this.$store.dispatch("search/search", this.$route);

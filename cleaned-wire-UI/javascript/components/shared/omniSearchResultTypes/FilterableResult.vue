@@ -6,7 +6,7 @@
     <div class="ml-4 flex-grow-1 row">
       <div class="col-17">
         <span v-html="htmlText"></span>
-        <div class="_temp_488-3">
+        <div class="pl-3">
           <em><span v-html="data.subtext" /></em>
         </div>
       </div>

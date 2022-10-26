@@ -21,11 +21,11 @@
 
 <script>
 import axios from "axios";
-import Preview from "./Preview";
+
 import Spinner from "../../../shared/Spinner";
 export default {
   name: "Recommended",
-  components: { Spinner, Preview },
+  components: { Spinner },
   props: ["form"],
   data() {
     return {
@@ -56,7 +56,7 @@ export default {
           function (portlet) {
             if (this.form.recommended_feed_id) {
               if (portlet.id === this.form.recommended_feed_id) {
-                this.form.url = portlet.url;
+                this.form._temp_1 = portlet._temp_1;
                 this.form.title = portlet.title;
               }
             }

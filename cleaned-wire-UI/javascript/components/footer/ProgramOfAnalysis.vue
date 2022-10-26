@@ -1,18 +1,18 @@
 <template>
   <b-nav-item-dropdown
     v-if="featuresAvailable.poaLinkEnabled"
-    id="nav-_temp_489"
+    id="nav-poa"
     dropup
     text="Program of Analysis"
     data-usage="nav-program-of-analysis"
   >
-    <b-dropdown-item v-if="!loading" :to="programOfAnalysisLinks['2022'].url">
+    <b-dropdown-item v-if="!loading" :to="programOfAnalysisLinks['2022']._temp_1">
       2022 Program of Analysis
     </b-dropdown-item>
-    <b-dropdown-item v-if="!loading" :to="programOfAnalysisLinks['2021'].url">
+    <b-dropdown-item v-if="!loading" :to="programOfAnalysisLinks['2021']._temp_1">
       2021 Program of Analysis
     </b-dropdown-item>
-    <b-dropdown-item v-if="!loading" :to="programOfAnalysisLinks['2020'].url">
+    <b-dropdown-item v-if="!loading" :to="programOfAnalysisLinks['2020']._temp_1">
       2020 Program of Analysis
     </b-dropdown-item>
   </b-nav-item-dropdown>

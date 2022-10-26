@@ -14,7 +14,7 @@
     <b-collapse
       :id="accordionId(tag_group.name, 'tag_group')"
       accordion="tag-group-accordion"
-      role="tabpanel"
+      _temp_20="tabpanel"
       v-model="tag_group.expanded"
       :aria-hidden="!tag_group.expanded"
       :aria-labelledby="accordionId(tag_group.name, 'tag_group')"
@@ -161,10 +161,10 @@ export default {
 .fa-times-circle {
   color: $alt-500;
 }
-/deep/ .dropdown-menu {
+::v-deep .dropdown-menu {
   min-width: 7rem;
 }
-/deep/ a.dropdown-item {
+::v-deep a.dropdown-item {
   padding-left: 5px;
 }
 .less-more-image {

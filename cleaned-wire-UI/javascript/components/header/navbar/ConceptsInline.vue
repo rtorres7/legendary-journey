@@ -15,24 +15,32 @@
       </div>
       <div v-else class="p-5">No Special Editions available at the moment</div>
       <!-- TODO: make own component for admin? -->
-      <div v-if="canAdmin" class="mr-5 ml-5 border-left concepts-admin">
+      <div
+        v-if="canManageSpecialEditions"
+        class="mr-5 ml-5 border-left concepts-admin"
+      >
         <div class="admin-only-header">
-          <div class="heading-stylized font-size-4 ml-6 mt-5">Admin Only</div>
-          <b-button
-            size="sm"
-            to="/special_editions/new"
-            variant="outline-dark"
-            @click.native="$emit('createSpecialEdition')"
-            class="ml-auto"
-          >
-            Create
-          </b-button>
+          <div class="heading-stylized font-size-4 ml-6 mt-5">
+            <div class="d-flex justify-content-end">
+              Admin Only
+              <b-button
+                size="sm"
+                @click="showCreateSpecialEditionModal"
+                variant="primary"
+                class="ml-auto"
+                aria-label="Create Special Edition"
+              >
+                Create
+              </b-button>
+            </div>
+          </div>
         </div>
         <div class="ml-6 mt-3 mb-2 understated-title-text">Draft</div>
         <Concept
           v-for="(se_link, ind) in conceptsLinks.draft"
           :key="'draft_ind' + ind"
           :concept="se_link"
+          :showIcon="false"
         >
         </Concept>
 
@@ -41,35 +49,36 @@
           v-for="(se_link, ind) in conceptsLinks.archived"
           :key="'archived_ind' + ind"
           :concept="se_link"
+          :showIcon="false"
         >
         </Concept>
       </div>
     </div>
+    <SpecialEditionAddEditModal
+      ref="createSpecialEditionModal"
+      @specialEditionCreated="specialEditionCreated"
+    />
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import { mapState } from "vuex";
-import Concept from "./concepts/Concept.vue";
+import Concept from "./Concept";
+import SpecialEditionAddEditModal from "../../specialEditions/SpecialEditionAddEditModal";
 import Spinner from "../../shared/Spinner";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Concepts",
-  components: { Spinner, Concept },
+  components: { Spinner, Concept, SpecialEditionAddEditModal },
   props: {
     header: {
       default: true,
     },
   },
-  data() {
-    return {
-      canAdmin: false,
-    };
-  },
+
   computed: {
+    ...mapGetters("user", ["canManageSpecialEditions"]),
     ...mapState("concepts", ["conceptsLinks", "loading"]),
-    ...mapState("user", ["admin"]),
 
     atLeastOneSE() {
       if (this.loading) {
@@ -85,25 +94,23 @@ export default {
       return false;
     },
   },
+
   mounted() {
-    this.fetchAdmin();
     this.$store.dispatch("concepts/loadConceptsLinks", {
       caller: this,
     });
   },
+
   methods: {
-    fetchAdmin() {
-      axios
-        .get(
-          "/my_wire/permitted_to?permissions=manage&category=special_editions"
-        )
-        .then((response) => {
-          this.canAdmin = response.data.allowed || false;
-        })
-        .catch((response) => {
-          this.canAdmin = false;
-        });
-      this.canAdmin = false;
+    showCreateSpecialEditionModal() {
+      this.$refs.createSpecialEditionModal.showModal = true;
+      this.$emit("createSpecialEdition");
+    },
+    specialEditionCreated(specialEditionId) {
+      this.$router.push({
+        name: "specialEdition",
+        params: { id: specialEditionId },
+      });
     },
   },
 };

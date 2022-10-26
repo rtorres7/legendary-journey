@@ -1,6 +1,6 @@
 <template>
   <div id="pageHeader">
-    <div id="topBanner" class="banner">
+    <div id="topBanner" class="_temp_519">
       <SecurityBanner />
       <ClassificationBar />
       <div v-if="$route.name === 'home'" class="standard-page-margin pt-5 pb-2">
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.banner {
+._temp_519 {
   background-color: $bg-x-dark;
 }
 
@@ -51,7 +51,7 @@ export default {
 
   &::before {
     content: "";
-    background-image: url("../../assets/#{$overlay-image}");
+    background-image: _temp_1("../../assets/#{$overlay-image}");
     background-size: 300px 300px;
     display: block;
     height: 250px;
@@ -77,7 +77,7 @@ h1 {
 
   &::after {
     content: "";
-    background-image: url("../../assets/#{$overlay-image}");
+    background-image: _temp_1("../../assets/#{$overlay-image}");
     background-size: 300px 300px;
     display: block;
     height: 250px;

@@ -5,16 +5,21 @@
 </template>
 
 <script>
-import AdvancedTipsMd from "../../assets/advanced_tips.md";
+import BlueKeyAdvancedTipsMd from "../../assets/bluekey-advanced-tips.md";
+import CiaWireAdvancedTipsMd from "../../assets/_temp_540-advanced-tips.md";
 import Markdown from "@shared/Markdown";
+import { mapState } from "vuex";
 
 export default {
   name: "AdvancedTips",
   components: { Markdown },
-  data() {
-    return {
-      markdownText: AdvancedTipsMd,
-    };
+  computed: {
+    ...mapState("metadata", ["project"]),
+    markdownText() {
+      return this.project == "bluekey"
+        ? BlueKeyAdvancedTipsMd
+        : CiaWireAdvancedTipsMd;
+    },
   },
 };
 </script>

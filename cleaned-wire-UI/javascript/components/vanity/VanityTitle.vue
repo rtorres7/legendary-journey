@@ -4,15 +4,13 @@
       <WireBackgroundAsset :image-name="img" fill />
     </b-col>
     <b-col
-      class="col-24 col-sm-22 d-flex flex-column justify-content-around title-area _temp_488-sm-6 pr-0"
+      class="col-24 col-sm-22 d-flex flex-column justify-content-around title-area pl-sm-6 pr-0"
     >
       <slot></slot>
       <div class="d-flex">
         <StandardTitle :title="title"></StandardTitle>
         <AdvancedTipsLink
-          v-if="
-            featuresAvailable.advancedTipsLink && this.$route.name === 'search'
-          "
+          v-if="displayAdvancedTips"
           class="align-self-end ml-auto"
           responsive
         />
@@ -24,7 +22,6 @@
 <script>
 import { mapState } from "vuex";
 import AdvancedTipsLink from "../shared/AdvancedTipsLink";
-import ResultsNav from "@shared/ResultsNav";
 import StandardTitle from "./vanityTitle/StandardTitle";
 import WireBackgroundAsset from "@shared/WireBackgroundAsset";
 export default {
@@ -33,11 +30,15 @@ export default {
     AdvancedTipsLink,
     WireBackgroundAsset,
     StandardTitle,
-    ResultsNav,
   },
   props: ["title"],
   computed: {
     ...mapState("metadata", ["featuresAvailable"]),
+    displayAdvancedTips() {
+      return (
+        this.featuresAvailable.advancedTipsLink && this.$route.name === "search"
+      );
+    },
     img() {
       switch (this.$route.name) {
         case "exports":
@@ -55,6 +56,9 @@ export default {
         case "subregions":
         case "countries":
           return "regions-icon.svg";
+        case "backgroundJobs":
+        case "jobDetails":
+        case "ingestStatus":
         case "managealerts":
           return "alerts-icon.svg";
         case "tag":
@@ -62,14 +66,30 @@ export default {
         case "allTags":
         case "searchTags":
           return "tags-icon.svg";
+        case "new_wire":
+        case "edit_wire":
         case "leadership":
         case "issues":
         case "topics":
-          return "intelligence-icon.svg";
+        case "role_membership":
+        case "feedback_reviews":
+        case "productTypes":
+        case "producingOffices":
+        case "systemFeedback":
+          return "_temp_536-icon.svg";
         case "revisions":
           return "revisions-icon.svg";
         case "contact_us":
           return "contact-icon.svg";
+        case "authenticationFailures":
+        case "authenticationFailureDetails":
+        case "FSDTool":
+          return "auth-fail-icon.svg";
+        case "feeds":
+          return "feeds-icon.svg";
+        case "specialEdition":
+        case "specialEditions":
+          return "special-editions-icon.svg";
       }
     },
   },
@@ -110,5 +130,6 @@ export default {
 
 .image-area {
   border-right: 2px solid $alt-400;
+  padding-right: 0.75em;
 }
 </style>

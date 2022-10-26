@@ -1,5 +1,5 @@
 <template>
-  <b-form-group class="_temp_369-compact-selector">
+  <b-form-group class="cozy-compact-selector">
     <b-form-radio-group
       v-model="compact"
       buttons
@@ -19,10 +19,14 @@
     </b-form-radio-group>
   </b-form-group>
 </template>
+
 <script>
 import { mapMutations, mapState } from "vuex";
+import navigationErrorHandlerMixin from "@shared/mixins/navigationErrorHandlerMixin";
+
 export default {
   name: "ViewSelector",
+  mixins: [navigationErrorHandlerMixin],
 
   data() {
     return {
@@ -54,7 +58,9 @@ export default {
             query["media_tags[]"].push(tag.code);
           });
         }
-        this.$router.push({ query });
+        this.$router.push({ query }).catch((failure) => {
+          this.handleNavigationErrors(failure);
+        });
       },
     },
   },
@@ -79,7 +85,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .btn,
+::v-deep .btn,
 .btn:focus {
   border-radius: unset;
 }

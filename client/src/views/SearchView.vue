@@ -7,10 +7,183 @@
       energy:border-zinc-700/50
     "
   >
-    <p class="font-semibold text-2xl">Search</p>
+    <p v-show="!loadingMetadata" class="pb-2">{{ pageSubheader }}</p>
+    <p class="font-semibold text-2xl">
+      {{ pageHeader }}
+    </p>
   </div>
+  <!-- Search Form -->
+  <div class="flex flex-row-reverse py-1 my-2">
+    <template v-if="loadingMetadata">
+      <div
+        class="
+          h-8
+          w-16
+          animate-pulse
+          bg-white
+          dark:bg-slate-800/50
+          energy:bg-zinc-800
+          rounded
+        "
+      ></div>
+    </template>
+    <template v-else>
+      <button
+        class="
+          text-mission-light-blue
+          dark:text-teal-400
+          energy:text-energy-yellow
+        "
+        @click="clearFilters"
+      >
+        Clear All
+      </button>
+    </template>
+  </div>
+  <BaseCard
+    :class="[
+      'p-4',
+      loadingMetadata
+        ? 'animate-pulse h-[35rem] md:h-[23rem] lg:h-[12.5rem]'
+        : '',
+    ]"
+  >
+    <div v-show="!loadingMetadata">
+      <Disclosure v-slot="{ open }" defaultOpen>
+        <div class="flex flex-col justify-between">
+          <div
+            class="
+              grid-cols-1
+              md:grid md:grid-cols-2 md:gap-4
+              space-y-3
+              md:space-y-0
+              lg:flex lg:space-x-6 lg:gap-0
+              flex-col
+              lg:flex-row
+              w-full
+            "
+          >
+            <div class="lg:w-2/5">
+              <BaseInput
+                v-model="queryText"
+                label="Keyword Search or Filter"
+                type="text"
+                autocomplete="off"
+                @keyup.enter="searchQueryText"
+              />
+            </div>
+            <template
+              v-for="n in [
+                queryFilters.regions,
+                queryFilters.issues,
+                queryFilters.reporting,
+              ]"
+              :key="n"
+            >
+              <div class="lg:w-1/5">
+                <BaseListbox
+                  v-model="n.model"
+                  :label="n.label"
+                  :items="n.list"
+                  multiple
+                />
+              </div>
+            </template>
+          </div>
+          <DisclosureButton
+            class="
+              py-3
+              lg:py-1
+              max-w-fit
+              hover:text-black
+              dark:hover:text-white
+              energy:hover:text-whit
+            "
+          >
+            <span
+              class="
+                text-sm text-mission-light-blue
+                dark:text-teal-400
+                energy:text-energy-yellow
+                mr-2
+                inline-block
+              "
+              >{{ open ? "Less" : "More" }}</span
+            >
+            <ChevronUpIcon
+              :class="open ? '' : 'rotate-180 transform'"
+              class="
+                text-mission-light-blue
+                dark:text-teal-400
+                energy:text-energy-yellow
+                h-5
+                w-5
+                inline-block
+              "
+            />
+          </DisclosureButton>
+        </div>
+        <DisclosurePanel class="my-2">
+          <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
+            <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
+              <template v-if="!loadingMetadata">
+                <template
+                  v-for="n in [
+                    queryFilters.classifications,
+                    queryFilters.media_types,
+                  ]"
+                  :key="n"
+                >
+                  <div class="w-1/2">
+                    <BaseListbox
+                      v-model="n.model"
+                      :label="n.label"
+                      :items="n.list"
+                      multiple
+                    />
+                  </div>
+                </template>
+              </template>
+            </div>
+            <div
+              class="
+                grid grid-cols-2
+                md:grid-cols-3
+                gap-4
+                lg:gap-0
+                lg:grid-cols-0
+                lg:flex
+                lg:w-3/5
+                lg:space-x-6
+                lg:max-w-none
+              "
+            >
+              <template
+                v-for="n in [
+                  queryFilters.nonstate_actors,
+                  queryFilters.producing_offices,
+                  queryFilters.frontpage_featured,
+                ]"
+                :key="n"
+              >
+                <div class="lg:w-1/3">
+                  <BaseListbox
+                    v-model="n.model"
+                    :label="n.label"
+                    :items="n.list"
+                    :disabled="n.disabled || false"
+                    multiple
+                  />
+                </div>
+              </template>
+            </div>
+          </div>
+        </DisclosurePanel>
+      </Disclosure>
+    </div>
+  </BaseCard>
   <!-- Results Container -->
-  <template v-if="loading">
+  <template v-if="loadingResults">
     <div class="max-w-fit m-auto mt-[20vh]">
       <svg
         class="
@@ -43,7 +216,7 @@
       </svg>
     </div>
   </template>
-  <template v-if="!loading && totalCount === 0">
+  <template v-if="!loadingResults && totalCount === 0">
     <div class="mt-6">
       <p class="text-xl text-center font-semibold">
         Sorry, we didn't find any results.
@@ -54,16 +227,23 @@
       </p>
     </div>
   </template>
-  <template v-if="!loading && totalCount > 0">
+  <template v-if="!loadingResults && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
-      <div class="h-fit basis-4/5">
+      <div
+        class="h-fit"
+        :class="[
+          selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+            ? 'basis-full'
+            : 'basis-3/4',
+        ]"
+      >
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
             <div class="inline-flex">
               <label class="self-center font-medium text-sm">Sort By</label>
-              <Listbox v-model="selectedOrder" class="ml-3 min-w-[120px]">
+              <Listbox v-model="selectedSort" class="ml-3 min-w-[115px]">
                 <div class="relative">
                   <ListboxButton
                     class="
@@ -90,9 +270,7 @@
                       focus-visible:ring-offset-2
                     "
                   >
-                    <span class="block truncate">{{
-                      selectedOrder.label
-                    }}</span>
+                    <span class="block truncate">{{ selectedSort.label }}</span>
                     <span
                       class="absolute inset-y-0 right-0 flex items-center pr-2"
                     >
@@ -148,6 +326,106 @@
                 </div>
               </Listbox>
             </div>
+            <div class="inline-flex">
+              <label class="self-center">View</label>
+              <Listbox v-model="selectedView" class="ml-3 min-w-[100px]">
+                <div class="relative">
+                  <ListboxButton
+                    class="
+                      min-h-[2rem]
+                      flex
+                      relative
+                      w-full
+                      py-1
+                      px-2
+                      text-left
+                      capitalize
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-zinc-700
+                      border-t border-t-gray-100
+                      dark:border-t-slate-800
+                      energy:border-t-zinc-800
+                      rounded-lg
+                      shadow-md
+                      cursor-default
+                      focus:outline-none
+                      focus-visible:ring-2
+                      focus-visible:ring-opacity-75
+                      focus-visible:ring-offset-2
+                    "
+                  >
+                    <span class="block truncate">{{ selectedView.label }}</span>
+                    <span
+                      class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    >
+                      <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  </ListboxButton>
+                  <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                  >
+                    <ListboxOptions
+                      class="
+                        absolute
+                        w-full
+                        py-1
+                        mt-1
+                        overflow-auto
+                        bg-white
+                        dark:bg-slate-700
+                        energy:bg-zinc-700
+                        rounded-md
+                        shadow-lg
+                        max-h-60
+                        ring-1 ring-black ring-opacity-5
+                        focus:outline-none
+                        z-10
+                      "
+                    >
+                      <ListboxOption
+                        v-slot="{ active }"
+                        v-for="item in viewOptions"
+                        :key="item"
+                        :value="item"
+                        as="template"
+                        class="capitalize px-2 py-1 cursor-pointer"
+                      >
+                        <li
+                          :class="[
+                            active
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                              : 'bg-none',
+                          ]"
+                        >
+                          {{ item.label }}
+                        </li>
+                      </ListboxOption>
+                    </ListboxOptions>
+                  </transition>
+                </div>
+              </Listbox>
+            </div>
+          </div>
+          <div
+            v-show="
+              selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+            "
+            class="
+              cursor-pointer
+              text-mission-light-blue
+              dark:text-teal-400
+              energy:text-energy-yellow
+              self-center
+            "
+            @click="openMobileFacetsDialog"
+          >
+            Show Filters
           </div>
         </div>
         <!-- Search Results Table -->
@@ -170,74 +448,237 @@
             />
           </div>
           <!-- Results -->
-          <template v-for="result in results" :key="result">
-            <div
-              class="
-                flex
-                p-4
-                border-b border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-zinc-700/50
-              "
-            >
-              <div class="h-fit px-2 text-center">
-                <span class="block font-semibold">{{
-                  dayjs(result.item.publication_date).format("DD")
-                }}</span>
-                <span class="block text-sm">{{
-                  dayjs(result.item.publication_date).format("MMM")
-                }}</span>
-                <span class="block text-sm">{{
-                  dayjs(result.item.publication_date).format("YYYY")
-                }}</span>
-              </div>
-              <div class="px-2 w-full">
-                <div class="flex justify-between mb-2">
-                  <router-link
-                    :to="{
-                      name: 'article',
-                      params: { doc_num: result.item.doc_num },
-                    }"
-                  >
-                    <div
-                      class="
-                        basis-[768px]
-                        cursor-pointer
-                        hover:underline
-                        line-clamp-2
-                      "
-                    >
-                      <span
-                        class="
-                          text-slate-600
-                          dark:text-slate-300
-                          energy:text-zinc-300
-                        "
-                        >{{
-                          `${"(" + result.item.title_classification + ") "}`
-                        }}</span
+          <template v-if="selectedView.label === 'List'">
+            <template v-for="result in results" :key="result">
+              <div
+                class="
+                  flex
+                  p-4
+                  border-b border-slate-900/10
+                  dark:border-slate-50/[0.06]
+                  energy:border-zinc-700/50
+                "
+              >
+                <div class="h-fit px-2 text-center">
+                  <span class="block font-semibold">{{
+                    dayjs(result.date_published).format("DD")
+                  }}</span>
+                  <span class="block text-sm">{{
+                    dayjs(result.date_published).format("MMM")
+                  }}</span>
+                  <span class="block text-sm">{{
+                    dayjs(result.date_published).format("YYYY")
+                  }}</span>
+                </div>
+                <div class="px-2 w-full">
+                  <div class="flex justify-between">
+                    <div class="basis-[768px] cursor-pointer hover:underline">
+                      <router-link
+                        :to="{
+                          name: 'article',
+                          params: { doc_num: result.doc_num },
+                        }"
                       >
-                      <span
-                        class="text-black dark:text-white energy:text-white"
-                        >{{ result.item.title }}</span
-                      >
+                        <span
+                          class="
+                            text-slate-600
+                            dark:text-slate-300
+                            energy:text-zinc-300
+                          "
+                          >{{
+                            `${"(" + result.title_classification + ") "}`
+                          }}</span
+                        >
+
+                        <span
+                          class="text-black dark:text-white energy:text-white"
+                          >{{ result.title }}</span
+                        >
+                      </router-link>
                     </div>
-                  </router-link>
-                  <div class="text-xs lg:text-sm">
-                    {{ result.item.doc_num }}
+                    <div class="text-xs lg:text-sm">
+                      {{ result.doc_num }}
+                    </div>
+                  </div>
+                  <div
+                    class="
+                      py-2
+                      text-sm text-slate-600
+                      dark:text-slate-300
+                      energy:text-zinc-300
+                    "
+                  >
+                    <template v-if="showHighlightedResult()">
+                      <span v-html="result.highlighted_result" />
+                    </template>
+                    <template v-else>
+                      <span>{{ result.summary }}</span>
+                    </template>
                   </div>
                 </div>
+              </div>
+            </template>
+          </template>
+          <template v-else-if="selectedView.label === 'Grid'">
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
+            >
+              <template v-for="result in results" :key="result">
                 <div
                   class="
-                    text-sm text-slate-600
-                    dark:text-slate-300
-                    energy:text-zinc-300
-                    line-clamp-3
+                    flex
+                    justify-between
+                    p-4
+                    border border-slate-900/10
+                    dark:border-slate-50/[0.12]
+                    energy:border-zinc-700
+                    h-full
                   "
                 >
-                  {{ result.item.summary }}
+                  <div class="px-2 flex flex-col justify-between">
+                    <div class="cursor-pointer hover:underline">
+                      <router-link
+                        :to="{
+                          name: 'article',
+                          params: { doc_num: result.doc_num },
+                        }"
+                      >
+                        <span
+                          class="
+                            text-slate-600
+                            dark:text-slate-300
+                            energy:text-zinc-300
+                          "
+                          >{{
+                            `${"(" + result.title_classification + ") "}`
+                          }}</span
+                        >
+                        <span
+                          class="text-black dark:text-white energy:text-white"
+                          >{{ result.title }}</span
+                        >
+                      </router-link>
+                    </div>
+                    <div class="mt-2 text-sm">
+                      {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                    </div>
+                  </div>
+                  <div v-show="result.hasImage">
+                    <ArticleImage
+                      class="w-[150px] h-[150px] sm:max-w-full h-full"
+                      :article="result"
+                      smartRender
+                      @imageNotFound="toggleImgContainer(result, false)"
+                      @imageLoaded="toggleImgContainer(result, true)"
+                    />
+                  </div>
                 </div>
-              </div>
+              </template>
+            </div>
+          </template>
+          <template v-else-if="selectedView.label === 'Visuals'">
+            <div
+              class="
+                grid grid-cols-1
+                md:grid-cols-2
+                lg:grid-cols-3
+                xl:grid-cols-4
+                gap-4
+                m-4
+              "
+            >
+              <template v-for="result in results" :key="result">
+                <div class="flex p-4">
+                  <div class="group">
+                    <div class="relative">
+                      <div
+                        class="
+                          invisible
+                          group-hover:visible
+                          absolute
+                          h-full
+                          p-2
+                          py-5
+                          inset-x-0
+                          text-white
+                          bg-mission-blue/[.90]
+                          dark:bg-dark-space-blue/[.90]
+                          energy:bg-zinc-800/[.90]
+                        "
+                      >
+                        <div class="flex flex-col">
+                          <div class="line-clamp-3">
+                            <span>{{
+                              `${"(" + result.title_classification + ") "}`
+                            }}</span>
+                            <span>{{ result.title }}</span>
+                          </div>
+                          <div
+                            class="
+                              flex
+                              justify-around
+                              absolute
+                              inset-x-0
+                              bottom-2
+                              text-sm
+                            "
+                          >
+                            <button
+                              @click="openMedia(result.images.table.secondary)"
+                              class="hover:underline"
+                            >
+                              VIEW MEDIA
+                              <span class="sr-only"
+                                >Open media for {{ result.title }}</span
+                              >
+                            </button>
+                            <p>|</p>
+                            <router-link
+                              class="hover:underline"
+                              :to="{
+                                name: 'demo-article',
+                                params: { doc_num: result.doc_num },
+                              }"
+                              >VIEW ARTICLE
+                            </router-link>
+                          </div>
+                        </div>
+                      </div>
+                      <img
+                        :src="getImgUrl(result.images.table.secondary)"
+                        alt=""
+                        class="object-cover"
+                      />
+                    </div>
+                    <div
+                      class="
+                        flex
+                        justify-between
+                        p-2
+                        border border-slate-900/10
+                        dark:border-slate-50/[0.06]
+                        energy:border-zinc-700/50
+                        text-sm
+                      "
+                    >
+                      <div>
+                        <span
+                          v-for="(region, ind) in result.regions"
+                          :key="ind"
+                        >
+                          {{ region
+                          }}<span v-if="ind < result.regions.length - 1"
+                            >,&nbsp;</span
+                          >
+                        </span>
+                      </div>
+                      <div>
+                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </template>
           <!-- Bottom Pagination -->
@@ -260,11 +701,17 @@
         </BaseCard>
       </div>
       <!-- Search Results Filters -->
+      <BaseCard
+        v-show="selectedView.label === 'List'"
+        class="hidden lg:block basis-1/4 ml-4 h-full"
+      >
+        <SearchResultsFacets :facets="aggregations" />
+      </BaseCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
         <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
           <div class="inline-flex">
             <label class="self-center min-w-[58px] sm:min-w-0">Sort By</label>
-            <Listbox v-model="selectedOrder" class="ml-3 min-w-[110px]">
+            <Listbox v-model="selectedSort" class="ml-3 min-w-[110px]">
               <div class="relative">
                 <ListboxButton
                   class="
@@ -291,7 +738,7 @@
                     focus-visible:ring-offset-2
                   "
                 >
-                  <span class="block truncate">{{ selectedOrder.label }}</span>
+                  <span class="block truncate">{{ selectedSort.label }}</span>
                   <span
                     class="absolute inset-y-0 right-0 flex items-center pr-2"
                   >
@@ -347,88 +794,736 @@
               </div>
             </Listbox>
           </div>
+          <div class="inline-flex">
+            <label class="self-center min-w-[58px] sm:min-w-0">View</label>
+            <Listbox v-model="selectedView" class="ml-3 min-w-[110px]">
+              <div class="relative">
+                <ListboxButton
+                  class="
+                    min-h-[2rem]
+                    flex
+                    relative
+                    w-full
+                    py-1
+                    px-2
+                    text-left
+                    capitalize
+                    bg-white
+                    dark:bg-slate-700
+                    energy:bg-zinc-700
+                    border-t border-t-gray-100
+                    dark:border-t-slate-800
+                    energy:border-t-zinc-800
+                    rounded-lg
+                    shadow-md
+                    cursor-default
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-opacity-75
+                    focus-visible:ring-offset-2
+                  "
+                >
+                  <span class="block truncate">{{ selectedView.label }}</span>
+                  <span
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                  >
+                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                  </span>
+                </ListboxButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <ListboxOptions
+                    class="
+                      absolute
+                      w-full
+                      py-1
+                      mt-1
+                      overflow-auto
+                      bg-white
+                      dark:bg-slate-700
+                      energy:bg-zinc-700
+                      rounded-md
+                      shadow-lg
+                      max-h-60
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
+                      z-10
+                    "
+                  >
+                    <ListboxOption
+                      v-slot="{ active }"
+                      v-for="item in viewOptions"
+                      :key="item"
+                      :value="item"
+                      as="template"
+                      class="capitalize px-2 py-1 cursor-pointer"
+                    >
+                      <li
+                        :class="[
+                          active
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                            : 'bg-none',
+                        ]"
+                      >
+                        {{ item.label }}
+                      </li>
+                    </ListboxOption>
+                  </ListboxOptions>
+                </transition>
+              </div>
+            </Listbox>
+          </div>
+        </div>
+        <div
+          class="
+            cursor-pointer
+            text-mission-light-blue
+            dark:text-teal-400
+            energy:text-energy-yellow
+            self-center
+          "
+          @click="openMobileFacetsDialog"
+        >
+          Show Filters
         </div>
       </div>
+      <!-- Mobile Result Facets Dialog -->
+      <TransitionRoot appear :show="isMobileFacetsDialogOpen" as="template">
+        <Dialog as="div" @close="closeMobileFacetsDialog">
+          <div class="fixed inset-0 z-20 overflow-y-auto w-full">
+            <div class="min-h-screen px-4 text-center">
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <div class="fixed inset-0 bg-black/25" />
+              </TransitionChild>
+              <span
+                class="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0 scale-95"
+                enter-to="opacity-100 scale-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100 scale-100"
+                leave-to="opacity-0 scale-95"
+              >
+                <DialogPanel
+                  class="
+                    inline-block
+                    w-full
+                    max-w-xl
+                    md:max-w-[700px]
+                    lg:max-w-[900px]
+                    p-6
+                    my-8
+                    text-left
+                    align-middle
+                    transition-all
+                    transform
+                    text-slate-700
+                    dark:text-slate-300
+                    energy:text-zinc-300
+                    bg-slate-100
+                    dark:bg-slate-700
+                    energy:bg-zinc-700
+                    shadow-lg
+                    rounded-lg
+                  "
+                >
+                  <div class="mt-6">
+                    <button
+                      type="button"
+                      class="
+                        absolute
+                        top-5
+                        right-5
+                        w-8
+                        h-8
+                        flex
+                        items-center
+                        justify-center
+                      "
+                      tabindex="0"
+                      @click="closeMobileFacetsDialog"
+                    >
+                      <span class="sr-only">Close navigation</span
+                      ><XIcon class="h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <SearchResultsFacets
+                      :facets="aggregations"
+                      class="grid grid-cols-2 md:grid-cols-3 gap-4"
+                    />
+                  </div>
+                </DialogPanel>
+              </TransitionChild>
+            </div>
+          </div>
+        </Dialog>
+      </TransitionRoot>
     </div>
   </template>
 </template>
 
 <script>
 import * as dayjs from "dayjs";
+import { isEmpty } from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import {
+  Dialog,
+  DialogPanel,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
   Listbox,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
+  TransitionChild,
+  TransitionRoot,
 } from "@headlessui/vue";
-import { SelectorIcon } from "@heroicons/vue/outline";
+import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
+import ArticleImage from "@/components/ArticleImage";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
-
+import SearchResultsFacets from "@/components/SearchResultsFacets";
 const sortOptions = [
-  { label: "Relevance", key: "rel" },
-  { label: "Newest", key: "desc" },
-  { label: "Oldest", key: "asc" },
+  { label: "Newest", key: "desc", type: "sort_dir" },
+  { label: "Oldest", key: "asc", type: "sort_dir" },
+  { label: "Relevance", key: "score", type: "sort_field" },
+];
+const viewOptions = [
+  { label: "List", key: "list" },
+  { label: "Grid", key: "grid" },
+  //{ label: "Visuals", key: "visuals" },
 ];
 
 export default {
   components: {
+    Dialog,
+    DialogPanel,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
     Listbox,
     ListboxButton,
     ListboxOptions,
     ListboxOption,
+    TransitionChild,
+    TransitionRoot,
+    ChevronUpIcon,
     SelectorIcon,
+    XIcon,
+    ArticleImage,
     SearchResultsTablePagination,
+    SearchResultsFacets,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
 
-    const loading = computed(() => store.state.danielSearch.loading);
-    const results = computed(() => store.state.danielSearch.results);
-    const totalCount = computed(() => store.state.danielSearch.totalCount);
+    const loadingMetadata = computed(() => store.state.metadata.loading);
+    const criteria = computed(() => store.state.metadata.criteria);
+    const loadingResults = computed(() => store.state.search.loading);
+    const results = computed(() => store.state.search.results);
+    const totalCount = computed(() => store.state.search.totalCount);
+    const aggregations = computed(() => store.state.search.aggregations);
 
-    const selectedOrder = ref(
-      route.query.sort_dir === "asc" ? sortOptions[1] : sortOptions[0]
+    const getValueForCode = (list, code) => {
+      return list.find((item) => item.code === code);
+    };
+    const getValueForName = (list, name) => {
+      return list.find((item) => item.name === name);
+    };
+    const getSubregionNameForCountryCode = (code) => {
+      return criteria.value.subregions.find((subregion) => {
+        return subregion.country_codes.find(
+          (countryCode) => countryCode === code
+        );
+      }).name;
+    };
+
+    const getHeaderName = (route) => {
+      if (
+        route.name === "issues" ||
+        route.name === "regions" ||
+        route.name === "subregions" ||
+        route.name === "countries"
+      ) {
+        return route.params.name ? route.params.name : "Search";
+      } else {
+        return "Search";
+      }
+    };
+    const getSubheaderName = ({ name, params }) => {
+      if (name === "countries") {
+        const countryValue = getValueForName(
+          criteria.value.countries,
+          params.name
+        );
+        let subregionName = "";
+        if (countryValue) {
+          subregionName = getSubregionNameForCountryCode(countryValue.code);
+        }
+        return subregionName;
+      } else {
+        return "";
+      }
+    };
+
+    const pageHeader = ref(getHeaderName(route));
+    const pageSubheader = ref(getSubheaderName(route));
+
+    const clearFilters = () => {
+      router.push({ name: "search", query: {} });
+    };
+
+    /* 
+      - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
+      - 1) Looks in the route query if any of types are present there
+      - 2) For each type found in the query, it loops through the values for that query property
+      - 3) Each value is then matched up against the list of list box items and pushed into the 'selectedModels' array
+      - 4) The selectedModels represents the list of currently selected items in the list box
+    */
+    const currentModel = ({ items, types }) => {
+      console.log("currentModel: ", items, types);
+      const selectedModels = [];
+      if (items.length > 0) {
+        types.forEach((type) => {
+          if (route.query[type]) {
+            if (!Array.isArray(route.query[type])) {
+              route.query[type] = [route.query[type]];
+            }
+            for (let i = 0; i < route.query[type].length; i++) {
+              selectedModels.push(
+                items.find((item) => item.code === route.query[type][i])
+              );
+            }
+          }
+        });
+      }
+      console.log("selectedModels: ", selectedModels);
+      return selectedModels;
+    };
+
+    const buildItems = (items, type) => {
+      return items.map((item) => ({ ...item, type }));
+    };
+    const buildRegions = () => {
+      let items = [];
+      criteria.value.regions.forEach((region) => {
+        items.push({ ...region, type: "regions[]" });
+        if (region.subregions.length > 1) {
+          region.subregions.forEach((subregionCode) => {
+            const subregion = getValueForCode(
+              criteria.value.subregions,
+              subregionCode
+            );
+            items.push({
+              ...subregion,
+              type: "subregions[]",
+              subitem: true,
+            });
+          });
+        }
+      });
+      criteria.value.countries.forEach((country) => {
+        items.push({ ...country, type: "countries[]" });
+      });
+      return items;
+    };
+    const buildIssues = () => {
+      let items = [];
+      criteria.value.issues.forEach((issue) => {
+        items.push({ ...issue, type: "issues[]" });
+        issue.topics.forEach((topic) => {
+          items.push({
+            ...topic,
+            code: topic.codes[0],
+            type: "topics[]",
+            subitem: true,
+          });
+        });
+      });
+      return items;
+    };
+    const buildReportingTypes = () => {
+      let items = [];
+      criteria.value.reporting_types.forEach((reportingType) => {
+        items.push({ ...reportingType, type: "reporting_types[]" });
+        reportingType.productTypes.forEach((productTypeCode) => {
+          const productType = getValueForCode(
+            criteria.value.product_types,
+            productTypeCode
+          );
+          items.push({
+            ...productType,
+            code: productType.code.toString(),
+            type: "product_types[]",
+            subitem: true,
+          });
+        });
+      });
+      return items;
+    };
+
+    const buildQueryFilters = () => {
+      const regions = {
+        items: buildRegions(),
+        types: ["regions[]", "subregions[]", "countries[]"],
+      };
+      const issues = {
+        items: buildIssues(),
+        types: ["issues[]", "topics[]"],
+      };
+      const reportings = {
+        items: buildReportingTypes(),
+        types: ["reporting_types[]", "product_types[]"],
+      };
+      const classifications = {
+        items: buildItems(criteria.value.classification, "classifications[]"),
+        types: ["classifications[]"],
+      };
+      const mediaTypes = {
+        items: buildItems(criteria.value.media_tags, "media_tags[]"),
+        types: ["media_tags[]"],
+      };
+      const nonStateActors = {
+        items: buildItems(
+          criteria.value.non_state_actors,
+          "non_state_actors[]"
+        ),
+        types: ["non_state_actors[]"],
+      };
+      const frontPageFeatured = {
+        items: buildItems(criteria.value.selected_for, "selected_for[]"),
+        types: ["selected_for[]"],
+      };
+      return {
+        regions: {
+          label: "Regions & Countries",
+          model: currentModel(regions),
+          list: regions.items,
+          types: regions.types,
+        },
+        issues: {
+          label: "Issues & Topics",
+          model: currentModel(issues),
+          list: issues.items,
+          types: issues.types,
+        },
+        reporting: {
+          label: "Reporting & Product Types",
+          model: currentModel(reportings),
+          list: reportings.items,
+          types: reportings.types,
+        },
+        classifications: {
+          label: "Classifications",
+          model: currentModel(classifications),
+          list: classifications.items,
+          types: classifications.types,
+        },
+        media_types: {
+          label: "Media Types",
+          model: currentModel(mediaTypes),
+          list: mediaTypes.items,
+          types: mediaTypes.types,
+        },
+        nonstate_actors: {
+          label: "Non State Actors",
+          model: currentModel(nonStateActors),
+          list: nonStateActors.items,
+          types: nonStateActors.types,
+        },
+        producing_offices: {
+          label: "Producing Offices",
+          model: [],
+          list: [],
+          types: ["producing_offices[]"],
+          disabled: true,
+        },
+        frontpage_featured: {
+          label: "Front Page Featured",
+          model: currentModel(frontPageFeatured),
+          list: frontPageFeatured.items,
+          types: frontPageFeatured.types,
+        },
+      };
+    };
+    const queryText = ref(route.query.text || "");
+    const queryFilters = ref(buildQueryFilters());
+    /*
+      - This method builds a watcher for each query filter in order to track changes at the individual listbox level
+      - 1) First, a query value is initialized that contains a copy of the existing query.
+      - 2) The types present in this query filter are then removed from the newly created query object
+      - 3) If the query filter's model values are empty, this skips to step 6
+      - 4) The unique types present in the query filter's model are identified
+      - 5) Each unique type is matched up against the query filter's model values (selected items) and the query is updated for each type
+      - 6) The updated query is sent to the router via a router.replace and this fires off a query update
+    */
+    const buildWatcher = (object) => {
+      return watch(
+        () => object,
+        (newValue) => {
+          console.log("local watcher triggered.", newValue);
+          let query = {
+            ...route.query,
+          };
+          newValue.types.forEach((type) => {
+            delete query[type];
+          });
+          if (newValue.model.length > 0) {
+            const uniqueTypes = [
+              ...new Set(newValue.model.map((item) => item.type)),
+            ];
+            console.log("uniqueTypes: ", uniqueTypes);
+            for (let i = 0; i < uniqueTypes.length; i++) {
+              let valuesForType = [];
+              for (let j = 0; j < newValue.model.length; j++) {
+                console.log("newValue.model: ", newValue.model);
+                if (newValue.model[j].type === uniqueTypes[i]) {
+                  valuesForType.push(newValue.model[j].code);
+                }
+              }
+              console.log("valuesForType after: ", valuesForType);
+              query[uniqueTypes[i]] = valuesForType;
+            }
+          }
+          console.log("query: ", query);
+          router.replace({
+            name: "search",
+            query: query,
+          });
+        },
+        { deep: true }
+      );
+    };
+    const buildQueryWatchers = (object) => {
+      let watchers = [];
+      Object.keys(object).forEach((filter) => {
+        watchers.push(buildWatcher(object[filter]));
+      });
+      return watchers;
+    };
+    buildQueryWatchers(queryFilters.value);
+
+    const getSortOption = (query) => {
+      const sortDir = query.sort_dir ? query.sort_dir : undefined;
+      const sortField = query.sort_field ? query.sort_field : undefined;
+      if (sortDir && !sortField) {
+        return sortDir === "asc" ? sortOptions[1] : sortOptions[0];
+      }
+      if (sortField && !sortDir) {
+        if (sortField === "score") {
+          return sortOptions[2];
+        }
+      }
+      return sortOptions[0];
+    };
+
+    const selectedSort = ref(getSortOption(route.query));
+    const selectedView = ref(
+      route.query.view === "grid"
+        ? viewOptions[1]
+        : route.query.view === "visuals"
+        ? viewOptions[2]
+        : viewOptions[0]
     );
-
     const currentPage = ref(parseInt(route.query.page) || 1);
 
+    const getImgUrl = (url) => {
+      return require("@/assets/" + url);
+    };
+    const isMobileFacetsDialogOpen = ref(false);
+
     onMounted(() => {
-      store.dispatch("danielSearch/search");
+      store.dispatch("search/search");
     });
 
-    watch([selectedOrder], () => {
+    const searchQueryText = () => {
+      let query = {
+        ...route.query,
+      };
+      if (!queryText.value) {
+        delete query["text"];
+      } else {
+        query = { ...query, text: queryText.value };
+      }
       router.push({
-        query: {
-          ...route.query,
-          sort_dir: selectedOrder.value.key,
-        },
+        name: "search",
+        query: query,
       });
-    });
+    };
+
+    const showHighlightedResult = () => {
+      if (route.name === "search" && queryText.value !== "") {
+        return true;
+      }
+      return false;
+    };
+
+    const isLocked = (result) => {
+      return !isEmpty(result.needed) || result.org_restricted;
+    };
+
+    const toggleImgContainer = (result, value) => {
+      result.hasImage = value;
+    };
 
     watch(
       () => route.query,
       () => {
         console.log("route.query watcher triggered.");
-        if (route.name === "search") {
-          store.dispatch("danielSearch/search");
+        if (
+          route.name === "search" ||
+          route.name === "issues" ||
+          route.name === "regions" ||
+          route.name === "subregions" ||
+          route.name === "countries"
+        ) {
+          store.dispatch("search/search");
+          pageHeader.value = getHeaderName(route);
+          pageSubheader.value = getSubheaderName(route);
+
+          queryText.value = route.query.text || "";
+          queryFilters.value = buildQueryFilters();
           currentPage.value = parseInt(route.query.page) || 1;
+          selectedView.value =
+            route.query.view === "grid"
+              ? viewOptions[1]
+              : route.query.view === "visuals"
+              ? viewOptions[2]
+              : viewOptions[0];
         }
       }
     );
 
+    /*
+      Metadata needs to load first before building the query filters.
+      Countries subheader relies on Metadata so we load that as well.
+    */
+    watch([loadingMetadata], () => {
+      if (!loadingMetadata.value) {
+        queryFilters.value = buildQueryFilters();
+      }
+      if (route.name === "countries") {
+        pageSubheader.value = getSubheaderName(route);
+      }
+    });
+
+    watch(
+      () => queryFilters,
+      () => {
+        buildQueryWatchers(queryFilters.value);
+      },
+      { deep: true }
+    );
+
+    watch([selectedSort], () => {
+      let query = { ...route.query, page: currentPage.value };
+      if (selectedSort.value.type === "sort_dir") {
+        if (query.sort_field) {
+          delete query["sort_field"];
+        }
+        query = { ...query, sort_dir: selectedSort.value.key };
+      } else {
+        if (query.sort_dir) {
+          delete query["sort_dir"];
+        }
+        query = { ...query, sort_field: selectedSort.value.key };
+      }
+      router.push({
+        query,
+      });
+    });
+
+    watch([selectedView], () => {
+      console.log("selectedView watcher triggered.");
+      if (
+        selectedView.value.key === "list" ||
+        selectedView.value.key === "grid"
+      ) {
+        router.push({
+          query: {
+            ...route.query,
+            view: selectedView.value.key,
+          },
+        });
+      } else if (selectedView.value.key === "visuals") {
+        let query = {
+          ...route.query,
+          view: selectedView.value.key,
+        };
+        //TODO: Align these values with thats on the backend
+        query["media_tags[]"] = [
+          "audio",
+          "interactive",
+          "graphic",
+          "map",
+          "video",
+        ];
+        router.push({
+          query,
+        });
+      }
+    });
+
+    const closeMobileFacetsDialog = () =>
+      (isMobileFacetsDialogOpen.value = false);
+
+    const openMobileFacetsDialog = () =>
+      (isMobileFacetsDialogOpen.value = true);
+
+    const openMedia = (url) => {
+      let route = getImgUrl(url);
+      window.open(route);
+    };
+
     return {
       dayjs,
-      loading,
+      loadingMetadata,
+      loadingResults,
       results,
-      selectedOrder,
-      sortOptions,
       totalCount,
+      aggregations,
+      pageHeader,
+      pageSubheader,
+      clearFilters,
+      queryText,
+      searchQueryText,
+      showHighlightedResult,
+      isLocked,
+      toggleImgContainer,
+      queryFilters,
+      sortOptions,
+      selectedSort,
+      viewOptions,
+      selectedView,
       currentPage,
+      getImgUrl,
+      isMobileFacetsDialogOpen,
+      closeMobileFacetsDialog,
+      openMobileFacetsDialog,
+      openMedia,
     };
   },
 };
