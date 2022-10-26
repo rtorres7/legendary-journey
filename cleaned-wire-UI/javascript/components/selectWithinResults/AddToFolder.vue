@@ -19,7 +19,7 @@
 
         <b-form-invalid-feedback
           id="choose-folder-live-feedback"
-          role="alert"
+          _temp_20="alert"
           aria-live="polite"
         >
           Select a folder. <span class="sr-only"> or create a new folder</span>

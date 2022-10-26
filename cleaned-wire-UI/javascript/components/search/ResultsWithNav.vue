@@ -9,7 +9,7 @@
     >
       <div
         :class="{ 'transitioned-div': selectedControls !== undefined }"
-        class="_temp_488-5"
+        class="pl-5"
       >
         <transition name="fade" mode="out-in">
           <component

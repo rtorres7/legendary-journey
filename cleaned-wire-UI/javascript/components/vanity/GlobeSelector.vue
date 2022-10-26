@@ -76,7 +76,7 @@ export default {
   height: 100%;
 }
 
-/deep/ .nav {
+::v-deep .nav {
   .nav-link {
     border-left: 3px solid transparent;
     text-align: center;

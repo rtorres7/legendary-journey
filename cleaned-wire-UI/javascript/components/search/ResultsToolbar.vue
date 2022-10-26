@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "ResultsToolbar",
@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     notify() {
-      let message = this.resultsDisplay();
+      let message = this.resultsCount.toLocaleString() + " Wire Results";
       this.$announcer.set(message);
     },
     resultsDisplay() {

@@ -1,6 +1,6 @@
 <template>
   <div class="pr-5">
-    <div class="wire-date _temp_488-3" v-if="date">
+    <div class="wire-date pl-3" v-if="date">
       <div class="days pb-1 pt-1">{{ date | moment("DD") }}</div>
       <div class="months">{{ date | moment("MMM") }}</div>
       <div class="years" v-if="fullDate">{{ date | moment("YYYY") }}</div>
@@ -24,7 +24,7 @@ export default {
       if (isEmpty(this.documentDate)) {
         return;
       }
-      return Date.parse(this.documentDate);
+      return this.$moment(this.documentDate);
     },
   },
 };

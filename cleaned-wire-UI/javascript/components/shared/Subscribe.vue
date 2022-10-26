@@ -6,13 +6,13 @@
     >
       <template v-if="is_subscribed">
         <span class="fa fa-star mr-2"></span> Unsubscribe<span class="sr-only">
-          from {{ this.agency }} {{ this.name }} front page email
+          from {{ this.agency }} {{ this.name }} front page _temp_37
           notifications</span
         >
       </template>
       <template v-else>
         <span class="fa fa-star-o mr-2"></span> Subscribe<span class="sr-only">
-          to {{ this.agency }} {{ this.name }} front page email
+          to {{ this.agency }} {{ this.name }} front page _temp_37
           notifications</span
         >
       </template>
@@ -59,14 +59,14 @@ export default {
           ? "stop receiving "
           : "receive ";
         return (
-          "<p>Email subscribers receive a daily table of contents with links " +
+          "<p>_temp_37 subscribers receive a daily table of contents with links " +
           "to featured articles published in the last 24 hours.</p><p>" +
           'Choose the "' +
           this.button_text +
           '" button below to ' +
           button_action +
-          "email at <span class='text-bold'>" +
-          this.user.email +
+          "_temp_37 at <span class='text-bold'>" +
+          this.user._temp_37 +
           "</span></p>"
         );
       }
@@ -84,7 +84,7 @@ export default {
 .fa-star-o {
   font-size: $font-size-3;
 }
-/deep/ .modal-header-title {
+::v-deep .modal-header-title {
   color: $pri-800;
   font-size: $font-size-5;
 }

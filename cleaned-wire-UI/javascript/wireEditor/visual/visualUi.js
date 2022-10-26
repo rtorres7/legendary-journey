@@ -72,9 +72,9 @@ function getLabelText(visualParams) {
 }
 
 function getVisuals() {
-  const url = window.location.pathname.replace(
+  const _temp_1 = window.location.pathname.replace(
     /edit$/,
     "attachments.json?selector=visuals"
   );
-  return axios.get(url);
+  return axios.get(_temp_1);
 }

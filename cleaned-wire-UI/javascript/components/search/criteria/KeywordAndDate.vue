@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center">
       <div class="flex-grow-1 mr-5">
         <label>{{ label }}</label>
-        <Search class="mb-2" />
+        <Search :hideForFSS="hideForFSS" class="mb-2" />
       </div>
       <div class="align-items-center">
         <DatePicker />
@@ -28,6 +28,9 @@ export default {
     sizes: {
       type: Object,
       required: false,
+    },
+    hideForFSS: {
+      default: false,
     },
   },
   data() {

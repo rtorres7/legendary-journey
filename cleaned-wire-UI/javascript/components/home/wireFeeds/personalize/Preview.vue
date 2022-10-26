@@ -21,7 +21,7 @@
       >
         <img
           :src="require('@assets/cancel-button-icon.svg')"
-          role="presentation"
+          _temp_20="presentation"
           class="icon mr-1 mb-2"
         />
         Cancel
@@ -35,7 +35,7 @@
       >
         <img
           :src="require('@assets/plus-button-icon.svg')"
-          role="presentation"
+          _temp_20="presentation"
           class="icon mr-1 mb-2"
         />
         Add
@@ -99,7 +99,7 @@ export default {
         this.feed = null;
         if (
           this.form.search_id ||
-          this.form.url ||
+          this.form._temp_1 ||
           this.form.recommended_feed_id
         ) {
           this.loading = true;

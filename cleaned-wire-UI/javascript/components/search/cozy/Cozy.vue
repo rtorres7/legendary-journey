@@ -37,24 +37,14 @@
 
 <script>
 import { mapState } from "vuex";
-import preloader from "@shared/mixins/preloader";
 import SiteEnhancementCard from "../../home/SiteEnhancementCard";
 import Card from "../../home/featured/Card";
 
 export default {
-  name: "Cozy.vue",
+  name: "Cozy",
   components: { Card, SiteEnhancementCard },
-  mixins: [preloader],
   computed: {
     ...mapState("search", ["results", "siteEnhancement"]),
-  },
-  watch: {
-    results() {
-      this.preloadResults(this.results);
-    },
-  },
-  mounted() {
-    this.preloadResults(this.results);
   },
 };
 </script>

@@ -1,7 +1,10 @@
 <template>
-  <div class="mt-6 standard-page-margin">
-    <vanity-title title="Alerts"></vanity-title>
-    <b-container fluid>
+  <div>
+    <div v-if="errored">
+      <NotFound />
+    </div>
+    <b-container class="mt-6 standard-page-margin" v-else>
+      <vanity-title title="Alerts"></vanity-title>
       <b-row>
         <b-col class="col-24 col-lg-12">
           <AlertForm :form="formData" ref="alertForm" />
@@ -41,6 +44,7 @@
 import VanityTitle from "../../vanity/VanityTitle";
 import AlertForm from "./AlertForm";
 import AlertGroup from "./AlertGroup";
+import NotFound from "@shared/errors/NotFound";
 import axios from "axios";
 
 export default {
@@ -49,9 +53,11 @@ export default {
     VanityTitle,
     AlertForm,
     AlertGroup,
+    NotFound,
   },
   data() {
     return {
+      errored: false,
       formData: null,
       allAlerts: null,
     };
@@ -71,9 +77,21 @@ export default {
   },
   methods: {
     populateAlerts() {
-      axios.get("/alerts/").then((response) => {
-        this.allAlerts = response.data;
-      });
+      axios
+        .get("/alerts/")
+        .then((response) => {
+          this.allAlerts = response.data;
+          this.errored = false;
+        })
+        .catch((e) => {
+          this.errored = true;
+          this.$wireNotification({
+            title: "Alert Error",
+            duration: 5000,
+            text: "Unable to load alerts.",
+            type: "error",
+          });
+        });
     },
     resetFormData() {
       this.formData = {
@@ -87,19 +105,29 @@ export default {
       };
     },
     deleteAlert(id) {
-      axios.delete("/alerts/" + id).then(() => {
-        this.$wireNotification({
-          title: "Alert Deleted",
-          duration: 5000,
-          text: "Alert deleted",
-          type: "success",
+      axios
+        .delete("/alerts/" + id)
+        .then(() => {
+          this.$wireNotification({
+            title: "Alert Deleted",
+            duration: 5000,
+            text: "Alert deleted",
+            type: "success",
+          });
+          this.populateAlerts();
+          if (this.formData.id == id) {
+            this.resetFormData();
+          }
+          this.$refs.alertForm.setFocus();
+        })
+        .catch((e) => {
+          this.$wireNotification({
+            title: "Alert Error",
+            duration: 5000,
+            text: "Unable to delete alerts.",
+            type: "error",
+          });
         });
-        this.populateAlerts();
-        if (this.formData.id == id) {
-          this.resetFormData();
-        }
-        this.$refs.alertForm.setFocus();
-      });
     },
     loadForm(alert) {
       this.formData = {

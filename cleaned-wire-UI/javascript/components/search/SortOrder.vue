@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { upperFirst } from "lodash";
+
 export default {
   name: "SortOrder",
   data() {
@@ -48,7 +50,7 @@ export default {
         name: this.$route.name,
         query,
       });
-      this.selected = _.upperFirst(value);
+      this.selected = upperFirst(value);
       this.$store.dispatch("search/search", this.$route);
     },
     clearSearchOrder() {

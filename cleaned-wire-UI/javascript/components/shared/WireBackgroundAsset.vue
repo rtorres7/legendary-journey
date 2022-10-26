@@ -1,8 +1,8 @@
 <template>
   <div
-    class="wire-background-_temp_311"
+    class="wire-background-asset"
     :style="{
-      'background-image': 'url(' + img + ')',
+      'background-image': '_temp_1(' + img + ')',
     }"
     :class="{ 'pri-800-bg': blueBackground, fill }"
   >
@@ -32,7 +32,7 @@ export default {
 <style scoped lang="scss">
 @import "../../../assets/stylesheets/variables_and_mixins";
 
-.wire-background-_temp_311 {
+.wire-background-asset {
   background-repeat: no-repeat;
 }
 

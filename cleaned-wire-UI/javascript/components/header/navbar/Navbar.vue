@@ -43,7 +43,7 @@
         <Search :header="true" class="flex-grow-1" />
       </b-collapse>
       <b-navbar-toggle
-        _temp_576="navbarSupportedContent"
+        target="navbarSupportedContent"
         class="m-1 ml-auto"
       ></b-navbar-toggle>
     </b-navbar>
@@ -54,9 +54,8 @@
 import { mapState } from "vuex";
 
 import Issues from "./Issues";
-import IssuesInline from "./IssuesInline";
 import Leadership from "./Leadership";
-import NavLink from "./NavLink";
+import LeadershipInline from "./LeadershipInline";
 import Regions from "./Regions";
 import Concepts from "./Concepts";
 import ConceptsInline from "./ConceptsInline";
@@ -64,23 +63,21 @@ import SavedSearches from "./SavedSearches";
 import YouLink from "./YouLink";
 import Logo from "@shared/Logo";
 import Search from "@shared/Search";
-import LeadershipInline from "./LeadershipInline";
-var Admin = () => import(/* webpackChunkName: "admin" */ "./Admin/Admin");
+
+var Admin = () => import(/* webpackChunkName: "admin" */ "./Admin");
 
 export default {
   name: "Navbar",
   components: {
-    LeadershipInline,
     Search,
     Logo,
     Admin,
     SavedSearches,
     Issues,
-    IssuesInline,
     Concepts,
     ConceptsInline,
     Leadership,
-    NavLink,
+    LeadershipInline,
     Regions,
     YouLink,
   },
@@ -97,11 +94,11 @@ export default {
   border-color: white;
 }
 
-/deep/ .nav-link {
+::v-deep .nav-link {
   font-family: $headings-font-family;
 }
 
-/deep/ .navbar-collapse.collapse.show .navbar-nav {
+::v-deep .navbar-collapse.collapse.show .navbar-nav {
   .nav-link {
     border-left: 4px solid $alt-700;
     border-top: unset;
@@ -127,7 +124,7 @@ export default {
   flex-direction: row;
 }
 
-/deep/ .navbar-nav {
+::v-deep .navbar-nav {
   .nav-link {
     border-top: 5px solid $alt-700;
     height: 70px;
@@ -156,13 +153,13 @@ export default {
 }
 
 @media (min-width: $screen-md) and (max-width: $screen-xl) {
-  /deep/ ul.dropdown-menu.show {
+  ::v-deep ul.dropdown-menu.show {
     max-height: 70vh;
     overflow-y: auto;
   }
 }
 
-/deep/ .navbar-nav {
+::v-deep .navbar-nav {
   font-size: $font-size-large;
 }
 
@@ -171,7 +168,7 @@ export default {
   height: 40px;
 }
 
-/deep/ .logo {
+::v-deep .logo {
   margin-top: -8px;
   margin-right: 15px;
 }

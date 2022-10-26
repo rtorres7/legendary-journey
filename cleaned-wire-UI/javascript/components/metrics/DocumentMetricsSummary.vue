@@ -2,13 +2,13 @@
   <div>
     <b-row class="py-2">
       <b-col class="text-nowrap">
-        <a :href="linkPath" _temp_576="_blank">
-          {{ document.documentNumber }}
+        <a :href="linkPath" target="_blank">
+          {{ document.doc_num }}
         </a>
       </b-col>
       <b-col class="text-nowrap">
         <span class="metrics-label">Publication Date:</span
-        >{{ formatDateTime(document.publicationDate) }}
+        >{{ formatDateTime(document.display_date) }}
       </b-col>
       <b-col class="text-nowrap text-right">
         <span class="metrics-label">Unique Readers:</span
@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     linkPath() {
-      return `/documents/${this.document.documentNumber}`;
+      return `/documents/${this.$route.params["docNum"]}`;
     },
     readershipDateRange() {
       let startDate = this.formatDateTime(

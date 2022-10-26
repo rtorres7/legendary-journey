@@ -42,39 +42,34 @@
             data-usage="nav-modal-next"
           >
             Next<span class="sr-only"> article</span
-            ><span class="_temp_488-3 fa fa-angle-right"></span>
+            ><span class="pl-3 fa fa-angle-right"></span>
           </b-button>
         </span>
       </b-button-toolbar>
     </div>
-    <div>
-      <rails-view :docNum="docNum" />
+    <div id="pageMainContent">
+      <Document />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
-import RailsView from "../RailsView";
+import Document from "../document/Document";
 import navmodalLoader from "@shared/mixins/navmodalLoader";
 import { flatten, concat } from "lodash";
 
 export default {
   name: "NavModal",
-  components: { RailsView },
+  components: { Document },
   mixins: [navmodalLoader],
   props: ["docNum", "returnPath", "section"],
-
-  data() {
-    return {
-      articleDocNum: null,
-    };
-  },
 
   computed: {
     ...mapState("articles", [
       "additionalContent",
-      "executiveUpdates",
+      "headlineStack",
+      "headlineTitle",
       "highlights",
       "featured",
       "more",
@@ -92,7 +87,7 @@ export default {
       return {
         name: "document",
         params: {
-          docNum: this.next,
+          docNum: this.next || this.docNum,
         },
         query: {
           search_text: this.$route.query.search_text,
@@ -124,15 +119,16 @@ export default {
       }
     },
     setArticles(section) {
+      let articles = [];
       switch (section) {
-        case "acrossTheCIA":
-          let articles = [];
+        case "_temp_538":
+          articles = [];
           this.additionalContent.content_cards.forEach((contentType) =>
             articles.push(contentType.articles)
           );
           articles = flatten(articles);
 
-          this.setupNavModal("Across the _temp_28", articles, this.returnPath);
+          this.setupNavModal("Across the _temp_6", articles, this.returnPath);
           break;
         case "acrossTheFBI":
           articles = [];
@@ -140,12 +136,12 @@ export default {
             articles.push(contentType.articles)
           );
           articles = flatten(articles);
-          this.setupNavModal("Across the FBI", articles, this.returnPath);
+          this.setupNavModal("Across the _temp_537", articles, this.returnPath);
           break;
-        case "executiveUpdates":
+        case "headlineStack":
           this.setupNavModal(
-            "Executive Updates",
-            this.executiveUpdates,
+            this.headlineTitle,
+            this.headlineStack,
             this.returnPath
           );
           break;

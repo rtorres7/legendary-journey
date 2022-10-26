@@ -3,9 +3,9 @@
     <VanityHeader
       v-if="!loading"
       :title="$route.params.countryName"
-      :code="country.code"
+      :code="countryCode"
       class="standard-page-margin"
-      :mapCodes="[country.code]"
+      :mapCodes="[countryCode]"
     >
       <div class="font-size-4 alt-800 mb-5">{{ subregion }}</div>
     </VanityHeader>
@@ -17,7 +17,6 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 
-import CountryLeaders from "./CountryLeaders";
 import ResultsWithNav from "../search/ResultsWithNav";
 import VanityHeader from "@shared/VanityHeader";
 import vanityPage from "@shared/mixins/vanityPage";
@@ -25,7 +24,7 @@ import Pills from "../search/pills/Pills";
 
 export default {
   name: "Countries",
-  components: { CountryLeaders, Pills, ResultsWithNav, VanityHeader },
+  components: { Pills, ResultsWithNav, VanityHeader },
   mixins: [vanityPage],
   computed: {
     ...mapState("metadata/criteria/countries", { countries: "values" }),
@@ -50,16 +49,20 @@ export default {
       if (this.loading) {
         return null;
       }
-      for (const_temp_19in this.countries) {
-        const country = this.countries[C];
+      for (const c in this.countries) {
+        const country = this.countries[c];
         if (country.name === this.$route.params.countryName) {
           return country;
         }
       }
     },
 
+    countryCode() {
+      return this.country ? this.country.code : "";
+    },
+
     subregion() {
-      let subregion = this.getSubregionForCountry(this.country.code);
+      let subregion = this.getSubregionForCountry(this.countryCode);
       if (subregion) {
         return subregion.name;
       }

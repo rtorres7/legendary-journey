@@ -4,6 +4,7 @@
       >({{ portionMark }})</span
     >
     <span v-html="textString" class="portion_marked_string"></span>
+    <!-- <span class="sr-only">_temp_39 00012345</span> -->
   </span>
 </template>
 
@@ -20,7 +21,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ em {
+::v-deep em {
   background-color: $alt-400;
 }
 </style>

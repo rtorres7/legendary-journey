@@ -14,7 +14,7 @@ export default {
   actions: {
     preload({ state, commit }, docNum) {
       axios
-        .get("/preload/documents/" + docNum + "/")
+        .get("/preload/documents/" + docNum + ".json")
         .then((response) => {
           commit("importPreload", { docNum, data: response.data });
         })
@@ -30,14 +30,12 @@ export default {
         if (articleNum === docNum) {
           if (ind > 0) {
             state.previous = state.articleList[ind - 1];
-            dispatch("preload", state.previous);
           } else {
             state.previous = null;
           }
 
           if (ind < state.articleList.length - 1) {
             state.next = state.articleList[ind + 1];
-            dispatch("preload", state.next);
           } else {
             state.next = null;
           }

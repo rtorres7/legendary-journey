@@ -16,6 +16,9 @@ export default {
   name: "RegionsSubregionsCountries",
   components: { WireSelect },
   props: {
+    hideForFSS: {
+      default: false,
+    },
     label: {
       type: String,
       default: "Regions, Subregions & Countries",
@@ -34,24 +37,34 @@ export default {
 
     options() {
       let options = [];
-      this.regions.forEach((region) => {
-        options.push({
-          value: region.code,
-          text: region.name,
-          type: "regions[]",
-          children: true,
-        });
-        region.subregions.forEach((subregionCode) => {
-          const subregion = this.getSubregionForCode(subregionCode);
-          options.push({
-            value: subregion.code,
-            text: subregion.name,
-            type: "subregions[]",
-            indent: true,
-          });
-        });
-      });
 
+      if (!this.hideForFSS) {
+        this.regions.forEach((region) => {
+          options.push({
+            value: region.code,
+            text: region.name,
+            type: "regions[]",
+            children: true,
+          });
+          if (region.subregions.length > 1)
+            region.subregions.forEach((subregionCode) => {
+              const subregion = this.getSubregionForCode(subregionCode);
+              options.push({
+                value: subregion.code,
+                text: subregion.name,
+                type: "subregions[]",
+                indent: true,
+              });
+            });
+        });
+      }
+
+      options.push({
+        text: "Unknown",
+        value: "AX1",
+        type: "countries[]",
+        children: true,
+      });
       options.push({
         text: "Countries",
         value: "",

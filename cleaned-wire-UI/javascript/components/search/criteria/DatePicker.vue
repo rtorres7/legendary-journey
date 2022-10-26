@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label class="d-block _temp_488-0">Date</label>
+    <label class="d-block pl-0">{{ title }}</label>
     <b-btn
-      v-b-modal.search-date-modal
+      @click="$bvModal.show(uniqueModalId)"
       aria-label="search date range selector"
       class="p-0 px-2"
     >
@@ -14,7 +14,8 @@
     </b-btn>
 
     <b-modal
-      id="search-date-modal"
+      :id="uniqueModalId"
+      class="search-date-modal"
       title="Select Your Date Range"
       title-class="modal-header-title"
       @ok="setDate()"
@@ -129,11 +130,18 @@
 import { mapMutations, mapState } from "vuex";
 import WireBackgroundAsset from "@shared/WireBackgroundAsset";
 import urlStore from "@shared/mixins/urlStore";
+import navigationErrorHandlerMixin from "@shared/mixins/navigationErrorHandlerMixin";
 
 export default {
   name: "DatePicker",
   components: { WireBackgroundAsset },
-  mixins: [urlStore],
+  mixins: [urlStore, navigationErrorHandlerMixin],
+  props: {
+    title: {
+      default: "Date",
+      type: String,
+    },
+  },
   data() {
     return {
       // we need start and end date entry in order to support text fields
@@ -150,6 +158,7 @@ export default {
         // showMonths: 2,
         inline: true,
       },
+      uniqueModalId: "id" + Math.random().toString(16).slice(2),
     };
   },
 
@@ -231,16 +240,21 @@ export default {
     },
 
     setDate() {
+      this.$emit("datesSelected", this.startDate, this.endDate);
       var query = Object.assign({}, this.$route.query);
-      this.$router.push({
-        query: {
-          ...query,
-          ...{
-            start_date: this.startDate,
-            end_date: this.endDate,
+      this.$router
+        .push({
+          query: {
+            ...query,
+            ...{
+              start_date: this.startDate,
+              end_date: this.endDate,
+            },
           },
-        },
-      });
+        })
+        .catch((failure) => {
+          this.handleNavigationErrors(failure);
+        });
     },
 
     getSetDate() {
@@ -262,7 +276,7 @@ export default {
   height: 30px;
   width: 30px;
 }
-/deep/ .dropdown-toggle-no-caret::after {
+::v-deep .dropdown-toggle-no-caret::after {
   display: none;
 }
 #search-date-range-picker {
@@ -273,18 +287,14 @@ export default {
     color: $text-dark;
   }
 }
-#search-date-modal {
+.search-date-modal {
   /*width: 90vw;*/
   background-color: white;
 }
-/deep/ .modal-dialog {
+::v-deep .modal-dialog {
   max-width: 60rem;
 }
-/deep/.btn-outline-secondary {
-  color: $text-dark;
-}
 .btn-secondary {
-  color: $text-dark;
   background-color: unset;
   border: unset;
   padding-top: 0;
@@ -294,10 +304,13 @@ export default {
     box-shadow: 0 0 0 0.2rem $alt-500;
   }
 }
+::v-deep .btn-outline-secondary {
+  color: $text-dark;
+}
 .quick-links {
   min-width: 125px;
 }
-/deep/ .modal-header-title {
+::v-deep .modal-header-title {
   color: $pri-800;
   font-size: $font-size-5;
 }

@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .modal-header-title {
+::v-deep .modal-header-title {
   color: $pri-800;
   font-size: $font-size-5;
 }

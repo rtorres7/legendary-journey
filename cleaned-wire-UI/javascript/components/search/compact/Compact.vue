@@ -10,7 +10,7 @@
       />
       <Card
         v-for="(article, index) in results"
-        :key="article.doc_num"
+        :key="`${index}_${article.doc_num}`"
         :article="article"
         :index="index"
         section="search"
@@ -28,8 +28,6 @@
 import { mapState } from "vuex";
 import Card from "./Card";
 import SiteEnhancementCard from "../../home/SiteEnhancementCard";
-import CozyCard from "../../home/featured/Card";
-import preloader from "@shared/mixins/preloader";
 import Aggregations from "./Aggregations";
 import AggregateCollapse from "./AggregateCollapse";
 
@@ -39,20 +37,10 @@ export default {
     AggregateCollapse,
     Aggregations,
     Card,
-    CozyCard,
     SiteEnhancementCard,
   },
-  mixins: [preloader],
   computed: {
     ...mapState("search", ["results", "siteEnhancement"]),
-  },
-  watch: {
-    results() {
-      this.preloadResults(this.results);
-    },
-  },
-  mounted() {
-    this.preloadResults(this.results);
   },
 };
 </script>

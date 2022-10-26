@@ -14,7 +14,7 @@ export default {
   props: {
     label: {
       type: String,
-      default: "Fisa Role",
+      default: "Fisa _temp_20",
     },
     sizes: {
       type: Object,
@@ -28,10 +28,10 @@ export default {
     }),
     options() {
       let options = [];
-      this.fisaRole.forEach((role) => {
+      this.fisaRole.forEach((_temp_20) => {
         options.push({
-          value: role.code,
-          text: role.name,
+          value: _temp_20.code,
+          text: _temp_20.name,
           type: "fisa_role[]",
         });
       });

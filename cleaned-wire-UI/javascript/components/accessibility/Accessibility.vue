@@ -9,7 +9,7 @@
       {{ this.agency }} {{ this.name }}
       would like to hear your feedback on how we're doing in meeting the
       accessibility objectives:
-      <router-link to="/feedback">Feedback</router-link>
+      <router-link to="/contact_us">Feedback</router-link>
     </p>
     <b-row class="pb-8">
       <b-col class="mr-7 pb-8"><DatePicker /></b-col>

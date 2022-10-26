@@ -1,4 +1,4 @@
-import { remove } from "lodash";
+import { remove, uniq } from "lodash";
 
 export default {
   props: ["query", "queryValue"],
@@ -32,8 +32,12 @@ export default {
       }
 
       this.removeSearchIdIfNecessary(criteria);
+
+      // remove any duplicate values in criteria
+      query[criteria] = uniq(query[criteria]);
+
       this.$nextTick(() => {
-        this.$router.push({ query });
+        this.$router.push({ query }).catch(() => {});
       });
     },
 
@@ -42,6 +46,16 @@ export default {
       let query = Object.assign({}, this.$route.query);
       if (Array.isArray(query[this.query])) {
         if (query[this.query].includes(this.queryValue)) {
+          if (
+            this.queryValue == query["search_title"] ||
+            (query["selected_for[]"] &&
+              this.query["search_title"] == query["selected_for[]"][0]) ||
+            (query["search_reporting_type"] != undefined &&
+              this.queryValue == query["search_reporting_type"])
+          ) {
+            delete query["search_title"];
+          }
+
           query[this.query] = remove(query[this.query], (n) => {
             return n !== this.queryValue;
           });
@@ -51,6 +65,7 @@ export default {
         delete query["end_date"];
       } else {
         delete query[this.query];
+        delete query["search_title"];
       }
 
       delete query["page"];

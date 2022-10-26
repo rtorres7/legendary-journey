@@ -5,7 +5,9 @@ export default {
   state: {
     loading: true,
     pretend: null,
-    user: {},
+    user: {
+      authorizations: {},
+    },
   },
 
   getters: {
@@ -21,15 +23,54 @@ export default {
       }
       return false;
     },
-    canUseMetrics: (state, getters) => {
-      return getters.hasRole("metrics_user");
+    canExportZip: (state) => {
+      return state.user.authorizations.canExportZip;
+    },
+    canManageRelatedProducts: (state) => {
+      return state.user.authorizations.canManageRelatedProducts;
+    },
+    canUnpublishDocuments: (state) => {
+      return state.user.authorizations.canUnpublishDocuments;
+    },
+    canUpdateAttachments: (state) => {
+      return state.user.authorizations.canUpdateAttachments;
+    },
+    canManageSelects: (state) => {
+      return state.user.authorizations.canManageSelects;
+    },
+    canManageFeatures: (state) => {
+      return state.user.authorizations.canManageFeatures;
+    },
+    canManageWire: (state) => {
+      return state.user.authorizations.canManageWire;
+    },
+    canManageUser: (state) => {
+      return state.user.authorizations.canManageUser;
+    },
+    canManageUserRoles: (state) => {
+      return state.user.authorizations.canManageUserRoles;
+    },
+    canManageLocks: (state) => {
+      return state.user.authorizations.canManageLocks;
+    },
+    canManageSpecialEditions: (state) => {
+      return state.user.authorizations.canManageSpecialEditions;
+    },
+    canUseMetrics: (state) => {
+      return state.user.authorizations.canUseMetrics;
+    },
+    canPreviewWireSubscriptionEmail: (state) => {
+      return state.user.authorizations.canPreviewWireSubscriptionEmail;
+    },
+    canViewDocumentAdminTools: (state) => {
+      return state.user.authorizations.canViewDocumentAdminTools;
     },
   },
 
   actions: {
     loadUser({ state, commit }) {
       state.loading = true;
-      axios.get("/my_wire/user_data").then((response) => {
+      axios.get("/my_wire/user_data?time=" + new Date()).then((response) => {
         commit("importUser", response.data);
       });
     },
@@ -41,13 +82,16 @@ export default {
         })
         .then(() => {
           commit("importPretend", pretendAs);
+          location.reload();
         });
     },
 
     pretendStatus({ state, commit }) {
-      axios.get("/my_wire/preferences/pretends").then((response) => {
-        commit("importPretend", response.data.pretend);
-      });
+      axios
+        .get("/my_wire/preferences/pretends?time=" + moment())
+        .then((response) => {
+          commit("importPretend", response.data.pretend);
+        });
     },
   },
 

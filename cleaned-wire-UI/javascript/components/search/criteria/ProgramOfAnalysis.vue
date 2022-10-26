@@ -13,7 +13,7 @@ export default {
   props: {
     label: {
       type: String,
-      default: "_temp_190",
+      default: "_temp_384",
     },
     sizes: {
       type: Object,

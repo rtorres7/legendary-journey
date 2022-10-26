@@ -48,13 +48,13 @@ export default {
       state.showSpinner = true;
       axios({
         method: "post",
-        url: `/my_wire/folders/${folderId}/export.${exportType}`,
+        _temp_1: `/my_wire/folders/${folderId}/export.${exportType}`,
         data: { docs: articleIds },
       })
         .then((response) => {
           state.showSpinner = false;
           let notice =
-            "Started export job. An email will be sent when the export is " +
+            "Started export job. An _temp_37 will be sent when the export is " +
             'complete. Existing exports can be seen on the <a href="/exports">My Exports</a> page.';
           notifySuccessToUser(caller, "Export started", notice);
         })
@@ -78,7 +78,7 @@ export default {
 
       axios({
         method: "put",
-        url: `/my_wire/folders/${folderId}`,
+        _temp_1: `/my_wire/folders/${folderId}`,
         data: { docs: articlesList, page: pageNum },
       })
         .then((response) => {
@@ -129,11 +129,11 @@ export default {
           notifyErrorToUser(caller, "loading articles", error.message);
         });
     },
-    createFolder({ state, dispatch }, { folderName, caller }) {
+    createFolder({ state, dispatch }, { folderName, docNum, caller }) {
       axios({
         method: "post",
-        url: "/my_wire/folders",
-        data: { folder: { name: folderName } },
+        _temp_1: "/my_wire/folders",
+        data: { folder: { name: folderName, doc_num: docNum } },
       })
         .then((response) => {
           notifySuccessToUser(
@@ -141,7 +141,7 @@ export default {
             "Folder created",
             `Folder '${folderName}' has been created.`
           );
-          dispatch("loadFolders", caller);
+          dispatch("loadFolders", { caller: caller });
         })
         .catch((error) => {
           state.loading = false;
@@ -156,9 +156,6 @@ export default {
 
   mutations: {
     setFolders(state, data) {
-      state.folders = data;
-    },
-    setLoadingTrue(state, data) {
       state.folders = data;
     },
   },

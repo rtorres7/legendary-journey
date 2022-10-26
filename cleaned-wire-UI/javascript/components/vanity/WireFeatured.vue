@@ -39,11 +39,11 @@ export default {
   methods: {
     fetchArticles() {
       // 10085 is "WIRe Intelligence Review"
-      var url =
+      var _temp_1 =
         "/search?" +
         this.$route.fullPath.split("?")[1] +
         "&product_types[]=10085";
-      axios.get(url).then((response) => {
+      axios.get(_temp_1).then((response) => {
         this.articles = [];
         response.data.results.forEach(
           function (item) {

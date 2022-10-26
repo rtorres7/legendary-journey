@@ -6,7 +6,7 @@
           <img :src="imageUrl" :alt="'image of ' + leader.name" />
         </b-col>
         <b-col>
-          <b-card-title>{{ leader.name }}</b-card-title>
+          <h3>{{ leader.name }}</h3>
           <b-card-text>{{ truncatedPosition }}</b-card-text>
         </b-col>
       </b-row>
@@ -45,7 +45,7 @@ export default {
 
 img {
   border-radius: 50px;
-  max-height: 75px;
+  max-height: 50px;
 }
 
 .card .card-header {

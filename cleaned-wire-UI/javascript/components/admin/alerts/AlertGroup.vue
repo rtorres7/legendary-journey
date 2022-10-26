@@ -4,7 +4,7 @@
       <b-btn
         variant="link"
         size="lg"
-        class="alert-type-title w-100 _temp_488-0"
+        class="alert-type-title w-100 pl-0"
         :aria-expanded="visible"
         :aria-label="title + ' Alerts'"
         @click="visible = !visible"
@@ -32,7 +32,7 @@
               {{ formatDateTime(alert.end_at) }})
             </span>
             <b-btn
-              class="alert-detail-actions _temp_488-0 pr-0"
+              class="alert-detail-actions pl-0 pr-0"
               variant="link"
               :aria-label="'Edit ' + alert.title"
               @click="editAlert(alert)"
@@ -130,7 +130,7 @@ export default {
 .alert-details {
   font-size: $font-size-2;
   font-family: "Roboto Condensed";
-  color: $alt-700;
+  color: $alt-800;
   text-transform: uppercase;
 }
 .alert-detail-actions {

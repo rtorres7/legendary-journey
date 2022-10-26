@@ -3,7 +3,7 @@
     <div class="standard-page-margin">
       <SectionHeader
         v-bind:title="highlights_header"
-        :href="highlights.path"
+        :href="`${highlights.path}&search_title=${searchTitle}`"
         v-bind:description="highlights_subtext"
         class="section-heading"
       />
@@ -32,6 +32,9 @@ export default {
       "highlights_header",
       "highlights_subtext",
     ]),
+    searchTitle() {
+      return this.highlights.path.replace(/.*selected_for%5B%5D=/, "");
+    },
   },
 };
 </script>

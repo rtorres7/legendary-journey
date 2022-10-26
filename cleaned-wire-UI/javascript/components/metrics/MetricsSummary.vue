@@ -2,7 +2,7 @@
   <div>
     <b-row class="py-2">
       <b-col class="text-nowrap">
-        <a :href="linkPath" _temp_576="_blank">
+        <a :href="linkPath" target="_blank">
           <i class="fa fa-search fa-fw"></i> Run This Search
         </a>
       </b-col>

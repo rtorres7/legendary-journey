@@ -3,30 +3,30 @@
     <div class="standard-page-margin align-items-center d-flex flex-wrap">
       <div class="user-state d-inline-flex mb-4">User State</div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-8 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-8 mb-3"
       >
         LOCK STATE
-        <span class="_temp_488-3 user-state-pills"
+        <span class="pl-3 user-state-pills"
           ><span :class="lockedIcon"></span> {{ lockedState }}</span
         >
       </div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-6 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-6 mb-3"
       >
-        _temp_28
-        <span class="_temp_488-3 user-state-pills">
+        _temp_6
+        <span class="pl-3 user-state-pills">
           <img
-            :src="require(`@assets/${statusIcon(user._temp_28)}.svg`)"
+            :src="require(`@assets/${statusIcon(user._temp_6)}.svg`)"
             class="status-icon"
           />
-          {{ yesOrNo(user._temp_28) }}
+          {{ yesOrNo(user._temp_6) }}
         </span>
       </div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-6 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-6 mb-3"
       >
         CONGRESS
-        <span class="_temp_488-3 user-state-pills">
+        <span class="pl-3 user-state-pills">
           <img
             :src="require(`@assets/${statusIcon(user.congress)}.svg`)"
             class="status-icon"
@@ -35,10 +35,10 @@
         </span>
       </div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-6 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-6 mb-3"
       >
-        _temp_120
-        <span class="_temp_488-3 user-state-pills">
+        _temp_233
+        <span class="pl-3 user-state-pills">
           <img
             :src="require(`@assets/${statusIcon(hasHcs)}.svg`)"
             class="status-icon"
@@ -47,10 +47,10 @@
         </span>
       </div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-6 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-6 mb-3"
       >
-        _temp_116
-        <span class="_temp_488-3 user-state-pills">
+        _temp_227
+        <span class="pl-3 user-state-pills">
           <img
             :src="require(`@assets/${statusIcon(hasGamma)}.svg`)"
             class="status-icon"
@@ -59,10 +59,10 @@
         </span>
       </div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-6 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-6 mb-3"
       >
-        _temp_144-R
-        <span class="_temp_488-3 user-state-pills">
+        _temp_273-R
+        <span class="pl-3 user-state-pills">
           <img
             :src="require(`@assets/${statusIcon(hasKlmR)}.svg`)"
             class="status-icon"
@@ -71,10 +71,10 @@
         </span>
       </div>
       <div
-        class="user-state-pills-title d-inline-flex align-items-center _temp_488-6 mb-3"
+        class="user-state-pills-title d-inline-flex align-items-center pl-6 mb-3"
       >
-        NEXT _temp_246 CHECK
-        <span class="_temp_488-3 user-state-pills">
+        NEXT _temp_450 CHECK
+        <span class="pl-3 user-state-pills">
           <img
             :src="require('@assets/calendar-icon-dark.svg')"
             class="cal-icon mr-2"
@@ -125,19 +125,19 @@ export default {
     hasHcs() {
       return (
         this.user.sci_codes &&
-        (this.user.sci_codes.includes("_temp_120-P") ||
-          this.user.sci_codes.includes("_temp_120"))
+        (this.user.sci_codes.includes("_temp_233-P") ||
+          this.user.sci_codes.includes("_temp_233"))
       );
     },
     hasGamma() {
       return (
         this.user.sci_codes &&
-        (this.user.sci_codes.includes("_temp_257-G") ||
+        (this.user.sci_codes.includes("SI_temp_226") ||
           this.user.sci_codes.includes("G"))
       );
     },
     hasKlmR() {
-      return this.user.sci_codes && this.user.sci_codes.includes("_temp_144-R");
+      return this.user.sci_codes && this.user.sci_codes.includes("_temp_273-R");
     },
     nextSCICheck() {
       let nextCheck = this.$moment();
