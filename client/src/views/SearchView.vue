@@ -63,7 +63,7 @@
               w-full
             "
           >
-            <div class="lg:w-2/5">
+            <div class="lg:w-3/5">
               <BaseInput
                 v-model="queryText"
                 label="Keyword Search or Filter"
@@ -73,11 +73,7 @@
               />
             </div>
             <template
-              v-for="n in [
-                queryFilters.regions,
-                queryFilters.issues,
-                queryFilters.reporting,
-              ]"
+              v-for="n in [queryFilters.regions, queryFilters.reporting]"
               :key="n"
             >
               <div class="lg:w-1/5">
@@ -182,6 +178,8 @@
       </Disclosure>
     </div>
   </BaseCard>
+  <!-- Search Booolean Selectors -->
+
   <!-- Results Container -->
   <template v-if="loadingResults">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -524,25 +522,26 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <div
-                  class="
-                    flex
-                    justify-between
-                    p-4
-                    border border-slate-900/10
-                    dark:border-slate-50/[0.12]
-                    energy:border-zinc-700
-                    h-full
-                  "
+                <router-link
+                  :to="{
+                    name: 'article',
+                    params: { doc_num: result.doc_num },
+                  }"
                 >
-                  <div class="px-2 flex flex-col justify-between">
-                    <div class="cursor-pointer hover:underline">
-                      <router-link
-                        :to="{
-                          name: 'article',
-                          params: { doc_num: result.doc_num },
-                        }"
-                      >
+                  <div
+                    class="
+                      flex
+                      justify-between
+                      p-4
+                      border border-slate-900/10
+                      dark:border-slate-50/[0.12]
+                      energy:border-zinc-700
+                      h-full
+                      hover:underline
+                    "
+                  >
+                    <div class="px-2 flex flex-col justify-between">
+                      <div>
                         <span
                           class="
                             text-slate-600
@@ -557,22 +556,22 @@
                           class="text-black dark:text-white energy:text-white"
                           >{{ result.title }}</span
                         >
-                      </router-link>
+                      </div>
+                      <div class="mt-2 text-sm">
+                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                      </div>
                     </div>
-                    <div class="mt-2 text-sm">
-                      {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                    <div v-show="result.hasImage">
+                      <ArticleImage
+                        class="w-[165px] h-[165px] sm:max-w-full h-full"
+                        :article="result"
+                        smartRender
+                        @imageNotFound="toggleImgContainer(result, false)"
+                        @imageLoaded="toggleImgContainer(result, true)"
+                      />
                     </div>
                   </div>
-                  <div v-show="result.hasImage">
-                    <ArticleImage
-                      class="w-[150px] h-[150px] sm:max-w-full h-full"
-                      :article="result"
-                      smartRender
-                      @imageNotFound="toggleImgContainer(result, false)"
-                      @imageLoaded="toggleImgContainer(result, true)"
-                    />
-                  </div>
-                </div>
+                </router-link>
               </template>
             </div>
           </template>
@@ -1150,21 +1149,21 @@ export default {
       });
       return items;
     };
-    const buildIssues = () => {
-      let items = [];
-      criteria.value.issues.forEach((issue) => {
-        items.push({ ...issue, type: "issues[]" });
-        issue.topics.forEach((topic) => {
-          items.push({
-            ...topic,
-            code: topic.codes[0],
-            type: "topics[]",
-            subitem: true,
-          });
-        });
-      });
-      return items;
-    };
+    // const buildIssues = () => {
+    //   let items = [];
+    //   criteria.value.issues.forEach((issue) => {
+    //     items.push({ ...issue, type: "issues[]" });
+    //     issue.topics.forEach((topic) => {
+    //       items.push({
+    //         ...topic,
+    //         code: topic.codes[0],
+    //         type: "topics[]",
+    //         subitem: true,
+    //       });
+    //     });
+    //   });
+    //   return items;
+    // };
     const buildReportingTypes = () => {
       let items = [];
       criteria.value.reporting_types.forEach((reportingType) => {
@@ -1190,17 +1189,17 @@ export default {
         items: buildRegions(),
         types: ["regions[]", "subregions[]", "countries[]"],
       };
-      const issues = {
-        items: buildIssues(),
-        types: ["issues[]", "topics[]"],
-      };
+      // const issues = {
+      //   items: buildIssues(),
+      //   types: ["issues[]", "topics[]"],
+      // };
       const reportings = {
         items: buildReportingTypes(),
         types: ["reporting_types[]", "product_types[]"],
       };
       const classifications = {
-        items: buildItems(criteria.value.classification, "classifications[]"),
-        types: ["classifications[]"],
+        items: buildItems(criteria.value.classification, "classification[]"),
+        types: ["classification[]"],
       };
       const mediaTypes = {
         items: buildItems(criteria.value.media_tags, "media_tags[]"),
@@ -1224,12 +1223,12 @@ export default {
           list: regions.items,
           types: regions.types,
         },
-        issues: {
-          label: "Issues & Topics",
-          model: currentModel(issues),
-          list: issues.items,
-          types: issues.types,
-        },
+        // issues: {
+        //   label: "Issues & Topics",
+        //   model: currentModel(issues),
+        //   list: issues.items,
+        //   types: issues.types,
+        // },
         reporting: {
           label: "Reporting & Product Types",
           model: currentModel(reportings),
@@ -1271,6 +1270,32 @@ export default {
     };
     const queryText = ref(route.query.text || "");
     const queryFilters = ref(buildQueryFilters());
+
+    console.log("route z: ", route);
+
+    const getBooleanMapping = (queryKey) => {
+      if (queryKey === "product_types[]") {
+        return false;
+      } else {
+        const bracketIndex = queryKey.indexOf("[]");
+        if (bracketIndex !== -1) {
+          return queryKey.slice(0, bracketIndex).concat("_bool");
+        }
+        return false;
+      }
+    };
+
+    const filteredKeys = Object.keys(route.query).filter((key) => {
+      if (key.indexOf("[]") !== -1) {
+        return true;
+      }
+      return false;
+    });
+
+    console.log("filtered keys: ", filteredKeys);
+
+    console.log(getBooleanMapping("regions[]"));
+
     /*
       - This method builds a watcher for each query filter in order to track changes at the individual listbox level
       - 1) First, a query value is initialized that contains a copy of the existing query.
@@ -1299,16 +1324,42 @@ export default {
             for (let i = 0; i < uniqueTypes.length; i++) {
               let valuesForType = [];
               for (let j = 0; j < newValue.model.length; j++) {
-                console.log("newValue.model: ", newValue.model);
+                //console.log("newValue.model: ", newValue.model);
                 if (newValue.model[j].type === uniqueTypes[i]) {
                   valuesForType.push(newValue.model[j].code);
                 }
               }
-              console.log("valuesForType after: ", valuesForType);
+              //console.log("valuesForType after: ", valuesForType);
               query[uniqueTypes[i]] = valuesForType;
             }
+
+            uniqueTypes.forEach((type) => {
+              const booleanMapping = getBooleanMapping(type);
+              if (booleanMapping) {
+                const mappingFound = Object.keys(query).find(
+                  (queryKey) => queryKey === booleanMapping
+                );
+                if (!mappingFound) {
+                  query[booleanMapping] = "and";
+                }
+                //console.log("mappingFound: ", mappingFound);
+              }
+              //console.log("booleanMapping: ", booleanMapping);
+            });
           }
           console.log("query: ", query);
+          /*
+          When the local watcher gets triggered
+          ============================
+          Check for unique types in the watcher
+          for each unique type, check if its boolean mapping exists in the route query being sent
+          if it exists and the unique type values length is 1 or less, remove the boolean mapping
+          if it exists and the unique type values length is more than 1, keep the boolean mapping
+          */
+          // uniqueTypes.forEach(type => {
+          //   const booleanMapping = getBooleanMapping(type);
+          //   console.log(booleanMapping)
+          // })
           router.replace({
             name: "search",
             query: query,
@@ -1375,7 +1426,7 @@ export default {
     };
 
     const showHighlightedResult = () => {
-      if (route.name === "search" && queryText.value !== "") {
+      if (route.name === "search" && route.query.text !== "") {
         return true;
       }
       return false;
