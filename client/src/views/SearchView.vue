@@ -225,7 +225,7 @@
               class="
                 flex
                 rounded-xl
-                bg-white
+                bg-slate-100
                 dark:bg-slate-700
                 energy:bg-zinc-600
                 p-2
@@ -553,7 +553,12 @@
                   p-4
                   border-b border-slate-900/10
                   dark:border-slate-50/[0.06]
-                  energy:border-zinc-700/50
+                  energy:border-zinc-50/[0.06]
+                "
+                :class="
+                  isLocked(result)
+                    ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
+                    : ''
                 "
               >
                 <div class="h-fit px-2 text-center">
@@ -568,14 +573,21 @@
                   }}</span>
                 </div>
                 <div class="px-2 w-full">
+                  <template v-if="isLocked(result)">
+                    <div class="flex mb-2 items-center">
+                      <LockClosedIcon
+                        class="mr-2 h-4 w-4"
+                        aria-hidden="true"
+                      ></LockClosedIcon>
+                      <span class="uppercase text-sm">Locked</span>
+                    </div>
+                  </template>
                   <div class="flex justify-between">
-                    <div class="basis-[768px] cursor-pointer hover:underline">
-                      <router-link
-                        :to="{
-                          name: 'article',
-                          params: { doc_num: result.doc_num },
-                        }"
-                      >
+                    <div
+                      class="basis-[768px] hover:underline"
+                      :class="isLocked(result) ? '' : 'cursor-pointer'"
+                    >
+                      <a @click="goToArticle(result)">
                         <span
                           class="
                             text-slate-600
@@ -591,7 +603,7 @@
                           class="text-black dark:text-white energy:text-white"
                           >{{ result.title }}</span
                         >
-                      </router-link>
+                      </a>
                     </div>
                     <div class="text-xs lg:text-sm">
                       {{ result.doc_num }}
@@ -621,12 +633,7 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <router-link
-                  :to="{
-                    name: 'article',
-                    params: { doc_num: result.doc_num },
-                  }"
-                >
+                <a @click="goToArticle(result)">
                   <div
                     class="
                       flex
@@ -638,8 +645,22 @@
                       h-full
                       hover:underline
                     "
+                    :class="
+                      isLocked(result)
+                        ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
+                        : 'cursor-pointer'
+                    "
                   >
                     <div class="px-2 flex flex-col justify-between">
+                      <template v-if="isLocked(result)">
+                        <div class="flex mb-2 items-center">
+                          <LockClosedIcon
+                            class="mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          ></LockClosedIcon>
+                          <span class="uppercase text-sm">Locked</span>
+                        </div>
+                      </template>
                       <div>
                         <span
                           class="
@@ -670,7 +691,7 @@
                       />
                     </div>
                   </div>
-                </router-link>
+                </a>
               </template>
             </div>
           </template>
@@ -1099,6 +1120,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
+import { LockClosedIcon } from "@heroicons/vue/solid";
 import ArticleImage from "@/components/ArticleImage";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
@@ -1129,6 +1151,7 @@ export default {
     ChevronUpIcon,
     SelectorIcon,
     XIcon,
+    LockClosedIcon,
     ArticleImage,
     SearchResultsTablePagination,
     SearchResultsFacets,
@@ -1202,7 +1225,7 @@ export default {
       - 4) The selectedModels represents the list of currently selected items in the list box
     */
     const currentModel = ({ items, types }) => {
-      console.log("currentModel: ", items, types);
+      //console.log("currentModel: ", items, types);
       const selectedModels = [];
       if (items.length > 0) {
         types.forEach((type) => {
@@ -1218,7 +1241,9 @@ export default {
           }
         });
       }
-      console.log("selectedModels: ", selectedModels);
+      if (selectedModels.length > 0) {
+        console.log("selectedModels: ", selectedModels);
+      }
       return selectedModels;
     };
 
@@ -1411,10 +1436,7 @@ export default {
       }
     };
 
-    //console.log(getBooleanMapping("regions[]"));
-
     const buildBooleanFilters = () => {
-      console.log("query: ", route.query);
       const filteredKeys = Object.keys(route.query).filter((key) => {
         if (key.indexOf("[]") !== -1) {
           return true;
@@ -1447,7 +1469,7 @@ export default {
             displayName: displayName ? displayName.name : null,
           };
         });
-        console.log("items: ", items);
+        //console.log("items: ", items);
         let boolean_val = "or";
         let toggleable = false;
         if (booleanMapping) {
@@ -1461,7 +1483,7 @@ export default {
           toggleable,
         });
       });
-      console.log("booleanFilterGroups: ", booleanFilterGroups);
+      //console.log("booleanFilterGroups: ", booleanFilterGroups);
       let booleanFilters = [];
       if (queryText) {
         booleanFilters.push(queryText);
@@ -1576,7 +1598,7 @@ export default {
             }
             uniqueTypes.forEach((type) => {
               const booleanMapping = getBooleanMapping(type);
-              console.log("booleanMapping: ", booleanMapping);
+              //console.log("booleanMapping: ", booleanMapping);
               if (booleanMapping) {
                 const mappingFound = Object.keys(query).find(
                   (queryKey) => queryKey === booleanMapping
@@ -1590,7 +1612,7 @@ export default {
               }
             });
           }
-          console.log("query: ", query);
+          //console.log("query: ", query);
           router.push({
             name: "search",
             query: query,
@@ -1665,6 +1687,15 @@ export default {
 
     const isLocked = (result) => {
       return !isEmpty(result.needed) || result.org_restricted;
+    };
+
+    const goToArticle = (result) => {
+      if (!isLocked(result)) {
+        router.push({
+          name: "article",
+          params: { doc_num: result.doc_num },
+        });
+      }
     };
 
     const toggleImgContainer = (result, value) => {
@@ -1795,6 +1826,7 @@ export default {
       queryText,
       searchQueryText,
       showHighlightedResult,
+      goToArticle,
       isLocked,
       toggleImgContainer,
       queryFilters,
