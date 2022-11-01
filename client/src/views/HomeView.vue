@@ -10,7 +10,6 @@
         w-5
       "
     ></CalendarIcon>
-    <BaseDatepicker v-model="date" :enableTimePicker="false"></BaseDatepicker>
   </div>
   <!-- Main Section -->
   <div
