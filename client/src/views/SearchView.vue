@@ -97,6 +97,25 @@
                       "
                     ></CalendarIcon>
                   </template>
+                  <template #left-sidebar>
+                    <div
+                      class="
+                        text-mission-light-blue
+                        dark:text-teal-400
+                        energy:text-energy-yellow
+                        p-4
+                        flex flex-col
+                        text-sm
+                        space-y-6
+                      "
+                    >
+                      <button @click="selectDate('24H')">Past 24 Hours</button>
+                      <button @click="selectDate('1WK')">Past Week</button>
+                      <button @click="selectDate('1MO')">Past Month</button>
+                      <button @click="selectDate('6MO')">Past 6 Months</button>
+                      <button @click="selectDate('1YR')">Past Year</button>
+                    </div>
+                  </template>
                 </BaseDatepicker>
               </div>
             </div>
@@ -1288,6 +1307,36 @@ export default {
       });
     };
 
+    const selectDate = (code) => {
+      const today = dayjs().toDate();
+      let pastDate = dayjs();
+      switch (code) {
+        case "24H":
+          pastDate = pastDate.subtract(1, "day").toDate();
+          break;
+        case "1WK":
+          pastDate = pastDate.subtract(1, "week").toDate();
+          break;
+        case "1MO":
+          pastDate = pastDate.subtract(1, "month").toDate();
+          break;
+        case "6MO":
+          pastDate = pastDate.subtract(6, "month").toDate();
+          break;
+        case "1YR":
+          pastDate = pastDate.subtract(1, "year").toDate();
+          break;
+      }
+      if (queryDateRange.value) {
+        queryDateRange.value[0] = pastDate;
+        queryDateRange.value[1] = today;
+      } else {
+        queryDateRange.value = [];
+        queryDateRange.value[0] = pastDate;
+        queryDateRange.value[1] = today;
+      }
+    };
+
     const clearFilters = () => {
       router.push({ name: "search", query: {} });
     };
@@ -1919,6 +1968,7 @@ export default {
       pageSubheader,
       queryDateRange,
       handleDateRange,
+      selectDate,
       clearFilters,
       queryText,
       searchQueryText,

@@ -26,6 +26,32 @@ export default {
 .dp__today {
   border-width: 2px;
 }
+.dp__input {
+  font-family: "Inter", "system-ui";
+  font-size: 0.9rem;
+}
+.dp__input_icons {
+  font-size: 0.9rem;
+}
+.dp__menu {
+  font-family: "Inter", "system-ui";
+  font-size: 0.9rem;
+}
+.dp__now_button {
+  font-size: 0.9rem;
+}
+.dp__calendar_wrap {
+  font-family: "Inter", "system-ui";
+}
+.dp__overlay {
+  font-family: "Inter", "system-ui";
+}
+.dp__time_input {
+  font-family: "Inter", "system-ui";
+}
+.dp__main {
+  font-family: "Inter", "system-ui";
+}
 .dp__theme_light {
   --dp-background-color: #ffffff;
   --dp-text-color: var(--color-slate-900);
@@ -41,7 +67,7 @@ export default {
   --dp-disabled-color: #f6f6f6;
   --dp-scroll-bar-background: #f3f3f3;
   --dp-scroll-bar-color: #959595;
-  --dp-success-color: var(--color-green-700);
+  --dp-success-color: rgb(3 85 166); // mission-light-blue
   --dp-success-color-disabled: var(--color-green-500);
   --dp-icon-color: var(--color-slate-900);
   --dp-danger-color: #ff6f60;
@@ -62,7 +88,7 @@ export default {
   --dp-disabled-color: #f6f6f6;
   --dp-scroll-bar-background: var(--color-slate-800);
   --dp-scroll-bar-color: var(--color-slate-300);
-  --dp-success-color: var(--color-green-400);
+  --dp-success-color: var(--color-teal-400);
   --dp-success-color-disabled: var(--color-green-200);
   --dp-icon-color: var(--color-slate-300);
   --dp-danger-color: #ff6f60;
@@ -83,7 +109,7 @@ export default {
   --dp-disabled-color: #f6f6f6;
   --dp-scroll-bar-background: var(--color-zinc-700);
   --dp-scroll-bar-color: var(--color-zinc-300);
-  --dp-success-color: var(--color-emerald-400);
+  --dp-success-color: rgb(239 208 85); // energy-yellow
   --dp-success-color-disabled: var(--color-emerald-200);
   --dp-icon-color: var(--color-zinc-300);
   --dp-danger-color: #ff6f60;
