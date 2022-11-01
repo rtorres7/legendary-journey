@@ -63,14 +63,42 @@
               w-full
             "
           >
-            <div class="lg:w-2/5">
-              <BaseInput
-                v-model="queryText"
-                label="Keyword Search or Filter"
-                type="text"
-                autocomplete="off"
-                @keyup.enter="searchQueryText"
-              />
+            <div class="lg:w-2/5 flex space-x-3">
+              <div class="w-full">
+                <BaseInput
+                  v-model="queryText"
+                  label="Keyword Search or Filter"
+                  type="text"
+                  autocomplete="off"
+                  @keyup.enter="searchQueryText"
+                />
+              </div>
+              <div class="flex flex-col mt-1 justify-between">
+                <label :for="datepickerUuid" class="text-sm font-medium"
+                  >Date</label
+                >
+                <BaseDatepicker
+                  :id="datepickerUuid"
+                  v-model="queryDateRange"
+                  @update:modelValue="handleDateRange"
+                  :enableTimePicker="false"
+                  range
+                  multiCalendars
+                >
+                  <template #trigger>
+                    <CalendarIcon
+                      class="
+                        cursor-pointer
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:hover:text-white
+                        h-9
+                        w-9
+                      "
+                    ></CalendarIcon>
+                  </template>
+                </BaseDatepicker>
+              </div>
             </div>
             <template
               v-for="n in [
@@ -1103,6 +1131,7 @@
 <script>
 import * as dayjs from "dayjs";
 import { isEmpty } from "@/helpers";
+import uniqueID from "@/composables/uniqueID";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -1119,7 +1148,12 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
+import {
+  CalendarIcon,
+  ChevronUpIcon,
+  SelectorIcon,
+  XIcon,
+} from "@heroicons/vue/outline";
 import { LockClosedIcon } from "@heroicons/vue/solid";
 import ArticleImage from "@/components/ArticleImage";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
@@ -1148,6 +1182,7 @@ export default {
     ListboxOption,
     TransitionChild,
     TransitionRoot,
+    CalendarIcon,
     ChevronUpIcon,
     SelectorIcon,
     XIcon,
@@ -1157,6 +1192,7 @@ export default {
     SearchResultsFacets,
   },
   setup() {
+    const datepickerUuid = uniqueID().getID();
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
@@ -1212,6 +1248,45 @@ export default {
 
     const pageHeader = ref(getHeaderName(route));
     const pageSubheader = ref(getSubheaderName(route));
+
+    const buildDateRange = () => {
+      const queryStartDate = route.query["start_date"];
+      const queryEndDate = route.query["end_date"];
+      if (!queryStartDate && !queryEndDate) {
+        return null;
+      }
+      let dateRange = [null, null];
+      if (queryStartDate) {
+        dateRange[0] = dayjs(queryStartDate).toDate();
+      }
+      if (queryEndDate) {
+        dateRange[1] = dayjs(queryEndDate).toDate();
+      }
+      return dateRange;
+    };
+
+    const queryDateRange = ref(buildDateRange());
+
+    const handleDateRange = () => {
+      let query = {
+        ...route.query,
+      };
+      const startDate = queryDateRange.value[0];
+      const endDate = queryDateRange.value[1];
+      if (startDate) {
+        query["start_date"] = dayjs(startDate).format("YYYY-MM-DD");
+      } else {
+        delete query["start_date"];
+      }
+      if (endDate) {
+        query["end_date"] = dayjs(endDate).format("YYYY-MM-DD");
+      } else {
+        delete query["end_date"];
+      }
+      router.push({
+        query,
+      });
+    };
 
     const clearFilters = () => {
       router.push({ name: "search", query: {} });
@@ -1443,13 +1518,25 @@ export default {
         }
         return false;
       });
-      let queryText;
+      let queryText, queryDates;
       if (route.query["text"]) {
         queryText = {
           displayName: route.query["text"],
           firstItem: true,
           lastItem: true,
           type: "text",
+        };
+      }
+      if (route.query["start_date"] || route.query["end_date"]) {
+        let endDate = route.query["end_date"];
+        if (!endDate) {
+          endDate = "Present";
+        }
+        queryDates = {
+          displayName: route.query["start_date"] + " - " + endDate,
+          firstItem: true,
+          lastItem: true,
+          type: "dates",
         };
       }
       let booleanFilterGroups = [];
@@ -1488,6 +1575,9 @@ export default {
       if (queryText) {
         booleanFilters.push(queryText);
       }
+      if (queryDates) {
+        booleanFilters.push(queryDates);
+      }
       booleanFilterGroups.forEach((filterGroup) => {
         filterGroup.items.forEach((item, index, array) => {
           let booleanFilter = {
@@ -1522,6 +1612,9 @@ export default {
       };
       if (item.type === "text") {
         delete query[item.type];
+      } else if (item.type === "dates") {
+        delete query["start_date"];
+        delete query["end_date"];
       } else {
         query[item.type] = query[item.type].filter(
           (queryItem) => queryItem !== item.code
@@ -1718,6 +1811,7 @@ export default {
           pageSubheader.value = getSubheaderName(route);
 
           queryText.value = route.query.text || "";
+          queryDateRange.value = buildDateRange();
           queryFilters.value = buildQueryFilters();
           booleanFilters.value = buildBooleanFilters();
           currentPage.value = parseInt(route.query.page) || 1;
@@ -1815,6 +1909,7 @@ export default {
 
     return {
       dayjs,
+      datepickerUuid,
       loadingMetadata,
       loadingResults,
       results,
@@ -1822,6 +1917,8 @@ export default {
       aggregations,
       pageHeader,
       pageSubheader,
+      queryDateRange,
+      handleDateRange,
       clearFilters,
       queryText,
       searchQueryText,

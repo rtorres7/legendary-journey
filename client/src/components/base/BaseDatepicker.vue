@@ -1,7 +1,11 @@
 <template>
   <!-- For configurable options, see https://vue3datepicker.com/ -->
   <!-- Do not use Vue Datepicker's Light/Dark mode feature, see styling below -->
-  <Datepicker></Datepicker>
+  <Datepicker>
+    <template v-for="(_, name) in $slots" v-slot:[name]="slotData"
+      ><slot :name="name" v-bind="slotData"
+    /></template>
+  </Datepicker>
 </template>
 
 <script>
