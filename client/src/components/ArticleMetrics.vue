@@ -1,41 +1,50 @@
 <template>
-  <div class="flex flex-row justify-between">
-    <div class="flex flex-col">
-      <div class="text-sm">
-        <label for="startDate">Start Date</label>
+  <div
+    class="
+      flex flex-col
+      space-y-3
+    "
+  >
+    <p class="font-semibold">Metrics</p>
+    <p class="font-medium text-sm">Unique Readers (2608)</p>
+    <div class="flex flex-row justify-between">
+      <div class="flex flex-col">
+        <div class="text-sm">
+          <label for="startDate">Start Date</label>
+        </div>
+        <div>
+          <input
+            type="date"
+            name="startDate"
+            id="startDate"
+            class="
+              text-sm
+              border-2 border-slate-900/20
+              bg-gray-50
+              dark:text-dark-navy dark:bg-slate-300
+              energy:text-zinc-900 energy:bg-zinc-300
+            "
+          />
+        </div>
       </div>
-      <div>
-        <input
-          type="date"
-          name="startDate"
-          id="startDate"
-          class="
-            text-sm
-            border-2 border-slate-900/20
-            bg-gray-50
-            dark:text-dark-navy dark:bg-slate-300
-            energy:text-zinc-900 energy:bg-zinc-300
-          "
-        />
-      </div>
-    </div>
-    <div class="flex flex-col">
-      <div class="text-sm">
-        <label for="endDate">End Date</label>
-      </div>
-      <div>
-        <input
-          type="date"
-          name="endDate"
-          id="endDate"
-          class="
-            text-sm
-            border-2 border-slate-900/20
-            bg-gray-50
-            dark:text-dark-navy dark:bg-slate-300
-            energy:text-zinc-900 energy:bg-zinc-300
-          "
-        />
+      <div class="flex flex-col">
+        <div class="text-sm">
+          <label for="endDate">End Date</label>
+        </div>
+        <div>
+          <input
+            type="date"
+            name="endDate"
+            id="endDate"
+            class="
+              text-sm
+              border-2 border-slate-900/20
+              bg-gray-50
+              dark:text-dark-navy dark:bg-slate-300
+              energy:text-zinc-900 energy:bg-zinc-300
+            "
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -43,17 +52,31 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useStore } from "vuex";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 // import { metrics } from "@/data";
 
 export default {
-  setup() {
+  props: [
+    "articleDetails",
+  ],  
+  setup(props) {
+    const store = useStore();
+
+    const metrics = computed(() => store.state.metrics)
+
     const chartdiv = ref(null);
 
+    console.log("articleDetails: ", props.articleDetails);
+    console.log("metrics: ", metrics.value);
+
     onMounted(() => {
+
+      store.dispatch("metrics/getMetrics");
+
       let root = am5.Root.new(chartdiv.value);
       root.setThemes([am5themes_Animated.new(root)]);
       let chart = root.container.children.push(

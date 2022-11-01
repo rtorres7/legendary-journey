@@ -10,6 +10,7 @@ import savedSearches from "./modules/saved-searches"
 import danielDetails from "./modules/danielDetails"
 import testConsole from "./modules/test-console"
 import metadata from "./modules/metadata"
+import metrics from "./modules/metrics"
 
 export default createStore({
     state: {
@@ -35,6 +36,7 @@ export default createStore({
         savedSearches,
         danielDetails,
         testConsole,
-        metadata
+        metadata,
+        metrics,
     },
 })
