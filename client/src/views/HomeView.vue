@@ -10,6 +10,7 @@
         w-5
       "
     ></CalendarIcon>
+    <BaseDatepicker v-model="date" :enableTimePicker="false"></BaseDatepicker>
   </div>
   <!-- Main Section -->
   <div
@@ -256,12 +257,12 @@
 import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
+import { CalendarIcon } from "@heroicons/vue/outline";
 import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 import PersonalSection from "@/components/PersonalSection";
 import FeedSection from "@/components/FeedSection";
-import { CalendarIcon } from "@heroicons/vue/outline";
 
 const personalArticles = [
   {
