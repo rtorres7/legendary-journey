@@ -33,7 +33,6 @@ export default {
     siteClassification: "",
     siteDefaultTitle: "",
   },
-
   actions: {
     loadMetadata({ commit }) {
       if (process.env.NODE_ENV === 'low') {
