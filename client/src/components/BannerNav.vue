@@ -448,7 +448,7 @@
       </div>
       <!-- Desktop Navigation -->
       <ul class="hidden lg:flex space-x-8 text-sm leading-10 justify-center">
-        <li>
+        <!-- <li>
           <Menu as="div" class="relative">
             <MenuButton
               class="
@@ -511,7 +511,7 @@
               </MenuItems>
             </transition>
           </Menu>
-        </li>
+        </li> -->
         <li>
           <BannerNavPopover :wideShrunk="true">
             <template #heading>

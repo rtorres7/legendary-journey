@@ -63,14 +63,61 @@
               w-full
             "
           >
-            <div class="lg:w-2/5">
-              <BaseInput
-                v-model="queryText"
-                label="Keyword Search or Filter"
-                type="text"
-                autocomplete="off"
-                @keyup.enter="searchQueryText"
-              />
+            <div class="lg:w-2/5 flex space-x-3">
+              <div class="w-full">
+                <BaseInput
+                  v-model="queryText"
+                  label="Keyword Search or Filter"
+                  type="text"
+                  autocomplete="off"
+                  @keyup.enter="searchQueryText"
+                />
+              </div>
+              <div class="flex flex-col mt-1 justify-between">
+                <label :for="datepickerUuid" class="text-sm font-medium"
+                  >Date</label
+                >
+                <BaseDatepicker
+                  :id="datepickerUuid"
+                  v-model="queryDateRange"
+                  @update:modelValue="handleDateRange"
+                  :enableTimePicker="false"
+                  range
+                  multiCalendars
+                >
+                  <template #trigger>
+                    <CalendarIcon
+                      class="
+                        cursor-pointer
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:hover:text-white
+                        h-9
+                        w-9
+                      "
+                    ></CalendarIcon>
+                  </template>
+                  <template #left-sidebar>
+                    <div
+                      class="
+                        text-mission-light-blue
+                        dark:text-teal-400
+                        energy:text-energy-yellow
+                        p-4
+                        flex flex-col
+                        text-sm
+                        space-y-6
+                      "
+                    >
+                      <button @click="selectDate('24H')">Past 24 Hours</button>
+                      <button @click="selectDate('1WK')">Past Week</button>
+                      <button @click="selectDate('1MO')">Past Month</button>
+                      <button @click="selectDate('6MO')">Past 6 Months</button>
+                      <button @click="selectDate('1YR')">Past Year</button>
+                    </div>
+                  </template>
+                </BaseDatepicker>
+              </div>
             </div>
             <template
               v-for="n in [
@@ -123,65 +170,162 @@
             />
           </DisclosureButton>
         </div>
-        <DisclosurePanel class="my-2">
-          <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
-            <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
-              <template v-if="!loadingMetadata">
+        <transition
+          enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-out"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <DisclosurePanel class="my-2">
+            <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
+              <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
+                <template v-if="!loadingMetadata">
+                  <template
+                    v-for="n in [
+                      queryFilters.classifications,
+                      queryFilters.media_types,
+                    ]"
+                    :key="n"
+                  >
+                    <div class="w-1/2">
+                      <BaseListbox
+                        v-model="n.model"
+                        :label="n.label"
+                        :items="n.list"
+                        multiple
+                      />
+                    </div>
+                  </template>
+                </template>
+              </div>
+              <div
+                class="
+                  grid grid-cols-2
+                  md:grid-cols-3
+                  gap-4
+                  lg:gap-0
+                  lg:grid-cols-0
+                  lg:flex
+                  lg:w-3/5
+                  lg:space-x-6
+                  lg:max-w-none
+                "
+              >
                 <template
                   v-for="n in [
-                    queryFilters.classifications,
-                    queryFilters.media_types,
+                    queryFilters.nonstate_actors,
+                    queryFilters.producing_offices,
+                    queryFilters.frontpage_featured,
                   ]"
                   :key="n"
                 >
-                  <div class="w-1/2">
+                  <div class="lg:w-1/3">
                     <BaseListbox
                       v-model="n.model"
                       :label="n.label"
                       :items="n.list"
+                      :disabled="n.disabled || false"
                       multiple
                     />
                   </div>
                 </template>
-              </template>
+              </div>
             </div>
-            <div
-              class="
-                grid grid-cols-2
-                md:grid-cols-3
-                gap-4
-                lg:gap-0
-                lg:grid-cols-0
-                lg:flex
-                lg:w-3/5
-                lg:space-x-6
-                lg:max-w-none
-              "
-            >
-              <template
-                v-for="n in [
-                  queryFilters.nonstate_actors,
-                  queryFilters.producing_offices,
-                  queryFilters.frontpage_featured,
-                ]"
-                :key="n"
-              >
-                <div class="lg:w-1/3">
-                  <BaseListbox
-                    v-model="n.model"
-                    :label="n.label"
-                    :items="n.list"
-                    :disabled="n.disabled || false"
-                    multiple
-                  />
-                </div>
-              </template>
-            </div>
-          </div>
-        </DisclosurePanel>
+          </DisclosurePanel>
+        </transition>
       </Disclosure>
     </div>
   </BaseCard>
+  <div class="flex flex-row-reverse py-1 mt-2">
+    <template v-if="!loadingMetadata && booleanFilters.length > 0">
+      <button
+        class="
+          text-mission-light-blue
+          dark:text-teal-400
+          energy:text-energy-yellow
+        "
+        @click="toggleSelectors"
+      >
+        {{ showSelectors ? "Hide Selectors" : "Show Selectors" }}
+      </button>
+    </template>
+  </div>
+  <!-- Search Booolean Selectors -->
+  <template
+    v-if="!loadingMetadata && showSelectors && booleanFilters.length > 0"
+  >
+    <BaseCard class="mt-2 px-4 py-2 w-fit text-sm">
+      <div class="flex flex-wrap">
+        <template v-for="(n, index) in booleanFilters" :key="n">
+          <div
+            class="my-2"
+            :class="[
+              n.lastItem && index < booleanFilters.length - 1
+                ? 'pr-3 border-r border-slate-700/50 energy:border-zinc-700/50'
+                : 'pr-2',
+              index !== 0 && n.firstItem ? 'pl-3' : '',
+            ]"
+          >
+            <div
+              class="
+                flex
+                rounded-xl
+                bg-slate-100
+                dark:bg-slate-700
+                energy:bg-zinc-600
+                p-2
+              "
+            >
+              <div class="self-center pr-1">
+                <template v-if="n.type === 'text'">
+                  <span class="pr-1 italic">Text: </span>
+                </template>
+                {{ n.displayName }}
+              </div>
+              <button
+                type="button"
+                class="w-5 h-5 flex items-center justify-center"
+                tabindex="0"
+                @click="removeFilter(n)"
+              >
+                <span class="sr-only">Remove filter</span
+                ><XIcon
+                  class="
+                    h-5
+                    w-5
+                    text-mission-light-blue
+                    dark:text-teal-400
+                    energy:text-energy-yellow
+                  "
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+          </div>
+          <template v-if="!n.lastItem">
+            <template v-if="n.toggleable">
+              <button
+                class="
+                  mr-3
+                  text-mission-light-blue
+                  dark:text-teal-400
+                  energy:text-energy-yellow
+                "
+                @click="toggleBooleanValue(n)"
+              >
+                {{ n.boolean_val }}
+              </button>
+            </template>
+            <template v-else>
+              <div class="mr-3 self-center">{{ n.boolean_val }}</div>
+            </template>
+          </template>
+        </template>
+      </div>
+    </BaseCard>
+  </template>
   <!-- Results Container -->
   <template v-if="loadingResults">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -242,7 +386,7 @@
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
             <div class="inline-flex">
-              <label class="self-center font-medium text-sm">Sort By</label>
+              <label class="self-center font-medium">Sort By</label>
               <Listbox v-model="selectedSort" class="ml-3 min-w-[115px]">
                 <div class="relative">
                   <ListboxButton
@@ -456,7 +600,12 @@
                   p-4
                   border-b border-slate-900/10
                   dark:border-slate-50/[0.06]
-                  energy:border-zinc-700/50
+                  energy:border-zinc-50/[0.06]
+                "
+                :class="
+                  isLocked(result)
+                    ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
+                    : ''
                 "
               >
                 <div class="h-fit px-2 text-center">
@@ -471,14 +620,21 @@
                   }}</span>
                 </div>
                 <div class="px-2 w-full">
+                  <template v-if="isLocked(result)">
+                    <div class="flex mb-2 items-center">
+                      <LockClosedIcon
+                        class="mr-2 h-4 w-4"
+                        aria-hidden="true"
+                      ></LockClosedIcon>
+                      <span class="uppercase text-sm">Locked</span>
+                    </div>
+                  </template>
                   <div class="flex justify-between">
-                    <div class="basis-[768px] cursor-pointer hover:underline">
-                      <router-link
-                        :to="{
-                          name: 'article',
-                          params: { doc_num: result.doc_num },
-                        }"
-                      >
+                    <div
+                      class="basis-[768px] hover:underline"
+                      :class="isLocked(result) ? '' : 'cursor-pointer'"
+                    >
+                      <a @click="goToArticle(result)">
                         <span
                           class="
                             text-slate-600
@@ -494,7 +650,7 @@
                           class="text-black dark:text-white energy:text-white"
                           >{{ result.title }}</span
                         >
-                      </router-link>
+                      </a>
                     </div>
                     <div class="text-xs lg:text-sm">
                       {{ result.doc_num }}
@@ -524,25 +680,35 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <div
-                  class="
-                    flex
-                    justify-between
-                    p-4
-                    border border-slate-900/10
-                    dark:border-slate-50/[0.12]
-                    energy:border-zinc-700
-                    h-full
-                  "
-                >
-                  <div class="px-2 flex flex-col justify-between">
-                    <div class="cursor-pointer hover:underline">
-                      <router-link
-                        :to="{
-                          name: 'article',
-                          params: { doc_num: result.doc_num },
-                        }"
-                      >
+                <a @click="goToArticle(result)">
+                  <div
+                    class="
+                      flex
+                      justify-between
+                      p-4
+                      border border-slate-900/10
+                      dark:border-slate-50/[0.12]
+                      energy:border-zinc-700
+                      h-full
+                      hover:underline
+                    "
+                    :class="
+                      isLocked(result)
+                        ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
+                        : 'cursor-pointer'
+                    "
+                  >
+                    <div class="px-2 flex flex-col justify-between">
+                      <template v-if="isLocked(result)">
+                        <div class="flex mb-2 items-center">
+                          <LockClosedIcon
+                            class="mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          ></LockClosedIcon>
+                          <span class="uppercase text-sm">Locked</span>
+                        </div>
+                      </template>
+                      <div>
                         <span
                           class="
                             text-slate-600
@@ -557,22 +723,22 @@
                           class="text-black dark:text-white energy:text-white"
                           >{{ result.title }}</span
                         >
-                      </router-link>
+                      </div>
+                      <div class="mt-2 text-sm">
+                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                      </div>
                     </div>
-                    <div class="mt-2 text-sm">
-                      {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                    <div v-show="result.hasImage">
+                      <ArticleImage
+                        class="w-[165px] h-[165px] sm:max-w-full h-full"
+                        :article="result"
+                        smartRender
+                        @imageNotFound="toggleImgContainer(result, false)"
+                        @imageLoaded="toggleImgContainer(result, true)"
+                      />
                     </div>
                   </div>
-                  <div v-show="result.hasImage">
-                    <ArticleImage
-                      class="w-[150px] h-[150px] sm:max-w-full h-full"
-                      :article="result"
-                      smartRender
-                      @imageNotFound="toggleImgContainer(result, false)"
-                      @imageLoaded="toggleImgContainer(result, true)"
-                    />
-                  </div>
-                </div>
+                </a>
               </template>
             </div>
           </template>
@@ -984,6 +1150,7 @@
 <script>
 import * as dayjs from "dayjs";
 import { isEmpty } from "@/helpers";
+import uniqueID from "@/composables/uniqueID";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -1000,7 +1167,13 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ChevronUpIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
+import {
+  CalendarIcon,
+  ChevronUpIcon,
+  SelectorIcon,
+  XIcon,
+} from "@heroicons/vue/outline";
+import { LockClosedIcon } from "@heroicons/vue/solid";
 import ArticleImage from "@/components/ArticleImage";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
@@ -1028,14 +1201,17 @@ export default {
     ListboxOption,
     TransitionChild,
     TransitionRoot,
+    CalendarIcon,
     ChevronUpIcon,
     SelectorIcon,
     XIcon,
+    LockClosedIcon,
     ArticleImage,
     SearchResultsTablePagination,
     SearchResultsFacets,
   },
   setup() {
+    const datepickerUuid = uniqueID().getID();
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
@@ -1092,6 +1268,75 @@ export default {
     const pageHeader = ref(getHeaderName(route));
     const pageSubheader = ref(getSubheaderName(route));
 
+    const buildDateRange = () => {
+      const queryStartDate = route.query["start_date"];
+      const queryEndDate = route.query["end_date"];
+      if (!queryStartDate && !queryEndDate) {
+        return null;
+      }
+      let dateRange = [null, null];
+      if (queryStartDate) {
+        dateRange[0] = dayjs(queryStartDate).toDate();
+      }
+      if (queryEndDate) {
+        dateRange[1] = dayjs(queryEndDate).toDate();
+      }
+      return dateRange;
+    };
+
+    const queryDateRange = ref(buildDateRange());
+
+    const handleDateRange = () => {
+      let query = {
+        ...route.query,
+      };
+      const startDate = queryDateRange.value[0];
+      const endDate = queryDateRange.value[1];
+      if (startDate) {
+        query["start_date"] = dayjs(startDate).format("YYYY-MM-DD");
+      } else {
+        delete query["start_date"];
+      }
+      if (endDate) {
+        query["end_date"] = dayjs(endDate).format("YYYY-MM-DD");
+      } else {
+        delete query["end_date"];
+      }
+      router.push({
+        query,
+      });
+    };
+
+    const selectDate = (code) => {
+      const today = dayjs().toDate();
+      let pastDate = dayjs();
+      switch (code) {
+        case "24H":
+          pastDate = pastDate.subtract(1, "day").toDate();
+          break;
+        case "1WK":
+          pastDate = pastDate.subtract(1, "week").toDate();
+          break;
+        case "1MO":
+          pastDate = pastDate.subtract(1, "month").toDate();
+          break;
+        case "6MO":
+          pastDate = pastDate.subtract(6, "month").toDate();
+          break;
+        case "1YR":
+          pastDate = pastDate.subtract(1, "year").toDate();
+          break;
+      }
+      if (queryDateRange.value) {
+        queryDateRange.value[0] = pastDate;
+        queryDateRange.value[1] = today;
+      } else {
+        queryDateRange.value = [];
+        queryDateRange.value[0] = pastDate;
+        queryDateRange.value[1] = today;
+      }
+    };
+
     const clearFilters = () => {
       router.push({ name: "search", query: {} });
     };
@@ -1104,7 +1349,7 @@ export default {
       - 4) The selectedModels represents the list of currently selected items in the list box
     */
     const currentModel = ({ items, types }) => {
-      console.log("currentModel: ", items, types);
+      //console.log("currentModel: ", items, types);
       const selectedModels = [];
       if (items.length > 0) {
         types.forEach((type) => {
@@ -1120,7 +1365,9 @@ export default {
           }
         });
       }
-      console.log("selectedModels: ", selectedModels);
+      if (selectedModels.length > 0) {
+        console.log("selectedModels: ", selectedModels);
+      }
       return selectedModels;
     };
 
@@ -1199,8 +1446,8 @@ export default {
         types: ["reporting_types[]", "product_types[]"],
       };
       const classifications = {
-        items: buildItems(criteria.value.classification, "classifications[]"),
-        types: ["classifications[]"],
+        items: buildItems(criteria.value.classification, "classification[]"),
+        types: ["classification[]"],
       };
       const mediaTypes = {
         items: buildItems(criteria.value.media_tags, "media_tags[]"),
@@ -1225,7 +1472,7 @@ export default {
           types: regions.types,
         },
         issues: {
-          label: "Issues & Topics",
+          label: "Counterterrosim and Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
@@ -1271,14 +1518,198 @@ export default {
     };
     const queryText = ref(route.query.text || "");
     const queryFilters = ref(buildQueryFilters());
+
+    const getBooleanMapping = (queryKey) => {
+      if (queryKey === "product_types[]") {
+        return false;
+      } else {
+        const bracketIndex = queryKey.indexOf("[]");
+        if (bracketIndex !== -1) {
+          return queryKey.slice(0, bracketIndex).concat("_bool");
+        }
+        return false;
+      }
+    };
+
+    const getListForType = (type) => {
+      switch (type) {
+        case "regions[]":
+          return criteria.value.regions;
+        case "subregions[]":
+          return criteria.value.subregions;
+        case "countries[]":
+          return criteria.value.countries;
+        case "issues[]":
+          return criteria.value.issues;
+        case "topics[]":
+          return criteria.value.topics;
+        case "reporting_types[]":
+          return criteria.value.reporting_types;
+        case "product_types[]":
+          return criteria.value.product_types;
+        case "classification[]":
+          return criteria.value.classification;
+        case "media_tags[]":
+          return criteria.value.media_tags;
+        case "non_state_actors[]":
+          return criteria.value.non_state_actors;
+        case "selected_for[]":
+          return criteria.value.selected_for;
+        default:
+          return [];
+      }
+    };
+
+    const buildBooleanFilters = () => {
+      const filteredKeys = Object.keys(route.query).filter((key) => {
+        if (key.indexOf("[]") !== -1) {
+          return true;
+        }
+        return false;
+      });
+      let queryText, queryDates;
+      if (route.query["text"]) {
+        queryText = {
+          displayName: route.query["text"],
+          firstItem: true,
+          lastItem: true,
+          type: "text",
+        };
+      }
+      if (route.query["start_date"] || route.query["end_date"]) {
+        let endDate = route.query["end_date"];
+        if (!endDate) {
+          endDate = "Present";
+        }
+        queryDates = {
+          displayName: route.query["start_date"] + " - " + endDate,
+          firstItem: true,
+          lastItem: true,
+          type: "dates",
+        };
+      }
+      let booleanFilterGroups = [];
+      filteredKeys.forEach((type) => {
+        const booleanMapping = getBooleanMapping(type);
+        const list = getListForType(type);
+        let items = !Array.isArray(route.query[type])
+          ? [route.query[type]]
+          : route.query[type];
+        items = items.map((code) => {
+          const displayName = getValueForCode(
+            list,
+            type === "product_types[]" ? parseInt(code) : code
+          );
+          return {
+            code,
+            displayName: displayName ? displayName.name : null,
+          };
+        });
+        //console.log("items: ", items);
+        let boolean_val = "or";
+        let toggleable = false;
+        if (booleanMapping) {
+          boolean_val = route.query[booleanMapping];
+          toggleable = type === "reporting_types[]" ? false : true;
+        }
+        booleanFilterGroups.push({
+          type,
+          items,
+          boolean_val,
+          toggleable,
+        });
+      });
+      //console.log("booleanFilterGroups: ", booleanFilterGroups);
+      let booleanFilters = [];
+      if (queryText) {
+        booleanFilters.push(queryText);
+      }
+      if (queryDates) {
+        booleanFilters.push(queryDates);
+      }
+      booleanFilterGroups.forEach((filterGroup) => {
+        filterGroup.items.forEach((item, index, array) => {
+          let booleanFilter = {
+            displayName: item.displayName,
+            code: item.code,
+            type: filterGroup.type,
+            boolean_val: filterGroup.boolean_val,
+            toggleable: filterGroup.toggleable,
+          };
+          if (index === 0) {
+            booleanFilter.firstItem = true;
+          }
+          if (index === array.length - 1) {
+            booleanFilter.lastItem = true;
+          }
+          booleanFilters.push(booleanFilter);
+        });
+      });
+      console.log("booleanFilters: ", booleanFilters);
+      return booleanFilters;
+    };
+    const booleanFilters = ref(buildBooleanFilters());
+    const showSelectors = ref(true);
+
+    const toggleSelectors = () => {
+      showSelectors.value = !showSelectors.value;
+    };
+
+    const removeFilter = (item) => {
+      let query = {
+        ...route.query,
+      };
+      if (item.type === "text") {
+        delete query[item.type];
+      } else if (item.type === "dates") {
+        delete query["start_date"];
+        delete query["end_date"];
+      } else {
+        query[item.type] = query[item.type].filter(
+          (queryItem) => queryItem !== item.code
+        );
+        if (query[item.type].length < 2) {
+          const booleanMapping = getBooleanMapping(item.type);
+          if (query[booleanMapping]) {
+            delete query[booleanMapping];
+          }
+          if (query[item.type].length === 0) {
+            delete query[item.type];
+          }
+        }
+      }
+      router.push({
+        name: "search",
+        query,
+      });
+    };
+
+    const toggleBooleanValue = (item) => {
+      let query = {
+        ...route.query,
+      };
+      const booleanMapping = getBooleanMapping(item.type);
+      if (query[booleanMapping] === "and") {
+        query[booleanMapping] = "or";
+      } else {
+        query[booleanMapping] = "and";
+      }
+      router.push({
+        query,
+      });
+    };
+
     /*
       - This method builds a watcher for each query filter in order to track changes at the individual listbox level
       - 1) First, a query value is initialized that contains a copy of the existing query.
       - 2) The types present in this query filter are then removed from the newly created query object
-      - 3) If the query filter's model values are empty, this skips to step 6
+      - 3) If the query filter's model values are empty, this skips to step 8
       - 4) The unique types present in the query filter's model are identified
       - 5) Each unique type is matched up against the query filter's model values (selected items) and the query is updated for each type
-      - 6) The updated query is sent to the router via a router.replace and this fires off a query update
+      - 6) For each unique type, it checks if a boolean mapping exists in the updated query
+      - 7a) If it exists and the number of items for the query object is more than 1, it adds/keeps the boolean mapping
+      - 7b) If it exists and the number of items for the query object is 1 or less, it removes the boolean mapping
+      - 8) The updated query is sent to the router via a router.push and this fires off a query update
     */
     const buildWatcher = (object) => {
       return watch(
@@ -1295,21 +1726,36 @@ export default {
             const uniqueTypes = [
               ...new Set(newValue.model.map((item) => item.type)),
             ];
-            console.log("uniqueTypes: ", uniqueTypes);
+            //console.log("uniqueTypes: ", uniqueTypes);
             for (let i = 0; i < uniqueTypes.length; i++) {
               let valuesForType = [];
               for (let j = 0; j < newValue.model.length; j++) {
-                console.log("newValue.model: ", newValue.model);
+                //console.log("newValue.model: ", newValue.model);
                 if (newValue.model[j].type === uniqueTypes[i]) {
                   valuesForType.push(newValue.model[j].code);
                 }
               }
-              console.log("valuesForType after: ", valuesForType);
+              //console.log("valuesForType after: ", valuesForType);
               query[uniqueTypes[i]] = valuesForType;
             }
+            uniqueTypes.forEach((type) => {
+              const booleanMapping = getBooleanMapping(type);
+              //console.log("booleanMapping: ", booleanMapping);
+              if (booleanMapping) {
+                const mappingFound = Object.keys(query).find(
+                  (queryKey) => queryKey === booleanMapping
+                );
+                if (!mappingFound && query[type] && query[type].length > 1) {
+                  query[booleanMapping] = "and";
+                }
+                if (mappingFound && query[type].length <= 1) {
+                  delete query[booleanMapping];
+                }
+              }
+            });
           }
-          console.log("query: ", query);
-          router.replace({
+          //console.log("query: ", query);
+          router.push({
             name: "search",
             query: query,
           });
@@ -1324,7 +1770,6 @@ export default {
       });
       return watchers;
     };
-    buildQueryWatchers(queryFilters.value);
 
     const getSortOption = (query) => {
       const sortDir = query.sort_dir ? query.sort_dir : undefined;
@@ -1357,6 +1802,7 @@ export default {
 
     onMounted(() => {
       store.dispatch("search/search");
+      buildQueryWatchers(queryFilters.value);
     });
 
     const searchQueryText = () => {
@@ -1375,7 +1821,7 @@ export default {
     };
 
     const showHighlightedResult = () => {
-      if (route.name === "search" && queryText.value !== "") {
+      if (route.name === "search" && route.query.text !== "") {
         return true;
       }
       return false;
@@ -1383,6 +1829,15 @@ export default {
 
     const isLocked = (result) => {
       return !isEmpty(result.needed) || result.org_restricted;
+    };
+
+    const goToArticle = (result) => {
+      if (!isLocked(result)) {
+        router.push({
+          name: "article",
+          params: { doc_num: result.doc_num },
+        });
+      }
     };
 
     const toggleImgContainer = (result, value) => {
@@ -1405,7 +1860,9 @@ export default {
           pageSubheader.value = getSubheaderName(route);
 
           queryText.value = route.query.text || "";
+          queryDateRange.value = buildDateRange();
           queryFilters.value = buildQueryFilters();
+          booleanFilters.value = buildBooleanFilters();
           currentPage.value = parseInt(route.query.page) || 1;
           selectedView.value =
             route.query.view === "grid"
@@ -1424,6 +1881,7 @@ export default {
     watch([loadingMetadata], () => {
       if (!loadingMetadata.value) {
         queryFilters.value = buildQueryFilters();
+        booleanFilters.value = buildBooleanFilters();
       }
       if (route.name === "countries") {
         pageSubheader.value = getSubheaderName(route);
@@ -1500,6 +1958,7 @@ export default {
 
     return {
       dayjs,
+      datepickerUuid,
       loadingMetadata,
       loadingResults,
       results,
@@ -1507,13 +1966,22 @@ export default {
       aggregations,
       pageHeader,
       pageSubheader,
+      queryDateRange,
+      handleDateRange,
+      selectDate,
       clearFilters,
       queryText,
       searchQueryText,
       showHighlightedResult,
+      goToArticle,
       isLocked,
       toggleImgContainer,
       queryFilters,
+      booleanFilters,
+      showSelectors,
+      toggleSelectors,
+      removeFilter,
+      toggleBooleanValue,
       sortOptions,
       selectedSort,
       viewOptions,

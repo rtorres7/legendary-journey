@@ -14,7 +14,7 @@
       px-2
       mt-1
       dark:bg-slate-700
-      energy:bg-zinc-700
+      energy:bg-zinc-600
       border border-gray-200
       dark:border-slate-800
       energy:border-zinc-800

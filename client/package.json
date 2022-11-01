@@ -16,6 +16,7 @@
     "@ckeditor/ckeditor5-vue": "^4.0.1",
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
+    "@vuepic/vue-datepicker": "^3.5.2",
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.1",

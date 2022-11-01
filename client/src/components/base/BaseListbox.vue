@@ -80,7 +80,7 @@
             <li
               :class="[
                 active
-                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-700'
                   : 'bg-none',
                 'relative cursor-default select-none py-2 pl-10 pr-4',
               ]"
