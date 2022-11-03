@@ -32,6 +32,7 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { isEmpty } from "@/helpers";
 
 export default {
   props: {
@@ -55,7 +56,14 @@ export default {
       if (sampleImage.value || uploadBinary.value) {
         return true;
       }
-      const hasImages = article.images?.length > 0;
+      let hasImages = true;
+      if (isEmpty(article.images)) {
+        hasImages = false;
+      } else {
+        if (article.images.table && isEmpty(article.images.table.article)) {
+          hasImages = false;
+        }
+      }
       if (props.smartRender && !hasImages) {
         emit("imageNotFound");
       }

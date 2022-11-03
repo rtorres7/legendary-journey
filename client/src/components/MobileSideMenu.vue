@@ -86,7 +86,7 @@
                     >Searches</a
                   >
                 </li>
-                <li>
+                <!-- <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
                     <ul class="list-disc list-inside ml-4 mt-4">
                       <template
@@ -103,11 +103,14 @@
                       </template>
                     </ul>
                   </MobileSideMenuDisclosure>
-                </li>
+                </li> -->
                 <li>
                   <MobileSideMenuDisclosure :title="'Regions'">
                     <div class="ml-4 mt-4 space-y-4">
-                      <div v-for="region in metadata.regions.items" :key="region">
+                      <div
+                        v-for="region in metadata.regions.items"
+                        :key="region"
+                      >
                         <Disclosure v-slot="{ open }">
                           <DisclosureButton
                             class="
@@ -138,7 +141,11 @@
                                 <a
                                   href=""
                                   @click.prevent="navigateToRegion(region)"
-                                  class="lg:text-lg hover:underline cursor-pointer"
+                                  class="
+                                    lg:text-lg
+                                    hover:underline
+                                    cursor-pointer
+                                  "
                                 >
                                   {{ region.name }}
                                 </a>
@@ -147,7 +154,8 @@
                                   :key="subregion"
                                 >
                                   <template
-                                    v-for="subregionItem in metadata.subregions.items"
+                                    v-for="subregionItem in metadata.subregions
+                                      .items"
                                     :key="subregionItem"
                                   >
                                     <li v-if="subregionItem.key === subregion">
@@ -156,7 +164,11 @@
                                         @click.prevent="
                                           navigateToSubregion(subregionItem)
                                         "
-                                        class="hover:underline cursor-pointer font-light"
+                                        class="
+                                          hover:underline
+                                          cursor-pointer
+                                          font-light
+                                        "
                                       >
                                         {{ subregionItem.name }}
                                       </a>
