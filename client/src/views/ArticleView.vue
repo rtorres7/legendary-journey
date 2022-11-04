@@ -21,7 +21,7 @@
         md:flex-nowrap
         justify-between
         md:space-x-10
-        lg:space-x-5
+        lg:space-x-15
         mb-8
         "
       >
@@ -156,21 +156,8 @@
           </Disclosure>
         </div>
         <div class="flex flex-col pb-8 space-y-3 mt-10">
-          <div
-            class="border-t-2 md:border-t-0 border-b-2 pb-4 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 flex flex-col space-y-3"
-          >
-            <p class="font-semibold mt-4 md:mt-0">Attachments</p>
-            <div
-              v-for="attachment in articleDetails.attachments_metadata"
-              :key="attachment.id"
-            >
-              <p class="hover:underline text-sm">{{ attachment.file_name }}</p>
-            </div>
-          </div>
-          <ArticleMetrics
-            :articleDetails="this.articleDetails"
-          >
-          </ArticleMetrics>
+          <ArticleAttachments :articleDetails="articleDetails" />
+          <ArticleMetrics :articleDetails="articleDetails" />
         </div>
       </div>
     </template>
@@ -186,6 +173,7 @@ import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleImage from "@/components/ArticleImage";
+import ArticleAttachments from "@/components/ArticleAttachments"
 import ArticleMetrics from "@/components/ArticleMetrics";
 import NotFound from "@/components/NotFound";
 
@@ -197,6 +185,7 @@ export default {
     DisclosurePanel,
     ArticleNavigation,
     ArticleImage,
+    ArticleAttachments,
     ArticleMetrics,
     NotFound,
   },

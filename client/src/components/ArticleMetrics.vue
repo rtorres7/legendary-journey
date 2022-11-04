@@ -6,45 +6,55 @@
     "
   >
     <p class="font-semibold">Metrics</p>
-    <p class="font-medium text-sm">Unique Readers (2608)</p>
-    <div class="flex flex-row justify-between">
+    <p class="font-medium text-md">Unique Readers</p>
+    <div class="flex flex-row justify-between items-center">
       <div class="flex flex-col">
-        <div class="text-sm">
-          <label for="startDate">Start Date</label>
-        </div>
-        <div>
-          <input
-            type="date"
-            name="startDate"
-            id="startDate"
-            class="
-              text-sm
-              border-2 border-slate-900/20
-              bg-gray-50
-              dark:text-dark-navy dark:bg-slate-300
-              energy:text-zinc-900 energy:bg-zinc-300
-            "
-          />
-        </div>
+        <label :for="datepickerUuid" class="text-sm font-medium">Start Date</label>
+        <BaseDatepicker 
+          :id="datepickerUuid"
+          v-model="readershipStartDate"
+          :min-date="articleDetails.display_date"
+          :max-date="readershipEndDate"        
+          :enableTimePicker="false"
+          @update:modelValue="handleStartDate"
+          format="MMM dd, yyyy"
+          class="
+            text-sm
+            dark:bg-slate-700
+            energy:bg-zinc-600
+            border border-gray-200
+            dark:border-slate-800
+            energy:border-zinc-800
+            rounded-lg
+            shadow-md
+            cursor-default
+          "
+        >
+        </BaseDatepicker>        
       </div>
+      <div class="flex flex-col px-3 pt-4">to</div>
       <div class="flex flex-col">
-        <div class="text-sm">
-          <label for="endDate">End Date</label>
-        </div>
-        <div>
-          <input
-            type="date"
-            name="endDate"
-            id="endDate"
-            class="
-              text-sm
-              border-2 border-slate-900/20
-              bg-gray-50
-              dark:text-dark-navy dark:bg-slate-300
-              energy:text-zinc-900 energy:bg-zinc-300
-            "
-          />
-        </div>
+        <label :for="datepickerUuid" class="text-sm font-medium">End Date</label>
+        <BaseDatepicker
+          :id="datepickerUuid"
+          v-model="readershipEndDate"
+          :min-date="readershipStartDate"
+          :enableTimePicker="false"
+          @update:modelValue="handleEndDate"
+          format="MMM dd, yyyy"
+          class="
+            text-sm
+            dark:bg-slate-700
+            energy:bg-zinc-600
+            border border-gray-200
+            dark:border-slate-800
+            energy:border-zinc-800
+            rounded-lg
+            shadow-md
+            cursor-default
+          "
+        >
+        </BaseDatepicker>
       </div>
     </div>
   </div>
@@ -57,21 +67,38 @@ import { useStore } from "vuex";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-// import { metrics } from "@/data";
+import uniqueID from "@/composables/uniqueID";
+import * as dayjs from "dayjs";
 
 export default {
-  props: [
-    "articleDetails",
-  ],  
-  setup(props) {
+  props: {
+    articleDetails: {
+      type: Object,
+      required: true
+    }
+  },  
+  setup() {
     const store = useStore();
-
     const metrics = computed(() => store.state.metrics)
-
+    const datepickerUuid = uniqueID().getID();
+    let readershipStartDate = ref(dayjs().format("YYYY-MM-DD"));
+    let readershipEndDate = ref(dayjs().format("YYYY-MM-DD"));
     const chartdiv = ref(null);
 
-    console.log("articleDetails: ", props.articleDetails);
-    console.log("metrics: ", metrics.value);
+    const handleStartDate = (modelData) => {
+      readershipStartDate = dayjs(modelData).format("YYYY-MM-DD");
+    };
+
+    const handleEndDate = (modelData) => {
+      readershipEndDate = dayjs(modelData).format("YYYY-MM-DD");
+    };
+
+    const queryParams = computed(() => {
+      const params = {};
+      params["readership_start_date"] = readershipStartDate;
+      params["readership_end_date"] = readershipEndDate;
+      return params;
+    });
 
     onMounted(() => {
 
@@ -128,7 +155,15 @@ export default {
       );
       legend.data.setAll(series.dataItems);
     });
+
     return {
+      metrics,
+      datepickerUuid,
+      readershipStartDate,
+      readershipEndDate,
+      handleStartDate,
+      handleEndDate,
+      queryParams,
       chartdiv,
     };
   },

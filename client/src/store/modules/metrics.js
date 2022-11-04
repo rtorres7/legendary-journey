@@ -18,11 +18,13 @@ export default {
       state.loading = true;
       let route = router.currentRoute.value;
       if (process.env.NODE_ENV === 'low') {
-        console.log("metrics: ", metrics)
+        // console.log("metrics: ", metrics)
+        // console.log("metrics readershipStartDate: ", this.readershipStartDate);
+        // console.log("metrics readershipEndDate: ", this.readershipEndDate);
         commit("saveMetrics", metrics)
       } else {
         console.log("HIGH")
-        axios.get("/documents/" + `${route.params.doc_num}.json`).then(response => {
+        axios.get("/documents/" + `${route.params.doc_num}/metrics/basic_metrics.json`).then(response => {
           console.log("metrics (response): ", response.data);
         })
       }
