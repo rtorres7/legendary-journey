@@ -70,6 +70,7 @@
                   label="Keyword Search or Filter"
                   type="text"
                   autocomplete="off"
+                  placeholder="Press enter after typing"
                   @keyup.enter="searchQueryText"
                 />
               </div>
@@ -248,7 +249,11 @@
         "
         @click="toggleSelectors"
       >
-        {{ showSelectors ? "Hide Selectors" : "Show Selectors" }}
+        {{
+          showSelectors
+            ? "Hide Selectors"
+            : `Show Selectors (${booleanFilters.length})`
+        }}
       </button>
     </template>
   </div>
@@ -1472,7 +1477,7 @@ export default {
           types: regions.types,
         },
         issues: {
-          label: "Counterterrosim and Subtopics",
+          label: "Counterterrorism and Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
@@ -1847,7 +1852,7 @@ export default {
     watch(
       () => route.query,
       () => {
-        console.log("route.query watcher triggered.");
+        console.log(`route.query watcher triggered [${route.name}]`);
         if (
           route.name === "search" ||
           route.name === "issues" ||
