@@ -21,7 +21,7 @@
   <template v-else>
     <template v-if="items.length > 0">
       <div class="hidden lg:grid xl:grid-cols-3 grid-cols-2 gap-6">
-        <template v-for="(item, index) in items.length" :key="item">
+        <template v-for="(item, index) in items.slice(0, number)" :key="item">
           <FeedItemCard :feed="items[index]" />
         </template>
       </div>
@@ -76,6 +76,7 @@ export default {
       default: new Array(),
     },
     loading: Boolean,
+    number: Number,
   },
   setup() {
     return {

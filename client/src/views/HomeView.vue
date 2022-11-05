@@ -155,7 +155,7 @@
     </div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
-        <template v-for="n in 6" :key="n">
+        <template v-for="n in 12" :key="n">
           <div class="w-full h-[264px]">
             <PublishedArticleCard loading />
           </div>
@@ -164,7 +164,7 @@
       <template v-else>
         <template v-if="danielArticles.length > 3">
           <template
-            v-for="article in danielArticles.slice(3, 6)"
+            v-for="article in danielArticles.slice(3, 15)"
             :key="article"
           >
             <div class="w-full h-[264px]">
@@ -187,6 +187,23 @@
       </template>
     </div>
   </div>
+  <!-- KingFisher Section -->
+  <div
+    class="
+      pt-4
+      pb-6
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-zinc-700/50
+    "
+  >
+    <FeedSection
+      :title="'KingFisher Derogatory Reports'"
+      :items="kingFisherFeeds"
+      :loading="loadingOseFeeds"
+      :number="6"
+    />
+  </div>
   <!-- Ose Feeds Section -->
   <div
     class="
@@ -201,10 +218,28 @@
       :title="'Open Source Highlights'"
       :items="oseFeeds"
       :loading="loadingOseFeeds"
+      :number="3"
+    />
+  </div>
+  <!-- NIC Section -->
+  <div
+    class="
+      pt-4
+      pb-6
+      border-b-2 border-slate-900/10
+      dark:border-slate-50/[0.06]
+      energy:border-zinc-700/50
+    "
+  >
+    <FeedSection
+      :title="'NIC Sharable'"
+      :items="nicFeeds"
+      :loading="loadingOseFeeds"
+      :number="3"
     />
   </div>
   <!-- Demo Articles Section -->
-  <div
+  <!-- <div
     class="
       pt-4
       pb-6
@@ -239,16 +274,16 @@
         </template>
       </template>
     </div>
-  </div>
+  </div> -->
   <!-- Personal Section -->
-  <div class="pt-4">
+  <!-- <div class="pt-4">
     <PersonalSection
       :title="'Because you were interested in Ukraine and COVID19'"
       :items="personalArticles"
     />
     <PersonalSection :title="'Your Favorites'" :items="personalArticles" />
     <PersonalSection :title="'Recently Viewed'" :items="personalArticles" />
-  </div>
+  </div> -->
   <!-- <ScrollToTopBtn /> -->
 </template>
 
@@ -257,10 +292,10 @@ import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { CalendarIcon } from "@heroicons/vue/outline";
-import DemoArticleCard from "@/components/DemoArticleCard";
+//import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
-import PersonalSection from "@/components/PersonalSection";
+//import PersonalSection from "@/components/PersonalSection";
 import FeedSection from "@/components/FeedSection";
 
 const personalArticles = [
@@ -314,10 +349,10 @@ const personalArticles = [
 
 export default {
   components: {
-    DemoArticleCard,
+    //DemoArticleCard,
     PublishedArticleCard,
     MainSectionSituationalAwareness,
-    PersonalSection,
+    //PersonalSection,
     FeedSection,
     CalendarIcon,
   },
@@ -327,7 +362,9 @@ export default {
     const loadingArticles = computed(() => store.state.articles.loading);
     const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const kingFisherFeeds = computed(() => store.state.feeds.kingFisher);
     const oseFeeds = computed(() => store.state.feeds.results);
+    const nicFeeds = computed(() => store.state.feeds.nic);
     const loadingOseFeeds = computed(() => store.state.feeds.loading);
 
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
@@ -336,6 +373,8 @@ export default {
       store.dispatch("articles/getHomeArticles");
       store.dispatch("daniel/getDanielArticles");
       store.dispatch("feeds/getOseFeeds");
+      store.dispatch("feeds/getKingFisherFeeds");
+      store.dispatch("feeds/getNicFeeds");
     });
 
     return {
@@ -346,6 +385,8 @@ export default {
       personalArticles,
       oseFeeds,
       loadingOseFeeds,
+      kingFisherFeeds,
+      nicFeeds,
       today,
     };
   },
