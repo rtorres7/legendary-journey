@@ -11,6 +11,21 @@
       {{ specialEdition.edition.name }}
     </p>
   </div>
+  <div class="flex py-4">
+    <div class="basis-2/3 grid grid-cols-1 lg:grid-cols-2 gap-4 px-2">
+      <template
+        v-for="article in specialEdition.edition.articles.concat(
+          specialEdition.edition.restrictedArticles
+        )"
+        :key="article.id"
+      >
+        <BaseCard class="h-full" hoverable :rounded="false">
+          <ArticleCard :article="article" />
+        </BaseCard>
+      </template>
+    </div>
+    <div class="basis-1/3">test 2</div>
+  </div>
   <div>special edition {{ specialEdition }}</div>
 </template>
 
@@ -19,9 +34,13 @@ import * as dayjs from "dayjs";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import ArticleCard from "@/components/ArticleCard";
+
 // import { useRoute, useRouter } from "vue-router";
 export default {
-  components: {},
+  components: {
+    ArticleCard,
+  },
   setup() {
     const store = useStore();
     const route = useRoute();

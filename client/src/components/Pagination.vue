@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="flex-1 flex items-center justify-between">
     <div>
@@ -27,65 +28,58 @@
         aria-label="Pagination"
       >
         <template v-if="currentPage === 1">
-          <SearchResultsTablePaginationButton
-            class="px-2 rounded-l-md"
-            :disabled="true"
-          >
+          <PaginationButton class="px-2 rounded-l-md" :disabled="true">
             <span class="sr-only">Previous</span>
             <ChevronLeftIcon class="h-5 w-5"
-          /></SearchResultsTablePaginationButton>
+          /></PaginationButton>
         </template>
         <template v-else>
-          <SearchResultsTablePaginationButton
+          <PaginationButton
             class="px-2 rounded-l-md"
             @click="navigatePrevious(currentPage)"
           >
             <span class="sr-only">Previous</span>
             <ChevronLeftIcon class="h-5 w-5"
-          /></SearchResultsTablePaginationButton>
+          /></PaginationButton>
         </template>
         <template
           v-for="n in buildPageButtons(currentPage, totalPages(totalCount))"
           :key="n"
         >
           <template v-if="n === '...'">
-            <SearchResultsTablePaginationButton
-              aria-current="page"
-              :disabled="true"
-              >...</SearchResultsTablePaginationButton
+            <PaginationButton aria-current="page" :disabled="true"
+              >...</PaginationButton
             >
           </template>
           <template v-else>
             <template v-if="currentPage === n">
-              <SearchResultsTablePaginationButton
+              <PaginationButton
                 aria-current="page"
                 :current="true"
                 :disabled="true"
-                >{{ n }}</SearchResultsTablePaginationButton
+                >{{ n }}</PaginationButton
               >
             </template>
             <template v-else>
-              <SearchResultsTablePaginationButton @click="navigatePage(n)">{{
+              <PaginationButton @click="navigatePage(n)">{{
                 n
-              }}</SearchResultsTablePaginationButton>
+              }}</PaginationButton>
             </template>
           </template>
         </template>
         <template v-if="currentPage === totalPages(totalCount)">
-          <SearchResultsTablePaginationButton
-            class="px-2 rounded-r-md"
-            :disabled="true"
+          <PaginationButton class="px-2 rounded-r-md" :disabled="true"
             ><span class="sr-only">Next</span>
             <ChevronRightIcon class="h-5 w-5"
-          /></SearchResultsTablePaginationButton>
+          /></PaginationButton>
         </template>
         <template v-else>
-          <SearchResultsTablePaginationButton
+          <PaginationButton
             class="px-2 rounded-r-md"
             @click="navigateNext(currentPage)"
             ><span class="sr-only">Next</span>
             <ChevronRightIcon class="h-5 w-5"
-          /></SearchResultsTablePaginationButton>
+          /></PaginationButton>
         </template>
       </nav>
       <div
@@ -93,86 +87,86 @@
         aria-label="Pagination"
       >
         <template v-if="currentPage === 1">
-          <SearchResultsTablePaginationButton
-            class="rounded-md"
-            :disabled="true"
-            >Previous</SearchResultsTablePaginationButton
+          <PaginationButton class="rounded-md" :disabled="true"
+            >Previous</PaginationButton
           >
         </template>
         <template v-else>
-          <SearchResultsTablePaginationButton
+          <PaginationButton
             class="rounded-md"
             @click="navigatePrevious(currentPage)"
-            >Previous</SearchResultsTablePaginationButton
+            >Previous</PaginationButton
           >
         </template>
         <template v-if="currentPage === totalPages(totalCount)">
-          <SearchResultsTablePaginationButton
-            class="ml-3 rounded-md"
-            :disabled="true"
-            >Next</SearchResultsTablePaginationButton
+          <PaginationButton class="ml-3 rounded-md" :disabled="true"
+            >Next</PaginationButton
           >
         </template>
         <template v-else>
-          <SearchResultsTablePaginationButton
+          <PaginationButton
             class="ml-3 rounded-md"
             @click="navigateNext(currentPage)"
-            >Next</SearchResultsTablePaginationButton
+            >Next</PaginationButton
           >
         </template>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
-import SearchResultsTablePaginationButton from "./SearchResultsTablePaginationButton";
+import PaginationButton from "./PaginationButton";
 
 export default {
   components: {
     ChevronLeftIcon,
     ChevronRightIcon,
-    SearchResultsTablePaginationButton,
+    PaginationButton,
   },
   props: {
-    totalCount: Number,
-    currentPage: Number,
+    totalCount: {
+      type: Number,
+    },
+    currentPage: {
+      type: Number,
+    },
+    maxPerPage: {
+      type: Number,
+      default: 50,
+    },
   },
-  setup() {
+  setup(props) {
     const route = useRoute();
     const router = useRouter();
 
     const totalPages = (count) => {
-      return Math.ceil(count / 50);
+      return Math.ceil(count / props.maxPerPage);
     };
 
     const startingResult = (page) => {
-      return 50 * (page - 1) + 1;
+      return props.maxPerPage * (page - 1) + 1;
     };
 
     const endingResult = (page, total) => {
-      return 50 * page > total ? total : 50 * page;
+      return props.maxPerPage * page > total ? total : props.maxPerPage * page;
     };
 
     const navigatePrevious = (current) => {
       router.push({
-        name: "search",
         query: { ...route.query, page: current - 1 },
       });
     };
 
     const navigateNext = (current) => {
       router.push({
-        name: "search",
         query: { ...route.query, page: current + 1 },
       });
     };
 
     const navigatePage = (page) => {
       router.push({
-        name: "search",
         query: { ...route.query, page },
       });
     };

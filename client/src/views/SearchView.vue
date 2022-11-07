@@ -591,10 +591,7 @@
               energy:border-zinc-700/50
             "
           >
-            <SearchResultsTablePagination
-              :totalCount="totalCount"
-              :currentPage="currentPage"
-            />
+            <Pagination :totalCount="totalCount" :currentPage="currentPage" />
           </div>
           <!-- Results -->
           <template v-if="selectedView.label === 'List'">
@@ -685,65 +682,7 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <a @click="goToArticle(result)">
-                  <div
-                    class="
-                      flex
-                      justify-between
-                      p-4
-                      border border-slate-900/10
-                      dark:border-slate-50/[0.12]
-                      energy:border-zinc-700
-                      h-full
-                      hover:underline
-                    "
-                    :class="
-                      isLocked(result)
-                        ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
-                        : 'cursor-pointer'
-                    "
-                  >
-                    <div class="px-2 flex flex-col justify-between">
-                      <template v-if="isLocked(result)">
-                        <div class="flex mb-2 items-center">
-                          <LockClosedIcon
-                            class="mr-2 h-4 w-4"
-                            aria-hidden="true"
-                          ></LockClosedIcon>
-                          <span class="uppercase text-sm">Locked</span>
-                        </div>
-                      </template>
-                      <div>
-                        <span
-                          class="
-                            text-slate-600
-                            dark:text-slate-300
-                            energy:text-zinc-300
-                          "
-                          >{{
-                            `${"(" + result.title_classification + ") "}`
-                          }}</span
-                        >
-                        <span
-                          class="text-black dark:text-white energy:text-white"
-                          >{{ result.title }}</span
-                        >
-                      </div>
-                      <div class="mt-2 text-sm">
-                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
-                      </div>
-                    </div>
-                    <div v-show="result.hasImage">
-                      <ArticleImage
-                        class="w-[165px] h-[165px] sm:max-w-full h-full"
-                        :article="result"
-                        smartRender
-                        @imageNotFound="toggleImgContainer(result, false)"
-                        @imageLoaded="toggleImgContainer(result, true)"
-                      />
-                    </div>
-                  </div>
-                </a>
+                <ArticleCard :article="result" />
               </template>
             </div>
           </template>
@@ -864,10 +803,7 @@
               energy:border-zinc-700/50
             "
           >
-            <SearchResultsTablePagination
-              :totalCount="totalCount"
-              :currentPage="currentPage"
-            />
+            <Pagination :totalCount="totalCount" :currentPage="currentPage" />
           </div>
         </BaseCard>
       </div>
@@ -1179,8 +1115,8 @@ import {
   XIcon,
 } from "@heroicons/vue/outline";
 import { LockClosedIcon } from "@heroicons/vue/solid";
-import ArticleImage from "@/components/ArticleImage";
-import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
+import ArticleCard from "@/components/ArticleCard";
+import Pagination from "@/components/Pagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 const sortOptions = [
   { label: "Newest", key: "desc", type: "sort_dir" },
@@ -1211,8 +1147,8 @@ export default {
     SelectorIcon,
     XIcon,
     LockClosedIcon,
-    ArticleImage,
-    SearchResultsTablePagination,
+    ArticleCard,
+    Pagination,
     SearchResultsFacets,
   },
   setup() {

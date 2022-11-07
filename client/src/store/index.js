@@ -4,6 +4,7 @@ import daniel from "./modules/daniel"
 import danielSearch from "./modules/daniel-search"
 import search from "./modules/search"
 import specialEdition from './modules/specialEdition'
+import specialEditions from './modules/specialEditions'
 import user from "./modules/user"
 import document from "./modules/document"
 import feeds from "./modules/feeds"
@@ -31,6 +32,7 @@ export default createStore({
         danielSearch,
         search,
         specialEdition,
+        specialEditions,
         user,
         document,
         feeds,
