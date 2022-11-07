@@ -222,15 +222,7 @@
     />
   </div>
   <!-- NIC Section -->
-  <div
-    class="
-      pt-4
-      pb-6
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
-    "
-  >
+  <div class="py-4">
     <FeedSection
       :title="'NIC Sharable'"
       :items="nicFeeds"
