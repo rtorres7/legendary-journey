@@ -19,6 +19,6 @@ export const user = {
 export { articles } from './articles'
 export { danielArticles } from './danielArticles'
 export { countries, regions } from './regions'
-export { getOseFeeds, getSearchDataFromUrl } from './search'
+export { getOseFeeds, getKingFisherFeeds, getNicFeeds, getSearchDataFromUrl } from './search'
 export { danielArticlesDetails } from "./danielArticlesDetails"
 export { metadata } from "./metadata"
