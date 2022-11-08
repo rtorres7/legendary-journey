@@ -155,10 +155,12 @@
             </DisclosurePanel>
           </Disclosure>
         </div>
-        <div class="flex flex-col pb-8 space-y-3 mt-10">
-          <ArticleAttachments :articleDetails="articleDetails" />
-          <ArticleMetrics :articleDetails="articleDetails" />
-        </div>
+        <template v-if="article">
+          <div class="flex flex-col pb-8 space-y-3 mt-10">
+            <ArticleAttachments :articleDetails="articleDetails" />
+            <ArticleMetrics :articleDetails="articleDetails" />
+          </div>
+        </template>
       </div>
     </template>
   </template>

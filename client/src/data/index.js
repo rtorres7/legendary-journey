@@ -22,4 +22,4 @@ export { countries, regions } from './regions'
 export { getOseFeeds, getSearchDataFromUrl } from './search'
 export { danielArticlesDetails } from "./danielArticlesDetails"
 export { metadata } from "./metadata"
-export { metrics } from "./metrics"
+export { articleMetrics } from "./articleMetrics"

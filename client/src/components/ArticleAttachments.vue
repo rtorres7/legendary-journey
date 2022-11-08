@@ -49,9 +49,9 @@ export default {
   },
   setup(props) {
     const route = useRoute();
-
     const docNum = computed(() => `${route.params.doc_num}` || props.articleDetails.doc_num);
     const attachmentLink = computed(() => `/documents/${docNum.value}/attachments`);
+    
     const pdfVersions = computed(() => {
       const pdfs =
         props.articleDetails.attachments_metadata.filter(
@@ -59,6 +59,7 @@ export default {
         )
       return pdfs;
     });
+    
     const attachments = computed(() => {
       const attachments_metadata =
         props.articleDetails.attachments_metadata.filter(
@@ -70,7 +71,7 @@ export default {
         )
       return attachments_metadata;
     });
-
+    
     return {
       docNum,
       attachmentLink,

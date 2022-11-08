@@ -1,5 +1,6 @@
-export const metrics = [
+export const articleMetrics = [
   {
+    doc_num: "WIReWIRe_sample_",
     readership: [
       {
         name: "Intelligence",
@@ -21,6 +22,7 @@ export const metrics = [
     uniqueReadership: 100
   },
   {
+    doc_num: "WIReWIRe_sample_2",
     readership: [
       {
         name: "Intelligence",
@@ -46,6 +48,7 @@ export const metrics = [
     uniqueReadership: 300
   },
   {
+    doc_num: "WIReWIRe_sample_3",
     readership: [
       {
         name: "Intelligence",
@@ -71,6 +74,7 @@ export const metrics = [
     uniqueReadership: 800
   },
   {
+    doc_num: "WIReWIRe_sample_4",
     readership: [
       {
         name: "Intelligence",
@@ -96,6 +100,7 @@ export const metrics = [
     uniqueReadership: 500
   },
   {
+    doc_num: "WIReWIRe_sample_5",
     readership: [
       {
         name: "Intelligence",

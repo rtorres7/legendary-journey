@@ -1,11 +1,16 @@
-import { metrics } from "@/data";
+import { articleMetrics } from "@/data";
 import axios from '@/config/wireAxios'
 import router from "@/router"
+
+const getMetricsForArticle = (metrics) => {
+  let route = router.currentRoute.value;
+  let metricsForArticle = metrics.filter(data => data.doc_num === route.params.doc_num);
+  return metricsForArticle;
+};
 
 export default {
   namespaced: true,
   state: {
-    metrics: [],
     readershipStartDate: "",
     readershipEndDate: "",
     uniqueReaders: 0,
@@ -14,27 +19,49 @@ export default {
   },
 
   actions: {
+    initDates({commit}, {readershipStartDate, readershipEndDate}) {
+      commit("saveStartDate", readershipStartDate);
+      commit("saveEndDate", readershipEndDate);
+    },
     getMetrics({ state, commit }) {
       state.loading = true;
-      let route = router.currentRoute.value;
       if (process.env.NODE_ENV === 'low') {
-        // console.log("metrics: ", metrics)
-        // console.log("metrics readershipStartDate: ", this.readershipStartDate);
-        // console.log("metrics readershipEndDate: ", this.readershipEndDate);
-        commit("saveMetrics", metrics)
+        let metrics = getMetricsForArticle(articleMetrics);
+        commit("importData", metrics);
       } else {
-        console.log("HIGH")
-        axios.get("/documents/" + `${route.params.doc_num}/metrics/basic_metrics.json`).then(response => {
-          console.log("metrics (response): ", response.data);
-        })
-      }
-    }
+          let route = router.currentRoute.value;
+          axios.get("/documents/" + `${route.params.doc_num}/metrics/basic_metrics.json`,
+            {
+              params: {
+                readership_start_date: state.readershipStartDate,
+                readership_end_date: state.readershipEndDate
+              }
+            }
+          )
+          .then(response => {
+            // console.log("metrics (response): ", response.data);
+            commit("importData", response.data);
+          })
+        }
+    },
+    updateStartDate({commit}, startDate) {
+      commit("saveStartDate", startDate)
+    },
+    updateEndDate({commit}, endDate) {
+      commit("saveStartDate", endDate)
+    },
   },
 
   mutations: {
-    saveMetrics(state, metrics) {
-      state.metrics = metrics;
-      state.loading = false;
-    }
+    importData(state, data) {
+      state.uniqueReaders = data[0].uniqueReadership;
+      state.readership = data[0].readership;
+    },
+    saveStartDate(state, value) {
+      state.readershipStartDate = value
+    },
+    saveEndDate(state, value) {
+      state.readershipEndDate = value
+    },
   },
 };

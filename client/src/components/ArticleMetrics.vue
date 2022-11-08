@@ -6,15 +6,15 @@
     "
   >
     <p class="font-semibold">Metrics</p>
-    <p class="font-medium text-md">Unique Readers</p>
+    <p class="font-medium text-md">Unique Readers ({{ uniqueReaders }})</p>
     <div class="flex flex-row justify-between items-center">
       <div class="flex flex-col">
         <label :for="datepickerUuid" class="text-sm font-medium">Start Date</label>
         <BaseDatepicker 
           :id="datepickerUuid"
           v-model="readershipStartDate"
-          :min-date="articleDetails.display_date"
-          :max-date="readershipEndDate"        
+          :minDate="articleDetails.display_date"
+          :maxDate="new Date(readershipEndDate)"
           :enableTimePicker="false"
           @update:modelValue="handleStartDate"
           format="MMM dd, yyyy"
@@ -38,7 +38,7 @@
         <BaseDatepicker
           :id="datepickerUuid"
           v-model="readershipEndDate"
-          :min-date="readershipStartDate"
+          :minDate="new Date(readershipStartDate)"
           :enableTimePicker="false"
           @update:modelValue="handleEndDate"
           format="MMM dd, yyyy"
@@ -62,8 +62,9 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
@@ -77,32 +78,39 @@ export default {
       required: true
     }
   },  
-  setup() {
+  setup(props) {
     const store = useStore();
-    const metrics = computed(() => store.state.metrics)
+    const route = useRoute();
     const datepickerUuid = uniqueID().getID();
-    let readershipStartDate = ref(dayjs().format("YYYY-MM-DD"));
-    let readershipEndDate = ref(dayjs().format("YYYY-MM-DD"));
+    const uniqueReaders = computed(() => store.state.metrics.uniqueReaders);
+    const readership = computed(() => store.state.metrics.readership);
+    let readershipStartDate = ref();
+    let readershipEndDate = ref();
     const chartdiv = ref(null);
-
+    
     const handleStartDate = (modelData) => {
-      readershipStartDate = dayjs(modelData).format("YYYY-MM-DD");
+      readershipStartDate = formatDate(modelData);
+      store.dispatch("metrics/updateStartDate", readershipStartDate);
     };
 
     const handleEndDate = (modelData) => {
-      readershipEndDate = dayjs(modelData).format("YYYY-MM-DD");
+      readershipEndDate = formatDate(modelData);
+      store.dispatch("metrics/updateEndDate", readershipEndDate);
     };
 
-    const queryParams = computed(() => {
-      const params = {};
-      params["readership_start_date"] = readershipStartDate;
-      params["readership_end_date"] = readershipEndDate;
-      return params;
-    });
+    const formatDate = (date) => {
+      return dayjs(date).format("YYYY-MM-DD");
+    }
+
+    const today = ref(formatDate(dayjs()));
 
     onMounted(() => {
-
+      store.dispatch("metrics/initDates",
+        {readershipStartDate: props.articleDetails.display_date, readershipEndDate: today.value});
       store.dispatch("metrics/getMetrics");
+      
+      readershipStartDate.value = dayjs(props.articleDetails.display_date).format("MMM DD, YYYY");
+      readershipEndDate.value = dayjs(today.value).format("MMM DD, YYYY");
 
       let root = am5.Root.new(chartdiv.value);
       root.setThemes([am5themes_Animated.new(root)]);
@@ -111,28 +119,6 @@ export default {
           layout: root.verticalLayout,
         })
       );
-      const readership = [
-        {
-          name: "Intelligence",
-          y: 1842,
-        },
-        {
-          name: "Law Enforcement",
-          y: 72,
-        },
-        {
-          name: "Policy",
-          y: 196,
-        },
-        {
-          name: "Unknown",
-          y: 5,
-        },
-        {
-          name: "Warfighter",
-          y: 493,
-        },
-      ];
       let series = chart.series.push(
         am5percent.PieSeries.new(root, {
           name: "Series",
@@ -143,7 +129,7 @@ export default {
           legendValueText: "[bold {fill}]{value}[/]",
         })
       );
-      series.data.setAll(readership);
+      series.data.setAll(readership.value);
       series.labels.template.set("forceHidden", true);
       series.ticks.template.set("forceHidden", true);
 
@@ -154,17 +140,34 @@ export default {
         })
       );
       legend.data.setAll(series.dataItems);
+
+      watch(
+        () => route.params,
+        () => {series.data.setAll(readership.value), legend.data.setAll(series.dataItems)}
+      );
     });
 
+    watch(
+      () => route.params,
+      () => {
+        store.dispatch("metrics/getMetrics");
+        store.dispatch("metrics/initDates",
+        {readershipStartDate: props.articleDetails.display_date, readershipEndDate: today.value});        
+        console.log("date", readershipStartDate.value = dayjs(props.articleDetails.display_date).format("MMM DD, YYYY"));
+        readershipEndDate.value = dayjs(today.value).format("MMM DD, YYYY");
+      }
+    );
+
     return {
-      metrics,
       datepickerUuid,
+      uniqueReaders,
+      readership,
       readershipStartDate,
       readershipEndDate,
+      chartdiv,
       handleStartDate,
       handleEndDate,
-      queryParams,
-      chartdiv,
+      today,
     };
   },
 };
