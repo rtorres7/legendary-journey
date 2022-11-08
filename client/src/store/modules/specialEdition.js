@@ -16,11 +16,10 @@ export default {
       state.loading = true;
       let route = router.currentRoute.value;
       if (process.env.NODE_ENV === 'low') {
-        //let displayedDocument = danielArticlesDetails.find(({ data }) => data.doc_num === route.params.doc_num);
-        commit("saveSpecialEdition", specialEdition);
+        setTimeout(() => commit("saveSpecialEdition", specialEdition), 750)
       } else {
         axios.get("/special_editions/" + `${route.params.id}`, { params: { page: route.query.page || 1 } }).then(response => {
-          console.log('/special_editions/ (response):', response);
+          console.log(`/special_editions/${route.params.id} (response):`, response);
           commit("saveSpecialEdition", response.data);
         })
       }

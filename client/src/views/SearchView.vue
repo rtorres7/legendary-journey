@@ -591,7 +591,10 @@
               energy:border-zinc-700/50
             "
           >
-            <Pagination :totalCount="totalCount" :currentPage="currentPage" />
+            <SearchResultsPagination
+              :totalCount="totalCount"
+              :currentPage="currentPage"
+            />
           </div>
           <!-- Results -->
           <template v-if="selectedView.label === 'List'">
@@ -803,7 +806,10 @@
               energy:border-zinc-700/50
             "
           >
-            <Pagination :totalCount="totalCount" :currentPage="currentPage" />
+            <SearchResultsPagination
+              :totalCount="totalCount"
+              :currentPage="currentPage"
+            />
           </div>
         </BaseCard>
       </div>
@@ -1116,8 +1122,8 @@ import {
 } from "@heroicons/vue/outline";
 import { LockClosedIcon } from "@heroicons/vue/solid";
 import ArticleCard from "@/components/ArticleCard";
-import Pagination from "@/components/Pagination";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
+import SearchResultsPagination from "@/components/SearchResultsPagination";
 const sortOptions = [
   { label: "Newest", key: "desc", type: "sort_dir" },
   { label: "Oldest", key: "asc", type: "sort_dir" },
@@ -1148,8 +1154,8 @@ export default {
     XIcon,
     LockClosedIcon,
     ArticleCard,
-    Pagination,
     SearchResultsFacets,
+    SearchResultsPagination,
   },
   setup() {
     const datepickerUuid = uniqueID().getID();

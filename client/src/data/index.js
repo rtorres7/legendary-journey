@@ -3,6 +3,9 @@ export const user = {
     notifications: {
         "ntk": {}
     },
+    authorizations: {
+        canManageSpecialEditions: true
+    },
     name: 'Jonathan Oszczakiewicz',
     email: "jonathan@gmail.com",
     roles: [

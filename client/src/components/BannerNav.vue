@@ -513,7 +513,7 @@
           </Menu>
         </li> -->
         <li>
-          <BannerNavPopover :wideShrunk="true">
+          <BannerNavPopover wideShrunk>
             <template #heading>
               Regions<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
             </template>
@@ -585,7 +585,7 @@
           </BannerNavPopover>
         </li>
         <li>
-          <BannerNavPopover :wideShrunk="true">
+          <BannerNavPopover wideShrunk>
             <template #heading>
               Countries<ChevronDownIcon
                 class="h-3 w-3 ml-1"
@@ -728,6 +728,78 @@
           </div>
         </li>
         <li>
+          <BannerNavPopover>
+            <template #heading>
+              Special Editions<ChevronDownIcon
+                class="h-3 w-3 ml-1"
+                aria-hidden="true"
+              />
+            </template>
+            <template #content>
+              <div class="hidden lg:block lg:m-auto">
+                <template v-if="loadingSpecialEditionLinks">
+                  <div class="flex justify-center">
+                    <svg
+                      class="
+                        animate-spin
+                        -ml-1
+                        mr-3
+                        h-14
+                        w-14
+                        text-mission-blue
+                        dark:text-slate-300
+                        energy:text-zinc-300
+                      "
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      ></circle>
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  </div>
+                </template>
+                <template v-else>
+                  <template
+                    v-if="
+                      specialEditionLinks.posted &&
+                      specialEditionLinks.posted.length > 0
+                    "
+                  >
+                    <div
+                      class="flex flex-col space-y-3"
+                      aria-label="select a special edition"
+                    >
+                      <template
+                        v-for="link in specialEditionLinks.posted"
+                        :key="link"
+                      >
+                        <SpecialEditionLink :link="link" />
+                      </template>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <p class="italic">
+                      There are currently no Special Editions
+                    </p>
+                  </template>
+                </template>
+              </div>
+            </template>
+          </BannerNavPopover>
+        </li>
+        <!-- <li>
           <div
             class="
               font-semibold
@@ -739,9 +811,9 @@
             "
             tabindex="0"
           >
-            <BaseTooltip placement="bottom"> Special Editions </BaseTooltip>
+            Special Editions
           </div>
-        </li>
+        </li> -->
         <!-- <li class="2xl:hidden">
           <Menu as="div" class="relative">
             <MenuButton
@@ -1059,6 +1131,7 @@ import { metadata } from "@/config";
 import BannerSearchBar from "@/components/BannerSearchBar";
 import BannerNavPopover from "@/components/BannerNavPopover";
 import BannerNavMap from "@/components/BannerNavMap";
+import SpecialEditionLink from "@/components/SpecialEditionLink";
 import MobileSideMenu from "@/components/MobileSideMenu";
 import TestConsoleDialog from "@/components/TestConsoleDialog";
 import {
@@ -1103,6 +1176,7 @@ export default {
     MobileSideMenu,
     TestConsoleDialog,
     BannerNavMap,
+    SpecialEditionLink,
     Dialog,
     DialogPanel,
     Listbox,
@@ -1176,6 +1250,12 @@ export default {
     const alertEnabled = ref(false);
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
+    const loadingSpecialEditionLinks = computed(
+      () => store.state.specialEditions.loading
+    );
+    const specialEditionLinks = computed(
+      () => store.state.specialEditions.links
+    );
     const isAdmin = computed(() => store.state.testConsole.admin);
     const selectedCountry = ref(countries[0]);
 
@@ -1306,6 +1386,8 @@ export default {
       alertEnabled,
       currentUsername,
       loadingUser,
+      loadingSpecialEditionLinks,
+      specialEditionLinks,
       isAdmin,
       isActive,
       closeMainMenuModal,

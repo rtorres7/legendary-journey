@@ -114,13 +114,40 @@ export const specialEdition = {
 export const specialEditionLinks = {
   concepts: {
     posted: [
-
+      {
+        name: "(U) Russia/Ukraine Tensions",
+        image_path: "/special_editions/1/icon",
+        id: 1
+      },
+      {
+        name: "(U) November Elections 2022",
+        image_path: "/special_editions/2/icon",
+        id: 2
+      },
+      {
+        name: "(U) Qatar World Cup 2022",
+        image_path: "/special_editions/3/icon",
+        id: 3
+      }
     ],
     draft: [
-
+      {
+        name: "(U) Testing Draft Edition",
+        image_path: "/special_editions/4/icon",
+        id: 4
+      }
     ],
     archived: [
-
+      {
+        name: "(U) Special Editions Archived Test",
+        image_path: "/special_editions/5/icon",
+        id: 5
+      },
+      {
+        name: "(U) Syria - CPP:TEST",
+        image_path: "/special_editions/6/icon",
+        id: 6
+      }
     ]
   }
 }
