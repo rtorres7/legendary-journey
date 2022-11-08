@@ -92,6 +92,7 @@ export default {
     onMounted(() => {
       store.dispatch("user/loadUser");
       store.dispatch("metadata/loadMetadata");
+      store.dispatch("specialEditions/loadConceptsLinks");
 
       document.documentElement.classList.remove(
         ...document.documentElement.classList
