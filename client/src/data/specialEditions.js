@@ -76,16 +76,17 @@ const buildArray = (item, number) => {
 }
 
 export const specialEdition = {
+  id: 1,
   totalPages: 25,
   name: "Russia/Ukraine Tensions",
   name_classification: "U",
-  name_classification_xml: "\u003cclass:Classification xlmns:class\"...",
+  name_classification_xml: '<class:Classification xmln:class="urn:us:gov:cia:enterprise:schema:Classification:2.3" xmlns="http://www.w3.org/1999/xhtml" dateClassified"2022-11-09" portionMarking="true" caveat="false" tool="DHTML" toolVersion="202220"><class:ClassificationMarking type="USClassificationMarking" value="U"></class:ClassificationMarking><class:ClassifiedBy></class:ClassifiedBy><class:ClassificationHeader><class:ClassificationBanner>U</class:ClassificationBanner><class:SCICaveat></class:SCICaveat><class:DescriptiveMarkings></class:DescriptiveMarkings></class:ClassificationHeader><class:ClassificationFooter><class:ClassificationBanner>U</class:ClassificationBanner></class:ClassificationFooter></class:Classification>',
   search_params: "http://localhost:8080/#/search?text=russia",
   state: "posted",
   position: 1,
   key_leaders: "",
-  key_readings: "",
-  icon: "data:image/jpg;base64...",
+  key_readings: 'WIReWIRe_sample_1\nWIReWIRe_sample_2\nWIReWIRe_sample_3',
+  icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAIAAAD+THXTAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABqSURBVGhD7c8BDYAwEACxvU6komN2CDZ2S5Ma6JrnvYxSgVKBUoFSgVKBUoFSgVKBUoFSgVKBUoFSgVKBUoFSgVLB+vZcRqlAqUCpQKlAqUCpQKlAqUCpQKlAqUCpQKlAqUCpQKlA6Xx7fuEn7pxwTlEJAAAAAElFTkSuQmCC",
   canEdit: true,
   articles: buildArray(article, 10),
   restrictedArticles: buildArray(restrictedArticle, 4),
