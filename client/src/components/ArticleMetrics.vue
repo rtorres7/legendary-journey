@@ -9,12 +9,12 @@
     <p class="font-medium text-md">Unique Readers ({{ uniqueReaders }})</p>
     <div class="flex flex-row justify-between items-center">
       <div class="flex flex-col">
-        <label :for="datepickerUuid" class="text-sm font-medium">Start Date</label>
+        <label :for="startDatepickerUuid" class="text-sm font-medium">Start Date</label>
         <BaseDatepicker 
-          :id="datepickerUuid"
-          v-model="readershipStartDate"
+          :id="startDatepickerUuid"
+          v-model="startDate"
           :minDate="articleDetails.display_date"
-          :maxDate="new Date(readershipEndDate)"
+          :maxDate="new Date(endDate)"
           :enableTimePicker="false"
           @update:modelValue="handleStartDate"
           format="MMM dd, yyyy"
@@ -34,11 +34,11 @@
       </div>
       <div class="flex flex-col px-3 pt-4">to</div>
       <div class="flex flex-col">
-        <label :for="datepickerUuid" class="text-sm font-medium">End Date</label>
+        <label :for="endDatepickerUuid" class="text-sm font-medium">End Date</label>
         <BaseDatepicker
-          :id="datepickerUuid"
-          v-model="readershipEndDate"
-          :minDate="new Date(readershipStartDate)"
+          :id="endDatepickerUuid"
+          v-model="endDate"
+          :minDate="new Date(startDate)"
           :enableTimePicker="false"
           @update:modelValue="handleEndDate"
           format="MMM dd, yyyy"
@@ -81,36 +81,47 @@ export default {
   setup(props) {
     const store = useStore();
     const route = useRoute();
-    const datepickerUuid = uniqueID().getID();
+    
+    const startDatepickerUuid = uniqueID().getID();
+    const endDatepickerUuid = uniqueID().getID();
+    let startDate = ref();
+    let endDate = ref();
+    
     const uniqueReaders = computed(() => store.state.metrics.uniqueReaders);
     const readership = computed(() => store.state.metrics.readership);
-    let readershipStartDate = ref();
-    let readershipEndDate = ref();
-    const chartdiv = ref(null);
+    const readershipStartDate = computed(() => store.state.metrics.readershipStartDate);
+    const readershipEndDate = computed(() => store.state.metrics.readershipEndDate);
     
+    const chartdiv = ref(null);
+
+    // TODO create one handle function
     const handleStartDate = (modelData) => {
-      readershipStartDate = formatDate(modelData);
-      store.dispatch("metrics/updateStartDate", readershipStartDate);
+      startDate = formatDate(modelData);
+      store.dispatch("metrics/updateStartDate", startDate);
+      store.dispatch("metrics/getMetrics");
     };
 
     const handleEndDate = (modelData) => {
-      readershipEndDate = formatDate(modelData);
-      store.dispatch("metrics/updateEndDate", readershipEndDate);
+      endDate = formatDate(modelData);
+      store.dispatch("metrics/updateEndDate", endDate);
+      store.dispatch("metrics/getMetrics");
     };
 
     const formatDate = (date) => {
       return dayjs(date).format("YYYY-MM-DD");
     }
 
-    const today = ref(formatDate(dayjs()));
+    const setDatepickers = () => {
+      startDate.value = dayjs(props.articleDetails.display_date).format("MMM DD, YYYY");
+      endDate.value = dayjs(dayjs()).format("MMM DD, YYYY");
+    }
 
     onMounted(() => {
       store.dispatch("metrics/initDates",
-        {readershipStartDate: props.articleDetails.display_date, readershipEndDate: today.value});
+        {readershipStartDate: formatDate(props.articleDetails.display_date), readershipEndDate: formatDate(dayjs())});
       store.dispatch("metrics/getMetrics");
-      
-      readershipStartDate.value = dayjs(props.articleDetails.display_date).format("MMM DD, YYYY");
-      readershipEndDate.value = dayjs(today.value).format("MMM DD, YYYY");
+
+      setDatepickers();
 
       let root = am5.Root.new(chartdiv.value);
       root.setThemes([am5themes_Animated.new(root)]);
@@ -147,19 +158,24 @@ export default {
       );
     });
 
-    watch(
-      () => route.params,
+      watch(
+      () => props.articleDetails,
       () => {
+        console.log("watch fires", props.articleDetails.display_date);
         store.dispatch("metrics/getMetrics");
         store.dispatch("metrics/initDates",
-        {readershipStartDate: props.articleDetails.display_date, readershipEndDate: today.value});        
-        console.log("date", readershipStartDate.value = dayjs(props.articleDetails.display_date).format("MMM DD, YYYY"));
-        readershipEndDate.value = dayjs(today.value).format("MMM DD, YYYY");
+          {readershipStartDate: formatDate(props.articleDetails.display_date), readershipEndDate: formatDate(dayjs())});
+
+        setDatepickers();
+
       }
     );
 
     return {
-      datepickerUuid,
+      startDatepickerUuid,
+      endDatepickerUuid,
+      startDate,
+      endDate,
       uniqueReaders,
       readership,
       readershipStartDate,
@@ -167,7 +183,6 @@ export default {
       chartdiv,
       handleStartDate,
       handleEndDate,
-      today,
     };
   },
 };

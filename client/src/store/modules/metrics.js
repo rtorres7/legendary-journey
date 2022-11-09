@@ -24,9 +24,10 @@ export default {
       commit("saveEndDate", readershipEndDate);
     },
     getMetrics({ state, commit }) {
-      state.loading = true;
+       state.loading = true;
       if (process.env.NODE_ENV === 'low') {
         let metrics = getMetricsForArticle(articleMetrics);
+        console.log("basic_metrics.json?readership_start_date="+state.readershipStartDate+"&readership_end_date="+state.readershipEndDate);
         commit("importData", metrics);
       } else {
           let route = router.currentRoute.value;
@@ -45,23 +46,23 @@ export default {
         }
     },
     updateStartDate({commit}, startDate) {
-      commit("saveStartDate", startDate)
+       commit("saveStartDate", startDate)
     },
     updateEndDate({commit}, endDate) {
-      commit("saveStartDate", endDate)
+       commit("saveEndDate", endDate)
     },
   },
 
   mutations: {
     importData(state, data) {
-      state.uniqueReaders = data[0].uniqueReadership;
+       state.uniqueReaders = data[0].uniqueReadership;
       state.readership = data[0].readership;
     },
     saveStartDate(state, value) {
       state.readershipStartDate = value
-    },
+     },
     saveEndDate(state, value) {
-      state.readershipEndDate = value
+       state.readershipEndDate = value
     },
   },
 };
