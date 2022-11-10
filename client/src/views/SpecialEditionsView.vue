@@ -9,7 +9,7 @@
   >
     <p class="font-semibold text-2xl">Special Editions</p>
   </div>
-  <!-- <div class="flex justify-end py-1 my-2">
+  <div class="flex justify-end py-1 my-2">
     <div class="flex space-x-3">
       <template v-if="loading">
         <div
@@ -28,7 +28,7 @@
         <BaseButton @click.prevent="openModal">Create</BaseButton>
       </template>
     </div>
-  </div> -->
+  </div>
   <div class="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     <div>
       <p
@@ -156,19 +156,19 @@
       </div>
     </template>
   </div>
-  <!-- <SpecialEditionCreateEditModal :isOpen="isModalOpen" @close="closeModal" /> -->
+  <SpecialEditionCreateEditModal :isOpen="isModalOpen" @close="closeModal" />
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import SpecialEditionLink from "@/components/SpecialEditionLink";
-//import SpecialEditionCreateEditModal from "@/components/SpecialEditionCreateEditModal";
+import SpecialEditionCreateEditModal from "@/components/SpecialEditionCreateEditModal";
 
 export default {
   components: {
     SpecialEditionLink,
-    //SpecialEditionCreateEditModal,
+    SpecialEditionCreateEditModal,
   },
   setup() {
     const store = useStore();
@@ -178,6 +178,10 @@ export default {
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
     );
+
+    onMounted(() => {
+      store.dispatch("specialEditions/loadConceptsLinks");
+    });
 
     const isModalOpen = ref(false);
 

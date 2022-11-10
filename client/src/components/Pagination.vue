@@ -181,9 +181,9 @@ export default {
           }
         }
       }
-      console.log(
-        `Pagination button builder result for page ${current} and total number pages of ${total} : [${buttons}]`
-      );
+      // console.log(
+      //   `Pagination button builder result for page ${current} and total number pages of ${total} : [${buttons}]`
+      // );
       return buttons;
     };
 

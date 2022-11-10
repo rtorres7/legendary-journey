@@ -137,7 +137,11 @@
             <DotsVerticalIcon class="h-6 w-6" aria-hidden="true" />
           </button>
           <!-- Admin Dropdown -->
-          <Menu v-show="isAdmin" as="div" class="hidden lg:block ml-3 relative">
+          <Menu
+            v-show="isAdmin || canManageSpecialEditions"
+            as="div"
+            class="hidden lg:block ml-3 relative"
+          >
             <div>
               <MenuButton
                 class="
@@ -172,7 +176,7 @@
                   absolute
                   right-0
                   mt-2
-                  w-40
+                  w-48
                   rounded-md
                   shadow-2xl
                   py-2
@@ -204,6 +208,23 @@
                     "
                   >
                     Publish an Article
+                  </router-link>
+                </MenuItem>
+                <MenuItem>
+                  <router-link
+                    to="/special_editions"
+                    class="
+                      py-1
+                      px-3
+                      hover:bg-slate-700/80
+                      dark:hover:bg-slate-600/80
+                      energy:hover:bg-zinc-600/80
+                      flex
+                      items-center
+                      cursor-pointer
+                    "
+                  >
+                    Manage Special Editions
                   </router-link>
                 </MenuItem>
               </MenuItems>
@@ -979,6 +1000,18 @@
                       Publish an Article
                     </router-link>
                   </li>
+                  <li v-show="isAdmin || canManageSpecialEditions">
+                    <router-link
+                      to="/special_editions"
+                      class="
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:hover:text-white
+                      "
+                    >
+                      Manage Special Editions
+                    </router-link>
+                  </li>
                   <li>
                     <BaseTooltip placement="left">
                       <a
@@ -1257,6 +1290,9 @@ export default {
       () => store.state.specialEditions.links
     );
     const isAdmin = computed(() => store.state.testConsole.admin);
+    const canManageSpecialEditions = computed(
+      () => store.getters["user/canManageSpecialEditions"]
+    );
     const selectedCountry = ref(countries[0]);
 
     const removeAlertMessage = () => {
@@ -1389,6 +1425,7 @@ export default {
       loadingSpecialEditionLinks,
       specialEditionLinks,
       isAdmin,
+      canManageSpecialEditions,
       isActive,
       closeMainMenuModal,
       openMainMenuModal,
