@@ -31,15 +31,19 @@
             : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
         "
       >
-        <span class="block truncate max-w-[calc(100%-20px)]">{{
-          multiple
-            ? modelValue.length > 1
-              ? `${modelValue[0].name} +(${modelValue.length - 1})`
-              : modelValue.length === 1
-              ? modelValue[0].name
-              : ""
-            : modelValue.name
-        }}</span>
+        <span
+          class="block truncate max-w-[calc(100%-20px)]"
+          :class="multiple ? '' : 'capitalize'"
+          >{{
+            multiple
+              ? modelValue.length > 1
+                ? `${modelValue[0].name} +(${modelValue.length - 1})`
+                : modelValue.length === 1
+                ? modelValue[0].name
+                : ""
+              : modelValue
+          }}</span
+        >
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
           <SelectorIcon class="h-5 w-5" aria-hidden="true" />
         </span>
@@ -93,9 +97,10 @@
                     ? 'font-light'
                     : 'font-normal',
                   item.subitem ? 'pl-2' : '',
+                  multiple ? '' : 'capitalize',
                   'block truncate text-sm',
                 ]"
-                >{{ item.name }}</span
+                >{{ multiple ? item.name : item }}</span
               >
               <span
                 v-if="selected"
@@ -146,7 +151,7 @@ export default {
       required: true,
     },
     modelValue: {
-      type: [String, Array],
+      type: [String, Number, Array],
       default: "",
     },
     disabled: {
