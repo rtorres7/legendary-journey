@@ -194,8 +194,8 @@
                 "
               >
                 <MenuItem>
-                  <router-link
-                    to="/publish"
+                  <a
+                    @click="navigateToPublish"
                     class="
                       py-1
                       px-3
@@ -208,7 +208,7 @@
                     "
                   >
                     Publish an Article
-                  </router-link>
+                </a>
                 </MenuItem>
                 <MenuItem>
                   <router-link
@@ -989,8 +989,8 @@
                     >
                   </li>
                   <li v-show="isAdmin">
-                    <router-link
-                      to="/publish"
+                    <a
+                      @click="navigateToPublish"
                       class="
                         hover:text-black
                         dark:hover:text-white
@@ -998,7 +998,7 @@
                       "
                     >
                       Publish an Article
-                    </router-link>
+                    </a>
                   </li>
                   <li v-show="isAdmin || canManageSpecialEditions">
                     <router-link
@@ -1405,6 +1405,15 @@ export default {
       });
     };
 
+    const navigateToPublish = () => {
+      router.push({
+        name: "publish",
+        params: {
+          date: new Date().toISOString().split('T')[0],
+        },
+      });
+    };
+
     return {
       metadata,
       regions,
@@ -1440,6 +1449,7 @@ export default {
       navigateToRegion,
       navigateToSubregion,
       navigateToCountry,
+      navigateToPublish
     };
   },
 };
