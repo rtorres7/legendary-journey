@@ -11,6 +11,7 @@ import feeds from "./modules/feeds"
 import savedSearches from "./modules/saved-searches"
 import danielDetails from "./modules/danielDetails"
 import testConsole from "./modules/test-console"
+import kevin from "./modules/kevin"
 import metadata from "./modules/metadata"
 
 export default createStore({
@@ -39,6 +40,7 @@ export default createStore({
         savedSearches,
         danielDetails,
         testConsole,
+        kevin,
         metadata
     },
 })

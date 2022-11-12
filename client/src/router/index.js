@@ -84,7 +84,7 @@ const routes = [
     }
   },
   {
-    path: '/publish',
+    path: '/:date/publish',
     name: 'publish',
     component: PublishArticleView,
     meta: {
@@ -110,7 +110,7 @@ const routes = [
     }
   },
   {
-    path: '/demo-article/new',
+    path: '/demo-article/:date/:id/:doc_num/new',
     name: 'new',
     component: EditDocumentView,
     meta: {
@@ -120,7 +120,7 @@ const routes = [
     }
   },
   {
-    path: '/demo-article/edit/:id',
+    path: '/demo-article/:date/:id/:doc_num/edit',
     name: 'edit',
     component: EditDocumentView,
     meta: {
