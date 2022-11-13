@@ -8,12 +8,18 @@
 - Visual Studio Code (https://code.visualstudio.com/)
 
 # Recommended Visual Studio (VS) Code Extensions
-- Vetur
-- ESLint
-- JavaScript (ES6) code snippets
-- Tailwind Intellisense
-- Material Icon Theme
-- Night Owl (Optional)
+- Vue Language Features (Volar) - _Vue_
+- JavaScript (ES6) code snippets - _charalampos karypidis_
+- ESLint - _Microsoft_
+- Vue VSCode Snippets - _sarah.drasner_
+- Tailwind Intellisense - _Tailwind Labs_
+- Auto Rename Tag - _Jun Han_
+- npm Intellisense - _Christian Kohler_
+- Path Intellisense - _Christian Kohler_
+- TODO Highlight - _Wayou Liu_
+- Material Icon Theme - _Philipp Kief_
+- Project Manager - _Alessandro Fragnani_
+- Night Owl (Optional) - _sarah.drasner_
 
 ## Project setup
 ```
