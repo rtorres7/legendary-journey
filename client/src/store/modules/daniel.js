@@ -32,6 +32,18 @@ export default {
         })
       }
     },
+    getWireByDate({ state, commit }, date) {
+      state.loading = true;
+      if (process.env.NODE_ENV === 'low') {
+        console.log('Wire: ');
+      } else {
+        axios.get("/wires/" + date + "/getWireByDate").then(response => {
+          console.log("~~~~~~~~~~~~~~~~~~~~~~~~", response.data);
+          let articles = response?.data?.features;
+          commit("saveArticles", articles)
+        });
+      }
+    },
     //Test Console Feature Only
     setDanielArticles({ commit }, count) {
       commit("saveArticles", count <= 0 ? [] : danielArticles.slice(0, count))

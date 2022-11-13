@@ -25,7 +25,7 @@
         ></div>
       </template>
       <template v-else>
-        <BaseButton @click.prevent="openModal">Create</BaseButton>
+        <BaseButton @click.prevent="openDialog">Create</BaseButton>
       </template>
     </div>
   </div>
@@ -156,19 +156,22 @@
       </div>
     </template>
   </div>
-  <SpecialEditionCreateEditModal :isOpen="isModalOpen" @close="closeModal" />
+  <SpecialEditionCreateEditDialog
+    :isOpen="isDialogOpen"
+    @closeDialog="closeDialog"
+  />
 </template>
 
 <script>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import SpecialEditionLink from "@/components/SpecialEditionLink";
-import SpecialEditionCreateEditModal from "@/components/SpecialEditionCreateEditModal";
+import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
 export default {
   components: {
     SpecialEditionLink,
-    SpecialEditionCreateEditModal,
+    SpecialEditionCreateEditDialog,
   },
   setup() {
     const store = useStore();
@@ -183,14 +186,14 @@ export default {
       store.dispatch("specialEditions/loadConceptsLinks");
     });
 
-    const isModalOpen = ref(false);
+    const isDialogOpen = ref(false);
 
-    const openModal = () => {
-      isModalOpen.value = true;
+    const openDialog = () => {
+      isDialogOpen.value = true;
     };
 
-    const closeModal = () => {
-      isModalOpen.value = false;
+    const closeDialog = () => {
+      isDialogOpen.value = false;
     };
 
     const getImgUrl = (link) => {
@@ -204,9 +207,9 @@ export default {
       loading,
       links,
       canManageSpecialEditions,
-      isModalOpen,
-      openModal,
-      closeModal,
+      isDialogOpen,
+      openDialog,
+      closeDialog,
       getImgUrl,
     };
   },

@@ -15,11 +15,10 @@ export default {
     getSpecialEdition({ state, commit }) {
       state.loading = true;
       let route = router.currentRoute.value;
-      let page = route.query.page || 1
       if (process.env.NODE_ENV === 'low') {
         setTimeout(() => commit("saveSpecialEdition", specialEdition), 750)
       } else {
-        axios.get("/special_editions/" + `${route.params.id}`, { params: { page } }).then(response => {
+        axios.get("/special_editions/" + `${route.params.id}`, { params: { page: route.query.page || 1 } }).then(response => {
           console.log(`/special_editions/${route.params.id} (response):`, response);
           commit("saveSpecialEdition", response.data);
         })
