@@ -35,12 +35,12 @@ npm run dev
 ```
 cd client
 npm install
-npm run serve
+npm run serve:low
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+npm run build:low
 ```
 
 ### Lints and fixes files
