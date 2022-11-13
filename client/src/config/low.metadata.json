@@ -16,7 +16,8 @@
         },
         {
           "name": "Security & Copyright",
-          "href": "https://www.google.com/"
+          "button": true,
+          "key": "security"
         }
       ]
     },
@@ -69,6 +70,20 @@
           "href": "https://www.google.com/"
         }
       ]
+    }
+  ],
+  "footer_security": [
+    {
+      "header": "Sensistive Material",
+      "content": "Such information, neque eu lacus venenatis tempor. Suspendisse vel ultrices nulla, eget iaculis risus. Donec vitae purus aliquam, pulvinar nunc a, porttitor justo. Maecenas sapien lorem, sagittis et justo at, ornare volutpat orci. Maecenas vitae venenatis tellus, vel facilisis lorem. Aliquam erat volutpat. Duis luctus lorem ligula."
+    },
+    {
+      "header": "Security Reminder",
+      "content": "Use of this U.S. Government system, authorized or unauthorized, constitutes consent to monitoring of this system. Unauthorized use may subject you to criminal prosecution. Evidence of unauthorized use collected during monitoring may be used in administrative, criminal, or other adverse actions."
+    },
+    {
+      "header": "Copyright Material",
+      "content": "Material used within this site may be subject to copyright laws. Further reproduction and dissemination by any means, for any purpose other than official business, may be subject to copyright restrictions and is generally prohibited without the permission of the copyright holder."
     }
   ],
   "footer_note": "Built in partnership with WIRe",

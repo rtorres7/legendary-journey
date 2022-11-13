@@ -45,7 +45,7 @@
         <BaseButton @click.prevent="openDeleteModal" type="danger"
           >Delete</BaseButton
         >
-        <BaseButton @click.prevent="openEditModal">Edit</BaseButton>
+        <BaseButton @click.prevent="openEditDialog">Edit</BaseButton>
       </template>
     </div>
   </div>
@@ -293,11 +293,11 @@
     </div>
   </div>
   <template v-if="!loadingSpecialEdition">
-    <SpecialEditionCreateEditModal
+    <SpecialEditionCreateEditDialog
       editMode
       :edition="specialEdition"
-      :isOpen="isEditModalOpen"
-      @close="closeEditModal"
+      :isOpen="isEditDialogOpen"
+      @closeDialog="closeEditDialog"
       @specialEditionUpdated="reloadSpecialEdition"
     />
     <SpecialEditionConfirmDialog
@@ -318,7 +318,7 @@ import { ChevronUpIcon } from "@heroicons/vue/outline";
 import axios from "@/config/wireAxios";
 import ArticleCard from "@/components/ArticleCard";
 import Pagination from "@/components/Pagination";
-import SpecialEditionCreateEditModal from "@/components/SpecialEditionCreateEditModal";
+import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 import SpecialEditionConfirmDialog from "@/components/SpecialEditionConfirmDialog";
 
 export default {
@@ -329,7 +329,7 @@ export default {
     ChevronUpIcon,
     ArticleCard,
     Pagination,
-    SpecialEditionCreateEditModal,
+    SpecialEditionCreateEditDialog,
     SpecialEditionConfirmDialog,
   },
   setup() {
@@ -343,14 +343,14 @@ export default {
     const specialEdition = computed(() => store.state.specialEdition.edition);
     const currentPage = ref(parseInt(route.query.page) || 1);
 
-    const isEditModalOpen = ref(false);
+    const isEditDialogOpen = ref(false);
 
-    const openEditModal = () => {
-      isEditModalOpen.value = true;
+    const openEditDialog = () => {
+      isEditDialogOpen.value = true;
     };
 
-    const closeEditModal = () => {
-      isEditModalOpen.value = false;
+    const closeEditDialog = () => {
+      isEditDialogOpen.value = false;
     };
 
     const isDeleteModalOpen = ref(false);
@@ -407,9 +407,9 @@ export default {
       loadingSpecialEdition,
       specialEdition,
       currentPage,
-      isEditModalOpen,
-      openEditModal,
-      closeEditModal,
+      isEditDialogOpen,
+      openEditDialog,
+      closeEditDialog,
       isDeleteModalOpen,
       openDeleteModal,
       closeDeleteModal,
