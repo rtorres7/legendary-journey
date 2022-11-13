@@ -39,7 +39,7 @@
         alt="thumbnail"
         class="max-h-[70px] max-w-[70px]"
       />
-      <div v-show="uploadFileName" class="flex items-center text-sm">
+      <div v-if="uploadFile" class="flex items-center text-sm">
         <button
           type="button"
           class="w-8 h-8 flex items-center justify-center"
@@ -53,7 +53,7 @@
           <span class="font-medium">Current File: </span
           ><span
             class="ml-1 text-slate-900 dark:text-slate-400 energy:text-zinc-400"
-            >{{ uploadFileName }}</span
+            >{{ uploadFile.name }}</span
           >
         </div>
       </div>
@@ -73,6 +73,10 @@ export default {
     binary: {
       type: String,
     },
+    file: {
+      type: File,
+      default: null,
+    },
     label: {
       type: String,
       default: "Image Attachment",
@@ -80,20 +84,23 @@ export default {
   },
   emits: ["onImageAdded", "onImageRemoved"],
   setup(props, { emit }) {
-    const uploadFileName = ref(null);
+    const uploadFile = ref(props.file);
 
     const changeImage = (event) => {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        emit("onImageAdded", reader.result);
+        emit("onImageAdded", {
+          binary: reader.result,
+          file: uploadFile.value,
+        });
       });
-      uploadFileName.value = event.target.files[0].name;
-      reader.readAsDataURL(event.target.files[0]);
+      uploadFile.value = event.target.files[0];
+      reader.readAsDataURL(uploadFile.value);
       event.target.value = null;
     };
 
     const removeArticleImage = () => {
-      uploadFileName.value = null;
+      uploadFile.value = null;
       emit("onImageRemoved");
     };
 
@@ -107,7 +114,7 @@ export default {
     return {
       changeImage,
       removeArticleImage,
-      uploadFileName,
+      uploadFile,
       close,
       getImgUrl,
     };

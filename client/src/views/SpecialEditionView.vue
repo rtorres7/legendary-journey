@@ -63,25 +63,31 @@
         energy:border-zinc-700/25
       "
     >
-      <div class="pb-4 flex justify-center">
+      <div class="flex justify-center">
         <template v-if="loadingSpecialEdition">
-          <div
-            class="
-              h-[38px]
-              w-56
-              animate-pulse
-              bg-white
-              dark:bg-slate-800/50
-              energy:bg-zinc-800
-              rounded
-            "
-          ></div>
+          <div class="pb-4">
+            <div
+              class="
+                h-[38px]
+                w-56
+                animate-pulse
+                bg-white
+                dark:bg-slate-800/50
+                energy:bg-zinc-800
+                rounded
+              "
+            ></div>
+          </div>
         </template>
         <template v-else>
-          <Pagination
-            :currentPage="currentPage"
-            :pages="specialEdition.totalPages"
-          />
+          <template v-if="specialEdition.totalPages > 1">
+            <div class="pb-4">
+              <Pagination
+                :currentPage="currentPage"
+                :pages="specialEdition.totalPages"
+              />
+            </div>
+          </template>
         </template>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

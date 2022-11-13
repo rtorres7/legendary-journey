@@ -2,57 +2,79 @@
   "application_name": "Current",
   "system_classification": "UNCLASSIFIED",
   "system_message": "Use of this system message content placeholder message. Sit an qualisque appellantur. Eu clita omnesque elaboraret usu, semper dictas vim ea. Nam ea ipsum sonet. Volumus fabellas expetendis no quo, ei pro commodo pertinax. Diam doming inimicus ex est, ex his audiam fastidii persequeris. No has nihil electram.",
-  "footer_links": {
-    "resources_links": [
-      [
+  "footer_links": [
+    {
+      "header": "About",
+      "links": [
+        {
+          "name": "NCTC Info",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "Revisions",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "Security & Copyright",
+          "href": "https://www.google.com/"
+        }
+      ]
+    },
+    {
+      "header": "Program of Analysis",
+      "links": [
+        {
+          "name": "2022 Program of Analysis",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "2021 Program of Analysis",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "2020 Program of Analysis",
+          "href": "https://www.google.com/"
+        }
+      ]
+    },
+    {
+      "header": "Resources",
+      "links": [
         {
           "name": "DI Tradecraft",
-          "href": "/"
+          "href": "https://www.google.com/"
         },
         {
-          "name": "NCTC/DI Artforms",
-          "href": "/"
+          "name": "NCTC/DI ARES",
+          "href": "https://www.google.com/"
         },
         {
-          "name": "NCTC Additional Resources",
-          "href": "/"
+          "name": "WIRe Accessibility Page",
+          "href": "https://www.google.com/"
         },
         {
-          "name": "Production Processes",
-          "href": "/"
-        }
-      ],
-      [
+          "name": "WIRe FAQ",
+          "href": "https://www.google.com/"
+        },
         {
-          "name": "Website Overview",
-          "href": "/"
+          "name": "WIRe Handbook",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "WIRe Intellipedia",
+          "href": "https://www.google.com/"
         },
         {
           "name": "World Factbook",
-          "href": "/"
-        },
-        {
-          "name": "Accessibility Help",
-          "href": "/"
+          "href": "https://www.google.com/"
         }
       ]
-    ],
-    "poa_links": [
-      {
-        "name": "2022 Program of Analysis",
-        "href": "/"
-      },
-      {
-        "name": "2021 Program of Analysis",
-        "href": "/"
-      },
-      {
-        "name": "2020 Program of Analysis",
-        "href": "/"
-      }
-    ]
-  },
+    }
+  ],
   "footer_note": "Built in partnership with WIRe",
+  "footer_contact": {
+    "email": "ITS-HELP-LINE@current.gov"
+  },
   "search_suggestions": [
     {
       "text": "Australia",

@@ -133,11 +133,12 @@
                       />
                     </div>
                     <div>
-                      <BaseFileChooser
+                      <BaseImageFileChooser
                         :label="'File Attachment (required)'"
                         :binary="editionEvent.icon"
-                        @onImageAdded="updateBinary"
-                        @onImageRemoved="removeBinary"
+                        :file="imageFile"
+                        @onImageAdded="updateImageFile"
+                        @onImageRemoved="removeImageFile"
                       />
                     </div>
                   </div>
@@ -211,6 +212,7 @@ export default {
     const links = computed(() => store.state.specialEditions.links);
 
     const editionEvent = ref(Object.assign({}, props.edition));
+    const imageFile = ref(null);
 
     const buildOrderOptions = () => {
       let options = [];
@@ -229,18 +231,22 @@ export default {
       editionEvent.value.name_classification_xml = payload.classification_xml;
     };
 
-    const updateBinary = (payload) => {
-      editionEvent.value.icon = payload;
+    const updateImageFile = (payload) => {
+      editionEvent.value.icon = payload.binary;
+      imageFile.value = payload.file;
     };
 
-    const removeBinary = () => {
+    const removeImageFile = () => {
       editionEvent.value.icon = null;
+      imageFile.value = null;
     };
 
     const buildFormData = () => {
       const formData = new FormData();
       Object.keys(editionEvent.value).forEach((key) => {
-        if (editionEvent.value[key]) {
+        if (key === "icon") {
+          formData.append(key, imageFile.value);
+        } else if (editionEvent.value[key]) {
           formData.append(key, editionEvent.value[key]);
         }
       });
@@ -325,10 +331,11 @@ export default {
     return {
       stateOptions,
       editionEvent,
+      imageFile,
       orderOptions,
       updateClassification,
-      updateBinary,
-      removeBinary,
+      updateImageFile,
+      removeImageFile,
       isDisabled,
       close,
       sendForm,

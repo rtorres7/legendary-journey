@@ -7,33 +7,33 @@
       [
         {
           "name": "DI Tradecraft",
-          "href": "/"
+          "href": "https://www.google.com/"
         },
         {
-          "name": "NCTC/DI Artforms",
-          "href": "/"
-        },
-        {
-          "name": "NCTC Additional Resources",
-          "href": "/"
-        },
-        {
-          "name": "Production Processes",
-          "href": "/"
+          "name": "NCTC/DI ARES",
+          "href": "https://www.google.com/"
         }
       ],
       [
         {
-          "name": "Website Overview",
-          "href": "/"
+          "name": "WIRe Accessibility Page",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "WIRe FAQ",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "WIRe Handbook",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "WIRe Intellipedia",
+          "href": "https://www.google.com/"
         },
         {
           "name": "World Factbook",
-          "href": "/"
-        },
-        {
-          "name": "Accessibility Help",
-          "href": "/"
+          "href": "https://www.google.com/"
         }
       ]
     ],
@@ -53,6 +53,9 @@
     ]
   },
   "footer_note": "Built in partnership with WIRe",
+  "footer_contact": {
+    "email": "ITS-HELP-LINE@current.gov"
+  },
   "search_suggestions": [
     {
       "text": "Australia",
