@@ -137,11 +137,7 @@
             <DotsVerticalIcon class="h-6 w-6" aria-hidden="true" />
           </button>
           <!-- Admin Dropdown -->
-          <Menu
-            v-show="isAdmin || canManageSpecialEditions"
-            as="div"
-            class="hidden lg:block ml-3 relative"
-          >
+          <Menu as="div" class="hidden lg:block ml-3 relative">
             <div>
               <MenuButton
                 class="
@@ -175,6 +171,7 @@
                   origin-top-right
                   absolute
                   right-0
+                  z-10
                   mt-2
                   w-48
                   rounded-md
@@ -208,9 +205,9 @@
                     "
                   >
                     Publish an Article
-                </a>
+                  </a>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem v-show="canManageSpecialEditions">
                   <router-link
                     to="/special_editions"
                     class="
@@ -988,7 +985,7 @@
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
                     >
                   </li>
-                  <li v-show="isAdmin">
+                  <li>
                     <a
                       @click="navigateToPublish"
                       class="
@@ -1000,7 +997,7 @@
                       Publish an Article
                     </a>
                   </li>
-                  <li v-show="isAdmin || canManageSpecialEditions">
+                  <li v-show="canManageSpecialEditions">
                     <router-link
                       to="/special_editions"
                       class="
@@ -1157,6 +1154,7 @@
 </template>
 
 <script>
+import * as dayjs from "dayjs";
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -1406,10 +1404,11 @@ export default {
     };
 
     const navigateToPublish = () => {
+      const today = dayjs().format("YYYY-MM-DD");
       router.push({
         name: "publish",
         params: {
-          date: new Date().toISOString().split('T')[0],
+          date: today,
         },
       });
     };
@@ -1449,7 +1448,7 @@ export default {
       navigateToRegion,
       navigateToSubregion,
       navigateToCountry,
-      navigateToPublish
+      navigateToPublish,
     };
   },
 };
