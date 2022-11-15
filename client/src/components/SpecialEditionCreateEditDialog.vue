@@ -149,7 +149,9 @@ export default {
       const formData = new FormData();
       Object.keys(editionEvent.value).forEach((key) => {
         if (key === "icon") {
-          formData.append(key, imageFile.value);
+          if (!props.editMode) {
+            formData.append(key, imageFile.value);
+          }
         } else if (editionEvent.value[key]) {
           formData.append(key, editionEvent.value[key]);
         }
@@ -205,7 +207,7 @@ export default {
                 closeDialog();
               })
               .catch((err) => {
-                this.showErrorMsg(err);
+                console.error(err);
               });
           } else {
             axios
