@@ -1,17 +1,17 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import store from "@/store"
 import { metadata } from "@/config";
-import HomeView from '../views/HomeView.vue'
 import ArticleView from '../views/ArticleView.vue'
-import DemoArticleView from '../views/DemoArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
-import SearchView from '../views/SearchView.vue'
-//import DemoSearchView from '../views/SearchView.vue'
+import DemoArticleView from '../views/DemoArticleView.vue'
 import EditDocumentView from '../views/EditDocumentView.vue'
-import ProfileView from '../views/ProfileView.vue'
+import HomeView from '../views/HomeView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import PublishArticleView from '../views/PublishArticleView.vue'
-
+import SearchView from '../views/SearchView.vue'
+import SpecialEditionView from '../views/SpecialEditionView.vue'
+import SpecialEditionsView from '../views/SpecialEditionsView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 const routes = [
   {
@@ -83,17 +83,8 @@ const routes = [
       title: 'Search',
     }
   },
-  // {
-  //   path: '/demo-search',
-  //   name: 'demo-search',
-  //   component: DemoSearchView,
-  //   meta: {
-  //     title: 'Search (Demo)',
-  //     demo: true
-  //   }
-  // },
   {
-    path: '/publish',
+    path: '/:date/publish',
     name: 'publish',
     component: PublishArticleView,
     meta: {
@@ -103,7 +94,23 @@ const routes = [
     },
   },
   {
-    path: '/demo-article/new',
+    path: '/special_editions/:id(\\d+)',
+    name: 'specialEdition',
+    component: SpecialEditionView,
+    meta: {
+      title: 'Special Edition'
+    },
+  },
+  {
+    path: '/special_editions',
+    name: 'specialEditions',
+    component: SpecialEditionsView,
+    meta: {
+      title: 'Manage Special Editions'
+    }
+  },
+  {
+    path: '/demo-article/:date/:id/:doc_num/new',
     name: 'new',
     component: EditDocumentView,
     meta: {
@@ -113,7 +120,7 @@ const routes = [
     }
   },
   {
-    path: '/demo-article/edit/:id',
+    path: '/demo-article/:date/:id/:doc_num/edit',
     name: 'edit',
     component: EditDocumentView,
     meta: {

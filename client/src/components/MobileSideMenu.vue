@@ -74,18 +74,6 @@
                     >Home</a
                   >
                 </li>
-                <li>
-                  <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
-                    href="/"
-                    >Searches</a
-                  >
-                </li>
                 <!-- <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
                     <ul class="list-disc list-inside ml-4 mt-4">
@@ -304,20 +292,6 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
-                <BaseTooltip placement="top">
-                  <li>
-                    <a
-                      class="
-                        font-medium
-                        hover:text-black
-                        dark:hover:text-white
-                        energy:text-white
-                      "
-                      href="/"
-                      >Community</a
-                    >
-                  </li>
-                </BaseTooltip>
                 <li>
                   <BaseTooltip placement="top">
                     <a
@@ -328,9 +302,73 @@
                         energy:text-white
                       "
                       href="/"
-                      >Special Editions</a
+                      >Community</a
                     >
                   </BaseTooltip>
+                </li>
+                <li>
+                  <MobileSideMenuDisclosure :title="'Special Editions'">
+                    <div class="mt-4">
+                      <template v-if="loadingSpecialEditionLinks">
+                        <div class="flex justify-center">
+                          <svg
+                            class="
+                              animate-spin
+                              -ml-1
+                              mr-3
+                              h-14
+                              w-14
+                              text-mission-blue
+                              dark:text-slate-300
+                              energy:text-zinc-300
+                            "
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              class="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                            <path
+                              class="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </template>
+                      <template v-else>
+                        <template
+                          v-if="
+                            specialEditionLinks.posted &&
+                            specialEditionLinks.posted.length > 0
+                          "
+                        >
+                          <div
+                            class="flex flex-col space-y-3"
+                            aria-label="select a special edition"
+                          >
+                            <template
+                              v-for="link in specialEditionLinks.posted"
+                              :key="link"
+                            >
+                              <SpecialEditionLink :link="link" />
+                            </template>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <p class="italic">
+                            There are currently no Special Editions
+                          </p>
+                        </template>
+                      </template>
+                    </div>
+                  </MobileSideMenuDisclosure>
                 </li>
                 <li>
                   <BaseTooltip placement="top">
@@ -356,11 +394,13 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { metadata } from "@/config";
 import { regions, countries } from "@/data";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
+import SpecialEditionLink from "@/components/SpecialEditionLink";
 import {
   Dialog,
   DialogPanel,
@@ -379,6 +419,7 @@ import { ChevronDownIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
 export default {
   components: {
     MobileSideMenuDisclosure,
+    SpecialEditionLink,
     Dialog,
     DialogPanel,
     Disclosure,
@@ -398,7 +439,15 @@ export default {
     isOpen: Boolean,
   },
   setup(props, { emit }) {
+    const store = useStore();
     const router = useRouter();
+
+    const loadingSpecialEditionLinks = computed(
+      () => store.state.specialEditions.loading
+    );
+    const specialEditionLinks = computed(
+      () => store.state.specialEditions.links
+    );
 
     const selectedCountry = ref(countries[0]);
     const close = () => {
@@ -473,6 +522,8 @@ export default {
       close,
       regions,
       countries,
+      loadingSpecialEditionLinks,
+      specialEditionLinks,
       selectedCountry,
       navigateToIssue,
       navigateToCountry,

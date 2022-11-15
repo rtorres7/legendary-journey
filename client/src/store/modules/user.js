@@ -6,7 +6,10 @@ export default {
   state: {
     loading: true,
     pretend: null,
-    user: {},
+    user: {
+      authorizations: {
+      },
+    },
   },
 
   getters: {
@@ -21,6 +24,9 @@ export default {
         return state.user.roles.includes(roleName);
       }
       return false;
+    },
+    canManageSpecialEditions: (state) => {
+      return state.user.authorizations.canManageSpecialEditions;
     },
   },
 
