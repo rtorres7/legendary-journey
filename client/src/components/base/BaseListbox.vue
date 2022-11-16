@@ -1,12 +1,13 @@
 <template>
   <Listbox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
     <div class="relative mt-1">
-      <ListboxLabel
-        class="text-sm font-medium line-clamp-1 xl:line-clamp-none"
-        >{{ label }}</ListboxLabel
-      >
-      <ListboxButton
-        class="
+      <ListboxLabel class="text-sm font-medium line-clamp-1 xl:line-clamp-none">{{ label }}
+        <template v-if="required">
+          <span class="sr-only">Required</span>
+          <span class="text-red-500">*</span>
+        </template>
+      </ListboxLabel>
+      <ListboxButton class="
           min-h-[2rem]
           flex
           relative
@@ -24,40 +25,28 @@
           focus-visible:ring-2
           focus-visible:ring-opacity-75
           focus-visible:ring-offset-2
-        "
-        :class="
+        " :class="
           disabled
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
             : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
-        "
-      >
-        <span
-          class="block truncate max-w-[calc(100%-20px)]"
-          :class="multiple ? '' : 'capitalize'"
-          >{{
+        ">
+        <span class="block truncate max-w-[calc(100%-20px)]" :class="multiple ? '' : 'capitalize'">{{
             multiple
               ? modelValue.length > 1
                 ? `${modelValue[0].name} +(${modelValue.length - 1})`
                 : modelValue.length === 1
-                ? modelValue[0].name
-                : ""
+                  ? modelValue[0].name
+                  : ""
               : modelValue
-          }}</span
-        >
+        }}</span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
           <SelectorIcon class="h-5 w-5" aria-hidden="true" />
         </span>
       </ListboxButton>
-      <transition
-        enter-active-class="transition ease-out duration-100"
-        enter-from-class="transform opacity-0 scale-95"
-        enter-to-class="transform opacity-100 scale-100"
-        leave-active-class="transition ease-in duration-75"
-        leave-from-class="transform opacity-100 scale-100"
-        leave-to-class="transform opacity-0 scale-95"
-      >
-        <ListboxOptions
-          class="
+      <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
+        leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+        <ListboxOptions class="
             absolute
             w-full
             py-1
@@ -72,40 +61,25 @@
             ring-1 ring-black ring-opacity-5
             focus:outline-none
             z-10
-          "
-        >
-          <ListboxOption
-            v-slot="{ active, selected }"
-            v-for="item in items"
-            :key="item"
-            :value="item"
-            as="template"
-          >
-            <li
-              :class="[
-                active
-                  ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-700'
-                  : 'bg-none',
-                'relative cursor-default select-none py-2 pl-10 pr-4',
-              ]"
-            >
-              <span
-                :class="[
-                  selected
-                    ? 'font-medium'
-                    : item.subitem
+          ">
+          <ListboxOption v-slot="{ active, selected }" v-for="item in items" :key="item" :value="item" as="template">
+            <li :class="[
+              active
+                ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-700'
+                : 'bg-none',
+              'relative cursor-default select-none py-2 pl-10 pr-4',
+            ]">
+              <span :class="[
+                selected
+                  ? 'font-medium'
+                  : item.subitem
                     ? 'font-light'
                     : 'font-normal',
-                  item.subitem ? 'pl-2' : '',
-                  multiple ? '' : 'capitalize',
-                  'block truncate text-sm',
-                ]"
-                >{{ multiple ? item.name : item }}</span
-              >
-              <span
-                v-if="selected"
-                class="absolute inset-y-0 left-0 flex items-center pl-3"
-              >
+                item.subitem ? 'pl-2' : '',
+                multiple ? '' : 'capitalize',
+                'block truncate text-sm',
+              ]">{{ multiple ? item.name : item }}</span>
+              <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3">
                 <CheckIcon class="h-5 w-5" aria-hidden="true" />
               </span>
             </li>
@@ -158,6 +132,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    required: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {

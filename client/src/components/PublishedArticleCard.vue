@@ -64,14 +64,21 @@
               headline
                 ? 'text-lg line-clamp-4 md:line-clamp-3'
                 : 'line-clamp-2',
-              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium',
+              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium break-all',
             ]"
           >
             {{ `(${article.title_classification}) ${article.title}` }}
           </h1>
           <p
             v-show="headline"
-            class="hidden mt-3 text-md lg:line-clamp-2 xl:line-clamp-3"
+            class="
+              hidden
+              mt-3
+              text-md
+              lg:line-clamp-2
+              xl:line-clamp-3
+              break-all
+            "
           >
             {{ `(${article.summary_classification}) ${article.summary}` }}
           </p>
@@ -79,7 +86,7 @@
         <p
           :class="[
             headline ? '' : 'xl:mt-1',
-            'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
+            'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80 break-all',
           ]"
         >
           {{ dayjs(article.publication_date).format("ddd, MMMM D, YYYY") }}

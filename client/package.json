@@ -23,11 +23,13 @@
     "fuse.js": "^6.6.2",
     "inter-ui": "^3.19.3",
     "lodash": "^4.17.21",
+    "vee-validate": "^4.5.8",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue3-carousel": "^0.1.38",
     "vue3-simple-typeahead": "^1.0.11",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -50,7 +52,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "vue/setup-compiler-macros": true
     },
     "extends": [
       "plugin:vue/vue3-essential",
