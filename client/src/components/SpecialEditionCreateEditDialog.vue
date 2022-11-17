@@ -1,66 +1,37 @@
 
 <template>
-  <BaseDialog :isOpen="isOpen" @close="closeDialog" class="max-w-[800px]">
+  <BaseDialog :isOpen="isOpen" @close="closeDialog" class="max-w-[950px]"
+    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`">
     <form id="se_form" @submit.prevent="sendForm">
       <div class="block lg:flex my-4 lg:space-x-5">
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseInput
-              v-model="editionEvent.name"
-              label="Name (required)"
-              autocomplete="off"
-              type="text"
-            />
+            <BaseInput v-model="editionEvent.name" label="Name" autocomplete="off" type="text" required />
           </div>
           <div>
-            <BaseInput
-              v-model="editionEvent.search_params"
-              label="Search params (required)"
-              autocomplete="off"
-              type="text"
-            />
+            <BaseInput v-model="editionEvent.search_params" label="Search params" autocomplete="off"
+              placeholder="Run a search, copy the URL, and paste it here." type="text" required />
           </div>
           <div>
-            <BaseTextarea
-              maxlength="4000"
-              rows="5"
-              v-model="editionEvent.key_readings"
-              label="Selected Readings"
-              v-model.trim="editionEvent.key_readings"
-            ></BaseTextarea>
+            <BaseTextarea maxlength="4000" rows="5" v-model="editionEvent.key_readings" label="Selected Readings"
+              placeholder="One document number per line, ex: WIRe110416-02." v-model.trim="editionEvent.key_readings">
+            </BaseTextarea>
           </div>
           <div>
-            <BaseListbox
-              v-model="editionEvent.state"
-              :label="'State (required)'"
-              :items="stateOptions"
-            />
+            <BaseListbox v-model="editionEvent.state" :label="'State'" :items="stateOptions" required />
           </div>
         </div>
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseListbox
-              v-model="editionEvent.position"
-              :label="'Order'"
-              :items="orderOptions"
-            />
+            <BaseListbox v-model="editionEvent.position" :label="'Order'" :items="orderOptions" />
           </div>
           <div class="flex flex-col">
-            <BaseClassify
-              :label="'Classification (required)'"
-              showSelection
-              :selection="editionEvent.name_classification"
-              @classificationSelected="updateClassification"
-            />
+            <BaseClassify :label="'Classification'" showSelection :selection="editionEvent.name_classification"
+              @classificationSelected="updateClassification" required />
           </div>
           <div>
-            <BaseImageFileChooser
-              :label="'File Attachment (required)'"
-              :binary="editionEvent.icon"
-              :file="imageFile"
-              @onImageAdded="updateImageFile"
-              @onImageRemoved="removeImageFile"
-            />
+            <BaseImageFileChooser :label="'File Attachment'" :binary="editionEvent.icon" :file="imageFile"
+              @onImageAdded="updateImageFile" @onImageRemoved="removeImageFile" required />
           </div>
         </div>
       </div>
@@ -68,7 +39,7 @@
     <template #actions>
       <BaseButton @click.prevent="closeDialog">Cancel</BaseButton>
       <BaseButton :disabled="isDisabled()" type="submit" form="se_form">{{
-        editMode ? "Save" : "Create"
+          editMode ? "Save" : "Create"
       }}</BaseButton>
     </template>
   </BaseDialog>
@@ -78,6 +49,8 @@
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
+// import { useField, userForm } from 'vee-validate'
+// import { mixed, number, object, string } from 'yup';
 
 const stateOptions = ["draft", "archived", "posted"];
 
@@ -112,6 +85,38 @@ export default {
     const links = computed(() => store.state.specialEditions.links);
 
     const editionEvent = ref(Object.assign({}, props.edition));
+
+    // const validationSchema = object({
+    //   name: string().required(),
+    //   search_params: string().required(),
+    //   key_readers: undefined,
+    //   state: string().required(),
+    //   position: number(),
+    //   name_classification: string().required,
+    //   icon: mixed().required('File is required.')
+    // })
+
+    // const { handleSubmit, errors } = useForm({
+    //   validationSchema,
+    //   initialValues: {
+    //     position: 1,
+    //   }
+    // })
+
+    // const { value: category } = useField('name')
+    // const { value: title } = useField('search_params')
+    // const { value: description } = useField('key_readers')
+    // const { value: location } = useField('state')
+    // const { value: pets } = useField('position')
+    // const { value: catering } = useField('name_classification')
+    // const { value: music } = useField('icon')
+
+
+    // // const { handleSubmit } = useForm({
+    // //   validationSchema
+    // // })
+
+
     const imageFile = ref(null);
 
     const closeDialog = () => {
@@ -149,7 +154,7 @@ export default {
       const formData = new FormData();
       Object.keys(editionEvent.value).forEach((key) => {
         if (key === "icon") {
-          if (!props.editMode) {
+          if (imageFile.value) {
             formData.append(key, imageFile.value);
           }
         } else if (editionEvent.value[key]) {
@@ -158,6 +163,19 @@ export default {
       });
       return formData;
     };
+
+    const resetForm = () => {
+      editionEvent.value = {
+        icon: null,
+        name: null,
+        name_classification: null,
+        search_params: null,
+        state: null,
+        position: 1,
+        key_readings: null,
+      }
+      imageFile.value = null;
+    }
 
     /*
       The posted links needs to load first before building the order options.
@@ -189,10 +207,12 @@ export default {
         if (process.env.NODE_ENV === "low") {
           if (props.editMode) {
             emit("specialEditionUpdated");
+            closeDialog();
           } else {
             store.dispatch("specialEditions/loadConceptsLinks");
+            resetForm();
+            closeDialog();
           }
-          closeDialog();
         } else {
           if (props.editMode) {
             axios
@@ -215,6 +235,7 @@ export default {
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
+                resetForm();
                 closeDialog();
               })
               .catch((err) => {

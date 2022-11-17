@@ -3,20 +3,19 @@ import { ref } from 'vue'
 export default function () {
   const files = ref([])
 
-  const fileExists = (otherId) => {
+  function addFiles(newFiles) {
+    let newUploadableFiles = [...newFiles].map((file) => new UploadableFile(file)).filter((file) => !fileExists(file.id))
+    files.value = files.value.concat(newUploadableFiles)
+  }
+
+  function fileExists(otherId) {
     return files.value.some(({ id }) => id === otherId)
   }
 
-  const removeFile = (file) => {
+  function removeFile(file) {
     const index = files.value.indexOf(file)
-    if (index > -1) {
-      files.value.splice(index, 1)
-    }
-  }
 
-  const addFiles = (newFiles) => {
-    let newUploadableFiles = [...newFiles].map((file) => new UploadableFile(file)).filter((file) => !fileExists(file.id))
-    files.value = files.value.concat(newUploadableFiles)
+    if (index > -1) files.value.splice(index, 1)
   }
 
   return { files, addFiles, removeFile }

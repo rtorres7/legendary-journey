@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="
+  <div class="
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
-    "
-  >
+    ">
     <template v-if="loadingSpecialEdition">
-      <div
-        class="
+      <div class="
           h-[32px]
           w-64
           animate-pulse
@@ -17,8 +14,7 @@
           dark:bg-slate-800/50
           energy:bg-zinc-800
           rounded
-        "
-      ></div>
+        "></div>
     </template>
     <template v-else>
       <p class="font-semibold text-2xl">
@@ -29,8 +25,7 @@
   <div class="flex justify-end py-1 my-2">
     <div class="flex space-x-3">
       <template v-if="loadingSpecialEdition">
-        <div
-          class="
+        <div class="
             h-[38px]
             w-40
             animate-pulse
@@ -38,20 +33,18 @@
             dark:bg-slate-800/50
             energy:bg-zinc-800
             rounded
-          "
-        ></div>
+          "></div>
       </template>
       <template v-else>
-        <BaseButton @click.prevent="openDeleteModal" type="danger"
-          >Delete</BaseButton
-        >
-        <BaseButton @click.prevent="openEditDialog">Edit</BaseButton>
+        <template v-if="canManageSpecialEditions">
+          <BaseButton @click.prevent="openDeleteDialog" type="danger">Delete</BaseButton>
+          <BaseButton @click.prevent="openEditDialog">Edit</BaseButton>
+        </template>
       </template>
     </div>
   </div>
   <div class="flex flex-col lg:flex-row py-4">
-    <div
-      class="
+    <div class="
         basis-2/3
         lg:pr-4 lg:border-r
         pb-4
@@ -61,13 +54,11 @@
         border-slate-900/10
         dark:border-slate-50/[0.06]
         energy:border-zinc-700/25
-      "
-    >
+      ">
       <div class="flex justify-center">
         <template v-if="loadingSpecialEdition">
           <div class="pb-4">
-            <div
-              class="
+            <div class="
                 h-[38px]
                 w-56
                 animate-pulse
@@ -75,17 +66,13 @@
                 dark:bg-slate-800/50
                 energy:bg-zinc-800
                 rounded
-              "
-            ></div>
+              "></div>
           </div>
         </template>
         <template v-else>
           <template v-if="specialEdition.totalPages > 1">
             <div class="pb-4">
-              <Pagination
-                :currentPage="currentPage"
-                :pages="specialEdition.totalPages"
-              />
+              <Pagination :currentPage="currentPage" :pages="specialEdition.totalPages" />
             </div>
           </template>
         </template>
@@ -93,23 +80,18 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <template v-if="loadingSpecialEdition">
           <template v-for="n in 6" :key="n">
-            <div
-              class="
+            <div class="
                 h-[200px]
                 animate-pulse
                 bg-white
                 dark:bg-slate-800/50
                 energy:bg-zinc-800
                 rounded
-              "
-            ></div>
+              "></div>
           </template>
         </template>
         <template v-else>
-          <template
-            v-for="article in specialEdition.articles"
-            :key="article.id"
-          >
+          <template v-for="article in specialEdition.articles" :key="article.id">
             <BaseCard class="h-full" hoverable :rounded="false">
               <ArticleCard :article="article" />
             </BaseCard>
@@ -117,18 +99,13 @@
         </template>
       </div>
       <template v-if="!loadingSpecialEdition">
-        <template
-          v-if="
-            specialEdition.restrictedArticles &&
-            specialEdition.restrictedArticles.length > 0
-          "
-        >
+        <template v-if="
+          specialEdition.restrictedArticles &&
+          specialEdition.restrictedArticles.length > 0
+        ">
           <p class="font-medium text-lg py-4">Need More Access to View</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <template
-              v-for="article in specialEdition.restrictedArticles"
-              :key="article.id"
-            >
+            <template v-for="article in specialEdition.restrictedArticles" :key="article.id">
               <BaseCard class="h-full" hoverable :rounded="false">
                 <ArticleCard :article="article" />
               </BaseCard>
@@ -139,17 +116,14 @@
     </div>
     <div class="basis-1/3 pl-0 lg:pl-4 pt-4 lg:pt-0">
       <div class="flex flex-col space-y-3">
-        <div
-          class="
+        <div class="
             border-b border-slate-900/10
             dark:border-slate-50/[0.06]
             energy:border-zinc-700/25
             pb-4
-          "
-        >
+          ">
           <template v-if="loadingSpecialEdition">
-            <div
-              class="
+            <div class="
                 h-[28px]
                 w-40
                 mb-4
@@ -158,37 +132,28 @@
                 dark:bg-slate-800/50
                 energy:bg-zinc-800
                 rounded
-              "
-            ></div>
+              "></div>
           </template>
           <template v-else>
             <p class="font-medium text-lg pb-4">Selected Readings</p>
           </template>
           <div class="flex flex-col space-y-3">
             <template v-if="loadingSpecialEdition">
-              <div
-                class="
+              <div class="
                   h-[200px]
                   animate-pulse
                   bg-white
                   dark:bg-slate-800/50
                   energy:bg-zinc-800
                   rounded
-                "
-              ></div>
+                "></div>
             </template>
             <template v-else>
-              <template
-                v-for="reading in specialEdition.readings"
-                :key="reading.id"
-              >
-                <router-link
-                  :to="{
-                    name: 'article',
-                    params: { doc_num: reading.doc_num },
-                  }"
-                  class="hover:underline"
-                >
+              <template v-for="reading in specialEdition.readings" :key="reading.id">
+                <router-link :to="{
+                  name: 'article',
+                  params: { doc_num: reading.doc_num },
+                }" class="hover:underline">
                   {{ `(${reading.title_classification}) ${reading.title}` }}
                 </router-link>
               </template>
@@ -196,87 +161,63 @@
           </div>
         </div>
         <template v-if="loadingSpecialEdition">
-          <div
-            class="
+          <div class="
               h-[415px]
               animate-pulse
               bg-white
               dark:bg-slate-800/50
               energy:bg-zinc-800
               rounded
-            "
-          ></div>
+            "></div>
         </template>
         <template v-else>
-          <div
-            v-if="
-              specialEdition.reporting && specialEdition.reporting.length > 0
-            "
-          >
+          <div v-if="
+            specialEdition.reporting && specialEdition.reporting.length > 0
+          ">
             <p class="font-medium text-lg pb-2">Reporting</p>
-            <template
-              v-for="(report, index) in specialEdition.reporting"
-              :key="index"
-            >
+            <template v-for="(report, index) in specialEdition.reporting" :key="index">
               <template v-if="report.docs && report.docs.length > 0">
-                <div
-                  class="
+                <div class="
                     border-b border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-zinc-700/50
                     last:border-none
-                  "
-                >
+                  ">
                   <Disclosure v-slot="{ open }" defaultOpen>
                     <DisclosureButton class="py-4 w-full">
                       <div class="flex justify-between items-center">
-                        <span
-                          class="
+                        <span class="
                             text-mission-light-blue
                             dark:text-teal-400
                             energy:text-energy-yellow
                             mr-2
                             inline-block
-                          "
-                        >
+                          ">
                           {{ report.type }}
                         </span>
-                        <ChevronUpIcon
-                          :class="open ? '' : 'rotate-180 transform'"
-                          class="
+                        <ChevronUpIcon :class="open ? '' : 'rotate-180 transform'" class="
                             text-mission-light-blue
                             dark:text-teal-400
                             energy:text-energy-yellow
                             h-5
                             w-5
                             inline-block
-                          "
-                        />
+                          " />
                       </div>
                     </DisclosureButton>
-                    <transition
-                      enter-active-class="transition duration-100 ease-out"
-                      enter-from-class="transform scale-95 opacity-0"
-                      enter-to-class="transform scale-100 opacity-100"
+                    <transition enter-active-class="transition duration-100 ease-out"
+                      enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
                       leave-active-class="transition duration-75 ease-out"
-                      leave-from-class="transform scale-100 opacity-100"
-                      leave-to-class="transform scale-95 opacity-0"
-                    >
+                      leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
                       <DisclosurePanel class="pb-4">
                         <div class="flex flex-col space-y-3">
-                          <template
-                            v-for="article in report.docs"
-                            :key="article.id"
-                          >
-                            <router-link
-                              :to="{
-                                name: 'article',
-                                params: { doc_num: article.doc_num },
-                              }"
-                              class="hover:underline text-md lg:text-sm"
-                            >
+                          <template v-for="article in report.docs" :key="article.id">
+                            <router-link :to="{
+                              name: 'article',
+                              params: { doc_num: article.doc_num },
+                            }" class="hover:underline text-md lg:text-sm">
                               {{
-                                `(${article.title_classification}) ${article.title}`
+                                  `(${article.title_classification}) ${article.title}`
                               }}
                             </router-link>
                           </template>
@@ -293,19 +234,16 @@
     </div>
   </div>
   <template v-if="!loadingSpecialEdition">
-    <SpecialEditionCreateEditDialog
-      editMode
-      :edition="specialEdition"
-      :isOpen="isEditDialogOpen"
-      @closeDialog="closeEditDialog"
-      @specialEditionUpdated="reloadSpecialEdition"
-    />
-    <SpecialEditionConfirmDialog
-      :header="'Delete Special Edition'"
-      :isOpen="isDeleteModalOpen"
-      @close="closeDeleteModal"
-      @onConfirmAction="deleteSpecialEdition"
-    />
+    <SpecialEditionCreateEditDialog editMode :edition="specialEdition" :isOpen="isEditDialogOpen"
+      @closeDialog="closeEditDialog" @specialEditionUpdated="reloadSpecialEdition" />
+    <BaseDialog :isOpen="isDeleteDialogOpen" @close="closeDeleteDialog" :title="'Delete Special Edition'"
+      class="max-w-fit">
+      <p>Are you sure you want to do this?</p>
+      <template #actions>
+        <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
+        <BaseButton @click.prevent="deleteSpecialEdition" type="danger">Delete</BaseButton>
+      </template>
+    </BaseDialog>
   </template>
 </template>
 
@@ -319,7 +257,6 @@ import axios from "@/config/wireAxios";
 import ArticleCard from "@/components/ArticleCard";
 import Pagination from "@/components/Pagination";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
-import SpecialEditionConfirmDialog from "@/components/SpecialEditionConfirmDialog";
 
 export default {
   components: {
@@ -330,7 +267,6 @@ export default {
     ArticleCard,
     Pagination,
     SpecialEditionCreateEditDialog,
-    SpecialEditionConfirmDialog,
   },
   setup() {
     const store = useStore();
@@ -341,6 +277,9 @@ export default {
       () => store.state.specialEdition.loading
     );
     const specialEdition = computed(() => store.state.specialEdition.edition);
+    const canManageSpecialEditions = computed(
+      () => store.getters["user/canManageSpecialEditions"]
+    );
     const currentPage = ref(parseInt(route.query.page) || 1);
 
     const isEditDialogOpen = ref(false);
@@ -353,14 +292,14 @@ export default {
       isEditDialogOpen.value = false;
     };
 
-    const isDeleteModalOpen = ref(false);
+    const isDeleteDialogOpen = ref(false);
 
-    const openDeleteModal = () => {
-      isDeleteModalOpen.value = true;
+    const openDeleteDialog = () => {
+      isDeleteDialogOpen.value = true;
     };
 
-    const closeDeleteModal = () => {
-      isDeleteModalOpen.value = false;
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
     };
 
     const deleteSpecialEdition = () => {
@@ -406,13 +345,14 @@ export default {
     return {
       loadingSpecialEdition,
       specialEdition,
+      canManageSpecialEditions,
       currentPage,
       isEditDialogOpen,
       openEditDialog,
       closeEditDialog,
-      isDeleteModalOpen,
-      openDeleteModal,
-      closeDeleteModal,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
       deleteSpecialEdition,
       reloadSpecialEdition,
     };
@@ -420,4 +360,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+
 </style>

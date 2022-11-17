@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import store from "@/store"
 import { metadata } from "@/config";
 import ArticleView from '../views/ArticleView.vue'
@@ -10,7 +10,7 @@ import NotFoundView from '../views/NotFoundView.vue'
 import PublishArticleView from '../views/PublishArticleView.vue'
 import SearchView from '../views/SearchView.vue'
 import SpecialEditionView from '../views/SpecialEditionView.vue'
-import SpecialEditionsView from '../views/SpecialEditionsView.vue'
+import SpecialEditionsManagerView from '../views/SpecialEditionsManagerView.vue'
 import ProfileView from '../views/ProfileView.vue'
 
 const routes = [
@@ -104,7 +104,7 @@ const routes = [
   {
     path: '/special_editions',
     name: 'specialEditions',
-    component: SpecialEditionsView,
+    component: SpecialEditionsManagerView,
     meta: {
       title: 'Manage Special Editions'
     }
@@ -142,7 +142,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
