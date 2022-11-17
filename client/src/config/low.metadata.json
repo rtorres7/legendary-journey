@@ -90,36 +90,6 @@
   "footer_contact": {
     "email": "ITS-HELP-LINE@current.gov"
   },
-  "search_suggestions": [
-    {
-      "text": "Australia",
-      "type": "system"
-    },
-    {
-      "text": "Covid",
-      "type": "system"
-    },
-    {
-      "text": "Covid Crisis",
-      "type": "system"
-    },
-    {
-      "text": "Colombian Election",
-      "type": "system"
-    },
-    {
-      "text": "Russia",
-      "type": "system"
-    },
-    {
-      "text": "King Charles",
-      "type": "system"
-    },
-    {
-      "text": "Ukraine",
-      "type": "system"
-    }
-  ],
   "issues": {
     "type": "issues[]",
     "items": [

@@ -1,13 +1,11 @@
 <template>
-  <label :for="uuid" class="text-sm font-medium">{{ label }}</label>
+  <label :for="uuid" class="text-sm font-medium">{{ label }}
+    <template v-if="required">
+      <span class="sr-only">Required</span>
+      <span class="text-red-500">*</span>
+    </template></label>
   <div class="flex items-center">
-    <BaseButton
-      :id="uuid"
-      v-bind="$attrs"
-      class="max-w-fit mt-1"
-      @click.prevent="classify"
-      >Classify</BaseButton
-    >
+    <BaseButton :id="uuid" v-bind="$attrs" class="max-w-fit mt-1" @click.prevent="classify">Classify</BaseButton>
     <template v-if="showSelection && selection">
       <p class="ml-2">{{ selection }}</p>
     </template>
@@ -31,6 +29,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    required: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ["classificationSelected"],
   setup(props, { emit }) {

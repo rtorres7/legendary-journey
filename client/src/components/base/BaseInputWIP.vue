@@ -28,6 +28,9 @@
       focus-visible:ring-offset-2
       placeholder:italic
     " :id="uuid" />
+  <template v-if="error">
+    <p class="text-red-500">{{ error }}</p>
+  </template>
 </template>
 
 <script>
@@ -46,7 +49,11 @@ export default {
     required: {
       type: Boolean,
       default: false
-    }
+    },
+    error: {
+      type: String,
+      default: ''
+    },
   },
   setup() {
     const uuid = uniqueID().getID();

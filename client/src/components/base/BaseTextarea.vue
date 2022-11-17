@@ -1,12 +1,13 @@
 <template>
   <label :for="uuid" v-if="label" class="text-sm font-medium">{{
-    label
-  }}</label>
-  <textarea
-    v-bind="$attrs"
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-    class="
+      label
+  }}
+    <template v-if="required">
+      <span class="sr-only">Required</span>
+      <span class="text-red-500">*</span>
+    </template>
+  </label>
+  <textarea v-bind="$attrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="
       min-h-[2rem]
       w-full
       py-1
@@ -27,9 +28,8 @@
       focus-visible:ring-opacity-75
       focus-visible:ring-offset-2
       resize-none
-    "
-    :id="uuid"
-  ></textarea>
+      placeholder:italic
+    " :id="uuid"></textarea>
 </template>
 
 <script>
@@ -45,6 +45,10 @@ export default {
       type: [String, Number],
       default: "",
     },
+    required: {
+      type: Boolean,
+      default: false
+    }
   },
   setup() {
     const uuid = uniqueID().getID();
