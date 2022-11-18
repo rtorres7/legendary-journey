@@ -155,12 +155,18 @@
             </DisclosurePanel>
           </Disclosure>
         </div>
-        <template v-if="article">
-          <div class="flex flex-col pb-8 space-y-3 mt-10">
+        <div class="flex flex-col pb-8 space-y-3 mt-10">
+          <template v-if="!loadingDanielArticlesDetails">
             <ArticleAttachments :articleDetails="articleDetails" />
-            <ArticleMetrics :articleDetails="articleDetails" />
-          </div>
-        </template>
+          </template>
+          <template v-if="!loadingArticleMetrics">
+            <ArticleMetrics 
+              :articleMetrics="articleMetrics"
+              :articleDetails="articleDetails"
+            >
+            </ArticleMetrics>
+          </template>
+        </div>
       </div>
     </template>
   </template>
@@ -198,6 +204,7 @@ export default {
 
     const articleDetails = computed(() => store.state.danielDetails.document);
     const danielArticles = computed(() => store.state.daniel.articles);
+    const articleMetrics = computed(() => store.state.metrics);
 
     const adjustLayout = ref(false);
 
@@ -205,6 +212,7 @@ export default {
       () => store.state.danielDetails.loading
     );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const loadingArticleMetrics = computed(() => store.state.metrics.loading);
 
     const showImgContainer = ref(true);
 
@@ -215,7 +223,7 @@ export default {
 
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("danielDetails/getDanielArticlesDetails"); 
     });
 
     const calculateLayout = (imageWidth) => {
@@ -267,16 +275,27 @@ export default {
       () => {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails");
+          store.dispatch("metrics/getMetrics");
         }
       }
     );
+
+    watch([loadingDanielArticlesDetails], () => {
+      if(!loadingDanielArticlesDetails.value) {
+        store.dispatch("metrics/initDates",
+          {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
+          .then(store.dispatch("metrics/getMetrics"));
+      }
+    })
 
     return {
       dayjs,
       articleDetails,
       danielArticles,
+      articleMetrics,
       loadingDanielArticlesDetails,
       loadingDanielArticles,
+      loadingArticleMetrics,
       currentArticleIndex,
       previousArticle,
       nextArticle,

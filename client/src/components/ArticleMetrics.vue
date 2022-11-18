@@ -6,7 +6,7 @@
     "
   >
     <p class="font-semibold">Metrics</p>
-    <p class="font-medium text-md">Unique Readers ({{ uniqueReaders }})</p>
+    <p class="font-medium text-md">Unique Readers ({{ articleMetrics.uniqueReaders }})</p>
     <div class="flex flex-row justify-between items-center">
       <div class="flex flex-col">
         <label :for="startDatepickerUuid" class="text-sm font-medium">Start Date</label>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import * as am5 from "@amcharts/amcharts5";
@@ -76,7 +76,11 @@ export default {
     articleDetails: {
       type: Object,
       required: true
-    }
+    },
+    articleMetrics: {
+      type: Object,
+      required: true
+    },
   },  
   setup(props) {
     const store = useStore();
@@ -86,11 +90,6 @@ export default {
     const endDatepickerUuid = uniqueID().getID();
     let startDate = ref();
     let endDate = ref();
-    
-    const uniqueReaders = computed(() => store.state.metrics.uniqueReaders);
-    const readership = computed(() => store.state.metrics.readership);
-    const readershipStartDate = computed(() => store.state.metrics.readershipStartDate);
-    const readershipEndDate = computed(() => store.state.metrics.readershipEndDate);
     
     const chartdiv = ref(null);
 
@@ -112,14 +111,11 @@ export default {
     }
 
     const setDatepickers = () => {
-      startDate.value = dayjs(props.articleDetails.display_date).format("MMM DD, YYYY");
-      endDate.value = dayjs(dayjs()).format("MMM DD, YYYY");
-    }
+      startDate.value = dayjs(props.articleMetrics.readershipStartDate).format("MMM DD, YYYY");
+      endDate.value = dayjs(props.articleMetrics.readershipEndDate).format("MMM DD, YYYY");
+    }    
 
     onMounted(() => {
-      store.dispatch("metrics/initDates",
-        {readershipStartDate: formatDate(props.articleDetails.display_date), readershipEndDate: formatDate(dayjs())});
-      store.dispatch("metrics/getMetrics");
 
       setDatepickers();
 
@@ -140,7 +136,7 @@ export default {
           legendValueText: "[bold {fill}]{value}[/]",
         })
       );
-      series.data.setAll(readership.value);
+      series.data.setAll(props.articleMetrics.readership);
       series.labels.template.set("forceHidden", true);
       series.ticks.template.set("forceHidden", true);
 
@@ -154,32 +150,15 @@ export default {
 
       watch(
         () => route.params,
-        () => {series.data.setAll(readership.value), legend.data.setAll(series.dataItems)}
+        () => {series.data.setAll(props.articleMetrics.readership), legend.data.setAll(series.dataItems)}
       );
     });
-
-      watch(
-      () => props.articleDetails,
-      () => {
-        console.log("watch fires", props.articleDetails.display_date);
-        store.dispatch("metrics/getMetrics");
-        store.dispatch("metrics/initDates",
-          {readershipStartDate: formatDate(props.articleDetails.display_date), readershipEndDate: formatDate(dayjs())});
-
-        setDatepickers();
-
-      }
-    );
 
     return {
       startDatepickerUuid,
       endDatepickerUuid,
       startDate,
       endDate,
-      uniqueReaders,
-      readership,
-      readershipStartDate,
-      readershipEndDate,
       chartdiv,
       handleStartDate,
       handleEndDate,
