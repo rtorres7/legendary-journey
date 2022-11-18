@@ -20,14 +20,14 @@
     <ul>
       <li v-for="pdf in pdfVersions" :key="pdf.binary_id">
         <router-link
-          :to="attachmentLink + '/' + pdf.file_name"
+          :to="attachmentLink + '/' + pdf.file_name" target="_blank"
         >
           PDF version of this product
         </router-link>
       </li>
       <li v-for="attachment in attachments" :key="attachment.binary_id">
         <router-link
-          :to="attachmentLink + '/' + attachment.file_name"
+          :to="attachmentLink + '/' + attachment.file_name" target="_blank"
         >    
           {{ attachment.title ? attachment.title : attachment.file_name.split(".")[0] }}
         </router-link>
