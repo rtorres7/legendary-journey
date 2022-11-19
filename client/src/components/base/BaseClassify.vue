@@ -1,8 +1,8 @@
 <template>
-  <label :for="uuid" class="text-sm font-medium">{{ label }}
+  <label :for="uuid" class="inline-flex text-sm font-medium">{{ label }}
     <template v-if="required">
       <span class="sr-only">Required</span>
-      <span class="text-red-500">*</span>
+      <span class="pl-1 text-red-500">*</span>
     </template></label>
   <div class="flex items-center">
     <BaseButton :id="uuid" v-bind="$attrs" class="max-w-fit mt-1" @click.prevent="classify">Classify</BaseButton>

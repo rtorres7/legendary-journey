@@ -238,7 +238,7 @@
       @closeDialog="closeEditDialog" @specialEditionUpdated="reloadSpecialEdition" />
     <BaseDialog :isOpen="isDeleteDialogOpen" @close="closeDeleteDialog" :title="'Delete Special Edition'"
       class="max-w-fit">
-      <p>Are you sure you want to do this?</p>
+      <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
         <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
         <BaseButton @click.prevent="deleteSpecialEdition" type="danger">Delete</BaseButton>

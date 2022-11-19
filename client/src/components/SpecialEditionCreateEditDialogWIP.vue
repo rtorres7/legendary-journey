@@ -6,11 +6,12 @@
       <div class="block lg:flex my-4 lg:space-x-5">
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseInputWIP label="Name" v-model="name" :error="errors.name" autocomplete="off" type="text" required />
+            <BaseInputWIP label="Name" :modelValue="name" @change="handleChange" @blur="handleChange"
+              :error="errors.name" autocomplete="off" type="text" required />
           </div>
           <div>
-            <BaseInput v-model="search_params" :error="errors.search_params" label="Search params" autocomplete="off"
-              placeholder="Run a search, copy the URL, and paste it here." type="text" required />
+            <BaseInputWIP2 name="search_params" type="text" label="Search params" autocomplete="off"
+              placeholder="Run a search, copy the URL, and paste it here." required />
           </div>
           <!-- <div>
             <BaseTextarea maxlength="4000" rows="5" v-model="key_readings" :error="errors.key_readings"
@@ -39,7 +40,7 @@
     </form>
     <template #actions>
       <BaseButton @click.prevent="closeDialog">Cancel</BaseButton>
-      <BaseButton type="submit" form="se_form">{{
+      <BaseButton :disabled="!meta.valid" type="submit" form="se_form">{{
           editMode ? "Save" : "Create"
       }}</BaseButton>
     </template>
@@ -48,6 +49,7 @@
 
 <script>
 import BaseInputWIP from "@/components/base/BaseInputWIP"
+import BaseInputWIP2 from "@/components/base/BaseInputWIP2"
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 //import axios from "@/config/wireAxios";
@@ -58,7 +60,8 @@ const stateOptions = ["draft", "archived", "posted"];
 
 export default {
   components: {
-    BaseInputWIP
+    BaseInputWIP,
+    BaseInputWIP2
   },
   props: {
     isOpen: {
@@ -93,7 +96,13 @@ export default {
 
     const validationSchema = object({
       name: string().required().min(2),
-      search_params: string().required(),
+      search_params: string().required().min(2),
+      // search_params: string()
+      //   .matches(
+      //     /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      //     'Enter correct url!'
+      //   )
+      //   .required('Please enter website'),
       // key_readings: undefined,
       // state: string().required(),
       //position: number(),
@@ -101,20 +110,22 @@ export default {
       //icon: mixed().required('File is required.')
     })
 
-    const { handleSubmit, errors } = useForm({
+    const { handleSubmit, errors, meta } = useForm({
       validationSchema,
       // initialValues: {
       //   position: 1,
       // }
     })
 
-    const { value: name } = useField('name')
+    const { value: name, handleChange } = useField('name')
     const { value: search_params } = useField('search_params')
     // const { value: key_readings } = useField('key_readings')
     // const { value: state } = useField('state')
     //const { value: position } = useField('position')
     //const { value: name_classification } = useField('name_classification')
     //const { value: file } = useField('file')
+
+    // setFieldValue('name')
 
 
 
@@ -268,10 +279,13 @@ export default {
       // state,
       //position,
       //name_classification,
+      handleChange,
+      //handleSearchChange,
       //file,
       submit,
       submit2,
-      errors
+      errors,
+      meta
     };
   },
 };

@@ -1,10 +1,12 @@
 <template>
   <Listbox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
     <div class="relative mt-1">
-      <ListboxLabel class="text-sm font-medium line-clamp-1 xl:line-clamp-none">{{ label }}
+      <ListboxLabel :class="['text-sm font-medium', required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none']">{{
+          label
+      }}
         <template v-if="required">
           <span class="sr-only">Required</span>
-          <span class="text-red-500">*</span>
+          <span class="pl-1 text-red-500">*</span>
         </template>
       </ListboxLabel>
       <ListboxButton class="
@@ -31,13 +33,7 @@
             : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
         ">
         <span class="block truncate max-w-[calc(100%-20px)]" :class="multiple ? '' : 'capitalize'">{{
-            multiple
-              ? modelValue.length > 1
-                ? `${modelValue[0].name} +(${modelValue.length - 1})`
-                : modelValue.length === 1
-                  ? modelValue[0].name
-                  : ""
-              : modelValue
+            displayValue(modelValue)
         }}</span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
           <SelectorIcon class="h-5 w-5" aria-hidden="true" />
@@ -89,7 +85,6 @@
     </div>
   </Listbox>
 </template>
-
 <script>
 import { computed } from "vue";
 import {
@@ -125,7 +120,7 @@ export default {
       required: true,
     },
     modelValue: {
-      type: [String, Number, Array],
+      type: [Object, String, Number, Array],
       default: "",
     },
     disabled: {
@@ -146,8 +141,31 @@ export default {
       },
     });
 
+    const displayValue = (model) => {
+      if (model) {
+        const type = typeof model
+        if (props.multiple && model.length > 0) {
+          const suffix = model.length > 1 ? ` +(${model.length - 1})` : ''
+          if (type === 'object') {
+            return model[0].name + suffix
+          } else {
+            return model + suffix
+          }
+        } else {
+          if (type === 'object') {
+            return model.name
+          } else {
+            return model
+          }
+        }
+      } else {
+        return null
+      }
+    }
+
     return {
       selectedItem,
+      displayValue
     };
   },
 };

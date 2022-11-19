@@ -1,4 +1,4 @@
-import { metadata } from "@/config";
+//import { metadata } from "@/config";
 //import router from "@/router"
 
 // const sortByText = (a, b) => {
@@ -20,13 +20,15 @@ export default {
   state: {
     loading: true,
     cachedSearches: JSON.parse(localStorage.getItem("cachedSearches")) || [],
-    systemSearches: metadata.search_suggestions,
+    systemSearches: [],
+    // systemSearches: metadata.search_suggestions,
     searches: [],
   },
 
   actions: {
     getAllSearches: ({ commit, state }) => {
       let searches = state.cachedSearches.concat(state.systemSearches)
+      console.log('searches: ', searches)
       commit("saveSearches", searches)
     },
     addSearch: ({ commit, state }, search) => {
