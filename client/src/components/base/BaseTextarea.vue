@@ -1,10 +1,10 @@
 <template>
-  <label :for="uuid" v-if="label" class="text-sm font-medium">{{
+  <label :for="uuid" v-if="label" class="inline-flex text-sm font-medium">{{
       label
   }}
     <template v-if="required">
       <span class="sr-only">Required</span>
-      <span class="text-red-500">*</span>
+      <span class="pl-1 text-red-500">*</span>
     </template>
   </label>
   <textarea v-bind="$attrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="

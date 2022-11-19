@@ -71,7 +71,7 @@ export default {
           name: null,
           name_classification: null,
           search_params: null,
-          state: null,
+          state: [],
           position: 1,
           key_readings: null,
         };

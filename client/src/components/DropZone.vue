@@ -39,3 +39,4 @@ onUnmounted(() => {
     document.body.removeEventListener(eventName, preventDefaults);
   });
 });
+</script>
