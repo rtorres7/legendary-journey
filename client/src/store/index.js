@@ -13,6 +13,7 @@ import danielDetails from "./modules/danielDetails"
 import testConsole from "./modules/test-console"
 import kevin from "./modules/kevin"
 import metadata from "./modules/metadata"
+import metrics from "./modules/metrics"
 
 export default createStore({
     state: {
@@ -41,6 +42,7 @@ export default createStore({
         danielDetails,
         testConsole,
         kevin,
-        metadata
+        metadata,
+        metrics,
     },
 })
