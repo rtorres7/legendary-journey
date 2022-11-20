@@ -29,6 +29,12 @@ const routes = [
     props: true
   },
   {
+    path: '/article/:doc_num/preview',
+    name: 'article-preview',
+    component: ArticleView,
+    props: true
+  },
+  {
     path: '/demo-article/:doc_num',
     name: 'demo-article',
     component: DemoArticleView,
@@ -110,17 +116,17 @@ const routes = [
     }
   },
   {
-    path: '/demo-article/:date/:id/:doc_num/new',
+    path: '/article/:date/:id/:doc_num/new',
     name: 'new',
     component: EditDocumentView,
     meta: {
       title: 'New Document',
       // admin: true,
-      demo: true
+      // demo: true
     }
   },
   {
-    path: '/demo-article/:date/:id/:doc_num/edit',
+    path: '/article/:date/:id/:doc_num/edit',
     name: 'edit',
     component: EditDocumentView,
     meta: {

@@ -1,15 +1,16 @@
 <template>
   <!-- For configurable options, see https://vue3datepicker.com/ -->
   <!-- Do not use Vue Datepicker's Light/Dark mode feature, see styling below -->
-  <Datepicker>
-    <template v-for="(_, name) in $slots" v-slot:[name]="slotData"
-      ><slot :name="name" v-bind="slotData"
-    /></template>
+  <Datepicker :id="uuid">
+    <template v-for="(_, name) in $slots" v-slot:[name]="slotData">
+      <slot :name="name" v-bind="slotData" />
+    </template>
   </Datepicker>
 </template>
 
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
+import uniqueID from "@/composables/uniqueID";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 export default {
@@ -17,7 +18,10 @@ export default {
     Datepicker,
   },
   setup() {
-    return {};
+    const uuid = uniqueID().getID();
+    return {
+      uuid
+    };
   },
 };
 </script>
@@ -26,32 +30,41 @@ export default {
 .dp__today {
   border-width: 2px;
 }
+
 .dp__input {
   font-family: "Inter", "system-ui";
   font-size: 0.9rem;
 }
+
 .dp__input_icons {
   font-size: 0.9rem;
 }
+
 .dp__menu {
   font-family: "Inter", "system-ui";
   font-size: 0.9rem;
 }
+
 .dp__now_button {
   font-size: 0.9rem;
 }
+
 .dp__calendar_wrap {
   font-family: "Inter", "system-ui";
 }
+
 .dp__overlay {
   font-family: "Inter", "system-ui";
 }
+
 .dp__time_input {
   font-family: "Inter", "system-ui";
 }
+
 .dp__main {
   font-family: "Inter", "system-ui";
 }
+
 .dp__theme_light {
   --dp-background-color: #ffffff;
   --dp-text-color: var(--color-slate-900);
@@ -73,6 +86,7 @@ export default {
   --dp-danger-color: #ff6f60;
   --dp-highlight-color: rgba(25, 118, 210, 0.1);
 }
+
 .dark .dp__theme_light {
   --dp-background-color: var(--color-slate-700);
   --dp-text-color: var(--color-slate-300);
@@ -94,6 +108,7 @@ export default {
   --dp-danger-color: #ff6f60;
   --dp-highlight-color: rgba(25, 118, 210, 0.1);
 }
+
 .energy .dp__theme_light {
   --dp-background-color: var(--color-zinc-600);
   --dp-text-color: var(--color-zinc-300);

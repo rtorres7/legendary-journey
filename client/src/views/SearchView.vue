@@ -1,12 +1,10 @@
 <template>
-  <div
-    class="
+  <div class="
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
-    "
-  >
+    ">
     <p v-show="!loadingMetadata" class="pb-2">{{ pageSubheader }}</p>
     <p class="font-semibold text-2xl">
       {{ pageHeader }}
@@ -15,8 +13,7 @@
   <!-- Search Form -->
   <div class="flex flex-row-reverse py-1 my-2">
     <template v-if="loadingMetadata">
-      <div
-        class="
+      <div class="
           h-8
           w-16
           animate-pulse
@@ -24,35 +21,28 @@
           dark:bg-slate-800/50
           energy:bg-zinc-800
           rounded
-        "
-      ></div>
+        "></div>
     </template>
     <template v-else>
-      <button
-        class="
+      <button class="
           text-mission-light-blue
           dark:text-teal-400
           energy:text-energy-yellow
-        "
-        @click="clearFilters"
-      >
+        " @click="clearFilters">
         Clear All
       </button>
     </template>
   </div>
-  <BaseCard
-    :class="[
-      'p-4',
-      loadingMetadata
-        ? 'animate-pulse h-[35rem] md:h-[23rem] lg:h-[12.5rem]'
-        : '',
-    ]"
-  >
+  <BaseCard :class="[
+    'p-4',
+    loadingMetadata
+      ? 'animate-pulse h-[35rem] md:h-[23rem] lg:h-[12.5rem]'
+      : '',
+  ]">
     <div v-show="!loadingMetadata">
       <Disclosure v-slot="{ open }" defaultOpen>
         <div class="flex flex-col justify-between">
-          <div
-            class="
+          <div class="
               grid-cols-1
               md:grid md:grid-cols-2 md:gap-4
               space-y-3
@@ -61,46 +51,28 @@
               flex-col
               lg:flex-row
               w-full
-            "
-          >
+            ">
             <div class="lg:w-2/5 flex space-x-3">
               <div class="w-full">
-                <BaseInput
-                  v-model="queryText"
-                  label="Keyword Search or Filter"
-                  type="text"
-                  autocomplete="off"
-                  placeholder="Press enter after typing"
-                  @keyup.enter="searchQueryText"
-                />
+                <BaseInput v-model="queryText" label="Keyword Search or Filter" type="text" autocomplete="off"
+                  placeholder="Press enter after typing" @keyup.enter="searchQueryText" />
               </div>
               <div class="flex flex-col mt-1 justify-between">
-                <label :for="datepickerUuid" class="text-sm font-medium"
-                  >Date</label
-                >
-                <BaseDatepicker
-                  :id="datepickerUuid"
-                  v-model="queryDateRange"
-                  @update:modelValue="handleDateRange"
-                  :enableTimePicker="false"
-                  range
-                  multiCalendars
-                >
+                <label :for="datepickerUuid" class="text-sm font-medium">Date</label>
+                <BaseDatepicker v-model="queryDateRange" @update:modelValue="handleDateRange" :enableTimePicker="false"
+                  range multiCalendars>
                   <template #trigger>
-                    <CalendarIcon
-                      class="
+                    <CalendarIcon class="
                         cursor-pointer
                         hover:text-black
                         dark:hover:text-white
                         energy:hover:text-white
                         h-9
                         w-9
-                      "
-                    ></CalendarIcon>
+                      "></CalendarIcon>
                   </template>
                   <template #left-sidebar>
-                    <div
-                      class="
+                    <div class="
                         text-mission-light-blue
                         dark:text-teal-400
                         energy:text-energy-yellow
@@ -108,8 +80,7 @@
                         flex flex-col
                         text-sm
                         space-y-6
-                      "
-                    >
+                      ">
                       <button @click="selectDate('24H')">Past 24 Hours</button>
                       <button @click="selectDate('1WK')">Past Week</button>
                       <button @click="selectDate('1MO')">Past Month</button>
@@ -120,89 +91,60 @@
                 </BaseDatepicker>
               </div>
             </div>
-            <template
-              v-for="n in [
-                queryFilters.regions,
-                queryFilters.issues,
-                queryFilters.reporting,
-              ]"
-              :key="n"
-            >
+            <template v-for="n in [
+              queryFilters.regions,
+              queryFilters.issues,
+              queryFilters.reporting,
+            ]" :key="n">
               <div class="lg:w-1/5">
-                <BaseListbox
-                  v-model="n.model"
-                  :label="n.label"
-                  :items="n.list"
-                  multiple
-                />
+                <BaseListbox v-model="n.model" :label="n.label" :items="n.list" multiple />
               </div>
             </template>
           </div>
-          <DisclosureButton
-            class="
+          <DisclosureButton class="
               py-3
               lg:py-1
               max-w-fit
               hover:text-black
               dark:hover:text-white
               energy:hover:text-whit
-            "
-          >
-            <span
-              class="
+            ">
+            <span class="
                 text-sm text-mission-light-blue
                 dark:text-teal-400
                 energy:text-energy-yellow
                 mr-2
                 inline-block
-              "
-              >{{ open ? "Less" : "More" }}</span
-            >
-            <ChevronUpIcon
-              :class="open ? '' : 'rotate-180 transform'"
-              class="
+              ">{{ open ? "Less" : "More" }}</span>
+            <ChevronUpIcon :class="open ? '' : 'rotate-180 transform'" class="
                 text-mission-light-blue
                 dark:text-teal-400
                 energy:text-energy-yellow
                 h-5
                 w-5
                 inline-block
-              "
-            />
+              " />
           </DisclosureButton>
         </div>
-        <transition
-          enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-out"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
+        <transition enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-out" leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0">
           <DisclosurePanel class="my-2">
             <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
               <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
                 <template v-if="!loadingMetadata">
-                  <template
-                    v-for="n in [
-                      queryFilters.classifications,
-                      queryFilters.media_types,
-                    ]"
-                    :key="n"
-                  >
+                  <template v-for="n in [
+                    queryFilters.classifications,
+                    queryFilters.media_types,
+                  ]" :key="n">
                     <div class="w-1/2">
-                      <BaseListbox
-                        v-model="n.model"
-                        :label="n.label"
-                        :items="n.list"
-                        multiple
-                      />
+                      <BaseListbox v-model="n.model" :label="n.label" :items="n.list" multiple />
                     </div>
                   </template>
                 </template>
               </div>
-              <div
-                class="
+              <div class="
                   grid grid-cols-2
                   md:grid-cols-3
                   gap-4
@@ -212,24 +154,15 @@
                   lg:w-3/5
                   lg:space-x-6
                   lg:max-w-none
-                "
-              >
-                <template
-                  v-for="n in [
-                    queryFilters.nonstate_actors,
-                    queryFilters.producing_offices,
-                    queryFilters.frontpage_featured,
-                  ]"
-                  :key="n"
-                >
+                ">
+                <template v-for="n in [
+                  queryFilters.nonstate_actors,
+                  queryFilters.producing_offices,
+                  queryFilters.frontpage_featured,
+                ]" :key="n">
                   <div class="lg:w-1/3">
-                    <BaseListbox
-                      v-model="n.model"
-                      :label="n.label"
-                      :items="n.list"
-                      :disabled="n.disabled || false"
-                      multiple
-                    />
+                    <BaseListbox v-model="n.model" :label="n.label" :items="n.list" :disabled="n.disabled || false"
+                      multiple />
                   </div>
                 </template>
               </div>
@@ -241,85 +174,65 @@
   </BaseCard>
   <div class="flex flex-row-reverse py-1 mt-2">
     <template v-if="!loadingMetadata && booleanFilters.length > 0">
-      <button
-        class="
+      <button class="
           text-mission-light-blue
           dark:text-teal-400
           energy:text-energy-yellow
-        "
-        @click="toggleSelectors"
-      >
+        " @click="toggleSelectors">
         {{
-          showSelectors
-            ? "Hide Selectors"
-            : `Show Selectors (${booleanFilters.length})`
+            showSelectors
+              ? "Hide Selectors"
+              : `Show Selectors (${booleanFilters.length})`
         }}
       </button>
     </template>
   </div>
   <!-- Search Booolean Selectors -->
-  <template
-    v-if="!loadingMetadata && showSelectors && booleanFilters.length > 0"
-  >
+  <template v-if="!loadingMetadata && showSelectors && booleanFilters.length > 0">
     <BaseCard class="mt-2 px-4 py-2 w-fit text-sm">
       <div class="flex flex-wrap">
         <template v-for="(n, index) in booleanFilters" :key="n">
-          <div
-            class="my-2"
-            :class="[
-              n.lastItem && index < booleanFilters.length - 1
-                ? 'pr-3 border-r border-slate-700/50 energy:border-zinc-700/50'
-                : 'pr-2',
-              index !== 0 && n.firstItem ? 'pl-3' : '',
-            ]"
-          >
-            <div
-              class="
+          <div class="my-2" :class="[
+            n.lastItem && index < booleanFilters.length - 1
+              ? 'pr-3 border-r border-slate-700/50 energy:border-zinc-700/50'
+              : 'pr-2',
+            index !== 0 && n.firstItem ? 'pl-3' : '',
+          ]">
+            <div class="
                 flex
                 rounded-xl
                 bg-slate-100
                 dark:bg-slate-700
                 energy:bg-zinc-600
                 p-2
-              "
-            >
+              ">
               <div class="self-center pr-1">
                 <template v-if="n.type === 'text'">
                   <span class="pr-1 italic">Text: </span>
                 </template>
                 {{ n.displayName }}
               </div>
-              <button
-                type="button"
-                class="w-5 h-5 flex items-center justify-center"
-                tabindex="0"
-                @click="removeFilter(n)"
-              >
-                <span class="sr-only">Remove filter</span
-                ><XIcon
-                  class="
+              <button type="button" class="w-5 h-5 flex items-center justify-center" tabindex="0"
+                @click="removeFilter(n)">
+                <span class="sr-only">Remove filter</span>
+                <XIcon class="
                     h-5
                     w-5
                     text-mission-light-blue
                     dark:text-teal-400
                     energy:text-energy-yellow
-                  "
-                  aria-hidden="true"
-                />
+                  " aria-hidden="true" />
               </button>
             </div>
           </div>
           <template v-if="!n.lastItem">
             <template v-if="n.toggleable">
-              <button
-                class="
+              <button class="
                   mr-3
                   text-mission-light-blue
                   dark:text-teal-400
                   energy:text-energy-yellow
-                "
-                @click="toggleBooleanValue(n)"
-              >
+                " @click="toggleBooleanValue(n)">
                 {{ n.boolean_val }}
               </button>
             </template>
@@ -334,8 +247,7 @@
   <!-- Results Container -->
   <template v-if="loadingResults">
     <div class="max-w-fit m-auto mt-[20vh]">
-      <svg
-        class="
+      <svg class="
           animate-spin
           -ml-1
           mr-3
@@ -344,24 +256,11 @@
           text-mission-blue
           dark:text-slate-300
           energy:text-zinc-300
-        "
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          class="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="4"
-        ></circle>
-        <path
-          class="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        ></path>
+        " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+        </path>
       </svg>
     </div>
   </template>
@@ -379,14 +278,11 @@
   <template v-if="!loadingResults && totalCount > 0">
     <div class="flex flex-col-reverse lg:flex-row py-4">
       <!-- Search Results & Sorting Listbox (Left) -->
-      <div
-        class="h-fit"
-        :class="[
-          selectedView.label === 'Grid' || selectedView.label === 'Visuals'
-            ? 'basis-full'
-            : 'basis-3/4',
-        ]"
-      >
+      <div class="h-fit" :class="[
+        selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+          ? 'basis-full'
+          : 'basis-3/4',
+      ]">
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
@@ -394,8 +290,7 @@
               <label class="self-center font-medium">Sort By</label>
               <Listbox v-model="selectedSort" class="ml-3 min-w-[115px]">
                 <div class="relative">
-                  <ListboxButton
-                    class="
+                  <ListboxButton class="
                       min-h-[2rem]
                       flex
                       relative
@@ -417,25 +312,17 @@
                       focus-visible:ring-2
                       focus-visible:ring-opacity-75
                       focus-visible:ring-offset-2
-                    "
-                  >
+                    ">
                     <span class="block truncate">{{ selectedSort.label }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                       <SelectorIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                   </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
+                  <transition enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
                     leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="
+                    leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                    <ListboxOptions class="
                         absolute
                         w-full
                         py-1
@@ -450,23 +337,14 @@
                         ring-1 ring-black ring-opacity-5
                         focus:outline-none
                         z-10
-                      "
-                    >
-                      <ListboxOption
-                        v-slot="{ active }"
-                        v-for="item in sortOptions"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
+                      ">
+                      <ListboxOption v-slot="{ active }" v-for="item in sortOptions" :key="item" :value="item"
+                        as="template" class="capitalize px-2 py-1 cursor-pointer">
+                        <li :class="[
+                          active
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                            : 'bg-none',
+                        ]">
                           {{ item.label }}
                         </li>
                       </ListboxOption>
@@ -479,8 +357,7 @@
               <label class="self-center">View</label>
               <Listbox v-model="selectedView" class="ml-3 min-w-[100px]">
                 <div class="relative">
-                  <ListboxButton
-                    class="
+                  <ListboxButton class="
                       min-h-[2rem]
                       flex
                       relative
@@ -502,25 +379,17 @@
                       focus-visible:ring-2
                       focus-visible:ring-opacity-75
                       focus-visible:ring-offset-2
-                    "
-                  >
+                    ">
                     <span class="block truncate">{{ selectedView.label }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                       <SelectorIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                   </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
+                  <transition enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
                     leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="
+                    leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                    <ListboxOptions class="
                         absolute
                         w-full
                         py-1
@@ -535,23 +404,14 @@
                         ring-1 ring-black ring-opacity-5
                         focus:outline-none
                         z-10
-                      "
-                    >
-                      <ListboxOption
-                        v-slot="{ active }"
-                        v-for="item in viewOptions"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
+                      ">
+                      <ListboxOption v-slot="{ active }" v-for="item in viewOptions" :key="item" :value="item"
+                        as="template" class="capitalize px-2 py-1 cursor-pointer">
+                        <li :class="[
+                          active
+                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                            : 'bg-none',
+                        ]">
                           {{ item.label }}
                         </li>
                       </ListboxOption>
@@ -561,27 +421,22 @@
               </Listbox>
             </div>
           </div>
-          <div
-            v-show="
-              selectedView.label === 'Grid' || selectedView.label === 'Visuals'
-            "
-            class="
+          <div v-show="
+            selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+          " class="
               cursor-pointer
               text-mission-light-blue
               dark:text-teal-400
               energy:text-energy-yellow
               self-center
-            "
-            @click="openMobileFacetsDialog"
-          >
+            " @click="openMobileFacetsDialog">
             Show Filters
           </div>
         </div>
         <!-- Search Results Table -->
         <BaseCard>
           <!-- Top Pagination -->
-          <div
-            class="
+          <div class="
               px-4
               py-3
               flex
@@ -589,86 +444,65 @@
               border-b border-gray-200
               dark:border-slate-50/[0.06]
               energy:border-zinc-700/50
-            "
-          >
-            <SearchResultsPagination
-              :totalCount="totalCount"
-              :currentPage="currentPage"
-            />
+            ">
+            <SearchResultsPagination :totalCount="totalCount" :currentPage="currentPage" />
           </div>
           <!-- Results -->
           <template v-if="selectedView.label === 'List'">
             <template v-for="result in results" :key="result">
-              <div
-                class="
+              <div class="
                   flex
                   p-4
                   border-b border-slate-900/10
                   dark:border-slate-50/[0.06]
                   energy:border-zinc-50/[0.06]
-                "
-                :class="
+                " :class="
                   isLocked(result)
                     ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
                     : ''
-                "
-              >
+                ">
                 <div class="h-fit px-2 text-center">
                   <span class="block font-semibold">{{
-                    dayjs(result.date_published).format("DD")
+                      dayjs(result.date_published).format("DD")
                   }}</span>
                   <span class="block text-sm">{{
-                    dayjs(result.date_published).format("MMM")
+                      dayjs(result.date_published).format("MMM")
                   }}</span>
                   <span class="block text-sm">{{
-                    dayjs(result.date_published).format("YYYY")
+                      dayjs(result.date_published).format("YYYY")
                   }}</span>
                 </div>
                 <div class="px-2 w-full">
                   <template v-if="isLocked(result)">
                     <div class="flex mb-2 items-center">
-                      <LockClosedIcon
-                        class="mr-2 h-4 w-4"
-                        aria-hidden="true"
-                      ></LockClosedIcon>
+                      <LockClosedIcon class="mr-2 h-4 w-4" aria-hidden="true"></LockClosedIcon>
                       <span class="uppercase text-sm">Locked</span>
                     </div>
                   </template>
                   <div class="flex justify-between">
-                    <div
-                      class="basis-[768px] hover:underline"
-                      :class="isLocked(result) ? '' : 'cursor-pointer'"
-                    >
+                    <div class="basis-[768px] hover:underline" :class="isLocked(result) ? '' : 'cursor-pointer'">
                       <a @click="goToArticle(result)">
-                        <span
-                          class="
+                        <span class="
                             text-slate-600
                             dark:text-slate-300
                             energy:text-zinc-300
-                          "
-                          >{{
-                            `${"(" + result.title_classification + ") "}`
-                          }}</span
-                        >
+                          ">{{
+                              `${"(" + result.title_classification + ") "}`
+                          }}</span>
 
-                        <span
-                          class="text-black dark:text-white energy:text-white"
-                          >{{ result.title }}</span
-                        >
+                        <span class="text-black dark:text-white energy:text-white">{{ result.title }}</span>
                       </a>
                     </div>
                     <div class="text-xs lg:text-sm">
                       {{ result.doc_num }}
                     </div>
                   </div>
-                  <div
-                    class="
+                  <div class="
                       py-2
                       text-sm text-slate-600
                       dark:text-slate-300
                       energy:text-zinc-300
-                    "
-                  >
+                    ">
                     <template v-if="showHighlightedResult()">
                       <span v-html="result.highlighted_result" />
                     </template>
@@ -681,31 +515,26 @@
             </template>
           </template>
           <template v-else-if="selectedView.label === 'Grid'">
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
-            >
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
               <template v-for="result in results" :key="result">
                 <ArticleCard :article="result" />
               </template>
             </div>
           </template>
           <template v-else-if="selectedView.label === 'Visuals'">
-            <div
-              class="
+            <div class="
                 grid grid-cols-1
                 md:grid-cols-2
                 lg:grid-cols-3
                 xl:grid-cols-4
                 gap-4
                 m-4
-              "
-            >
+              ">
               <template v-for="result in results" :key="result">
                 <div class="flex p-4">
                   <div class="group">
                     <div class="relative">
-                      <div
-                        class="
+                      <div class="
                           invisible
                           group-hover:visible
                           absolute
@@ -717,54 +546,38 @@
                           bg-mission-blue/[.90]
                           dark:bg-dark-space-blue/[.90]
                           energy:bg-zinc-800/[.90]
-                        "
-                      >
+                        ">
                         <div class="flex flex-col">
                           <div class="line-clamp-3">
                             <span>{{
-                              `${"(" + result.title_classification + ") "}`
+                                `${"(" + result.title_classification + ") "}`
                             }}</span>
                             <span>{{ result.title }}</span>
                           </div>
-                          <div
-                            class="
+                          <div class="
                               flex
                               justify-around
                               absolute
                               inset-x-0
                               bottom-2
                               text-sm
-                            "
-                          >
-                            <button
-                              @click="openMedia(result.images.table.secondary)"
-                              class="hover:underline"
-                            >
+                            ">
+                            <button @click="openMedia(result.images.table.secondary)" class="hover:underline">
                               VIEW MEDIA
-                              <span class="sr-only"
-                                >Open media for {{ result.title }}</span
-                              >
+                              <span class="sr-only">Open media for {{ result.title }}</span>
                             </button>
                             <p>|</p>
-                            <router-link
-                              class="hover:underline"
-                              :to="{
-                                name: 'demo-article',
-                                params: { doc_num: result.doc_num },
-                              }"
-                              >VIEW ARTICLE
+                            <router-link class="hover:underline" :to="{
+                              name: 'demo-article',
+                              params: { doc_num: result.doc_num },
+                            }">VIEW ARTICLE
                             </router-link>
                           </div>
                         </div>
                       </div>
-                      <img
-                        :src="getImgUrl(result.images.table.secondary)"
-                        alt=""
-                        class="object-cover"
-                      />
+                      <img :src="getImgUrl(result.images.table.secondary)" alt="" class="object-cover" />
                     </div>
-                    <div
-                      class="
+                    <div class="
                         flex
                         justify-between
                         p-2
@@ -772,17 +585,11 @@
                         dark:border-slate-50/[0.06]
                         energy:border-zinc-700/50
                         text-sm
-                      "
-                    >
+                      ">
                       <div>
-                        <span
-                          v-for="(region, ind) in result.regions"
-                          :key="ind"
-                        >
+                        <span v-for="(region, ind) in result.regions" :key="ind">
                           {{ region
-                          }}<span v-if="ind < result.regions.length - 1"
-                            >,&nbsp;</span
-                          >
+                          }}<span v-if="ind < result.regions.length - 1">,&nbsp;</span>
                         </span>
                       </div>
                       <div>
@@ -795,8 +602,7 @@
             </div>
           </template>
           <!-- Bottom Pagination -->
-          <div
-            class="
+          <div class="
               px-4
               py-3
               flex
@@ -804,20 +610,13 @@
               border-t border-gray-200
               dark:border-slate-50/[0.06]
               energy:border-zinc-700/50
-            "
-          >
-            <SearchResultsPagination
-              :totalCount="totalCount"
-              :currentPage="currentPage"
-            />
+            ">
+            <SearchResultsPagination :totalCount="totalCount" :currentPage="currentPage" />
           </div>
         </BaseCard>
       </div>
       <!-- Search Results Filters -->
-      <BaseCard
-        v-show="selectedView.label === 'List'"
-        class="hidden lg:block basis-1/4 ml-4 h-full"
-      >
+      <BaseCard v-show="selectedView.label === 'List'" class="hidden lg:block basis-1/4 ml-4 h-full">
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
@@ -826,8 +625,7 @@
             <label class="self-center min-w-[58px] sm:min-w-0">Sort By</label>
             <Listbox v-model="selectedSort" class="ml-3 min-w-[110px]">
               <div class="relative">
-                <ListboxButton
-                  class="
+                <ListboxButton class="
                     min-h-[2rem]
                     flex
                     relative
@@ -849,25 +647,17 @@
                     focus-visible:ring-2
                     focus-visible:ring-opacity-75
                     focus-visible:ring-offset-2
-                  "
-                >
+                  ">
                   <span class="block truncate">{{ selectedSort.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
+                  <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                     <SelectorIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
-                    class="
+                <transition enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95">
+                  <ListboxOptions class="
                       absolute
                       w-full
                       py-1
@@ -882,23 +672,14 @@
                       ring-1 ring-black ring-opacity-5
                       focus:outline-none
                       z-10
-                    "
-                  >
-                    <ListboxOption
-                      v-slot="{ active }"
-                      v-for="item in sortOptions"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                            : 'bg-none',
-                        ]"
-                      >
+                    ">
+                    <ListboxOption v-slot="{ active }" v-for="item in sortOptions" :key="item" :value="item"
+                      as="template" class="capitalize px-2 py-1 cursor-pointer">
+                      <li :class="[
+                        active
+                          ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                          : 'bg-none',
+                      ]">
                         {{ item.label }}
                       </li>
                     </ListboxOption>
@@ -911,8 +692,7 @@
             <label class="self-center min-w-[58px] sm:min-w-0">View</label>
             <Listbox v-model="selectedView" class="ml-3 min-w-[110px]">
               <div class="relative">
-                <ListboxButton
-                  class="
+                <ListboxButton class="
                     min-h-[2rem]
                     flex
                     relative
@@ -934,25 +714,17 @@
                     focus-visible:ring-2
                     focus-visible:ring-opacity-75
                     focus-visible:ring-offset-2
-                  "
-                >
+                  ">
                   <span class="block truncate">{{ selectedView.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
+                  <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                     <SelectorIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
-                    class="
+                <transition enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95">
+                  <ListboxOptions class="
                       absolute
                       w-full
                       py-1
@@ -967,23 +739,14 @@
                       ring-1 ring-black ring-opacity-5
                       focus:outline-none
                       z-10
-                    "
-                  >
-                    <ListboxOption
-                      v-slot="{ active }"
-                      v-for="item in viewOptions"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                            : 'bg-none',
-                        ]"
-                      >
+                    ">
+                    <ListboxOption v-slot="{ active }" v-for="item in viewOptions" :key="item" :value="item"
+                      as="template" class="capitalize px-2 py-1 cursor-pointer">
+                      <li :class="[
+                        active
+                          ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                          : 'bg-none',
+                      ]">
                         {{ item.label }}
                       </li>
                     </ListboxOption>
@@ -993,16 +756,13 @@
             </Listbox>
           </div>
         </div>
-        <div
-          class="
+        <div class="
             cursor-pointer
             text-mission-light-blue
             dark:text-teal-400
             energy:text-energy-yellow
             self-center
-          "
-          @click="openMobileFacetsDialog"
-        >
+          " @click="openMobileFacetsDialog">
           Show Filters
         </div>
       </div>
@@ -1011,34 +771,17 @@
         <Dialog as="div" @close="closeMobileFacetsDialog">
           <div class="fixed inset-0 z-20 overflow-y-auto w-full">
             <div class="min-h-screen px-4 text-center">
-              <TransitionChild
-                as="template"
-                enter="duration-300 ease-out"
-                enter-from="opacity-0"
-                enter-to="opacity-100"
-                leave="duration-200 ease-in"
-                leave-from="opacity-100"
-                leave-to="opacity-0"
-              >
+              <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+                leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
                 <div class="fixed inset-0 bg-black/25" />
               </TransitionChild>
-              <span
-                class="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
+              <span class="inline-block h-screen align-middle" aria-hidden="true">
                 &#8203;
               </span>
-              <TransitionChild
-                as="template"
-                enter="duration-300 ease-out"
-                enter-from="opacity-0 scale-95"
-                enter-to="opacity-100 scale-100"
-                leave="duration-200 ease-in"
-                leave-from="opacity-100 scale-100"
-                leave-to="opacity-0 scale-95"
-              >
-                <DialogPanel
-                  class="
+              <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                leave-to="opacity-0 scale-95">
+                <DialogPanel class="
                     inline-block
                     w-full
                     max-w-xl
@@ -1058,12 +801,9 @@
                     energy:bg-zinc-700
                     shadow-lg
                     rounded-lg
-                  "
-                >
+                  ">
                   <div class="mt-6">
-                    <button
-                      type="button"
-                      class="
+                    <button type="button" class="
                         absolute
                         top-5
                         right-5
@@ -1072,17 +812,11 @@
                         flex
                         items-center
                         justify-center
-                      "
-                      tabindex="0"
-                      @click="closeMobileFacetsDialog"
-                    >
-                      <span class="sr-only">Close navigation</span
-                      ><XIcon class="h-5 w-5" aria-hidden="true" />
+                      " tabindex="0" @click="closeMobileFacetsDialog">
+                      <span class="sr-only">Close navigation</span>
+                      <XIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
-                    <SearchResultsFacets
-                      :facets="aggregations"
-                      class="grid grid-cols-2 md:grid-cols-3 gap-4"
-                    />
+                    <SearchResultsFacets :facets="aggregations" class="grid grid-cols-2 md:grid-cols-3 gap-4" />
                   </div>
                 </DialogPanel>
               </TransitionChild>
@@ -1097,7 +831,6 @@
 <script>
 import * as dayjs from "dayjs";
 import { isEmpty } from "@/helpers";
-import uniqueID from "@/composables/uniqueID";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -1158,7 +891,6 @@ export default {
     SearchResultsPagination,
   },
   setup() {
-    const datepickerUuid = uniqueID().getID();
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
@@ -1737,8 +1469,8 @@ export default {
       route.query.view === "grid"
         ? viewOptions[1]
         : route.query.view === "visuals"
-        ? viewOptions[2]
-        : viewOptions[0]
+          ? viewOptions[2]
+          : viewOptions[0]
     );
     const currentPage = ref(parseInt(route.query.page) || 1);
 
@@ -1815,8 +1547,8 @@ export default {
             route.query.view === "grid"
               ? viewOptions[1]
               : route.query.view === "visuals"
-              ? viewOptions[2]
-              : viewOptions[0];
+                ? viewOptions[2]
+                : viewOptions[0];
         }
       }
     );
@@ -1905,7 +1637,6 @@ export default {
 
     return {
       dayjs,
-      datepickerUuid,
       loadingMetadata,
       loadingResults,
       results,
@@ -1944,4 +1675,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+
 </style>

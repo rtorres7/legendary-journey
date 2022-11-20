@@ -41,8 +41,8 @@
         (item) => {
           return item.text;
         }
-      " @selectItem="selectItemEventHandler" @onInput="onInputEventHandler" @onFocus="onFocusEventHandler"
-      @onBlur="onBlurEventHandler" @keydown.enter.prevent="onEnter" :selectOnTab="false" :value="modelValue">
+      " @selectItem="selectItemEventHandler" @onInput="onInputEventHandler" @keydown.enter.prevent="onEnter"
+      :selectOnTab="false" :value="modelValue">
       <template #list-item-text="slot">
         <div class="
             bg-slate-100
@@ -107,7 +107,7 @@ export default {
 
     onMounted(() => {
       store.dispatch("savedSearches/getAllSearches");
-      console.log("searches: ", searches);
+      //console.log("searches: ", searches);
     });
 
     watch(
