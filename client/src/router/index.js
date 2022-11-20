@@ -4,7 +4,7 @@ import { metadata } from "@/config";
 import ArticleView from '../views/ArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
 import DemoArticleView from '../views/DemoArticleView.vue'
-import EditDocumentView from '../views/EditDocumentView.vue'
+import EditDocumentView from '../views/EditDocumentView'
 import HomeView from '../views/HomeView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import PublishArticleView from '../views/PublishArticleView.vue'
