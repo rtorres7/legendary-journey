@@ -95,8 +95,6 @@ const routes = [
     component: PublishArticleView,
     meta: {
       title: 'Publish an Article',
-      demo: true
-      // admin: true,
     },
   },
   {
