@@ -808,6 +808,7 @@
                         hover:text-black
                         dark:hover:text-white
                         energy:hover:text-white
+                        cursor-pointer
                       ">
                   Publish an Article
                 </a>

@@ -74,7 +74,7 @@
                 item.subitem ? 'pl-2' : '',
                 multiple ? '' : 'capitalize',
                 'block truncate text-sm',
-              ]">{{ multiple ? item.name : item }}</span>
+              ]">{{ displayValue(item) }}</span>
               <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3">
                 <CheckIcon class="h-5 w-5" aria-hidden="true" />
               </span>

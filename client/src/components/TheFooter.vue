@@ -26,9 +26,7 @@
                     <a :href="link.href" target="_blank">{{ link.name }}</a>
                   </template>
                   <template v-else>
-                    <template v-if="link.key === 'security'">
-                      <a role="button" tabindex="0" @click="openSecurityDialog">{{ link.name }}</a>
-                    </template>
+                    <a role="button" tabindex="0" @click="openDialog(link.key)">{{ link.name }}</a>
                   </template>
                 </li>
               </template>
@@ -171,9 +169,29 @@
       </p>
     </div>
   </div>
+  <BaseDialog class="max-w-[600px]" :isOpen="isMissionDialogOpen" @close="closeMissionDialog">
+    <div class="flex flex-col space-y-6">
+      <template v-for="paragraph in metadata.footer_mission" :key="paragraph">
+        <div>
+          <p class="font-semibold mb-2">{{ paragraph.header }}</p>
+          <p>{{ paragraph.content }}</p>
+        </div>
+      </template>
+    </div>
+  </BaseDialog>
   <BaseDialog class="max-w-[600px]" :isOpen="isSecurityDialogOpen" @close="closeSecurityDialog">
     <div class="flex flex-col space-y-6">
       <template v-for="paragraph in metadata.footer_security" :key="paragraph">
+        <div>
+          <p class="font-semibold mb-2">{{ paragraph.header }}</p>
+          <p>{{ paragraph.content }}</p>
+        </div>
+      </template>
+    </div>
+  </BaseDialog>
+  <BaseDialog class="max-w-[600px]" :isOpen="isFAQDialogOpen" @close="closeFAQDialog">
+    <div class="flex flex-col space-y-6">
+      <template v-for="paragraph in metadata.footer_faq" :key="paragraph">
         <div>
           <p class="font-semibold mb-2">{{ paragraph.header }}</p>
           <p>{{ paragraph.content }}</p>
@@ -197,21 +215,42 @@ export default {
     MailIcon,
   },
   setup() {
+    const isMissionDialogOpen = ref(false);
     const isSecurityDialogOpen = ref(false);
+    const isFAQDialogOpen = ref(false);
 
-    const openSecurityDialog = () => {
-      isSecurityDialogOpen.value = true;
+    const closeMissionDialog = () => {
+      isMissionDialogOpen.value = false;
     };
 
     const closeSecurityDialog = () => {
       isSecurityDialogOpen.value = false;
     };
 
+    const closeFAQDialog = () => {
+      isFAQDialogOpen.value = false;
+    };
+
+    const openDialog = (key) => {
+      switch (key) {
+        case 'mission': isMissionDialogOpen.value = true;
+          break;
+        case 'security': isSecurityDialogOpen.value = true;
+          break;
+        case 'faq': isFAQDialogOpen.value = true;
+          break;
+      }
+    }
+
     return {
       metadata,
+      isMissionDialogOpen,
       isSecurityDialogOpen,
-      openSecurityDialog,
+      isFAQDialogOpen,
+      closeMissionDialog,
       closeSecurityDialog,
+      closeFAQDialog,
+      openDialog
     };
   },
 };
