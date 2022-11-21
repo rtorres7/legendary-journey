@@ -6,13 +6,14 @@ import search from "./modules/search"
 import specialEdition from './modules/specialEdition'
 import specialEditions from './modules/specialEditions'
 import user from "./modules/user"
-import document from "./modules/document"
 import feeds from "./modules/feeds"
 import savedSearches from "./modules/saved-searches"
 import danielDetails from "./modules/danielDetails"
 import testConsole from "./modules/test-console"
 import kevin from "./modules/kevin"
 import metadata from "./modules/metadata"
+import metrics from "./modules/metrics"
+import wires from "./modules/wires"
 
 export default createStore({
     state: {
@@ -35,12 +36,13 @@ export default createStore({
         specialEdition,
         specialEditions,
         user,
-        document,
         feeds,
         savedSearches,
         danielDetails,
         testConsole,
         kevin,
-        metadata
+        metadata,
+        metrics,
+        wires,
     },
 })

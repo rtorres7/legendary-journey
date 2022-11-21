@@ -17,15 +17,15 @@
       </div>
       <div
         class="
-          flex flex-wrap
-          md:flex-nowrap
-          justify-between
-          md:space-x-10
-          lg:space-x-5
-          mb-8
+        flex flex-wrap
+        md:flex-nowrap
+        justify-between
+        md:space-x-10
+        lg:space-x-15
+        mb-8
         "
       >
-        <div class="flex flex-col space-y-4">
+        <div class="md:basis-9/12 flex flex-col space-y-4">
           <p class="font-semibold text-sm lg:text-md uppercase">article</p>
           <h1 class="font-semibold text-2xl lg:text-3xl">
             {{ articleDetails.title }}
@@ -155,6 +155,18 @@
             </DisclosurePanel>
           </Disclosure>
         </div>
+        <div class="flex flex-col pb-8 space-y-3 mt-10">
+          <template v-if="!loadingDanielArticlesDetails">
+            <ArticleAttachments :articleDetails="articleDetails" />
+          </template>
+          <template v-if="!loadingArticleMetrics">
+            <ArticleMetrics 
+              :articleMetrics="articleMetrics"
+              :articleDetails="articleDetails"
+            >
+            </ArticleMetrics>
+          </template>
+        </div>
       </div>
     </template>
   </template>
@@ -169,6 +181,8 @@ import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleImage from "@/components/ArticleImage";
+import ArticleAttachments from "@/components/ArticleAttachments"
+import ArticleMetrics from "@/components/ArticleMetrics";
 import NotFound from "@/components/NotFound";
 
 export default {
@@ -179,6 +193,8 @@ export default {
     DisclosurePanel,
     ArticleNavigation,
     ArticleImage,
+    ArticleAttachments,
+    ArticleMetrics,
     NotFound,
   },
   props: ["doc_num", "title"],
@@ -188,6 +204,7 @@ export default {
 
     const articleDetails = computed(() => store.state.danielDetails.document);
     const danielArticles = computed(() => store.state.daniel.articles);
+    const articleMetrics = computed(() => store.state.metrics);
 
     const adjustLayout = ref(false);
 
@@ -195,6 +212,7 @@ export default {
       () => store.state.danielDetails.loading
     );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const loadingArticleMetrics = computed(() => store.state.metrics.loading);
 
     const showImgContainer = ref(true);
 
@@ -205,7 +223,7 @@ export default {
 
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("danielDetails/getDanielArticlesDetails"); 
     });
 
     const calculateLayout = (imageWidth) => {
@@ -257,16 +275,27 @@ export default {
       () => {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails");
+          store.dispatch("metrics/getMetrics");
         }
       }
     );
+
+    watch([loadingDanielArticlesDetails], () => {
+      if(!loadingDanielArticlesDetails.value) {
+        store.dispatch("metrics/initDates",
+          {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
+          .then(store.dispatch("metrics/getMetrics"));
+      }
+    })
 
     return {
       dayjs,
       articleDetails,
       danielArticles,
+      articleMetrics,
       loadingDanielArticlesDetails,
       loadingDanielArticles,
+      loadingArticleMetrics,
       currentArticleIndex,
       previousArticle,
       nextArticle,

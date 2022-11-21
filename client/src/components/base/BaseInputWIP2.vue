@@ -7,16 +7,15 @@
       <span class="pl-1 text-red-500">*</span>
     </template>
   </label>
-  <textarea v-bind="$attrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="
+  <input v-bind="$attrs" :name="name" :type="type" @change="handleChange" @blur="handleChange" class="
       min-h-[2rem]
+      flex
       w-full
       py-1
       px-2
       mt-1
-      text-left
-      bg-white
       dark:bg-slate-700
-      energy:bg-zinc-700
+      energy:bg-zinc-600
       border border-gray-200
       dark:border-slate-800
       energy:border-zinc-800
@@ -27,33 +26,41 @@
       focus-visible:ring-2
       focus-visible:ring-opacity-75
       focus-visible:ring-offset-2
-      resize-none
       placeholder:italic
-    " :id="uuid"></textarea>
+    " :id="uuid" />
+  <template v-if="errorMessage">
+    <p class="pt-1 text-sm text-red-500">{{ errorMessage }}</p>
+  </template>
 </template>
 
 <script>
 import uniqueID from "@/composables/uniqueID";
+import { useField } from 'vee-validate';
 export default {
   components: {},
   props: {
-    label: {
-      type: String,
-      default: "",
+    name: {
+      type: String
     },
-    modelValue: {
-      type: [String, Number],
-      default: "",
+    type: {
+      type: String
+    },
+    label: {
+      type: String
     },
     required: {
       type: Boolean,
       default: false
-    }
+    },
   },
-  setup() {
+  setup(props) {
     const uuid = uniqueID().getID();
+    const { value, errorMessage, handleChange } = useField(props.name)
     return {
       uuid,
+      value,
+      errorMessage,
+      handleChange
     };
   },
 };

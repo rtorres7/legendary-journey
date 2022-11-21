@@ -1,6 +1,5 @@
 import { danielArticles } from "@/data";
 import axios from '@/config/wireAxios'
-//import router from "@/router"
 
 export default {
   namespaced: true,
@@ -8,13 +7,12 @@ export default {
     articles: [],
     loading: true,
   },
-
   actions: {
     getDanielArticles({ state, commit }) {
       state.loading = true;
       if (process.env.NODE_ENV === 'low') {
         console.log('danielArticles: ', danielArticles)
-        commit("saveArticles", danielArticles)
+        setTimeout(() => commit("saveArticles", danielArticles), 750)
       } else {
         axios.get("/home/daniel").then(response => {
           console.log('/home/daniel (response):', response);
@@ -32,18 +30,6 @@ export default {
         })
       }
     },
-    getWireByDate({ state, commit }, date) {
-      state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        console.log('Wire: ');
-      } else {
-        axios.get("/wires/" + date + "/getWireByDate").then(response => {
-          console.log("~~~~~~~~~~~~~~~~~~~~~~~~", response.data);
-          let articles = response?.data?.features;
-          commit("saveArticles", articles)
-        });
-      }
-    },
     //Test Console Feature Only
     setDanielArticles({ commit }, count) {
       commit("saveArticles", count <= 0 ? [] : danielArticles.slice(0, count))
@@ -52,7 +38,6 @@ export default {
       commit("toggleLoading", value)
     },
   },
-
   mutations: {
     saveArticles(state, articles) {
       state.articles = articles;

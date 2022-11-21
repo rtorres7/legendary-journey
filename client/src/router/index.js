@@ -4,14 +4,13 @@ import { metadata } from "@/config";
 import ArticleView from '../views/ArticleView.vue'
 import AttachmentView from '../views/AttachmentView.vue'
 import DemoArticleView from '../views/DemoArticleView.vue'
-import EditDocumentView from '../views/EditDocumentView.vue'
+import EditDocumentView from '../views/EditDocumentView'
 import HomeView from '../views/HomeView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import PublishArticleView from '../views/PublishArticleView.vue'
 import SearchView from '../views/SearchView.vue'
 import SpecialEditionView from '../views/SpecialEditionView.vue'
 import SpecialEditionsManagerView from '../views/SpecialEditionsManagerView.vue'
-import ProfileView from '../views/ProfileView.vue'
 
 const routes = [
   {
@@ -25,6 +24,12 @@ const routes = [
   {
     path: '/article/:doc_num',
     name: 'article',
+    component: ArticleView,
+    props: true
+  },
+  {
+    path: '/article/:doc_num/preview',
+    name: 'article-preview',
     component: ArticleView,
     props: true
   },
@@ -89,8 +94,6 @@ const routes = [
     component: PublishArticleView,
     meta: {
       title: 'Publish an Article',
-      demo: true
-      // admin: true,
     },
   },
   {
@@ -110,32 +113,23 @@ const routes = [
     }
   },
   {
-    path: '/demo-article/:date/:id/:doc_num/new',
+    path: '/article/:date/:id/:doc_num/new',
     name: 'new',
     component: EditDocumentView,
     meta: {
       title: 'New Document',
       // admin: true,
-      demo: true
+      // demo: true
     }
   },
   {
-    path: '/demo-article/:date/:id/:doc_num/edit',
+    path: '/article/:date/:id/:doc_num/edit',
     name: 'edit',
     component: EditDocumentView,
     meta: {
       title: 'Edit Document',
       // admin: true,
       demo: true
-    },
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: ProfileView,
-    meta: {
-      title: 'Profile',
-      // admin: true,
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },

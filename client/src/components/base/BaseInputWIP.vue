@@ -1,10 +1,10 @@
 <template>
-  <label :for="uuid" v-if="label" class="text-sm font-medium">{{
+  <label :for="uuid" v-if="label" class="inline-flex text-sm font-medium">{{
       label
   }}
     <template v-if="required">
       <span class="sr-only">Required</span>
-      <span class="text-red-500">*</span>
+      <span class="pl-1 text-red-500">*</span>
     </template>
   </label>
   <input v-bind="$attrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="
@@ -29,7 +29,7 @@
       placeholder:italic
     " :id="uuid" />
   <template v-if="error">
-    <p class="text-red-500">{{ error }}</p>
+    <p class="pt-1 text-sm text-red-500">{{ error }}</p>
   </template>
 </template>
 
