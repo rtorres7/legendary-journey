@@ -180,9 +180,9 @@
           energy:text-energy-yellow
         " @click="toggleSelectors">
         {{
-            showSelectors
-              ? "Hide Selectors"
-              : `Show Selectors (${booleanFilters.length})`
+        showSelectors
+        ? "Hide Selectors"
+        : `Show Selectors (${booleanFilters.length})`
         }}
       </button>
     </template>
@@ -463,13 +463,13 @@
                 ">
                 <div class="h-fit px-2 text-center">
                   <span class="block font-semibold">{{
-                      dayjs(result.date_published).format("DD")
+                  dayjs(result.date_published).format("DD")
                   }}</span>
                   <span class="block text-sm">{{
-                      dayjs(result.date_published).format("MMM")
+                  dayjs(result.date_published).format("MMM")
                   }}</span>
                   <span class="block text-sm">{{
-                      dayjs(result.date_published).format("YYYY")
+                  dayjs(result.date_published).format("YYYY")
                   }}</span>
                 </div>
                 <div class="px-2 w-full">
@@ -487,7 +487,7 @@
                             dark:text-slate-300
                             energy:text-zinc-300
                           ">{{
-                              `${"(" + result.title_classification + ") "}`
+                          `${"(" + result.title_classification + ") "}`
                           }}</span>
 
                         <span class="text-black dark:text-white energy:text-white">{{ result.title }}</span>
@@ -550,7 +550,7 @@
                         <div class="flex flex-col">
                           <div class="line-clamp-3">
                             <span>{{
-                                `${"(" + result.title_classification + ") "}`
+                            `${"(" + result.title_classification + ") "}`
                             }}</span>
                             <span>{{ result.title }}</span>
                           </div>

@@ -11,7 +11,6 @@ import PublishArticleView from '../views/PublishArticleView.vue'
 import SearchView from '../views/SearchView.vue'
 import SpecialEditionView from '../views/SpecialEditionView.vue'
 import SpecialEditionsManagerView from '../views/SpecialEditionsManagerView.vue'
-import ProfileView from '../views/ProfileView.vue'
 
 const routes = [
   {
@@ -131,15 +130,6 @@ const routes = [
       title: 'Edit Document',
       // admin: true,
       demo: true
-    },
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: ProfileView,
-    meta: {
-      title: 'Profile',
-      // admin: true,
     },
   },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: NotFoundView, meta: { title: 'Page Not Found', } },
