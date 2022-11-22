@@ -5,18 +5,20 @@
       space-y-3
     "
   >
-    <p class="font-semibold">Metrics</p>
-    <p class="font-medium text-md">Unique Readers ({{ articleMetrics.uniqueReaders }})</p>
+    <p class="font-semibold">
+      Metrics
+    </p>
+    <p class="font-medium text-md">
+      Unique Readers ({{ articleMetrics.uniqueReaders }})
+    </p>
     <div class="flex flex-row justify-between items-center">
       <div class="flex flex-col">
-        <label :for="startDatepickerUuid" class="text-sm font-medium">Start Date</label>
+        <label class="text-sm font-medium">Start Date</label>
         <BaseDatepicker 
-          :id="startDatepickerUuid"
           v-model="startDate"
-          :minDate="articleDetails.display_date"
+          :minDate="article.display_date"
           :maxDate="new Date(endDate)"
           :enableTimePicker="false"
-          @update:modelValue="handleStartDate"
           format="MMM dd, yyyy"
           class="
             text-sm
@@ -29,18 +31,19 @@
             shadow-md
             cursor-default
           "
-        >
-        </BaseDatepicker>        
+          week-start="0"
+          auto-apply @update:modelValue="handleStartDate"
+        />        
       </div>
-      <div class="flex flex-col px-3 pt-4">to</div>
+      <div class="flex flex-col px-3 pt-4">
+        to
+      </div>
       <div class="flex flex-col">
-        <label :for="endDatepickerUuid" class="text-sm font-medium">End Date</label>
+        <label class="text-sm font-medium">End Date</label>
         <BaseDatepicker
-          :id="endDatepickerUuid"
           v-model="endDate"
           :minDate="new Date(startDate)"
           :enableTimePicker="false"
-          @update:modelValue="handleEndDate"
           format="MMM dd, yyyy"
           class="
             text-sm
@@ -53,12 +56,13 @@
             shadow-md
             cursor-default
           "
-        >
-        </BaseDatepicker>
+          week-start="0"
+          auto-apply @update:modelValue="handleEndDate"
+        />
       </div>
     </div>
   </div>
-  <div class="w-full h-[400px] text-xs" ref="chartdiv"></div>
+  <div ref="chartdiv" class="w-full h-[400px] text-xs" />
 </template>
 
 <script>
@@ -68,12 +72,11 @@ import { useRoute } from "vue-router";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-import uniqueID from "@/composables/uniqueID";
 import * as dayjs from "dayjs";
 
 export default {
   props: {
-    articleDetails: {
+    article: {
       type: Object,
       required: true
     },
@@ -85,9 +88,6 @@ export default {
   setup(props) {
     const store = useStore();
     const route = useRoute();
-    
-    const startDatepickerUuid = uniqueID().getID();
-    const endDatepickerUuid = uniqueID().getID();
     let startDate = ref();
     let endDate = ref();
     
@@ -154,8 +154,6 @@ export default {
     });
 
     return {
-      startDatepickerUuid,
-      endDatepickerUuid,
       startDate,
       endDate,
       chartdiv,

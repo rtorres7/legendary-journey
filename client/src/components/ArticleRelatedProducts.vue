@@ -1,5 +1,5 @@
 <template>
-<div
+  <div
     class="
       flex flex-col 
       space-y-3
@@ -10,8 +10,9 @@
       dark:border-slate-50/[0.06] 
       energy:border-zinc-700/25"
   >
-    <p class="font-semibold mt-4 md:mt-0">Related Products</p>
-
+    <p class="font-semibold mt-4 md:mt-0">
+      Related Products
+    </p>
   </div>
 </template>
 

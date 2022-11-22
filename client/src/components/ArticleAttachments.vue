@@ -10,9 +10,11 @@
       dark:border-slate-50/[0.06] 
       energy:border-zinc-700/25"
   >
-    <p class="font-semibold mt-4 md:mt-0">Attachments</p>
-    <div v-if="articleDetails.highlightAttachmentText">
-      {{ articleDetails.highlightAttachmentText }}
+    <p class="font-semibold mt-4 md:mt-0">
+      Attachments
+    </p>
+    <div v-if="article.highlightAttachmentText">
+      {{ article.highlightAttachmentText }}
     </div>
     <div v-if="pdfVersions.length === 0 && attachments.length === 0">
       There are no attachments
@@ -42,19 +44,19 @@ import { useRoute } from "vue-router"
 
 export default {
   props: {
-    articleDetails: {
+    article: {
       type: Object,
       required: true
     }
   },
   setup(props) {
     const route = useRoute();
-    const docNum = computed(() => `${route.params.doc_num}` || props.articleDetails.doc_num);
+    const docNum = computed(() => `${route.params.doc_num}` || props.article.doc_num);
     const attachmentLink = computed(() => `/documents/${docNum.value}/attachments`);
     
     const pdfVersions = computed(() => {
       const pdfs =
-        props.articleDetails.attachments_metadata.filter(
+        props.article.attachments_metadata.filter(
           attachment => attachment.pdf_version === true && attachment.visible === true
         )
       return pdfs;
@@ -62,7 +64,7 @@ export default {
     
     const attachments = computed(() => {
       const attachments_metadata =
-        props.articleDetails.attachments_metadata.filter(
+        props.article.attachments_metadata.filter(
           attachment => 
             attachment.pdf_version !== true &&
             attachment.visible === true &&
