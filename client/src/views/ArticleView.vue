@@ -148,8 +148,18 @@
           <template v-if="!loadingDanielArticlesDetails">
             <ArticleAttachments :articleDetails="articleDetails" />
           </template>
-          <template v-if="!isDraft && !loadingArticleMetrics || !loadingArticleMetrics && articleMetrics.uniqueReaders !== 0">
-            <ArticleMetrics :articleMetrics="articleMetrics" :articleDetails="articleDetails" />
+          <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
+          <template v-if="!loadingRelatedProducts">
+            <ArticleRelatedProducts
+              :relatedProducts="relatedProducts"
+            />
+          </template>
+          <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
+          <template v-if="!loadingArticleMetrics && !isDraft || !loadingArticleMetrics && articleMetrics.uniqueReaders !== 0">
+            <ArticleMetrics 
+              :articleMetrics="articleMetrics"
+              :articleDetails="articleDetails"
+            />
           </template>
         </div>
       </div>
@@ -167,6 +177,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleImage from "@/components/ArticleImage";
 import ArticleAttachments from "@/components/ArticleAttachments"
+import ArticleRelatedProducts from "@/components/ArticleRelatedProducts"
 import ArticleMetrics from "@/components/ArticleMetrics";
 import NotFound from "@/components/NotFound";
 
@@ -179,6 +190,7 @@ export default {
     ArticleNavigation,
     ArticleImage,
     ArticleAttachments,
+    ArticleRelatedProducts,
     ArticleMetrics,
     NotFound,
   },
@@ -189,7 +201,10 @@ export default {
 
     const articleDetails = computed(() => store.state.danielDetails.document);
     const danielArticles = computed(() => store.state.daniel.articles);
+    const relatedProducts = computed(() => store.state.relatedProducts);
     const articleMetrics = computed(() => store.state.metrics);
+    
+    //console.log("relatedProducts: ", relatedProducts);
 
     const adjustLayout = ref(false);
 
@@ -197,6 +212,9 @@ export default {
       () => store.state.danielDetails.loading
     );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const loadingRelatedProducts = computed(
+      () => store.state.relatedProducts.loading
+    );
     const loadingArticleMetrics = computed(() => store.state.metrics.loading);
 
     const showImgContainer = ref(true);
@@ -211,6 +229,7 @@ export default {
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");
       store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("relatedProducts/getRelatedDocuments");
       store.dispatch("metrics/initDates",
         {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
         .then(store.dispatch("metrics/getMetrics"));
@@ -269,6 +288,7 @@ export default {
       () => {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails");
+          store.dispatch("relatedProducts/getRelatedDocuments");          
           store.dispatch("metrics/initDates",
             {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
             .then(store.dispatch("metrics/getMetrics"));          
@@ -283,6 +303,7 @@ export default {
       articleMetrics,
       loadingDanielArticlesDetails,
       loadingDanielArticles,
+      loadingRelatedProducts,
       loadingArticleMetrics,
       currentArticleIndex,
       previousArticle,
@@ -293,6 +314,7 @@ export default {
       computedArticleLayout,
       calculateLayout,
       adjustLayout,
+      relatedProducts,
       isDraft
     };
   },
