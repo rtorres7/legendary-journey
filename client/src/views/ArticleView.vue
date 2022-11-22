@@ -8,19 +8,25 @@
     </template>
     <template v-else>
       <div>
-        <ArticleNavigation :currentArticleIndex="currentArticleIndex" :previousArticle="previousArticle"
-          :nextArticle="nextArticle" :totalArticles="danielArticles"></ArticleNavigation>
+        <ArticleNavigation
+          :currentArticleIndex="currentArticleIndex" :previousArticle="previousArticle"
+          :nextArticle="nextArticle" :totalArticles="danielArticles"
+        />
       </div>
-      <div class="
+      <div
+        class="
         flex flex-wrap
         md:flex-nowrap
         justify-between
         md:space-x-10
         lg:space-x-15
         mb-8
-        ">
+        "
+      >
         <div class="md:basis-9/12 flex flex-col space-y-4">
-          <p class="font-semibold text-sm lg:text-md uppercase">article</p>
+          <p class="font-semibold text-sm lg:text-md uppercase">
+            article
+          </p>
           <h1 class="font-semibold text-2xl lg:text-3xl">
             {{ articleDetails.title }}
           </h1>
@@ -28,10 +34,12 @@
             <p>
               {{ `${articleDetails.state} -` }}
               {{
-                  dayjs(articleDetails.date_published).format("ddd, MMMM D, YYYY")
+                dayjs(articleDetails.date_published).format("ddd, MMMM D, YYYY")
               }}
             </p>
-            <p aria-hidden="true">●</p>
+            <p aria-hidden="true">
+              ●
+            </p>
             <p v-if="articleDetails.authors?.length > 0">
               <template v-for="(author, index) in articleDetails.authors" :key="index">
                 {{ author.name
@@ -43,18 +51,23 @@
           <div :class="['flex flex-col', computedArticleLayout]">
             <div v-show="showImgContainer" :class="adjustLayout ? 'w-[350px]' : ''">
               <template v-if="article">
-                <div v-show="(isDraft && article.product_image) || (article.attributes)"
-                  class="h-full w-full h-[300px] sm:h-[375px] flex flex-col">
+                <div
+                  v-show="(isDraft && article.product_image) || (article.attributes)"
+                  class="h-full w-full h-[300px] sm:h-[375px] flex flex-col"
+                >
                   <template v-if="isDraft">
                     <template v-if="article.product_image">
                       <img
                         :src="`/documents/${articleDetails.doc_num}/images/article?updated_at=${articleDetails.updated_at}`"
-                        class="max-w-[375px] h-full" />
+                        class="max-w-[375px] h-full"
+                      >
                     </template>
                   </template>
                   <template v-else>
-                    <ArticleImage class="max-w-[400px] sm:max-w-full h-full" :article="article.attributes" smartRender
-                      @imageLoaded="calculateLayout" @imageNotFound="disableImgContainer" />
+                    <ArticleImage
+                      class="max-w-[400px] sm:max-w-full h-full" :article="article.attributes" smartRender
+                      @imageLoaded="calculateLayout" @imageNotFound="disableImgContainer"
+                    />
                     <p class="italic text-sm pt-2">
                       {{ articleDetails.image_caption }}
                     </p>
@@ -63,18 +76,20 @@
               </template>
             </div>
             <div class="w-full pr-2">
-              <p class="whitespace-pre-line" v-if="articleDetails.html_body">
-                <span class="summary" v-html="articleDetails.html_body"></span>
+              <p v-if="articleDetails.html_body" class="whitespace-pre-line">
+                <span class="summary" v-html="articleDetails.html_body" />
               </p>
             </div>
           </div>
-          <p class="
+          <p
+            class="
               font-semibold
               border-t-2 border-slate-900/10
               dark:border-slate-50/[0.06]
               energy:border-zinc-700/25
               pt-4
-            ">
+            "
+          >
             Document Details
           </p>
           <Disclosure v-slot="{ open }">
@@ -95,14 +110,14 @@
                 </p>
                 <p>
                   <span class="font-semibold">Posted: </span>{{
-                      dayjs(articleDetails.posted_at).format(
-                        "DD MMM YYYY hh:mm:ss"
-                      )
+                    dayjs(articleDetails.posted_at).format(
+                      "DD MMM YYYY hh:mm:ss"
+                    )
                   }}
                 </p>
                 <p>
                   <span class="font-semibold">Publication Date: </span>{{
-                      dayjs(articleDetails.date_published).format("DD MMM YYYY")
+                    dayjs(articleDetails.date_published).format("DD MMM YYYY")
                   }}
                 </p>
                 <p>
@@ -133,9 +148,18 @@
           <template v-if="!loadingDanielArticlesDetails">
             <ArticleAttachments :articleDetails="articleDetails" />
           </template>
-          <template v-if="!isDraft && !loadingArticleMetrics">
-            <ArticleMetrics :articleMetrics="articleMetrics" :articleDetails="articleDetails">
-            </ArticleMetrics>
+          <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
+          <template v-if="!loadingRelatedProducts">
+            <ArticleRelatedProducts
+              :relatedProducts="relatedProducts"
+            />
+          </template>
+          <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
+          <template v-if="!isDraft || !loadingArticleMetrics && articleMetrics.uniqueReaders !== 0">
+            <ArticleMetrics 
+              :articleMetrics="articleMetrics"
+              :articleDetails="articleDetails"
+            />
           </template>
         </div>
       </div>
@@ -153,6 +177,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleImage from "@/components/ArticleImage";
 import ArticleAttachments from "@/components/ArticleAttachments"
+import ArticleRelatedProducts from "@/components/ArticleRelatedProducts"
 import ArticleMetrics from "@/components/ArticleMetrics";
 import NotFound from "@/components/NotFound";
 
@@ -165,6 +190,7 @@ export default {
     ArticleNavigation,
     ArticleImage,
     ArticleAttachments,
+    ArticleRelatedProducts,
     ArticleMetrics,
     NotFound,
   },
@@ -175,7 +201,10 @@ export default {
 
     const articleDetails = computed(() => store.state.danielDetails.document);
     const danielArticles = computed(() => store.state.daniel.articles);
+    const relatedProducts = computed(() => store.state.relatedProducts);
     const articleMetrics = computed(() => store.state.metrics);
+    
+    //console.log("relatedProducts: ", relatedProducts);
 
     const adjustLayout = ref(false);
 
@@ -183,6 +212,9 @@ export default {
       () => store.state.danielDetails.loading
     );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
+    const loadingRelatedProducts = computed(
+      () => store.state.relatedProducts.loading
+    );
     const loadingArticleMetrics = computed(() => store.state.metrics.loading);
 
     const showImgContainer = ref(true);
@@ -197,6 +229,10 @@ export default {
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");
       store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("relatedProducts/getRelatedDocuments");
+      store.dispatch("metrics/initDates",
+        {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
+        .then(store.dispatch("metrics/getMetrics"));
     });
 
     const calculateLayout = (imageWidth) => {
@@ -252,7 +288,10 @@ export default {
       () => {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails");
-          store.dispatch("metrics/getMetrics");
+          store.dispatch("relatedProducts/getRelatedDocuments");          
+          store.dispatch("metrics/initDates",
+            {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
+            .then(store.dispatch("metrics/getMetrics"));          
         }
       }
     );
@@ -272,6 +311,7 @@ export default {
       articleMetrics,
       loadingDanielArticlesDetails,
       loadingDanielArticles,
+      loadingRelatedProducts,
       loadingArticleMetrics,
       currentArticleIndex,
       previousArticle,
@@ -282,6 +322,7 @@ export default {
       computedArticleLayout,
       calculateLayout,
       adjustLayout,
+      relatedProducts,
       isDraft
     };
   },
