@@ -7,7 +7,8 @@
     </template>
   </label>
   <div class="flex flex-col space-y-3">
-    <div class="
+    <div
+      class="
         min-h-[2rem]
         max-w-fit
         mt-1
@@ -18,17 +19,21 @@
         bg-white
         dark:bg-dark-navy/30
         energy:bg-zinc-900/30
-      ">
+      "
+    >
       <label for="image-input" class="relative cursor-pointer focus-within:ring-2 font-medium">
         <div class="px-2 md:px-4 py-2 dark:text-slate-300 energy:text-zinc-300">
           Choose File
         </div>
-        <input id="image-input" name="image-input" type="file" class="sr-only" accept="image/jpeg, image/png, image/jpg"
-          @change="changeImage" />
+        <input
+          id="image-input" name="image-input" type="file" class="sr-only"
+          accept="image/jpeg, image/png, image/jpg"
+          @change="changeImage"
+        >
       </label>
     </div>
     <div v-if="binary" class="flex flex-col">
-      <img :src="getImgUrl(binary)" alt="thumbnail" class="max-h-[70px] max-w-[70px]" />
+      <img :src="getImgUrl(binary)" alt="thumbnail" class="max-h-[70px] max-w-[70px]">
       <div v-if="uploadFile" class="flex items-center text-sm">
         <button type="button" class="w-8 h-8 flex items-center justify-center" tabindex="0" @click="removeArticleImage">
           <span class="sr-only">Remove Current Image</span>
@@ -36,7 +41,8 @@
         </button>
         <div class="line-clamp-1">
           <span class="font-medium">Current File: </span><span
-            class="ml-1 text-slate-900 dark:text-slate-400 energy:text-zinc-400">{{ uploadFile.name }}</span>
+            class="ml-1 text-slate-900 dark:text-slate-400 energy:text-zinc-400"
+          >{{ uploadFile.name }}</span>
         </div>
       </div>
     </div>

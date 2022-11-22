@@ -1,13 +1,12 @@
 <template>
-  <label :for="uuid" v-if="label" class="inline-flex text-sm font-medium">{{
-      label
-  }}
+  <label v-if="label" :for="uuid" class="inline-flex text-sm font-medium">{{ label }}
     <template v-if="required">
       <span class="sr-only">Required</span>
       <span class="pl-1 text-red-500">*</span>
     </template>
   </label>
-  <input v-bind="$attrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="
+  <input
+    v-bind="$attrs" :id="uuid" :value="modelValue" class="
       min-h-[2rem]
       flex
       w-full
@@ -27,9 +26,13 @@
       focus-visible:ring-opacity-75
       focus-visible:ring-offset-2
       placeholder:italic
-    " :id="uuid" />
+    "
+    @input="$emit('update:modelValue', $event.target.value)"
+  >
   <template v-if="error">
-    <p class="pt-1 text-sm text-red-500">{{ error }}</p>
+    <p class="pt-1 text-sm text-red-500">
+      {{ error }}
+    </p>
   </template>
 </template>
 

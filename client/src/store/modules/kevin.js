@@ -23,7 +23,9 @@ export default {
       classification_xml: '',
       classification_decl_fmt: '',
       doc_num: '',
-      date_published: ''
+      date_published: '',
+      poc_info: '',
+      publication_number: ''
     },
     metadata: {
       countries: [],
@@ -86,7 +88,7 @@ export default {
           summary_classif_xml: form.summary_classif_xml,
           html_body: form.html_body,
           publication_date: date,
-          publication_number: form.publication_number,
+          publication_number: Math.floor(100000 + Math.random() * 900000),
           poc_info: form.poc_info,
         }).then(response => {
           console.log(response)
@@ -127,7 +129,7 @@ export default {
           // priority_alert: form.priority_alert,
           // producer: form.producer,
           producing_office: 'DNI/NCTC',
-          publication_number: form.publication_number,
+          publication_number: Math.floor(100000 + Math.random() * 900000),
           // source_order: form.source_order,
           summary: form.summary,
           summary_classif: form.summary_classif,
@@ -177,6 +179,8 @@ export default {
             classification_decl_fmt: response?.data?.classification_decl_fmt,
             doc_num: response?.data?.doc_num,
             date_published: response?.data?.date_published,
+            poc_info: response?.data?.poc_info,
+            publication_number: response?.data?.publication_number
           }
           console.log(data.title)
           // commit("saveDocument", document1);
@@ -234,6 +238,8 @@ export default {
       state.data.classification_decl_fmt = data.classification_decl_fmt;
       state.data.doc_num = data.doc_num;
       state.data.date_published = data.date_published;
+      state.data.poc_info = data.poc_info;
+      state.data.publication_number = data.publication_number;
       state.loadingDocument = false;
     },
     saveMetadata(state, metadata) {

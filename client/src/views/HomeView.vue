@@ -1,15 +1,15 @@
 <template>
   <div class="flex text-sm py-4">
-    <p class="pr-3">{{ today }}</p>
-    <CalendarIcon
-      class="
+    <p class="pr-3">
+      {{ today }}
+    </p>
+    <!-- <CalendarIcon class="
         hover:text-black
         dark:hover:text-white
         energy:hover:text-white
         h-5
         w-5
-      "
-    ></CalendarIcon>
+      "></CalendarIcon> -->
   </div>
   <!-- Main Section -->
   <div
@@ -31,9 +31,7 @@
       "
     >
       <!-- Main Section Sit. Awareness & Headline Container -->
-      <div
-        class="h-116 md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-116"
-      >
+      <div class="h-116 md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-116">
         <div
           class="
             pb-4
@@ -70,10 +68,7 @@
                   params: { doc_num: danielArticles[0].attributes.doc_num },
                 }"
               >
-                <PublishedArticleCard
-                  :article="danielArticles[0].attributes"
-                  headline
-                />
+                <PublishedArticleCard :article="danielArticles[0].attributes" headline />
               </router-link>
             </template>
             <template v-else>
@@ -120,10 +115,7 @@
             </template>
           </template>
           <template v-else>
-            <template
-              v-for="article in danielArticles.slice(1, 3)"
-              :key="article"
-            >
+            <template v-for="article in danielArticles.slice(1, 3)" :key="article">
               <div class="w-full h-[264px] max-w-[591px]">
                 <router-link
                   :to="{
@@ -145,9 +137,6 @@
     class="
       xl:pt-4
       pb-6
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
     "
   >
     <div class="hidden xl:block font-semibold mb-4">
@@ -163,10 +152,7 @@
       </template>
       <template v-else>
         <template v-if="danielArticles.length > 3">
-          <template
-            v-for="article in danielArticles.slice(3, 15)"
-            :key="article"
-          >
+          <template v-for="article in danielArticles.slice(3, 15)" :key="article">
             <div class="w-full h-[264px]">
               <router-link
                 :to="{
@@ -186,49 +172,6 @@
         </template>
       </template>
     </div>
-  </div>
-  <!-- KingFisher Section -->
-  <div
-    class="
-      pt-4
-      pb-6
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
-    "
-  >
-    <FeedSection
-      :title="'KingFisher Derogatory Reports'"
-      :items="kingFisherFeeds"
-      :loading="loadingOseFeeds"
-      :number="6"
-    />
-  </div>
-  <!-- Ose Feeds Section -->
-  <div
-    class="
-      pt-4
-      pb-6
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
-    "
-  >
-    <FeedSection
-      :title="'Open Source Highlights'"
-      :items="oseFeeds"
-      :loading="loadingOseFeeds"
-      :number="3"
-    />
-  </div>
-  <!-- NIC Section -->
-  <div class="py-4">
-    <FeedSection
-      :title="'NIC Sharable'"
-      :items="nicFeeds"
-      :loading="loadingOseFeeds"
-      :number="3"
-    />
   </div>
   <!-- Demo Articles Section -->
   <!-- <div
@@ -283,12 +226,11 @@
 import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import { CalendarIcon } from "@heroicons/vue/outline";
+//import { CalendarIcon } from "@heroicons/vue/outline";
 //import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
 //import PersonalSection from "@/components/PersonalSection";
-import FeedSection from "@/components/FeedSection";
 
 const personalArticles = [
   {
@@ -345,8 +287,7 @@ export default {
     PublishedArticleCard,
     MainSectionSituationalAwareness,
     //PersonalSection,
-    FeedSection,
-    CalendarIcon,
+    //CalendarIcon,
   },
   setup() {
     const store = useStore();
@@ -364,9 +305,6 @@ export default {
     onMounted(() => {
       store.dispatch("articles/getHomeArticles");
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("feeds/getOseFeeds");
-      store.dispatch("feeds/getKingFisherFeeds");
-      store.dispatch("feeds/getNicFeeds");
     });
 
     return {

@@ -4,23 +4,40 @@
 - Node + NPM (16.15.0 LTS - https://nodejs.org/en/)
 - Git (Windows Users - https://git-scm.com/downloads)
 
-# Recommended for development
+# Required editor for development
 - Visual Studio Code (https://code.visualstudio.com/)
 
-# Recommended Visual Studio (VS) Code Extensions
+# Required Visual Studio (VS) Code Extensions
 - Vue Language Features (Volar) - _Vue_
-- JavaScript (ES6) code snippets - _charalampos karypidis_
 - ESLint - _Microsoft_
+- TODO Highlight - _Wayou Liu_
+
+# Visual Studio Code _settings.json_ for automatic linting with ESLint
+```json
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.workingDirectories": [
+        {
+            "mode": "auto"
+        }
+    ],
+    "javascript.updateImportsOnFileMove.enabled": "always"
+}
+```
+
+# Recommended Visual Studio (VS) Code Extensions
+- JavaScript (ES6) code snippets - _charalampos karypidis_
 - Vue VSCode Snippets - _sarah.drasner_
 - Tailwind Intellisense - _Tailwind Labs_
 - Auto Rename Tag - _Jun Han_
 - npm Intellisense - _Christian Kohler_
 - Path Intellisense - _Christian Kohler_
-- TODO Highlight - _Wayou Liu_
 - Material Icon Theme - _Philipp Kief_
 - Project Manager - _Alessandro Fragnani_
-- Night Owl (Optional) - _sarah.drasner_
-
+- Night Owl - _sarah.drasner_
+- 
 ## Project setup
 ```
 npm run install-all-deps
