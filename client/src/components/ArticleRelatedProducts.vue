@@ -20,12 +20,12 @@
 export default {
   props: {
     relatedProducts: {
-      type: Object,
+      type: Array,
       required: true
     },
   },
   setup(props) {
-    console.log("props.relatedProducts: ", props.relatedProducts);
+    console.log("props.relatedProducts: ", props);
 
   },
 };
