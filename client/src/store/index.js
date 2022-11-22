@@ -12,6 +12,7 @@ import danielDetails from "./modules/danielDetails"
 import testConsole from "./modules/test-console"
 import kevin from "./modules/kevin"
 import metadata from "./modules/metadata"
+import relatedProducts from './modules/relatedProducts'
 import metrics from "./modules/metrics"
 import wires from "./modules/wires"
 
@@ -42,6 +43,7 @@ export default createStore({
         testConsole,
         kevin,
         metadata,
+        relatedProducts,
         metrics,
         wires,
     },

@@ -26,4 +26,5 @@ export { getOseFeeds, getKingFisherFeeds, getNicFeeds, getSearchDataFromUrl } fr
 export { danielArticlesDetails } from "./danielArticlesDetails"
 export { metadata } from "./metadata"
 export { specialEdition, specialEditionLinks } from "./specialEditions"
+export { relatedProducts } from "./relatedProducts"
 export { articleMetrics } from "./articleMetrics"
