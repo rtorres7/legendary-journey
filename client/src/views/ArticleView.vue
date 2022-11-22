@@ -15,14 +15,13 @@
     <div
       class="
         flex flex-wrap
-        md:flex-nowrap
+        flex-col lg:flex-row
+        lg:flex-nowrap
         justify-between
-        md:space-x-10
-        lg:space-x-15
         mb-8
         "
     >
-      <div class="md:basis-9/12 flex flex-col space-y-4">
+      <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
         <p class="font-semibold text-sm lg:text-md uppercase">
           article
         </p>
@@ -30,7 +29,7 @@
           {{ article.title }}
         </h1>
         <div class="flex space-x-4 text-sm md:text-md">
-          <p>
+          <p class="capitalize">
             {{ `${article.state} -` }}
             {{
               dayjs(article.date_published).format("ddd, MMMM D, YYYY")
@@ -126,7 +125,7 @@
           </DisclosurePanel>
         </Disclosure>
       </div>
-      <div class="flex flex-col pb-8 space-y-3 mt-10">
+      <div class="md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25">
         <ArticleAttachments :article="article" />
         <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
         <template v-if="!loadingRelatedProducts">
@@ -135,12 +134,62 @@
           />
         </template>
         <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="!loadingMetrics && !isDraft || metrics.uniqueReaders !== 0">
+        <template v-if="!loadingMetrics">
+          <div
+            class="flex flex-col space-y-4"
+          >
+            <p class="font-semibold">
+              Metrics
+            </p>
+            <template v-if="metrics.uniqueReaders !== 0">
+              <p>
+                Unique Readers ({{ metrics.uniqueReaders }})
+              </p>
+              <div class="flex items-center">
+                <div class="flex flex-col">
+                  <label class="text-sm font-medium mb-1">Start Date</label>
+                  <BaseDatepicker 
+                    v-model="metricStartDate"
+                    :minDate="article.display_date"
+                    :maxDate="new Date()"
+                    :enableTimePicker="false"
+                    format="MMM dd, yyyy"
+                    week-start="0"
+                    auto-apply
+                  />        
+                </div>
+                <p class="px-3 pt-4">
+                  to
+                </p>
+                <div class="flex flex-col">
+                  <label class="text-sm font-medium mb-1">End Date</label>
+                  <BaseDatepicker
+                    v-model="metricEndDate"
+                    :minDate="new Date()"
+                    :enableTimePicker="false"
+                    format="MMM dd, yyyy"
+                    week-start="0"
+                    auto-apply
+                  />
+                </div>
+              </div>
+              <ArticleMetrics 
+                :metrics="metrics.readership"
+              />
+            </template>
+          </div>
+        </template>
+        <template v-else>
+          <div class="m-auto pt-8">
+            <BaseLoadingSpinner class="h-20 w-20" />
+          </div>
+        </template>
+        <!-- <template v-if="!loadingMetrics && !isDraft || metrics.uniqueReaders !== 0">
           <ArticleMetrics 
             :articleMetrics="metrics"
             :article="article"
           />
-        </template>
+        </template> -->
       </div>
     </div>
   </template>
@@ -182,8 +231,11 @@ export default {
     const loadingRelatedProducts = computed(() => store.state.relatedProducts.loading);
     const metrics = computed(() => store.state.metrics);
     const loadingMetrics = computed(() => store.state.metrics.loading);
+    const metricStartDate = ref(null);
+    const metricEndDate = ref(null);
     const navigation = ref(null)
     const isDraft = ref(route.name === 'article-preview' ? true : false)
+
 
     onMounted(() => {
       store.dispatch("danielDetails/getDanielArticlesDetails");
@@ -191,14 +243,25 @@ export default {
       store.dispatch("relatedProducts/getRelatedDocuments");
     });
 
+    
+    const formatDate = (date) => {
+      return dayjs(date).format("YYYY-MM-DD");
+    }
+
     /*
       Article needs to load first before firing a metrics call.
     */
     watch([loadingArticle], () => {
-      if (!loadingArticle.value) {
-        store.dispatch("metrics/initDates",
-        {readershipStartDate: article.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
-        .then(store.dispatch("metrics/getMetrics"));
+      if (!loadingArticle.value && route.name !== 'article-preview') {
+        metricStartDate.value = dayjs(article.value.display_date).toDate();
+        metricEndDate.value = dayjs().toDate();
+        store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
+        /* 
+          After the metrics have been loaded, we can then watch the date models change
+        */
+        watch([metricStartDate, metricEndDate], () => {
+          store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
+        });
       }
     });
 
@@ -242,10 +305,7 @@ export default {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails");
           store.dispatch("daniel/getDanielArticles")
-          store.dispatch("relatedProducts/getRelatedDocuments");   
-          // store.dispatch("metrics/initDates",
-          //   {readershipStartDate: article.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
-          //   .then(store.dispatch("metrics/getMetrics"));          
+          store.dispatch("relatedProducts/getRelatedDocuments"); 
         }
       }
     );
@@ -259,8 +319,10 @@ export default {
       loadingRelatedProducts,
       metrics,
       loadingMetrics,
+      metricStartDate,
+      metricEndDate,
       navigation,
-      isDraft
+      isDraft,
     };
   },
 };

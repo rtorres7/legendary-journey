@@ -3,8 +3,8 @@ import axios from '@/config/wireAxios'
 import router from "@/router"
 
 const getMetricsForArticle = (metrics) => {
-  const route = router.currentRoute.value;
-  const filteredMetrics = metrics.filter(data => data.doc_num === route.params.doc_num);
+  const { doc_num } = router.currentRoute.value.params;
+  const filteredMetrics = metrics.filter(data => data.doc_num === doc_num);
   const metricsForArticle = (({ readership, uniqueReadership }) => ({ readership, uniqueReadership }))(filteredMetrics[0]);
   return metricsForArticle;
 };
@@ -12,33 +12,25 @@ const getMetricsForArticle = (metrics) => {
 export default {
   namespaced: true,
   state: {
-    readershipStartDate: "",
-    readershipEndDate: "",
     uniqueReaders: 0,
     readership: [],
     loading: true,
   },
-
   actions: {
-    initDates({state, commit}, {readershipStartDate, readershipEndDate}) {
-      state.loading = true;
-      commit("saveStartDate", readershipStartDate);
-      commit("saveEndDate", readershipEndDate);
-    },
-    getMetrics({ state, commit }) {
+    getMetrics({ state, commit }, { start, end}) {
        state.loading = true;
       if (process.env.NODE_ENV === 'low') {
-        let metrics = getMetricsForArticle(articleMetrics);
+        const metrics = getMetricsForArticle(articleMetrics);
         // console.log("basic_metrics.json?readership_start_date="+state.readershipStartDate+"&readership_end_date="+state.readershipEndDate);
-        console.log('[store] getMetrics:', metrics)
-        setTimeout(() => commit("importData", metrics), 750);
+        console.log('[store] getMetrics:', metrics, `params: start - ${start} , end - ${end}`)
+        setTimeout(() => commit("importData", metrics), 900);
       } else {
           let route = router.currentRoute.value;
           axios.get("/documents/" + `${route.params.doc_num}/metrics/basic_metrics.json`,
             {
               params: {
-                readership_start_date: state.readershipStartDate,
-                readership_end_date: state.readershipEndDate
+                readership_start_date: start,
+                readership_end_date: end
               }
             }
           )
@@ -48,12 +40,6 @@ export default {
           })
         }
     },
-    updateStartDate({commit}, startDate) {
-      commit("saveStartDate", startDate);
-    },
-    updateEndDate({commit}, endDate) {
-      commit("saveEndDate", endDate)
-    },
   },
 
   mutations: {
@@ -61,14 +47,6 @@ export default {
       state.uniqueReaders = metrics.uniqueReadership;
       state.readership = metrics.readership;
       state.loading = false;
-    },
-    saveStartDate(state, value) {
-      state.readershipStartDate = value;
-      state.loading = false;
-     },
-    saveEndDate(state, value) {
-       state.readershipEndDate = value;
-       state.loading = false;
     },
   },
 };
