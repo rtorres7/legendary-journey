@@ -1,26 +1,23 @@
 <template>
-  <div class="w-full h-[500px]" ref="chartdiv"></div>
+  <div ref="chartdiv" class="w-full h-[500px]" />
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { getValueForName } from "@/helpers";
+import { computed, ref, onMounted } from "vue";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { metadata } from "@/config";
 
 export default {
   setup() {
+    const store = useStore();
     const router = useRouter();
     const chartdiv = ref(null);
-
-    const findCountryInMetadata = (dataItem) => {
-      return metadata.countries.items.find(
-        (country) => country.name === dataItem
-      );
-    };
+    const criteria = computed(() => store.state.metadata.criteria);
 
     const navigateToCountry = (country) => {
       let query = {
@@ -28,7 +25,7 @@ export default {
         view: "grid",
         landing: true,
       };
-      query[metadata.countries.type] = country.key;
+      query['countries[]'] = country.code;
       router.push({
         name: "countries",
         params: {
@@ -66,7 +63,7 @@ export default {
       });
       polygonSeries.mapPolygons.template.events.on("click", function (event) {
         let dataItem = event.target.dataItem.dataContext;
-        navigateToCountry(findCountryInMetadata(dataItem.name));
+        navigateToCountry(getValueForName(criteria.value.countries, dataItem.name));
       });
     });
     return {

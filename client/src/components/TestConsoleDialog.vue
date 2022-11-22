@@ -68,15 +68,18 @@
                   tabindex="0"
                   @click="close"
                 >
-                  <span class="sr-only">Close navigation</span
-                  ><XIcon class="h-5 w-5" aria-hidden="true" />
+                  <span class="sr-only">Close navigation</span><XIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <div class="py-4">
-                  <p class="font-medium">Site Options</p>
+                  <p class="font-medium">
+                    Site Options
+                  </p>
                   <ul class="py-2 space-y-2">
                     <SwitchGroup>
                       <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4">Enable Alert</SwitchLabel>
+                        <SwitchLabel class="mr-4">
+                          Enable Alert
+                        </SwitchLabel>
                         <Switch
                           v-model="alertEnabled"
                           :class="
@@ -117,9 +120,9 @@
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4"
-                          >Enable Loading Metadata</SwitchLabel
-                        >
+                        <SwitchLabel class="mr-4">
+                          Enable Loading Metadata
+                        </SwitchLabel>
                         <Switch
                           v-model="loadingMetadataEnabled"
                           :class="
@@ -162,7 +165,9 @@
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4">Enable Admin</SwitchLabel>
+                        <SwitchLabel class="mr-4">
+                          Enable Admin
+                        </SwitchLabel>
                         <Switch
                           v-model="adminEnabled"
                           :class="
@@ -203,9 +208,9 @@
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4"
-                          >Toggle Sample Article Image</SwitchLabel
-                        >
+                        <SwitchLabel class="mr-4">
+                          Toggle Sample Article Image
+                        </SwitchLabel>
                         <Switch
                           v-model="sampleImageEnabled"
                           :class="
@@ -247,9 +252,7 @@
                       </div>
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
-                      <label id="article-counter" class="mr-4"
-                        >Upload Your Own Article Image</label
-                      >
+                      <label id="article-counter" class="mr-4">Upload Your Own Article Image</label>
                       <div
                         class="
                           rounded
@@ -289,7 +292,7 @@
                             class="sr-only"
                             accept="image/jpeg, image/png, image/jpg"
                             @change="changeArticleImage"
-                          />
+                          >
                         </label>
                       </div>
                     </div>
@@ -303,20 +306,17 @@
                         tabindex="0"
                         @click="removeArticleImage"
                       >
-                        <span class="sr-only">Remove Current Image</span
-                        ><XIcon class="h-5 w-5" aria-hidden="true" />
+                        <span class="sr-only">Remove Current Image</span><XIcon class="h-5 w-5" aria-hidden="true" />
                       </button>
                       <div class="line-clamp-1">
-                        <span class="font-medium">Current File: </span
-                        ><span
+                        <span class="font-medium">Current File: </span><span
                           class="
                             ml-1
                             text-slate-900
                             dark:text-slate-400
                             energy:text-zinc-400
                           "
-                          >{{ uploadFileName }}</span
-                        >
+                        >{{ uploadFileName }}</span>
                       </div>
                     </div>
                     <!-- <SwitchGroup>
@@ -365,20 +365,20 @@
                   </ul>
                 </div>
                 <div
+                  v-show="currentRoute === 'home'"
                   class="
                     py-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-zinc-500/50
                   "
-                  v-show="currentRoute === 'home'"
                 >
-                  <p class="font-medium">Home Options</p>
+                  <p class="font-medium">
+                    Home Options
+                  </p>
                   <div class="py-2">
                     <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4"
-                        >Published Articles (max. 5)</label
-                      >
+                      <label id="article-counter" class="mr-4">Published Articles (max. 5)</label>
                       <div
                         class="
                           inline-flex
@@ -391,11 +391,6 @@
                         "
                       >
                         <button
-                          @click="
-                            changePublishedArticleCount(
-                              publishedArticleCountFromStore - 1
-                            )
-                          "
                           class="
                             rounded-l
                             px-4
@@ -408,6 +403,11 @@
                             text-gray-100
                             dark:text-slate-300
                             energy:text-zinc-300
+                          "
+                          @click="
+                            changePublishedArticleCount(
+                              publishedArticleCountFromStore - 1
+                            )
                           "
                         >
                           -
@@ -426,11 +426,6 @@
                           {{ publishedArticleCountFromStore }}
                         </div>
                         <button
-                          @click="
-                            changePublishedArticleCount(
-                              publishedArticleCountFromStore + 1
-                            )
-                          "
                           class="
                             rounded-r
                             px-4
@@ -444,15 +439,18 @@
                             dark:text-slate-300
                             energy:text-zinc-300
                           "
+                          @click="
+                            changePublishedArticleCount(
+                              publishedArticleCountFromStore + 1
+                            )
+                          "
                         >
                           +
                         </button>
                       </div>
                     </div>
                     <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4"
-                        >Open Source Feeds (max. 4)</label
-                      >
+                      <label id="article-counter" class="mr-4">Open Source Feeds (max. 4)</label>
                       <div
                         class="
                           inline-flex
@@ -465,7 +463,6 @@
                         "
                       >
                         <button
-                          @click="changeFeedCount(feedCountFromStore - 1)"
                           class="
                             rounded-l
                             px-4
@@ -479,6 +476,7 @@
                             dark:text-slate-300
                             energy:text-zinc-300
                           "
+                          @click="changeFeedCount(feedCountFromStore - 1)"
                         >
                           -
                         </button>
@@ -496,7 +494,6 @@
                           {{ feedCountFromStore }}
                         </div>
                         <button
-                          @click="changeFeedCount(feedCountFromStore + 1)"
                           class="
                             rounded-r
                             px-4
@@ -510,6 +507,7 @@
                             dark:text-slate-300
                             energy:text-zinc-300
                           "
+                          @click="changeFeedCount(feedCountFromStore + 1)"
                         >
                           +
                         </button>
@@ -517,9 +515,9 @@
                     </div>
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4"
-                          >Enable Loading Published Articles</SwitchLabel
-                        >
+                        <SwitchLabel class="mr-4">
+                          Enable Loading Published Articles
+                        </SwitchLabel>
                         <Switch
                           v-model="loadingPublishedArticlesEnabled"
                           :class="
@@ -562,9 +560,9 @@
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4"
-                          >Enable Loading Open Source Feeds</SwitchLabel
-                        >
+                        <SwitchLabel class="mr-4">
+                          Enable Loading Open Source Feeds
+                        </SwitchLabel>
                         <Switch
                           v-model="loadingOseFeedsEnabled"
                           :class="
@@ -607,9 +605,9 @@
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4"
-                          >Enable Loading Demo Articles</SwitchLabel
-                        >
+                        <SwitchLabel class="mr-4">
+                          Enable Loading Demo Articles
+                        </SwitchLabel>
                         <Switch
                           v-model="loadingArticlesEnabled"
                           :class="
@@ -653,21 +651,23 @@
                   </div>
                 </div>
                 <div
+                  v-show="currentRoute === 'search'"
                   class="
                     py-4
                     border-t border-slate-900/10
                     dark:border-slate-50/[0.06]
                     energy:border-zinc-500/50
                   "
-                  v-show="currentRoute === 'search'"
                 >
-                  <p class="font-medium">Search Options</p>
+                  <p class="font-medium">
+                    Search Options
+                  </p>
                   <div class="py-2">
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4"
-                          >Enable Loading Search Results</SwitchLabel
-                        >
+                        <SwitchLabel class="mr-4">
+                          Enable Loading Search Results
+                        </SwitchLabel>
                         <Switch
                           v-model="loadingResultsEnabled"
                           :class="

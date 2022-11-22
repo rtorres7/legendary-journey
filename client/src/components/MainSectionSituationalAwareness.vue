@@ -1,28 +1,20 @@
 <template>
   <div class="flex flex-col h-full">
     <div class="hidden lg:block font-semibold mb-4">
-      Situational Awareness<span
-        class="pl-2 text-sm font-light italic"
-        title="This feature is not available yet."
-        >(offline)</span
-      >
+      Situational Awareness<span class="pl-2 text-sm font-light italic"
+        title="This feature is not available yet.">(offline)</span>
     </div>
     <div class="flex lg:hidden justify-between mb-4">
       <div class="font-semibold">
-        Situational Awareness<span
-          class="pl-2 text-sm font-light italic"
-          title="This feature is not available yet."
-          >(offline)</span
-        >
+        Situational Awareness<span class="pl-2 text-sm font-light italic"
+          title="This feature is not available yet.">(offline)</span>
       </div>
-      <div
-        class="
+      <div class="
           text-sm
           hover:text-black
           dark:hover:text-white
           energy:hover:text-white
-        "
-      >
+        ">
         View More
       </div>
     </div>
@@ -30,33 +22,23 @@
       <div class="lg:flex flex-col justify-between">
         <template v-for="item in sitreps" :key="item">
           <div class="mb-4">
-            <BaseCard
-              class="h-36 px-4 py-4"
-              :locked="item.locked"
-              hoverable
-              :rounded="false"
-            >
+            <BaseCard class="h-36 px-4 py-4" :locked="item.locked" hoverable :rounded="false">
               <div class="flex flex-col h-full justify-between">
                 <div>
                   <div class="flex items-center text-sm mb-2">
                     <template v-if="item.locked">
-                      <LockClosedIcon
-                        class="mr-2 h-4 w-4"
-                        aria-hidden="true"
-                      ></LockClosedIcon>
+                      <LockClosedIcon class="mr-2 h-4 w-4" aria-hidden="true"></LockClosedIcon>
                     </template>
                     <span class="line-clamp-2">{{ item.type }}</span>
                   </div>
                   <div class="line-clamp-2 font-medium">{{ item.title }}</div>
                 </div>
-                <div
-                  class="
+                <div class="
                     text-slate-600
                     dark:text-slate-400
                     energy:text-zinc-400
                     text-sm
-                  "
-                >
+                  ">
                   Posted {{ item.date }}
                 </div>
               </div>
@@ -64,36 +46,23 @@
           </div>
         </template>
       </div>
-      <p
-        class="
+      <p class="
           text-sm text-right
           hover:text-black
           dark:hover:text-white
           energy:hover:text-white
-        "
-      >
+        ">
         More >
       </p>
     </div>
-    <Carousel
-      :settings="settings"
-      :breakpoints="breakpoints"
-      class="lg:hidden w-full"
-    >
+    <Carousel :settings="settings" :breakpoints="breakpoints" class="lg:hidden w-full">
       <Slide v-for="item in sitreps" :key="item">
         <div class="pr-2 text-sm">
-          <BaseCard
-            class="w-[220px] rounded-md shadow-md px-4 py-2"
-            :locked="item.locked"
-            hoverable
-          >
+          <BaseCard class="w-[220px] rounded-md shadow-md px-4 py-2" :locked="item.locked" hoverable>
             <div class="flex flex-col text-left">
               <div class="flex items-center pb-1">
                 <template v-if="item.locked">
-                  <LockClosedIcon
-                    class="mr-2 h-4 w-4"
-                    aria-hidden="true"
-                  ></LockClosedIcon>
+                  <LockClosedIcon class="mr-2 h-4 w-4" aria-hidden="true"></LockClosedIcon>
                 </template>
                 <span class="line-clamp-1 font-medium">{{ item.title }}</span>
               </div>
@@ -103,16 +72,14 @@
         </div>
       </Slide>
       <template #addons>
-        <Navigation
-          class="
+        <Navigation class="
             invisible
             xl:visible
             bg-mission-blue
             text-mission-gray
             dark:bg-slate-300 dark:text-dark-navy
             energy:bg-zinc-800 energy:text-zinc-300
-          "
-        />
+          " />
       </template>
     </Carousel>
   </div>
@@ -125,7 +92,7 @@ import { Carousel, Navigation, Slide } from "vue3-carousel";
 const sitreps = [
   {
     title: "(U) Latest Sample SITREP Publication Heading",
-    type: "SITREP",
+    type: "Daily Brief",
     date: "yesterday",
     locked: false,
   },
@@ -137,7 +104,7 @@ const sitreps = [
   },
   {
     title: "(U) Another Sample SITREP Publication Heading #2",
-    type: "SITREP",
+    type: "Daily Brief",
     date: "1 week ago",
     locked: false,
   },

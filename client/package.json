@@ -56,13 +56,27 @@
       "vue/setup-compiler-macros": true
     },
     "extends": [
+      "plugin:vue/base",
       "plugin:vue/vue3-essential",
+      "plugin:vue/vue3-recommended",
+      "plugin:vue/vue3-strongly-recommended",
       "eslint:recommended"
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "vue/max-attributes-per-line": ["error", {
+        "singleline": {
+          "max": 4
+        },      
+        "multiline": {
+          "max": 4
+        }
+      }],
+      "vue/v-on-event-hyphenation": "off",
+      "vue/attribute-hyphenation": "off"
+    }
   },
   "browserslist": [
     "> 1%",
