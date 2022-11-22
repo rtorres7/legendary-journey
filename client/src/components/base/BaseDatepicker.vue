@@ -73,7 +73,7 @@ export default {
   --dp-hover-icon-color: var(--color-slate-900);
   --dp-primary-color: rgb(3 85 166); // mission-light-blue
   --dp-primary-text-color: #f8f5f5;
-  --dp-secondary-color: var(--color-slate-900);
+  --dp-secondary-color: var(--color-slate-500);
   --dp-border-color: var(--color-gray-200);
   --dp-menu-border-color: var(--color-gray-200);
   --dp-border-color-hover: #aaaeb7;
@@ -95,7 +95,7 @@ export default {
   --dp-hover-icon-color: var(--color-slate-300);
   --dp-primary-color: var(--color-teal-700);
   --dp-primary-text-color: var(--color-slate-100);
-  --dp-secondary-color: var(--color-slate-300);
+  --dp-secondary-color: var(--color-slate-400);
   --dp-border-color: var(--color-slate-800);
   --dp-menu-border-color: var(--color-slate-800);
   --dp-border-color-hover: var(--color-slate-300);
@@ -117,7 +117,7 @@ export default {
   --dp-hover-icon-color: var(--color-zinc-300);
   --dp-primary-color: rgb(198 169 57); //darker shade of energy-yellow
   --dp-primary-text-color: var(--color-zinc-900);
-  --dp-secondary-color: var(--color-zinc-300);
+  --dp-secondary-color: var(--color-zinc-400);
   --dp-border-color: var(--color-zinc-800);
   --dp-menu-border-color: var(--color-zinc-800);
   --dp-border-color-hover: var(--color-zinc-300);

@@ -58,8 +58,7 @@
                 tabindex="0"
                 @click="close"
               >
-                <span class="sr-only">Close main menu</span
-                ><XIcon class="h-5 w-5" aria-hidden="true" />
+                <span class="sr-only">Close main menu</span><XIcon class="h-5 w-5" aria-hidden="true" />
               </button>
               <ul class="space-y-6">
                 <li>
@@ -71,8 +70,7 @@
                       energy:text-white
                     "
                     href="/"
-                    >Home</a
-                  >
+                  >Home</a>
                 </li>
                 <!-- <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
@@ -95,13 +93,17 @@
                 <li>
                   <MobileSideMenuDisclosure :title="'Regions'">
                     <div class="ml-4 mt-4 space-y-4">
-                      <div
-                        v-for="region in metadata.regions.items"
-                        :key="region"
-                      >
-                        <Disclosure v-slot="{ open }">
-                          <DisclosureButton
-                            class="
+                      <template v-if="loadingMetadata">
+                        Loading...
+                      </template>
+                      <template v-else>
+                        <div
+                          v-for="region in criteria.regions"
+                          :key="region"
+                        >
+                          <Disclosure v-slot="{ open }">
+                            <DisclosureButton
+                              class="
                               hover:text-black
                               dark:hover:text-white
                               energy:text-white
@@ -109,100 +111,97 @@
                               space-x-2
                               items-center
                             "
-                          >
-                            <span>{{ region.name }}</span>
-                            <ChevronDownIcon
-                              class="h-3 w-3"
-                              :class="open ? 'transform rotate-180' : ''"
-                            />
-                          </DisclosureButton>
-                          <transition
-                            enter-active-class="transition ease-out duration-100"
-                            enter-from-class="transform opacity-0 scale-95"
-                            enter-to-class="transform opacity-100 scale-100"
-                            leave-active-class="transition ease-in duration-75"
-                            leave-from-class="transform opacity-100 scale-100"
-                            leave-to-class="transform opacity-0 scale-95"
-                          >
-                            <DisclosurePanel>
-                              <ul class="list-disc list-inside ml-4 my-2">
-                                <a
-                                  href=""
-                                  @click.prevent="navigateToRegion(region)"
-                                  class="
+                            >
+                              <span>{{ region.name }}</span>
+                              <ChevronDownIcon
+                                class="h-4 w-4"
+                                :class="open ? 'transform rotate-180' : ''"
+                              />
+                            </DisclosureButton>
+                            <transition
+                              enter-active-class="transition ease-out duration-100"
+                              enter-from-class="transform opacity-0 scale-95"
+                              enter-to-class="transform opacity-100 scale-100"
+                              leave-active-class="transition ease-in duration-75"
+                              leave-from-class="transform opacity-100 scale-100"
+                              leave-to-class="transform opacity-0 scale-95"
+                            >
+                              <DisclosurePanel>
+                                <ul class="list-disc list-inside ml-4 my-2">
+                                  <a
+                                    href=""
+                                    class="
                                     lg:text-lg
                                     hover:underline
                                     cursor-pointer
                                   "
-                                >
-                                  {{ region.name }}
-                                </a>
-                                <template
-                                  v-for="subregion in region.subregions"
-                                  :key="subregion"
-                                >
+                                    @click.prevent="navigateToRegion(region)"
+                                  >
+                                    {{ region.name }}
+                                  </a>
                                   <template
-                                    v-for="subregionItem in metadata.subregions
-                                      .items"
+                                    v-for="subregionItem in formattedSubregions(region.subregions)"
                                     :key="subregionItem"
                                   >
-                                    <li v-if="subregionItem.key === subregion">
+                                    <li>
                                       <a
                                         href=""
-                                        @click.prevent="
-                                          navigateToSubregion(subregionItem)
-                                        "
                                         class="
                                           hover:underline
                                           cursor-pointer
                                           font-light
+                                        "
+                                        @click.prevent="
+                                          navigateToSubregion(subregionItem)
                                         "
                                       >
                                         {{ subregionItem.name }}
                                       </a>
                                     </li>
                                   </template>
-                                </template>
-                              </ul>
-                            </DisclosurePanel>
-                          </transition>
-                        </Disclosure>
-                      </div>
-                      <p
-                        class="
+                                </ul>
+                              </DisclosurePanel>
+                            </transition>
+                          </Disclosure>
+                        </div>
+                        <p
+                          class="
                           text-sm
                           pt-4
                           border-t border-slate-900/10
                           dark:border-slate-50/[0.06]
                           energy:border-zinc-700/25
                         "
-                      >
-                        View a
-                        <button
-                          @click="openPDF"
-                          class="underline"
-                          aria-label="View a PDF document with a list of countries that fall under each region and subregion"
                         >
-                          list of countries
-                        </button>
-                        that fall under each region and subregion
-                      </p>
+                          View a
+                          <button
+                            class="underline"
+                            aria-label="View a PDF document with a list of countries that fall under each region and subregion"
+                            @click="openPDF"
+                          >
+                            list of countries
+                          </button>
+                          that fall under each region and subregion
+                        </p>
+                      </template>
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
                 <li>
                   <MobileSideMenuDisclosure :title="'Countries'">
                     <div class="ml-4 mt-4">
-                      <label for="country" aria-hidden="true"
-                        >Select a country</label
-                      >
-                      <Listbox
-                        v-model="selectedCountry"
-                        aria-label="select a country from the dropdown"
-                      >
-                        <div class="relative mt-1">
-                          <ListboxButton
-                            class="
+                      <template v-if="loadingMetadata">
+                        Loading...
+                      </template>
+                      <template v-else>
+                        <label for="country" aria-hidden="true">Select a country</label>
+                        <Listbox
+                          v-model="selectedCountry"
+                          aria-label="select a country from the dropdown"
+                        >
+                          <div class="relative mt-1">
+                            <ListboxButton
+                              class="
                               flex
                               relative
                               w-full
@@ -220,12 +219,12 @@
                               focus-visible:ring-opacity-75
                               focus-visible:ring-offset-2
                             "
-                          >
-                            <span class="block truncate">{{
-                              selectedCountry.name
-                            }}</span>
-                            <span
-                              class="
+                            >
+                              <span class="block truncate">{{
+                                selectedCountry ? selectedCountry.name : criteria.countries[0].name
+                              }}</span>
+                              <span
+                                class="
                                 absolute
                                 inset-y-0
                                 right-0
@@ -233,23 +232,23 @@
                                 items-center
                                 pr-2
                               "
+                              >
+                                <SelectorIcon
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </ListboxButton>
+                            <transition
+                              enter-active-class="transition ease-out duration-100"
+                              enter-from-class="transform opacity-0 scale-95"
+                              enter-to-class="transform opacity-100 scale-100"
+                              leave-active-class="transition ease-in duration-75"
+                              leave-from-class="transform opacity-100 scale-100"
+                              leave-to-class="transform opacity-0 scale-95"
                             >
-                              <SelectorIcon
-                                class="h-5 w-5"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </ListboxButton>
-                          <transition
-                            enter-active-class="transition ease-out duration-100"
-                            enter-from-class="transform opacity-0 scale-95"
-                            enter-to-class="transform opacity-100 scale-100"
-                            leave-active-class="transition ease-in duration-75"
-                            leave-from-class="transform opacity-100 scale-100"
-                            leave-to-class="transform opacity-0 scale-95"
-                          >
-                            <ListboxOptions
-                              class="
+                              <ListboxOptions
+                                class="
                                 absolute
                                 w-full
                                 py-1
@@ -265,36 +264,37 @@
                                 focus:outline-none
                                 z-10
                               "
-                            >
-                              <ListboxOption
-                                v-slot="{ active }"
-                                v-for="country in metadata.countries.items"
-                                :key="country"
-                                :value="country"
-                                as="template"
-                                class="capitalize px-2 py-1 cursor-pointer"
-                                @click="navigateToCountry(country)"
                               >
-                                <li
-                                  :class="[
-                                    active
-                                      ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-zinc-700'
-                                      : 'bg-none',
-                                  ]"
+                                <ListboxOption
+                                  v-for="country in criteria.countries"
+                                  v-slot="{ active }"
+                                  :key="country"
+                                  :value="country"
+                                  as="template"
+                                  class="capitalize px-2 py-1 cursor-pointer"
+                                  @click="navigateToCountry(country)"
                                 >
-                                  {{ country.name }}
-                                </li>
-                              </ListboxOption>
-                            </ListboxOptions>
-                          </transition>
-                        </div>
-                      </Listbox>
+                                  <li
+                                    :class="[
+                                      active
+                                        ? 'bg-slate-200/80 dark:bg-slate-700 energy:bg-zinc-700'
+                                        : 'bg-none',
+                                    ]"
+                                  >
+                                    {{ country.name }}
+                                  </li>
+                                </ListboxOption>
+                              </ListboxOptions>
+                            </transition>
+                          </div>
+                        </Listbox>
+                      </template>
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
                 <li>
                   <BaseTooltip placement="top">
-                    <a
+                    <p
                       class="
                         font-medium
                         hover:text-black
@@ -302,8 +302,23 @@
                         energy:text-white
                       "
                       href="/"
-                      >Community</a
                     >
+                      Foreign
+                    </p>
+                  </BaseTooltip>
+                </li>
+                <li>
+                  <BaseTooltip placement="top">
+                    <p
+                      class="
+                        font-medium
+                        hover:text-black
+                        dark:hover:text-white
+                        energy:text-white
+                      "
+                    >
+                      Community
+                    </p>
                   </BaseTooltip>
                 </li>
                 <li>
@@ -333,12 +348,12 @@
                               r="10"
                               stroke="currentColor"
                               stroke-width="4"
-                            ></circle>
+                            />
                             <path
                               class="opacity-75"
                               fill="currentColor"
                               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
+                            />
                           </svg>
                         </div>
                       </template>
@@ -346,7 +361,7 @@
                         <template
                           v-if="
                             specialEditionLinks.posted &&
-                            specialEditionLinks.posted.length > 0
+                              specialEditionLinks.posted.length > 0
                           "
                         >
                           <div
@@ -370,20 +385,6 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
-                <li>
-                  <BaseTooltip placement="top">
-                    <a
-                      class="
-                        font-medium
-                        hover:text-black
-                        dark:hover:text-white
-                        energy:text-white
-                      "
-                      href="/"
-                      >Foreign</a
-                    >
-                  </BaseTooltip>
-                </li>
               </ul>
             </DialogPanel>
           </TransitionChild>
@@ -394,11 +395,10 @@
 </template>
 
 <script>
+import { getValueForCode } from "@/helpers";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { metadata } from "@/config";
-import { regions, countries } from "@/data";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
 import SpecialEditionLink from "@/components/SpecialEditionLink";
 import {
@@ -441,6 +441,8 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
+    const loadingMetadata = computed(() => store.state.metadata.loading);
+    const criteria = computed(() => store.state.metadata.criteria);
 
     const loadingSpecialEditionLinks = computed(
       () => store.state.specialEditions.loading
@@ -449,37 +451,22 @@ export default {
       () => store.state.specialEditions.links
     );
 
-    const selectedCountry = ref(countries[0]);
+    const selectedCountry = ref(null);
     const close = () => {
       emit("close");
     };
 
     const navigateToIssue = (issue) => {
-      router.push({
-        name: "issues",
-        params: {
-          name: issue.name,
-        },
-        query: {
-          "issues[]": issue.key,
-          "reporting_types[]": "analysis.all_source",
-          view: "grid",
-          landing: true,
-        },
-      });
-    };
-
-    const navigateToCountry = (country) => {
       let query = {
         "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query[metadata.countries.type] = country.key;
+      query['topics[]'] = issue.key;
       router.push({
-        name: "countries",
+        name: "issues",
         params: {
-          name: country.name,
+          name: issue.name,
         },
         query,
       });
@@ -491,7 +478,7 @@ export default {
         view: "grid",
         landing: true,
       };
-      query[metadata.regions.type] = region.key;
+      query['regions[]'] = region.code;
       router.push({
         name: "regions",
         params: {
@@ -501,13 +488,22 @@ export default {
       });
     };
 
+    const formattedSubregions = (codes) => {
+      const subregions = []
+      codes.forEach(code => {
+        const subregion = getValueForCode(criteria.value.subregions, code)
+        subregions.push(subregion)
+      })
+      return subregions
+    }
+
     const navigateToSubregion = (subregion) => {
       let query = {
         "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query[metadata.subregions.type] = subregion.key;
+      query['subregions[]'] = subregion.code;
       router.push({
         name: "subregions",
         params: {
@@ -517,23 +513,39 @@ export default {
       });
     };
 
+    const navigateToCountry = (country) => {
+      let query = {
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+        landing: true,
+      };
+      query['countries[]'] = country.code;
+      router.push({
+        name: "countries",
+        params: {
+          name: country.name,
+        },
+        query,
+      });
+    };
+
     return {
-      metadata,
       close,
-      regions,
-      countries,
+      loadingMetadata,
+      criteria,
       loadingSpecialEditionLinks,
       specialEditionLinks,
       selectedCountry,
       navigateToIssue,
-      navigateToCountry,
       navigateToRegion,
+      formattedSubregions,
       navigateToSubregion,
+      navigateToCountry
     };
   },
   methods: {
     openPDF() {
-      window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
+      //window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
     },
   },
 };
