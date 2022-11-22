@@ -40,22 +40,15 @@
 - 
 ## Project setup
 ```
-npm run install-all-deps
-```
 
-### Running the application (server + clent)
-```
-npm run dev
-```
-
-### Running the frontend (client)
+### Running the frontend (must be in client folder)
 ```
 cd client
 npm install
 npm run serve:low
 ```
 
-### Compiles and minifies for production
+### Compiles and minifies for production (must be in client folder)
 ```
 npm run build:low
 ```
