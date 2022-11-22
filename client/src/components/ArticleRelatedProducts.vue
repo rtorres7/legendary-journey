@@ -13,10 +13,24 @@
     <p class="font-semibold mt-4 md:mt-0">
       Related Products
     </p>
+    <div v-if="relatedProducts.length === 0">
+      There are no related products
+    </div>
+    <ul>
+      <li v-for="relatedProduct in relatedProducts" :key="relatedProduct.document.id">
+        <router-link
+          :to="relatedProductLink + '/' + relatedProduct.id + '.json'" target="_blank"
+        >
+          {{ relatedProduct.document.title }}
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   props: {
@@ -25,9 +39,15 @@ export default {
       required: true
     },
   },
-  setup(props) {
-    console.log("props.relatedProducts: ", props);
-
+  setup() {
+    const route = useRoute();
+    const docNum = computed(() => `${route.params.doc_num}`);
+    const relatedProductLink = computed(() => `/documents/${docNum.value}/related_documents/`);
+    
+    return {
+      docNum,
+      relatedProductLink,
+    }
   },
 };
 </script>
