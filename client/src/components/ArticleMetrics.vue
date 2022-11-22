@@ -93,7 +93,6 @@ export default {
     
     const chartdiv = ref(null);
 
-    // TODO create one handle function
     const handleStartDate = (modelData) => {
       startDate = formatDate(modelData);
       store.dispatch("metrics/updateStartDate", startDate);

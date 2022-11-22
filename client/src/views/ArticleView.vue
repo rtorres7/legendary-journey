@@ -159,7 +159,8 @@
           <template v-if="!loadingDanielArticlesDetails">
             <ArticleAttachments :articleDetails="articleDetails" />
           </template>
-          <template v-if="!loadingArticleMetrics">
+          <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
+          <template v-if="!loadingArticleMetrics && articleMetrics.uniqueReaders !== 0">
             <ArticleMetrics 
               :articleMetrics="articleMetrics"
               :articleDetails="articleDetails"
@@ -223,7 +224,10 @@ export default {
 
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("danielDetails/getDanielArticlesDetails"); 
+      store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("metrics/initDates",
+        {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
+        .then(store.dispatch("metrics/getMetrics"));
     });
 
     const calculateLayout = (imageWidth) => {
@@ -275,18 +279,12 @@ export default {
       () => {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails");
-          store.dispatch("metrics/getMetrics");
+          store.dispatch("metrics/initDates",
+            {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
+            .then(store.dispatch("metrics/getMetrics"));          
         }
       }
     );
-
-    watch([loadingDanielArticlesDetails], () => {
-      if(!loadingDanielArticlesDetails.value) {
-        store.dispatch("metrics/initDates",
-          {readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD")})
-          .then(store.dispatch("metrics/getMetrics"));
-      }
-    })
 
     return {
       dayjs,
