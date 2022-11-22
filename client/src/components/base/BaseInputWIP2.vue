@@ -1,13 +1,13 @@
 <template>
-  <label :for="uuid" v-if="label" class="inline-flex text-sm font-medium">{{
-      label
-  }}
+  <label v-if="label" :for="uuid" class="inline-flex text-sm font-medium">{{ label }}
     <template v-if="required">
       <span class="sr-only">Required</span>
       <span class="pl-1 text-red-500">*</span>
     </template>
   </label>
-  <input v-bind="$attrs" :name="name" :type="type" @change="handleChange" @blur="handleChange" class="
+  <input
+    v-bind="$attrs" :id="uuid" :name="name" :type="type"
+    class="
       min-h-[2rem]
       flex
       w-full
@@ -27,9 +27,12 @@
       focus-visible:ring-opacity-75
       focus-visible:ring-offset-2
       placeholder:italic
-    " :id="uuid" />
+    " @change="handleChange" @blur="handleChange"
+  >
   <template v-if="errorMessage">
-    <p class="pt-1 text-sm text-red-500">{{ errorMessage }}</p>
+    <p class="pt-1 text-sm text-red-500">
+      {{ errorMessage }}
+    </p>
   </template>
 </template>
 

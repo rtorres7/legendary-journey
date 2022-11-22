@@ -1,21 +1,29 @@
 
 <template>
-  <BaseDialog :isOpen="isOpen" @close="closeDialog" class="max-w-[950px]"
-    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`">
+  <BaseDialog
+    :is-open="isOpen" class="max-w-[950px]" :title="`${editMode ? 'Edit' : 'Create'} Special Edition`"
+    @close="closeDialog"
+  >
     <form id="se_form" @submit.prevent="sendForm">
       <div class="block lg:flex my-4 lg:space-x-5">
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseInput v-model="editionEvent.name" label="Name" autocomplete="off" type="text" required />
+            <BaseInput
+              v-model="editionEvent.name" label="Name" autocomplete="off" type="text"
+              required
+            />
           </div>
           <div>
-            <BaseInput v-model="editionEvent.search_params" label="Search params" autocomplete="off"
-              placeholder="Run a search, copy the URL, and paste it here." type="text" required />
+            <BaseInput
+              v-model="editionEvent.search_params" label="Search params" autocomplete="off"
+              placeholder="Run a search, copy the URL, and paste it here." type="text" required
+            />
           </div>
           <div>
-            <BaseTextarea maxlength="4000" rows="5" v-model="editionEvent.key_readings" label="Selected Readings"
-              placeholder="One document number per line, ex: WIRe110416-02." v-model.trim="editionEvent.key_readings">
-            </BaseTextarea>
+            <BaseTextarea
+              v-model="editionEvent.key_readings" v-model.trim="editionEvent.key_readings" maxlength="4000" rows="5"
+              label="Selected Readings" placeholder="One document number per line, ex: WIRe110416-02."
+            />
           </div>
           <div>
             <BaseListbox v-model="editionEvent.state" :label="'State'" :items="stateOptions" required />
@@ -26,21 +34,29 @@
             <BaseListbox v-model="editionEvent.position" :label="'Order'" :items="orderOptions" />
           </div>
           <div class="flex flex-col">
-            <BaseClassify :label="'Classification'" showSelection :selection="editionEvent.name_classification"
-              @classificationSelected="updateClassification" required />
+            <BaseClassify
+              :label="'Classification'" show-selection :selection="editionEvent.name_classification"
+              required @classificationSelected="updateClassification"
+            />
           </div>
           <div>
-            <BaseImageFileChooser :label="'File Attachment'" :binary="editionEvent.icon" :file="imageFile"
-              @onImageAdded="updateImageFile" @onImageRemoved="removeImageFile" required />
+            <BaseImageFileChooser
+              :label="'File Attachment'" :binary="editionEvent.icon" :file="imageFile"
+              required @onImageAdded="updateImageFile" @onImageRemoved="removeImageFile"
+            />
           </div>
         </div>
       </div>
     </form>
     <template #actions>
-      <BaseButton @click.prevent="closeDialog">Cancel</BaseButton>
-      <BaseButton :disabled="isDisabled()" type="submit" form="se_form">{{
+      <BaseButton @click.prevent="closeDialog">
+        Cancel
+      </BaseButton>
+      <BaseButton :disabled="isDisabled()" type="submit" form="se_form">
+        {{
           editMode ? "Save" : "Create"
-      }}</BaseButton>
+        }}
+      </BaseButton>
     </template>
   </BaseDialog>
 </template>

@@ -1,5 +1,6 @@
 <template>
-  <div class="
+  <div
+    class="
       flex
       items-center
       pointer-events-auto
@@ -17,18 +18,22 @@
       energy:bg-zinc-900
       leading-8
       text-sm text-primary
-    ">
+    "
+  >
     <button type="button" tabindex="0" @click="onClickSearch">
       <span class="sr-only">Search</span>
-      <SearchIcon class="
+      <SearchIcon
+        class="
           w-5
           h-5
           text-slate-400
           dark:text-slate-500/90
           energy:text-zinc-500/90
-        " aria-hidden="true" />
+        " aria-hidden="true"
+      />
     </button>
-    <vue3-simple-typeahead class="
+    <vue3-simple-typeahead
+      id="typeahead_id" class="
         ml-2
         focus-visible:outline-none
         bg-transparent
@@ -36,15 +41,18 @@
         text-slate-200
         dark:text-slate-300
         energy:text-zinc-300
-      " id="typeahead_id" placeholder="Search for keywords, documents, or pages" :items="searches" :minInputLength="1"
-      :itemProjection="
+      " placeholder="Search for keywords, documents, or pages" :items="searches"
+      :min-input-length="1"
+      :item-projection="
         (item) => {
           return item.text;
         }
-      " @selectItem="selectItemEventHandler" @onInput="onInputEventHandler" @keydown.enter.prevent="onEnter"
-      :selectOnTab="false" :value="modelValue">
+      " :select-on-tab="false" :value="modelValue" @selectItem="selectItemEventHandler"
+      @onInput="onInputEventHandler" @keydown.enter.prevent="onEnter"
+    >
       <template #list-item-text="slot">
-        <div class="
+        <div
+          class="
             bg-slate-100
             dark:bg-slate-800
             energy:bg-zinc-600
@@ -62,17 +70,20 @@
             slot.item.type === 'user'
               ? 'text-purple-800 dark:text-purple-300 energy:text-purple-300'
               : 'text-slate-800 dark:text-slate-300 energy:text-zinc-300'
-          ">
-          <span v-html="slot.boldMatchText(slot.itemProjection(slot.item))"></span>
+        "
+        >
+          <span v-html="slot.boldMatchText(slot.itemProjection(slot.item))" />
           <template v-if="slot.item.type === 'user'">
             <button @click="deleteSearch(slot.item)">
-              <XIcon class="
+              <XIcon
+                class="
                   h-5
                   w-5
                   text-slate-800
                   dark:text-slate-300
                   energy:text-zinc-300
-                " aria-hidden="true" />
+                " aria-hidden="true"
+              />
             </button>
           </template>
         </div>

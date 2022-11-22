@@ -17,7 +17,8 @@ export default {
         let displayedDocument = danielArticlesDetails.find(({ data }) => data.doc_num === route.params.doc_num);
         commit("saveDocument", displayedDocument.data);
       } else {
-        axios.get("/preload/documents/" + `${route.params.doc_num}.json`).then(response => {
+        const url = route.name === 'article-preview' ? `/documents/${route.params.doc_num}/preview.json` : `/preload/documents/${route.params.doc_num}.json`
+        axios.get(url).then(response => {
           console.log('/preload/documents/ (response):', response);
           commit("saveDocument", response.data);
         })
