@@ -155,7 +155,7 @@
             />
           </template>
           <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-          <template v-if="!isDraft || !loadingArticleMetrics && articleMetrics.uniqueReaders !== 0">
+          <template v-if="!loadingArticleMetrics && !isDraft || !loadingArticleMetrics && articleMetrics.uniqueReaders !== 0">
             <ArticleMetrics 
               :articleMetrics="articleMetrics"
               :articleDetails="articleDetails"
@@ -295,14 +295,6 @@ export default {
         }
       }
     );
-
-    watch([loadingDanielArticlesDetails], () => {
-      if (!loadingDanielArticlesDetails.value) {
-        store.dispatch("metrics/initDates",
-          { readershipStartDate: articleDetails.value.display_date, readershipEndDate: dayjs().format("YYYY-MM-DD") })
-          .then(store.dispatch("metrics/getMetrics"));
-      }
-    })
 
     return {
       dayjs,
