@@ -276,7 +276,7 @@ const articles = {
         //nothing
       }
     },
-  ]
+  ],
 }
 
 export const danielArticles = articles.published

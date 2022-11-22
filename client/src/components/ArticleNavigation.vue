@@ -11,7 +11,7 @@
     "
   >
     <div>
-      <BaseButton @click="returnHome" @keyup.enter="returnHome" tabIndex="0">
+      <BaseButton tabIndex="0" @click="returnHome" @keyup.enter="returnHome">
         Home
       </BaseButton>
     </div>
@@ -22,35 +22,39 @@
       "
     >
       <div>
-        <template v-if="currentArticleIndex + 1 === 1">
-          <BaseButton disabled>Previous</BaseButton>
+        <template v-if="!navigation.previousArticle">
+          <BaseButton disabled>
+            Previous
+          </BaseButton>
         </template>
         <template v-else>
           <BaseButton
-            @click="goToPreviousArticle"
-            @keyup.enter="goToPreviousArticle"
             tabIndex="0"
+            @click="goToArticle(navigation.previousArticle)"
+            @keyup.enter="goToArticle(navigation.previousArticle)"
           >
             Previous
           </BaseButton>
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Article {{ currentArticleIndex + 1 }} of
-        {{ totalArticles.length }}
+        Featured Article {{ navigation.currentArticle.position }} of
+        {{ navigation.totalArticles }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
-        {{ currentArticleIndex + 1 }} of {{ totalArticles.length }}
+        {{ navigation.currentArticle.position }} of {{ navigation.totalArticles }}
       </div>
       <div>
-        <template v-if="currentArticleIndex + 1 === totalArticles.length">
-          <BaseButton disabled> Next </BaseButton>
+        <template v-if="!navigation.nextArticle">
+          <BaseButton disabled>
+            Next
+          </BaseButton>
         </template>
         <template v-else>
           <BaseButton
-            @click="goToNextArticle"
-            @keyup.enter="goToNextArticle"
             tabIndex="0"
+            @click="goToArticle(navigation.nextArticle)"
+            @keyup.enter="goToArticle(navigation.nextArticle)"
           >
             Next
           </BaseButton>
@@ -64,45 +68,31 @@
 import { useRouter } from "vue-router";
 
 export default {
-  props: [
-    "currentArticleIndex",
-    "previousArticle",
-    "nextArticle",
-    "totalArticles",
-  ],
-  setup(props) {
+  props: {
+    navigation: {
+      type: Object,
+      required: true
+    }
+  },
+  setup() {
     const router = useRouter();
 
     const returnHome = () => {
       router.push({ name: "home" });
     };
 
-    const goToPreviousArticle = () => {
-      let doc_num = props.previousArticle.attributes.doc_num;
-      console.log("doc_num: ", doc_num);
+    const goToArticle = ({ doc_num }) => {
       router.push({
         name: "article",
         params: {
-          doc_num,
-        },
-      });
-    };
-
-    const goToNextArticle = () => {
-      let doc_num = props.nextArticle.attributes.doc_num;
-      console.log("doc_num: ", doc_num);
-      router.push({
-        name: "article",
-        params: {
-          doc_num,
+          doc_num
         },
       });
     };
 
     return {
       returnHome,
-      goToPreviousArticle,
-      goToNextArticle,
+      goToArticle
     };
   },
 };
