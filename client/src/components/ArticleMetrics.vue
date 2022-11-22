@@ -86,6 +86,7 @@ export default {
     },
   },  
   setup(props) {
+    console.log('props: ', props)
     const store = useStore();
     const route = useRoute();
     let startDate = ref();
@@ -115,9 +116,7 @@ export default {
     }    
 
     onMounted(() => {
-
       setDatepickers();
-
       let root = am5.Root.new(chartdiv.value);
       root.setThemes([am5themes_Animated.new(root)]);
       let chart = root.container.children.push(
@@ -149,7 +148,10 @@ export default {
 
       watch(
         () => route.params,
-        () => {series.data.setAll(props.articleMetrics.readership), legend.data.setAll(series.dataItems)}
+        () => {
+          console.log('is this watcher happening: ', props.articleMetrics)
+          series.data.setAll(props.articleMetrics.readership), legend.data.setAll(series.dataItems)
+        }
       );
     });
 

@@ -30,6 +30,7 @@ export default {
       if (process.env.NODE_ENV === 'low') {
         let metrics = getMetricsForArticle(articleMetrics);
         // console.log("basic_metrics.json?readership_start_date="+state.readershipStartDate+"&readership_end_date="+state.readershipEndDate);
+        console.log('[store] getMetrics:', metrics)
         setTimeout(() => commit("importData", metrics), 750);
       } else {
           let route = router.currentRoute.value;
@@ -42,6 +43,7 @@ export default {
             }
           )
           .then(response => {
+            console.log('[store] getMetrics:', response.data.metrics)
             commit("importData", response.data.metrics);
           })
         }

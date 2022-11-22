@@ -135,7 +135,7 @@
           />
         </template>
         <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="!loadingMetrics && !isDraft || !loadingMetrics && metrics.uniqueReaders !== 0">
+        <template v-if="!loadingMetrics && !isDraft || metrics.uniqueReaders !== 0">
           <ArticleMetrics 
             :articleMetrics="metrics"
             :article="article"
@@ -183,10 +183,6 @@ export default {
     const metrics = computed(() => store.state.metrics);
     const loadingMetrics = computed(() => store.state.metrics.loading);
     const navigation = ref(null)
-    
-    //console.log("relatedProducts: ", relatedProducts);
-    //const isFeatured = ref(false);
-
     const isDraft = ref(route.name === 'article-preview' ? true : false)
 
     onMounted(() => {
