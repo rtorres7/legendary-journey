@@ -134,62 +134,58 @@
           />
         </template>
         <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="!loadingMetrics">
-          <div
-            class="flex flex-col space-y-4"
-          >
-            <p class="font-semibold">
-              Metrics
-            </p>
-            <template v-if="metrics.uniqueReaders !== 0">
-              <p>
-                Unique Readers ({{ metrics.uniqueReaders }})
+        <template v-if="!isDraft">
+          <template v-if="!loadingMetrics">
+            <div
+              class="flex flex-col space-y-4"
+            >
+              <p class="font-semibold text-lg">
+                Metrics
               </p>
-              <div class="flex items-center">
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium mb-1">Start Date</label>
-                  <BaseDatepicker 
-                    v-model="metricStartDate"
-                    :minDate="article.display_date"
-                    :maxDate="new Date()"
-                    :enableTimePicker="false"
-                    format="MMM dd, yyyy"
-                    week-start="0"
-                    auto-apply
-                  />        
-                </div>
-                <p class="px-3 pt-4">
-                  to
+              <template v-if="metrics.uniqueReaders !== 0">
+                <p>
+                  Unique Readers ({{ metrics.uniqueReaders }})
                 </p>
-                <div class="flex flex-col">
-                  <label class="text-sm font-medium mb-1">End Date</label>
-                  <BaseDatepicker
-                    v-model="metricEndDate"
-                    :minDate="new Date()"
-                    :enableTimePicker="false"
-                    format="MMM dd, yyyy"
-                    week-start="0"
-                    auto-apply
-                  />
+                <div class="flex items-center">
+                  <div class="flex flex-col">
+                    <label class="text-sm font-medium mb-1">Start Date</label>
+                    <BaseDatepicker 
+                      v-model="metricStartDate"
+                      :minDate="article.display_date"
+                      :maxDate="new Date()"
+                      :enableTimePicker="false"
+                      format="MMM dd, yyyy"
+                      week-start="0"
+                      auto-apply
+                    />        
+                  </div>
+                  <p class="px-3 pt-4">
+                    to
+                  </p>
+                  <div class="flex flex-col">
+                    <label class="text-sm font-medium mb-1">End Date</label>
+                    <BaseDatepicker
+                      v-model="metricEndDate"
+                      :minDate="new Date()"
+                      :enableTimePicker="false"
+                      format="MMM dd, yyyy"
+                      week-start="0"
+                      auto-apply
+                    />
+                  </div>
                 </div>
-              </div>
-              <ArticleMetrics 
-                :metrics="metrics.readership"
-              />
-            </template>
-          </div>
+                <ArticleMetrics 
+                  :metrics="metrics.readership"
+                />
+              </template>
+            </div>
+          </template>
+          <template v-else>
+            <div class="m-auto pt-8">
+              <BaseLoadingSpinner class="h-20 w-20" />
+            </div>
+          </template>
         </template>
-        <template v-else>
-          <div class="m-auto pt-8">
-            <BaseLoadingSpinner class="h-20 w-20" />
-          </div>
-        </template>
-        <!-- <template v-if="!loadingMetrics && !isDraft || metrics.uniqueReaders !== 0">
-          <ArticleMetrics 
-            :articleMetrics="metrics"
-            :article="article"
-          />
-        </template> -->
       </div>
     </div>
   </template>
