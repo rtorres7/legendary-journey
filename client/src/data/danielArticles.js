@@ -276,7 +276,7 @@ const articles = {
         //nothing
       }
     },
-  ]
+  ],
 }
 
 export const danielArticles = articles.published
@@ -286,7 +286,7 @@ export const articlesForWire = articles.published.map((article, index) => {
       ...article.attributes,
       title_classif: article.attributes.title_classification,
       summary_classif: article.attributes.summary_classification,
-      state: index === 0 ? 'published' : 'draft'
+      state: index === 0 ? 'posted' : 'draft'
     },
     data: { ...article.data }
   }

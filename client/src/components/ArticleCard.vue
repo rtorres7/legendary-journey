@@ -23,15 +23,14 @@
             <LockClosedIcon
               class="mr-2 h-4 w-4"
               aria-hidden="true"
-            ></LockClosedIcon>
+            />
             <span class="uppercase text-sm">Locked</span>
           </div>
         </template>
         <div>
           <span
             class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
-            >{{ `${"(" + article.title_classification + ") "}` }}</span
-          >
+          >{{ `${"(" + article.title_classification + ") "}` }}</span>
           <span class="text-black dark:text-white energy:text-white">{{
             article.title
           }}</span>

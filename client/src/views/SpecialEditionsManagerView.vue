@@ -1,16 +1,21 @@
 <template>
-  <div class="
+  <div
+    class="
       py-4
       border-b-2 border-slate-900/10
       dark:border-slate-50/[0.06]
       energy:border-zinc-700/50
-    ">
-    <p class="font-semibold text-2xl">Special Editions</p>
+    "
+  >
+    <p class="font-semibold text-2xl">
+      Special Editions
+    </p>
   </div>
   <div class="flex justify-end py-1 my-2">
     <div class="flex space-x-3">
       <template v-if="loading">
-        <div class="
+        <div
+          class="
             h-[38px]
             w-40
             animate-pulse
@@ -18,37 +23,44 @@
             dark:bg-slate-800/50
             energy:bg-zinc-800
             rounded
-          "></div>
+          "
+        />
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <BaseButton @click.prevent="openDialog">Create</BaseButton>
+          <BaseButton @click.prevent="openDialog">
+            Create
+          </BaseButton>
         </template>
       </template>
     </div>
   </div>
   <div class="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     <div>
-      <p class="
+      <p
+        class="
           font-medium
           text-lg
           pb-2
           border-b border-slate-900/10
           dark:border-slate-50/[0.06]
           energy:border-zinc-700/50
-        ">
+        "
+      >
         Posted
       </p>
       <div class="flex flex-col space-y-4 pt-4">
         <template v-if="loading">
           <template v-for="n in 3" :key="n">
-            <div class="
+            <div
+              class="
                 h-[70px]
                 animate-pulse
                 bg-white
                 dark:bg-slate-800/50
                 energy:bg-zinc-800
-              "></div>
+              "
+            />
           </template>
         </template>
         <template v-else>
@@ -60,33 +72,39 @@
             </template>
           </template>
           <template v-else>
-            <p class="italic">No Special Editions</p>
+            <p class="italic">
+              No Special Editions
+            </p>
           </template>
         </template>
       </div>
     </div>
     <template v-if="canManageSpecialEditions">
       <div>
-        <p class="
+        <p
+          class="
             font-medium
             text-lg
             pb-2
             border-b border-slate-900/10
             dark:border-slate-50/[0.06]
             energy:border-zinc-700/50
-          ">
+          "
+        >
           Draft
         </p>
         <div class="flex flex-col space-y-4 pt-4">
           <template v-if="loading">
             <template v-for="n in 3" :key="n">
-              <div class="
+              <div
+                class="
                   h-[70px]
                   animate-pulse
                   bg-white
                   dark:bg-slate-800/50
                   energy:bg-zinc-800
-                "></div>
+                "
+              />
             </template>
           </template>
           <template v-else>
@@ -98,32 +116,38 @@
               </template>
             </template>
             <template v-else>
-              <p class="italic">No Special Editions</p>
+              <p class="italic">
+                No Special Editions
+              </p>
             </template>
           </template>
         </div>
       </div>
       <div>
-        <p class="
+        <p
+          class="
             font-medium
             text-lg
             pb-2
             border-b border-slate-900/10
             dark:border-slate-50/[0.06]
             energy:border-zinc-700/50
-          ">
+          "
+        >
           Archived
         </p>
         <div class="flex flex-col space-y-4 pt-4">
           <template v-if="loading">
             <template v-for="n in 3" :key="n">
-              <div class="
+              <div
+                class="
                   h-[70px]
                   animate-pulse
                   bg-white
                   dark:bg-slate-800/50
                   energy:bg-zinc-800
-                "></div>
+                "
+              />
             </template>
           </template>
           <template v-else>
@@ -135,7 +159,9 @@
               </template>
             </template>
             <template v-else>
-              <p class="italic">No Special Editions</p>
+              <p class="italic">
+                No Special Editions
+              </p>
             </template>
           </template>
         </div>

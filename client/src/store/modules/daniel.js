@@ -11,11 +11,11 @@ export default {
     getDanielArticles({ state, commit }) {
       state.loading = true;
       if (process.env.NODE_ENV === 'low') {
-        console.log('danielArticles: ', danielArticles)
+        console.log('[store] getDanielArticles: ', danielArticles)
         setTimeout(() => commit("saveArticles", danielArticles), 750)
       } else {
         axios.get("/home/daniel").then(response => {
-          console.log('/home/daniel (response):', response);
+          console.log('[store] getDanielArticles: ', response);
           const data = response.data.woah;
           let articles = []
           if (data) {
