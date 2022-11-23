@@ -1,15 +1,17 @@
 <template>
   <div
+    ref="topOfApp"
     class="
       min-h-full
       bg-mission-blue
       dark:bg-dark-space-blue
       energy:bg-zinc-800
     "
-    ref="topOfApp"
     tabindex="-1"
   >
-    <button @click="skipToMain" class="skipLink">Skip to main content</button>
+    <button class="skipLink" @click="skipToMain">
+      Skip to main content
+    </button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
@@ -40,6 +42,7 @@
         </p>
       </div> -->
       <div
+        ref="mainContent"
         class="
           max-w-8xl
           min-h-[80vh]
@@ -51,10 +54,18 @@
           sm:px-6
           lg:px-8
         "
-        ref="mainContent"
         tabindex="-1"
       >
-        <router-view></router-view>
+        <template v-if="loadingUser">
+          <div class="max-w-fit m-auto mt-[30vh]">
+            <BaseLoadingSpinner class="w-32 h-32" />
+          </div>
+        </template>
+        <template v-else>
+          <AuthorizatonWrapper>
+            <router-view />
+          </AuthorizatonWrapper>
+        </template>
       </div>
     </main>
     <TheFooter v-if="!['attachment'].includes($route.name)" />
@@ -65,12 +76,14 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import AuthorizatonWrapper from "@/components/AuthorizationWrapper"
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
 
 export default {
   components: {
+    AuthorizatonWrapper,
     TheBanner,
     TheFooter,
     // ScrollToTopBtn,
@@ -80,6 +93,7 @@ export default {
     const store = useStore();
     const topOfApp = ref(null);
     const mainContent = ref(null);
+    const loadingUser = computed(() => store.state.user.loading);
 
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
@@ -114,6 +128,7 @@ export default {
       }
     });
     return {
+      loadingUser,
       isLiveDemo,
       topOfApp,
       mainContent,
