@@ -150,6 +150,7 @@
           </button>
           <!-- Admin Dropdown -->
           <Menu
+            v-show="canManageSpecialEditions || canManageWire"
             as="div"
             class="hidden lg:block ml-3 relative"
           >
@@ -208,7 +209,7 @@
                   energy:border-zinc-700/50
                 "
               >
-                <MenuItem>
+                <MenuItem v-show="canManageWire"> 
                   <a
                     class="
                       py-1
@@ -1043,7 +1044,7 @@
                       "
                     >{{ loadingUser ? "Loading..." : currentUsername }}</a>
                   </li>
-                  <li>
+                  <li v-show="canManageWire">
                     <a
                       class="
                         hover:text-black
@@ -1355,6 +1356,9 @@ export default {
       () => store.state.specialEditions.links
     );
     const isAdmin = computed(() => store.state.testConsole.admin);
+    const canManageWire = computed(
+      () => store.getters["user/canManageWire"]
+    );
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
     );
@@ -1509,6 +1513,7 @@ export default {
       loadingSpecialEditionLinks,
       specialEditionLinks,
       isAdmin,
+      canManageWire,
       canManageSpecialEditions,
       isActive,
       closeMainMenuModal,

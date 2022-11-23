@@ -25,6 +25,9 @@ export default {
       }
       return false;
     },
+    canManageWire: (state) => {
+      return state.user.authorizations.canManageWire;
+    },
     canManageSpecialEditions: (state) => {
       return state.user.authorizations.canManageSpecialEditions;
     },
@@ -34,9 +37,11 @@ export default {
     loadUser({ state, commit }) {
       state.loading = true;
       if (process.env.NODE_ENV === 'low') {
-        commit("importUser", user);
+        console.log('[store] loadUser: ', user)
+        setTimeout(() => commit("importUser", user), 750)
       } else {
         axios.get("/my_wire/user_data").then((response) => {
+          console.log('[store] loadUser: ', response.data)
           commit("importUser", response.data);
         });
       }
