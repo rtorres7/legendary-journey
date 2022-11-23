@@ -4,7 +4,7 @@ export const user = {
         "ntk": {}
     },
     authorizations: {
-        canManageWire: false,
+        canManageWire: true,
         canManageSpecialEditions: true,
     },
     name: 'Jonathan Oszczakiewicz',
