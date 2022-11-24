@@ -10,6 +10,9 @@ export async function uploadFile(file, url) {
 
   //change status to indicate the success of the upload request
   file.status = response.ok
+  let json = await response.json()
+  file.dbId = json.att_id
+  file.wire_url = url
 
   return response
 }

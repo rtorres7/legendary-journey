@@ -27,5 +27,7 @@ class UploadableFile {
     this.id = `${file.name}-${file.size}-${file.lastModified}-${file.type}`
     this.url = URL.createObjectURL(file)
     this.status = null
+    this.dbId = null
+    this.wire_url = null
   }
 }
