@@ -11,18 +11,20 @@
     <p class="font-semibold text-lg">
       Related Products
     </p>
-    <div v-if="relatedProducts.length === 0">
-      There are no related products
-    </div>
-    <ul class="space-y-1">
-      <li v-for="relatedProduct in relatedProducts" :key="relatedProduct.document.id">
-        <router-link
-          :to="relatedProductLink + '/' + relatedProduct.id + '.json'" target="_blank"
-        >
-          {{ relatedProduct.document.title }}
-        </router-link>
-      </li>
-    </ul>
+    <template v-if="relatedProducts.length === 0">
+      <div>There are no related products</div>
+    </template>
+    <template v-else>
+      <ul class="space-y-1">
+        <li v-for="relatedProduct in relatedProducts" :key="relatedProduct">
+          <router-link
+            :to="relatedProductLink + '/' + relatedProduct.id + '.json'" target="_blank"
+          >
+            {{ relatedProduct.document.title }}
+          </router-link>
+        </li>
+      </ul>
+    </template>
   </div>
 </template>
 
