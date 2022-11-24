@@ -166,7 +166,8 @@
                     <label class="text-sm font-medium mb-1">End Date</label>
                     <BaseDatepicker
                       v-model="metricEndDate"
-                      :minDate="new Date()"
+                      :minDate="article.display_date"
+                      :maxDate="new Date()"
                       :enableTimePicker="false"
                       format="MMM dd, yyyy"
                       week-start="0"

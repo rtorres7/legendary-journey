@@ -1397,22 +1397,29 @@ export default {
       return items;
     };
     const buildReportingTypes = () => {
-      let items = [];
-      criteria.value.reporting_types.forEach((reportingType) => {
-        items.push({ ...reportingType, type: "reporting_types[]" });
-        reportingType.productTypes.forEach((productTypeCode) => {
-          const productType = getValueForCode(
-            criteria.value.product_types,
-            productTypeCode
-          );
-          items.push({
-            ...productType,
-            code: productType.code.toString(),
-            type: "product_types[]",
-            subitem: true,
-          });
-        });
-      });
+      // let items = [];
+      // criteria.value.reporting_types.forEach((reportingType) => {
+      //   items.push({ ...reportingType, type: "reporting_types[]" });
+      //   reportingType.productTypes.forEach((productTypeCode) => {
+      //     const productType = getValueForCode(
+      //       criteria.value.product_types,
+      //       productTypeCode
+      //     );
+      //     items.push({
+      //       ...productType,
+      //       code: productType.code.toString(),
+      //       type: "product_types[]",
+      //       subitem: true,
+      //     });
+      //   });
+      // });
+      let items = [
+        {
+          code: "10376",
+          name: "Current",
+          type: "product_types[]"
+        }
+      ]
       return items;
     };
 
@@ -1427,7 +1434,8 @@ export default {
       };
       const reportings = {
         items: buildReportingTypes(),
-        types: ["reporting_types[]", "product_types[]"],
+        types: ["product_types[]"]
+        //types: ["reporting_types[]", "product_types[]"],
       };
       const classifications = {
         items: buildItems(criteria.value.classification, "classification[]"),

@@ -1,14 +1,23 @@
 <template>
   <component :is="tag" class="file-preview">
     <div class="flex space-x-2">
-      <button @click="$emit('remove', file)" class="close-icon shrink-0">
+      <button v-if="!file.status" class="close-icon shrink-0" @click="$emit('remove', file)">
         &times;
       </button>
-      <img :src="file.url" :alt="file.file.name" :title="file.file.name" />
-      --
-      <span class="status-indicator loading-indicator" v-show="file.status == 'loading'">In Progress</span>
-      <span class="status-indicator success-indicator" v-show="file.status == true">Uploaded</span>
-      <span class="status-indicator failure-indicator" v-show="file.status == false">Error</span>
+      <span>{{ file.file.name }}</span>
+      <span v-show="file.status == true">
+        <router-link :to="''+file.wire_url+file.dbId" target="_blank">
+          <DocumentDownloadIcon class="h5 w-5" title="Download" />
+        </router-link> 
+      </span>
+      <span v-show="file.status == true">
+        <router-link to="" @click.prevent="deleteItem(file)">
+          <DocumentRemoveIcon class="h-5 w-5" title="Download" />
+        </router-link>
+      </span>
+      <span v-show="file.status == 'loading'" class="status-indicator loading-indicator">In Progress</span>
+      <span v-show="file.status == true" class="status-indicator success-indicator">Uploaded</span>
+      <span v-show="file.status == false" class="status-indicator failure-indicator">Error</span>
     </div>
   </component>
 </template>
@@ -18,6 +27,27 @@ defineProps({
   tag: { type: String, default: 'li' }
 })
 defineEmits(['remove'])
+</script>
+<script>
+import { DocumentDownloadIcon, DocumentRemoveIcon } from "@heroicons/vue/solid"
+
+export default {
+  components: {
+    DocumentDownloadIcon,
+    DocumentRemoveIcon
+  },
+  setup() {
+
+  },
+  methods: {
+    deleteItem(file) {
+      fetch(file.wire_url + file.dbId, { method: 'DELETE'}).then(response => {
+        console.log('deleteItem response: ', response)
+        this.$emit('remove', file)
+      }).catch(console.log('Failed'))
+    }
+  }
+}
 </script>
 <style scoped lang="scss">
 .file-preview {
