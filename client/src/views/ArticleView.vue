@@ -60,21 +60,15 @@
             </template>
           </p>
         </div>
-        <div class="flex flex-col">
-          <div
+        <div class="w-full pr-2">
+          <img
             v-show="article.product_image"
-            class="h-full w-full h-[300px] sm:h-[375px] flex flex-col"
+            :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
+            class="h-[350px] w-[350px] float-right"
           >
-            <img
-              :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
-              class="max-w-[375px] h-full"
-            >
-          </div>
-          <div class="w-full pr-2">
-            <p v-if="article.html_body" class="whitespace-pre-line">
-              <span class="summary" v-html="article.html_body" />
-            </p>
-          </div>
+          <p v-if="article.html_body" class="whitespace-pre-line">
+            <span class="summary" v-html="article.html_body" />
+          </p>
         </div>
         <p
           class="
@@ -261,21 +255,17 @@ export default {
     const formatDate = (date) => {
       return dayjs(date).format("YYYY-MM-DD");
     }
-
-    /*
-      Article needs to load first before firing a metrics call.
-    */
+    
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== 'article-preview') {
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
+      }
+    });
+
+    watch([metricStartDate, metricEndDate], () => {
+      if(metricStartDate.value && metricEndDate.value){
         store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
-        /* 
-          After the metrics have been loaded, we can then watch the date models change
-        */
-        watch([metricStartDate, metricEndDate], () => {
-          store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
-        });
       }
     });
 
