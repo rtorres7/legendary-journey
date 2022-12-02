@@ -7,10 +7,13 @@
     </div>  
   </template>
   <template v-else>
-    <div v-if="!loadingFeaturedArticles && navigation">
+    <div v-if="!loadingFeaturedArticles && navigation && !wantsPreview">
       <ArticleNavigation
         :navigation="navigation"
       />
+    </div>
+    <div v-show="wantsPreview" class="flex justify-center pb-8 text-sm">
+      <p>If you do not see changes in your document, please save the document and select preview again</p>
     </div>
     <div
       class="
@@ -224,8 +227,18 @@ export default {
     ArticleRelatedProducts,
     ArticleMetrics
   },
-  props: ["doc_num", "title"],
-  setup() {
+  props: {
+    doc_num: {
+      type: String
+    },
+    title: {
+      type: String
+    },
+    wantsPreview: {
+      type: Boolean
+    },
+  },
+  setup(props) {
     const store = useStore();
     const route = useRoute();
 
@@ -246,7 +259,7 @@ export default {
     );
 
     onMounted(() => {
-      store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
       store.dispatch("daniel/getDanielArticles")
       store.dispatch("relatedProducts/getRelatedDocuments");
     });
@@ -307,7 +320,7 @@ export default {
       () => route.params,
       () => {
         if (route.name === "article") {
-          store.dispatch("danielDetails/getDanielArticlesDetails");
+          store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
           store.dispatch("daniel/getDanielArticles")
           store.dispatch("relatedProducts/getRelatedDocuments"); 
         }
