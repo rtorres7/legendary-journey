@@ -21,6 +21,20 @@
         mb-8
         "
     >
+      <div v-show="canManageWire" class="flex md:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-8">
+        <router-link
+          :to="{
+            name: 'edit',
+            params: {
+              date: article.feature_date,
+              id: article.feature_id,
+              doc_num: article.doc_num,
+            },
+          }"
+        >
+          <PencilIcon class="h-5 w-5 cursor-pointer" />
+        </router-link>
+      </div>
       <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
         <p class="font-semibold text-sm lg:text-md uppercase">
           article
@@ -191,7 +205,7 @@ import * as dayjs from "dayjs";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon, PencilIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleAttachments from "@/components/ArticleAttachments"
@@ -201,6 +215,7 @@ import ArticleMetrics from "@/components/ArticleMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    PencilIcon,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -226,7 +241,9 @@ export default {
     const metricEndDate = ref(null);
     const navigation = ref(null)
     const isDraft = ref(route.name === 'article-preview' ? true : false)
-
+    const canManageWire = computed(
+      () => store.getters["user/canManageWire"]
+    );
 
     onMounted(() => {
       store.dispatch("danielDetails/getDanielArticlesDetails");
@@ -310,6 +327,7 @@ export default {
       metricEndDate,
       navigation,
       isDraft,
+      canManageWire,
     };
   },
 };
