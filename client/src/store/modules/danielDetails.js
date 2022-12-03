@@ -10,7 +10,7 @@ export default {
   },
 
   actions: {
-    getDanielArticlesDetails({ state, commit }) {
+    getDanielArticlesDetails({ state, commit }, wantsPreview) {
       state.loading = true;
       let route = router.currentRoute.value;
       if (process.env.NODE_ENV === 'low') {
@@ -18,7 +18,7 @@ export default {
         console.log('[store] getDanielArticlesDetails: ', displayedDocument.data)
         setTimeout(() => commit("saveDocument", displayedDocument.data), 750)
       } else {
-        const url = route.name === 'article-preview' ? `/documents/${route.params.doc_num}/preview.json` : `/preload/documents/${route.params.doc_num}.json`
+        const url = route.name === 'article-preview' || wantsPreview ? `/documents/${route.params.doc_num}/preview.json` : `/preload/documents/${route.params.doc_num}.json`
         axios.get(url).then(response => {
           console.log('[store] getDanielArticlesDetails: ', response.data);
           commit("saveDocument", response.data);
