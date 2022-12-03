@@ -36,6 +36,9 @@
         </router-link>
       </div>
       <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
+        <div class="flex justify-center pb-2 text-sm lg:text-md">
+          {{ article.classification }}
+        </div>
         <p class="font-semibold text-sm lg:text-md uppercase">
           article
         </p>
