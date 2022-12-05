@@ -87,9 +87,7 @@
                       <a :href="link.href" target="_blank">{{ link.name }}</a>
                     </template>
                     <template v-else>
-                      <template v-if="link.key === 'security'">
-                        <a role="button" tabindex="0" @click="openSecurityDialog">{{ link.name }}</a>
-                      </template>
+                      <a role="button" tabindex="0" @click="openSecurityDialog">{{ link.name }}</a>
                     </template>
                   </li>
                 </template>
