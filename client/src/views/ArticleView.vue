@@ -68,7 +68,7 @@
         </div>
         <div class="w-full pr-2">
           <img
-            v-show="article.product_image"
+            v-if="article.product_image"
             :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
             class="h-[350px] w-[350px] float-right"
           >
@@ -142,13 +142,15 @@
       <div class="md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25">
         <ArticleAttachments :article="article" />
         <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
-        <template v-if="!loadingRelatedProducts">
-          <ArticleRelatedProducts
-            :relatedProducts="relatedProducts"
-          />
+        <template v-if="!isDraft && !wantsPreview">
+          <template v-if="!loadingRelatedProducts">
+            <ArticleRelatedProducts
+              :relatedProducts="relatedProducts"
+            />
+          </template>
         </template>
         <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="!isDraft">
+        <template v-if="(!isDraft && !wantsPreview)">
           <template v-if="!loadingMetrics">
             <div
               class="flex flex-col space-y-4"
@@ -264,7 +266,7 @@ export default {
     onMounted(() => {
       store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
       store.dispatch("daniel/getDanielArticles")
-      store.dispatch("relatedProducts/getRelatedDocuments");
+      store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
     });
 
     
@@ -325,7 +327,7 @@ export default {
         if (route.name === "article") {
           store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
           store.dispatch("daniel/getDanielArticles")
-          store.dispatch("relatedProducts/getRelatedDocuments"); 
+          store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview); 
         }
       }
     );
