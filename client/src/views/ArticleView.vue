@@ -7,10 +7,13 @@
     </div>  
   </template>
   <template v-else>
-    <div v-if="!loadingFeaturedArticles && navigation">
+    <div v-if="!loadingFeaturedArticles && navigation && !wantsPreview">
       <ArticleNavigation
         :navigation="navigation"
       />
+    </div>
+    <div v-show="wantsPreview" class="flex justify-center pb-8 text-sm">
+      <p>If you do not see changes in your document, please save the document and select preview again</p>
     </div>
     <div
       class="
@@ -21,7 +24,24 @@
         mb-8
         "
     >
+      <div v-show="canManageWire" class="flex md:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-8">
+        <router-link
+          :to="{
+            name: 'edit',
+            params: {
+              date: article.feature_date,
+              id: article.feature_id,
+              doc_num: article.doc_num,
+            },
+          }"
+        >
+          <PencilIcon class="h-5 w-5 cursor-pointer" />
+        </router-link>
+      </div>
       <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
+        <div class="text-center pb-2 text-sm lg:text-md">
+          {{ article.classification }}
+        </div>
         <p class="font-semibold text-sm lg:text-md uppercase">
           article
         </p>
@@ -46,21 +66,15 @@
             </template>
           </p>
         </div>
-        <div class="flex flex-col">
-          <div
-            v-show="article.product_image"
-            class="h-full w-full h-[300px] sm:h-[375px] flex flex-col"
+        <div class="w-full pr-2">
+          <img
+            v-if="article.product_image"
+            :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
+            class="h-[350px] w-[350px] float-right"
           >
-            <img
-              :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
-              class="max-w-[375px] h-full"
-            >
-          </div>
-          <div class="w-full pr-2">
-            <p v-if="article.html_body" class="whitespace-pre-line">
-              <span class="summary" v-html="article.html_body" />
-            </p>
-          </div>
+          <p v-if="article.html_body" class="whitespace-pre-line">
+            <span class="summary" v-html="article.html_body" />
+          </p>
         </div>
         <p
           class="
@@ -128,13 +142,15 @@
       <div class="md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25">
         <ArticleAttachments :article="article" />
         <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
-        <template v-if="!loadingRelatedProducts">
-          <ArticleRelatedProducts
-            :relatedProducts="relatedProducts"
-          />
+        <template v-if="!isDraft && !wantsPreview">
+          <template v-if="!loadingRelatedProducts">
+            <ArticleRelatedProducts
+              :relatedProducts="relatedProducts"
+            />
+          </template>
         </template>
         <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="!isDraft">
+        <template v-if="(!isDraft && !wantsPreview)">
           <template v-if="!loadingMetrics">
             <div
               class="flex flex-col space-y-4"
@@ -197,7 +213,7 @@ import * as dayjs from "dayjs";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon, PencilIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleAttachments from "@/components/ArticleAttachments"
@@ -207,6 +223,7 @@ import ArticleMetrics from "@/components/ArticleMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    PencilIcon,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -215,8 +232,18 @@ export default {
     ArticleRelatedProducts,
     ArticleMetrics
   },
-  props: ["doc_num", "title"],
-  setup() {
+  props: {
+    doc_num: {
+      type: String
+    },
+    title: {
+      type: String
+    },
+    wantsPreview: {
+      type: Boolean
+    },
+  },
+  setup(props) {
     const store = useStore();
     const route = useRoute();
 
@@ -232,33 +259,31 @@ export default {
     const metricEndDate = ref(null);
     const navigation = ref(null)
     const isDraft = ref(route.name === 'article-preview' ? true : false)
-
+    const canManageWire = computed(
+      () => store.getters["user/canManageWire"]
+    );
 
     onMounted(() => {
-      store.dispatch("danielDetails/getDanielArticlesDetails");
+      store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
       store.dispatch("daniel/getDanielArticles")
-      store.dispatch("relatedProducts/getRelatedDocuments");
+      store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
     });
 
     
     const formatDate = (date) => {
       return dayjs(date).format("YYYY-MM-DD");
     }
-
-    /*
-      Article needs to load first before firing a metrics call.
-    */
+    
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== 'article-preview') {
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
+      }
+    });
+
+    watch([metricStartDate, metricEndDate], () => {
+      if(metricStartDate.value && metricEndDate.value){
         store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
-        /* 
-          After the metrics have been loaded, we can then watch the date models change
-        */
-        watch([metricStartDate, metricEndDate], () => {
-          store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
-        });
       }
     });
 
@@ -300,9 +325,9 @@ export default {
       () => route.params,
       () => {
         if (route.name === "article") {
-          store.dispatch("danielDetails/getDanielArticlesDetails");
+          store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
           store.dispatch("daniel/getDanielArticles")
-          store.dispatch("relatedProducts/getRelatedDocuments"); 
+          store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview); 
         }
       }
     );
@@ -320,6 +345,7 @@ export default {
       metricEndDate,
       navigation,
       isDraft,
+      canManageWire,
     };
   },
 };
