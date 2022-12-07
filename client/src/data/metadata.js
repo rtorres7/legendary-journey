@@ -1158,7 +1158,7 @@ export const metadata = {
         },
         {
           "code": "TUR",
-          "name": "Turcode",
+          "name": "Turkey",
           "digraph": "TU"
         },
         {

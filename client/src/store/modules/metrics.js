@@ -31,6 +31,7 @@ export default {
             id: response.data.id,
             product_type_id: response.data.product_type_id
           }).then(response => {
+            console.log('/visitorCount (response): ', response)
             axios.get(`/documents/${route.params.doc_num}/metrics/basic_metrics.json`,
               {
                 params: {
