@@ -25,6 +25,24 @@
         "
     >
       <div v-show="canManageWire" class="flex md:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-8">
+        <div v-if="!isDraft && !wantsPreview" class="flex">
+          <MailIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" @click="updateEmailCount" />
+          <div 
+            class="
+              bg-teal-300 
+              rounded-full 
+              w-fit 
+              h-full 
+              -mt-2 
+              text-center text-sm 
+              p-1
+            "
+          >
+            <p>
+              {{ article.email_count }}
+            </p>
+          </div>
+        </div>
         <router-link
           :to="{
             name: 'edit',
@@ -35,7 +53,7 @@
             },
           }"
         >
-          <PencilIcon class="h-5 w-5 cursor-pointer" />
+          <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
         </router-link>
       </div>
       <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
@@ -213,7 +231,7 @@ import * as dayjs from "dayjs";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { ChevronDownIcon, PencilIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon, MailIcon, PencilIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleAttachments from "@/components/ArticleAttachments"
@@ -223,6 +241,7 @@ import ArticleMetrics from "@/components/ArticleMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    MailIcon,
     PencilIcon,
     Disclosure,
     DisclosureButton,
@@ -259,6 +278,10 @@ export default {
     const metricEndDate = ref(null);
     const navigation = ref(null)
     const isDraft = ref(route.name === 'article-preview' ? true : false)
+    const emailCount = computed(() => store.state.danielDetails.document.email_count);
+    const updateEmailCount = () => {
+      store.dispatch("danielDetails/saveEmailCount");
+    };
     const canManageWire = computed(
       () => store.getters["user/canManageWire"]
     );
@@ -345,6 +368,8 @@ export default {
       metricEndDate,
       navigation,
       isDraft,
+      emailCount,
+      updateEmailCount,
       canManageWire,
     };
   },
