@@ -25,20 +25,27 @@ export default {
         console.log('[store] getMetrics:', metrics, `params: start - ${start} , end - ${end}`)
         setTimeout(() => commit("importData", metrics), 900);
       } else {
-          let route = router.currentRoute.value;
-          axios.get("/documents/" + `${route.params.doc_num}/metrics/basic_metrics.json`,
-            {
-              params: {
-                readership_start_date: start,
-                readership_end_date: end
+        let route = router.currentRoute.value;
+        axios.get(`/documents/${route.params.doc_num}`).then(response => {
+          axios.put(`/wires/${response.data.date_published}/articles/${response.data.id}/visitorCount`, {
+            id: response.data.id,
+            product_type_id: response.data.product_type_id
+          }).then(response => {
+            axios.get(`/documents/${route.params.doc_num}/metrics/basic_metrics.json`,
+              {
+                params: {
+                  readership_start_date: start,
+                  readership_end_date: end
+                }
               }
-            }
-          )
-          .then(response => {
-            console.log('[store] getMetrics:', response.data.metrics)
-            commit("importData", response.data.metrics);
-          })
-        }
+            )
+            .then(response => {
+              console.log('[store] getMetrics:', response.data.metrics)
+              commit("importData", response.data.metrics);
+            });
+          });
+        });
+      }
     },
   },
 
