@@ -12,7 +12,7 @@
         :navigation="navigation"
       />
     </div>
-    <div v-show="wantsPreview" class="flex justify-center pb-8 text-sm">
+    <div v-show="wantsPreview" class="text-center pb-8 text-sm">
       <p>If you do not see changes in your document, please save the document and select preview again</p>
     </div>
     <div
@@ -24,12 +24,16 @@
         mb-8
         "
     >
-      <div v-show="canManageWire" class="flex md:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-8">
-        <div v-if="!isDraft && !wantsPreview" class="flex">
-          <MailIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" @click="updateEmailCount" />
+      <div v-if="(!isDraft && !wantsPreview)" class="flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4">
+        <div class="flex">
+          <a :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`">
+            <MailIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" @click="updateEmailCount" />
+          </a>
           <div 
             class="
-              bg-teal-300 
+              bg-slate-200
+              dark:bg-slate-800
+              energy:bg-zinc-800
               rounded-full 
               w-fit 
               h-full 
@@ -43,18 +47,20 @@
             </p>
           </div>
         </div>
-        <router-link
-          :to="{
-            name: 'edit',
-            params: {
-              date: article.feature_date,
-              id: article.feature_id,
-              doc_num: article.doc_num,
-            },
-          }"
-        >
-          <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
-        </router-link>
+        <div v-show="canManageWire">
+          <router-link
+            :to="{
+              name: 'edit',
+              params: {
+                date: article.feature_date,
+                id: article.feature_id,
+                doc_num: article.doc_num,
+              },
+            }"
+          >
+            <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+          </router-link>
+        </div>
       </div>
       <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
         <div class="text-center pb-2 text-sm lg:text-md">
@@ -265,6 +271,7 @@ export default {
   setup(props) {
     const store = useStore();
     const route = useRoute();
+    const url = computed(() => window.location);
 
     const article = computed(() => store.state.danielDetails.document);
     const loadingArticle = computed(() => store.state.danielDetails.loading);
@@ -296,17 +303,21 @@ export default {
     const formatDate = (date) => {
       return dayjs(date).format("YYYY-MM-DD");
     }
-    
+
+    /*
+      Article needs to load first before firing a metrics call.
+    */
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== 'article-preview') {
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
-      }
-    });
-
-    watch([metricStartDate, metricEndDate], () => {
-      if(metricStartDate.value && metricEndDate.value){
         store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
+        /*
+          After the metrics have been loaded, we can then watch the date models change
+        */
+        watch([metricStartDate, metricEndDate], () => {
+          store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
+        });
       }
     });
 
@@ -371,6 +382,7 @@ export default {
       emailCount,
       updateEmailCount,
       canManageWire,
+      url,
     };
   },
 };
