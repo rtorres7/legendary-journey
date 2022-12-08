@@ -12,7 +12,7 @@
         :navigation="navigation"
       />
     </div>
-    <div v-show="wantsPreview" class="flex justify-center pb-8 text-sm">
+    <div v-show="wantsPreview" class="text-center pb-8 text-sm">
       <p>If you do not see changes in your document, please save the document and select preview again</p>
     </div>
     <div
@@ -24,19 +24,43 @@
         mb-8
         "
     >
-      <div v-show="canManageWire" class="flex md:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-8">
-        <router-link
-          :to="{
-            name: 'edit',
-            params: {
-              date: article.feature_date,
-              id: article.feature_id,
-              doc_num: article.doc_num,
-            },
-          }"
-        >
-          <PencilIcon class="h-5 w-5 cursor-pointer" />
-        </router-link>
+      <div v-if="(!isDraft && !wantsPreview)" class="flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4">
+        <div class="flex">
+          <a :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`">
+            <MailIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" @click="updateEmailCount" />
+          </a>
+          <div 
+            class="
+              bg-slate-200
+              dark:bg-slate-800
+              energy:bg-zinc-800
+              rounded-full 
+              w-fit 
+              h-full 
+              -mt-2 
+              text-center text-sm 
+              p-1
+            "
+          >
+            <p>
+              {{ article.email_count }}
+            </p>
+          </div>
+        </div>
+        <div v-show="canManageWire">
+          <router-link
+            :to="{
+              name: 'edit',
+              params: {
+                date: article.feature_date,
+                id: article.feature_id,
+                doc_num: article.doc_num,
+              },
+            }"
+          >
+            <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+          </router-link>
+        </div>
       </div>
       <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
         <div class="text-center pb-2 text-sm lg:text-md">
@@ -213,7 +237,7 @@ import * as dayjs from "dayjs";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { ChevronDownIcon, PencilIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon, MailIcon, PencilIcon } from "@heroicons/vue/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
 import ArticleAttachments from "@/components/ArticleAttachments"
@@ -223,6 +247,7 @@ import ArticleMetrics from "@/components/ArticleMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    MailIcon,
     PencilIcon,
     Disclosure,
     DisclosureButton,
@@ -246,6 +271,7 @@ export default {
   setup(props) {
     const store = useStore();
     const route = useRoute();
+    const url = computed(() => window.location);
 
     const article = computed(() => store.state.danielDetails.document);
     const loadingArticle = computed(() => store.state.danielDetails.loading);
@@ -259,6 +285,10 @@ export default {
     const metricEndDate = ref(null);
     const navigation = ref(null)
     const isDraft = ref(route.name === 'article-preview' ? true : false)
+    const emailCount = computed(() => store.state.danielDetails.document.email_count);
+    const updateEmailCount = () => {
+      store.dispatch("danielDetails/saveEmailCount");
+    };
     const canManageWire = computed(
       () => store.getters["user/canManageWire"]
     );
@@ -345,7 +375,10 @@ export default {
       metricEndDate,
       navigation,
       isDraft,
+      emailCount,
+      updateEmailCount,
       canManageWire,
+      url,
     };
   },
 };
