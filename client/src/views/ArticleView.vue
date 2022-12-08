@@ -303,21 +303,17 @@ export default {
     const formatDate = (date) => {
       return dayjs(date).format("YYYY-MM-DD");
     }
-
-    /*
-      Article needs to load first before firing a metrics call.
-    */
+    
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== 'article-preview') {
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
+      }
+    });
+
+    watch([metricStartDate, metricEndDate], () => {
+      if(metricStartDate.value && metricEndDate.value){
         store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
-        /*
-          After the metrics have been loaded, we can then watch the date models change
-        */
-        watch([metricStartDate, metricEndDate], () => {
-          store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
-        });
       }
     });
 
