@@ -62,6 +62,7 @@ export default {
         fill: am5.color(0xc2c4cb),
       });
       polygonSeries.mapPolygons.template.events.on("click", function (event) {
+        console.log('event.target.dataItem: ', event.target.dataItem)
         let dataItem = event.target.dataItem.dataContext;
         navigateToCountry(getValueForName(criteria.value.countries, dataItem.name));
       });

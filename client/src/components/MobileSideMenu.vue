@@ -139,25 +139,27 @@
                                   >
                                     {{ region.name }}
                                   </a>
-                                  <template
-                                    v-for="subregionItem in formattedSubregions(region.subregions)"
-                                    :key="subregionItem"
-                                  >
-                                    <li>
-                                      <a
-                                        href=""
-                                        class="
+                                  <template v-if="(region.subregions.length > 1)">
+                                    <template
+                                      v-for="subregionItem in formattedSubregions(region.subregions)"
+                                      :key="subregionItem"
+                                    >
+                                      <li>
+                                        <a
+                                          href=""
+                                          class="
                                           hover:underline
                                           cursor-pointer
                                           font-light
                                         "
-                                        @click.prevent="
-                                          navigateToSubregion(subregionItem)
-                                        "
-                                      >
-                                        {{ subregionItem.name }}
-                                      </a>
-                                    </li>
+                                          @click.prevent="
+                                            navigateToSubregion(subregionItem)
+                                          "
+                                        >
+                                          {{ subregionItem.name }}
+                                        </a>
+                                      </li>
+                                    </template>
                                   </template>
                                 </ul>
                               </DisclosurePanel>
@@ -174,13 +176,14 @@
                         "
                         >
                           View a
-                          <button
+                          <a
                             class="underline"
                             aria-label="View a PDF document with a list of countries that fall under each region and subregion"
-                            @click="openPDF"
+                            :href="metadata.countries_link"
+                            target="_blank"
                           >
                             list of countries
-                          </button>
+                          </a>
                           that fall under each region and subregion
                         </p>
                       </template>
@@ -396,6 +399,7 @@
 
 <script>
 import { getValueForCode } from "@/helpers";
+import { metadata } from "@/config";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -415,7 +419,6 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { ChevronDownIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
-
 export default {
   components: {
     MobileSideMenuDisclosure,
@@ -530,6 +533,7 @@ export default {
     };
 
     return {
+      metadata,
       close,
       loadingMetadata,
       criteria,
@@ -542,11 +546,6 @@ export default {
       navigateToSubregion,
       navigateToCountry
     };
-  },
-  methods: {
-    openPDF() {
-      //window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
-    },
   },
 };
 </script>
