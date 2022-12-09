@@ -9,13 +9,63 @@
     </p>
     <p class="font-light mt-6">
       The page you are trying to access is limited to to users with special privileges. If you reached this page from another part of the site,
-      please contact us so we can correct the problem.
+      please contact us so we can correct the problem:
     </p>
+    NCTC/DI Managing Editor, NCTC Current
+
+    <p>
+      U: <span
+        class="
+          text-amber-300
+          dark:text-teal-400
+          energy:text-energy-yellow
+        "
+      >(571)280-3627</span>
+
+      S:
+      <span
+        class="
+          text-amber-300
+          dark:text-teal-400
+          energy:text-energy-yellow
+        "
+      >XX-XXXXX</span>
+    </p>
+    <p>
+      ITS Help -24/7 Support
+    </p>
+      <a
+        :href="`mailto:${metadata.footer_contact.email}`" class="
+          text-amber-300
+          dark:text-teal-400
+          energy:text-energy-yellow
+          flex
+          items-center
+          hover:underline
+          w-fit
+          m-0
+          md:m-auto
+        "
+      >
+        {{ metadata.footer_contact.email }}
+        <MailIcon class="h-5 w-5 m1-1" aria-hidden="true" />
+      </a>
   </div>
 </template>
 
 <script>
+import { metadata } from '@/config';
+import { MailIcon } from '@heroicons/vue/outline';
+
 export default {
+  components: {
+    MailIcon,
+  },
+  setup() {
+    return {
+      metadata,
+    };
+  },
 };
 </script>
 
