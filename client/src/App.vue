@@ -13,6 +13,17 @@
       Skip to main content
     </button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
+    <button
+      @click.prevent="
+        () => {
+          createNotification({
+            message: 'This is a notification from the App.vue Component',
+          });
+        }
+      "
+    >
+      Notification From App Component
+    </button>
     <main
       role="main"
       class="
@@ -22,25 +33,6 @@
         energy:text-zinc-300 energy:bg-zinc-900
       "
     >
-      <!-- <div
-        v-show="isLiveDemo"
-        class="
-          flex
-          justify-center
-          items-center
-          bg-emerald-600/80
-          p-2
-          sticky
-          z-10
-          top-[101px]
-        "
-      >
-        <p class="text-sm text-white">
-          Note: This page is represents a live preview. The contents of this
-          page are meant to showcase future capabilities and gather user
-          feedback.
-        </p>
-      </div> -->
       <div
         ref="mainContent"
         class="
@@ -69,16 +61,43 @@
       </div>
     </main>
     <TheFooter v-if="!['attachment'].includes($route.name)" />
+    <transition-group
+      name="toast-notification"
+      tag="div"
+      class="toast-notifications"
+      @before-enter="stopBodyOverflow"
+      @after-enter="allowBodyOverflow"
+      @before-leave="stopBodyOverflow"
+      @after-leave="allowBodyOverflow"
+    >
+      <ToastNotification
+        v-for="(item) in notifications"
+        :id="item.id"
+        :key="item.id"
+        :type="item.type"
+        :title="item.title"
+        :message="item.message"
+        :auto-close="item.autoClose"
+        :duration="item.duration"
+        @close="
+          () => {
+            removeNotifications(item.id);
+          }
+        "
+      />
+    </transition-group>
   </div>
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, provide, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import AuthorizatonWrapper from "@/components/AuthorizationWrapper"
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
+import ToastNotification from "@/components/ToastNotification"
+import useNotifications from "@/composables/notifications";
 // import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
 
 export default {
@@ -86,6 +105,7 @@ export default {
     AuthorizatonWrapper,
     TheBanner,
     TheFooter,
+    ToastNotification
     // ScrollToTopBtn,
   },
   setup() {
@@ -94,6 +114,16 @@ export default {
     const topOfApp = ref(null);
     const mainContent = ref(null);
     const loadingUser = computed(() => store.state.user.loading);
+
+    const {
+      notifications,
+      createNotification,
+      removeNotifications,
+      stopBodyOverflow,
+      allowBodyOverflow,
+    } = useNotifications();
+
+    provide("create-notification", createNotification);
 
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
@@ -129,6 +159,11 @@ export default {
     });
     return {
       loadingUser,
+      notifications,
+      createNotification,
+      removeNotifications,
+      stopBodyOverflow,
+      allowBodyOverflow,
       isLiveDemo,
       topOfApp,
       mainContent,
@@ -180,4 +215,30 @@ html {
     padding: 10px;
   }
 }
+
+.toast-notifications {
+    z-index: 100;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.8rem;
+  }
+  .toast-notification-enter-active {
+    animation: toast-fade-in 0.5s ease-in-out;
+  }
+  .toast-notification-leave-active {
+    animation: toast-fade-in 0.5s ease-in-out reverse;
+  }
+  @keyframes toast-fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 </style>
