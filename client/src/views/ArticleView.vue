@@ -13,7 +13,8 @@
       />
     </div>
     <div v-show="wantsPreview" class="text-center pb-8 text-sm">
-      <p>If you do not see changes in your document, please save the document and select preview again</p>
+      <div>PREVIEW</div>
+      <div>If you do not see changes in your document, please save the document and select preview again</div>
     </div>
     <div
       class="
@@ -52,9 +53,9 @@
             :to="{
               name: 'edit',
               params: {
-                date: article.feature_date,
-                id: article.feature_id,
-                doc_num: article.doc_num,
+                date: article?.date_published,
+                id: article?.feature_id ? article.feature_id : -1,
+                doc_num: article?.doc_num,
               },
             }"
           >
@@ -70,7 +71,7 @@
           article
         </p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
-          {{ article.title }}
+          ({{ article.title_classif }}) {{ article.title }}
         </h1>
         <div class="flex space-x-4 text-sm md:text-md">
           <p class="capitalize">
