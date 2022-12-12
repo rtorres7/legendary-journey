@@ -617,24 +617,26 @@
                       >
                         {{ region.name }}
                       </a>
-                      <ul class="pt-2 list-disc list-inside">
-                        <template
-                          v-for="subregionItem in formattedSubregions(region.subregions)"
-                          :key="subregionItem"
-                        >
-                          <li>
-                            <a
-                              href=""
-                              class="hover:underline cursor-pointer font-light"
-                              @click.prevent="
-                                navigateToSubregion(subregionItem)
-                              "
-                            >
-                              {{ subregionItem.name }}
-                            </a>
-                          </li>
-                        </template>
-                      </ul>
+                      <template v-if="(region.subregions.length > 1)">
+                        <ul class="pt-2 list-disc list-inside">
+                          <template
+                            v-for="subregionItem in formattedSubregions(region.subregions)"
+                            :key="subregionItem"
+                          >
+                            <li>
+                              <a
+                                href=""
+                                class="hover:underline cursor-pointer font-light"
+                                @click.prevent="
+                                  navigateToSubregion(subregionItem)
+                                "
+                              >
+                                {{ subregionItem.name }}
+                              </a>
+                            </li>
+                          </template>
+                        </ul>
+                      </template>
                     </div>
                   </div>
                   <p
@@ -646,13 +648,14 @@
                   "
                   >
                     View a
-                    <button
+                    <a
                       class="underline"
                       aria-label="View a PDF document with a list of countries that fall under each region and subregion"
-                      @click="openPDF"
+                      :href="metadata.countries_link"
+                      target="_blank"
                     >
                       list of countries
-                    </button>
+                    </a>
                     that fall under each region and subregion
                   </p>
                 </div>
@@ -1398,16 +1401,11 @@ export default {
       isTestConsoleMenuOpen.value = true;
     };
 
-    // NOTE: setTimeout added as a temporary workaround for
+    // TODO: setTimeout added as a temporary workaround for
     // multiple dialog scroll behavior bug
     const openTestConsoleModalMobile = () => {
       isUserMenuOpen.value = false;
       setTimeout(() => (isTestConsoleMenuOpen.value = true), 500);
-    };
-
-    const openPDF = () => {
-      //TODO: figure the right approach to PDF referencing
-      //window.open("/pdf/List-of-Countries-by-Region-UN-Annex-II.pdf");
     };
 
     const navigateToIssue = (issue) => {
@@ -1523,7 +1521,6 @@ export default {
       closeTestConsoleModal,
       openTestConsoleModal,
       openTestConsoleModalMobile,
-      openPDF,
       removeAlertMessage,
       navigateToIssue,
       navigateToRegion,

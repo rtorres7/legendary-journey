@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { ref, watch, computed } from "vue";
+import { inject, ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 // import { useField, userForm } from 'vee-validate'
@@ -99,6 +99,7 @@ export default {
     const store = useStore();
     const loadingLinks = computed(() => store.state.specialEditions.loading);
     const links = computed(() => store.state.specialEditions.links);
+    const createNotification = inject("create-notification");
 
     const editionEvent = ref(Object.assign({}, props.edition));
 
@@ -223,6 +224,12 @@ export default {
         if (process.env.NODE_ENV === "low") {
           if (props.editMode) {
             emit("specialEditionUpdated");
+            createNotification({
+              title: 'Changes saved',
+              message: `${props.edition?.name} Special Edition has been saved.`,
+              type: 'success',
+              duration: 4,
+            });
             closeDialog();
           } else {
             store.dispatch("specialEditions/loadConceptsLinks");

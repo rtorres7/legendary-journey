@@ -252,7 +252,7 @@
                       </div>
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
-                      <label id="article-counter" class="mr-4">Upload Your Own Article Image</label>
+                      <label id="image-input" class="mr-4">Upload Your Own Article Image</label>
                       <div
                         class="
                           rounded
@@ -318,6 +318,31 @@
                           "
                         >{{ uploadFileName }}</span>
                       </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <label id="toast-toggle" class="mr-4">Notification Toast</label>
+                      <button
+                        class="
+                          rounded
+                          shadow-md
+                          text-xs
+                          md:text-sm
+                          px-2
+                          md:px-4
+                          py-2
+                          focus-within:ring-2
+                          font-medium
+                          text-white
+                          dark:text-slate-300
+                          energy:text-zinc-300
+                          bg-mission-blue/30
+                          dark:bg-dark-navy/30
+                          energy:bg-zinc-900/30
+                        "
+                        @click="toggleNotificationToast"
+                      >
+                        Toggle
+                      </button>
                     </div>
                     <!-- <SwitchGroup>
                       <div class="flex items-center justify-between">
@@ -720,7 +745,7 @@
 </template>
 
 <script>
-import { ref, watch, computed } from "vue";
+import { inject, ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
@@ -756,6 +781,7 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     const route = useRoute();
+    const createNotification = inject("create-notification");
 
     const currentRoute = ref(route.name);
 
@@ -847,6 +873,14 @@ export default {
       event.target.value = null;
     };
 
+    const toggleNotificationToast = () => {
+      createNotification({
+        title: '[Test] Changes saved',
+        message: `Your changes has been saved.`,
+        type: 'success',
+      });
+    }
+
     const changePublishedArticleCount = (count) => {
       store.dispatch("daniel/setDanielArticles", count);
     };
@@ -911,6 +945,7 @@ export default {
       loadingPublishedArticlesEnabled,
       removeArticleImage,
       changeArticleImage,
+      toggleNotificationToast,
       changePublishedArticleCount,
       feedCountFromStore,
       loadingOseFeedsEnabled,
