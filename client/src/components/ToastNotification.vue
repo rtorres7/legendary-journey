@@ -1,41 +1,45 @@
 <template>
   <div
     :ref="id"
-    class="toast-notification"
-    :style="`--toast-duration: ${duration}s; --toast-color: ${toastColor}`"
-    @click.prevent="close"
+    class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 
+      shadow-lg p-5  transition duration-300 ease-in-out"
+    :style="`--toast-duration: ${duration}s`"
   >
-    <div class="close-btn" title="Close" @click="close">
-      <i class="ri-icon ri-lg ri-close-fill" />
+    <div class="absolute top-4 right-4 flex items-center justify-center cursor-pointer" title="Close" @click="close">
+      <XIcon
+        class="h-5 w-5"
+        aria-hidden="true"
+      />
     </div>
-
-    <div class="body">
-      <!-- <i :class="`ri-icon ri-2x ${toastIcon}`" /> -->
-      <component :is="toastIcon" />
-      <div class="vl" />
-      <div class="content">
-        <div class="content__title">
-          {{ toastTitle }}
+    <div class="flex gap-4 place-items-center">
+      <div
+        class="flex items-center h-12 pr-4 border-r border-slate-700/50 energy:border-zinc-700/50"
+      >
+        <component :is="toastIcon" :class="['h-8 w-8', toastColor]" />
+      </div>
+      <div class="flex flex-col gap-3">
+        <div v-show="title" class="font-semibold">
+          {{ title }}
         </div>
-
-        <p class="content__message">
+        <p>
           {{ message }}
         </p>
       </div>
     </div>
-    <div v-if="autoClose" class="progress" />
+    <div v-if="autoClose" class="animate-progress absolute bottom-0 left-0 w-full h-1.5 bg-blue-500" />
   </div>
 </template>
 <script>
 import { computed, onMounted, ref } from "vue";
-import { CheckCircleIcon, InformationCircleIcon, ExclamationCircleIcon, XCircleIcon } from "@heroicons/vue/outline";
+import { CheckCircleIcon, InformationCircleIcon, ExclamationCircleIcon, XCircleIcon, XIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
     CheckCircleIcon,
     InformationCircleIcon,
     ExclamationCircleIcon,
-    XCircleIcon
+    XCircleIcon,
+    XIcon
   },
   props: {
     id: { 
@@ -70,14 +74,10 @@ export default {
   },
   emits: ["close"],
   setup(props, { emit }) {
-    // some reactive values to manage the notification
     const timer = ref(-1);
     const startedAt = ref(0);
     const delay = ref(0);
 
-    // setting up the automatic
-    // dismissing of notificaton
-    // after the specified duration
     onMounted(() => {
       if (props.autoClose) {
         startedAt.value = Date.now();
@@ -86,8 +86,6 @@ export default {
       } 
     });
 
-    // a computed property to set
-    // the icon for the notification
     const toastIcon = computed(() => {
       switch (props.type) {
         case "error":
@@ -101,100 +99,33 @@ export default {
       }
     });
 
-    // a computed property to set
-    // the icon and progres bar color
-    // for the notification
     const toastColor = computed(() => {
       switch (props.type) {
         case "error":
-          return "#ff355b";
+          return "text-red-500";
         case "warning":
-          return "#e8b910";
+          return "text-yellow-500";
         case "success":
-          return "#00cc69";
+          return "text-green-500";
         default:
-          return "#0067ff";
+          return "text-blue-500"
       }
     });
 
-    // a computed property to set
-// the title of the notification
-    const toastTitle = computed(() => {
-      return props.title && props.title !== null ? props.title : "Notification";
-    });
-
-    // a method to close the
-    // notification and emit the action
     const close = () => {
       emit("close");
     };
-
     
     return {
       toastIcon,
       toastColor,
-      toastTitle
+      close
     };
   },
 };
 </script>
 <style lang="scss" scoped>
-.toast-notification {
-  --toast-color: #0067ff;
-  cursor: pointer;
-  max-width: 450px;
-  position: relative;
-  background: white;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.08),
-    0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  min-height: 4rem;
-  padding-inline: 1.5rem;
-  padding-block: 1.2rem;
-  transition: all 0.3s ease-in-out;
-  .close-btn {
-    position: absolute;
-    top: 0.4rem;
-    right: 0.4rem;
-    display: flex;
-    place-items: center;
-    justify-content: center;
-    height: 32px;
-    width: 32px;
-    transition: var(--all-transition);
-    cursor: pointer;
-    &:hover {
-      box-shadow: 0px 0px 10px rgb(228, 228, 228);
-      border-radius: 50%;
-    }
-  }
-  .body {
-    display: flex;
-    gap: 1.4rem;
-    place-items: center;
-    i {
-      color: var(--toast-color);
-    }
-    .vl {
-      background: #e4e4e4;
-      width: 0.12rem;
-      height: 3rem;
-    }
-    .content {
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-      &__title {
-        font-weight: 600;
-      }
-    }
-  }
-  .progress {
-    position: absolute;
-    bottom: 0px;
-    left: 0;
-    height: 0.4rem;
-    width: 100%;
-    background: var(--toast-color);
+  .animate-progress {
     animation: progress var(--toast-duration) ease-in-out forwards;
   }
   @keyframes progress {
@@ -202,18 +133,4 @@ export default {
       width: 0;
     }
   }
-  @keyframes toast-fade-in {
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes toast-fade-out {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-}
 </style>

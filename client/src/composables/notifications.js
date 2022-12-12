@@ -3,7 +3,6 @@ import uniqueID from "@/composables/uniqueID";
 
 const defaultNotificationOptions = {
   type: "info",
-  title: "Info Notification",
   message: "Ooops! A message was not provided",
   autoClose: true,
   duration: 5,
@@ -28,7 +27,7 @@ export default function useNotifications() {
   const createErrorNotification = (options) => {
     createNotification({
       type: "error",
-      title: "Yikes. Something went wrong.",
+      title: "Something went wrong.",
       duration: 8,
       ...options,
     });

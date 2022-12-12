@@ -13,22 +13,11 @@
       Skip to main content
     </button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
-    <button
-      @click.prevent="
-        () => {
-          createNotification({
-            message: 'This is a notification from the App.vue Component',
-          });
-        }
-      "
-    >
-      Notification From App Component
-    </button>
     <main
       role="main"
       class="
         text-slate-900
-        bg-gray-50
+        bg-slate-100
         dark:text-slate-300 dark:bg-dark-navy
         energy:text-zinc-300 energy:bg-zinc-900
       "
@@ -64,7 +53,7 @@
     <transition-group
       name="toast-notification"
       tag="div"
-      class="toast-notifications"
+      class="z-[100] fixed top-2 right-2 flex flex-col-reverse gap-3"
       @before-enter="stopBodyOverflow"
       @after-enter="allowBodyOverflow"
       @before-leave="stopBodyOverflow"
@@ -215,30 +204,20 @@ html {
     padding: 10px;
   }
 }
-
-.toast-notifications {
-    z-index: 100;
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 0.8rem;
+.toast-notification-enter-active {
+  animation: toast-fade-in 0.5s ease-in-out;
+}
+.toast-notification-leave-active {
+  animation: toast-fade-in 0.5s ease-in-out reverse;
+}
+@keyframes toast-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
   }
-  .toast-notification-enter-active {
-    animation: toast-fade-in 0.5s ease-in-out;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  .toast-notification-leave-active {
-    animation: toast-fade-in 0.5s ease-in-out reverse;
-  }
-  @keyframes toast-fade-in {
-    from {
-      opacity: 0;
-      transform: scale(0.4);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
+}
 </style>
