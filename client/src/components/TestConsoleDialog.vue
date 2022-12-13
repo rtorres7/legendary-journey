@@ -1,4 +1,3 @@
-
 <template>
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="close">
@@ -28,58 +27,24 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="
-                inline-block
-                w-full
-                min-w-[300px]
-                sm:min-w-[400px]
-                lg:min-w-[500px]
-                max-w-xs
-                p-6
-                my-8
-                text-left text-sm
-                md:text-base
-                align-middle
-                transition-all
-                transform
-                text-slate-700
-                dark:text-slate-300
-                energy:text-zinc-300
-                bg-slate-100
-                dark:bg-slate-700
-                energy:bg-zinc-700
-                shadow-lg
-                rounded-lg
-              "
+              class="inline-block w-full min-w-[300px] sm:min-w-[400px] lg:min-w-[500px] max-w-xs p-6 my-8 text-left text-sm md:text-base align-middle transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg rounded-lg"
             >
               <div class="pt-6">
                 <button
                   type="button"
-                  class="
-                    absolute
-                    top-5
-                    right-5
-                    w-8
-                    h-8
-                    flex
-                    items-center
-                    justify-center
-                  "
+                  class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center"
                   tabindex="0"
                   @click="close"
                 >
-                  <span class="sr-only">Close navigation</span><XIcon class="h-5 w-5" aria-hidden="true" />
+                  <span class="sr-only">Close navigation</span>
+                  <XIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <div class="py-4">
-                  <p class="font-medium">
-                    Site Options
-                  </p>
+                  <p class="font-medium">Site Options</p>
                   <ul class="py-2 space-y-2">
                     <SwitchGroup>
                       <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4">
-                          Enable Alert
-                        </SwitchLabel>
+                        <SwitchLabel class="mr-4"> Enable Alert </SwitchLabel>
                         <Switch
                           v-model="alertEnabled"
                           :class="
@@ -87,33 +52,13 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
                               alertEnabled ? 'translate-x-6' : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
@@ -130,19 +75,7 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
@@ -150,24 +83,14 @@
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
                     </SwitchGroup>
                     <SwitchGroup>
                       <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4">
-                          Enable Admin
-                        </SwitchLabel>
+                        <SwitchLabel class="mr-4"> Enable Admin </SwitchLabel>
                         <Switch
                           v-model="adminEnabled"
                           :class="
@@ -175,33 +98,13 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
                               adminEnabled ? 'translate-x-6' : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
@@ -218,19 +121,7 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
@@ -238,50 +129,24 @@
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
-                      <label id="image-input" class="mr-4">Upload Your Own Article Image</label>
+                      <label id="image-input" class="mr-4"
+                        >Upload Your Own Article Image</label
+                      >
                       <div
-                        class="
-                          rounded
-                          shadow-md
-                          text-xs
-                          md:text-sm
-                          bg-mission-blue/30
-                          dark:bg-dark-navy/30
-                          energy:bg-zinc-900/30
-                        "
+                        class="rounded shadow-md text-xs md:text-sm bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
                       >
                         <label
                           for="image-input"
-                          class="
-                            relative
-                            cursor-pointer
-                            focus-within:ring-2
-                            font-medium
-                          "
+                          class="relative cursor-pointer focus-within:ring-2 font-medium"
                         >
                           <div
-                            class="
-                              px-2
-                              md:px-4
-                              py-2
-                              text-white
-                              dark:text-slate-300
-                              energy:text-zinc-300
-                            "
+                            class="px-2 md:px-4 py-2 text-white dark:text-slate-300 energy:text-zinc-300"
                           >
                             Choose File
                           </div>
@@ -292,7 +157,7 @@
                             class="sr-only"
                             accept="image/jpeg, image/png, image/jpg"
                             @change="changeArticleImage"
-                          >
+                          />
                         </label>
                       </div>
                     </div>
@@ -306,39 +171,23 @@
                         tabindex="0"
                         @click="removeArticleImage"
                       >
-                        <span class="sr-only">Remove Current Image</span><XIcon class="h-5 w-5" aria-hidden="true" />
+                        <span class="sr-only">Remove Current Image</span>
+                        <XIcon class="h-5 w-5" aria-hidden="true" />
                       </button>
                       <div class="line-clamp-1">
-                        <span class="font-medium">Current File: </span><span
-                          class="
-                            ml-1
-                            text-slate-900
-                            dark:text-slate-400
-                            energy:text-zinc-400
-                          "
-                        >{{ uploadFileName }}</span>
+                        <span class="font-medium">Current File: </span
+                        ><span
+                          class="ml-1 text-slate-900 dark:text-slate-400 energy:text-zinc-400"
+                          >{{ uploadFileName }}</span
+                        >
                       </div>
                     </div>
                     <div class="flex items-center justify-between">
-                      <label id="toast-toggle" class="mr-4">Notification Toast</label>
+                      <label id="toast-toggle" class="mr-4"
+                        >Notification Toast</label
+                      >
                       <button
-                        class="
-                          rounded
-                          shadow-md
-                          text-xs
-                          md:text-sm
-                          px-2
-                          md:px-4
-                          py-2
-                          focus-within:ring-2
-                          font-medium
-                          text-white
-                          dark:text-slate-300
-                          energy:text-zinc-300
-                          bg-mission-blue/30
-                          dark:bg-dark-navy/30
-                          energy:bg-zinc-900/30
-                        "
+                        class="rounded shadow-md text-xs md:text-sm px-2 md:px-4 py-2 focus-within:ring-2 font-medium text-white dark:text-slate-300 energy:text-zinc-300 bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
                         @click="toggleNotificationToast"
                       >
                         Toggle
@@ -391,44 +240,19 @@
                 </div>
                 <div
                   v-show="currentRoute === 'home'"
-                  class="
-                    py-4
-                    border-t border-slate-900/10
-                    dark:border-slate-50/[0.06]
-                    energy:border-zinc-500/50
-                  "
+                  class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
                 >
-                  <p class="font-medium">
-                    Home Options
-                  </p>
+                  <p class="font-medium">Home Options</p>
                   <div class="py-2">
                     <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4">Published Articles (max. 5)</label>
+                      <label id="article-counter" class="mr-4"
+                        >Published Articles (max. 5)</label
+                      >
                       <div
-                        class="
-                          inline-flex
-                          items-center
-                          rounded
-                          shadow-md
-                          bg-mission-blue/30
-                          dark:bg-dark-navy/30
-                          energy:bg-zinc-900/30
-                        "
+                        class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
                       >
                         <button
-                          class="
-                            rounded-l
-                            px-4
-                            py-2
-                            text-sm
-                            font-medium
-                            hover:bg-mission-blue/70
-                            dark:hover:bg-slate-900/70
-                            energy:hover:bg-zinc-900/50
-                            text-gray-100
-                            dark:text-slate-300
-                            energy:text-zinc-300
-                          "
+                          class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
                             changePublishedArticleCount(
                               publishedArticleCountFromStore - 1
@@ -438,32 +262,12 @@
                           -
                         </button>
                         <div
-                          class="
-                            px-4
-                            py-2
-                            text-sm
-                            font-medium
-                            bg-gray-100
-                            dark:bg-slate-700
-                            energy:bg-zinc-700
-                          "
+                          class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-slate-700 energy:bg-zinc-700"
                         >
                           {{ publishedArticleCountFromStore }}
                         </div>
                         <button
-                          class="
-                            rounded-r
-                            px-4
-                            py-2
-                            text-sm
-                            font-medium
-                            hover:bg-mission-blue/70
-                            dark:hover:bg-slate-900/70
-                            energy:hover:bg-zinc-900/50
-                            text-gray-100
-                            dark:text-slate-300
-                            energy:text-zinc-300
-                          "
+                          class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
                             changePublishedArticleCount(
                               publishedArticleCountFromStore + 1
@@ -475,63 +279,25 @@
                       </div>
                     </div>
                     <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4">Open Source Feeds (max. 4)</label>
+                      <label id="article-counter" class="mr-4"
+                        >Open Source Feeds (max. 4)</label
+                      >
                       <div
-                        class="
-                          inline-flex
-                          items-center
-                          rounded
-                          shadow-md
-                          bg-mission-blue/30
-                          dark:bg-dark-navy/30
-                          energy:bg-zinc-900/30
-                        "
+                        class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
                       >
                         <button
-                          class="
-                            rounded-l
-                            px-4
-                            py-2
-                            text-sm
-                            font-medium
-                            hover:bg-mission-blue/70
-                            dark:hover:bg-slate-900/70
-                            energy:hover:bg-zinc-900/50
-                            text-gray-100
-                            dark:text-slate-300
-                            energy:text-zinc-300
-                          "
+                          class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="changeFeedCount(feedCountFromStore - 1)"
                         >
                           -
                         </button>
                         <div
-                          class="
-                            px-4
-                            py-2
-                            text-sm
-                            font-medium
-                            bg-gray-100
-                            dark:bg-slate-700
-                            energy:bg-zinc-700
-                          "
+                          class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-slate-700 energy:bg-zinc-700"
                         >
                           {{ feedCountFromStore }}
                         </div>
                         <button
-                          class="
-                            rounded-r
-                            px-4
-                            py-2
-                            text-sm
-                            font-medium
-                            hover:bg-mission-blue/70
-                            dark:hover:bg-slate-900/70
-                            energy:hover:bg-zinc-900/50
-                            text-gray-100
-                            dark:text-slate-300
-                            energy:text-zinc-300
-                          "
+                          class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="changeFeedCount(feedCountFromStore + 1)"
                         >
                           +
@@ -550,19 +316,7 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
@@ -570,15 +324,7 @@
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
@@ -595,19 +341,7 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
@@ -615,15 +349,7 @@
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
@@ -640,19 +366,7 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
@@ -660,15 +374,7 @@
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
@@ -677,16 +383,9 @@
                 </div>
                 <div
                   v-show="currentRoute === 'search'"
-                  class="
-                    py-4
-                    border-t border-slate-900/10
-                    dark:border-slate-50/[0.06]
-                    energy:border-zinc-500/50
-                  "
+                  class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
                 >
-                  <p class="font-medium">
-                    Search Options
-                  </p>
+                  <p class="font-medium">Search Options</p>
                   <div class="py-2">
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
@@ -700,19 +399,7 @@
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
+                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
                           <span
                             :class="
@@ -720,15 +407,7 @@
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
+                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
                           />
                         </Switch>
                       </div>
@@ -875,11 +554,11 @@ export default {
 
     const toggleNotificationToast = () => {
       createNotification({
-        title: '[Test] Changes saved',
+        title: "[Test] Changes saved",
         message: `Your changes has been saved.`,
-        type: 'success',
+        type: "success",
       });
-    }
+    };
 
     const changePublishedArticleCount = (count) => {
       store.dispatch("daniel/setDanielArticles", count);

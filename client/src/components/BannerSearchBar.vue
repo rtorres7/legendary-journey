@@ -1,88 +1,46 @@
 <template>
   <div
-    class="
-      flex
-      items-center
-      pointer-events-auto
-      px-3
-      mx-4
-      max-w-[640px]
-      rounded-md
-      shadow-sm
-      w-full
-      border border-slate-400
-      dark:border-slate-700/80
-      energy:border-zinc-700/80
-      bg-transparent
-      dark:bg-transparent
-      energy:bg-zinc-900
-      leading-8
-      text-sm text-primary
-    "
+    class="flex items-center pointer-events-auto px-3 mx-4 max-w-[640px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
   >
     <button type="button" tabindex="0" @click="onClickSearch">
       <span class="sr-only">Search</span>
       <SearchIcon
-        class="
-          w-5
-          h-5
-          text-slate-400
-          dark:text-slate-500/90
-          energy:text-zinc-500/90
-        " aria-hidden="true"
+        class="w-5 h-5 text-slate-400 dark:text-slate-500/90 energy:text-zinc-500/90"
+        aria-hidden="true"
       />
     </button>
     <vue3-simple-typeahead
-      id="typeahead_id" class="
-        ml-2
-        focus-visible:outline-none
-        bg-transparent
-        w-full
-        text-slate-200
-        dark:text-slate-300
-        energy:text-zinc-300
-      " placeholder="Search for keywords, documents, or pages" :items="searches"
+      id="typeahead_id"
+      class="ml-2 focus-visible:outline-none bg-transparent w-full text-slate-200 dark:text-slate-300 energy:text-zinc-300"
+      placeholder="Search for keywords, documents, or pages"
+      :items="searches"
       :min-input-length="1"
       :item-projection="
         (item) => {
           return item.text;
         }
-      " :select-on-tab="false" :value="modelValue" @selectItem="selectItemEventHandler"
-      @onInput="onInputEventHandler" @keydown.enter.prevent="onEnter"
+      "
+      :select-on-tab="false"
+      :value="modelValue"
+      @selectItem="selectItemEventHandler"
+      @onInput="onInputEventHandler"
+      @keydown.enter.prevent="onEnter"
     >
       <template #list-item-text="slot">
         <div
-          class="
-            bg-slate-100
-            dark:bg-slate-800
-            energy:bg-zinc-600
-            hover:bg-slate-200
-            dark:hover:bg-slate-700
-            energy:hover:bg-zinc-500
-            active:bg-slate-300
-            dark:active:bg-slate-600
-            energy:active:bg-zinc-400
-            px-2
-            py-1
-            flex
-            justify-between
-          " :class="
+          class="bg-slate-100 dark:bg-slate-800 energy:bg-zinc-600 hover:bg-slate-200 dark:hover:bg-slate-700 energy:hover:bg-zinc-500 active:bg-slate-300 dark:active:bg-slate-600 energy:active:bg-zinc-400 px-2 py-1 flex justify-between"
+          :class="
             slot.item.type === 'user'
               ? 'text-purple-800 dark:text-purple-300 energy:text-purple-300'
               : 'text-slate-800 dark:text-slate-300 energy:text-zinc-300'
-        "
+          "
         >
           <span v-html="slot.boldMatchText(slot.itemProjection(slot.item))" />
           <template v-if="slot.item.type === 'user'">
             <button @click="deleteSearch(slot.item)">
               <XIcon
-                class="
-                  h-5
-                  w-5
-                  text-slate-800
-                  dark:text-slate-300
-                  energy:text-zinc-300
-                " aria-hidden="true"
+                class="h-5 w-5 text-slate-800 dark:text-slate-300 energy:text-zinc-300"
+                aria-hidden="true"
               />
             </button>
           </template>
@@ -212,7 +170,7 @@ export default {
   width: 100%;
 }
 
-.simple-typeahead>input {
+.simple-typeahead > input {
   margin-bottom: 0;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
