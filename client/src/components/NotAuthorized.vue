@@ -4,53 +4,44 @@
       Error
       <span
         class="text-mission-blue dark:text-teal-400 energy:text-energy-yellow"
-      >403</span>
+        >403</span
+      >
       You don't have access to this page.
     </p>
     <p class="font-light mt-6">
-      The page you are trying to access is limited to to users with special privileges. If you reached this page from another part of the site,
-      please contact us so we can correct the problem:
+      The page you are trying to access is limited to to users with special
+      privileges. If you reached this page from another part of the site, please
+      contact us so we can correct the problem.
     </p>
     <br />
+    <p>NCTC/DI Managing Editor, NCTC Current</p>
     <p>
-      NCTC/DI Managing Editor, NCTC Current
-    </p>
-    <p>
-      U: <span
-        class="
-          text-mission-light-blue"
-      >(571)280-3627</span>
-
+      U:
+      <span
+        class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+        >(571)280-3627</span
+      >
       S:
       <span
-        class="
-          text-mission-light-blue"
-      >XX-XXXXX</span>
+        class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+        >93-24533</span
+      >
     </p>
     <br />
-    <p>
-      ITS Help -24/7 Support
-    </p>
-      <a
-        :href="`mailto:${metadata.footer_contact.email}`" class="
-          text-mission-light-blue
-          flex
-          items-center
-          hover:underline
-          w-fit
-          m-0
-          md:m-auto
-        "
-      >
-        {{ metadata.footer_contact.email }}
-        <MailIcon class="h-5 w-5 m1-1" aria-hidden="true" />
-      </a>
+    <p>ITS Help -24/7 Support</p>
+    <a
+      :href="`mailto:${metadata.footer_contact.email}`"
+      class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow flex items-center hover:underline w-fit m-0 md:m-auto"
+    >
+      {{ metadata.footer_contact.email }}
+      <MailIcon class="h-5 w-5 m1-1" aria-hidden="true" />
+    </a>
   </div>
 </template>
 
 <script>
-import { metadata } from '@/config';
-import { MailIcon } from '@heroicons/vue/outline';
+import { metadata } from "@/config";
+import { MailIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
@@ -64,5 +55,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
