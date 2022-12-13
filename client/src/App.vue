@@ -4,7 +4,9 @@
     class="min-h-full bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800"
     tabindex="-1"
   >
-    <button class="skipLink" @click="skipToMain">Skip to main content</button>
+    <button class="skipLink" @click="skipToMainTest">
+      Skip to main content
+    </button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
@@ -26,6 +28,7 @@
           </AuthorizatonWrapper>
         </template>
       </div>
+      <ScrollToTopButton />
     </main>
     <TheFooter v-if="!['attachment'].includes($route.name)" />
     <transition-group
@@ -60,20 +63,20 @@
 import { computed, onMounted, provide, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import useNotifications from "@/composables/notifications";
 import AuthorizatonWrapper from "@/components/AuthorizationWrapper";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
 import ToastNotification from "@/components/ToastNotification";
-import useNotifications from "@/composables/notifications";
-// import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
 
 export default {
   components: {
     AuthorizatonWrapper,
+    ScrollToTopButton,
     TheBanner,
     TheFooter,
     ToastNotification,
-    // ScrollToTopBtn,
   },
   setup() {
     const route = useRoute();
@@ -124,6 +127,11 @@ export default {
         //do nothing
       }
     });
+
+    const skipToMain = () => {
+      mainContent.value.focus();
+    };
+
     return {
       loadingUser,
       notifications,
@@ -134,12 +142,8 @@ export default {
       isLiveDemo,
       topOfApp,
       mainContent,
+      skipToMain,
     };
-  },
-  methods: {
-    skipToMain() {
-      this.mainContent.focus();
-    },
   },
 };
 </script>
