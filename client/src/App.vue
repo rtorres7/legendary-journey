@@ -1,40 +1,20 @@
 <template>
   <div
     ref="topOfApp"
-    class="
-      min-h-full
-      bg-mission-blue
-      dark:bg-dark-space-blue
-      energy:bg-zinc-800
-    "
+    class="min-h-full bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800"
     tabindex="-1"
   >
-    <button class="skipLink" @click="skipToMain">
+    <button class="skipLink" @click="skipToMainTest">
       Skip to main content
     </button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
-      class="
-        text-slate-900
-        bg-slate-100
-        dark:text-slate-300 dark:bg-dark-navy
-        energy:text-zinc-300 energy:bg-zinc-900
-      "
+      class="text-slate-900 bg-slate-100 dark:text-slate-300 dark:bg-dark-navy energy:text-zinc-300 energy:bg-zinc-900"
     >
       <div
         ref="mainContent"
-        class="
-          max-w-8xl
-          min-h-[80vh]
-          md:min-h-[88vh]
-          lg:min-h-[82vh]
-          mx-auto
-          py-3
-          px-4
-          sm:px-6
-          lg:px-8
-        "
+        class="max-w-8xl min-h-[80vh] md:min-h-[88vh] lg:min-h-[82vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
         tabindex="-1"
       >
         <template v-if="loadingUser">
@@ -48,6 +28,7 @@
           </AuthorizatonWrapper>
         </template>
       </div>
+      <ScrollToTopButton />
     </main>
     <TheFooter v-if="!['attachment'].includes($route.name)" />
     <transition-group
@@ -60,7 +41,7 @@
       @after-leave="allowBodyOverflow"
     >
       <ToastNotification
-        v-for="(item) in notifications"
+        v-for="item in notifications"
         :id="item.id"
         :key="item.id"
         :type="item.type"
@@ -82,20 +63,20 @@
 import { computed, onMounted, provide, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import AuthorizatonWrapper from "@/components/AuthorizationWrapper"
+import useNotifications from "@/composables/notifications";
+import AuthorizatonWrapper from "@/components/AuthorizationWrapper";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
-import ToastNotification from "@/components/ToastNotification"
-import useNotifications from "@/composables/notifications";
-// import ScrollToTopBtn from "@/components/ScrollToTopBtn.vue";
+import ToastNotification from "@/components/ToastNotification";
 
 export default {
   components: {
     AuthorizatonWrapper,
+    ScrollToTopButton,
     TheBanner,
     TheFooter,
-    ToastNotification
-    // ScrollToTopBtn,
+    ToastNotification,
   },
   setup() {
     const route = useRoute();
@@ -146,6 +127,11 @@ export default {
         //do nothing
       }
     });
+
+    const skipToMain = () => {
+      mainContent.value.focus();
+    };
+
     return {
       loadingUser,
       notifications,
@@ -156,20 +142,20 @@ export default {
       isLiveDemo,
       topOfApp,
       mainContent,
+      skipToMain,
     };
-  },
-  methods: {
-    skipToMain() {
-      this.mainContent.focus();
-    },
   },
 };
 </script>
 <style lang="scss">
-@use "~inter-ui/default" with
-  ($inter-font-display: swap, $inter-font-path: "~inter-ui/Inter (web)");
-@use "~inter-ui/variable" with
-  ($inter-font-display: swap, $inter-font-path: "~inter-ui/Inter (web)");
+@use "~inter-ui/default" with (
+  $inter-font-display: swap,
+  $inter-font-path: "~inter-ui/Inter (web)"
+);
+@use "~inter-ui/variable" with (
+  $inter-font-display: swap,
+  $inter-font-path: "~inter-ui/Inter (web)"
+);
 @include default.all;
 @include variable.all;
 

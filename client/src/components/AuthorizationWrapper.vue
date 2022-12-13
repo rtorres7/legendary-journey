@@ -9,33 +9,33 @@
 
 <script>
 import { computed } from "vue";
-import { useStore } from "vuex"
+import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import NotAuthorized from "@/components/NotAuthorized"
+import NotAuthorized from "@/components/NotAuthorized";
 
 export default {
   components: {
-    NotAuthorized
+    NotAuthorized,
   },
   setup() {
-    const store = useStore()
-    const route = useRoute()
-    const canManageWire = computed(
-      () => store.getters["user/canManageWire"]
-    );
+    const store = useStore();
+    const route = useRoute();
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
     const authorized = computed(() => {
-      if(route.name === 'publish' && !canManageWire.value){
-        return false
+      if (
+        (route.name === "publish" || "edit" || "new") &&
+        !canManageWire.value
+      ) {
+        return false;
       }
-      return true
-    })
+      return true;
+    });
 
     return {
-      authorized
-    }
+      authorized,
+    };
   },
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

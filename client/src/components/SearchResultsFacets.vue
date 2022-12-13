@@ -10,12 +10,7 @@
           <template v-for="(facet, index) in rows" :key="facet">
             <div :class="index > 4 && !expand ? 'hidden' : 'block'">
               <a
-                class="
-                  cursor-pointer
-                  text-sm text-mission-light-blue
-                  dark:text-teal-400
-                  energy:text-energy-yellow
-                "
+                class="cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                 @click="filter(facetType, facet.key)"
                 >{{ facet.name }}
               </a>
@@ -24,16 +19,8 @@
           </template>
           <template v-if="rows.length > 5">
             <span
+              class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
               @click="toggleExpand(facetType)"
-              class="
-                max-w-fit
-                ml-2
-                mt-2
-                cursor-pointer
-                text-sm text-mission-light-blue
-                dark:text-teal-400
-                energy:text-energy-yellow
-              "
             >
               <template v-if="expand"> Show Less... </template>
               <template v-else> Show More... </template>
@@ -69,7 +56,8 @@ export default {
       };
       query[`${type}[]`] = code;
       router.push({
-        query: query,
+        name: "search",
+        query,
       });
     };
 
@@ -81,5 +69,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
