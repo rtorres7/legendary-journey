@@ -11,34 +11,29 @@
       The page you are trying to access is limited to to users with special privileges. If you reached this page from another part of the site,
       please contact us so we can correct the problem:
     </p>
-    NCTC/DI Managing Editor, NCTC Current
-
+    <br />
+    <p>
+      NCTC/DI Managing Editor, NCTC Current
+    </p>
     <p>
       U: <span
         class="
-          text-amber-300
-          dark:text-teal-400
-          energy:text-energy-yellow
-        "
+          text-mission-light-blue"
       >(571)280-3627</span>
 
       S:
       <span
         class="
-          text-amber-300
-          dark:text-teal-400
-          energy:text-energy-yellow
-        "
+          text-mission-light-blue"
       >XX-XXXXX</span>
     </p>
+    <br />
     <p>
       ITS Help -24/7 Support
     </p>
       <a
         :href="`mailto:${metadata.footer_contact.email}`" class="
-          text-amber-300
-          dark:text-teal-400
-          energy:text-energy-yellow
+          text-mission-light-blue
           flex
           items-center
           hover:underline
