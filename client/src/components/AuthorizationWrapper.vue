@@ -25,7 +25,7 @@ export default {
     );
 
     const authorized = computed(() => {
-      if(route.name === 'publish' || 'edit' && !canManageWire.value){
+      if(route.name === 'publish' || 'edit' || 'new' && !canManageWire.value){
         return false
       }
       return true
