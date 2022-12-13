@@ -53,7 +53,7 @@
             :to="{
               name: 'edit',
               params: {
-                date: article?.date_published,
+                date: article?.created_on,
                 id: article?.feature_id ? article.feature_id : -1,
                 doc_num: article?.doc_num,
               },
