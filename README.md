@@ -45,35 +45,29 @@
 - Material Icon Theme - _Philipp Kief_
 - Project Manager - _Alessandro Fragnani_
 - Night Owl - _sarah.drasner_
--
 
 ## Project setup
 
-```
-
 ### Running the frontend (must be in client folder)
 ```
-
 cd client
 npm install
 npm run serve:low
-
 ```
 
 ### Compiles and minifies for production (must be in client folder)
+
 ```
-
 npm run build:low
-
 ```
 
 ### Lints and fixes files
+
+
 ```
-
 npm run lint
-
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
-```
