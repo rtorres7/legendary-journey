@@ -40,6 +40,45 @@
                   <XIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <div class="py-4">
+                  <p class="font-medium">Access Control</p>
+                  <ul class="py-2 space-y-2">
+                    <template
+                      v-for="(authorization, index) in Object.keys(
+                        userAuthorizations
+                      )"
+                      :key="index"
+                    >
+                      <SwitchGroup>
+                        <div class="flex items-center justify-between">
+                          <SwitchLabel class="mr-4">{{
+                            authorization
+                          }}</SwitchLabel>
+                          <Switch
+                            v-model="userAuthorizations[authorization]"
+                            :class="
+                              userAuthorizations[authorization]
+                                ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                                : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                            "
+                            class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+                          >
+                            <span
+                              :class="
+                                userAuthorizations[authorization]
+                                  ? 'translate-x-6'
+                                  : 'translate-x-1'
+                              "
+                              class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
+                            />
+                          </Switch>
+                        </div>
+                      </SwitchGroup>
+                    </template>
+                  </ul>
+                </div>
+                <div
+                  class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
+                >
                   <p class="font-medium">Site Options</p>
                   <ul class="py-2 space-y-2">
                     <SwitchGroup>
@@ -89,27 +128,6 @@
                       </div>
                     </SwitchGroup>
                     <SwitchGroup>
-                      <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4"> Enable Admin </SwitchLabel>
-                        <Switch
-                          v-model="adminEnabled"
-                          :class="
-                            adminEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                          <span
-                            :class="
-                              adminEnabled ? 'translate-x-6' : 'translate-x-1'
-                            "
-                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup>
-                    <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
                           Toggle Sample Article Image
@@ -135,7 +153,7 @@
                       </div>
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
-                      <label id="image-input" class="mr-4"
+                      <label id="article-input" class="mr-4"
                         >Upload Your Own Article Image</label
                       >
                       <div
@@ -193,49 +211,6 @@
                         Toggle
                       </button>
                     </div>
-                    <!-- <SwitchGroup>
-                      <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4"
-                          >Enable API 2000ms Delay</SwitchLabel
-                        >
-                        <Switch
-                          v-model="delayEnabled"
-                          :class="
-                            delayEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
-                        >
-                          <span
-                            :class="
-                              delayEnabled ? 'translate-x-6' : 'translate-x-1'
-                            "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup> -->
                   </ul>
                 </div>
                 <div
@@ -278,7 +253,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="flex items-center justify-between mt-2">
+                    <!-- <div class="flex items-center justify-between mt-2">
                       <label id="article-counter" class="mr-4"
                         >Open Source Feeds (max. 4)</label
                       >
@@ -303,7 +278,7 @@
                           +
                         </button>
                       </div>
-                    </div>
+                    </div> -->
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
@@ -329,7 +304,7 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
-                    <SwitchGroup>
+                    <!-- <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
                           Enable Loading Open Source Feeds
@@ -378,11 +353,16 @@
                           />
                         </Switch>
                       </div>
-                    </SwitchGroup>
+                    </SwitchGroup> -->
                   </div>
                 </div>
                 <div
-                  v-show="currentRoute === 'search'"
+                  v-show="
+                    currentRoute === 'search' ||
+                    currentRoute === 'countries' ||
+                    currentRoute === 'regions' ||
+                    currentRoute === 'subregions'
+                  "
                   class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
                 >
                   <p class="font-medium">Search Options</p>
@@ -456,7 +436,7 @@ export default {
       default: false,
     },
   },
-  emits: ["update:alert"],
+  emits: ["update:alert", "close"],
   setup(props, { emit }) {
     const store = useStore();
     const route = useRoute();
@@ -484,6 +464,9 @@ export default {
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
 
+    const userAuthorizations = computed(
+      () => store.getters["user/authorizations"]
+    );
     const loadingMetadataFromStore = computed(
       () => store.state.metadata.loading
     );
@@ -528,13 +511,8 @@ export default {
       }
     });
 
-    //TODO: BUG Enabling this triggers an infinite loop
     watch(loadingResultsEnabled, (enabled) => {
-      if (enabled) {
-        //store.dispatch("search/removeSearch");
-      } else {
-        //store.dispatch("search/search");
-      }
+      store.dispatch("search/setLoading", enabled);
     });
 
     const removeArticleImage = () => {
@@ -617,6 +595,7 @@ export default {
       currentRoute,
       close,
       alertEnabled,
+      userAuthorizations,
       loadingMetadataEnabled,
       loadingArticlesEnabled,
       loadingResultsEnabled,

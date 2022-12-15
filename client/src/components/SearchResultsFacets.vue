@@ -38,7 +38,10 @@ import { useRoute, useRouter } from "vue-router";
 
 export default {
   props: {
-    facets: Object,
+    facets: {
+      type: Object,
+      required: true,
+    },
   },
   setup(props) {
     const route = useRoute();
