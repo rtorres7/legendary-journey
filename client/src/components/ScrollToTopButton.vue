@@ -1,7 +1,7 @@
 <template>
   <div
     ref="scrollTopButton"
-    class="invisible sticky w-full flex justify-end bottom-0 pb-3 pr-5 lg:pr-16 transition"
+    class="invisible sticky w-full flex justify-end bottom-0 pb-3 transition"
   >
     <button
       role="button"
@@ -10,7 +10,7 @@
       @click="scrollToTop"
     >
       <ChevronUpIcon
-        class="hover:animate-bounce h-8 w-8 p-1 bg-dark-space-blue dark:bg-slate-700 energy:bg-zinc-700 text-mission-gray dark:text-teal-300 energy:text-energy-yellow rounded-full"
+        class="h-8 w-8 p-1 bg-dark-space-blue dark:bg-slate-700 energy:bg-zinc-700 text-mission-gray dark:text-teal-300 energy:text-energy-yellow rounded-full"
       />
     </button>
   </div>

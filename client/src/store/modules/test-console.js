@@ -1,3 +1,4 @@
+//Module for Test Console specific state
 export default {
   namespaced: true,
   state: {
@@ -8,25 +9,25 @@ export default {
 
   actions: {
     setSampleImage({ commit }, value) {
-      commit("toggleSampleImage", value)
+      commit("toggleSampleImage", value);
     },
     setAdmin({ commit }, value) {
-      commit("toggleAdmin", value)
+      commit("toggleAdmin", value);
     },
     setUploadBinary({ commit }, value) {
-      commit("saveUploadBinary", value)
-    }
+      commit("saveUploadBinary", value);
+    },
   },
 
   mutations: {
     toggleSampleImage(state, value) {
-      state.sampleImage = value
+      state.sampleImage = value;
     },
     toggleAdmin(state, value) {
-      state.admin = value
+      state.admin = value;
     },
     saveUploadBinary(state, value) {
-      state.uploadBinary = value
-    }
+      state.uploadBinary = value;
+    },
   },
 };

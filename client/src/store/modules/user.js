@@ -1,5 +1,5 @@
-import { user } from '@/data'
-import axios from '@/config/wireAxios'
+import { user } from "@/data";
+import axios from "@/config/wireAxios";
 
 export default {
   namespaced: true,
@@ -7,8 +7,7 @@ export default {
     loading: true,
     pretend: null,
     user: {
-      authorizations: {
-      },
+      authorizations: {},
     },
   },
 
@@ -18,6 +17,9 @@ export default {
     },
     loading: (state) => {
       return state.loading;
+    },
+    authorizations: (state) => {
+      return state.user.authorizations;
     },
     hasRole: (state) => (roleName) => {
       if (state.user.roles) {
@@ -36,21 +38,27 @@ export default {
   actions: {
     loadUser({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        console.log('[store] loadUser: ', user)
-        setTimeout(() => commit("importUser", user), 750)
+      if (process.env.NODE_ENV === "low") {
+        console.log("[store] loadUser: ", user);
+        setTimeout(() => commit("importUser", user), 750);
       } else {
         axios.get("/my_wire/user_data").then((response) => {
-          console.log('[store] loadUser: ', response.data)
+          console.log("[store] loadUser: ", response.data);
           commit("importUser", response.data);
         });
       }
+    },
+    setAuthorization({ commit }, { auth, value }) {
+      commit("toggleAuthorization", { auth, value });
     },
   },
 
   mutations: {
     importUser(state, data) {
       (state.user = data), (state.loading = false);
+    },
+    toggleAuthorization(state, { auth, value }) {
+      state.user.authorizations[auth] = value;
     },
   },
 };
