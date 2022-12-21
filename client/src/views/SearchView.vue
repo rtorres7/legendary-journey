@@ -941,7 +941,7 @@ export default {
             }
             for (let i = 0; i < route.query[type].length; i++) {
               selectedModels.push(
-                items.find((item) => item.code === route.query[type][i])
+                items.find((item) => item.code === (type === 'product_types[]' ? parseInt(route.query[type][i]) : route.query[type][i]))
               );
             }
           }
@@ -994,32 +994,6 @@ export default {
       });
       return items;
     };
-    const buildReportingTypes = () => {
-      // let items = [];
-      // criteria.value.reporting_types.forEach((reportingType) => {
-      //   items.push({ ...reportingType, type: "reporting_types[]" });
-      //   reportingType.productTypes.forEach((productTypeCode) => {
-      //     const productType = getValueForCode(
-      //       criteria.value.product_types,
-      //       productTypeCode
-      //     );
-      //     items.push({
-      //       ...productType,
-      //       code: productType.code.toString(),
-      //       type: "product_types[]",
-      //       subitem: true,
-      //     });
-      //   });
-      // });
-      let items = [
-        {
-          code: "10376",
-          name: "Current",
-          type: "product_types[]",
-        },
-      ];
-      return items;
-    };
 
     const buildQueryFilters = () => {
       const regions = {
@@ -1031,7 +1005,7 @@ export default {
         types: ["issues[]", "topics[]"],
       };
       const reportings = {
-        items: buildReportingTypes(),
+        items: buildItems(criteria.value.product_types, "product_types[]"),
         types: ["product_types[]"],
         //types: ["reporting_types[]", "product_types[]"],
       };
