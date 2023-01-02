@@ -941,7 +941,13 @@ export default {
             }
             for (let i = 0; i < route.query[type].length; i++) {
               selectedModels.push(
-                items.find((item) => item.code === (type === 'product_types[]' ? parseInt(route.query[type][i]) : route.query[type][i]))
+                items.find(
+                  (item) =>
+                    item.code ===
+                    (type === "product_types[]"
+                      ? parseInt(route.query[type][i])
+                      : route.query[type][i])
+                )
               );
             }
           }

@@ -25,7 +25,7 @@ export default {
         view: "grid",
         landing: true,
       };
-      query['countries[]'] = country.code;
+      query["countries[]"] = country.code;
       router.push({
         name: "countries",
         params: {
@@ -62,9 +62,14 @@ export default {
         fill: am5.color(0xc2c4cb),
       });
       polygonSeries.mapPolygons.template.events.on("click", function (event) {
-        console.log('event.target.dataItem: ', event.target.dataItem)
+        console.log("event.target.dataItem: ", event.target.dataItem);
         let dataItem = event.target.dataItem.dataContext;
-        navigateToCountry(getValueForName(criteria.value.countries, dataItem.name));
+        navigateToCountry(
+          getValueForName(
+            criteria.value.countries,
+            dataItem.name === "Türkiye" ? "Turkey" : dataItem.name
+          )
+        );
       });
     });
     return {

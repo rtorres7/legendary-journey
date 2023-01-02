@@ -1,14 +1,7 @@
 <template>
-  <Popover class="relative">
+  <Popover class="static">
     <PopoverButton
-      class="
-        flex
-        items-center
-        font-semibold
-        hover:text-slate-100
-        dark:hover:text-slate-100
-        energy:hover:text-energy-yellow
-      "
+      class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
       tabindex="0"
       :title="title"
     >
@@ -23,23 +16,11 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <PopoverPanel
-        class="origin-top-right min-w-[26rem] right-0 transform z-10"
-        :class="wideShrunk ? 'w-full fixed' : 'absolute'"
+        class="origin-top-right absolute min-w-[26rem] right-0 transform z-10"
+        :class="wideShrunk ? 'w-full' : ''"
       >
         <div
-          class="
-            shadow-2xl
-            py-4
-            px-6
-            w-full
-            ring-1 ring-black ring-opacity-5
-            focus:outline-none
-            bg-mission-blue/95
-            dark:bg-dark-space-blue/95
-            energy:bg-zinc-800/95
-            dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-            energy:text-zinc-300
-          "
+          class="shadow-2xl py-4 px-6 w-full ring-1 ring-black ring-opacity-5 focus:outline-none bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300"
         >
           <slot name="content" />
         </div>
