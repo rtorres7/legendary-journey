@@ -4,9 +4,7 @@
     class="min-h-full bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800"
     tabindex="-1"
   >
-    <button class="skipLink" @click="skipToMainTest">
-      Skip to main content
-    </button>
+    <button class="skipLink" @click="skipToMain">Skip to main content</button>
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
@@ -26,9 +24,9 @@
           <AuthorizatonWrapper>
             <router-view />
           </AuthorizatonWrapper>
+          <ScrollToTopButton />
         </template>
       </div>
-      <ScrollToTopButton />
     </main>
     <TheFooter v-if="!['attachment'].includes($route.name)" />
     <transition-group

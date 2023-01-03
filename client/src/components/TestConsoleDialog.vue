@@ -37,9 +37,48 @@
                   @click="close"
                 >
                   <span class="sr-only">Close navigation</span>
-                  <XIcon class="h-5 w-5" aria-hidden="true" />
+                  <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <div class="py-4">
+                  <p class="font-medium">Access Control</p>
+                  <ul class="py-2 space-y-2">
+                    <template
+                      v-for="(authorization, index) in Object.keys(
+                        userAuthorizations
+                      )"
+                      :key="index"
+                    >
+                      <SwitchGroup>
+                        <div class="flex items-center justify-between">
+                          <SwitchLabel class="mr-4">{{
+                            authorization
+                          }}</SwitchLabel>
+                          <Switch
+                            v-model="userAuthorizations[authorization]"
+                            :class="
+                              userAuthorizations[authorization]
+                                ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
+                                : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                            "
+                            class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+                          >
+                            <span
+                              :class="
+                                userAuthorizations[authorization]
+                                  ? 'translate-x-6'
+                                  : 'translate-x-1'
+                              "
+                              class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
+                            />
+                          </Switch>
+                        </div>
+                      </SwitchGroup>
+                    </template>
+                  </ul>
+                </div>
+                <div
+                  class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
+                >
                   <p class="font-medium">Site Options</p>
                   <ul class="py-2 space-y-2">
                     <SwitchGroup>
@@ -89,27 +128,6 @@
                       </div>
                     </SwitchGroup>
                     <SwitchGroup>
-                      <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4"> Enable Admin </SwitchLabel>
-                        <Switch
-                          v-model="adminEnabled"
-                          :class="
-                            adminEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                          <span
-                            :class="
-                              adminEnabled ? 'translate-x-6' : 'translate-x-1'
-                            "
-                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup>
-                    <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
                           Toggle Sample Article Image
@@ -135,7 +153,7 @@
                       </div>
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
-                      <label id="image-input" class="mr-4"
+                      <label id="article-input" class="mr-4"
                         >Upload Your Own Article Image</label
                       >
                       <div
@@ -172,7 +190,7 @@
                         @click="removeArticleImage"
                       >
                         <span class="sr-only">Remove Current Image</span>
-                        <XIcon class="h-5 w-5" aria-hidden="true" />
+                        <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                       </button>
                       <div class="line-clamp-1">
                         <span class="font-medium">Current File: </span
@@ -193,49 +211,6 @@
                         Toggle
                       </button>
                     </div>
-                    <!-- <SwitchGroup>
-                      <div class="flex items-center justify-between">
-                        <SwitchLabel class="mr-4"
-                          >Enable API 2000ms Delay</SwitchLabel
-                        >
-                        <Switch
-                          v-model="delayEnabled"
-                          :class="
-                            delayEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="
-                            relative
-                            inline-flex
-                            items-center
-                            h-6
-                            transition-colors
-                            rounded-full
-                            w-11
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-slate-500
-                          "
-                        >
-                          <span
-                            :class="
-                              delayEnabled ? 'translate-x-6' : 'translate-x-1'
-                            "
-                            class="
-                              inline-block
-                              w-4
-                              h-4
-                              transition-transform
-                              transform
-                              bg-white
-                              rounded-full
-                            "
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup> -->
                   </ul>
                 </div>
                 <div
@@ -278,32 +253,6 @@
                         </button>
                       </div>
                     </div>
-                    <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4"
-                        >Open Source Feeds (max. 4)</label
-                      >
-                      <div
-                        class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
-                      >
-                        <button
-                          class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
-                          @click="changeFeedCount(feedCountFromStore - 1)"
-                        >
-                          -
-                        </button>
-                        <div
-                          class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-slate-700 energy:bg-zinc-700"
-                        >
-                          {{ feedCountFromStore }}
-                        </div>
-                        <button
-                          class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
-                          @click="changeFeedCount(feedCountFromStore + 1)"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
@@ -332,12 +281,12 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
-                          Enable Loading Open Source Feeds
+                          Enable Loading Situational Awareness
                         </SwitchLabel>
                         <Switch
-                          v-model="loadingOseFeedsEnabled"
+                          v-model="loadingSituationalAwarenessEnabled"
                           :class="
-                            loadingOseFeedsEnabled
+                            loadingSituationalAwarenessEnabled
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
@@ -345,32 +294,7 @@
                         >
                           <span
                             :class="
-                              loadingOseFeedsEnabled
-                                ? 'translate-x-6'
-                                : 'translate-x-1'
-                            "
-                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup>
-                    <SwitchGroup>
-                      <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4">
-                          Enable Loading Demo Articles
-                        </SwitchLabel>
-                        <Switch
-                          v-model="loadingArticlesEnabled"
-                          :class="
-                            loadingArticlesEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                          <span
-                            :class="
-                              loadingArticlesEnabled
+                              loadingSituationalAwarenessEnabled
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
@@ -382,7 +306,12 @@
                   </div>
                 </div>
                 <div
-                  v-show="currentRoute === 'search'"
+                  v-show="
+                    currentRoute === 'search' ||
+                    currentRoute === 'countries' ||
+                    currentRoute === 'regions' ||
+                    currentRoute === 'subregions'
+                  "
                   class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
                 >
                   <p class="font-medium">Search Options</p>
@@ -436,7 +365,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/outline";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -447,7 +376,7 @@ export default {
     SwitchLabel,
     TransitionChild,
     TransitionRoot,
-    XIcon,
+    XMarkIcon,
   },
   props: {
     isOpen: Boolean,
@@ -456,7 +385,7 @@ export default {
       default: false,
     },
   },
-  emits: ["update:alert"],
+  emits: ["update:alert", "close"],
   setup(props, { emit }) {
     const store = useStore();
     const route = useRoute();
@@ -479,11 +408,14 @@ export default {
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
     const loadingPublishedArticlesEnabled = ref(false);
-    const loadingOseFeedsEnabled = ref(false);
+    const loadingSituationalAwarenessEnabled = ref(false);
     const sampleImageEnabled = ref(false);
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
 
+    const userAuthorizations = computed(
+      () => store.getters["user/authorizations"]
+    );
     const loadingMetadataFromStore = computed(
       () => store.state.metadata.loading
     );
@@ -497,7 +429,9 @@ export default {
     const loadingPublishedArticlesFromStore = computed(
       () => store.state.daniel.loading
     );
-    const loadingOseFeedsFromStore = computed(() => store.state.feeds.loading);
+    const loadingSituationalAwarenessFromStore = computed(
+      () => store.state.feeds.loading
+    );
     const feedCountFromStore = computed(() => store.state.feeds.results.length);
     const adminFromStore = computed(() => store.state.testConsole.admin);
     const sampleImageFromStore = computed(
@@ -528,13 +462,8 @@ export default {
       }
     });
 
-    //TODO: BUG Enabling this triggers an infinite loop
     watch(loadingResultsEnabled, (enabled) => {
-      if (enabled) {
-        //store.dispatch("search/removeSearch");
-      } else {
-        //store.dispatch("search/search");
-      }
+      store.dispatch("search/setLoading", enabled);
     });
 
     const removeArticleImage = () => {
@@ -554,8 +483,8 @@ export default {
 
     const toggleNotificationToast = () => {
       createNotification({
-        title: "[Test] Changes saved",
-        message: `Your changes has been saved.`,
+        title: "Notification Toast",
+        message: `Your toast message goes here.`,
         type: "success",
       });
     };
@@ -572,7 +501,7 @@ export default {
       store.dispatch("daniel/setLoading", enabled);
     });
 
-    watch(loadingOseFeedsEnabled, (enabled) => {
+    watch(loadingSituationalAwarenessEnabled, (enabled) => {
       store.dispatch("feeds/setLoading", enabled);
     });
 
@@ -601,8 +530,8 @@ export default {
       loadingPublishedArticlesEnabled.value = loading;
     });
 
-    watch(loadingOseFeedsFromStore, (loading) => {
-      loadingOseFeedsEnabled.value = loading;
+    watch(loadingSituationalAwarenessFromStore, (loading) => {
+      loadingSituationalAwarenessEnabled.value = loading;
     });
 
     watch(adminFromStore, (status) => {
@@ -617,17 +546,18 @@ export default {
       currentRoute,
       close,
       alertEnabled,
+      userAuthorizations,
       loadingMetadataEnabled,
       loadingArticlesEnabled,
       loadingResultsEnabled,
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
+      loadingSituationalAwarenessEnabled,
       removeArticleImage,
       changeArticleImage,
       toggleNotificationToast,
       changePublishedArticleCount,
       feedCountFromStore,
-      loadingOseFeedsEnabled,
       changeFeedCount,
       uploadFileName,
       adminEnabled,

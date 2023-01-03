@@ -213,7 +213,7 @@
                 @click="removeFilter(n)"
               >
                 <span class="sr-only">Remove filter</span>
-                <XIcon
+                <XMarkIcon
                   class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                   aria-hidden="true"
                 />
@@ -300,7 +300,7 @@
                     <span
                       class="absolute inset-y-0 right-0 flex items-center pr-2"
                     >
-                      <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                   </ListboxButton>
                   <transition
@@ -348,7 +348,7 @@
                     <span
                       class="absolute inset-y-0 right-0 flex items-center pr-2"
                     >
-                      <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                   </ListboxButton>
                   <transition
@@ -585,7 +585,7 @@
                   <span
                     class="absolute inset-y-0 right-0 flex items-center pr-2"
                   >
-                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </ListboxButton>
                 <transition
@@ -633,7 +633,7 @@
                   <span
                     class="absolute inset-y-0 right-0 flex items-center pr-2"
                   >
-                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </ListboxButton>
                 <transition
@@ -720,7 +720,7 @@
                       @click="closeMobileFacetsDialog"
                     >
                       <span class="sr-only">Close navigation</span>
-                      <XIcon class="h-5 w-5" aria-hidden="true" />
+                      <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
                     <SearchResultsFacets
                       :facets="aggregations"
@@ -759,10 +759,10 @@ import {
 import {
   CalendarIcon,
   ChevronUpIcon,
-  SelectorIcon,
-  XIcon,
-} from "@heroicons/vue/outline";
-import { LockClosedIcon } from "@heroicons/vue/solid";
+  ChevronUpDownIcon,
+  XMarkIcon,
+} from "@heroicons/vue/24/outline";
+import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import ArticleCard from "@/components/ArticleCard";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 import SearchResultsPagination from "@/components/SearchResultsPagination";
@@ -792,8 +792,8 @@ export default {
     TransitionRoot,
     CalendarIcon,
     ChevronUpIcon,
-    SelectorIcon,
-    XIcon,
+    ChevronUpDownIcon,
+    XMarkIcon,
     LockClosedIcon,
     ArticleCard,
     SearchResultsFacets,
@@ -941,7 +941,13 @@ export default {
             }
             for (let i = 0; i < route.query[type].length; i++) {
               selectedModels.push(
-                items.find((item) => item.code === route.query[type][i])
+                items.find(
+                  (item) =>
+                    item.code ===
+                    (type === "product_types[]"
+                      ? parseInt(route.query[type][i])
+                      : route.query[type][i])
+                )
               );
             }
           }
@@ -994,32 +1000,6 @@ export default {
       });
       return items;
     };
-    const buildReportingTypes = () => {
-      // let items = [];
-      // criteria.value.reporting_types.forEach((reportingType) => {
-      //   items.push({ ...reportingType, type: "reporting_types[]" });
-      //   reportingType.productTypes.forEach((productTypeCode) => {
-      //     const productType = getValueForCode(
-      //       criteria.value.product_types,
-      //       productTypeCode
-      //     );
-      //     items.push({
-      //       ...productType,
-      //       code: productType.code.toString(),
-      //       type: "product_types[]",
-      //       subitem: true,
-      //     });
-      //   });
-      // });
-      let items = [
-        {
-          code: "10376",
-          name: "Current",
-          type: "product_types[]",
-        },
-      ];
-      return items;
-    };
 
     const buildQueryFilters = () => {
       const regions = {
@@ -1031,7 +1011,7 @@ export default {
         types: ["issues[]", "topics[]"],
       };
       const reportings = {
-        items: buildReportingTypes(),
+        items: buildItems(criteria.value.product_types, "product_types[]"),
         types: ["product_types[]"],
         //types: ["reporting_types[]", "product_types[]"],
       };
@@ -1068,7 +1048,7 @@ export default {
           types: issues.types,
         },
         reporting: {
-          label: "Reporting & Product Types",
+          label: "Product Types",
           model: currentModel(reportings),
           list: reportings.items,
           types: reportings.types,

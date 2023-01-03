@@ -1,15 +1,7 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-      class="
-        cursor-pointer
-        hover:text-black
-        dark:hover:text-white
-        energy:text-white
-        flex
-        space-x-2
-        items-center
-      "
+      class="cursor-pointer hover:text-black dark:hover:text-white energy:text-white flex space-x-2 items-center"
     >
       <span class="font-medium">{{ title }}</span>
       <ChevronDownIcon
@@ -33,7 +25,7 @@
 </template>
 <script>
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {

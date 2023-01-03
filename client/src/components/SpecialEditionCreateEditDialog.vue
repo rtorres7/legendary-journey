@@ -1,7 +1,8 @@
-
 <template>
   <BaseDialog
-    :is-open="isOpen" class="max-w-[950px]" :title="`${editMode ? 'Edit' : 'Create'} Special Edition`"
+    :is-open="isOpen"
+    class="max-w-[950px]"
+    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`"
     @close="closeDialog"
   >
     <form id="se_form" @submit.prevent="sendForm">
@@ -9,53 +10,79 @@
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
             <BaseInput
-              v-model="editionEvent.name" label="Name" autocomplete="off" type="text"
+              v-model="editionEvent.name"
+              label="Name"
+              autocomplete="off"
+              type="text"
               required
             />
           </div>
           <div>
             <BaseInput
-              v-model="editionEvent.search_params" label="Search params" autocomplete="off"
-              placeholder="Run a search, copy the URL, and paste it here." type="text" required
+              v-model="editionEvent.search_params"
+              label="Search params"
+              autocomplete="off"
+              placeholder="Run a search, copy the URL, and paste it here."
+              type="text"
+              required
             />
           </div>
           <div>
             <BaseTextarea
-              v-model="editionEvent.key_readings" v-model.trim="editionEvent.key_readings" maxlength="4000" rows="5"
-              label="Selected Readings" placeholder="One document number per line, ex: WIRe110416-02."
+              v-model="editionEvent.key_readings"
+              v-model.trim="editionEvent.key_readings"
+              maxlength="4000"
+              rows="5"
+              label="Selected Readings"
+              placeholder="One document number per line, ex: WIRe110416-02."
             />
           </div>
           <div>
-            <BaseListbox v-model="editionEvent.state" :label="'State'" :items="stateOptions" required />
+            <BaseListbox
+              v-model="editionEvent.state"
+              :label="'State'"
+              :items="stateOptions"
+              required
+            />
           </div>
         </div>
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseListbox v-model="editionEvent.position" :label="'Order'" :items="orderOptions" />
+            <BaseListbox
+              v-model="editionEvent.position"
+              :label="'Order'"
+              :items="orderOptions"
+            />
           </div>
           <div class="flex flex-col">
-            <BaseClassify
+            <!-- <BaseClassify
               :label="'Classification'" show-selection :selection="editionEvent.name_classification"
               required @classificationSelected="updateClassification"
+            /> -->
+            <BaseClassifier
+              v-model="editionEvent.name_classification_xml"
+              label="Classification"
+              required
+              @update:classObj="updateClassification"
             />
           </div>
           <div>
             <BaseImageFileChooser
-              :label="'File Attachment'" :binary="editionEvent.icon" :file="imageFile"
-              required @onImageAdded="updateImageFile" @onImageRemoved="removeImageFile"
+              :label="'File Attachment'"
+              :binary="editionEvent.icon"
+              :file="imageFile"
+              required
+              @onImageAdded="updateImageFile"
+              @onImageRemoved="removeImageFile"
             />
           </div>
         </div>
       </div>
     </form>
     <template #actions>
-      <BaseButton @click.prevent="closeDialog">
-        Cancel
-      </BaseButton>
+      <BaseButton @click.prevent="closeDialog"> Cancel </BaseButton>
       <BaseButton :disabled="isDisabled()" type="submit" form="se_form">
-        {{
-          editMode ? "Save" : "Create"
-        }}
+        {{ editMode ? "Save" : "Create" }}
       </BaseButton>
     </template>
   </BaseDialog>
@@ -128,11 +155,9 @@ export default {
     // const { value: catering } = useField('name_classification')
     // const { value: music } = useField('icon')
 
-
     // // const { handleSubmit } = useForm({
     // //   validationSchema
     // // })
-
 
     const imageFile = ref(null);
 
@@ -153,8 +178,9 @@ export default {
     const orderOptions = ref(buildOrderOptions());
 
     const updateClassification = (payload) => {
-      editionEvent.value.name_classification = payload.classification_string;
-      editionEvent.value.name_classification_xml = payload.classification_xml;
+      // editionEvent.value.name_classification = payload.classification_string;
+      // editionEvent.value.name_classification_xml = payload.classification_xml;
+      editionEvent.value.name_classification = payload.name;
     };
 
     const updateImageFile = (payload) => {
@@ -190,9 +216,9 @@ export default {
         state: null,
         position: 1,
         key_readings: null,
-      }
+      };
       imageFile.value = null;
-    }
+    };
 
     /*
       The posted links needs to load first before building the order options.
@@ -225,9 +251,9 @@ export default {
           if (props.editMode) {
             emit("specialEditionUpdated");
             createNotification({
-              title: 'Changes saved',
+              title: "Changes saved",
               message: `${props.edition?.name} Special Edition has been saved.`,
-              type: 'success',
+              type: "success",
               duration: 4,
             });
             closeDialog();

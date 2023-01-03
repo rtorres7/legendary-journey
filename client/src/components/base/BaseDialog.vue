@@ -1,4 +1,3 @@
-
 <template>
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="close">
@@ -28,65 +27,29 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="
-                inline-block
-                w-full
-                p-6
-                text-left
-                align-middle
-                transition-all
-                transform
-                text-slate-900
-                dark:text-slate-300
-                energy:text-zinc-300
-                bg-white
-                dark:bg-slate-800
-                energy:bg-zinc-800
-                shadow-lg
-                rounded-lg
-              "
+              class="inline-block w-full p-6 text-left align-middle transition-all transform text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-800 energy:bg-zinc-800 shadow-lg rounded-lg"
               v-bind="$attrs"
             >
               <div
-                class="
-                  border-b border-slate-900/10
-                  dark:border-slate-50/[0.06]
-                  energy:border-zinc-500/50
-                "
+                class="border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
                 :class="title ? 'pb-4 text-lg' : 'pb-10'"
               >
                 {{ title }}
                 <button
                   type="button"
-                  class="
-                    absolute
-                    top-5
-                    right-5
-                    w-8
-                    h-8
-                    flex
-                    items-center
-                    justify-center
-                  "
+                  class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center"
                   tabindex="0"
                   @click="close"
                 >
                   <span class="sr-only">Close navigation</span
-                  ><XIcon class="h-5 w-5" aria-hidden="true" />
+                  ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>
               <div class="py-4">
                 <slot />
               </div>
               <div
-                class="
-                  flex
-                  justify-end
-                  pt-4
-                  border-t border-slate-900/10
-                  dark:border-slate-50/[0.06]
-                  energy:border-zinc-500/50
-                "
+                class="flex justify-end pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
               >
                 <div class="flex space-x-3">
                   <slot name="actions">
@@ -109,7 +72,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/outline";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -117,7 +80,7 @@ export default {
     DialogPanel,
     TransitionChild,
     TransitionRoot,
-    XIcon,
+    XMarkIcon,
   },
   props: {
     isOpen: {
