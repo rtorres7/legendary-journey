@@ -3,13 +3,6 @@
     <p class="pr-3">
       {{ today }}
     </p>
-    <!-- <CalendarIcon class="
-        hover:text-black
-        dark:hover:text-white
-        energy:hover:text-white
-        h-5
-        w-5
-      "></CalendarIcon> -->
   </div>
   <!-- Main Section -->
   <div
@@ -27,7 +20,10 @@
         >
           <template v-if="loadingSitrepFeeds">Loading ...</template>
           <template v-else>
-            <MainSectionSituationalAwareness :sitreps="sitrepFeeds" />
+            <MainSectionSituationalAwareness
+              :sitreps="sitrepFeeds"
+              :loading="loadingSitrepFeeds"
+            />
           </template>
         </div>
         <div
@@ -137,144 +133,36 @@
       </template>
     </div>
   </div>
-  <!-- Demo Articles Section -->
-  <!-- <div
-    class="
-      pt-4
-      pb-6
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
-    "
-  >
-    <div class="font-semibold mb-4">
-      Demo Articles<span
-        class="pl-2 text-sm font-light italic"
-        title="This feature is not available yet."
-        >(offline)</span
-      >
-    </div>
-    <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
-      <template v-if="loadingArticles">
-        <template v-for="n in 6" :key="n">
-          <DemoArticleCard :loading="true" />
-        </template>
-      </template>
-      <template v-else>
-        <template v-for="article in articles.slice(0, 6)" :key="article">
-          <router-link
-            :to="{
-              name: 'demo-article',
-              params: { doc_num: article.doc_num },
-            }"
-          >
-            <DemoArticleCard :article="article" />
-          </router-link>
-        </template>
-      </template>
-    </div>
-  </div> -->
-  <!-- Personal Section -->
-  <!-- <div class="pt-4">
-    <PersonalSection
-      :title="'Because you were interested in Ukraine and COVID19'"
-      :items="personalArticles"
-    />
-    <PersonalSection :title="'Your Favorites'" :items="personalArticles" />
-    <PersonalSection :title="'Recently Viewed'" :items="personalArticles" />
-  </div> -->
-  <!-- <ScrollToTopBtn /> -->
 </template>
 
 <script>
 import * as dayjs from "dayjs";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-//import { CalendarIcon } from "@heroicons/vue/outline";
-//import DemoArticleCard from "@/components/DemoArticleCard";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
 import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
-//import PersonalSection from "@/components/PersonalSection";
-
-const personalArticles = [
-  {
-    doc_num: 1,
-    title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
-    summary:
-      "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
-    tag1: "Russia",
-    tag2: "Ukraine",
-    date: "24 April 2022",
-  },
-  {
-    doc_num: 2,
-    title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
-    summary:
-      "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
-    tag1: "COVID19",
-    tag2: "C.D.C.",
-    date: "23 April 2022",
-  },
-  {
-    doc_num: 3,
-    title:
-      "(U) Coronavirus Has Infected Most Americans at Least Once, C.D.C. Says",
-    summary:
-      "(U) By February 2022, nearly 60 percent of the population had signs of exposure, almost double the proportion seen in December 2021, the agency’s data showed.",
-    tag1: "COVID19",
-    tag2: "C.D.C.",
-    date: "22 April 2022",
-  },
-  {
-    doc_num: 4,
-    title: "(U) Moscow Lashes Out, Accusing West of Proxy War",
-    summary:
-      "(U) At a meeting of military leaders, the U.S. accelerated its drive to deter Russia’s offensive. Germany said it would send Ukraine heavy weapons for the first time.",
-    tag1: "Russia",
-    tag2: "Ukraine",
-    date: "21 April 2022",
-  },
-  {
-    doc_num: 5,
-    title: "(U) Vice President Kamala Harris Tests Positive for Coronavirus",
-    summary:
-      "(U) Ms. Harris is the highest-ranking official in Washington to be infected. She has not had recent contact with President Biden, her office said. If you experience COVID19 symptoms, please get tested. She has not had recent contact with President Biden, her office said.",
-    tag1: "COVID19",
-    tag2: "C.D.C.",
-    date: "22 April 2022",
-  },
-];
 
 export default {
   components: {
-    //DemoArticleCard,
     PublishedArticleCard,
     MainSectionSituationalAwareness,
-    //PersonalSection,
-    //CalendarIcon,
   },
   setup() {
     const store = useStore();
-    const articles = computed(() => store.state.articles.featured);
-    const loadingArticles = computed(() => store.state.articles.loading);
     const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
     const sitrepFeeds = computed(() => store.state.feeds.sitreps);
     const loadingSitrepFeeds = computed(() => store.state.feeds.loading);
-
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
-      store.dispatch("articles/getHomeArticles");
       store.dispatch("daniel/getDanielArticles");
+      store.dispatch("feeds/getSitrepFeeds");
     });
 
     return {
-      articles,
-      loadingArticles,
       danielArticles,
       loadingDanielArticles,
-      personalArticles,
       loadingSitrepFeeds,
       sitrepFeeds,
       today,

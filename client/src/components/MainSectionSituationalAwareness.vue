@@ -15,7 +15,7 @@
           <template v-for="item in sitreps" :key="item">
             <div class="mb-4">
               <router-link
-                :to="{ name: article, params: { doc_num: item.doc_num } }"
+                :to="{ name: 'article', params: { doc_num: item.doc_num } }"
               >
                 <BaseCard
                   class="h-36 px-4 py-4"
@@ -101,37 +101,6 @@
 import { LockClosedIcon } from "@heroicons/vue/solid";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 
-const sitreps = [
-  {
-    title: "(U) Latest Sample SITREP Publication Heading",
-    type: "Daily Brief",
-    date: "yesterday",
-    locked: false,
-  },
-  {
-    title: "(U) Latest Sample Threat Publication Heading",
-    type: "Threat",
-    date: "2 days ago",
-    locked: true,
-  },
-  {
-    title: "(U) Another Sample SITREP Publication Heading #2",
-    type: "Daily Brief",
-    date: "1 week ago",
-    locked: false,
-  },
-  // {
-  //   title: "(U) Sample Threat Title",
-  //   date: "04/21/22, 0100 EDT",
-  //   locked: false,
-  // },
-  // {
-  //   title: "(U) Sample SITREP Title",
-  //   date: "04/20/22, 0100 EDT",
-  //   locked: true,
-  // },
-];
-
 // carousel settings
 const settings = {
   itemsToShow: 1.75,
@@ -200,7 +169,6 @@ const breakpoints = {
     snapAlign: "start",
   },
 };
-
 export default {
   components: {
     LockClosedIcon,
@@ -208,9 +176,18 @@ export default {
     Slide,
     Navigation,
   },
+  props: {
+    sitreps: {
+      type: Array,
+      required: true,
+    },
+    loading: {
+      type: Boolean,
+      required: true,
+    },
+  },
   setup() {
     return {
-      sitreps,
       settings,
       breakpoints,
     };

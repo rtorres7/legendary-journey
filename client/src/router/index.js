@@ -3,7 +3,6 @@ import store from "@/store";
 import { metadata } from "@/config";
 import ArticleView from "../views/ArticleView.vue";
 import AttachmentView from "../views/AttachmentView.vue";
-import DemoArticleView from "../views/DemoArticleView.vue";
 import EditDocumentView from "../views/EditDocumentView";
 import HomeView from "../views/HomeView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
@@ -32,15 +31,6 @@ const routes = [
     name: "article-preview",
     component: ArticleView,
     props: true,
-  },
-  {
-    path: "/demo-article/:doc_num",
-    name: "demo-article",
-    component: DemoArticleView,
-    props: true,
-    meta: {
-      demo: true,
-    },
   },
   {
     path: "/attachment/:url?",

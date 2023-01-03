@@ -1,4 +1,4 @@
-import { getNicFeeds } from "@/data";
+import { getSitreps } from "@/data";
 import axios from "@/config/wireAxios";
 
 export default {
@@ -6,27 +6,18 @@ export default {
   state: {
     loading: true,
     sitreps: [],
-    searchId: null,
-    selecting: false,
-    aggregations: [],
-    pages: 1,
-    totalCount: null,
-    siteEnhancement: [],
-    daClassifError: false,
   },
 
   actions: {
     getSitrepFeeds: ({ state, commit }) => {
-      console.log("getSitrepFeeds triggered");
       state.loading = true;
       if (process.env.NODE_ENV === "low") {
-        commit("importData", getNicFeeds);
-        state.loading = false;
+        console.log("[store] getSitrepFeeds: ", getSitreps);
+        setTimeout(() => commit("importSitrepData", getSitreps), 750);
       } else {
         axios.get("/home/daniel").then((response) => {
-          console.log("response: ", response);
+          console.log("[store] getSitrepFeeds: ", response.data?.woah?.briefs);
           commit("importSitrepData", response.data?.woah?.briefs);
-          state.loading = false;
         });
       }
     },
@@ -37,16 +28,13 @@ export default {
 
   mutations: {
     importSitrepData(state, data) {
-      console.log("feed (search) data: ", data);
-      state.searchId = data.searchId;
       state.sitreps = data.map((article) => {
         return article.attributes;
       });
-      state.aggregations = data.aggregations;
-      state.pages = Math.ceil(data.pages);
-      state.totalCount = data.totalCount;
-      state.siteEnhancement = data.siteEnhancement;
-      state.daClassifError = data.daClassifError;
+      state.loading = false;
+    },
+    toggleLoading(state, value) {
+      state.loading = value;
     },
   },
 };

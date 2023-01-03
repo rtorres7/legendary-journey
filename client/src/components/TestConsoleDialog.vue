@@ -253,32 +253,6 @@
                         </button>
                       </div>
                     </div>
-                    <!-- <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4"
-                        >Open Source Feeds (max. 4)</label
-                      >
-                      <div
-                        class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
-                      >
-                        <button
-                          class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
-                          @click="changeFeedCount(feedCountFromStore - 1)"
-                        >
-                          -
-                        </button>
-                        <div
-                          class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-slate-700 energy:bg-zinc-700"
-                        >
-                          {{ feedCountFromStore }}
-                        </div>
-                        <button
-                          class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
-                          @click="changeFeedCount(feedCountFromStore + 1)"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div> -->
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
@@ -304,15 +278,15 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
-                    <!-- <SwitchGroup>
+                    <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
-                          Enable Loading Open Source Feeds
+                          Enable Loading Situational Awareness
                         </SwitchLabel>
                         <Switch
-                          v-model="loadingOseFeedsEnabled"
+                          v-model="loadingSituationalAwarenessEnabled"
                           :class="
-                            loadingOseFeedsEnabled
+                            loadingSituationalAwarenessEnabled
                               ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
                               : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
                           "
@@ -320,7 +294,7 @@
                         >
                           <span
                             :class="
-                              loadingOseFeedsEnabled
+                              loadingSituationalAwarenessEnabled
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
@@ -329,31 +303,6 @@
                         </Switch>
                       </div>
                     </SwitchGroup>
-                    <SwitchGroup>
-                      <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4">
-                          Enable Loading Demo Articles
-                        </SwitchLabel>
-                        <Switch
-                          v-model="loadingArticlesEnabled"
-                          :class="
-                            loadingArticlesEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
-                          "
-                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                          <span
-                            :class="
-                              loadingArticlesEnabled
-                                ? 'translate-x-6'
-                                : 'translate-x-1'
-                            "
-                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup> -->
                   </div>
                 </div>
                 <div
@@ -459,7 +408,7 @@ export default {
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
     const loadingPublishedArticlesEnabled = ref(false);
-    const loadingOseFeedsEnabled = ref(false);
+    const loadingSituationalAwarenessEnabled = ref(false);
     const sampleImageEnabled = ref(false);
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
@@ -480,7 +429,9 @@ export default {
     const loadingPublishedArticlesFromStore = computed(
       () => store.state.daniel.loading
     );
-    const loadingOseFeedsFromStore = computed(() => store.state.feeds.loading);
+    const loadingSituationalAwarenessFromStore = computed(
+      () => store.state.feeds.loading
+    );
     const feedCountFromStore = computed(() => store.state.feeds.results.length);
     const adminFromStore = computed(() => store.state.testConsole.admin);
     const sampleImageFromStore = computed(
@@ -532,8 +483,8 @@ export default {
 
     const toggleNotificationToast = () => {
       createNotification({
-        title: "[Test] Changes saved",
-        message: `Your changes has been saved.`,
+        title: "Notification Toast",
+        message: `Your toast message goes here.`,
         type: "success",
       });
     };
@@ -550,7 +501,7 @@ export default {
       store.dispatch("daniel/setLoading", enabled);
     });
 
-    watch(loadingOseFeedsEnabled, (enabled) => {
+    watch(loadingSituationalAwarenessEnabled, (enabled) => {
       store.dispatch("feeds/setLoading", enabled);
     });
 
@@ -579,8 +530,8 @@ export default {
       loadingPublishedArticlesEnabled.value = loading;
     });
 
-    watch(loadingOseFeedsFromStore, (loading) => {
-      loadingOseFeedsEnabled.value = loading;
+    watch(loadingSituationalAwarenessFromStore, (loading) => {
+      loadingSituationalAwarenessEnabled.value = loading;
     });
 
     watch(adminFromStore, (status) => {
@@ -601,12 +552,12 @@ export default {
       loadingResultsEnabled,
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
+      loadingSituationalAwarenessEnabled,
       removeArticleImage,
       changeArticleImage,
       toggleNotificationToast,
       changePublishedArticleCount,
       feedCountFromStore,
-      loadingOseFeedsEnabled,
       changeFeedCount,
       uploadFileName,
       adminEnabled,

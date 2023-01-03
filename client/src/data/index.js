@@ -19,12 +19,7 @@ export const user = {
 export { articles } from "./articles";
 export { danielArticles, articlesForWire } from "./danielArticles";
 export { countries, regions } from "./regions";
-export {
-  getOseFeeds,
-  getKingFisherFeeds,
-  getNicFeeds,
-  getSearchDataFromUrl,
-} from "./search";
+export { getSitreps, getSearchDataFromUrl } from "./search";
 export { danielArticlesDetails } from "./danielArticlesDetails";
 export { metadata } from "./metadata";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
