@@ -8,10 +8,7 @@
     </template>
     <template v-else>
       <ul class="space-y-1">
-        <li
-          v-for="relatedProduct in relatedProducts.relatedDocuments"
-          :key="relatedProduct"
-        >
+        <li v-for="relatedProduct in relatedProducts" :key="relatedProduct">
           <router-link
             :to="relatedProductLink + '/' + relatedProduct.id + '.json'"
             target="_blank"
