@@ -37,7 +37,7 @@
                   @click="close"
                 >
                   <span class="sr-only">Close navigation</span>
-                  <XIcon class="h-5 w-5" aria-hidden="true" />
+                  <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <div class="py-4">
                   <p class="font-medium">Access Control</p>
@@ -190,7 +190,7 @@
                         @click="removeArticleImage"
                       >
                         <span class="sr-only">Remove Current Image</span>
-                        <XIcon class="h-5 w-5" aria-hidden="true" />
+                        <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                       </button>
                       <div class="line-clamp-1">
                         <span class="font-medium">Current File: </span
@@ -365,7 +365,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/outline";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -376,7 +376,7 @@ export default {
     SwitchLabel,
     TransitionChild,
     TransitionRoot,
-    XIcon,
+    XMarkIcon,
   },
   props: {
     isOpen: Boolean,

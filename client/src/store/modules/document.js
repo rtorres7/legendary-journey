@@ -33,7 +33,8 @@ export default {
     getDocument({ state, commit }, article) {
       state.loading = true;
       if (process.env.NODE_ENV === "low") {
-        console.log("Article: ");
+        //console.log("[store] getDocumentData: ", response.data);
+        state.loading = false;
       } else {
         let url =
           "/wires/" +

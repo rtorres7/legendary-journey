@@ -17,7 +17,7 @@
 </template>
 <script>
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import { ChevronUpIcon } from "@heroicons/vue/outline";
+import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {

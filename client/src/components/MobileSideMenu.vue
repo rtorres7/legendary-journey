@@ -24,53 +24,24 @@
             leave-to="-translate-x-full"
           >
             <DialogPanel
-              class="
-                relative
-                min-h-screen
-                w-80
-                max-w-calc[(100%-3rem)]
-                p-6
-                text-left
-                align-top
-                transition-all
-                transform
-                text-slate-700
-                dark:text-slate-300
-                energy:text-zinc-300
-                bg-slate-100
-                dark:bg-slate-700
-                energy:bg-zinc-700
-                shadow-lg
-              "
+              class="relative min-h-screen w-80 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg"
             >
               <button
                 type="button"
-                class="
-                  absolute
-                  top-5
-                  right-5
-                  w-8
-                  h-8
-                  flex
-                  items-center
-                  justify-center
-                "
+                class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center"
                 tabindex="0"
                 @click="close"
               >
-                <span class="sr-only">Close main menu</span><XIcon class="h-5 w-5" aria-hidden="true" />
+                <span class="sr-only">Close main menu</span
+                ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
               </button>
               <ul class="space-y-6">
                 <li>
                   <a
-                    class="
-                      font-medium
-                      hover:text-black
-                      dark:hover:text-white
-                      energy:text-white
-                    "
+                    class="font-medium hover:text-black dark:hover:text-white energy:text-white"
                     href="/"
-                  >Home</a>
+                    >Home</a
+                  >
                 </li>
                 <!-- <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
@@ -93,24 +64,12 @@
                 <li>
                   <MobileSideMenuDisclosure :title="'Regions'">
                     <div class="ml-4 mt-4 space-y-4">
-                      <template v-if="loadingMetadata">
-                        Loading...
-                      </template>
+                      <template v-if="loadingMetadata"> Loading... </template>
                       <template v-else>
-                        <div
-                          v-for="region in criteria.regions"
-                          :key="region"
-                        >
+                        <div v-for="region in criteria.regions" :key="region">
                           <Disclosure v-slot="{ open }">
                             <DisclosureButton
-                              class="
-                              hover:text-black
-                              dark:hover:text-white
-                              energy:text-white
-                              flex
-                              space-x-2
-                              items-center
-                            "
+                              class="hover:text-black dark:hover:text-white energy:text-white flex space-x-2 items-center"
                             >
                               <span>{{ region.name }}</span>
                               <ChevronDownIcon
@@ -130,28 +89,22 @@
                                 <ul class="list-disc list-inside ml-4 my-2">
                                   <a
                                     href=""
-                                    class="
-                                    lg:text-lg
-                                    hover:underline
-                                    cursor-pointer
-                                  "
+                                    class="lg:text-lg hover:underline cursor-pointer"
                                     @click.prevent="navigateToRegion(region)"
                                   >
                                     {{ region.name }}
                                   </a>
-                                  <template v-if="(region.subregions.length > 1)">
+                                  <template v-if="region.subregions.length > 1">
                                     <template
-                                      v-for="subregionItem in formattedSubregions(region.subregions)"
+                                      v-for="subregionItem in formattedSubregions(
+                                        region.subregions
+                                      )"
                                       :key="subregionItem"
                                     >
                                       <li>
                                         <a
                                           href=""
-                                          class="
-                                          hover:underline
-                                          cursor-pointer
-                                          font-light
-                                        "
+                                          class="hover:underline cursor-pointer font-light"
                                           @click.prevent="
                                             navigateToSubregion(subregionItem)
                                           "
@@ -167,13 +120,7 @@
                           </Disclosure>
                         </div>
                         <p
-                          class="
-                          text-sm
-                          pt-4
-                          border-t border-slate-900/10
-                          dark:border-slate-50/[0.06]
-                          energy:border-zinc-700/25
-                        "
+                          class="text-sm pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
                         >
                           View a
                           <a
@@ -193,50 +140,28 @@
                 <li>
                   <MobileSideMenuDisclosure :title="'Countries'">
                     <div class="ml-4 mt-4">
-                      <template v-if="loadingMetadata">
-                        Loading...
-                      </template>
+                      <template v-if="loadingMetadata"> Loading... </template>
                       <template v-else>
-                        <label for="country" aria-hidden="true">Select a country</label>
+                        <label for="country" aria-hidden="true"
+                          >Select a country</label
+                        >
                         <Listbox
                           v-model="selectedCountry"
                           aria-label="select a country from the dropdown"
                         >
                           <div class="relative mt-1">
                             <ListboxButton
-                              class="
-                              flex
-                              relative
-                              w-full
-                              p-2
-                              text-left
-                              capitalize
-                              bg-white
-                              dark:bg-slate-600
-                              energy:bg-zinc-600
-                              rounded-lg
-                              shadow-md
-                              cursor-default
-                              focus:outline-none
-                              focus-visible:ring-2
-                              focus-visible:ring-opacity-75
-                              focus-visible:ring-offset-2
-                            "
+                              class="flex relative w-full p-2 text-left capitalize bg-white dark:bg-slate-600 energy:bg-zinc-600 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
                             >
                               <span class="block truncate">{{
-                                selectedCountry ? selectedCountry.name : criteria.countries[0].name
+                                selectedCountry
+                                  ? selectedCountry.name
+                                  : criteria.countries[0].name
                               }}</span>
                               <span
-                                class="
-                                absolute
-                                inset-y-0
-                                right-0
-                                flex
-                                items-center
-                                pr-2
-                              "
+                                class="absolute inset-y-0 right-0 flex items-center pr-2"
                               >
-                                <SelectorIcon
+                                <ChevronUpDownIcon
                                   class="h-5 w-5"
                                   aria-hidden="true"
                                 />
@@ -251,22 +176,7 @@
                               leave-to-class="transform opacity-0 scale-95"
                             >
                               <ListboxOptions
-                                class="
-                                absolute
-                                w-full
-                                py-1
-                                mt-1
-                                overflow-auto
-                                bg-white
-                                dark:bg-slate-600
-                                energy:bg-zinc-600
-                                rounded-md
-                                shadow-lg
-                                max-h-60
-                                ring-1 ring-black ring-opacity-5
-                                focus:outline-none
-                                z-10
-                              "
+                                class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-600 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                               >
                                 <ListboxOption
                                   v-for="country in criteria.countries"
@@ -298,12 +208,7 @@
                 <li>
                   <BaseTooltip placement="top">
                     <p
-                      class="
-                        font-medium
-                        hover:text-black
-                        dark:hover:text-white
-                        energy:text-white
-                      "
+                      class="font-medium hover:text-black dark:hover:text-white energy:text-white"
                       href="/"
                     >
                       Foreign
@@ -313,12 +218,7 @@
                 <li>
                   <BaseTooltip placement="top">
                     <p
-                      class="
-                        font-medium
-                        hover:text-black
-                        dark:hover:text-white
-                        energy:text-white
-                      "
+                      class="font-medium hover:text-black dark:hover:text-white energy:text-white"
                     >
                       Community
                     </p>
@@ -330,16 +230,7 @@
                       <template v-if="loadingSpecialEditionLinks">
                         <div class="flex justify-center">
                           <svg
-                            class="
-                              animate-spin
-                              -ml-1
-                              mr-3
-                              h-14
-                              w-14
-                              text-mission-blue
-                              dark:text-slate-300
-                              energy:text-zinc-300
-                            "
+                            class="animate-spin -ml-1 mr-3 h-14 w-14 text-mission-blue dark:text-slate-300 energy:text-zinc-300"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -364,7 +255,7 @@
                         <template
                           v-if="
                             specialEditionLinks.posted &&
-                              specialEditionLinks.posted.length > 0
+                            specialEditionLinks.posted.length > 0
                           "
                         >
                           <div
@@ -418,7 +309,11 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { ChevronDownIcon, SelectorIcon, XIcon } from "@heroicons/vue/outline";
+import {
+  ChevronDownIcon,
+  ChevronUpDownIcon,
+  XMarkIcon,
+} from "@heroicons/vue/24/outline";
 export default {
   components: {
     MobileSideMenuDisclosure,
@@ -435,8 +330,8 @@ export default {
     TransitionChild,
     TransitionRoot,
     ChevronDownIcon,
-    SelectorIcon,
-    XIcon,
+    ChevronUpDownIcon,
+    XMarkIcon,
   },
   props: {
     isOpen: Boolean,
@@ -465,7 +360,7 @@ export default {
         view: "grid",
         landing: true,
       };
-      query['topics[]'] = issue.key;
+      query["topics[]"] = issue.key;
       router.push({
         name: "issues",
         params: {
@@ -477,11 +372,10 @@ export default {
 
     const navigateToRegion = (region) => {
       let query = {
-        "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query['regions[]'] = region.code;
+      query["regions[]"] = region.code;
       router.push({
         name: "regions",
         params: {
@@ -492,21 +386,20 @@ export default {
     };
 
     const formattedSubregions = (codes) => {
-      const subregions = []
-      codes.forEach(code => {
-        const subregion = getValueForCode(criteria.value.subregions, code)
-        subregions.push(subregion)
-      })
-      return subregions
-    }
+      const subregions = [];
+      codes.forEach((code) => {
+        const subregion = getValueForCode(criteria.value.subregions, code);
+        subregions.push(subregion);
+      });
+      return subregions;
+    };
 
     const navigateToSubregion = (subregion) => {
       let query = {
-        "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query['subregions[]'] = subregion.code;
+      query["subregions[]"] = subregion.code;
       router.push({
         name: "subregions",
         params: {
@@ -518,11 +411,10 @@ export default {
 
     const navigateToCountry = (country) => {
       let query = {
-        "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query['countries[]'] = country.code;
+      query["countries[]"] = country.code;
       router.push({
         name: "countries",
         params: {
@@ -544,7 +436,7 @@ export default {
       navigateToRegion,
       formattedSubregions,
       navigateToSubregion,
-      navigateToCountry
+      navigateToCountry,
     };
   },
 };

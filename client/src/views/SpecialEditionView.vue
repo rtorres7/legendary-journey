@@ -1,23 +1,10 @@
 <template>
   <div
-    class="
-      py-4
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
-    "
+    class="py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
   >
     <template v-if="loadingSpecialEdition">
       <div
-        class="
-          h-[32px]
-          w-64
-          animate-pulse
-          bg-white
-          dark:bg-slate-800/50
-          energy:bg-zinc-800
-          rounded
-        "
+        class="h-[32px] w-64 animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
       />
     </template>
     <template v-else>
@@ -30,15 +17,7 @@
     <div class="flex space-x-3">
       <template v-if="loadingSpecialEdition">
         <div
-          class="
-            h-[38px]
-            w-40
-            animate-pulse
-            bg-white
-            dark:bg-slate-800/50
-            energy:bg-zinc-800
-            rounded
-          "
+          class="h-[38px] w-40 animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
         />
       </template>
       <template v-else>
@@ -46,47 +25,30 @@
           <BaseButton type="danger" @click.prevent="openDeleteDialog">
             Delete
           </BaseButton>
-          <BaseButton @click.prevent="openEditDialog">
-            Edit
-          </BaseButton>
+          <BaseButton @click.prevent="openEditDialog"> Edit </BaseButton>
         </template>
       </template>
     </div>
   </div>
   <div class="flex flex-col lg:flex-row py-4">
     <div
-      class="
-        basis-2/3
-        lg:pr-4 lg:border-r
-        pb-4
-        lg:pb-0
-        border-b
-        lg:border-b-0
-        border-slate-900/10
-        dark:border-slate-50/[0.06]
-        energy:border-zinc-700/25
-      "
+      class="basis-2/3 lg:pr-4 lg:border-r pb-4 lg:pb-0 border-b lg:border-b-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
     >
       <div class="flex justify-center">
         <template v-if="loadingSpecialEdition">
           <div class="pb-4">
             <div
-              class="
-                h-[38px]
-                w-56
-                animate-pulse
-                bg-white
-                dark:bg-slate-800/50
-                energy:bg-zinc-800
-                rounded
-              "
+              class="h-[38px] w-56 animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
             />
           </div>
         </template>
         <template v-else>
           <template v-if="specialEdition.totalPages > 1">
             <div class="pb-4">
-              <Pagination :currentPage="currentPage" :pages="specialEdition.totalPages" />
+              <Pagination
+                :currentPage="currentPage"
+                :pages="specialEdition.totalPages"
+              />
             </div>
           </template>
         </template>
@@ -95,19 +57,15 @@
         <template v-if="loadingSpecialEdition">
           <template v-for="n in 6" :key="n">
             <div
-              class="
-                h-[200px]
-                animate-pulse
-                bg-white
-                dark:bg-slate-800/50
-                energy:bg-zinc-800
-                rounded
-              "
+              class="h-[200px] animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
             />
           </template>
         </template>
         <template v-else>
-          <template v-for="article in specialEdition.articles" :key="article.id">
+          <template
+            v-for="article in specialEdition.articles"
+            :key="article.id"
+          >
             <BaseCard class="h-full" hoverable :rounded="false">
               <ArticleCard :article="article" />
             </BaseCard>
@@ -118,14 +76,15 @@
         <template
           v-if="
             specialEdition.restrictedArticles &&
-              specialEdition.restrictedArticles.length > 0
+            specialEdition.restrictedArticles.length > 0
           "
         >
-          <p class="font-medium text-lg py-4">
-            Need More Access to View
-          </p>
+          <p class="font-medium text-lg py-4">Need More Access to View</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <template v-for="article in specialEdition.restrictedArticles" :key="article.id">
+            <template
+              v-for="article in specialEdition.restrictedArticles"
+              :key="article.id"
+            >
               <BaseCard class="h-full" hoverable :rounded="false">
                 <ArticleCard :article="article" />
               </BaseCard>
@@ -137,52 +96,33 @@
     <div class="basis-1/3 pl-0 lg:pl-4 pt-4 lg:pt-0">
       <div class="flex flex-col space-y-3">
         <div
-          class="
-            border-b border-slate-900/10
-            dark:border-slate-50/[0.06]
-            energy:border-zinc-700/25
-            pb-4
-          "
+          class="border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pb-4"
         >
           <template v-if="loadingSpecialEdition">
             <div
-              class="
-                h-[28px]
-                w-40
-                mb-4
-                animate-pulse
-                bg-white
-                dark:bg-slate-800/50
-                energy:bg-zinc-800
-                rounded
-              "
+              class="h-[28px] w-40 mb-4 animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
             />
           </template>
           <template v-else>
-            <p class="font-medium text-lg pb-4">
-              Selected Readings
-            </p>
+            <p class="font-medium text-lg pb-4">Selected Readings</p>
           </template>
           <div class="flex flex-col space-y-3">
             <template v-if="loadingSpecialEdition">
               <div
-                class="
-                  h-[200px]
-                  animate-pulse
-                  bg-white
-                  dark:bg-slate-800/50
-                  energy:bg-zinc-800
-                  rounded
-                "
+                class="h-[200px] animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
               />
             </template>
             <template v-else>
-              <template v-for="reading in specialEdition.readings" :key="reading.id">
+              <template
+                v-for="reading in specialEdition.readings"
+                :key="reading.id"
+              >
                 <router-link
                   :to="{
                     name: 'article',
                     params: { doc_num: reading.doc_num },
-                  }" class="hover:underline"
+                  }"
+                  class="hover:underline"
                 >
                   {{ `(${reading.title_classification}) ${reading.title}` }}
                 </router-link>
@@ -192,14 +132,7 @@
         </div>
         <template v-if="loadingSpecialEdition">
           <div
-            class="
-              h-[415px]
-              animate-pulse
-              bg-white
-              dark:bg-slate-800/50
-              energy:bg-zinc-800
-              rounded
-            "
+            class="h-[415px] animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
           />
         </template>
         <template v-else>
@@ -208,59 +141,49 @@
               specialEdition.reporting && specialEdition.reporting.length > 0
             "
           >
-            <p class="font-medium text-lg pb-2">
-              Reporting
-            </p>
-            <template v-for="(report, index) in specialEdition.reporting" :key="index">
+            <p class="font-medium text-lg pb-2">Reporting</p>
+            <template
+              v-for="(report, index) in specialEdition.reporting"
+              :key="index"
+            >
               <template v-if="report.docs && report.docs.length > 0">
                 <div
-                  class="
-                    border-b border-slate-900/10
-                    dark:border-slate-50/[0.06]
-                    energy:border-zinc-700/50
-                    last:border-none
-                  "
+                  class="border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50 last:border-none"
                 >
                   <Disclosure v-slot="{ open }" defaultOpen>
                     <DisclosureButton class="py-4 w-full">
                       <div class="flex justify-between items-center">
                         <span
-                          class="
-                            text-mission-light-blue
-                            dark:text-teal-400
-                            energy:text-energy-yellow
-                            mr-2
-                            inline-block
-                          "
+                          class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow mr-2 inline-block"
                         >
                           {{ report.type }}
                         </span>
                         <ChevronUpIcon
-                          :class="open ? '' : 'rotate-180 transform'" class="
-                            text-mission-light-blue
-                            dark:text-teal-400
-                            energy:text-energy-yellow
-                            h-5
-                            w-5
-                            inline-block
-                          "
+                          :class="open ? '' : 'rotate-180 transform'"
+                          class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow h-5 w-5 inline-block"
                         />
                       </div>
                     </DisclosureButton>
                     <transition
                       enter-active-class="transition duration-100 ease-out"
-                      enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
                       leave-active-class="transition duration-75 ease-out"
-                      leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
                     >
                       <DisclosurePanel class="pb-4">
                         <div class="flex flex-col space-y-3">
-                          <template v-for="article in report.docs" :key="article.id">
+                          <template
+                            v-for="article in report.docs"
+                            :key="article.id"
+                          >
                             <router-link
                               :to="{
                                 name: 'article',
                                 params: { doc_num: article.doc_num },
-                              }" class="hover:underline text-md lg:text-sm"
+                              }"
+                              class="hover:underline text-md lg:text-sm"
                             >
                               {{
                                 `(${article.title_classification}) ${article.title}`
@@ -281,20 +204,21 @@
   </div>
   <template v-if="!loadingSpecialEdition">
     <SpecialEditionCreateEditDialog
-      editMode :edition="specialEdition" :isOpen="isEditDialogOpen"
-      @closeDialog="closeEditDialog" @specialEditionUpdated="reloadSpecialEdition"
+      editMode
+      :edition="specialEdition"
+      :isOpen="isEditDialogOpen"
+      @closeDialog="closeEditDialog"
+      @specialEditionUpdated="reloadSpecialEdition"
     />
     <BaseDialog
-      :isOpen="isDeleteDialogOpen" :title="'Delete Special Edition'" class="max-w-fit"
+      :isOpen="isDeleteDialogOpen"
+      :title="'Delete Special Edition'"
+      class="max-w-fit"
       @close="closeDeleteDialog"
     >
-      <p class="py-4 pr-4">
-        Are you sure you want to do this?
-      </p>
+      <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <BaseButton @click.prevent="closeDeleteDialog">
-          Cancel
-        </BaseButton>
+        <BaseButton @click.prevent="closeDeleteDialog"> Cancel </BaseButton>
         <BaseButton type="danger" @click.prevent="deleteSpecialEdition">
           Delete
         </BaseButton>
@@ -308,7 +232,7 @@ import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronUpIcon } from "@heroicons/vue/outline";
+import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import ArticleCard from "@/components/ArticleCard";
 import Pagination from "@/components/Pagination";
@@ -415,6 +339,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

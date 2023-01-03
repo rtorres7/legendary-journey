@@ -167,7 +167,7 @@ import {
   ArrowRightIcon,
   CalendarIcon,
   PencilIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/24/outline";
 import ArticleImage from "@/components/ArticleImage";
 
 export default {

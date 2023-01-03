@@ -44,7 +44,7 @@ export default {
   props: {
     sitrep: {
       type: Object,
-      required: true,
+      default: () => {},
     },
     loading: {
       type: Boolean,

@@ -1,72 +1,51 @@
 <template>
   <Listbox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
     <div class="relative mt-1">
-      <ListboxLabel :class="['text-sm font-medium', required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none']">
-        {{
-          label
-        }}
+      <ListboxLabel
+        :class="[
+          'text-sm font-medium',
+          required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none',
+        ]"
+      >
+        {{ label }}
         <template v-if="required">
           <span class="sr-only">Required</span>
           <span class="pl-1 text-red-500">*</span>
         </template>
       </ListboxLabel>
       <ListboxButton
-        class="
-          min-h-[2rem]
-          flex
-          relative
-          w-full
-          py-1
-          px-2
-          mt-1
-          border border-gray-200
-          dark:border-slate-800
-          energy:border-zinc-800
-          rounded-lg
-          shadow-md
-          cursor-default
-          focus:outline-none
-          focus-visible:ring-2
-          focus-visible:ring-opacity-75
-          focus-visible:ring-offset-2
-        " :class="
+        class="min-h-[2rem] flex relative w-full py-1 px-2 mt-1 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+        :class="
           disabled
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
             : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
-      "
+        "
       >
-        <span class="block truncate max-w-[calc(100%-20px)]" :class="multiple ? '' : 'capitalize'">{{
-          displayValue(modelValue)
-        }}</span>
+        <span
+          class="block truncate max-w-[calc(100%-20px)]"
+          :class="multiple ? '' : 'capitalize'"
+          >{{ displayValue(modelValue) }}</span
+        >
         <span class="absolute inset-y-0 right-0 flex items-center pr-2">
-          <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+          <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
         </span>
       </ListboxButton>
       <transition
-        enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95"
-        enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
-        leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95"
+        enter-active-class="transition ease-out duration-100"
+        enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100"
+        leave-active-class="transition ease-in duration-75"
+        leave-from-class="transform opacity-100 scale-100"
+        leave-to-class="transform opacity-0 scale-95"
       >
         <ListboxOptions
-          class="
-            absolute
-            w-full
-            py-1
-            mt-1
-            overflow-auto
-            bg-white
-            dark:bg-slate-700
-            energy:bg-zinc-600
-            rounded-md
-            shadow-lg
-            max-h-60
-            ring-1 ring-black ring-opacity-5
-            focus:outline-none
-            z-10
-          "
+          class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
         >
           <ListboxOption
-            v-for="item in items" v-slot="{ active, selected }" :key="item" :value="item"
+            v-for="item in items"
+            v-slot="{ active, selected }"
+            :key="item"
+            :value="item"
             as="template"
           >
             <li
@@ -82,14 +61,18 @@
                   selected
                     ? 'font-medium'
                     : item.subitem
-                      ? 'font-light'
-                      : 'font-normal',
+                    ? 'font-light'
+                    : 'font-normal',
                   item.subitem ? 'pl-2' : '',
                   multiple ? '' : 'capitalize',
                   'block truncate text-sm',
                 ]"
-              >{{ displayValue(item) }}</span>
-              <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3">
+                >{{ displayValue(item) }}</span
+              >
+              <span
+                v-if="selected"
+                class="absolute inset-y-0 left-0 flex items-center pl-3"
+              >
                 <CheckIcon class="h-5 w-5" aria-hidden="true" />
               </span>
             </li>
@@ -108,7 +91,7 @@ import {
   ListboxOptions,
   ListboxOption,
 } from "@headlessui/vue";
-import { CheckIcon, SelectorIcon } from "@heroicons/vue/outline";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -118,7 +101,7 @@ export default {
     ListboxOptions,
     ListboxOption,
     CheckIcon,
-    SelectorIcon,
+    ChevronUpDownIcon,
   },
   props: {
     label: {
@@ -143,8 +126,8 @@ export default {
     },
     required: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
@@ -157,29 +140,29 @@ export default {
 
     const displayValue = (model) => {
       if (model) {
-        const type = typeof model
+        const type = typeof model;
         if (props.multiple && model.length > 0) {
-          const suffix = model.length > 1 ? ` +(${model.length - 1})` : ''
-          if (type === 'object') {
-            return model[0].name + suffix
+          const suffix = model.length > 1 ? ` +(${model.length - 1})` : "";
+          if (type === "object") {
+            return model[0].name + suffix;
           } else {
-            return model + suffix
+            return model + suffix;
           }
         } else {
-          if (type === 'object') {
-            return model.name
+          if (type === "object") {
+            return model.name;
           } else {
-            return model
+            return model;
           }
         }
       } else {
-        return null
+        return null;
       }
-    }
+    };
 
     return {
       selectedItem,
-      displayValue
+      displayValue,
     };
   },
 };

@@ -18,10 +18,100 @@
         <div
           class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:basis-1/3 lg:pr-4 lg:border-r xl:basis-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
-          <MainSectionSituationalAwareness
-            :sitreps="sitrepFeeds"
-            :loading="loadingSitrepFeeds"
-          />
+          <div class="flex flex-col h-full">
+            <div class="hidden lg:block font-semibold mb-4">
+              Situational Awareness
+            </div>
+            <div class="flex lg:hidden justify-between mb-4">
+              <div class="font-semibold">Situational Awareness</div>
+              <div
+                class="text-sm hover:text-black dark:hover:text-white energy:hover:text-white"
+              >
+                <router-link to="search?text=&product_types[]=10377">
+                  View More
+                </router-link>
+              </div>
+            </div>
+            <div
+              class="hidden h-full lg:flex flex-col space-y-2 justify-between"
+            >
+              <div class="lg:flex flex-col space-y-4 justify-between">
+                <template v-if="loadingSitreps">
+                  <template v-for="n in 3" :key="n">
+                    <div class="w-full h-40">
+                      <SituationalAwarenessCard loading />
+                    </div>
+                  </template>
+                </template>
+                <template v-else>
+                  <template v-if="sitreps.length > 0">
+                    <template v-for="item in sitreps" :key="item">
+                      <div class="w-full h-40">
+                        <router-link
+                          :to="{
+                            name: 'article',
+                            params: { doc_num: item.doc_num },
+                          }"
+                        >
+                          <SituationalAwarenessCard :sitrep="item" />
+                        </router-link>
+                      </div>
+                    </template>
+                  </template>
+                  <template v-else
+                    ><p class="text-sm italic">
+                      No Daily Briefs were found.
+                    </p></template
+                  >
+                </template>
+              </div>
+              <p
+                class="text-sm text-right hover:text-black dark:hover:text-white energy:hover:text-white"
+              >
+                <router-link to="search?text=&product_types[]=10377">
+                  More >
+                </router-link>
+              </p>
+            </div>
+            <Carousel
+              :settings="carouselSettings"
+              :breakpoints="carouselBreakpoints"
+              class="lg:hidden w-full"
+            >
+              <template v-if="loadingSitreps">
+                <Slide v-for="n in 3" :key="n">
+                  <div class="w-[280px] h-36 mr-4">
+                    <SituationalAwarenessCard loading />
+                  </div>
+                </Slide>
+              </template>
+              <template v-else>
+                <Slide v-for="item in sitreps" :key="item">
+                  <div class="w-full h-36 text-left mr-4">
+                    <router-link
+                      :to="{
+                        name: 'article',
+                        params: { doc_num: item.doc_num },
+                      }"
+                    >
+                      <SituationalAwarenessCard :sitrep="item" />
+                    </router-link>
+                  </div>
+                </Slide>
+              </template>
+              <template #addons>
+                <Navigation
+                  v-if="!loadingSitreps && sitreps.length > 0"
+                  class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-dark-navy dark:hover:text-dark-navy energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
+                />
+              </template>
+            </Carousel>
+            <template v-if="!loadingSitreps && sitreps.length === 0">
+              <p class="lg:hidden text-sm italic">
+                No Daily Briefs were found.
+              </p>
+            </template>
+          </div>
         </div>
         <div
           class="py-4 lg:py-0 h-[425px] lg:h-full lg:basis-2/3 xl:basis-2/3 lg:pl-4 xl:pr-4"
@@ -134,22 +224,38 @@
 
 <script>
 import * as dayjs from "dayjs";
+import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import PublishedArticleCard from "@/components/PublishedArticleCard";
-import MainSectionSituationalAwareness from "@/components/MainSectionSituationalAwareness";
+import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
+
+const carouselSettings = {
+  itemsToShow: 1.75,
+  snapAlign: "start",
+};
+const carouselBreakpoints = {
+  //Tailwind MD
+  768: {
+    itemsToShow: 3,
+    snapAlign: "start",
+  },
+};
 
 export default {
   components: {
+    Carousel,
+    Slide,
+    Navigation,
     PublishedArticleCard,
-    MainSectionSituationalAwareness,
+    SituationalAwarenessCard,
   },
   setup() {
     const store = useStore();
     const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
-    const sitrepFeeds = computed(() => store.state.feeds.sitreps);
-    const loadingSitrepFeeds = computed(() => store.state.feeds.loading);
+    const sitreps = computed(() => store.state.feeds.sitreps);
+    const loadingSitreps = computed(() => store.state.feeds.loading);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
@@ -158,10 +264,12 @@ export default {
     });
 
     return {
+      carouselSettings,
+      carouselBreakpoints,
       danielArticles,
       loadingDanielArticles,
-      loadingSitrepFeeds,
-      sitrepFeeds,
+      loadingSitreps,
+      sitreps,
       today,
     };
   },

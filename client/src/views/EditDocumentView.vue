@@ -280,7 +280,7 @@
                       "
                       target="_blank"
                     >
-                      <DocumentDownloadIcon
+                      <DocumentArrowDownIcon
                         class="h-5 w-5"
                         title="Download"
                         display="inline;"
@@ -293,7 +293,7 @@
                         removeDocument(attachment.id, documentNumber, index)
                       "
                     >
-                      <DocumentRemoveIcon
+                      <DocumentMinusIcon
                         class="h-5 w-5"
                         title="Delete"
                         display="inline;"
@@ -389,9 +389,9 @@ import * as dayjs from "dayjs";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import {
   ChevronDownIcon,
-  DocumentDownloadIcon,
-  DocumentRemoveIcon,
-} from "@heroicons/vue/solid";
+  DocumentArrowDownIcon,
+  DocumentMinusIcon,
+} from "@heroicons/vue/24/solid";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "@/config/wireAxios";
 import { getValueForCode, getValueForName } from "@/helpers";
@@ -407,8 +407,8 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
-    DocumentDownloadIcon,
-    DocumentRemoveIcon,
+    DocumentArrowDownIcon,
+    DocumentMinusIcon,
     DropZone,
     FilePreview,
     ArticleView,

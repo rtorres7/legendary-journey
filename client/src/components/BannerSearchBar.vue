@@ -4,7 +4,7 @@
   >
     <button type="button" tabindex="0" @click="onClickSearch">
       <span class="sr-only">Search</span>
-      <SearchIcon
+      <MagnifyingGlassIcon
         class="w-5 h-5 text-slate-400 dark:text-slate-500/90 energy:text-zinc-500/90"
         aria-hidden="true"
       />
@@ -38,7 +38,7 @@
           <span v-html="slot.boldMatchText(slot.itemProjection(slot.item))" />
           <template v-if="slot.item.type === 'user'">
             <button @click="deleteSearch(slot.item)">
-              <XIcon
+              <XMarkIcon
                 class="h-5 w-5 text-slate-800 dark:text-slate-300 energy:text-zinc-300"
                 aria-hidden="true"
               />
@@ -54,15 +54,15 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { SearchIcon, XIcon } from "@heroicons/vue/outline";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { metadata } from "@/config";
 
 let searchMatches = ["United Nations", "Zelensky"];
 
 export default {
   components: {
-    SearchIcon,
-    XIcon,
+    MagnifyingGlassIcon,
+    XMarkIcon,
   },
   setup() {
     const store = useStore();

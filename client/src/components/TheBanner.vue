@@ -15,7 +15,7 @@
         class="ml-2 text-slate-300 energy:text-zinc-300 hover:text-white"
         @click="removeSystemMessage"
       >
-        <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
+        <XMarkIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
     </div>
   </div>
@@ -33,12 +33,12 @@
 import { ref } from "vue";
 import BannerNav from "@/components/BannerNav.vue";
 import { metadata } from "@/config";
-import { XIcon } from "@heroicons/vue/outline";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
     BannerNav,
-    XIcon,
+    XMarkIcon,
   },
   setup() {
     const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));

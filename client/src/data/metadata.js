@@ -6,1373 +6,1373 @@ export const metadata = {
       displayName: "Classification",
       values: [
         {
-          "name": "UNCLASSIFIED",
-          "code": "UNC"
-        }
-      ]
+          name: "UNCLASSIFIED",
+          code: "UNC",
+        },
+      ],
     },
     countries: {
       displayName: "Countries",
       values: [
         {
-          "code": "AFG",
-          "name": "Afghanistan",
-          "digraph": "AF"
+          code: "AFG",
+          name: "Afghanistan",
+          digraph: "AF",
         },
         {
-          "code": "ALA",
-          "name": "Aland Islands"
+          code: "ALA",
+          name: "Aland Islands",
         },
         {
-          "code": "ALB",
-          "name": "Albania",
-          "digraph": "AL"
+          code: "ALB",
+          name: "Albania",
+          digraph: "AL",
         },
         {
-          "code": "DZA",
-          "name": "Algeria",
-          "digraph": "AG"
+          code: "DZA",
+          name: "Algeria",
+          digraph: "AG",
         },
         {
-          "code": "AND",
-          "name": "Andorra",
-          "digraph": "AN"
+          code: "AND",
+          name: "Andorra",
+          digraph: "AN",
         },
         {
-          "code": "AGO",
-          "name": "Angola",
-          "digraph": "AO"
+          code: "AGO",
+          name: "Angola",
+          digraph: "AO",
         },
         {
-          "code": "AIA",
-          "name": "Anguilla",
-          "digraph": "AV"
+          code: "AIA",
+          name: "Anguilla",
+          digraph: "AV",
         },
         {
-          "code": "ATA",
-          "name": "Antarctica",
-          "digraph": "AY"
+          code: "ATA",
+          name: "Antarctica",
+          digraph: "AY",
         },
         {
-          "code": "ATG",
-          "name": "Antigua and Barbuda",
-          "digraph": "AC"
+          code: "ATG",
+          name: "Antigua and Barbuda",
+          digraph: "AC",
         },
         {
-          "code": "ARG",
-          "name": "Argentina",
-          "digraph": "AR"
+          code: "ARG",
+          name: "Argentina",
+          digraph: "AR",
         },
         {
-          "code": "ARM",
-          "name": "Armenia",
-          "digraph": "AM"
+          code: "ARM",
+          name: "Armenia",
+          digraph: "AM",
         },
         {
-          "code": "ABW",
-          "name": "Aruba",
-          "digraph": "AA"
+          code: "ABW",
+          name: "Aruba",
+          digraph: "AA",
         },
         {
-          "code": "AUS",
-          "name": "Australia",
-          "digraph": "AS"
+          code: "AUS",
+          name: "Australia",
+          digraph: "AS",
         },
         {
-          "code": "AUT",
-          "name": "Austria",
-          "digraph": "AU"
+          code: "AUT",
+          name: "Austria",
+          digraph: "AU",
         },
         {
-          "code": "AZE",
-          "name": "Azerbaijan",
-          "digraph": "AJ"
+          code: "AZE",
+          name: "Azerbaijan",
+          digraph: "AJ",
         },
         {
-          "code": "BHS",
-          "name": "Bahamas, The",
-          "digraph": "BF"
+          code: "BHS",
+          name: "Bahamas, The",
+          digraph: "BF",
         },
         {
-          "code": "BHR",
-          "name": "Bahrain",
-          "digraph": "BA"
+          code: "BHR",
+          name: "Bahrain",
+          digraph: "BA",
         },
         {
-          "code": "BGD",
-          "name": "Bangladesh",
-          "digraph": "BG"
+          code: "BGD",
+          name: "Bangladesh",
+          digraph: "BG",
         },
         {
-          "code": "BRB",
-          "name": "Barbados",
-          "digraph": "BB"
+          code: "BRB",
+          name: "Barbados",
+          digraph: "BB",
         },
         {
-          "code": "BLR",
-          "name": "Belarus",
-          "digraph": "BO"
+          code: "BLR",
+          name: "Belarus",
+          digraph: "BO",
         },
         {
-          "code": "BEL",
-          "name": "Belgium",
-          "digraph": "BE"
+          code: "BEL",
+          name: "Belgium",
+          digraph: "BE",
         },
         {
-          "code": "BLZ",
-          "name": "Belize",
-          "digraph": "BH"
+          code: "BLZ",
+          name: "Belize",
+          digraph: "BH",
         },
         {
-          "code": "BEN",
-          "name": "Benin",
-          "digraph": "BN"
+          code: "BEN",
+          name: "Benin",
+          digraph: "BN",
         },
         {
-          "code": "BMU",
-          "name": "Bermuda",
-          "digraph": "BD"
+          code: "BMU",
+          name: "Bermuda",
+          digraph: "BD",
         },
         {
-          "code": "BTN",
-          "name": "Bhutan",
-          "digraph": "BT"
+          code: "BTN",
+          name: "Bhutan",
+          digraph: "BT",
         },
         {
-          "code": "BOL",
-          "name": "Bolivia",
-          "digraph": "BL"
+          code: "BOL",
+          name: "Bolivia",
+          digraph: "BL",
         },
         {
-          "code": "BES",
-          "name": "Bonaire, Sint Eustatius, and Saba"
+          code: "BES",
+          name: "Bonaire, Sint Eustatius, and Saba",
         },
         {
-          "code": "BIH",
-          "name": "Bosnia and Herzegovina",
-          "digraph": "BK"
+          code: "BIH",
+          name: "Bosnia and Herzegovina",
+          digraph: "BK",
         },
         {
-          "code": "BWA",
-          "name": "Botswana",
-          "digraph": "BC"
+          code: "BWA",
+          name: "Botswana",
+          digraph: "BC",
         },
         {
-          "code": "BVT",
-          "name": "Bouvet Island",
-          "digraph": "BV"
+          code: "BVT",
+          name: "Bouvet Island",
+          digraph: "BV",
         },
         {
-          "code": "BRA",
-          "name": "Brazil",
-          "digraph": "BR"
+          code: "BRA",
+          name: "Brazil",
+          digraph: "BR",
         },
         {
-          "code": "IOT",
-          "name": "British Indian Ocean Territory",
-          "digraph": "IO"
+          code: "IOT",
+          name: "British Indian Ocean Territory",
+          digraph: "IO",
         },
         {
-          "code": "VGB",
-          "name": "British Virgin Islands",
-          "digraph": "VI"
+          code: "VGB",
+          name: "British Virgin Islands",
+          digraph: "VI",
         },
         {
-          "code": "BRN",
-          "name": "Brunei",
-          "digraph": "BX"
+          code: "BRN",
+          name: "Brunei",
+          digraph: "BX",
         },
         {
-          "code": "BGR",
-          "name": "Bulgaria",
-          "digraph": "BU"
+          code: "BGR",
+          name: "Bulgaria",
+          digraph: "BU",
         },
         {
-          "code": "BFA",
-          "name": "Burkina Faso",
-          "digraph": "UV"
+          code: "BFA",
+          name: "Burkina Faso",
+          digraph: "UV",
         },
         {
-          "code": "MMR",
-          "name": "Burma",
-          "digraph": "BM"
+          code: "MMR",
+          name: "Burma",
+          digraph: "BM",
         },
         {
-          "code": "BDI",
-          "name": "Burundi",
-          "digraph": "BY"
+          code: "BDI",
+          name: "Burundi",
+          digraph: "BY",
         },
         {
-          "code": "CPV",
-          "name": "Cabo Verde",
-          "digraph": "CV"
+          code: "CPV",
+          name: "Cabo Verde",
+          digraph: "CV",
         },
         {
-          "code": "KHM",
-          "name": "Cambodia",
-          "digraph": "CB"
+          code: "KHM",
+          name: "Cambodia",
+          digraph: "CB",
         },
         {
-          "code": "CMR",
-          "name": "Cameroon",
-          "digraph": "CM"
+          code: "CMR",
+          name: "Cameroon",
+          digraph: "CM",
         },
         {
-          "code": "CAN",
-          "name": "Canada",
-          "digraph": "CA"
+          code: "CAN",
+          name: "Canada",
+          digraph: "CA",
         },
         {
-          "code": "CYM",
-          "name": "Cayman Islands",
-          "digraph": "CJ"
+          code: "CYM",
+          name: "Cayman Islands",
+          digraph: "CJ",
         },
         {
-          "code": "CAF",
-          "name": "Central African Republic",
-          "digraph": "CT"
+          code: "CAF",
+          name: "Central African Republic",
+          digraph: "CT",
         },
         {
-          "code": "TCD",
-          "name": "Chad",
-          "digraph": "CD"
+          code: "TCD",
+          name: "Chad",
+          digraph: "CD",
         },
         {
-          "code": "CHL",
-          "name": "Chile",
-          "digraph": "CI"
+          code: "CHL",
+          name: "Chile",
+          digraph: "CI",
         },
         {
-          "code": "CHN",
-          "name": "China",
-          "digraph": "CH"
+          code: "CHN",
+          name: "China",
+          digraph: "CH",
         },
         {
-          "code": "CXR",
-          "name": "Christmas Island",
-          "digraph": "KT"
+          code: "CXR",
+          name: "Christmas Island",
+          digraph: "KT",
         },
         {
-          "code": "CCK",
-          "name": "Cocos (Keeling) Islands",
-          "digraph": "CK"
+          code: "CCK",
+          name: "Cocos (Keeling) Islands",
+          digraph: "CK",
         },
         {
-          "code": "COL",
-          "name": "Colombia",
-          "digraph": "CO"
+          code: "COL",
+          name: "Colombia",
+          digraph: "CO",
         },
         {
-          "code": "COM",
-          "name": "Comoros",
-          "digraph": "CN"
+          code: "COM",
+          name: "Comoros",
+          digraph: "CN",
         },
         {
-          "code": "COD",
-          "name": "Democratic Republic of Congo",
-          "digraph": "CG"
+          code: "COD",
+          name: "Democratic Republic of Congo",
+          digraph: "CG",
         },
         {
-          "code": "COG",
-          "name": "Republic of Congo",
-          "digraph": "CF"
+          code: "COG",
+          name: "Republic of Congo",
+          digraph: "CF",
         },
         {
-          "code": "COK",
-          "name": "Cook Islands",
-          "digraph": "CW"
+          code: "COK",
+          name: "Cook Islands",
+          digraph: "CW",
         },
         {
-          "code": "CRI",
-          "name": "Costa Rica",
-          "digraph": "CS"
+          code: "CRI",
+          name: "Costa Rica",
+          digraph: "CS",
         },
         {
-          "code": "CIV",
-          "name": "Côte d'Ivoire",
-          "digraph": "IV"
+          code: "CIV",
+          name: "Côte d'Ivoire",
+          digraph: "IV",
         },
         {
-          "code": "HRV",
-          "name": "Croatia",
-          "digraph": "HR"
+          code: "HRV",
+          name: "Croatia",
+          digraph: "HR",
         },
         {
-          "code": "CUB",
-          "name": "Cuba",
-          "digraph": "CU"
+          code: "CUB",
+          name: "Cuba",
+          digraph: "CU",
         },
         {
-          "code": "CUW",
-          "name": "Curacao",
-          "digraph": "CC"
+          code: "CUW",
+          name: "Curacao",
+          digraph: "CC",
         },
         {
-          "code": "CYP",
-          "name": "Cyprus",
-          "digraph": "CY"
+          code: "CYP",
+          name: "Cyprus",
+          digraph: "CY",
         },
         {
-          "code": "CZE",
-          "name": "Czechia",
-          "digraph": "EZ"
+          code: "CZE",
+          name: "Czechia",
+          digraph: "EZ",
         },
         {
-          "code": "DNK",
-          "name": "Denmark",
-          "digraph": "DA"
+          code: "DNK",
+          name: "Denmark",
+          digraph: "DA",
         },
         {
-          "code": "DJI",
-          "name": "Djibouti",
-          "digraph": "DJ"
+          code: "DJI",
+          name: "Djibouti",
+          digraph: "DJ",
         },
         {
-          "code": "DMA",
-          "name": "Dominica",
-          "digraph": "DO"
+          code: "DMA",
+          name: "Dominica",
+          digraph: "DO",
         },
         {
-          "code": "DOM",
-          "name": "Dominican Republic",
-          "digraph": "DR"
+          code: "DOM",
+          name: "Dominican Republic",
+          digraph: "DR",
         },
         {
-          "code": "ECU",
-          "name": "Ecuador",
-          "digraph": "EC"
+          code: "ECU",
+          name: "Ecuador",
+          digraph: "EC",
         },
         {
-          "code": "EGY",
-          "name": "Egypt",
-          "digraph": "EG"
+          code: "EGY",
+          name: "Egypt",
+          digraph: "EG",
         },
         {
-          "code": "SLV",
-          "name": "El Salvador",
-          "digraph": "ES"
+          code: "SLV",
+          name: "El Salvador",
+          digraph: "ES",
         },
         {
-          "code": "GNQ",
-          "name": "Equatorial Guinea",
-          "digraph": "EK"
+          code: "GNQ",
+          name: "Equatorial Guinea",
+          digraph: "EK",
         },
         {
-          "code": "ERI",
-          "name": "Eritrea",
-          "digraph": "ER"
+          code: "ERI",
+          name: "Eritrea",
+          digraph: "ER",
         },
         {
-          "code": "EST",
-          "name": "Estonia",
-          "digraph": "EN"
+          code: "EST",
+          name: "Estonia",
+          digraph: "EN",
         },
         {
-          "code": "SWZ",
-          "name": "Eswatini",
-          "digraph": "WZ"
+          code: "SWZ",
+          name: "Eswatini",
+          digraph: "WZ",
         },
         {
-          "code": "ETH",
-          "name": "Ethiopia",
-          "digraph": "ET"
+          code: "ETH",
+          name: "Ethiopia",
+          digraph: "ET",
         },
         {
-          "code": "FLK",
-          "name": "Falkland Islands",
-          "digraph": "FK"
+          code: "FLK",
+          name: "Falkland Islands",
+          digraph: "FK",
         },
         {
-          "code": "FRO",
-          "name": "Faroe Islands",
-          "digraph": "FO"
+          code: "FRO",
+          name: "Faroe Islands",
+          digraph: "FO",
         },
         {
-          "code": "FSM",
-          "name": "Federated States of Micronesia",
-          "digraph": "FM"
+          code: "FSM",
+          name: "Federated States of Micronesia",
+          digraph: "FM",
         },
         {
-          "code": "FJI",
-          "name": "Fiji",
-          "digraph": "FJ"
+          code: "FJI",
+          name: "Fiji",
+          digraph: "FJ",
         },
         {
-          "code": "FIN",
-          "name": "Finland",
-          "digraph": "FI"
+          code: "FIN",
+          name: "Finland",
+          digraph: "FI",
         },
         {
-          "code": "FRA",
-          "name": "France",
-          "digraph": "FR"
+          code: "FRA",
+          name: "France",
+          digraph: "FR",
         },
         {
-          "code": "GUF",
-          "name": "French Guiana",
-          "digraph": "FG"
+          code: "GUF",
+          name: "French Guiana",
+          digraph: "FG",
         },
         {
-          "code": "PYF",
-          "name": "French Polynesia",
-          "digraph": "FP"
+          code: "PYF",
+          name: "French Polynesia",
+          digraph: "FP",
         },
         {
-          "code": "ATF",
-          "name": "French Southern and Antarctic Lands",
-          "digraph": "FS"
+          code: "ATF",
+          name: "French Southern and Antarctic Lands",
+          digraph: "FS",
         },
         {
-          "code": "GAB",
-          "name": "Gabon",
-          "digraph": "GB"
+          code: "GAB",
+          name: "Gabon",
+          digraph: "GB",
         },
         {
-          "code": "GMB",
-          "name": "Gambia, The",
-          "digraph": "GA"
+          code: "GMB",
+          name: "Gambia, The",
+          digraph: "GA",
         },
         {
-          "code": "GZ",
-          "name": "Gaza Strip",
-          "digraph": "GZ"
+          code: "GZ",
+          name: "Gaza Strip",
+          digraph: "GZ",
         },
         {
-          "code": "GEO",
-          "name": "Georgia",
-          "digraph": "GG"
+          code: "GEO",
+          name: "Georgia",
+          digraph: "GG",
         },
         {
-          "code": "DEU",
-          "name": "Germany",
-          "digraph": "GM"
+          code: "DEU",
+          name: "Germany",
+          digraph: "GM",
         },
         {
-          "code": "GHA",
-          "name": "Ghana",
-          "digraph": "GH"
+          code: "GHA",
+          name: "Ghana",
+          digraph: "GH",
         },
         {
-          "code": "GIB",
-          "name": "Gibraltar",
-          "digraph": "GI"
+          code: "GIB",
+          name: "Gibraltar",
+          digraph: "GI",
         },
         {
-          "code": "GRC",
-          "name": "Greece",
-          "digraph": "GR"
+          code: "GRC",
+          name: "Greece",
+          digraph: "GR",
         },
         {
-          "code": "GRL",
-          "name": "Greenland",
-          "digraph": "GL"
+          code: "GRL",
+          name: "Greenland",
+          digraph: "GL",
         },
         {
-          "code": "GRD",
-          "name": "Grenada",
-          "digraph": "GJ"
+          code: "GRD",
+          name: "Grenada",
+          digraph: "GJ",
         },
         {
-          "code": "GLP",
-          "name": "Guadeloupe",
-          "digraph": "GP"
+          code: "GLP",
+          name: "Guadeloupe",
+          digraph: "GP",
         },
         {
-          "code": "GTM",
-          "name": "Guatemala",
-          "digraph": "GT"
+          code: "GTM",
+          name: "Guatemala",
+          digraph: "GT",
         },
         {
-          "code": "GGY",
-          "name": "Guernsey",
-          "digraph": "GK"
+          code: "GGY",
+          name: "Guernsey",
+          digraph: "GK",
         },
         {
-          "code": "GIN",
-          "name": "Guinea",
-          "digraph": "GV"
+          code: "GIN",
+          name: "Guinea",
+          digraph: "GV",
         },
         {
-          "code": "GNB",
-          "name": "Guinea-Bissau",
-          "digraph": "PU"
+          code: "GNB",
+          name: "Guinea-Bissau",
+          digraph: "PU",
         },
         {
-          "code": "GUY",
-          "name": "Guyana",
-          "digraph": "GY"
+          code: "GUY",
+          name: "Guyana",
+          digraph: "GY",
         },
         {
-          "code": "HTI",
-          "name": "Haiti",
-          "digraph": "HA"
+          code: "HTI",
+          name: "Haiti",
+          digraph: "HA",
         },
         {
-          "code": "HMD",
-          "name": "Heard Island and McDonald Islands",
-          "digraph": "HM"
+          code: "HMD",
+          name: "Heard Island and McDonald Islands",
+          digraph: "HM",
         },
         {
-          "code": "VAT",
-          "name": "Holy See (Vatican City)",
-          "digraph": "VT"
+          code: "VAT",
+          name: "Holy See (Vatican City)",
+          digraph: "VT",
         },
         {
-          "code": "HND",
-          "name": "Honduras",
-          "digraph": "HO"
+          code: "HND",
+          name: "Honduras",
+          digraph: "HO",
         },
         {
-          "code": "HKG",
-          "name": "Hong Kong",
-          "digraph": "HK"
+          code: "HKG",
+          name: "Hong Kong",
+          digraph: "HK",
         },
         {
-          "code": "HUN",
-          "name": "Hungary",
-          "digraph": "HU"
+          code: "HUN",
+          name: "Hungary",
+          digraph: "HU",
         },
         {
-          "code": "ISL",
-          "name": "Iceland",
-          "digraph": "IC"
+          code: "ISL",
+          name: "Iceland",
+          digraph: "IC",
         },
         {
-          "code": "IND",
-          "name": "India",
-          "digraph": "IN"
+          code: "IND",
+          name: "India",
+          digraph: "IN",
         },
         {
-          "code": "IDN",
-          "name": "Indonesia",
-          "digraph": "ID"
+          code: "IDN",
+          name: "Indonesia",
+          digraph: "ID",
         },
         {
-          "code": "IRN",
-          "name": "Iran",
-          "digraph": "IR"
+          code: "IRN",
+          name: "Iran",
+          digraph: "IR",
         },
         {
-          "code": "IRQ",
-          "name": "Iraq",
-          "digraph": "IZ"
+          code: "IRQ",
+          name: "Iraq",
+          digraph: "IZ",
         },
         {
-          "code": "IRL",
-          "name": "Ireland",
-          "digraph": "EI"
+          code: "IRL",
+          name: "Ireland",
+          digraph: "EI",
         },
         {
-          "code": "IMN",
-          "name": "Isle of Man",
-          "digraph": "IM"
+          code: "IMN",
+          name: "Isle of Man",
+          digraph: "IM",
         },
         {
-          "code": "ISR",
-          "name": "Israel",
-          "digraph": "IS"
+          code: "ISR",
+          name: "Israel",
+          digraph: "IS",
         },
         {
-          "code": "ITA",
-          "name": "Italy",
-          "digraph": "IT"
+          code: "ITA",
+          name: "Italy",
+          digraph: "IT",
         },
         {
-          "code": "JAM",
-          "name": "Jamaica",
-          "digraph": "JM"
+          code: "JAM",
+          name: "Jamaica",
+          digraph: "JM",
         },
         {
-          "code": "JPN",
-          "name": "Japan",
-          "digraph": "JA"
+          code: "JPN",
+          name: "Japan",
+          digraph: "JA",
         },
         {
-          "code": "JEY",
-          "name": "Jersey",
-          "digraph": "JE"
+          code: "JEY",
+          name: "Jersey",
+          digraph: "JE",
         },
         {
-          "code": "JOR",
-          "name": "Jordan",
-          "digraph": "JO"
+          code: "JOR",
+          name: "Jordan",
+          digraph: "JO",
         },
         {
-          "code": "KAZ",
-          "name": "Kazakhstan",
-          "digraph": "KZ"
+          code: "KAZ",
+          name: "Kazakhstan",
+          digraph: "KZ",
         },
         {
-          "code": "KEN",
-          "name": "Kenya",
-          "digraph": "KE"
+          code: "KEN",
+          name: "Kenya",
+          digraph: "KE",
         },
         {
-          "code": "KIR",
-          "name": "Kiribati",
-          "digraph": "KR"
+          code: "KIR",
+          name: "Kiribati",
+          digraph: "KR",
         },
         {
-          "code": "KV",
-          "name": "Kosovo",
-          "digraph": "KV"
+          code: "KV",
+          name: "Kosovo",
+          digraph: "KV",
         },
         {
-          "code": "KWT",
-          "name": "Kuwait",
-          "digraph": "KU"
+          code: "KWT",
+          name: "Kuwait",
+          digraph: "KU",
         },
         {
-          "code": "KGZ",
-          "name": "Kyrgyzstan",
-          "digraph": "KG"
+          code: "KGZ",
+          name: "Kyrgyzstan",
+          digraph: "KG",
         },
         {
-          "code": "LAO",
-          "name": "Lao People's Democratic Republic",
-          "digraph": "LA"
+          code: "LAO",
+          name: "Lao People's Democratic Republic",
+          digraph: "LA",
         },
         {
-          "code": "LAO",
-          "name": "Laos",
-          "digraph": "LA"
+          code: "LAO",
+          name: "Laos",
+          digraph: "LA",
         },
         {
-          "code": "LVA",
-          "name": "Latvia",
-          "digraph": "LG"
+          code: "LVA",
+          name: "Latvia",
+          digraph: "LG",
         },
         {
-          "code": "LBN",
-          "name": "Lebanon",
-          "digraph": "LE"
+          code: "LBN",
+          name: "Lebanon",
+          digraph: "LE",
         },
         {
-          "code": "LSO",
-          "name": "Lesotho",
-          "digraph": "LT"
+          code: "LSO",
+          name: "Lesotho",
+          digraph: "LT",
         },
         {
-          "code": "LBR",
-          "name": "Liberia",
-          "digraph": "LI"
+          code: "LBR",
+          name: "Liberia",
+          digraph: "LI",
         },
         {
-          "code": "LBY",
-          "name": "Libya",
-          "digraph": "LY"
+          code: "LBY",
+          name: "Libya",
+          digraph: "LY",
         },
         {
-          "code": "LIE",
-          "name": "Liechtenstein",
-          "digraph": "LS"
+          code: "LIE",
+          name: "Liechtenstein",
+          digraph: "LS",
         },
         {
-          "code": "LTU",
-          "name": "Lithuania",
-          "digraph": "LH"
+          code: "LTU",
+          name: "Lithuania",
+          digraph: "LH",
         },
         {
-          "code": "LUX",
-          "name": "Luxembourg",
-          "digraph": "LU"
+          code: "LUX",
+          name: "Luxembourg",
+          digraph: "LU",
         },
         {
-          "code": "MAC",
-          "name": "Macau",
-          "digraph": "MC"
+          code: "MAC",
+          name: "Macau",
+          digraph: "MC",
         },
         {
-          "code": "MDG",
-          "name": "Madagascar",
-          "digraph": "MA"
+          code: "MDG",
+          name: "Madagascar",
+          digraph: "MA",
         },
         {
-          "code": "MWI",
-          "name": "Malawi",
-          "digraph": "MI"
+          code: "MWI",
+          name: "Malawi",
+          digraph: "MI",
         },
         {
-          "code": "MYS",
-          "name": "Malaysia",
-          "digraph": "MY"
+          code: "MYS",
+          name: "Malaysia",
+          digraph: "MY",
         },
         {
-          "code": "MDV",
-          "name": "Maldives",
-          "digraph": "MV"
+          code: "MDV",
+          name: "Maldives",
+          digraph: "MV",
         },
         {
-          "code": "MLI",
-          "name": "Mali",
-          "digraph": "ML"
+          code: "MLI",
+          name: "Mali",
+          digraph: "ML",
         },
         {
-          "code": "MLT",
-          "name": "Malta",
-          "digraph": "MT"
+          code: "MLT",
+          name: "Malta",
+          digraph: "MT",
         },
         {
-          "code": "MHL",
-          "name": "Marshall Islands",
-          "digraph": "RM"
+          code: "MHL",
+          name: "Marshall Islands",
+          digraph: "RM",
         },
         {
-          "code": "MTQ",
-          "name": "Martinique",
-          "digraph": "MB"
+          code: "MTQ",
+          name: "Martinique",
+          digraph: "MB",
         },
         {
-          "code": "MRT",
-          "name": "Mauritania",
-          "digraph": "MR"
+          code: "MRT",
+          name: "Mauritania",
+          digraph: "MR",
         },
         {
-          "code": "MUS",
-          "name": "Mauritius",
-          "digraph": "MP"
+          code: "MUS",
+          name: "Mauritius",
+          digraph: "MP",
         },
         {
-          "code": "MYT",
-          "name": "Mayotte",
-          "digraph": "MF"
+          code: "MYT",
+          name: "Mayotte",
+          digraph: "MF",
         },
         {
-          "code": "MEX",
-          "name": "Mexico",
-          "digraph": "MX"
+          code: "MEX",
+          name: "Mexico",
+          digraph: "MX",
         },
         {
-          "code": "MDA",
-          "name": "Moldova",
-          "digraph": "MD"
+          code: "MDA",
+          name: "Moldova",
+          digraph: "MD",
         },
         {
-          "code": "MCO",
-          "name": "Monaco",
-          "digraph": "MN"
+          code: "MCO",
+          name: "Monaco",
+          digraph: "MN",
         },
         {
-          "code": "MNG",
-          "name": "Mongolia",
-          "digraph": "MG"
+          code: "MNG",
+          name: "Mongolia",
+          digraph: "MG",
         },
         {
-          "code": "MNE",
-          "name": "Montenegro",
-          "digraph": "MJ"
+          code: "MNE",
+          name: "Montenegro",
+          digraph: "MJ",
         },
         {
-          "code": "MSR",
-          "name": "Montserrat",
-          "digraph": "MH"
+          code: "MSR",
+          name: "Montserrat",
+          digraph: "MH",
         },
         {
-          "code": "MAR",
-          "name": "Morocco",
-          "digraph": "MO"
+          code: "MAR",
+          name: "Morocco",
+          digraph: "MO",
         },
         {
-          "code": "MOZ",
-          "name": "Mozambique",
-          "digraph": "MZ"
+          code: "MOZ",
+          name: "Mozambique",
+          digraph: "MZ",
         },
         {
-          "code": "MMR",
-          "name": "Myanmar",
-          "digraph": "MM"
+          code: "MMR",
+          name: "Myanmar",
+          digraph: "MM",
         },
         {
-          "code": "NAM",
-          "name": "Namibia",
-          "digraph": "WA"
+          code: "NAM",
+          name: "Namibia",
+          digraph: "WA",
         },
         {
-          "code": "NRU",
-          "name": "Nauru",
-          "digraph": "NR"
+          code: "NRU",
+          name: "Nauru",
+          digraph: "NR",
         },
         {
-          "code": "NPL",
-          "name": "Nepal",
-          "digraph": "NP"
+          code: "NPL",
+          name: "Nepal",
+          digraph: "NP",
         },
         {
-          "code": "NLD",
-          "name": "Netherlands",
-          "digraph": "NL"
+          code: "NLD",
+          name: "Netherlands",
+          digraph: "NL",
         },
         {
-          "code": "NCL",
-          "name": "New Caledonia",
-          "digraph": "NC"
+          code: "NCL",
+          name: "New Caledonia",
+          digraph: "NC",
         },
         {
-          "code": "NZL",
-          "name": "New Zealand",
-          "digraph": "NZ"
+          code: "NZL",
+          name: "New Zealand",
+          digraph: "NZ",
         },
         {
-          "code": "NIC",
-          "name": "Nicaragua",
-          "digraph": "NU"
+          code: "NIC",
+          name: "Nicaragua",
+          digraph: "NU",
         },
         {
-          "code": "NER",
-          "name": "Niger",
-          "digraph": "NG"
+          code: "NER",
+          name: "Niger",
+          digraph: "NG",
         },
         {
-          "code": "NGA",
-          "name": "Nigeria",
-          "digraph": "NI"
+          code: "NGA",
+          name: "Nigeria",
+          digraph: "NI",
         },
         {
-          "code": "NIU",
-          "name": "Niue",
-          "digraph": "NE"
+          code: "NIU",
+          name: "Niue",
+          digraph: "NE",
         },
         {
-          "code": "NFK",
-          "name": "Norfolk Island",
-          "digraph": "NF"
+          code: "NFK",
+          name: "Norfolk Island",
+          digraph: "NF",
         },
         {
-          "code": "PRK",
-          "name": "North Korea",
-          "digraph": "KN"
+          code: "PRK",
+          name: "North Korea",
+          digraph: "KN",
         },
         {
-          "code": "MKD",
-          "name": "North Macedonia",
-          "digraph": "MK"
+          code: "MKD",
+          name: "North Macedonia",
+          digraph: "MK",
         },
         {
-          "code": "NOR",
-          "name": "Norway",
-          "digraph": "NO"
+          code: "NOR",
+          name: "Norway",
+          digraph: "NO",
         },
         {
-          "code": "OMN",
-          "name": "Oman",
-          "digraph": "MU"
+          code: "OMN",
+          name: "Oman",
+          digraph: "MU",
         },
         {
-          "code": "PAK",
-          "name": "Pakistan",
-          "digraph": "PK"
+          code: "PAK",
+          name: "Pakistan",
+          digraph: "PK",
         },
         {
-          "code": "PLW",
-          "name": "Palau",
-          "digraph": "PS"
+          code: "PLW",
+          name: "Palau",
+          digraph: "PS",
         },
         {
-          "code": "PSE",
-          "name": "Palestinian territories"
+          code: "PSE",
+          name: "Palestinian territories",
         },
         {
-          "code": "PAN",
-          "name": "Panama",
-          "digraph": "PM"
+          code: "PAN",
+          name: "Panama",
+          digraph: "PM",
         },
         {
-          "code": "PNG",
-          "name": "Papua New Guinea",
-          "digraph": "PP"
+          code: "PNG",
+          name: "Papua New Guinea",
+          digraph: "PP",
         },
         {
-          "code": "PRY",
-          "name": "Paraguay",
-          "digraph": "PA"
+          code: "PRY",
+          name: "Paraguay",
+          digraph: "PA",
         },
         {
-          "code": "PER",
-          "name": "Peru",
-          "digraph": "PE"
+          code: "PER",
+          name: "Peru",
+          digraph: "PE",
         },
         {
-          "code": "PHL",
-          "name": "Philippines",
-          "digraph": "RP"
+          code: "PHL",
+          name: "Philippines",
+          digraph: "RP",
         },
         {
-          "code": "PCN",
-          "name": "Pitcairn Islands",
-          "digraph": "PC"
+          code: "PCN",
+          name: "Pitcairn Islands",
+          digraph: "PC",
         },
         {
-          "code": "POL",
-          "name": "Poland",
-          "digraph": "PL"
+          code: "POL",
+          name: "Poland",
+          digraph: "PL",
         },
         {
-          "code": "PRT",
-          "name": "Portugal",
-          "digraph": "PO"
+          code: "PRT",
+          name: "Portugal",
+          digraph: "PO",
         },
         {
-          "code": "PRI",
-          "name": "Puerto Rico",
-          "digraph": "PR"
+          code: "PRI",
+          name: "Puerto Rico",
+          digraph: "PR",
         },
         {
-          "code": "QAT",
-          "name": "Qatar",
-          "digraph": "QA"
+          code: "QAT",
+          name: "Qatar",
+          digraph: "QA",
         },
         {
-          "code": "REU",
-          "name": "Reunion",
-          "digraph": "RE"
+          code: "REU",
+          name: "Reunion",
+          digraph: "RE",
         },
         {
-          "code": "ROU",
-          "name": "Romania",
-          "digraph": "RO"
+          code: "ROU",
+          name: "Romania",
+          digraph: "RO",
         },
         {
-          "code": "RUS",
-          "name": "Russia",
-          "digraph": "RS"
+          code: "RUS",
+          name: "Russia",
+          digraph: "RS",
         },
         {
-          "code": "RWA",
-          "name": "Rwanda",
-          "digraph": "RW"
+          code: "RWA",
+          name: "Rwanda",
+          digraph: "RW",
         },
         {
-          "code": "BLM",
-          "name": "Saint Barthelemy",
-          "digraph": "TB"
+          code: "BLM",
+          name: "Saint Barthelemy",
+          digraph: "TB",
         },
         {
-          "code": "SHN",
-          "name": "Saint Helena, Ascension, and Tristan da Cunha",
-          "digraph": "SH"
+          code: "SHN",
+          name: "Saint Helena, Ascension, and Tristan da Cunha",
+          digraph: "SH",
         },
         {
-          "code": "KNA",
-          "name": "Saint Kitts and Nevis",
-          "digraph": "SC"
+          code: "KNA",
+          name: "Saint Kitts and Nevis",
+          digraph: "SC",
         },
         {
-          "code": "LCA",
-          "name": "Saint Lucia",
-          "digraph": "ST"
+          code: "LCA",
+          name: "Saint Lucia",
+          digraph: "ST",
         },
         {
-          "code": "MAF",
-          "name": "Saint Martin",
-          "digraph": "RN"
+          code: "MAF",
+          name: "Saint Martin",
+          digraph: "RN",
         },
         {
-          "code": "SPM",
-          "name": "Saint Pierre and Miquelon",
-          "digraph": "SB"
+          code: "SPM",
+          name: "Saint Pierre and Miquelon",
+          digraph: "SB",
         },
         {
-          "code": "VCT",
-          "name": "Saint Vincent and the Grenadines",
-          "digraph": "VC"
+          code: "VCT",
+          name: "Saint Vincent and the Grenadines",
+          digraph: "VC",
         },
         {
-          "code": "WSM",
-          "name": "Samoa",
-          "digraph": "WS"
+          code: "WSM",
+          name: "Samoa",
+          digraph: "WS",
         },
         {
-          "code": "SMR",
-          "name": "San Marino",
-          "digraph": "SM"
+          code: "SMR",
+          name: "San Marino",
+          digraph: "SM",
         },
         {
-          "code": "STP",
-          "name": "Sao Tome and Principe",
-          "digraph": "TP"
+          code: "STP",
+          name: "Sao Tome and Principe",
+          digraph: "TP",
         },
         {
-          "code": "SAU",
-          "name": "Saudi Arabia",
-          "digraph": "SA"
+          code: "SAU",
+          name: "Saudi Arabia",
+          digraph: "SA",
         },
         {
-          "code": "SEN",
-          "name": "Senegal",
-          "digraph": "SG"
+          code: "SEN",
+          name: "Senegal",
+          digraph: "SG",
         },
         {
-          "code": "SRB",
-          "name": "Serbia",
-          "digraph": "RI"
+          code: "SRB",
+          name: "Serbia",
+          digraph: "RI",
         },
         {
-          "code": "SYC",
-          "name": "Seychelles",
-          "digraph": "SE"
+          code: "SYC",
+          name: "Seychelles",
+          digraph: "SE",
         },
         {
-          "code": "SLE",
-          "name": "Sierra Leone",
-          "digraph": "SL"
+          code: "SLE",
+          name: "Sierra Leone",
+          digraph: "SL",
         },
         {
-          "code": "SGP",
-          "name": "Singapore",
-          "digraph": "SN"
+          code: "SGP",
+          name: "Singapore",
+          digraph: "SN",
         },
         {
-          "code": "SXM",
-          "name": "Sint Maarten",
-          "digraph": "NN"
+          code: "SXM",
+          name: "Sint Maarten",
+          digraph: "NN",
         },
         {
-          "code": "SVK",
-          "name": "Slovakia",
-          "digraph": "LO"
+          code: "SVK",
+          name: "Slovakia",
+          digraph: "LO",
         },
         {
-          "code": "SVN",
-          "name": "Slovenia",
-          "digraph": "SI"
+          code: "SVN",
+          name: "Slovenia",
+          digraph: "SI",
         },
         {
-          "code": "SLB",
-          "name": "Solomon Islands",
-          "digraph": "BP"
+          code: "SLB",
+          name: "Solomon Islands",
+          digraph: "BP",
         },
         {
-          "code": "SOM",
-          "name": "Somalia",
-          "digraph": "SO"
+          code: "SOM",
+          name: "Somalia",
+          digraph: "SO",
         },
         {
-          "code": "ZAF",
-          "name": "South Africa",
-          "digraph": "SF"
+          code: "ZAF",
+          name: "South Africa",
+          digraph: "SF",
         },
         {
-          "code": "SGS",
-          "name": "South Georgia and South Sandwich Islands",
-          "digraph": "SX"
+          code: "SGS",
+          name: "South Georgia and South Sandwich Islands",
+          digraph: "SX",
         },
         {
-          "code": "KOR",
-          "name": "South Korea",
-          "digraph": "KS"
+          code: "KOR",
+          name: "South Korea",
+          digraph: "KS",
         },
         {
-          "code": "SSD",
-          "name": "South Sudan",
-          "digraph": "OD"
+          code: "SSD",
+          name: "South Sudan",
+          digraph: "OD",
         },
         {
-          "code": "ESP",
-          "name": "Spain",
-          "digraph": "SP"
+          code: "ESP",
+          name: "Spain",
+          digraph: "SP",
         },
         {
-          "code": "LKA",
-          "name": "Sri Lanka",
-          "digraph": "CE"
+          code: "LKA",
+          name: "Sri Lanka",
+          digraph: "CE",
         },
         {
-          "code": "SDN",
-          "name": "Sudan",
-          "digraph": "SU"
+          code: "SDN",
+          name: "Sudan",
+          digraph: "SU",
         },
         {
-          "code": "SUR",
-          "name": "Suriname",
-          "digraph": "NS"
+          code: "SUR",
+          name: "Suriname",
+          digraph: "NS",
         },
         {
-          "code": "SJM",
-          "name": "Svalbard and Jan Mayen",
-          "digraph": "SV"
+          code: "SJM",
+          name: "Svalbard and Jan Mayen",
+          digraph: "SV",
         },
         {
-          "code": "SWE",
-          "name": "Sweden",
-          "digraph": "SW"
+          code: "SWE",
+          name: "Sweden",
+          digraph: "SW",
         },
         {
-          "code": "CHE",
-          "name": "Switzerland",
-          "digraph": "SZ"
+          code: "CHE",
+          name: "Switzerland",
+          digraph: "SZ",
         },
         {
-          "code": "SYR",
-          "name": "Syria",
-          "digraph": "SY"
+          code: "SYR",
+          name: "Syria",
+          digraph: "SY",
         },
         {
-          "code": "TWN",
-          "name": "Taiwan",
-          "digraph": "TW"
+          code: "TWN",
+          name: "Taiwan",
+          digraph: "TW",
         },
         {
-          "code": "TJK",
-          "name": "Tajikistan",
-          "digraph": "TI"
+          code: "TJK",
+          name: "Tajikistan",
+          digraph: "TI",
         },
         {
-          "code": "TZA",
-          "name": "Tanzania",
-          "digraph": "TZ"
+          code: "TZA",
+          name: "Tanzania",
+          digraph: "TZ",
         },
         {
-          "code": "THA",
-          "name": "Thailand",
-          "digraph": "TH"
+          code: "THA",
+          name: "Thailand",
+          digraph: "TH",
         },
         {
-          "code": "TLS",
-          "name": "Timor-Leste",
-          "digraph": "TT"
+          code: "TLS",
+          name: "Timor-Leste",
+          digraph: "TT",
         },
         {
-          "code": "TGO",
-          "name": "Togo",
-          "digraph": "TO"
+          code: "TGO",
+          name: "Togo",
+          digraph: "TO",
         },
         {
-          "code": "TKL",
-          "name": "Tokelau",
-          "digraph": "TL"
+          code: "TKL",
+          name: "Tokelau",
+          digraph: "TL",
         },
         {
-          "code": "TON",
-          "name": "Tonga",
-          "digraph": "TN"
+          code: "TON",
+          name: "Tonga",
+          digraph: "TN",
         },
         {
-          "code": "TTO",
-          "name": "Trinidad and Tobago",
-          "digraph": "TD"
+          code: "TTO",
+          name: "Trinidad and Tobago",
+          digraph: "TD",
         },
         {
-          "code": "TUN",
-          "name": "Tunisia",
-          "digraph": "TS"
+          code: "TUN",
+          name: "Tunisia",
+          digraph: "TS",
         },
         {
-          "code": "TUR",
-          "name": "Turkey",
-          "digraph": "TU"
+          code: "TUR",
+          name: "Turkey",
+          digraph: "TU",
         },
         {
-          "code": "TKM",
-          "name": "Turkmenistan",
-          "digraph": "TX"
+          code: "TKM",
+          name: "Turkmenistan",
+          digraph: "TX",
         },
         {
-          "code": "TCA",
-          "name": "Turks and Caicos Islands",
-          "digraph": "TK"
+          code: "TCA",
+          name: "Turks and Caicos Islands",
+          digraph: "TK",
         },
         {
-          "code": "TUV",
-          "name": "Tuvalu",
-          "digraph": "TV"
+          code: "TUV",
+          name: "Tuvalu",
+          digraph: "TV",
         },
         {
-          "code": "UGA",
-          "name": "Uganda",
-          "digraph": "UG"
+          code: "UGA",
+          name: "Uganda",
+          digraph: "UG",
         },
         {
-          "code": "UKR",
-          "name": "Ukraine",
-          "digraph": "UP"
+          code: "UKR",
+          name: "Ukraine",
+          digraph: "UP",
         },
         {
-          "code": "ARE",
-          "name": "United Arab Emirates",
-          "digraph": "AE"
+          code: "ARE",
+          name: "United Arab Emirates",
+          digraph: "AE",
         },
         {
-          "code": "GBR",
-          "name": "United Kingdom",
-          "digraph": "UK"
+          code: "GBR",
+          name: "United Kingdom",
+          digraph: "UK",
         },
         {
-          "code": "USA",
-          "name": "United States",
-          "digraph": "US"
+          code: "USA",
+          name: "United States",
+          digraph: "US",
         },
         {
-          "code": "VIR",
-          "name": "US Virgin Islands",
-          "digraph": "VI"
+          code: "VIR",
+          name: "US Virgin Islands",
+          digraph: "VI",
         },
         {
-          "code": "URY",
-          "name": "Uruguay",
-          "digraph": "UY"
+          code: "URY",
+          name: "Uruguay",
+          digraph: "UY",
         },
         {
-          "code": "UZB",
-          "name": "Uzbekistan",
-          "digraph": "UZ"
+          code: "UZB",
+          name: "Uzbekistan",
+          digraph: "UZ",
         },
         {
-          "code": "VUT",
-          "name": "Vanuatu",
-          "digraph": "NH"
+          code: "VUT",
+          name: "Vanuatu",
+          digraph: "NH",
         },
         {
-          "code": "VEN",
-          "name": "Venezuela",
-          "digraph": "VE"
+          code: "VEN",
+          name: "Venezuela",
+          digraph: "VE",
         },
         {
-          "code": "VNM",
-          "name": "Vietnam",
-          "digraph": "VM"
+          code: "VNM",
+          name: "Vietnam",
+          digraph: "VM",
         },
         {
-          "code": "WLF",
-          "name": "Wallis and Futuna",
-          "digraph": "WF"
+          code: "WLF",
+          name: "Wallis and Futuna",
+          digraph: "WF",
         },
         {
-          "code": "WE",
-          "name": "West Bank",
-          "digraph": "WE"
+          code: "WE",
+          name: "West Bank",
+          digraph: "WE",
         },
         {
-          "code": "ESH",
-          "name": "Western Sahara",
-          "digraph": "WI"
+          code: "ESH",
+          name: "Western Sahara",
+          digraph: "WI",
         },
         {
-          "code": "WW",
-          "name": "Worldwide"
+          code: "WW",
+          name: "Worldwide",
         },
         {
-          "code": "YEM",
-          "name": "Yemen",
-          "digraph": "YM"
+          code: "YEM",
+          name: "Yemen",
+          digraph: "YM",
         },
         {
-          "code": "ZMB",
-          "name": "Zambia",
-          "digraph": "ZA"
+          code: "ZMB",
+          name: "Zambia",
+          digraph: "ZA",
         },
         {
-          "code": "ZWE",
-          "name": "Zimbabwe",
-          "digraph": "ZI"
-        }
-      ]
+          code: "ZWE",
+          name: "Zimbabwe",
+          digraph: "ZI",
+        },
+      ],
     },
     domestic_regions: {
       displayName: "Domestic Regions",
-      values: []
+      values: [],
     },
     fisa_role: {
       displayname: "FISA Role",
-      values: []
+      values: [],
     },
     issues: {
       displayName: "Issues",
       values: [
         {
-          "name": "Eastern Europe Geopolitics",
-          "code": "EEG",
-          "topics": [
+          name: "Eastern Europe Geopolitics",
+          code: "EEG",
+          topics: [
             {
-              "name": "Belarus Relations",
-              "codes": ["BRL"]
+              name: "Belarus Relations",
+              codes: ["BRL"],
             },
             {
-              "name": "Energy Crisis",
-              "codes": ["ENC"]
-            }
-          ]
+              name: "Energy Crisis",
+              codes: ["ENC"],
+            },
+          ],
         },
         {
-          "name": "Economic Turmoil",
-          "code": "ET",
-          "topics": [
+          name: "Economic Turmoil",
+          code: "ET",
+          topics: [
             {
-              "name": "Global Inflation",
-              "codes": ["GLI"]
+              name: "Global Inflation",
+              codes: ["GLI"],
             },
             {
-              "name": "Interest Rates",
-              "codes": ["INR"]
-            }
-          ]
+              name: "Interest Rates",
+              codes: ["INR"],
+            },
+          ],
         },
         {
-          "name": "Supply Chain Crisis",
-          "code": "SCC",
-          "topics": [
+          name: "Supply Chain Crisis",
+          code: "SCC",
+          topics: [
             {
-              "name": "Resource Scarcity",
-              "codes": ["RSC"]
+              name: "Resource Scarcity",
+              codes: ["RSC"],
             },
-          ]
+          ],
         },
         {
-          "name": "Ukraine War",
-          "code": "UW",
-          "topics": [
+          name: "Ukraine War",
+          code: "UW",
+          topics: [
             {
-              "name": "Annexation of Crimea",
-              "codes": ["ACR"]
+              name: "Annexation of Crimea",
+              codes: ["ACR"],
             },
             {
-              "name": "Russian Invation",
-              "codes": ["RI"]
-            }
-          ]
-        }
-      ]
+              name: "Russian Invation",
+              codes: ["RI"],
+            },
+          ],
+        },
+      ],
     },
     media_tags: {
       displayName: "Visuals",
       values: [
         {
-          "name": "audio",
-          "code": "audio"
+          name: "audio",
+          code: "audio",
         },
         {
-          "name": "interactive",
-          "code": "interactive"
+          name: "interactive",
+          code: "interactive",
         },
         {
-          "name": "graphic",
-          "code": "graphic"
+          name: "graphic",
+          code: "graphic",
         },
         {
-          "name": "map",
-          "code": "map"
+          name: "map",
+          code: "map",
         },
         {
-          "name": "video",
-          "code": "video"
-        }
-      ]
+          name: "video",
+          code: "video",
+        },
+      ],
     },
     non_state_actors: {
       displayName: "Non State Actors",
       values: [
         {
-          "name": "EU",
-          "code": "EU"
+          name: "EU",
+          code: "EU",
         },
         {
-          "name": "NATO",
-          "code": "NATO"
+          name: "NATO",
+          code: "NATO",
         },
         {
-          "name": "UN",
-          "code": "UN"
-        }
-      ]
+          name: "UN",
+          code: "UN",
+        },
+      ],
     },
     // producing_offices: {
     //   displayName: "Producing Offices",
@@ -1385,154 +1385,101 @@ export const metadata = {
       displayName: "Product Types",
       values: [
         {
-          "name": "Analysis: Group",
-          "code": 1000
+          name: "Current",
+          code: 10376,
         },
         {
-          "name": "Analysis: Cross",
-          "code": 1001
+          name: "Daily Brief",
+          code: 10377,
         },
-        {
-          "name": "Analysis: Critical",
-          "code": 1002
-        },
-        {
-          "name": "Analysis: Review",
-          "code": 1003
-        },
-        {
-          "name": "Analysis: Worldwide",
-          "code": 1004
-        },
-        {
-          "name": "Analysis: Surveillance",
-          "code": 1005
-        },
-        {
-          "name": "Analysis: Counterterrorism",
-          "code": 1006
-        },
-        {
-          "name": "Analysis: Targeting",
-          "code": 1007
-        },
-      ]
+      ],
     },
     regions: {
       displayName: "Regions",
       values: [
         {
-          "name": "Africa",
-          "code": "AF",
-          "subregions": [
-            "AFce",
-            "AFea",
-            "AFno",
-            "AFso",
-            "AFwe"
-          ]
+          name: "Africa",
+          code: "AF",
+          subregions: ["AFce", "AFea", "AFno", "AFso", "AFwe"],
         },
         {
-          "name": "Americas",
-          "code": "AM",
-          "subregions": [
-            "AMca",
-            "AMce",
-            "AMno",
-            "AMso",
-            "AMan"
-          ]
+          name: "Americas",
+          code: "AM",
+          subregions: ["AMca", "AMce", "AMno", "AMso", "AMan"],
         },
         {
-          "name": "Asia",
-          "code": "AS",
-          "subregions": [
-            "ASea",
-            "ASso",
-            "ASse"
-          ]
+          name: "Asia",
+          code: "AS",
+          subregions: ["ASea", "ASso", "ASse"],
         },
         {
-          "name": "Eurasia",
-          "code": "EA",
-          "subregions": [
-            "EAca",
-            "EAce",
-            "EAru"
-          ]
+          name: "Eurasia",
+          code: "EA",
+          subregions: ["EAca", "EAce", "EAru"],
         },
         {
-          "name": "Europe",
-          "code": "EU",
-          "subregions": [
-            "EUba",
-            "EUce",
-            "EUno",
-            "EUso"
-          ]
+          name: "Europe",
+          code: "EU",
+          subregions: ["EUba", "EUce", "EUno", "EUso"],
         },
         {
-          "name": "Middle East",
-          "code": "ME",
-          "subregions": [
-            "MEme"
-          ]
+          name: "Middle East",
+          code: "ME",
+          subregions: ["MEme"],
         },
         {
-          "name": "Oceania",
-          "code": "OC",
-          "subregions": [
-            "OCoc"
-          ]
+          name: "Oceania",
+          code: "OC",
+          subregions: ["OCoc"],
         },
         {
-          "name": "Worldwide",
-          "code": "WW",
-          "subregions": []
-        }
-      ]
+          name: "Worldwide",
+          code: "WW",
+          subregions: [],
+        },
+      ],
     },
     reporting_types: {
       displayName: "Reporting Types",
       values: [
         {
-          "name": "Analysis: All Source",
-          "code": "analysis.all_source",
-          "productTypes": [1000, 1001]
+          name: "Analysis: All Source",
+          code: "analysis.all_source",
+          productTypes: [1000, 1001],
         },
         {
-          "name": "Reporting: Enterprise",
-          "code": "reporting.enterprise",
-          "productTypes": [1002, 1003]
+          name: "Reporting: Enterprise",
+          code: "reporting.enterprise",
+          productTypes: [1002, 1003],
         },
         {
-          "name": "Reporting: Mass",
-          "code": "reporting.mass",
-          "productTypes": [1004, 1005]
+          name: "Reporting: Mass",
+          code: "reporting.mass",
+          productTypes: [1004, 1005],
         },
         {
-          "name": "Reporting: Mission",
-          "code": "reporting.mission",
-          "productTypes": [1006, 1007]
+          name: "Reporting: Mission",
+          code: "reporting.mission",
+          productTypes: [1006, 1007],
         },
-      ]
+      ],
     },
     selected_for: {
       displayName: "Front Page Featured",
       values: [
         {
-          "name": "Featured",
-          "code": "featured"
-        }
-      ]
+          name: "Featured",
+          code: "featured",
+        },
+      ],
     },
     subregions: {
       displayName: "Subregions",
       values: [
         {
-          "name": "Africa, Central",
-          "code": "AFce",
-          "country_codes": [
+          name: "Africa, Central",
+          code: "AFce",
+          country_codes: [
             "BDI",
             "CAF",
             "COD",
@@ -1540,38 +1487,23 @@ export const metadata = {
             "GAB",
             "RWA",
             "TZA",
-            "UGA"
-          ]
+            "UGA",
+          ],
         },
         {
-          "name": "Africa, East",
-          "code": "AFea",
-          "country_codes": [
-            "DJI",
-            "ERI",
-            "ETH",
-            "KEN",
-            "SOM",
-            "SDN",
-            "SSD"
-          ]
+          name: "Africa, East",
+          code: "AFea",
+          country_codes: ["DJI", "ERI", "ETH", "KEN", "SOM", "SDN", "SSD"],
         },
         {
-          "name": "Africa, North",
-          "code": "AFno",
-          "country_codes": [
-            "DZA",
-            "EGY",
-            "ESH",
-            "LBY",
-            "MAR",
-            "TUN"
-          ]
+          name: "Africa, North",
+          code: "AFno",
+          country_codes: ["DZA", "EGY", "ESH", "LBY", "MAR", "TUN"],
         },
         {
-          "name": "Africa, Southern",
-          "code": "AFso",
-          "country_codes": [
+          name: "Africa, Southern",
+          code: "AFso",
+          country_codes: [
             "AGO",
             "ATF",
             "BVT",
@@ -1591,13 +1523,13 @@ export const metadata = {
             "SYC",
             "ZAF",
             "ZMB",
-            "ZWE"
-          ]
+            "ZWE",
+          ],
         },
         {
-          "name": "Africa, West",
-          "code": "AFwe",
-          "country_codes": [
+          name: "Africa, West",
+          code: "AFwe",
+          country_codes: [
             "BEN",
             "BFA",
             "CIV",
@@ -1617,13 +1549,13 @@ export const metadata = {
             "SLE",
             "STP",
             "TCD",
-            "TGO"
-          ]
+            "TGO",
+          ],
         },
         {
-          "name": "Americas, Caribbean",
-          "code": "AMca",
-          "country_codes": [
+          name: "Americas, Caribbean",
+          code: "AMca",
+          country_codes: [
             "ABW",
             "AIA",
             "ATG",
@@ -1651,37 +1583,23 @@ export const metadata = {
             "TTO",
             "VCT",
             "VGB",
-            "VIR"
-          ]
+            "VIR",
+          ],
         },
         {
-          "name": "Americas, Central",
-          "code": "AMce",
-          "country_codes": [
-            "BLZ",
-            "CRI",
-            "GTM",
-            "HND",
-            "NIC",
-            "PAN",
-            "SLV"
-          ]
+          name: "Americas, Central",
+          code: "AMce",
+          country_codes: ["BLZ", "CRI", "GTM", "HND", "NIC", "PAN", "SLV"],
         },
         {
-          "name": "Americas, North",
-          "code": "AMno",
-          "country_codes": [
-            "BMU",
-            "CAN",
-            "MEX",
-            "SPM",
-            "USA"
-          ]
+          name: "Americas, North",
+          code: "AMno",
+          country_codes: ["BMU", "CAN", "MEX", "SPM", "USA"],
         },
         {
-          "name": "Americas, South",
-          "code": "AMso",
-          "country_codes": [
+          name: "Americas, South",
+          code: "AMso",
+          country_codes: [
             "ARG",
             "BOL",
             "BRA",
@@ -1696,20 +1614,18 @@ export const metadata = {
             "SGS",
             "SUR",
             "URY",
-            "VEN"
-          ]
+            "VEN",
+          ],
         },
         {
-          "name": "Antarctica",
-          "code": "AMan",
-          "country_codes": [
-            "ATA"
-          ]
+          name: "Antarctica",
+          code: "AMan",
+          country_codes: ["ATA"],
         },
         {
-          "name": "Asia, East",
-          "code": "ASea",
-          "country_codes": [
+          name: "Asia, East",
+          code: "ASea",
+          country_codes: [
             "CHN",
             "HKG",
             "JPN",
@@ -1717,13 +1633,13 @@ export const metadata = {
             "MAC",
             "MNG",
             "PRK",
-            "TWN"
-          ]
+            "TWN",
+          ],
         },
         {
-          "name": "Asia, South",
-          "code": "ASso",
-          "country_codes": [
+          name: "Asia, South",
+          code: "ASso",
+          country_codes: [
             "AFG",
             "BGD",
             "BTN",
@@ -1732,13 +1648,13 @@ export const metadata = {
             "LKA",
             "MDV",
             "NPL",
-            "PAK"
-          ]
+            "PAK",
+          ],
         },
         {
-          "name": "Asia, South East",
-          "code": "ASse",
-          "country_codes": [
+          name: "Asia, South East",
+          code: "ASse",
+          country_codes: [
             "BRN",
             "CCK",
             "CXR",
@@ -1751,56 +1667,33 @@ export const metadata = {
             "SGP",
             "THA",
             "TLS",
-            "VNM"
-          ]
+            "VNM",
+          ],
         },
         {
-          "name": "Eurasia, Caucasus",
-          "code": "EAca",
-          "country_codes": [
-            "ARM",
-            "AZE",
-            "GEO"
-          ]
+          name: "Eurasia, Caucasus",
+          code: "EAca",
+          country_codes: ["ARM", "AZE", "GEO"],
         },
         {
-          "name": "Eurasia, Central",
-          "code": "EAce",
-          "country_codes": [
-            "KAZ",
-            "KGZ",
-            "TJK",
-            "TKM",
-            "UZB"
-          ]
+          name: "Eurasia, Central",
+          code: "EAce",
+          country_codes: ["KAZ", "KGZ", "TJK", "TKM", "UZB"],
         },
         {
-          "name": "Eurasia, Western and Russia",
-          "code": "EAru",
-          "country_codes": [
-            "BLR",
-            "MDA",
-            "RUS",
-            "UKR"
-          ]
+          name: "Eurasia, Western and Russia",
+          code: "EAru",
+          country_codes: ["BLR", "MDA", "RUS", "UKR"],
         },
         {
-          "name": "Europe, Balkans",
-          "code": "EUba",
-          "country_codes": [
-            "ALB",
-            "BIH",
-            "HRV",
-            "MKD",
-            "SRB",
-            "MNE",
-            "KV"
-          ]
+          name: "Europe, Balkans",
+          code: "EUba",
+          country_codes: ["ALB", "BIH", "HRV", "MKD", "SRB", "MNE", "KV"],
         },
         {
-          "name": "Europe, Central",
-          "code": "EUce",
-          "country_codes": [
+          name: "Europe, Central",
+          code: "EUce",
+          country_codes: [
             "AUT",
             "BGR",
             "CHE",
@@ -1810,13 +1703,13 @@ export const metadata = {
             "POL",
             "ROU",
             "SVN",
-            "SVK"
-          ]
+            "SVK",
+          ],
         },
         {
-          "name": "Europe, North",
-          "code": "EUno",
-          "country_codes": [
+          name: "Europe, North",
+          code: "EUno",
+          country_codes: [
             "ALA",
             "BEL",
             "DEU",
@@ -1838,13 +1731,13 @@ export const metadata = {
             "NLD",
             "NOR",
             "SJM",
-            "SWE"
-          ]
+            "SWE",
+          ],
         },
         {
-          "name": "Europe, South",
-          "code": "EUso",
-          "country_codes": [
+          name: "Europe, South",
+          code: "EUso",
+          country_codes: [
             "AND",
             "CYP",
             "ESP",
@@ -1856,13 +1749,13 @@ export const metadata = {
             "PRT",
             "SMR",
             "TUR",
-            "VAT"
-          ]
+            "VAT",
+          ],
         },
         {
-          "name": "Middle East",
-          "code": "MEme",
-          "country_codes": [
+          name: "Middle East",
+          code: "MEme",
+          country_codes: [
             "ARE",
             "BHR",
             "PSE",
@@ -1878,13 +1771,13 @@ export const metadata = {
             "QAT",
             "SAU",
             "SYR",
-            "YEM"
-          ]
+            "YEM",
+          ],
         },
         {
-          "name": "Oceania",
-          "code": "OCoc",
-          "country_codes": [
+          name: "Oceania",
+          code: "OCoc",
+          country_codes: [
             "ASM",
             "AUS",
             "COK",
@@ -1909,44 +1802,44 @@ export const metadata = {
             "TUV",
             "VUT",
             "WLF",
-            "WSM"
-          ]
-        }
-      ]
+            "WSM",
+          ],
+        },
+      ],
     },
     topics: {
       displayName: "Topics",
       values: [
         {
-          "name": "Annexation of Crimea",
-          "code": "ACR"
+          name: "Annexation of Crimea",
+          code: "ACR",
         },
         {
-          "name": "Belarus Relations",
-          "code": "BRL"
+          name: "Belarus Relations",
+          code: "BRL",
         },
         {
-          "name": "Energy Crisis",
-          "code": "ENC"
+          name: "Energy Crisis",
+          code: "ENC",
         },
         {
-          "name": "Global Inflation",
-          "code": "GLI"
+          name: "Global Inflation",
+          code: "GLI",
         },
         {
-          "name": "Interest Rates",
-          "code": "INR"
+          name: "Interest Rates",
+          code: "INR",
         },
         {
-          "name": "Resource Scarcity",
-          "code": "RSC"
+          name: "Resource Scarcity",
+          code: "RSC",
         },
         {
-          "name": "Russian Invasion",
-          "code": "RI"
+          name: "Russian Invasion",
+          code: "RI",
         },
-      ]
-    }
+      ],
+    },
   },
   featuresAvailable: {},
   highlightsBanner: "",
@@ -1958,4 +1851,4 @@ export const metadata = {
   searchFilters: [],
   siteClassification: "",
   siteDefaultTitle: "",
-}
+};

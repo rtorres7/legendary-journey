@@ -21,7 +21,6 @@ export default {
 
     const navigateToCountry = (country) => {
       let query = {
-        "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };

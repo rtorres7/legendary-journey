@@ -1,11 +1,6 @@
 <template>
   <div
-    class="
-      py-4
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-zinc-700/50
-    "
+    class="py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
   >
     <p class="font-semibold text-2xl">Search</p>
   </div>
@@ -13,16 +8,7 @@
   <template v-if="loading">
     <div class="max-w-fit m-auto mt-[20vh]">
       <svg
-        class="
-          animate-spin
-          -ml-1
-          mr-3
-          h-24
-          w-24
-          text-mission-blue
-          dark:text-slate-300
-          energy:text-zinc-300
-        "
+        class="animate-spin -ml-1 mr-3 h-24 w-24 text-mission-blue dark:text-slate-300 energy:text-zinc-300"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -66,29 +52,7 @@
               <Listbox v-model="selectedOrder" class="ml-3 min-w-[120px]">
                 <div class="relative">
                   <ListboxButton
-                    class="
-                      min-h-[2rem]
-                      flex
-                      relative
-                      w-full
-                      py-1
-                      px-2
-                      text-left
-                      capitalize
-                      bg-white
-                      dark:bg-slate-700
-                      energy:bg-zinc-700
-                      border-t border-t-gray-100
-                      dark:border-t-slate-800
-                      energy:border-t-zinc-800
-                      rounded-lg
-                      shadow-md
-                      cursor-default
-                      focus:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-opacity-75
-                      focus-visible:ring-offset-2
-                    "
+                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
                   >
                     <span class="block truncate">{{
                       selectedOrder.label
@@ -96,7 +60,7 @@
                     <span
                       class="absolute inset-y-0 right-0 flex items-center pr-2"
                     >
-                      <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                   </ListboxButton>
                   <transition
@@ -108,26 +72,11 @@
                     leave-to-class="transform opacity-0 scale-95"
                   >
                     <ListboxOptions
-                      class="
-                        absolute
-                        w-full
-                        py-1
-                        mt-1
-                        overflow-auto
-                        bg-white
-                        dark:bg-slate-700
-                        energy:bg-zinc-700
-                        rounded-md
-                        shadow-lg
-                        max-h-60
-                        ring-1 ring-black ring-opacity-5
-                        focus:outline-none
-                        z-10
-                      "
+                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                     >
                       <ListboxOption
-                        v-slot="{ active }"
                         v-for="item in sortOptions"
+                        v-slot="{ active }"
                         :key="item"
                         :value="item"
                         as="template"
@@ -154,15 +103,7 @@
         <BaseCard>
           <!-- Top Pagination -->
           <div
-            class="
-              px-4
-              py-3
-              flex
-              items-center
-              border-b border-gray-200
-              dark:border-slate-50/[0.06]
-              energy:border-zinc-700/50
-            "
+            class="px-4 py-3 flex items-center border-b border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
           >
             <SearchResultsTablePagination
               :totalCount="totalCount"
@@ -172,13 +113,7 @@
           <!-- Results -->
           <template v-for="result in results" :key="result">
             <div
-              class="
-                flex
-                p-4
-                border-b border-slate-900/10
-                dark:border-slate-50/[0.06]
-                energy:border-zinc-700/50
-              "
+              class="flex p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
             >
               <div class="h-fit px-2 text-center">
                 <span class="block font-semibold">{{
@@ -200,19 +135,10 @@
                     }"
                   >
                     <div
-                      class="
-                        basis-[768px]
-                        cursor-pointer
-                        hover:underline
-                        line-clamp-2
-                      "
+                      class="basis-[768px] cursor-pointer hover:underline line-clamp-2"
                     >
                       <span
-                        class="
-                          text-slate-600
-                          dark:text-slate-300
-                          energy:text-zinc-300
-                        "
+                        class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
                         >{{
                           `${"(" + result.item.title_classification + ") "}`
                         }}</span
@@ -228,12 +154,7 @@
                   </div>
                 </div>
                 <div
-                  class="
-                    text-sm text-slate-600
-                    dark:text-slate-300
-                    energy:text-zinc-300
-                    line-clamp-3
-                  "
+                  class="text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300 line-clamp-3"
                 >
                   {{ result.item.summary }}
                 </div>
@@ -242,15 +163,7 @@
           </template>
           <!-- Bottom Pagination -->
           <div
-            class="
-              px-4
-              py-3
-              flex
-              items-center
-              border-t border-gray-200
-              dark:border-slate-50/[0.06]
-              energy:border-zinc-700/50
-            "
+            class="px-4 py-3 flex items-center border-t border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
           >
             <SearchResultsTablePagination
               :totalCount="totalCount"
@@ -267,35 +180,13 @@
             <Listbox v-model="selectedOrder" class="ml-3 min-w-[110px]">
               <div class="relative">
                 <ListboxButton
-                  class="
-                    min-h-[2rem]
-                    flex
-                    relative
-                    w-full
-                    py-1
-                    px-2
-                    text-left
-                    capitalize
-                    bg-white
-                    dark:bg-slate-700
-                    energy:bg-zinc-700
-                    border-t border-t-gray-100
-                    dark:border-t-slate-800
-                    energy:border-t-zinc-800
-                    rounded-lg
-                    shadow-md
-                    cursor-default
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-opacity-75
-                    focus-visible:ring-offset-2
-                  "
+                  class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
                 >
                   <span class="block truncate">{{ selectedOrder.label }}</span>
                   <span
                     class="absolute inset-y-0 right-0 flex items-center pr-2"
                   >
-                    <SelectorIcon class="h-5 w-5" aria-hidden="true" />
+                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </ListboxButton>
                 <transition
@@ -307,26 +198,11 @@
                   leave-to-class="transform opacity-0 scale-95"
                 >
                   <ListboxOptions
-                    class="
-                      absolute
-                      w-full
-                      py-1
-                      mt-1
-                      overflow-auto
-                      bg-white
-                      dark:bg-slate-700
-                      energy:bg-zinc-700
-                      rounded-md
-                      shadow-lg
-                      max-h-60
-                      ring-1 ring-black ring-opacity-5
-                      focus:outline-none
-                      z-10
-                    "
+                    class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                   >
                     <ListboxOption
-                      v-slot="{ active }"
                       v-for="item in sortOptions"
+                      v-slot="{ active }"
                       :key="item"
                       :value="item"
                       as="template"
@@ -364,7 +240,7 @@ import {
   ListboxOptions,
   ListboxOption,
 } from "@headlessui/vue";
-import { SelectorIcon } from "@heroicons/vue/outline";
+import { ChevronUpDownIcon } from "@heroicons/vue/24/outline";
 import SearchResultsTablePagination from "@/components/SearchResultsTablePagination";
 
 const sortOptions = [
@@ -379,7 +255,7 @@ export default {
     ListboxButton,
     ListboxOptions,
     ListboxOption,
-    SelectorIcon,
+    ChevronUpDownIcon,
     SearchResultsTablePagination,
   },
   setup() {
@@ -433,5 +309,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

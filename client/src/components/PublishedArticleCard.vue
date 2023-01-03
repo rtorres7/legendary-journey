@@ -89,6 +89,7 @@ export default {
   props: {
     article: {
       type: Object,
+      default: () => {},
     },
     loading: {
       type: Boolean,

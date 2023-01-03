@@ -8,7 +8,7 @@
       title="Close"
       @click="close"
     >
-      <XIcon class="h-5 w-5" aria-hidden="true" />
+      <XMarkIcon class="h-5 w-5" aria-hidden="true" />
     </div>
     <div class="flex gap-4 place-items-center">
       <div
@@ -38,8 +38,8 @@ import {
   InformationCircleIcon,
   ExclamationCircleIcon,
   XCircleIcon,
-  XIcon,
-} from "@heroicons/vue/outline";
+  XMarkIcon,
+} from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
     InformationCircleIcon,
     ExclamationCircleIcon,
     XCircleIcon,
-    XIcon,
+    XMarkIcon,
   },
   props: {
     id: {

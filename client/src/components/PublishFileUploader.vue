@@ -1,35 +1,18 @@
 <template>
   <div
-    class="
-      mt-1
-      flex
-      justify-center
-      px-6
-      pt-5
-      pb-6
-      border-2 border-gray-300 border-dashed
-      rounded-md
-    "
+    class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+    :class="active ? 'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700' : ''"
     @dragenter.prevent="toggleActive"
     @dragleave.prevent="toggleActive"
     @dragover.prevent
     @drop.prevent="toggleActive"
-    :class="active ? 'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700' : ''"
   >
     <div class="space-y-2 text-center flex flex-col">
       <DocumentAddIcon class="h-10 w-10 text-gray-500 self-center" />
       <div class="flex">
         <label
           for="fileUpload"
-          class="
-            relative
-            cursor-pointer
-            focus-within:ring-2
-            font-medium
-            text-mission-blue
-            dark:text-teal-300
-            energy:text-energy-yellow
-          "
+          class="relative cursor-pointer focus-within:ring-2 font-medium text-mission-blue dark:text-teal-300 energy:text-energy-yellow"
         >
           <span>Upload a file</span>
           <input
@@ -49,7 +32,7 @@
 
 <script>
 import { ref } from "vue";
-import { DocumentAddIcon } from "@heroicons/vue/outline";
+import { DocumentAddIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -70,5 +53,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
