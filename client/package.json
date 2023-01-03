@@ -26,7 +26,7 @@
     "vee-validate": "^4.5.8",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vue3-carousel": "^0.1.38",
+    "vue3-carousel": "^0.2.9",
     "vue3-simple-typeahead": "^1.0.11",
     "vuex": "^4.0.0",
     "yup": "^0.32.11"

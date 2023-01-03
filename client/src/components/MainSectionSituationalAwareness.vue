@@ -6,52 +6,34 @@
       <div
         class="text-sm hover:text-black dark:hover:text-white energy:hover:text-white"
       >
-        View More
+        <router-link to="search?text=&product_types[]=10377">
+          View More
+        </router-link>
       </div>
     </div>
-    <div class="hidden h-full lg:flex flex-col justify-between">
-      <div class="lg:flex flex-col justify-between">
-        <template v-if="sitreps.length > 0">
-          <template v-for="item in sitreps" :key="item">
-            <div class="mb-4">
-              <router-link
-                :to="{ name: 'article', params: { doc_num: item.doc_num } }"
-              >
-                <BaseCard
-                  class="h-36 px-4 py-4"
-                  :locked="item.locked"
-                  hoverable
-                  :rounded="false"
-                >
-                  <div class="flex flex-col h-full justify-between">
-                    <div>
-                      <div class="flex items-center text-sm mb-2">
-                        <template v-if="item.locked">
-                          <LockClosedIcon
-                            class="mr-2 h-4 w-4"
-                            aria-hidden="true"
-                          ></LockClosedIcon>
-                        </template>
-                        <span class="line-clamp-2">{{
-                          item.product_type_name
-                        }}</span>
-                      </div>
-                      <div class="line-clamp-2 font-medium">
-                        {{ item.title }}
-                      </div>
-                    </div>
-                    <div
-                      class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
-                    >
-                      Posted {{ item.date_published }}
-                    </div>
-                  </div>
-                </BaseCard>
-              </router-link>
+    <div class="hidden h-full lg:flex flex-col space-y-2 justify-between">
+      <div class="lg:flex flex-col space-y-4 justify-between">
+        <template v-if="loading">
+          <template v-for="n in 3" :key="n">
+            <div class="w-full h-40">
+              <SituationalAwarenessCard loading />
             </div>
           </template>
         </template>
-        <template v-else> No Daily Briefs were found.</template>
+        <template v-else>
+          <template v-if="sitreps.length > 0">
+            <template v-for="item in sitreps" :key="item">
+              <div class="w-full h-40">
+                <router-link
+                  :to="{ name: 'article', params: { doc_num: item.doc_num } }"
+                >
+                  <SituationalAwarenessCard :sitrep="item" />
+                </router-link>
+              </div>
+            </template>
+          </template>
+          <template v-else> No Daily Briefs were found.</template>
+        </template>
       </div>
       <p
         class="text-sm text-right hover:text-black dark:hover:text-white energy:hover:text-white"
@@ -66,31 +48,28 @@
       :breakpoints="breakpoints"
       class="lg:hidden w-full"
     >
-      <Slide v-for="item in sitreps" :key="item">
-        <div class="pr-2 text-sm">
-          <BaseCard
-            class="w-[220px] rounded-md shadow-md px-4 py-2"
-            :locked="item.locked"
-            hoverable
-          >
-            <div class="flex flex-col text-left">
-              <div class="flex items-center pb-1">
-                <template v-if="item.locked">
-                  <LockClosedIcon
-                    class="mr-2 h-4 w-4"
-                    aria-hidden="true"
-                  ></LockClosedIcon>
-                </template>
-                <span class="line-clamp-1 font-medium">{{ item.title }}</span>
-              </div>
-              <div>Posted {{ item.date }}</div>
-            </div>
-          </BaseCard>
-        </div>
-      </Slide>
+      <template v-if="loading">
+        <Slide v-for="n in 3" :key="n">
+          <div class="w-[280px] h-36 mr-4">
+            <SituationalAwarenessCard loading />
+          </div>
+        </Slide>
+      </template>
+      <template v-else>
+        <Slide v-for="item in sitreps" :key="item">
+          <div class="w-full h-36 text-left mr-4">
+            <router-link
+              :to="{ name: 'article', params: { doc_num: item.doc_num } }"
+            >
+              <SituationalAwarenessCard :sitrep="item" />
+            </router-link>
+          </div>
+        </Slide>
+      </template>
       <template #addons>
         <Navigation
-          class="invisible xl:visible bg-mission-blue text-mission-gray dark:bg-slate-300 dark:text-dark-navy energy:bg-zinc-800 energy:text-zinc-300"
+          v-if="!loading"
+          class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-dark-navy dark:hover:text-dark-navy energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
         />
       </template>
     </Carousel>
@@ -98,83 +77,26 @@
 </template>
 
 <script>
-import { LockClosedIcon } from "@heroicons/vue/solid";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
+import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
 
-// carousel settings
 const settings = {
   itemsToShow: 1.75,
   snapAlign: "start",
 };
-// carousel breakpoints
 const breakpoints = {
-  //Custom Size
-  280: {
-    itemsToShow: 1.1,
-    snapAlign: "start",
-  },
-  //Custom Size
-  350: {
-    itemsToShow: 1.33,
-    snapAlign: "start",
-  },
-  //iPhone 12 Pro
-  390: {
-    itemsToShow: 1.5,
-    snapAlign: "start",
-  },
-  //iPhone XR
-  414: {
-    itemsToShow: 1.65,
-    snapAlign: "start",
-  },
-  //Custom Size
-  500: {
-    itemsToShow: 1.9,
-    snapAlign: "start",
-  },
-  //Custom Size
-  600: {
-    itemsToShow: 2.25,
-    snapAlign: "start",
-  },
-  //Custom Size
-  700: {
-    itemsToShow: 2.65,
-    snapAlign: "start",
-  },
   //Tailwind MD
   768: {
-    itemsToShow: 2.85,
-    snapAlign: "start",
-  },
-  //iPad Air
-  820: {
-    itemsToShow: 3.25,
-    snapAlign: "start",
-  },
-  //Custom Size
-  950: {
-    itemsToShow: 3.75,
-    snapAlign: "start",
-  },
-  //Custom Size
-  1024: {
-    itemsToShow: 4.25,
-    snapAlign: "start",
-  },
-  //Custom Size
-  1180: {
-    itemsToShow: 4.75,
+    itemsToShow: 3,
     snapAlign: "start",
   },
 };
 export default {
   components: {
-    LockClosedIcon,
     Carousel,
     Slide,
     Navigation,
+    SituationalAwarenessCard,
   },
   props: {
     sitreps: {

@@ -9,22 +9,19 @@
     class="py-4 xl:border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
   >
     <div
-      class="flex flex-col lg:block xl:flex xl:flex-row xl:max-h-max h-full xl:h-116"
+      class="flex flex-col lg:block xl:flex xl:flex-row xl:max-h-max h-full xl:h-[37rem]"
     >
       <!-- Main Section Sit. Awareness & Headline Container -->
       <div
-        class="h-116 md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-116"
+        class="h-[39rem] md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-[37rem]"
       >
         <div
           class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:basis-1/3 lg:pr-4 lg:border-r xl:basis-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
-          <template v-if="loadingSitrepFeeds">Loading ...</template>
-          <template v-else>
-            <MainSectionSituationalAwareness
-              :sitreps="sitrepFeeds"
-              :loading="loadingSitrepFeeds"
-            />
-          </template>
+          <MainSectionSituationalAwareness
+            :sitreps="sitrepFeeds"
+            :loading="loadingSitrepFeeds"
+          />
         </div>
         <div
           class="py-4 lg:py-0 h-[425px] lg:h-full lg:basis-2/3 xl:basis-2/3 lg:pl-4 xl:pr-4"
@@ -68,7 +65,7 @@
         >
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <div class="w-full h-[264px]">
+              <div class="w-full h-[288px]">
                 <PublishedArticleCard :loading="true" />
               </div>
             </template>
@@ -78,7 +75,7 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="w-full h-[264px] max-w-[591px]">
+              <div class="w-full h-[288px] max-w-[591px]">
                 <router-link
                   :to="{
                     name: 'article',
