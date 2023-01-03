@@ -320,7 +320,7 @@
             <div>
               <BaseDatepicker
                 v-model="selectedPublicationDate"
-                :enableTimepicker="false"
+                :enableTimePicker="false"
                 week-start="0"
                 auto-apply
                 @update:modelValue="updateSelectedDate"
@@ -331,6 +331,8 @@
                     label="Publication Date"
                     type="text"
                     required
+                    disabled
+                    :disabledColor="false"
                   />
                 </template>
               </BaseDatepicker>
@@ -781,7 +783,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style>
 .ck-editor__editable_inline {
   height: 450px;
 }

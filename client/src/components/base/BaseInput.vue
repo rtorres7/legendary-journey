@@ -11,7 +11,12 @@
     :id="uuid"
     autocomplete="off"
     :value="modelValue"
-    class="min-h-[2rem] flex w-full py-1 px-2 mt-1 bg-white dark:bg-slate-700 energy:bg-zinc-600 disabled:bg-slate-100/80 disabled:dark:bg-slate-800 disabled:energy:bg-zinc-700 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 placeholder:italic"
+    class="min-h-[2rem] flex w-full py-1 px-2 mt-1 bg-white dark:bg-slate-700 energy:bg-zinc-600 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 placeholder:italic"
+    :class="
+      disabledColor
+        ? 'disabled:bg-slate-100/80 disabled:dark:bg-slate-800 disabled:energy:bg-zinc-700'
+        : ''
+    "
     @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
@@ -31,6 +36,10 @@ export default {
     required: {
       type: Boolean,
       default: false,
+    },
+    disabledColor: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: ["update:modelValue"],

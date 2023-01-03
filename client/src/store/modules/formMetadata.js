@@ -17,6 +17,7 @@ export default {
       state.dissem_orgs.loading = true;
       if (process.env.NODE_ENV === "low") {
         //low side metadata
+        state.dissem_orgs.loading = false;
       } else {
         axios.get("/wires/get_dissem_orgs").then((response) => {
           console.log("[store] getDissemOrgs: ", response.data.dissem_orgs);
@@ -28,6 +29,7 @@ export default {
       state.product_types.loading = true;
       if (process.env.NODE_ENV === "low") {
         //low side metadta
+        state.product_types.loading = false;
       } else {
         axios.get("/wires/get_product_types").then((response) => {
           console.log(
