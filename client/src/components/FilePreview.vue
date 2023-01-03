@@ -1,53 +1,72 @@
 <template>
   <component :is="tag" class="file-preview">
     <div class="flex space-x-2">
-      <button v-if="!file.status" class="close-icon shrink-0" @click="$emit('remove', file)">
+      <button
+        v-if="!file.status"
+        class="close-icon shrink-0"
+        @click="$emit('remove', file)"
+      >
         &times;
       </button>
       <span>{{ file.file.name }}</span>
       <span v-show="file.status == true">
-        <router-link :to="''+file.wire_url+file.dbId" target="_blank">
-          <DocumentDownloadIcon class="h5 w-5" title="Download" />
-        </router-link> 
+        <router-link :to="'' + file.wire_url + file.dbId" target="_blank">
+          <DocumentArrowDownIcon class="h5 w-5" title="Download" />
+        </router-link>
       </span>
       <span v-show="file.status == true">
         <router-link to="" @click.prevent="deleteItem(file)">
-          <DocumentRemoveIcon class="h-5 w-5" title="Download" />
+          <DocumentMinusIcon class="h-5 w-5" title="Download" />
         </router-link>
       </span>
-      <span v-show="file.status == 'loading'" class="status-indicator loading-indicator">In Progress</span>
-      <span v-show="file.status == true" class="status-indicator success-indicator">Uploaded</span>
-      <span v-show="file.status == false" class="status-indicator failure-indicator">Error</span>
+      <span
+        v-show="file.status == 'loading'"
+        class="status-indicator loading-indicator"
+        >In Progress</span
+      >
+      <span
+        v-show="file.status == true"
+        class="status-indicator success-indicator"
+        >Uploaded</span
+      >
+      <span
+        v-show="file.status == false"
+        class="status-indicator failure-indicator"
+        >Error</span
+      >
     </div>
   </component>
 </template>
 <script setup>
 defineProps({
   file: { type: Object, required: true },
-  tag: { type: String, default: 'li' }
-})
-defineEmits(['remove'])
+  tag: { type: String, default: "li" },
+});
+defineEmits(["remove"]);
 </script>
 <script>
-import { DocumentDownloadIcon, DocumentRemoveIcon } from "@heroicons/vue/solid"
+import {
+  DocumentArrowDownIcon,
+  DocumentMinusIcon,
+} from "@heroicons/vue/24/solid";
 
 export default {
   components: {
-    DocumentDownloadIcon,
-    DocumentRemoveIcon
+    DocumentArrowDownIcon,
+    DocumentMinusIcon,
   },
-  setup() {
-
-  },
+  setup() {},
   methods: {
     deleteItem(file) {
-      fetch(file.wire_url + file.dbId, { method: 'DELETE'}).then(response => {
-        console.log('deleteItem response: ', response)
-        this.$emit('remove', file)
-      }).catch(console.log('Failed'))
-    }
-  }
-}
+      fetch(file.wire_url + file.dbId, { method: "DELETE" })
+        .then((response) => {
+          console.log("deleteItem response: ", response);
+          this.$emit("remove", file);
+        })
+        .catch(console.log("Failed"));
+    },
+  },
+};
 </script>
 <style scoped lang="scss">
 .file-preview {
@@ -123,4 +142,3 @@ export default {
   }
 }
 </style>
-

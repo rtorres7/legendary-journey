@@ -1,124 +1,36 @@
-import { getOseFeeds } from "@/data"
-import { getKingFisherFeeds } from "@/data"
-import { getNicFeeds } from "@/data"
-import axios from "@/config/wireAxios"
+import { getSitreps } from "@/data";
+import axios from "@/config/wireAxios";
 
 export default {
   namespaced: true,
   state: {
     loading: true,
-    results: [],
-    kingFisher: [],
-    nic: [],
-    compact: true,
-    advancedFilters: null,
-    previousSearch: "",
-    previousSearchQuery: {},
-    showFilters: true,
-    searchId: null,
-    selecting: false,
-    aggregations: [],
-    pages: 1,
-    totalCount: null,
-    showContext: true,
-    siteEnhancement: [],
-    daClassifError: false,
+    sitreps: [],
   },
 
   actions: {
-    getOseFeeds: ({ state, commit }) => {
-      console.log("getOseFeeds triggered")
+    getSitrepFeeds: ({ state, commit }) => {
       state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        commit("importData", getOseFeeds)
-        state.loading = false;
+      if (process.env.NODE_ENV === "low") {
+        console.log("[store] getSitrepFeeds: ", getSitreps);
+        setTimeout(() => commit("importSitrepData", getSitreps), 750);
       } else {
-        const params = { "view": "list", "producing_offices[]": "Directorate of Digital Innovation/Open Source Enterprise" }
-        axios.get("/search", { params }).then(response => {
-          console.log("response: ", response)
-          commit("importData", response.data)
-          state.loading = false;
-        })
+        axios.get("/home/daniel").then((response) => {
+          console.log("[store] getSitrepFeeds: ", response.data?.woah?.briefs);
+          commit("importSitrepData", response.data?.woah?.briefs);
+        });
       }
-    },
-    getKingFisherFeeds: ({ state, commit }) => {
-      console.log("getKingFisherFeeds triggered")
-      state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        commit("importKingFisherData", getKingFisherFeeds)
-        state.loading = false;
-      } else {
-        const params = { "view": "list", "producing_offices[]": "Directorate of Digital Innovation/Open Source Enterprise" }
-        axios.get("/search", { params }).then(response => {
-          console.log("response: ", response)
-          commit("importData", response.data)
-          state.loading = false;
-        })
-      }
-    },
-    getNicFeeds: ({ state, commit }) => {
-      console.log("getNicFeeds triggered")
-      state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        commit("importNicData", getNicFeeds)
-        state.loading = false;
-      } else {
-        const params = { "view": "list", "producing_offices[]": "Directorate of Digital Innovation/Open Source Enterprise" }
-        axios.get("/search", { params }).then(response => {
-          console.log("response: ", response)
-          commit("importData", response.data)
-          state.loading = false;
-        })
-      }
-    },
-    //Test Console Feature Only
-    setFeeds({ commit }, count) {
-      commit("saveFeeds", count <= 0 ? [] : getOseFeeds.results.slice(0, count))
     },
     setLoading({ commit }, value) {
-      commit("toggleLoading", value)
+      commit("toggleLoading", value);
     },
   },
 
   mutations: {
-    importData(state, data) {
-      console.log('feed (search) data: ', data);
-      state.searchId = data.searchId;
-      state.results = data.results.map((article) => {
-        return article;
+    importSitrepData(state, data) {
+      state.sitreps = data.map((article) => {
+        return article.attributes;
       });
-      state.aggregations = data.aggregations;
-      state.pages = Math.ceil(data.pages);
-      state.totalCount = data.totalCount;
-      state.siteEnhancement = data.siteEnhancement;
-      state.daClassifError = data.daClassifError;
-    },
-    importKingFisherData(state, data) {
-      console.log('feed (search) data: ', data);
-      state.searchId = data.searchId;
-      state.kingFisher = data.results.map((article) => {
-        return article;
-      });
-      state.aggregations = data.aggregations;
-      state.pages = Math.ceil(data.pages);
-      state.totalCount = data.totalCount;
-      state.siteEnhancement = data.siteEnhancement;
-      state.daClassifError = data.daClassifError;
-    },
-    importNicData(state, data) {
-      console.log('feed (search) data: ', data);
-      state.searchId = data.searchId;
-      state.nic = data.results.map((article) => {
-        return article;
-      });
-      state.aggregations = data.aggregations;
-      state.pages = Math.ceil(data.pages);
-      state.totalCount = data.totalCount;
-      state.siteEnhancement = data.siteEnhancement;
-      state.daClassifError = data.daClassifError;
-    },
-    saveFeeds(state, feeds) {
-      state.results = feeds;
       state.loading = false;
     },
     toggleLoading(state, value) {

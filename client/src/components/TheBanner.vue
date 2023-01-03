@@ -2,48 +2,26 @@
   <div
     v-if="!hasAcknowledged"
     id="system-message"
-    class="
-      bg-mission-blue
-      dark:bg-dark-space-blue
-      energy:bg-zinc-800
-      justify-center
-      p-4
-    "
+    class="bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800 justify-center p-4"
   >
     <div
-      class="
-        flex
-        items-center
-        justify-center
-        bg-slate-700/40
-        dark:bg-slate-700/30
-        energy:bg-zinc-700/40
-        rounded-lg
-        p-4
-      "
+      class="flex items-center justify-center bg-slate-700/40 dark:bg-slate-700/30 energy:bg-zinc-700/40 rounded-lg p-4"
     >
       <p class="text-sm text-amber-300 dark:text-teal-400">
         {{ metadata.system_message }}
       </p>
       <a
         aria-label="Remove system message"
-        @click="removeSystemMessage"
         class="ml-2 text-slate-300 energy:text-zinc-300 hover:text-white"
+        @click="removeSystemMessage"
       >
-        <XIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
+        <XMarkIcon class="block cursor-pointer h-6 w-6" aria-hidden="true" />
       </a>
     </div>
   </div>
-  <div id="classification">
+  <div id="classification_banner">
     <p
-      class="
-        text-slate-300
-        bg-mission-blue
-        dark:text-slate-300 dark:bg-dark-space-blue
-        energy:text-zinc-300 energy:bg-zinc-800
-        text-center text-xs
-        uppercase
-      "
+      class="text-slate-300 bg-mission-blue dark:text-slate-300 dark:bg-dark-space-blue energy:text-zinc-300 energy:bg-zinc-800 text-center text-xs uppercase"
     >
       {{ metadata.system_classification }}
     </p>
@@ -55,12 +33,12 @@
 import { ref } from "vue";
 import BannerNav from "@/components/BannerNav.vue";
 import { metadata } from "@/config";
-import { XIcon } from "@heroicons/vue/outline";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
     BannerNav,
-    XIcon,
+    XMarkIcon,
   },
   setup() {
     const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));

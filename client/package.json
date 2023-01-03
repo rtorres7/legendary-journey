@@ -15,7 +15,7 @@
     "@ckeditor/ckeditor5-build-classic": "^34.2.0",
     "@ckeditor/ckeditor5-vue": "^4.0.1",
     "@headlessui/vue": "^1.6.7",
-    "@heroicons/vue": "^1.0.6",
+    "@heroicons/vue": "2.0.13",
     "@vuepic/vue-datepicker": "^3.5.2",
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
@@ -26,7 +26,7 @@
     "vee-validate": "^4.5.8",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vue3-carousel": "^0.1.38",
+    "vue3-carousel": "^0.2.9",
     "vue3-simple-typeahead": "^1.0.11",
     "vuex": "^4.0.0",
     "yup": "^0.32.11"

@@ -87,7 +87,7 @@
 </template>
 <script>
 import { useRoute, useRouter } from "vue-router";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
 import PaginationButton from "./PaginationButton";
 
 export default {
@@ -197,5 +197,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

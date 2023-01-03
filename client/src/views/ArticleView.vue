@@ -1,47 +1,39 @@
 <template>
   <template v-if="loadingArticle">
     <div class="max-w-fit m-auto mt-[24vh]">
-      <BaseLoadingSpinner
-        class="h-28 w-28"
-      />
-    </div>  
+      <BaseLoadingSpinner class="h-28 w-28" />
+    </div>
   </template>
   <template v-else>
     <div v-if="!loadingFeaturedArticles && navigation && !wantsPreview">
-      <ArticleNavigation
-        :navigation="navigation"
-      />
+      <ArticleNavigation :navigation="navigation" />
     </div>
     <div v-show="wantsPreview" class="text-center pb-8 text-sm">
       <div>PREVIEW</div>
-      <div>If you do not see changes in your document, please save the document and select preview again</div>
+      <div>
+        If you do not see changes in your document, please save the document and
+        select preview again
+      </div>
     </div>
     <div
-      class="
-        flex flex-wrap
-        flex-col lg:flex-row
-        lg:flex-nowrap
-        justify-between
-        mb-8
-        "
+      class="flex flex-wrap flex-col lg:flex-row lg:flex-nowrap justify-between mb-8"
     >
-      <div v-if="(!isDraft && !wantsPreview)" class="flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4">
+      <div
+        v-if="!isDraft && !wantsPreview"
+        class="flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
+      >
         <div class="flex">
-          <a :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`">
-            <MailIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" @click="updateEmailCount" />
+          <a
+            :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
+          >
+            <EnvelopeIcon
+              class="h-6 w-6 cursor-pointer"
+              aria-hidden="true"
+              @click="updateEmailCount"
+            />
           </a>
-          <div 
-            class="
-              bg-slate-200
-              dark:bg-slate-800
-              energy:bg-zinc-800
-              rounded-full 
-              w-fit 
-              h-full 
-              -mt-2 
-              text-center text-sm 
-              p-1
-            "
+          <div
+            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
           >
             <p>
               {{ article.email_count }}
@@ -67,26 +59,25 @@
         <div class="text-center pb-2 text-sm lg:text-md">
           {{ article.classification }}
         </div>
-        <p class="font-semibold text-sm lg:text-md uppercase">
-          article
-        </p>
+        <p class="font-semibold text-sm lg:text-md uppercase">article</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
           ({{ article.title_classif }}) {{ article.title }}
         </h1>
         <div class="flex space-x-4 text-sm md:text-md">
           <p class="capitalize">
             {{ `${article.state} -` }}
-            {{
-              dayjs(article.date_published).format("ddd, MMMM D, YYYY")
-            }}
+            {{ dayjs(article.date_published).format("ddd, MMMM D, YYYY") }}
           </p>
-          <p aria-hidden="true">
-            ●
-          </p>
+          <p aria-hidden="true">●</p>
           <p v-if="article.authors?.length > 0">
             <template v-for="(author, index) in article.authors" :key="index">
               {{ author.name
-              }}<span v-if="article.authors?.length > 1 && index < article.authors?.length - 1">,
+              }}<span
+                v-if="
+                  article.authors?.length > 1 &&
+                  index < article.authors?.length - 1
+                "
+                >,
               </span>
             </template>
           </p>
@@ -96,52 +87,49 @@
             v-if="article.product_image"
             :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
             class="h-[350px] w-[350px] float-right"
-          >
+          />
           <p v-if="article.html_body" class="whitespace-pre-line">
             <span class="summary" v-html="article.html_body" />
           </p>
         </div>
         <p
-          class="
-              font-semibold
-              border-t-2 border-slate-900/10
-              dark:border-slate-50/[0.06]
-              energy:border-zinc-700/25
-              pt-4
-            "
+          class="font-semibold border-t-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pt-4"
         >
           Document Details
         </p>
         <Disclosure v-slot="{ open }">
           <DisclosureButton class="flex space-x-2 text-sm">
             <span>CONTENTS</span>
-            <ChevronDownIcon class="h-4 w-4" :class="open ? 'transform rotate-180' : ''" />
+            <ChevronDownIcon
+              class="h-4 w-4"
+              :class="open ? 'transform rotate-180' : ''"
+            />
           </DisclosureButton>
           <DisclosurePanel>
             <div class="ml-4 space-y-2 text-sm">
               <p>
-                <span class="font-semibold">Produced By: </span>{{ article.producing_office }}
+                <span class="font-semibold">Produced By: </span
+                >{{ article.producing_office }}
               </p>
               <p>
-                <span class="font-semibold">Product Type: </span>{{ article.product_type_name }}
+                <span class="font-semibold">Product Type: </span
+                >{{ article.product_type_name }}
               </p>
               <p>
-                <span class="font-semibold">Document Number: </span>{{ article.doc_num }}
+                <span class="font-semibold">Document Number: </span
+                >{{ article.doc_num }}
               </p>
               <p>
-                <span class="font-semibold">Posted: </span>{{
-                  dayjs(article.posted_at).format(
-                    "DD MMM YYYY hh:mm:ss"
-                  )
-                }}
+                <span class="font-semibold">Posted: </span
+                >{{ dayjs(article.posted_at).format("DD MMM YYYY hh:mm:ss") }}
               </p>
               <p>
-                <span class="font-semibold">Publication Date: </span>{{
-                  dayjs(article.date_published).format("DD MMM YYYY")
-                }}
+                <span class="font-semibold">Publication Date: </span
+                >{{ dayjs(article.date_published).format("DD MMM YYYY") }}
               </p>
               <p>
-                <span class="font-semibold">Contact: </span>{{ article.poc_info }}
+                <span class="font-semibold">Contact: </span
+                >{{ article.poc_info }}
               </p>
             </div>
           </DisclosurePanel>
@@ -149,7 +137,10 @@
         <Disclosure v-slot="{ open }">
           <DisclosureButton class="flex space-x-2 text-sm">
             <span>SOURCES</span>
-            <ChevronDownIcon class="h-4 w-4" :class="open ? 'transform rotate-180' : ''" />
+            <ChevronDownIcon
+              class="h-4 w-4"
+              :class="open ? 'transform rotate-180' : ''"
+            />
           </DisclosureButton>
           <DisclosurePanel>
             <ol class="list-decimal list-inside ml-4 space-y-2">
@@ -164,33 +155,27 @@
           </DisclosurePanel>
         </Disclosure>
       </div>
-      <div class="md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25">
+      <div
+        class="md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+      >
         <ArticleAttachments :article="article" />
         <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
         <template v-if="!isDraft && !wantsPreview">
           <template v-if="!loadingRelatedProducts">
-            <ArticleRelatedProducts
-              :relatedProducts="relatedProducts"
-            />
+            <ArticleRelatedProducts :relatedProducts="relatedProducts" />
           </template>
         </template>
         <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="(!isDraft && !wantsPreview)">
+        <template v-if="!isDraft && !wantsPreview">
           <template v-if="!loadingMetrics">
-            <div
-              class="flex flex-col space-y-4"
-            >
-              <p class="font-semibold text-lg">
-                Metrics
-              </p>
+            <div class="flex flex-col space-y-4">
+              <p class="font-semibold text-lg">Metrics</p>
               <template v-if="metrics.uniqueReaders !== 0">
-                <p>
-                  Unique Readers ({{ metrics.uniqueReaders }})
-                </p>
+                <p>Unique Readers ({{ metrics.uniqueReaders }})</p>
                 <div class="flex items-center">
                   <div class="flex flex-col">
                     <label class="text-sm font-medium mb-1">Start Date</label>
-                    <BaseDatepicker 
+                    <BaseDatepicker
                       v-model="metricStartDate"
                       :minDate="article.display_date"
                       :maxDate="new Date()"
@@ -198,11 +183,9 @@
                       format="MMM dd, yyyy"
                       week-start="0"
                       auto-apply
-                    />        
+                    />
                   </div>
-                  <p class="px-3 pt-4">
-                    to
-                  </p>
+                  <p class="px-3 pt-4">to</p>
                   <div class="flex flex-col">
                     <label class="text-sm font-medium mb-1">End Date</label>
                     <BaseDatepicker
@@ -216,9 +199,7 @@
                     />
                   </div>
                 </div>
-                <ArticleMetrics 
-                  :metrics="metrics.readership"
-                />
+                <ArticleMetrics :metrics="metrics.readership" />
               </template>
             </div>
           </template>
@@ -238,17 +219,21 @@ import * as dayjs from "dayjs";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { ChevronDownIcon, MailIcon, PencilIcon } from "@heroicons/vue/outline";
+import {
+  ChevronDownIcon,
+  EnvelopeIcon,
+  PencilIcon,
+} from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import ArticleNavigation from "@/components/ArticleNavigation";
-import ArticleAttachments from "@/components/ArticleAttachments"
-import ArticleRelatedProducts from "@/components/ArticleRelatedProducts"
+import ArticleAttachments from "@/components/ArticleAttachments";
+import ArticleRelatedProducts from "@/components/ArticleRelatedProducts";
 import ArticleMetrics from "@/components/ArticleMetrics";
 
 export default {
   components: {
     ChevronDownIcon,
-    MailIcon,
+    EnvelopeIcon,
     PencilIcon,
     Disclosure,
     DisclosureButton,
@@ -256,17 +241,17 @@ export default {
     ArticleNavigation,
     ArticleAttachments,
     ArticleRelatedProducts,
-    ArticleMetrics
+    ArticleMetrics,
   },
   props: {
     doc_num: {
-      type: String
+      type: String,
     },
     title: {
-      type: String
+      type: String,
     },
     wantsPreview: {
-      type: Boolean
+      type: Boolean,
     },
   },
   setup(props) {
@@ -278,77 +263,92 @@ export default {
     const loadingArticle = computed(() => store.state.danielDetails.loading);
     const featuredArticles = computed(() => store.state.daniel.articles);
     const loadingFeaturedArticles = computed(() => store.state.daniel.loading);
-    const relatedProducts = computed(() => store.state.relatedProducts.relatedDocuments);
-    const loadingRelatedProducts = computed(() => store.state.relatedProducts.loading);
+    const relatedProducts = computed(
+      () => store.state.relatedProducts.relatedDocuments
+    );
+    const loadingRelatedProducts = computed(
+      () => store.state.relatedProducts.loading
+    );
     const metrics = computed(() => store.state.metrics);
     const loadingMetrics = computed(() => store.state.metrics.loading);
     const metricStartDate = ref(null);
     const metricEndDate = ref(null);
-    const navigation = ref(null)
-    const isDraft = ref(route.name === 'article-preview' ? true : false)
-    const emailCount = computed(() => store.state.danielDetails.document.email_count);
+    const navigation = ref(null);
+    const isDraft = ref(route.name === "article-preview" ? true : false);
+    const emailCount = computed(
+      () => store.state.danielDetails.document.email_count
+    );
     const updateEmailCount = () => {
       store.dispatch("danielDetails/saveEmailCount");
     };
-    const canManageWire = computed(
-      () => store.getters["user/canManageWire"]
-    );
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
     onMounted(() => {
-      store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
-      store.dispatch("daniel/getDanielArticles")
+      store.dispatch(
+        "danielDetails/getDanielArticlesDetails",
+        props.wantsPreview
+      );
+      store.dispatch("daniel/getDanielArticles");
       store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
     });
 
-    
     const formatDate = (date) => {
       return dayjs(date).format("YYYY-MM-DD");
-    }
-    
+    };
+
     watch([loadingArticle], () => {
-      if (!loadingArticle.value && route.name !== 'article-preview') {
+      if (!loadingArticle.value && route.name !== "article-preview") {
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
       }
     });
 
     watch([metricStartDate, metricEndDate], () => {
-      if(metricStartDate.value && metricEndDate.value){
-        store.dispatch("metrics/getMetrics", { start: formatDate(metricStartDate.value), end: formatDate(metricEndDate.value) });
+      if (metricStartDate.value && metricEndDate.value) {
+        store.dispatch("metrics/getMetrics", {
+          start: formatDate(metricStartDate.value),
+          end: formatDate(metricEndDate.value),
+        });
       }
     });
 
     const buildNavigation = () => {
-      const matchIndex  = featuredArticles.value.findIndex(featuredArticle => {
-          if (route.params.doc_num === featuredArticle.attributes.doc_num) {
-            return true;
-          }
-        })
-        if(matchIndex !== -1){
-          navigation.value = {
-            currentArticle: {
-              position: matchIndex + 1
-            },
-            totalArticles : featuredArticles.value.length
-          }
-          const prevArticleDocNum = matchIndex === 0 ? null : featuredArticles.value[matchIndex - 1].attributes.doc_num
-          const nextArticleDocNum = matchIndex === (featuredArticles.value.length - 1) ? null : featuredArticles.value[matchIndex + 1].attributes.doc_num
-          if(prevArticleDocNum){
-            navigation.value['previousArticle'] = {
-              doc_num : prevArticleDocNum
-            }
-          }
-          if(nextArticleDocNum){
-            navigation.value['nextArticle'] = {
-              doc_num : nextArticleDocNum
-            }
-          }
+      const matchIndex = featuredArticles.value.findIndex((featuredArticle) => {
+        if (route.params.doc_num === featuredArticle.attributes.doc_num) {
+          return true;
         }
-    }
+      });
+      if (matchIndex !== -1) {
+        navigation.value = {
+          currentArticle: {
+            position: matchIndex + 1,
+          },
+          totalArticles: featuredArticles.value.length,
+        };
+        const prevArticleDocNum =
+          matchIndex === 0
+            ? null
+            : featuredArticles.value[matchIndex - 1].attributes.doc_num;
+        const nextArticleDocNum =
+          matchIndex === featuredArticles.value.length - 1
+            ? null
+            : featuredArticles.value[matchIndex + 1].attributes.doc_num;
+        if (prevArticleDocNum) {
+          navigation.value["previousArticle"] = {
+            doc_num: prevArticleDocNum,
+          };
+        }
+        if (nextArticleDocNum) {
+          navigation.value["nextArticle"] = {
+            doc_num: nextArticleDocNum,
+          };
+        }
+      }
+    };
 
     watch([loadingFeaturedArticles], () => {
       if (!loadingFeaturedArticles.value) {
-        buildNavigation()
+        buildNavigation();
       }
     });
 
@@ -356,9 +356,15 @@ export default {
       () => route.params,
       () => {
         if (route.name === "article") {
-          store.dispatch("danielDetails/getDanielArticlesDetails", props.wantsPreview);
-          store.dispatch("daniel/getDanielArticles")
-          store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview); 
+          store.dispatch(
+            "danielDetails/getDanielArticlesDetails",
+            props.wantsPreview
+          );
+          store.dispatch("daniel/getDanielArticles");
+          store.dispatch(
+            "relatedProducts/getRelatedDocuments",
+            props.wantsPreview
+          );
         }
       }
     );
@@ -390,11 +396,11 @@ export default {
   @apply table w-auto p-8 mt-8 bg-white shadow-md;
 }
 
-::v-deep .digression-content>p {
+::v-deep .digression-content > p {
   @apply my-4;
 }
 
-::v-deep .summary>p {
+::v-deep .summary > p {
   @apply block my-4;
 }
 
