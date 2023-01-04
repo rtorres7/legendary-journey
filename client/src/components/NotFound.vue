@@ -14,14 +14,40 @@
       it correctly. If you reached this page from another part of the site,
       please contact us so we can correct the problem.
     </p>
+    <p class="font-light mt-6">
+      <em>Need Help?</em> Submit a ticket to
+      <a
+        :href="`${metadata.user_support.help_url}`"
+        class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow flex items-center hover:underline w-fit m-0 md:m-auto"
+      >
+        NCTC {{ metadata.application_name }} Online User Support
+        <HelpIcon class="h-5 w-5 m1-1" aria-hidden="true" />
+      </a>
+    </p>
+    <p class="font-light mt-6">
+      <em>Access Issues?</em> NCTC {{ metadata.application_name }}
+      {{ metadata.user_support.access_text }}
+      <a
+        :href="`${metadata.user_support.access_url}`"
+        class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow flex items-center hover:underline w-fit m-0 md:m-auto"
+      >
+        Request Enterprise Entitlements
+        <HelpIcon class="h-5 w-5 m1-1" aria-hidden="true" />
+      </a>
+    </p>
   </div>
 </template>
 
 <script>
+import { metadata } from "@/config";
 export default {
   name: "NotFound",
+  setup() {
+    return {
+      metadata,
+    };
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

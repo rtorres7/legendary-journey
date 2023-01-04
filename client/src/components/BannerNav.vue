@@ -235,12 +235,12 @@
                   </router-link>
                 </MenuItem>
                 <MenuItem>
-                  <BaseTooltip placement="left">
-                    <a
-                      class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
-                      >Settings
-                    </a>
-                  </BaseTooltip>
+                  <a
+                    class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
+                    :href="`${metadata.user_support.help_url}`"
+                    target="_blank"
+                    >User Support
+                  </a>
                 </MenuItem>
                 <template v-if="environment === 'low'">
                   <MenuItem>

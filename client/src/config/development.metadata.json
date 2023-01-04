@@ -120,5 +120,10 @@
   "footer_note": "Built in partnership with WIRe",
   "footer_contact": {
     "email": "ITS-HELP-LINE@current.gov"
+  },
+  "user_support": {
+    "help_url": "https://www.google.com",
+    "access_text": "leverages Enterprise Entitlements to protect access to restricted articles and content. Please navigate to the link below to review your organization affiliation as well as to request applicable Regions and Topics.",
+    "access_url": "https://www.google.com"
   }
 }
