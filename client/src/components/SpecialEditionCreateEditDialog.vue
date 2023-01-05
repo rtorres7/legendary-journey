@@ -63,6 +63,7 @@
               v-model="editionEvent.name_classification_xml"
               label="Classification"
               required
+              portionMark
               @update:classObj="updateClassification"
             />
           </div>
@@ -276,7 +277,12 @@ export default {
                 closeDialog();
               })
               .catch((err) => {
-                console.error(err);
+                createNotification({
+                  title: "Error editing the Special Edition",
+                  message: JSON.stringify(err.response.data.errors),
+                  type: "error",
+                  autoClose: false,
+                });
               });
           } else {
             axios
@@ -288,7 +294,12 @@ export default {
                 closeDialog();
               })
               .catch((err) => {
-                console.error(err);
+                createNotification({
+                  title: "Error creating the Special Edition",
+                  message: JSON.stringify(err.response.data.errors),
+                  type: "error",
+                  autoClose: false,
+                });
                 closeDialog();
               });
           }

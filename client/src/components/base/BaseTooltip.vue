@@ -1,33 +1,9 @@
-
 <template>
   <!-- TODO: classes need to be refactored in the future to minimize repetition -->
   <div class="group relative">
     <slot />
     <span
-      class="
-        absolute
-        opacity-0
-        -translate-x-[10000px]
-        transition-opacity
-        duration-300
-        group-hover:-translate-x-0
-        overflow:hidden
-        group-hover:opacity-100
-        -top-2
-        w-28
-        mt-2
-        px-2
-        py-2
-        bg-slate-200
-        dark:bg-slate-600
-        energy:bg-zinc-600
-        rounded-lg
-        font-normal
-        text-center text-sm text-slate-900
-        dark:text-slate-200
-        energy:text-zinc-200
-        z-10
-      "
+      class="absolute opacity-0 -translate-x-[10000px] transition-opacity duration-300 group-hover:-translate-x-0 overflow:hidden group-hover:opacity-100 -top-2 w-28 mt-2 px-2 py-2 bg-slate-200 dark:bg-slate-600 energy:bg-zinc-600 rounded-lg font-normal text-center text-sm text-slate-900 dark:text-slate-200 energy:text-zinc-200 z-[15]"
       :class="
         icon && placement === 'bottom'
           ? '-left-11 translate-y-full after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-slate-200 dark:after:border-b-slate-600 energy:after:border-b-zinc-600'
@@ -65,5 +41,4 @@ export default {
   setup() {},
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

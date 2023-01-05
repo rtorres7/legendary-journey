@@ -1838,6 +1838,10 @@ export const metadata = {
           name: "Russian Invasion",
           code: "RI",
         },
+        {
+          name: "Terrorism",
+          code: "TERR",
+        },
       ],
     },
   },

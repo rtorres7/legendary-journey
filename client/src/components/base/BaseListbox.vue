@@ -20,6 +20,7 @@
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
             : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
         "
+        @click="$emit('clicked')"
       >
         <span
           class="block truncate max-w-[calc(100%-20px)]"
@@ -39,7 +40,7 @@
         leave-to-class="transform opacity-0 scale-95"
       >
         <ListboxOptions
-          class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+          class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
         >
           <ListboxOption
             v-for="item in items"
@@ -129,7 +130,7 @@ export default {
       default: false,
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "clicked"],
   setup(props, { emit }) {
     const selectedItem = computed({
       get: () => props.modelValue,

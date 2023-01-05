@@ -1,4 +1,5 @@
 import axios from "@/config/wireAxios";
+import { document } from "@/data";
 export default {
   namespaced: true,
   state: {
@@ -25,6 +26,7 @@ export default {
       date_published: "",
       poc_info: "",
       publication_number: "",
+      product_type_id: null,
       worldwide: null,
     },
   },
@@ -33,8 +35,8 @@ export default {
     getDocument({ state, commit }, article) {
       state.loading = true;
       if (process.env.NODE_ENV === "low") {
-        //console.log("[store] getDocumentData: ", response.data);
-        state.loading = false;
+        console.log("[store] getDocumentData: ", document);
+        setTimeout(() => commit("saveData", document), 750);
       } else {
         let url =
           "/wires/" +

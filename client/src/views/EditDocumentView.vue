@@ -4,14 +4,7 @@
   >
     Edit Document
   </p>
-  <template
-    v-if="
-      loadingMetadata ||
-      loadingDissemOrgs ||
-      loadingProductTypes ||
-      loadingDocument
-    "
-  >
+  <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -24,6 +17,7 @@
           :label="formData.selectedProductType.label"
           :items="formData.selectedProductType.items"
           @update:modelValue="updateField($event, 'product_type_id')"
+          @clicked="openProductTypeDialog"
         />
       </div>
       <div class="flex flex-col lg:flex-row gap-6 lg:gap-3 mt-4">
@@ -381,6 +375,19 @@
       </div>
     </form>
   </template>
+  <!-- <BaseDialog
+    :isOpen="isProductTypeDialogOpen"
+    :title="'Product Type Change'"
+    class="max-w-fit"
+    @close="closeProductTypeDialog"
+  >
+    <p class="py-4 pr-4">
+      Changing the product type will change some of the field values entered.
+    </p>
+    <template #actions>
+      <BaseButton @click.prevent="closeProductTypeDialog">Okay</BaseButton>
+    </template>
+  </BaseDialog> -->
 </template>
 
 <script>
@@ -432,18 +439,25 @@ export default {
     const loadingDissemOrgs = computed(
       () => store.state.formMetadata.dissem_orgs.loading
     );
-    const productTypes = computed(
-      () => store.state.formMetadata.product_types.items
-    );
-    const loadingProductTypes = computed(
-      () => store.state.formMetadata.product_types.loading
-    );
+    // const productTypes = computed(
+    //   () => store.state.formMetadata.product_types.items
+    // );
+    // const loadingProductTypes = computed(
+    //   () => store.state.formMetadata.product_types.loading
+    // );
     const editor = ClassicEditor;
     const editorConfig = ref({});
     const { files, addFiles, removeFile } = useFileList();
     const { uploadFiles } = createUploader(
       "/documents/" + documentNumber + "/attachments/"
     );
+    const isProductTypeDialogOpen = ref(false);
+    const openProductTypeDialog = () => {
+      isProductTypeDialogOpen.value = true;
+    };
+    const closeProductTypeDialog = () => {
+      isProductTypeDialogOpen.value = false;
+    };
 
     const buildFormData = () => {
       return {
@@ -474,7 +488,7 @@ export default {
         selectedProductType: {
           label: "Product Type",
           model: [],
-          items: productTypes.value,
+          items: criteria.value.product_types,
         },
         selectedTopics: {
           label: "Topics",
@@ -551,6 +565,9 @@ export default {
           if (property === "worldwide" && model) {
             payload.value.countries = [];
             formData.value.selectedCountries.model = [];
+          }
+          if (property === "html_body" && !model) {
+            payload.value[property] = "<p></p>";
           }
       }
     };
@@ -651,10 +668,11 @@ export default {
         });
         formData.value.selectedDissemOrgs.model = dissemsToSelect;
         //formData.value.selectedOffice.model = producing_offices.value[0]
-        formData.value.selectedProductType.model = productTypes.value.find(
-          (productFromBackend) =>
-            productFromBackend.id === documentData.value.product_type_id
-        );
+        formData.value.selectedProductType.model =
+          formData.value.selectedProductType.items.find(
+            (productFromBackend) =>
+              productFromBackend.code === documentData.value.product_type_id
+          );
         formData.value.publicationDate = documentData.value.date_published;
         selectedPublicationDate.value = dayjs(
           documentData.value.date_published
@@ -753,7 +771,6 @@ export default {
       loadingMetadata,
       loadingDocument,
       loadingDissemOrgs,
-      loadingProductTypes,
       editor,
       editorConfig,
       files,
@@ -778,6 +795,9 @@ export default {
       updateSelectedDate,
       submit,
       cancel,
+      isProductTypeDialogOpen,
+      openProductTypeDialog,
+      closeProductTypeDialog,
     };
   },
 };
