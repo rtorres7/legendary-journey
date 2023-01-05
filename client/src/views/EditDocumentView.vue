@@ -566,6 +566,9 @@ export default {
             payload.value.countries = [];
             formData.value.selectedCountries.model = [];
           }
+          if (property === "html_body" && !model) {
+            payload.value[property] = "<p></p>";
+          }
       }
     };
 
