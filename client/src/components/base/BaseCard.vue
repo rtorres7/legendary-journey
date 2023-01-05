@@ -41,7 +41,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .hoverable {
-  @apply hover:underline hover:bg-white/80 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75;
+  @apply hover:underline hover:bg-slate-50 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75;
 }
 .rounded {
   @apply rounded-lg;

@@ -167,6 +167,13 @@ html {
   }
 }
 
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+}
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -2,7 +2,7 @@
   <div
     v-if="!hasAcknowledged"
     id="system-message"
-    class="bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800 justify-center p-4"
+    class="bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800 justify-center p-4 no-print"
   >
     <div
       class="flex items-center justify-center bg-slate-700/40 dark:bg-slate-700/30 energy:bg-zinc-700/40 rounded-lg p-4"
@@ -19,7 +19,7 @@
       </a>
     </div>
   </div>
-  <div id="classification_banner">
+  <div id="classification_banner" class="no-print">
     <p
       class="text-slate-300 bg-mission-blue dark:text-slate-300 dark:bg-dark-space-blue energy:text-zinc-300 energy:bg-zinc-800 text-center text-xs uppercase"
     >

@@ -32,13 +32,38 @@
   <div
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
-    <div class="flex space-x-2 items-center">
-      <a class="font-semibold cursor-pointer" @click="goToNewArticle">
-        Create a New Article
-      </a>
-      <ArrowRightIcon class="h-5 w-5" />
+    <div class="mb-6">
+      <h3 class="font-semibold text-lg">Create an Article</h3>
+      <p>Select the product you'd like to create</p>
     </div>
-    <p class="text-sm">Starting from scratch? Start here.</p>
+    <div class="flex space-x-4 mb-4">
+      <template
+        v-for="product in [
+          { type: 'current', name: 'Current' },
+          { type: 'daily_brief', name: 'Daily Brief' },
+        ]"
+        :key="product"
+      >
+        <a @click="goToArticle(product.type)">
+          <BaseCard
+            class="flex w-[200px] justify-center items-center font-medium cursor-pointer"
+            hoverable
+          >
+            <p class="z-10 p-10 text-2xl font-bold">{{ product.name }}</p>
+            <BaseProductIcon
+              class="absolute w-28 h-28 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
+              :icon="product.type"
+          /></BaseCard>
+        </a>
+      </template>
+    </div>
+    <p>
+      Or
+      <a class="font-semibold cursor-pointer" @click="goToArticle()"
+        >click here</a
+      >
+      to start with a blank template.
+    </p>
   </div>
   <template v-if="loadingArticles">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -47,7 +72,7 @@
   </template>
   <template v-else>
     <div class="py-6">
-      <h3 class="font-semibold pb-4">
+      <h3 class="font-semibold mb-6 text-lg">
         Edit Existing Articles ({{ articles.length }})
       </h3>
       <template v-if="articles.length > 0">
@@ -141,24 +166,19 @@
 <script>
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
+import { metadata } from "@/config";
 import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import {
-  ArrowRightIcon,
-  CalendarIcon,
-  PencilIcon,
-} from "@heroicons/vue/24/outline";
+import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
 import ArticleImage from "@/components/ArticleImage";
 
 export default {
   components: {
-    ArrowRightIcon,
     CalendarIcon,
     PencilIcon,
     ArticleImage,
   },
-
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -166,7 +186,30 @@ export default {
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
 
-    const goToNewArticle = () => {
+    const getPayload = (type) => {
+      const metadataPayload = type
+        ? {
+            ...metadata.product_types[type],
+            title: `${dayjs().format("DD MMMM YYYY")} ${
+              metadata.product_types[type].title
+            }`,
+          }
+        : {
+            title: "Draft Document Title",
+          };
+      return {
+        ...metadataPayload,
+        analysis_type_id: 5,
+        classification_xml: "",
+        document_action: "create",
+        html_body: "<p></p>",
+        producing_office: "DNI/NCTC",
+        publication_number: Math.floor(100000 * Math.random() * 900000),
+        wire_id: route.params.date,
+      };
+    };
+
+    const goToArticle = (type) => {
       if (process.env.NODE_ENV === "low") {
         router.push({
           name: "edit",
@@ -178,19 +221,7 @@ export default {
         });
       } else {
         axios
-          .post("/articles/processDocument", {
-            analysis_type_id: 5,
-            classification_xml: "",
-            document_action: "create",
-            html_body: "<p></p>",
-            producing_office: "DNI/NCTC",
-            poc_info:
-              "NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)",
-            publication_number: Math.floor(100000 * Math.random() * 900000),
-            title: "Draft Document Title",
-            topics: ["TERR"],
-            wire_id: route.params.date,
-          })
+          .post("/articles/processDocument", getPayload(type))
           .then((response) => {
             console.log("/articles/processDocument :", response);
             router.push({
@@ -229,7 +260,7 @@ export default {
     );
 
     return {
-      goToNewArticle,
+      goToArticle,
       selectedDate,
       routeDate,
       selectDate,

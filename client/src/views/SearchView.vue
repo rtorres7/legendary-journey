@@ -1030,10 +1030,6 @@ export default {
         ),
         types: ["non_state_actors[]"],
       };
-      const frontPageFeatured = {
-        items: buildItems(criteria.value.selected_for, "selected_for[]"),
-        types: ["selected_for[]"],
-      };
       return {
         regions: {
           label: "Regions & Countries",
@@ -1080,13 +1076,18 @@ export default {
         },
         frontpage_featured: {
           label: "Front Page Featured",
-          model: currentModel(frontPageFeatured),
-          list: frontPageFeatured.items,
-          types: frontPageFeatured.types,
+          model: [],
+          list: [],
+          types: ["selected_for[]"],
+          disabled: true,
         },
       };
     };
-    const queryText = ref(route.query.text || "");
+    const queryText = ref(
+      route.name === "issues"
+        ? `${route.params.name} Query`
+        : route.query.text || ""
+    );
     const queryFilters = ref(buildQueryFilters());
 
     const getBooleanMapping = (queryKey) => {
@@ -1140,7 +1141,10 @@ export default {
       let queryText, queryDates;
       if (route.query["text"]) {
         queryText = {
-          displayName: route.query["text"],
+          displayName:
+            route.name === "issues"
+              ? `${route.params.name} Query`
+              : route.query["text"],
           firstItem: true,
           lastItem: true,
           type: "text",
@@ -1219,7 +1223,7 @@ export default {
       return booleanFilters;
     };
     const booleanFilters = ref(buildBooleanFilters());
-    const showSelectors = ref(true);
+    const showSelectors = ref(route.name === "issues" ? false : true);
 
     const toggleSelectors = () => {
       showSelectors.value = !showSelectors.value;
@@ -1249,7 +1253,7 @@ export default {
         }
       }
       router.push({
-        name: "search",
+        //name: "search",
         query,
       });
     };
@@ -1326,7 +1330,7 @@ export default {
           }
           //console.log("query: ", query);
           router.push({
-            name: "search",
+            name: route.name === "issues" ? "issues" : "search",
             query: query,
           });
         },
@@ -1429,7 +1433,10 @@ export default {
           pageHeader.value = getHeaderName(route);
           pageSubheader.value = getSubheaderName(route);
 
-          queryText.value = route.query.text || "";
+          queryText.value =
+            route.name === "issues"
+              ? `${route.params.name} Query`
+              : route.query.text || "";
           queryDateRange.value = buildDateRange();
           queryFilters.value = buildQueryFilters();
           booleanFilters.value = buildBooleanFilters();
