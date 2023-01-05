@@ -4,14 +4,7 @@
   >
     Edit Document
   </p>
-  <template
-    v-if="
-      loadingMetadata ||
-      loadingDissemOrgs ||
-      loadingProductTypes ||
-      loadingDocument
-    "
-  >
+  <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -446,12 +439,12 @@ export default {
     const loadingDissemOrgs = computed(
       () => store.state.formMetadata.dissem_orgs.loading
     );
-    const productTypes = computed(
-      () => store.state.formMetadata.product_types.items
-    );
-    const loadingProductTypes = computed(
-      () => store.state.formMetadata.product_types.loading
-    );
+    // const productTypes = computed(
+    //   () => store.state.formMetadata.product_types.items
+    // );
+    // const loadingProductTypes = computed(
+    //   () => store.state.formMetadata.product_types.loading
+    // );
     const editor = ClassicEditor;
     const editorConfig = ref({});
     const { files, addFiles, removeFile } = useFileList();
@@ -495,7 +488,7 @@ export default {
         selectedProductType: {
           label: "Product Type",
           model: [],
-          items: productTypes.value,
+          items: criteria.value.product_types,
         },
         selectedTopics: {
           label: "Topics",
@@ -672,10 +665,11 @@ export default {
         });
         formData.value.selectedDissemOrgs.model = dissemsToSelect;
         //formData.value.selectedOffice.model = producing_offices.value[0]
-        formData.value.selectedProductType.model = productTypes.value.find(
-          (productFromBackend) =>
-            productFromBackend.id === documentData.value.product_type_id
-        );
+        formData.value.selectedProductType.model =
+          formData.value.selectedProductType.items.find(
+            (productFromBackend) =>
+              productFromBackend.code === documentData.value.product_type_id
+          );
         formData.value.publicationDate = documentData.value.date_published;
         selectedPublicationDate.value = dayjs(
           documentData.value.date_published
@@ -774,7 +768,6 @@ export default {
       loadingMetadata,
       loadingDocument,
       loadingDissemOrgs,
-      loadingProductTypes,
       editor,
       editorConfig,
       files,

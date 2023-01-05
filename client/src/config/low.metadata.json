@@ -3,6 +3,20 @@
   "system_classification": "UNCLASSIFIED",
   "system_message": "Use of this system message content placeholder message. Sit an qualisque appellantur. Eu clita omnesque elaboraret usu, semper dictas vim ea. Nam ea ipsum sonet. Volumus fabellas expetendis no quo, ei pro commodo pertinax. Diam doming inimicus ex est, ex his audiam fastidii persequeris. No has nihil electram.",
   "countries_link": "https://www.google.com/",
+  "product_types": {
+    "current": {
+      "title": "Current",
+      "summary": "",
+      "topics": ["TERR"],
+      "poc_info": "NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)"
+    },
+    "daily_brief": {
+      "title": "Daily Brief",
+      "summary": "The Daily Brief summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    }
+  },
   "issues": [
     {
       "name": "Important, Radical, Psychological and Critical (IRPC)",
