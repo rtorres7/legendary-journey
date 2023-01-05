@@ -20,6 +20,7 @@
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
             : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
         "
+        @click="$emit('clicked')"
       >
         <span
           class="block truncate max-w-[calc(100%-20px)]"
@@ -129,7 +130,7 @@ export default {
       default: false,
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "clicked"],
   setup(props, { emit }) {
     const selectedItem = computed({
       get: () => props.modelValue,

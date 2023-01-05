@@ -261,14 +261,7 @@
         <!-- <li>
           <Menu as="div" class="relative">
             <MenuButton
-              class="
-                flex
-                items-center
-                font-semibold
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
+              class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
               tabindex="0"
             >
               Issues<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
@@ -282,30 +275,13 @@
               leave-to-class="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="
-                  origin-top-right
-                  absolute
-                  right-0
-                  mt-2
-                  w-52
-                  rounded-md
-                  shadow-2xl
-                  py-2
-                  ring-1 ring-black ring-opacity-5
-                  focus:outline-none
-                  text-sm
-                  bg-mission-blue/95
-                  dark:bg-dark-space-blue/95
-                  energy:bg-zinc-800/95
-                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                  energy:text-zinc-300
-                "
+                class="origin-top-right absolute right-0 mt-2 w-52 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300"
               >
                 <MenuItem
-                  as="a"
-                  v-for="issue in metadata.issues.items"
+                  v-for="issue in metadata.issues"
                   :key="issue"
                   v-slot="{ active }"
+                  as="a"
                   @click="navigateToIssue(issue)"
                 >
                   <span
@@ -322,6 +298,40 @@
             </transition>
           </Menu>
         </li> -->
+        <li>
+          <BannerNavPopover :wideShrunk="loadingMetadata ? false : true">
+            <template #heading>
+              Issues
+              <ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </template>
+            <template #content>
+              <div class="hidden lg:block lg:mx-6">
+                <p class="text-lg font-medium mb-4">Issues</p>
+                <template v-if="loadingMetadata">
+                  <div class="flex justify-center">
+                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                  </div>
+                </template>
+                <template v-else>
+                  <div
+                    class="grid lg:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-1 pb-4"
+                    aria-label="select an issue"
+                  >
+                    <template v-for="issue in metadata.issues" :key="issue">
+                      <a
+                        href=""
+                        class="hover:underline cursor-pointer"
+                        @click.prevent="navigateToIssue(issue)"
+                      >
+                        {{ issue.name }}
+                      </a>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </BannerNavPopover>
+        </li>
         <li>
           <BannerNavPopover :wideShrunk="loadingMetadata ? false : true">
             <template #heading>
@@ -487,13 +497,16 @@
           </div>
         </li>
         <li>
-          <BannerNavPopover>
+          <BannerNavPopover
+            :wideShrunk="loadingSpecialEditionLinks ? false : true"
+          >
             <template #heading>
               Special Editions
               <ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
             </template>
             <template #content>
-              <div class="hidden lg:block lg:m-auto">
+              <div class="hidden lg:block lg:mx-6">
+                <p class="text-lg font-medium mb-4">Special Editions</p>
                 <template v-if="loadingSpecialEditionLinks">
                   <div class="flex justify-center">
                     <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
@@ -507,7 +520,7 @@
                     "
                   >
                     <div
-                      class="flex flex-col space-y-3"
+                      class="grid lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-2 pb-4"
                       aria-label="select a special edition"
                     >
                       <template
@@ -528,92 +541,6 @@
             </template>
           </BannerNavPopover>
         </li>
-        <!-- <li>
-          <div
-            class="
-              font-semibold
-              flex
-              items-center
-              hover:text-slate-100
-              dark:hover:text-slate-100
-              energy:hover:text-energy-yellow
-            "
-            tabindex="0"
-          >
-            Special Editions
-          </div>
-        </li> -->
-        <!-- <li class="2xl:hidden">
-          <Menu as="div" class="relative">
-            <MenuButton
-              class="
-                flex
-                items-center
-                font-semibold
-                hover:text-slate-100
-                dark:hover:text-slate-100
-                energy:hover:text-energy-yellow
-              "
-              tabindex="0"
-            >
-              More<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
-            </MenuButton>
-            <transition
-              enter-active-class="transition ease-out duration-100"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
-            >
-              <MenuItems
-                class="
-                  origin-top-right
-                  absolute
-                  right-0
-                  mt-2
-                  w-40
-                  rounded-md
-                  shadow-2xl
-                  py-2
-                  ring-1 ring-black ring-opacity-5
-                  focus:outline-none
-                  text-sm
-                  bg-mission-blue/95
-                  dark:bg-dark-space-blue/95
-                  energy:bg-zinc-800/95
-                  dark:ring-0 dark:highlight-white/5 dark:text-slate-300
-                  energy:text-zinc-300
-                "
-              >
-                <MenuItem as="div" v-slot="{ active }">
-                  <a
-                    href="/"
-                    :class="[
-                      active
-                        ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
-                        : '',
-                      'py-1 px-3 flex cursor-pointer',
-                    ]"
-                    >Community</a
-                  >
-                </MenuItem>
-                <MenuItem as="div" v-slot="{ active }">
-                  <a
-                    href="/"
-                    :class="[
-                      active
-                        ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
-                        : '',
-                      'py-1 px-3 flex cursor-pointer',
-                    ]"
-                    >Special Editions</a
-                  >
-                </MenuItem>
-              </MenuItems>
-            </transition>
-          </Menu>
-        </li> -->
       </ul>
     </div>
     <!-- Mobile side menu -->
@@ -741,13 +668,15 @@
                       </div>
                     </Listbox>
                   </li>
-                  <li>
-                    <a
-                      class="cursor-pointer"
-                      @click="openTestConsoleModalMobile"
-                      >Test Console</a
-                    >
-                  </li>
+                  <template v-if="environment === 'low'">
+                    <li>
+                      <a
+                        class="cursor-pointer"
+                        @click="openTestConsoleModalMobile"
+                        >Test Console</a
+                      >
+                    </li>
+                  </template>
                 </ul>
               </DialogPanel>
             </TransitionChild>
@@ -948,11 +877,10 @@ export default {
 
     const navigateToIssue = (issue) => {
       let query = {
-        "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query["topics[]"] = issue.key;
+      query["text"] = issue.query;
       router.push({
         name: "issues",
         params: {

@@ -1,6 +1,6 @@
-import { getSearchDataFromUrl } from "@/data"
-import axios from '@/config/wireAxios'
-import router from "@/router"
+import { getSearchDataFromUrl } from "@/data";
+import axios from "@/config/wireAxios";
+import router from "@/router";
 
 export default {
   namespaced: true,
@@ -24,11 +24,12 @@ export default {
 
   actions: {
     search: ({ state, dispatch }) => {
-      console.log("search triggered")
+      console.log("search triggered");
       state.loading = true;
-      const route = router.currentRoute.value
+      const route = router.currentRoute.value;
       let url = route ? route.fullPath : "";
       if (route.query) {
+        console.log("route query: ", route.query);
         dispatch("standardSearch", url);
       }
     },
@@ -39,13 +40,20 @@ export default {
       } else {
         url = "/search";
       }
-      console.log("search url: ", url)
+      console.log("search url: ", url);
       dispatch("debouncedSearch", url);
     },
 
     debouncedSearch: ({ commit }, url) => {
-      if (process.env.NODE_ENV === 'low') {
-        setTimeout(() => commit("importData", getSearchDataFromUrl(url, router.currentRoute.value)), 750)
+      if (process.env.NODE_ENV === "low") {
+        setTimeout(
+          () =>
+            commit(
+              "importData",
+              getSearchDataFromUrl(url, router.currentRoute.value)
+            ),
+          750
+        );
         //commit("importData", getSearchDataFromUrl(url, router.currentRoute.value))
       } else {
         axios.get(url).then((response) => {
@@ -59,13 +67,13 @@ export default {
     },
 
     setLoading({ commit }, value) {
-      commit("toggleLoading", value)
+      commit("toggleLoading", value);
     },
   },
 
   mutations: {
     importData(state, data) {
-      console.log('search data: ', data);
+      console.log("search data: ", data);
       state.loading = false;
       state.searchId = data.searchId;
       state.results = data.results.map((article) => {
@@ -78,14 +86,14 @@ export default {
       state.daClassifError = data.daClassifError;
     },
     resetSearch(state) {
-      state.searchId = null
-      state.results = []
-      state.aggregations = []
-      state.pages = 1
-      state.totalCount = null
-      state.siteEnhancement = []
-      state.daClassifError = false
-      state.loading = true
+      state.searchId = null;
+      state.results = [];
+      state.aggregations = [];
+      state.pages = 1;
+      state.totalCount = null;
+      state.siteEnhancement = [];
+      state.daClassifError = false;
+      state.loading = true;
     },
     toggleLoading(state, value) {
       state.loading = value;

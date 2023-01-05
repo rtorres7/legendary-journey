@@ -16,8 +16,8 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <PopoverPanel
-        class="origin-top-right absolute min-w-[26rem] right-0 transform z-10"
-        :class="wideShrunk ? 'w-full' : ''"
+        class="origin-top-right absolute min-w-[26rem] transform z-10"
+        :class="wideShrunk ? 'w-full right-0' : ''"
       >
         <div
           class="shadow-2xl py-4 px-6 w-full ring-1 ring-black ring-opacity-5 focus:outline-none bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300"

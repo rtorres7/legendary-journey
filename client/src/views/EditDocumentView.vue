@@ -24,6 +24,7 @@
           :label="formData.selectedProductType.label"
           :items="formData.selectedProductType.items"
           @update:modelValue="updateField($event, 'product_type_id')"
+          @clicked="openProductTypeDialog"
         />
       </div>
       <div class="flex flex-col lg:flex-row gap-6 lg:gap-3 mt-4">
@@ -381,6 +382,19 @@
       </div>
     </form>
   </template>
+  <!-- <BaseDialog
+    :isOpen="isProductTypeDialogOpen"
+    :title="'Product Type Change'"
+    class="max-w-fit"
+    @close="closeProductTypeDialog"
+  >
+    <p class="py-4 pr-4">
+      Changing the product type will change some of the field values entered.
+    </p>
+    <template #actions>
+      <BaseButton @click.prevent="closeProductTypeDialog">Okay</BaseButton>
+    </template>
+  </BaseDialog> -->
 </template>
 
 <script>
@@ -444,6 +458,13 @@ export default {
     const { uploadFiles } = createUploader(
       "/documents/" + documentNumber + "/attachments/"
     );
+    const isProductTypeDialogOpen = ref(false);
+    const openProductTypeDialog = () => {
+      isProductTypeDialogOpen.value = true;
+    };
+    const closeProductTypeDialog = () => {
+      isProductTypeDialogOpen.value = false;
+    };
 
     const buildFormData = () => {
       return {
@@ -778,6 +799,9 @@ export default {
       updateSelectedDate,
       submit,
       cancel,
+      isProductTypeDialogOpen,
+      openProductTypeDialog,
+      closeProductTypeDialog,
     };
   },
 };
