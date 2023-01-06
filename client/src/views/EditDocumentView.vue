@@ -11,7 +11,7 @@
   </template>
   <template v-else>
     <form ref="publishingForm">
-      <div class="w-[150px] mt-4">
+      <div class="w-[250px] mt-4">
         <BaseListbox
           v-model="formData.selectedProductType.model"
           :label="formData.selectedProductType.label"
