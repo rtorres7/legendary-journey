@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./client:/data
+    environment:
+      - API_URL=http://localhost:8081/
+    container_name: client
+
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/data
+    depends_on:
+      - server-database
+    environment:
+      - DATABASE_URL=server-database:27017
+    container_name: server
+
+  server-database:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db:/data/db
+    container_name: database
