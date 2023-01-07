@@ -1,25 +1,14 @@
 <template>
   <div
-    class="
-      flex flex-wrap
-      justify-between
-      p-4
-      mb-8
-      border-b-2 border-slate-900/10
-      dark:border-slate-50/[0.06]
-      energy:border-gray-700/25
-    "
+    class="flex flex-wrap justify-between p-4 mb-8 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"
   >
     <div>
-      <BaseButton @click="returnHome" @keyup.enter="returnHome" tabIndex="0">
+      <BaseButton tabIndex="0" @click="returnHome" @keyup.enter="returnHome">
         Home
       </BaseButton>
     </div>
     <div
-      class="
-        flex flex-wrap
-        sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2
-      "
+      class="flex flex-wrap sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2"
     >
       <div>
         <template v-if="currentArticle() === 1">
@@ -27,16 +16,16 @@
         </template>
         <template v-else>
           <BaseButton
+            tabIndex="0"
             @click="previousArticle"
             @keyup.enter="previousArticle"
-            tabIndex="0"
           >
             Previous
           </BaseButton>
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Article {{ currentArticle() }} of {{ articles.length }}
+        Featured Product {{ currentArticle() }} of {{ articles.length }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
         {{ currentArticle() }} of {{ articles.length }}
@@ -47,9 +36,9 @@
         </template>
         <template v-else>
           <BaseButton
+            tabIndex="0"
             @click="nextArticle"
             @keyup.enter="nextArticle"
-            tabIndex="0"
           >
             Next
           </BaseButton>
