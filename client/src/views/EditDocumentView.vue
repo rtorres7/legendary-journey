@@ -725,7 +725,7 @@ export default {
             id: route.params.id,
             wire_id: route.params.date,
             producing_office: "DNI/NCTC",
-            publicationDate: route.params.date,
+            publication_date: route.params.date,
             ...payload.value,
           })
           .then((response) => {

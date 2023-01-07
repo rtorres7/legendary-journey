@@ -199,8 +199,6 @@ export default {
           };
       return {
         ...metadataPayload,
-        analysis_type_id: 5,
-        classification_xml: "",
         document_action: "create",
         html_body: "<p></p>",
         producing_office: "DNI/NCTC",
