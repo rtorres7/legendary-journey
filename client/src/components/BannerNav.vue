@@ -257,7 +257,7 @@
         </div>
       </div>
       <!-- Desktop Navigation -->
-      <ul class="hidden lg:flex space-x-8 text-sm leading-10 justify-center">
+      <ul class="hidden lg:flex space-x-10 text-sm leading-10 justify-center">
         <!-- <li>
           <Menu as="div" class="relative">
             <MenuButton
@@ -605,14 +605,6 @@
                       Manage Special Editions
                     </router-link>
                   </li>
-                  <li>
-                    <BaseTooltip placement="left">
-                      <a
-                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                        >Settings</a
-                      >
-                    </BaseTooltip>
-                  </li>
                 </ul>
                 <ul
                   class="mt-6 pt-6 space-y-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
@@ -667,6 +659,14 @@
                         </ListboxOptions>
                       </div>
                     </Listbox>
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-pointer"
+                      :href="`${metadata.user_support.help_url}`"
+                      target="_blank"
+                      >User Support</a
+                    >
                   </li>
                   <template v-if="environment === 'low'">
                     <li>

@@ -11,7 +11,7 @@
     v-bind="$attrs"
     :id="uuid"
     autocomplete="off"
-    :value="classificationName"
+    :value="modelValue"
     class="min-h-[2rem] flex w-full py-1 px-2 mt-1 bg-white dark:bg-slate-700 energy:bg-zinc-600 disabled:bg-slate-100/80 disabled:dark:bg-slate-800 disabled:energy:bg-zinc-700 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 placeholder:italic"
     @input="$emit('update:modelValue', $event.target.value)"
   />
@@ -35,7 +35,7 @@ export default {
       default: false,
     },
   },
-  emits: ["update:classObj", "update:modelValue"],
+  emits: ["update:modelValue"],
   setup() {
     const uuid = uniqueID().getID();
 

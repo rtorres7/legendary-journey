@@ -43,24 +43,21 @@
                     >Home</a
                   >
                 </li>
-                <!-- <li>
+                <li>
                   <MobileSideMenuDisclosure :title="'Issues'">
                     <ul class="list-disc list-inside ml-4 mt-4">
-                      <template
-                        v-for="issue in metadata.issues.items"
-                        :key="issue"
-                      >
+                      <template v-for="issue in metadata.issues" :key="issue">
                         <li>
                           <a
-                            @click="navigateToIssue(issue)"
                             class="hover:underline cursor-pointer"
+                            @click="navigateToIssue(issue)"
                             >{{ issue.name }}</a
                           >
                         </li>
                       </template>
                     </ul>
                   </MobileSideMenuDisclosure>
-                </li> -->
+                </li>
                 <li>
                   <MobileSideMenuDisclosure :title="'Regions'">
                     <div class="ml-4 mt-4 space-y-4">
@@ -353,11 +350,10 @@ export default {
 
     const navigateToIssue = (issue) => {
       let query = {
-        "reporting_types[]": "analysis.all_source",
         view: "grid",
         landing: true,
       };
-      query["topics[]"] = issue.key;
+      query["text"] = issue.query;
       router.push({
         name: "issues",
         params: {

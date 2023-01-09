@@ -15,6 +15,48 @@
       "summary": "The Daily Brief summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "ct_weekly": {
+      "title": "CT Weekly",
+      "summary": "The CT Weekly summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "ct_digest": {
+      "title": "CT Digest",
+      "summary": "The CT Digest summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "svtc_notes": {
+      "title": "SVTC Notes",
+      "summary": "The SVTC Notes summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "special_threat_matrix": {
+      "title": "Reported Threats",
+      "summary": "The Special Threat Matrix summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "threat_matrix": {
+      "title": "Threat Matrix",
+      "summary": "The Threat Matrix summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "terrorism_summary": {
+      "title": "Terrorism Summary",
+      "summary": "The Terrorism summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "terrorism_digest": {
+      "title": "Terrorism Digest",
+      "summary": "The Terrorism Digest summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     }
   },
   "issues": [

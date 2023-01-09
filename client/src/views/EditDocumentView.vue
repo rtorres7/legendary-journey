@@ -18,82 +18,26 @@
           <div
             class="sticky top-[75px] lg:top-[125px] flex flex-col space-y-2 pr-6"
           >
-            <div
-              @click="
-                document.getElementById('productTypeSection').scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'center',
-                  inline: 'nearest',
-                })
-              "
-              class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75"
-            >
-              <BriefcaseIcon class="h-6 w-6" /><span
-                class="hidden lg:block pl-4"
-                >Product Type</span
+            <template v-for="category in categories" :key="category">
+              <div
+                @click="
+                  document
+                    .getElementById(`${category.target}Section`)
+                    .scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'center',
+                      inline: 'nearest',
+                    })
+                "
+                class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75"
               >
-            </div>
-            <div
-              @click="
-                document.getElementById('requiredSection').scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'center',
-                  inline: 'nearest',
-                })
-              "
-              class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/7"
-            >
-              <KeyIcon class="h-6 w-6" /><span class="hidden lg:block pl-4"
-                >Required</span
-              >
-            </div>
-            <div
-              @click="
-                document.getElementById('additionalSection').scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'center',
-                  inline: 'nearest',
-                })
-              "
-              class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/7"
-            >
-              <PlusCircleIcon class="h-6 w-6" /><span
-                class="hidden lg:block pl-4"
-                >Additional</span
-              >
-            </div>
-            <div
-              @click="
-                document.getElementById('attachmentSection').scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'center',
-                  inline: 'nearest',
-                })
-              "
-              class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/7"
-            >
-              <PaperClipIcon class="h-6 w-6" /><span
-                class="hidden lg:block pl-4"
-                >Attachments</span
-              >
-            </div>
-            <div
-              @click="
-                document
-                  .getElementById('classificationSection')
-                  .scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'nearest',
-                  })
-              "
-              class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/7"
-            >
-              <LockClosedIcon class="h-6 w-6" /><span
-                class="hidden lg:block pl-4"
-                >Classification</span
-              >
-            </div>
+                <span class="sr-only">{{ category.name }}</span>
+                <component class="h-6 w-6" :is="category.icon" /><span
+                  class="hidden lg:block pl-4"
+                  >{{ category.name }}</span
+                >
+              </div>
+            </template>
           </div>
         </div>
         <div class="w-full px-8">
@@ -117,7 +61,7 @@
                 :items="formData.selectedProductType.items"
                 @update:modelValue="updateField($event, 'product_type_id')"
                 @clicked="openProductTypeDialog"
-                class="md:w-1/3"
+                class="lg:w-1/3"
               />
             </div>
             <div
@@ -136,7 +80,7 @@
                 <div
                   class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                 >
-                  <div class="md:w-3/4">
+                  <div class="lg:w-3/4">
                     <BaseInput
                       v-model="formData.title"
                       label="Title"
@@ -145,7 +89,7 @@
                       @update:modelValue="updateField($event, 'title')"
                     />
                   </div>
-                  <div class="md:w-1/4">
+                  <div class="lg:w-1/4">
                     <BaseClassifier
                       v-model="formData.titleClassificationXML"
                       label="Title PM"
@@ -160,7 +104,7 @@
                 <div
                   class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                 >
-                  <div class="md:w-3/4">
+                  <div class="lg:w-3/4">
                     <BaseTextarea
                       v-model="formData.summary"
                       maxlength="4000"
@@ -170,7 +114,7 @@
                       @update:modelValue="updateField($event, 'summary')"
                     />
                   </div>
-                  <div class="md:w-1/4">
+                  <div class="lg:w-1/4">
                     <BaseClassifier
                       v-model="formData.summaryClassificationXML"
                       label="Summary PM"
@@ -182,7 +126,7 @@
                     />
                   </div>
                 </div>
-                <div class="md:w-1/4">
+                <div class="lg:w-1/4">
                   <BaseDatepicker
                     v-model="selectedPublicationDate"
                     :enableTimePicker="false"
@@ -205,7 +149,7 @@
                 <div
                   class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                 >
-                  <div class="md:w-1/3 space-y-4">
+                  <div class="lg:w-1/3 space-y-4">
                     <BaseListbox
                       v-model="formData.selectedCountries.model"
                       :label="formData.selectedCountries.label"
@@ -242,7 +186,7 @@
                     @update:modelValue="
                       updateField($event, 'topics', 'multiple')
                     "
-                    class="md:w-1/3"
+                    class="lg:w-1/3"
                   />
                 </div>
               </div>
@@ -282,9 +226,9 @@
                   @update:modelValue="
                     updateField($event, 'non_state-actors', 'multiple')
                   "
-                  class="md:w-1/2"
+                  class="lg:w-1/2"
                 />
-                <div class="md:w-1/2">
+                <div class="lg:w-1/2">
                   <BaseTextarea
                     v-model="formData.pocInfo"
                     maxlength="4000"
@@ -292,52 +236,27 @@
                     label="POC Info"
                   ></BaseTextarea>
                 </div>
-                <div>
-                  <label for="body" class="font-medium text-sm"
-                    >Dissem Orgs</label
-                  >
-                  <div class="mt-1">
-                    <div class="grid grid-cols-2 md:grid-cols-6 gap-y-2">
-                      <div>
-                        <input
-                          id="allOrgs"
-                          v-model="checkAllOrgs"
-                          type="checkbox"
-                          name="allOrgs"
-                          @click="toggleAllOrgs()"
-                        />
-                        <label for="allOrgs" class="ml-2 text-sm"
-                          >All Orgs</label
-                        >
-                      </div>
-                      <template
-                        v-for="org in formData.selectedDissemOrgs.items"
-                        :key="org"
-                      >
-                        <div class="flex items-center">
-                          <input
-                            :id="org.name"
-                            v-model="formData.selectedDissemOrgs.model"
-                            type="checkbox"
-                            :value="org"
-                            class="ml-2"
-                            @change="
-                              updateField(
-                                formData.selectedDissemOrgs.model,
-                                'dissem_orgs',
-                                'multiple'
-                              )
-                            "
-                          />
-                          <label
-                            :for="org.name"
-                            class="line-clamp-1 text-sm ml-1"
-                          >
-                            {{ org.name }}
-                          </label>
-                        </div>
-                      </template>
-                    </div>
+                <div class="lg:w-1/3 space-y-4">
+                  <BaseListbox
+                    v-model="formData.selectedDissemOrgs.model"
+                    :label="formData.selectedDissemOrgs.label"
+                    :items="formData.selectedDissemOrgs.items"
+                    multiple
+                    @update:modelValue="
+                      updateField($event, 'dissem_orgs', 'multiple')
+                    "
+                  />
+                  <div class="flex">
+                    <input
+                      id="allOrgs"
+                      v-model="checkAllOrgs"
+                      type="checkbox"
+                      name="allOrgs"
+                      @click="toggleAllOrgs()"
+                    />
+                    <label for="allOrgs" class="ml-2 text-sm"
+                      >Select All Orgs</label
+                    >
                   </div>
                 </div>
               </div>
@@ -356,7 +275,7 @@
               </div>
               <div class="flex flex-col space-y-4">
                 <DropZone
-                  class="md:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
+                  class="lg:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
                   @files-dropped="addFiles"
                 >
                   <label for="file-input" class="cursor-pointer">
@@ -443,7 +362,7 @@
                   highest level.
                 </p>
               </div>
-              <div class="md:w-1/2">
+              <div class="lg:w-1/2">
                 <BaseClassifier
                   v-model="formData.classificationXML"
                   label="Document Classification"
@@ -509,6 +428,34 @@ import FilePreview from "@/components/FilePreview";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
 import ArticleView from "@/views/ArticleView";
+
+const categories = [
+  {
+    name: "Product Type",
+    icon: "BriefcaseIcon",
+    target: "productType",
+  },
+  {
+    name: "Required",
+    icon: "KeyIcon",
+    target: "required",
+  },
+  {
+    name: "Additional",
+    icon: "PlusCircleIcon",
+    target: "additional",
+  },
+  {
+    name: "Attachments",
+    icon: "PaperClipIcon",
+    target: "attachments",
+  },
+  {
+    name: "Classification",
+    icon: "LockClosedIcon",
+    target: "classification",
+  },
+];
 
 export default {
   components: {
@@ -608,11 +555,11 @@ export default {
     const toggleAllOrgs = () => {
       dissemOrgs.value.forEach((org) => {
         if (!checkAllOrgs.value) {
-          if (!formData.value.selectedDissemOrgs.includes(org)) {
-            formData.value.selectedDissemOrgs.push(org);
+          if (!formData.value.selectedDissemOrgs.model.includes(org)) {
+            formData.value.selectedDissemOrgs.model.push(org);
           }
         } else {
-          formData.value.selectedDissemOrgs.push(org);
+          formData.value.selectedDissemOrgs.model = [];
         }
       });
     };
@@ -789,7 +736,6 @@ export default {
     });
 
     const onInputChange = (e) => {
-      console.log("is this happening");
       addFiles(e.target.files);
       e.target.value = null;
       uploadFiles(files.value);
@@ -863,6 +809,7 @@ export default {
     };
 
     return {
+      categories,
       loadingMetadata,
       loadingDocument,
       loadingDissemOrgs,

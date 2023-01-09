@@ -37,19 +37,13 @@
       <p>Select the product you'd like to create</p>
     </div>
     <div class="flex space-x-4 mb-4">
-      <template
-        v-for="product in [
-          { type: 'current', name: 'Current' },
-          { type: 'daily_brief', name: 'Daily Brief' },
-        ]"
-        :key="product"
-      >
+      <template v-for="product in products.slice(0, 2)" :key="product">
         <a @click="goToArticle(product.type)">
           <BaseCard
             class="flex w-[200px] justify-center items-center font-medium cursor-pointer"
             hoverable
           >
-            <p class="z-10 p-10 text-2xl font-bold">{{ product.name }}</p>
+            <p class="z-5 p-10 text-2xl font-bold">{{ product.title }}</p>
             <BaseProductIcon
               class="absolute w-28 h-28 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
               :icon="product.type"
@@ -186,6 +180,14 @@ export default {
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
 
+    const products = [];
+    Object.keys(metadata.product_types).forEach((type) => {
+      products.push({
+        type,
+        ...metadata.product_types[type],
+      });
+    });
+
     const getPayload = (type) => {
       const metadataPayload = type
         ? {
@@ -258,6 +260,7 @@ export default {
     );
 
     return {
+      products,
       goToArticle,
       selectedDate,
       routeDate,
