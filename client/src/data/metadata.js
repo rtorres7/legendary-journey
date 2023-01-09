@@ -1393,19 +1393,19 @@ export const metadata = {
           code: 10377,
         },
         {
-          name: "CT Weekly",
+          name: "CT Digest",
           code: 10379,
         },
         {
-          name: "CT Digest",
+          name: "CT Weekly",
           code: 10380,
         },
         {
-          name: "TBD1",
+          name: "Terrorism Digest",
           code: 10384,
         },
         {
-          name: "TBD2",
+          name: "Terrorism Summary",
           code: 10385,
         },
       ],
