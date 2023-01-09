@@ -27,7 +27,9 @@
               <div
                 class="text-sm hover:text-black dark:hover:text-white energy:hover:text-white"
               >
-                <router-link to="search?text=&product_types[]=10377">
+                <router-link
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385"
+                >
                   View More
                 </router-link>
               </div>
@@ -68,7 +70,9 @@
               <p
                 class="text-sm text-right hover:text-black dark:hover:text-white energy:hover:text-white"
               >
-                <router-link to="search?text=&product_types[]=10377">
+                <router-link
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385"
+                >
                   More >
                 </router-link>
               </p>
