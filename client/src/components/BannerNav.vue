@@ -105,7 +105,7 @@
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
                     @click="navigateToPublish"
                   >
-                    Publish an Article
+                    Publish a Product
                   </a>
                 </MenuItem>
                 <MenuItem v-show="canManageSpecialEditions">
@@ -594,7 +594,7 @@
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
                       @click="navigateToPublish"
                     >
-                      Publish an Article
+                      Publish a Product
                     </a>
                   </li>
                   <li v-show="canManageSpecialEditions">

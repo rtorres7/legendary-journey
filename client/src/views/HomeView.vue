@@ -148,7 +148,7 @@
       >
         <!-- Only shows in screens smaller than XL -->
         <div class="block xl:hidden font-semibold mb-4">
-          More Published Articles
+          More Published Products
         </div>
         <div
           class="flex flex-col md:flex-row xl:flex-col h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
@@ -181,10 +181,10 @@
       </div>
     </div>
   </div>
-  <!-- More Published Articles Section (Large Screen Devices) -->
+  <!-- More Published Products Section (Large Screen Devices) -->
   <div class="xl:pt-4 pb-6">
     <div class="hidden xl:block font-semibold mb-4">
-      More Published Articles
+      More Published Products
     </div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
