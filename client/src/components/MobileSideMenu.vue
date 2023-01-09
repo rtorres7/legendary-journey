@@ -206,23 +206,20 @@
                   </MobileSideMenuDisclosure>
                 </li>
                 <li>
-                  <BaseTooltip placement="top">
-                    <p
-                      class="font-medium hover:text-black dark:hover:text-white energy:text-white"
-                      href="/"
-                    >
-                      Foreign
-                    </p>
-                  </BaseTooltip>
+                  <a
+                    class="font-medium hover:text-black dark:hover:text-white energy:text-white"
+                    :href="`/search?&product_types[]=10381&view=grid`"
+                  >
+                    Foreign
+                  </a>
                 </li>
                 <li>
-                  <BaseTooltip placement="top">
-                    <p
-                      class="font-medium hover:text-black dark:hover:text-white energy:text-white"
-                    >
-                      Community
-                    </p>
-                  </BaseTooltip>
+                  <a
+                    class="font-medium hover:text-black dark:hover:text-white energy:text-white"
+                    :href="`/search?&product_types[]=10378&view=grid`"
+                  >
+                    Community
+                  </a>
                 </li>
                 <li>
                   <MobileSideMenuDisclosure :title="'Special Editions'">
