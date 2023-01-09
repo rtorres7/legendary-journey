@@ -1393,12 +1393,28 @@ export const metadata = {
           code: 10377,
         },
         {
+          name: "Community Product",
+          code: 10378,
+        },
+        {
           name: "CT Digest",
           code: 10379,
         },
         {
           name: "CT Weekly",
           code: 10380,
+        },
+        {
+          name: "Foreign Product",
+          code: 10381,
+        },
+        {
+          name: "Special Threat Matrix",
+          code: 10382,
+        },
+        {
+          name: "SVTC Notes",
+          code: 10383,
         },
         {
           name: "Terrorism Digest",

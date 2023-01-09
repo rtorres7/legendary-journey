@@ -485,7 +485,7 @@
             class="font-semibold flex items-center hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
             tabindex="0"
           >
-            <BaseTooltip :placement="'bottom'"> Foreign </BaseTooltip>
+            <a :href="`/search?&product_types[]=10381&view=grid`">Foreign </a>
           </div>
         </li>
         <li>
@@ -493,7 +493,7 @@
             class="font-semibold flex items-center hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
             tabindex="0"
           >
-            <BaseTooltip placement="bottom"> Community </BaseTooltip>
+            <a :href="`/search?&product_types[]=10378&view=grid`">Community </a>
           </div>
         </li>
         <li>
