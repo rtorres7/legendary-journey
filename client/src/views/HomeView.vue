@@ -27,7 +27,9 @@
               <div
                 class="text-sm hover:text-black dark:hover:text-white energy:hover:text-white"
               >
-                <router-link to="search?text=&product_types[]=10377">
+                <router-link
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385"
+                >
                   View More
                 </router-link>
               </div>
@@ -68,7 +70,9 @@
               <p
                 class="text-sm text-right hover:text-black dark:hover:text-white energy:hover:text-white"
               >
-                <router-link to="search?text=&product_types[]=10377">
+                <router-link
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385"
+                >
                   More >
                 </router-link>
               </p>
@@ -148,7 +152,7 @@
       >
         <!-- Only shows in screens smaller than XL -->
         <div class="block xl:hidden font-semibold mb-4">
-          More Published Articles
+          More Published Products
         </div>
         <div
           class="flex flex-col md:flex-row xl:flex-col h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
@@ -181,10 +185,10 @@
       </div>
     </div>
   </div>
-  <!-- More Published Articles Section (Large Screen Devices) -->
+  <!-- More Published Products Section (Large Screen Devices) -->
   <div class="xl:pt-4 pb-6">
     <div class="hidden xl:block font-semibold mb-4">
-      More Published Articles
+      More Published Products
     </div>
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">

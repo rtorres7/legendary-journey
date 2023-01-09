@@ -1392,6 +1392,22 @@ export const metadata = {
           name: "Daily Brief",
           code: 10377,
         },
+        {
+          name: "CT Digest",
+          code: 10379,
+        },
+        {
+          name: "CT Weekly",
+          code: 10380,
+        },
+        {
+          name: "Terrorism Digest",
+          code: 10384,
+        },
+        {
+          name: "Terrorism Summary",
+          code: 10385,
+        },
       ],
     },
     regions: {

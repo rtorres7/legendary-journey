@@ -3,7 +3,7 @@
     class="flex flex-col space-y-4 md:space-y-0 md:flex-row justify-between py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="flex flex-col space-y-4">
-      <h1 class="font-semibold text-2xl">Publish an Article</h1>
+      <h1 class="font-semibold text-2xl">Publish a Product</h1>
       <h2>Get started by selecting from the following options.</h2>
     </div>
     <BaseDatepicker
@@ -33,7 +33,7 @@
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="mb-6">
-      <h3 class="font-semibold text-lg">Create an Article</h3>
+      <h3 class="font-semibold text-lg">Create a Product</h3>
       <p>Select the product you'd like to create</p>
     </div>
     <div class="flex space-x-4 mb-4">
@@ -73,7 +73,7 @@
   <template v-else>
     <div class="py-6">
       <h3 class="font-semibold mb-6 text-lg">
-        Edit Existing Articles ({{ articles.length }})
+        Edit Existing Products ({{ articles.length }})
       </h3>
       <template v-if="articles.length > 0">
         <BaseCard>

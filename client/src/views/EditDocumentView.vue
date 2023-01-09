@@ -242,7 +242,7 @@
             <div
               class="border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pb-2"
             >
-              <h2 class="text-lg font-medium">Article Images</h2>
+              <h2 class="text-lg font-medium">Product Images</h2>
             </div>
             <div
               class="border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pb-2"
