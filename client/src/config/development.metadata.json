@@ -58,7 +58,7 @@
       ]
     },
     {
-      "header": "ITS Links",
+      "header": "NCTC Tools",
       "links": [
         {
           "name": "Collaboration",
@@ -69,15 +69,7 @@
           "href": "https://www.google.com/"
         },
         {
-          "name": "TASS",
-          "href": "https://www.google.com/"
-        },
-        {
           "name": "TASS Web",
-          "href": "https://www.google.com/"
-        },
-        {
-          "name": "TIDE",
           "href": "https://www.google.com/"
         },
         {
@@ -119,7 +111,10 @@
   ],
   "footer_note": "Built in partnership with WIRe",
   "footer_contact": {
-    "email": "ITS-HELP-LINE@current.gov"
+    "link": {
+      "name": "Customer Support JIRA",
+      "href": "https://www.google.com/"
+    }
   },
   "user_support": {
     "help_url": "https://www.google.com",
