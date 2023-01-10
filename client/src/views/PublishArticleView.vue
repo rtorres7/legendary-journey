@@ -73,7 +73,7 @@
         <BaseCard>
           <template v-for="{ attributes: article } in articles" :key="article">
             <div
-              class="flex p-4 justify-between border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
+              class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
             >
               <div class="flex px-2">
                 <div class="pr-4">
@@ -93,7 +93,7 @@
                     }"
                   >
                     <h4
-                      class="line-clamp-4 md:line-clamp-3 lg:line-clamp-2 hover:underline break-words"
+                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
                     >
                       {{
                         article.title_classif
@@ -105,13 +105,15 @@
                   </router-link>
                   <div class="text-sm break-all">
                     <p
-                      class="py-2 uppercase text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
+                      class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
                     >
                       {{ dayjs(article.date_published).format("D MMM") }} -
-                      {{ article.reporting_type_display_name }} |
-                      {{ article.doc_num }}
+                      <span class="font-medium pr-1">{{
+                        article.product_type
+                      }}</span>
+                      | <span class="pl-1">{{ article.doc_num }}</span>
                     </p>
-                    <p class="line-clamp-3 md:line-clamp-2 break-all">
+                    <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
                         article.summary_classif
                           ? `(${article.summary_classif})`

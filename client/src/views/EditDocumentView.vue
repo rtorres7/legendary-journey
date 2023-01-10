@@ -635,7 +635,7 @@ export default {
 
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
-      isPreviewDialogOpen.value = true;
+      isPreviewDialogOpen.value = false;
     };
     const openDialog = () => {
       isPreviewDialogOpen.value = true;
