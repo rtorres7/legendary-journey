@@ -55,7 +55,7 @@
           </router-link>
         </div>
       </div>
-      <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
+      <div class="w-full flex flex-col space-y-4 pb-6 lg:pb-0">
         <div class="text-center pb-2 text-sm lg:text-md">
           {{ article.classification }}
         </div>

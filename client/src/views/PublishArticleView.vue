@@ -37,19 +37,13 @@
       <p>Select the product you'd like to create</p>
     </div>
     <div class="flex space-x-4 mb-4">
-      <template
-        v-for="product in [
-          { type: 'current', name: 'Current' },
-          { type: 'daily_brief', name: 'Daily Brief' },
-        ]"
-        :key="product"
-      >
+      <template v-for="product in products.slice(0, 2)" :key="product">
         <a @click="goToArticle(product.type)">
           <BaseCard
             class="flex w-[200px] justify-center items-center font-medium cursor-pointer"
             hoverable
           >
-            <p class="z-10 p-10 text-2xl font-bold">{{ product.name }}</p>
+            <p class="z-5 p-10 text-2xl font-bold">{{ product.title }}</p>
             <BaseProductIcon
               class="absolute w-28 h-28 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
               :icon="product.type"
@@ -79,7 +73,7 @@
         <BaseCard>
           <template v-for="{ attributes: article } in articles" :key="article">
             <div
-              class="flex p-4 justify-between border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
+              class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
             >
               <div class="flex px-2">
                 <div class="pr-4">
@@ -99,7 +93,7 @@
                     }"
                   >
                     <h4
-                      class="line-clamp-4 md:line-clamp-3 lg:line-clamp-2 hover:underline break-words"
+                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
                     >
                       {{
                         article.title_classif
@@ -111,13 +105,15 @@
                   </router-link>
                   <div class="text-sm break-all">
                     <p
-                      class="py-2 uppercase text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
+                      class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
                     >
                       {{ dayjs(article.date_published).format("D MMM") }} -
-                      {{ article.reporting_type_display_name }} |
-                      {{ article.doc_num }}
+                      <span class="font-medium pr-1">{{
+                        article.product_type
+                      }}</span>
+                      | <span class="pl-1">{{ article.doc_num }}</span>
                     </p>
-                    <p class="line-clamp-3 md:line-clamp-2 break-all">
+                    <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
                         article.summary_classif
                           ? `(${article.summary_classif})`
@@ -186,6 +182,14 @@ export default {
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
 
+    const products = [];
+    Object.keys(metadata.product_types).forEach((type) => {
+      products.push({
+        type,
+        ...metadata.product_types[type],
+      });
+    });
+
     const getPayload = (type) => {
       const metadataPayload = type
         ? {
@@ -199,8 +203,6 @@ export default {
           };
       return {
         ...metadataPayload,
-        analysis_type_id: 5,
-        classification_xml: "",
         document_action: "create",
         html_body: "<p></p>",
         producing_office: "DNI/NCTC",
@@ -260,6 +262,7 @@ export default {
     );
 
     return {
+      products,
       goToArticle,
       selectedDate,
       routeDate,
