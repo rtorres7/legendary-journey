@@ -15,6 +15,48 @@
       "summary": "The Daily Brief summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "ct_weekly": {
+      "title": "CT Weekly",
+      "summary": "The CT Weekly summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "ct_digest": {
+      "title": "CT Digest",
+      "summary": "The CT Digest summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "svtc_notes": {
+      "title": "SVTC Notes",
+      "summary": "The SVTC Notes summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "special_threat_matrix": {
+      "title": "Reported Threats",
+      "summary": "The Special Threat Matrix summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "threat_matrix": {
+      "title": "Threat Matrix",
+      "summary": "The Threat Matrix summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "terrorism_summary": {
+      "title": "Terrorism Summary",
+      "summary": "The Terrorism summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+    },
+    "terrorism_digest": {
+      "title": "Terrorism Digest",
+      "summary": "The Terrorism Digest summary description goes here.",
+      "topics": ["TERR"],
+      "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     }
   },
   "issues": [
@@ -129,7 +171,7 @@
       ]
     },
     {
-      "header": "ITS Links",
+      "header": "NCTC Tools",
       "links": [
         {
           "name": "Collaboration",
@@ -140,15 +182,7 @@
           "href": "https://www.google.com/"
         },
         {
-          "name": "TASS",
-          "href": "https://www.google.com/"
-        },
-        {
           "name": "TASS Web",
-          "href": "https://www.google.com/"
-        },
-        {
-          "name": "TIDE",
           "href": "https://www.google.com/"
         },
         {
@@ -190,11 +224,14 @@
   ],
   "footer_note": "Built in partnership with WIRe",
   "footer_contact": {
-    "email": "ITS-HELP-LINE@current.gov"
+    "link": {
+      "name": "Customer Support JIRA",
+      "href": "https://www.google.com/"
+    }
   },
   "user_support": {
     "help_url": "https://www.google.com",
-    "access_text": "leverages Enterprise Entitlements to protect access to restricted articles and content. Please navigate to the link below to review your organization affiliation as well as to request applicable Regions and Topics.",
+    "access_text": "leverages Enterprise Entitlements to protect access to restricted products and content. Please navigate to the link below to review your organization affiliation as well as to request applicable Regions and Topics.",
     "access_url": "https://www.google.com"
   }
 }

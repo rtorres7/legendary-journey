@@ -842,8 +842,8 @@ export const getSitreps = [
     attributes: {
       date_published: "01-02-23",
       doc_num: "WIReWIRe_sample_",
-      product_type_name: "Daily Brief",
-      title: "(U) Russian Daily Brief",
+      product_type_name: "CT Weekly",
+      title: "(U) Russian CT Weekly",
     },
   },
   {

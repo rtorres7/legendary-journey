@@ -2,7 +2,7 @@
   <p
     class="font-semibold text-2xl py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
-    Edit Document
+    Edit Product
   </p>
   <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -11,345 +11,372 @@
   </template>
   <template v-else>
     <form ref="publishingForm">
-      <div class="w-[150px] mt-4">
-        <BaseListbox
-          v-model="formData.selectedProductType.model"
-          :label="formData.selectedProductType.label"
-          :items="formData.selectedProductType.items"
-          @update:modelValue="updateField($event, 'product_type_id')"
-          @clicked="openProductTypeDialog"
-        />
-      </div>
-      <div class="flex flex-col lg:flex-row gap-6 lg:gap-3 mt-4">
-        <!-- Left Container -->
-        <BaseCard class="flex flex-col lg:w-8/12 p-6 space-y-6">
-          <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
-            <div class="basis-1/2 space-y-4">
-              <BaseListbox
-                v-model="formData.selectedCountries.model"
-                :label="formData.selectedCountries.label"
-                :items="formData.selectedCountries.items"
-                :disabled="formData.worldwide"
-                multiple
-                required
-                @update:modelValue="
-                  updateField($event, 'countries', 'multiple')
+      <BaseCard class="flex mt-4 p-6">
+        <div
+          class="lg:min-w-[215px] border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+        >
+          <div
+            class="sticky top-[75px] lg:top-[125px] flex flex-col space-y-2 pr-6"
+          >
+            <template v-for="category in categories" :key="category">
+              <div
+                @click="
+                  document
+                    .getElementById(`${category.target}Section`)
+                    .scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'center',
+                      inline: 'nearest',
+                    })
                 "
-              />
-              <div class="flex">
-                <input
-                  id="worldwide"
-                  v-model="formData.worldwide"
-                  type="checkbox"
-                  name="worldwide"
-                  value="Worldwide"
-                  @change="updateField($event.target.checked, 'worldwide')"
-                />
-                <label for="worldwide" class="ml-2 text-sm">Worldwide</label>
-              </div>
-            </div>
-            <div class="basis-1/2">
-              <BaseListbox
-                v-model="formData.selectedTopics.model"
-                :label="formData.selectedTopics.label"
-                :items="formData.selectedTopics.items"
-                multiple
-                required
-                @update:modelValue="updateField($event, 'topics', 'multiple')"
-              />
-            </div>
-          </div>
-          <div class="md:flex">
-            <div class="basis-full space-y-4">
-              <BaseListbox
-                v-model="formData.selectedActors.model"
-                :label="formData.selectedActors.label"
-                :items="formData.selectedActors.items"
-                multiple
-                @update:modelValue="
-                  updateField($event, 'non_state-actors', 'multiple')
-                "
-              />
-              <div class="flex">
-                <input
-                  id="allOrgs"
-                  v-model="checkAllOrgs"
-                  type="checkbox"
-                  name="allOrgs"
-                  @click="toggleAllOrgs()"
-                />
-                <label for="allOrgs" class="ml-2 text-sm"> All Orgs</label>
-              </div>
-              <Disclosure v-slot="{ open }">
-                <DisclosureButton class="flex text-sm items-center">
-                  <span>Show Dissem Orgs</span>
-                  <ChevronDownIcon
-                    class="h-4 w-4"
-                    :class="open ? 'transform rotate-180' : ''"
-                  />
-                </DisclosureButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <DisclosurePanel>
-                    <div class="grid grid-cols-3 md:grid-cols-6 gap-y-2">
-                      <template
-                        v-for="(org, index) in formData.selectedDissemOrgs
-                          .items"
-                        :key="index"
-                      >
-                        <div class="flex items-center">
-                          <input
-                            :id="org.name"
-                            v-model="formData.selectedDissemOrgs.model"
-                            type="checkbox"
-                            :value="org"
-                            class="ml-2"
-                            @change="
-                              updateField(
-                                formData.selectedDissemOrgs.model,
-                                'dissem_orgs',
-                                'multiple'
-                              )
-                            "
-                          />
-                          <label
-                            :for="org.name"
-                            class="line-clamp-1 text-sm ml-1"
-                          >
-                            {{ org.name }}
-                          </label>
-                        </div>
-                      </template>
-                    </div>
-                  </DisclosurePanel>
-                </transition>
-              </Disclosure>
-            </div>
-          </div>
-          <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
-            <div class="basis-2/3">
-              <BaseInput
-                v-model="formData.title"
-                label="Title"
-                type="text"
-                required
-                @update:modelValue="updateField($event, 'title')"
-              />
-            </div>
-            <div class="basis-1/3">
-              <BaseClassifier
-                v-model="formData.titleClassificationXML"
-                label="Title PM"
-                required
-                portionMark
-                @update:classObj="
-                  updateField($event, 'title', 'classification')
-                "
-              />
-            </div>
-          </div>
-          <div class="md:flex md:space-x-4 space-y-4 md:space-y-0">
-            <div class="basis-2/3">
-              <BaseTextarea
-                v-model="formData.summary"
-                maxlength="4000"
-                rows="6"
-                label="Summary"
-                required
-                @update:modelValue="updateField($event, 'summary')"
-              ></BaseTextarea>
-            </div>
-            <div class="basis-1/3">
-              <BaseClassifier
-                v-model="formData.summaryClassificationXML"
-                label="Summary PM"
-                required
-                portionMark
-                @update:classObj="
-                  updateField($event, 'summary', 'classification')
-                "
-              />
-            </div>
-          </div>
-          <div>
-            <label for="body" class="font-medium text-sm">Body</label>
-            <div class="mt-1">
-              <ckeditor
-                id="body"
-                v-model="formData.editorData"
-                :editor="editor"
-                :config="editorConfig"
-                @update:modelValue="updateField($event, 'html_body')"
-              ></ckeditor>
-            </div>
-          </div>
-        </BaseCard>
-        <!-- Right Container -->
-        <BaseCard class="lg:w-4/12 p-6">
-          <div class="flex flex-col space-y-6">
-            <p
-              class="text-lg font-medium pb-2 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-            >
-              Classification
-            </p>
-            <div>
-              <BaseClassifier
-                v-model="formData.classificationXML"
-                label="Document Classification"
-                required
-                showClassBlock
-                @update:classObj="
-                  updateField($event, 'document', 'classification')
-                "
-              />
-            </div>
-            <p
-              class="text-lg font-medium pb-2 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-            >
-              Attachments
-            </p>
-            <DropZone
-              v-slot="{ dropZoneActive }"
-              class="w-full p-4 text-center shadow-md border dark:border-0 energy:border-0 border-gray-200 bg-white dark:bg-slate-700 energy:bg-zinc-600"
-              @files-dropped="addFiles"
-            >
-              <label for="file-input" class="cursor-pointer">
-                <template v-if="dropZoneActive">
-                  <p>Drop them here to add them</p>
-                </template>
-                <template v-else>
-                  <p>Drag your files here or</p>
-                  <p>
-                    <span class="font-semibold">click here</span> to select
-                    files
-                  </p>
-                </template>
-                <input
-                  id="file-input"
-                  type="file"
-                  class="sr-only"
-                  multiple
-                  @change="onInputChange"
-                />
-              </label>
-            </DropZone>
-            <div
-              class="border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pb-2"
-            >
-              <h2 class="text-lg font-medium">Article Images</h2>
-            </div>
-            <div
-              class="border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pb-2"
-            >
-              <h2 class="text-lg font-medium">Supporting Attachments</h2>
-              <ul v-show="files?.length" class="">
-                <FilePreview
-                  v-for="file of files"
-                  :key="file.id"
-                  :file="file"
-                  tag="li"
-                  @remove="removeFile"
-                />
-              </ul>
-              <ul v-show="formData.attachments?.length" id="attachment-list">
-                <li
-                  v-for="(attachment, index) in formData.attachments"
-                  :id="'attachment' + attachment.id"
-                  :key="attachment"
-                >
-                  <div class="flex space-x-2 pb-2">
-                    {{ attachment.file_name }} &nbsp;
-                    <router-link
-                      :to="
-                        '/documents/' +
-                        documentNumber +
-                        '/attachments/' +
-                        attachment.id
-                      "
-                      target="_blank"
-                    >
-                      <DocumentArrowDownIcon
-                        class="h-5 w-5"
-                        title="Download"
-                        display="inline;"
-                      />
-                    </router-link>
-                    <router-link
-                      to=""
-                      target="_blank"
-                      @click.prevent="
-                        removeDocument(attachment.id, documentNumber, index)
-                      "
-                    >
-                      <DocumentMinusIcon
-                        class="h-5 w-5"
-                        title="Delete"
-                        display="inline;"
-                      />
-                    </router-link>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div
-              class="border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pb-2"
-            >
-              <h2 class="text-lg font-medium">Details</h2>
-            </div>
-            <div>
-              <BaseInput
-                v-model="documentNumber"
-                label="Doc Num (Permalink)"
-                type="text"
-                required
-                disabled
-              />
-            </div>
-            <div>
-              <BaseDatepicker
-                v-model="selectedPublicationDate"
-                :enableTimePicker="false"
-                week-start="0"
-                auto-apply
-                @update:modelValue="updateSelectedDate"
+                class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75"
               >
-                <template #trigger>
-                  <BaseInput
-                    v-model="formData.publicationDate"
-                    label="Publication Date"
-                    type="text"
-                    required
-                    disabled
-                    :disabledColor="false"
-                  />
-                </template>
-              </BaseDatepicker>
-            </div>
-            <div>
-              <BaseTextarea
-                v-model="formData.pocInfo"
-                maxlength="4000"
-                rows="4"
-                label="POC Info"
-              ></BaseTextarea>
-            </div>
-            <div>
-              <BaseInput
-                v-model="formData.producingOffice"
-                label="Producing Office"
-                type="text"
-                disabled
+                <span class="sr-only">{{ category.name }}</span>
+                <component class="h-6 w-6" :is="category.icon" /><span
+                  class="hidden lg:block pl-4"
+                  >{{ category.name }}</span
+                >
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="w-full px-8">
+          <div class="flex flex-col space-y-8">
+            <div
+              id="productTypeSection"
+              class="flex flex-col space-y-8 pb-8 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            >
+              <div>
+                <h2 class="font-medium text-xl">Product Type</h2>
+                <p
+                  class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
+                >
+                  Changing the product type will prepopulate existing fields so
+                  be careful when changing it.
+                </p>
+              </div>
+              <BaseListbox
+                v-model="formData.selectedProductType.model"
+                :label="formData.selectedProductType.label"
+                :items="formData.selectedProductType.items"
+                @update:modelValue="updateField($event, 'product_type_id')"
+                @clicked="openProductTypeDialog"
+                class="lg:w-1/3"
               />
             </div>
+            <div
+              id="requiredSection"
+              class="flex flex-col space-y-8 pb-8 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            >
+              <div>
+                <h2 class="font-medium text-xl">Required</h2>
+                <p
+                  class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
+                >
+                  This information is required in order to save the product.
+                </p>
+              </div>
+              <div class="flex flex-col space-y-4">
+                <div
+                  class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
+                >
+                  <div class="lg:w-3/4">
+                    <BaseInput
+                      v-model="formData.title"
+                      label="Title"
+                      type="text"
+                      required
+                      @update:modelValue="updateField($event, 'title')"
+                    />
+                  </div>
+                  <div class="lg:w-1/4">
+                    <BaseClassifier
+                      v-model="formData.titleClassificationXML"
+                      label="Title PM"
+                      required
+                      portionMark
+                      @update:classObj="
+                        updateField($event, 'title', 'classification')
+                      "
+                    />
+                  </div>
+                </div>
+                <div
+                  class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
+                >
+                  <div class="lg:w-3/4">
+                    <BaseTextarea
+                      v-model="formData.summary"
+                      maxlength="4000"
+                      rows="6"
+                      label="Summary"
+                      required
+                      @update:modelValue="updateField($event, 'summary')"
+                    />
+                  </div>
+                  <div class="lg:w-1/4">
+                    <BaseClassifier
+                      v-model="formData.summaryClassificationXML"
+                      label="Summary PM"
+                      required
+                      portionMark
+                      @update:classObj="
+                        updateField($event, 'summary', 'classification')
+                      "
+                    />
+                  </div>
+                </div>
+                <div class="lg:w-1/4">
+                  <BaseDatepicker
+                    v-model="selectedPublicationDate"
+                    :enableTimePicker="false"
+                    week-start="0"
+                    auto-apply
+                    @update:modelValue="updateSelectedDate"
+                  >
+                    <template #trigger>
+                      <BaseInput
+                        v-model="formData.publicationDate"
+                        label="Publication Date"
+                        type="text"
+                        required
+                        disabled
+                        :disabledColor="false"
+                      />
+                    </template>
+                  </BaseDatepicker>
+                </div>
+                <div
+                  class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
+                >
+                  <div class="lg:w-1/3 space-y-4">
+                    <BaseListbox
+                      v-model="formData.selectedCountries.model"
+                      :label="formData.selectedCountries.label"
+                      :items="formData.selectedCountries.items"
+                      :disabled="formData.worldwide"
+                      multiple
+                      required
+                      @update:modelValue="
+                        updateField($event, 'countries', 'multiple')
+                      "
+                    />
+                    <div class="flex">
+                      <input
+                        id="worldwide"
+                        v-model="formData.worldwide"
+                        type="checkbox"
+                        name="worldwide"
+                        value="Worldwide"
+                        @change="
+                          updateField($event.target.checked, 'worldwide')
+                        "
+                      />
+                      <label for="worldwide" class="ml-2 text-sm"
+                        >Worldwide</label
+                      >
+                    </div>
+                  </div>
+                  <BaseListbox
+                    v-model="formData.selectedTopics.model"
+                    :label="formData.selectedTopics.label"
+                    :items="formData.selectedTopics.items"
+                    multiple
+                    required
+                    @update:modelValue="
+                      updateField($event, 'topics', 'multiple')
+                    "
+                    class="lg:w-1/3"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              id="additionalSection"
+              class="flex flex-col space-y-8 pb-8 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            >
+              <div>
+                <h2 class="font-medium text-xl">Additional</h2>
+                <p
+                  class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
+                >
+                  Further enhance your product by adding more details.
+                </p>
+              </div>
+              <div class="flex flex-col space-y-4">
+                <div>
+                  <label for="body" class="font-medium text-sm"
+                    >Product Content</label
+                  >
+                  <div class="mt-1 w-[95%]">
+                    <ckeditor
+                      id="body"
+                      v-model="formData.editorData"
+                      :editor="editor"
+                      :config="editorConfig"
+                      @update:modelValue="updateField($event, 'html_body')"
+                    ></ckeditor>
+                  </div>
+                </div>
+                <BaseListbox
+                  v-model="formData.selectedActors.model"
+                  :label="formData.selectedActors.label"
+                  :items="formData.selectedActors.items"
+                  multiple
+                  @update:modelValue="
+                    updateField($event, 'non_state-actors', 'multiple')
+                  "
+                  class="lg:w-1/2"
+                />
+                <div class="lg:w-1/2">
+                  <BaseTextarea
+                    v-model="formData.pocInfo"
+                    maxlength="4000"
+                    rows="4"
+                    label="POC Info"
+                  ></BaseTextarea>
+                </div>
+                <div class="lg:w-1/3 space-y-4">
+                  <BaseListbox
+                    v-model="formData.selectedDissemOrgs.model"
+                    :label="formData.selectedDissemOrgs.label"
+                    :items="formData.selectedDissemOrgs.items"
+                    multiple
+                    @update:modelValue="
+                      updateField($event, 'dissem_orgs', 'multiple')
+                    "
+                  />
+                  <div class="flex">
+                    <input
+                      id="allOrgs"
+                      v-model="checkAllOrgs"
+                      type="checkbox"
+                      name="allOrgs"
+                      @click="toggleAllOrgs()"
+                    />
+                    <label for="allOrgs" class="ml-2 text-sm"
+                      >Select All Orgs</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="attachmentsSection"
+              class="flex flex-col space-y-8 pb-8 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            >
+              <div>
+                <h2 class="font-medium text-xl">Attachments</h2>
+                <p
+                  class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
+                >
+                  Attachments will be immediately saved upon upload.
+                </p>
+              </div>
+              <div class="flex flex-col space-y-4">
+                <DropZone
+                  class="lg:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
+                  @files-dropped="addFiles"
+                >
+                  <label for="file-input" class="cursor-pointer">
+                    <p>Drag your files here or</p>
+                    <p>
+                      <span class="font-semibold">click here</span> to select
+                      files
+                    </p>
+                    <input
+                      id="file-input"
+                      type="file"
+                      class="sr-only"
+                      multiple
+                      @change="onInputChange"
+                    />
+                  </label>
+                </DropZone>
+                <div v-if="files?.length" class="pb-4">
+                  <h2 class="font-medium">Uploaded Files</h2>
+                  <ul>
+                    <FilePreview
+                      v-for="file of files"
+                      :key="file.id"
+                      :file="file"
+                      tag="li"
+                      @remove="removeFile"
+                    />
+                  </ul>
+                  <ul
+                    v-show="formData.attachments?.length"
+                    id="attachment-list"
+                  >
+                    <li
+                      v-for="(attachment, index) in formData.attachments"
+                      :id="'attachment' + attachment.id"
+                      :key="attachment"
+                    >
+                      <div class="flex space-x-2 pb-2">
+                        {{ attachment.file_name }} &nbsp;
+                        <router-link
+                          :to="
+                            '/documents/' +
+                            documentNumber +
+                            '/attachments/' +
+                            attachment.id
+                          "
+                          target="_blank"
+                        >
+                          <DocumentArrowDownIcon
+                            class="h-5 w-5"
+                            title="Download"
+                            display="inline;"
+                          />
+                        </router-link>
+                        <router-link
+                          to=""
+                          target="_blank"
+                          @click.prevent="
+                            removeDocument(attachment.id, documentNumber, index)
+                          "
+                        >
+                          <DocumentMinusIcon
+                            class="h-5 w-5"
+                            title="Delete"
+                            display="inline;"
+                          />
+                        </router-link>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div
+              id="classificationSection"
+              class="flex flex-col space-y-8 pb-8"
+            >
+              <div>
+                <h2 class="font-medium text-xl">Classification</h2>
+                <p
+                  class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
+                >
+                  The product's classification should be classified at the
+                  highest level.
+                </p>
+              </div>
+              <div class="lg:w-1/2">
+                <BaseClassifier
+                  v-model="formData.classificationXML"
+                  label="Document Classification"
+                  required
+                  showClassBlock
+                  @update:classObj="
+                    updateField($event, 'document', 'classification')
+                  "
+                />
+              </div>
+            </div>
           </div>
-        </BaseCard>
-      </div>
+        </div>
+      </BaseCard>
       <div class="flex my-4">
         <div class="flex flex-wrap gap-4">
           <BaseButton
@@ -375,19 +402,6 @@
       </div>
     </form>
   </template>
-  <!-- <BaseDialog
-    :isOpen="isProductTypeDialogOpen"
-    :title="'Product Type Change'"
-    class="max-w-fit"
-    @close="closeProductTypeDialog"
-  >
-    <p class="py-4 pr-4">
-      Changing the product type will change some of the field values entered.
-    </p>
-    <template #actions>
-      <BaseButton @click.prevent="closeProductTypeDialog">Okay</BaseButton>
-    </template>
-  </BaseDialog> -->
 </template>
 
 <script>
@@ -395,12 +409,17 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as dayjs from "dayjs";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import {
-  ChevronDownIcon,
   DocumentArrowDownIcon,
   DocumentMinusIcon,
 } from "@heroicons/vue/24/solid";
+import {
+  BriefcaseIcon,
+  KeyIcon,
+  PlusCircleIcon,
+  PaperClipIcon,
+  LockClosedIcon,
+} from "@heroicons/vue/24/outline";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "@/config/wireAxios";
 import { getValueForCode, getValueForName } from "@/helpers";
@@ -410,12 +429,41 @@ import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
 import ArticleView from "@/views/ArticleView";
 
+const categories = [
+  {
+    name: "Product Type",
+    icon: "BriefcaseIcon",
+    target: "productType",
+  },
+  {
+    name: "Required",
+    icon: "KeyIcon",
+    target: "required",
+  },
+  {
+    name: "Additional",
+    icon: "PlusCircleIcon",
+    target: "additional",
+  },
+  {
+    name: "Attachments",
+    icon: "PaperClipIcon",
+    target: "attachments",
+  },
+  {
+    name: "Classification",
+    icon: "LockClosedIcon",
+    target: "classification",
+  },
+];
+
 export default {
   components: {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    ChevronDownIcon,
+    BriefcaseIcon,
+    KeyIcon,
+    PlusCircleIcon,
+    PaperClipIcon,
+    LockClosedIcon,
     DocumentArrowDownIcon,
     DocumentMinusIcon,
     DropZone,
@@ -439,12 +487,6 @@ export default {
     const loadingDissemOrgs = computed(
       () => store.state.formMetadata.dissem_orgs.loading
     );
-    // const productTypes = computed(
-    //   () => store.state.formMetadata.product_types.items
-    // );
-    // const loadingProductTypes = computed(
-    //   () => store.state.formMetadata.product_types.loading
-    // );
     const editor = ClassicEditor;
     const editorConfig = ref({});
     const { files, addFiles, removeFile } = useFileList();
@@ -513,11 +555,11 @@ export default {
     const toggleAllOrgs = () => {
       dissemOrgs.value.forEach((org) => {
         if (!checkAllOrgs.value) {
-          if (!formData.value.selectedDissemOrgs.includes(org)) {
-            formData.value.selectedDissemOrgs.push(org);
+          if (!formData.value.selectedDissemOrgs.model.includes(org)) {
+            formData.value.selectedDissemOrgs.model.push(org);
           }
         } else {
-          formData.value.selectedDissemOrgs.push(org);
+          formData.value.selectedDissemOrgs.model = [];
         }
       });
     };
@@ -593,7 +635,7 @@ export default {
 
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
-      isPreviewDialogOpen.value = true;
+      isPreviewDialogOpen.value = false;
     };
     const openDialog = () => {
       isPreviewDialogOpen.value = true;
@@ -694,7 +736,6 @@ export default {
     });
 
     const onInputChange = (e) => {
-      console.log("is this happening");
       addFiles(e.target.files);
       e.target.value = null;
       uploadFiles(files.value);
@@ -725,7 +766,7 @@ export default {
             id: route.params.id,
             wire_id: route.params.date,
             producing_office: "DNI/NCTC",
-            publicationDate: route.params.date,
+            publication_date: route.params.date,
             ...payload.value,
           })
           .then((response) => {
@@ -768,6 +809,7 @@ export default {
     };
 
     return {
+      categories,
       loadingMetadata,
       loadingDocument,
       loadingDissemOrgs,

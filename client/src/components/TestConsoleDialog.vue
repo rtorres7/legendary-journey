@@ -130,7 +130,7 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
-                          Toggle Sample Article Image
+                          Toggle Sample Product Image
                         </SwitchLabel>
                         <Switch
                           v-model="sampleImageEnabled"
@@ -154,7 +154,7 @@
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
                       <label id="article-input" class="mr-4"
-                        >Upload Your Own Article Image</label
+                        >Upload Your Own Product Image</label
                       >
                       <div
                         class="rounded shadow-md text-xs md:text-sm bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"

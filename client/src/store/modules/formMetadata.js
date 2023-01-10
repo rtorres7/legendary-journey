@@ -1,4 +1,5 @@
 import axios from "@/config/wireAxios";
+import { dissemOrgs } from "@/data";
 
 export default {
   namespaced: true,
@@ -16,8 +17,8 @@ export default {
     getDissemOrgs({ state, commit }) {
       state.dissem_orgs.loading = true;
       if (process.env.NODE_ENV === "low") {
-        //low side metadata
-        state.dissem_orgs.loading = false;
+        console.log("[store] getDissemOrgs: ", dissemOrgs);
+        setTimeout(() => commit("saveOrgs", dissemOrgs), 750);
       } else {
         axios.get("/wires/get_dissem_orgs").then((response) => {
           console.log("[store] getDissemOrgs: ", response.data.dissem_orgs);
