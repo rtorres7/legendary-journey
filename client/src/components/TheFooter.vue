@@ -118,20 +118,32 @@
               S:
               <span
                 class="text-amber-300 dark:text-teal-400 energy:text-energy-yellow"
-                >93-24533</span
+                >93-14533</span
               >
             </p>
           </div>
         </div>
         <div class="flex flex-col">
           <p class="mb-1">ITS Help - 24/7 Support</p>
-          <a
-            :href="`mailto:${metadata.footer_contact.email}`"
-            class="text-amber-300 dark:text-teal-400 energy:text-energy-yellow flex items-center hover:underline w-fit m-0 md:m-auto lg:m-0"
-          >
-            {{ metadata.footer_contact.email }}
-            <EnvelopeIcon class="h-5 w-5 ml-1" aria-hidden="true" />
-          </a>
+          <div class="flex space-x-4">
+            <p>
+              S:
+              <span
+                class="text-amber-300 dark:text-teal-400 energy:text-energy-yellow"
+                >93-08900</span
+              >
+            </p>
+            <p>
+              Website:
+              <span
+                class="text-amber-300 dark:text-teal-400 energy:text-energy-yellow hover:underline w-fit m-0 md:m-auto lg:m-0"
+              >
+                <a :href="`${metadata.footer_contact.link.href}`">
+                  {{ metadata.footer_contact.link.name }}
+                </a>
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -194,7 +206,7 @@
 import { metadata } from "@/config";
 import { ref } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronUpIcon, EnvelopeIcon } from "@heroicons/vue/24/outline";
+import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -202,7 +214,6 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronUpIcon,
-    EnvelopeIcon,
   },
   setup() {
     const isMissionDialogOpen = ref(false);

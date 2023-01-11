@@ -105,7 +105,7 @@
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
                     @click="navigateToPublish"
                   >
-                    Publish an Article
+                    Publish a Product
                   </a>
                 </MenuItem>
                 <MenuItem v-show="canManageSpecialEditions">
@@ -257,7 +257,7 @@
         </div>
       </div>
       <!-- Desktop Navigation -->
-      <ul class="hidden lg:flex space-x-8 text-sm leading-10 justify-center">
+      <ul class="hidden lg:flex space-x-10 text-sm leading-10 justify-center">
         <!-- <li>
           <Menu as="div" class="relative">
             <MenuButton
@@ -485,7 +485,7 @@
             class="font-semibold flex items-center hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
             tabindex="0"
           >
-            <BaseTooltip :placement="'bottom'"> Foreign </BaseTooltip>
+            <a :href="`/search?&product_types[]=10381&view=grid`">Foreign </a>
           </div>
         </li>
         <li>
@@ -493,7 +493,7 @@
             class="font-semibold flex items-center hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
             tabindex="0"
           >
-            <BaseTooltip placement="bottom"> Community </BaseTooltip>
+            <a :href="`/search?&product_types[]=10378&view=grid`">Community </a>
           </div>
         </li>
         <li>
@@ -594,7 +594,7 @@
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
                       @click="navigateToPublish"
                     >
-                      Publish an Article
+                      Publish a Product
                     </a>
                   </li>
                   <li v-show="canManageSpecialEditions">
@@ -604,14 +604,6 @@
                     >
                       Manage Special Editions
                     </router-link>
-                  </li>
-                  <li>
-                    <BaseTooltip placement="left">
-                      <a
-                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                        >Settings</a
-                      >
-                    </BaseTooltip>
                   </li>
                 </ul>
                 <ul
@@ -667,6 +659,14 @@
                         </ListboxOptions>
                       </div>
                     </Listbox>
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-pointer"
+                      :href="`${metadata.user_support.help_url}`"
+                      target="_blank"
+                      >User Support</a
+                    >
                   </li>
                   <template v-if="environment === 'low'">
                     <li>

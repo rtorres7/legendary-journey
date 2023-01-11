@@ -55,11 +55,11 @@
           </router-link>
         </div>
       </div>
-      <div class="flex flex-col space-y-4 pb-6 lg:pb-0">
+      <div class="w-full flex flex-col space-y-4 pb-6 lg:pb-0">
         <div class="text-center pb-2 text-sm lg:text-md">
           {{ article.classification }}
         </div>
-        <p class="font-semibold text-sm lg:text-md uppercase">article</p>
+        <p class="font-semibold text-sm lg:text-md uppercase">product</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
           ({{ article.title_classif }}) {{ article.title }}
         </h1>

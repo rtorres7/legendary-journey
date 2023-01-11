@@ -26,3 +26,4 @@ export { specialEdition, specialEditionLinks } from "./specialEditions";
 export { relatedProducts } from "./relatedProducts";
 export { articleMetrics } from "./articleMetrics";
 export { document } from "./document";
+export { dissemOrgs } from "./formMetadata";

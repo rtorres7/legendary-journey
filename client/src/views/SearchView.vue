@@ -43,10 +43,11 @@
               <div class="w-full">
                 <BaseInput
                   v-model="queryText"
-                  label="Keyword Search or Filter"
+                  label="Keyword Search or Query"
                   type="text"
                   autocomplete="off"
                   placeholder="Press enter after typing"
+                  :disabled="queryDisabled"
                   @keyup.enter="searchQueryText"
                 />
               </div>
@@ -181,7 +182,7 @@
       </button>
     </template>
   </div>
-  <!-- Search Booolean Selectors -->
+  <!-- Search Boolean Selectors -->
   <template
     v-if="!loadingMetadata && showSelectors && booleanFilters.length > 0"
   >
@@ -203,6 +204,9 @@
               <div class="self-center pr-1">
                 <template v-if="n.type === 'text'">
                   <span class="pr-1 italic">Text: </span>
+                </template>
+                <template v-if="n.type === 'query'">
+                  <span class="pr-1 italic">Query: </span>
                 </template>
                 {{ n.displayName }}
               </div>
@@ -1084,10 +1088,9 @@ export default {
       };
     };
     const queryText = ref(
-      route.name === "issues"
-        ? `${route.params.name} Query`
-        : route.query.text || ""
+      route.name === "issues" ? route.params.name : route.query.text || ""
     );
+    const queryDisabled = ref(route.name === "issues" ? true : false);
     const queryFilters = ref(buildQueryFilters());
 
     const getBooleanMapping = (queryKey) => {
@@ -1142,12 +1145,10 @@ export default {
       if (route.query["text"]) {
         queryText = {
           displayName:
-            route.name === "issues"
-              ? `${route.params.name} Query`
-              : route.query["text"],
+            route.name === "issues" ? route.params.name : route.query["text"],
           firstItem: true,
           lastItem: true,
-          type: "text",
+          type: route.name === "issues" ? "query" : "text",
         };
       }
       if (route.query["start_date"] || route.query["end_date"]) {
@@ -1223,7 +1224,7 @@ export default {
       return booleanFilters;
     };
     const booleanFilters = ref(buildBooleanFilters());
-    const showSelectors = ref(route.name === "issues" ? false : true);
+    const showSelectors = ref(true);
 
     const toggleSelectors = () => {
       showSelectors.value = !showSelectors.value;
@@ -1233,8 +1234,8 @@ export default {
       let query = {
         ...route.query,
       };
-      if (item.type === "text") {
-        delete query[item.type];
+      if (item.type === "text" || item.type === "query") {
+        delete query["text"];
       } else if (item.type === "dates") {
         delete query["start_date"];
         delete query["end_date"];
@@ -1252,8 +1253,9 @@ export default {
           }
         }
       }
+      console.log("route: ", route.query.text);
       router.push({
-        //name: "search",
+        name: route.name === "issues" && !query.text ? "search" : route.name,
         query,
       });
     };
@@ -1328,7 +1330,6 @@ export default {
               }
             });
           }
-          //console.log("query: ", query);
           router.push({
             name: route.name === "issues" ? "issues" : "search",
             query: query,
@@ -1434,9 +1435,11 @@ export default {
           pageSubheader.value = getSubheaderName(route);
 
           queryText.value =
-            route.name === "issues"
-              ? `${route.params.name} Query`
+            route.name === "issues" && route.query.text
+              ? route.params.name
               : route.query.text || "";
+          queryDisabled.value =
+            route.name === "issues" && route.query.text ? true : false;
           queryDateRange.value = buildDateRange();
           queryFilters.value = buildQueryFilters();
           booleanFilters.value = buildBooleanFilters();
@@ -1547,6 +1550,7 @@ export default {
       selectDate,
       clearFilters,
       queryText,
+      queryDisabled,
       searchQueryText,
       showHighlightedResult,
       goToArticle,

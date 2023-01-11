@@ -25,7 +25,7 @@
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Article {{ navigation.currentArticle.position }} of
+        Featured Product {{ navigation.currentArticle.position }} of
         {{ navigation.totalArticles }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
