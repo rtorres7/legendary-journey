@@ -32,7 +32,7 @@
         <div
           class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
         >
-          Posted {{ sitrep.date_published }}
+          Posted {{ formatDate(sitrep.date_published) }}
         </div>
       </div>
     </template>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { useDate } from "@/composables/date";
 export default {
   props: {
     sitrep: {
@@ -52,7 +53,10 @@ export default {
     },
   },
   setup() {
-    return {};
+    const { formatDate } = useDate();
+    return {
+      formatDate,
+    };
   },
 };
 </script>

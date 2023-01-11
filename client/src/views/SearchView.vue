@@ -427,7 +427,7 @@
                     dayjs(result.date_published).format("DD")
                   }}</span>
                   <span class="block text-sm">{{
-                    dayjs(result.date_published).format("MMM")
+                    dayjs(result.date_published).format("MMMM")
                   }}</span>
                   <span class="block text-sm">{{
                     dayjs(result.date_published).format("YYYY")
@@ -550,7 +550,7 @@
                         </span>
                       </div>
                       <div>
-                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                        {{ formatDate(result.date_published) }}
                       </div>
                     </div>
                   </div>
@@ -743,6 +743,7 @@
 
 <script>
 import * as dayjs from "dayjs";
+import { useDate } from "@/composables/date";
 import { isEmpty, getValueForCode, getValueForName } from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
@@ -804,6 +805,7 @@ export default {
     SearchResultsPagination,
   },
   setup() {
+    const { formatDate } = useDate();
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
@@ -1538,6 +1540,7 @@ export default {
 
     return {
       dayjs,
+      formatDate,
       loadingMetadata,
       loadingResults,
       results,

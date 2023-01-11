@@ -260,7 +260,7 @@ export default {
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
     const sitreps = computed(() => store.state.feeds.sitreps);
     const loadingSitreps = computed(() => store.state.feeds.loading);
-    const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
+    const today = ref(dayjs().format("DD MMMM YYYY"));
 
     onMounted(() => {
       store.dispatch("daniel/getDanielArticles");

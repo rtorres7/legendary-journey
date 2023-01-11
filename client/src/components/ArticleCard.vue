@@ -25,7 +25,7 @@
           }}</span>
         </div>
         <div class="mt-2 text-sm">
-          {{ dayjs(article.date_published).format("DD MMM YYYY") }}
+          {{ formatDate(article.date_published) }}
         </div>
       </div>
       <div v-show="article.hasImage">
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
+import { useDate } from "@/composables/date";
 import { isEmpty } from "@/helpers";
 import { useRouter } from "vue-router";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
@@ -58,6 +58,7 @@ export default {
     },
   },
   setup() {
+    const { formatDate } = useDate();
     const router = useRouter();
 
     const isLocked = (article) => {
@@ -78,7 +79,7 @@ export default {
     };
 
     return {
-      dayjs,
+      formatDate,
       goToArticle,
       isLocked,
       toggleImgContainer,
