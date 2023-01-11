@@ -1,6 +1,7 @@
 import axios from "axios";
 //import Vue from "vue";
 
+axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 axios.interceptors.response.use(function (response) {

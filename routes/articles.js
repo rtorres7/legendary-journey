@@ -1,30 +1,46 @@
 var express = require("express");
 var router = express.Router();
-
+const moment = require("moment");
 const arxiv = require("arxiv-api");
 
 var Article = require("../models/articles");
 
 // GET
 router.get("/", (req, res) => {
-  Article.find({}, "title description", function (error, articles) {
-    if (error) {
-      console.error(error);
+  Article.find(
+    {},
+    "attributes doc_num title title_classification summary summary_classification date_published",
+    function (error, articles) {
+      if (error) {
+        console.error(error);
+      }
+      res.send({
+        woah: {
+          articles: articles,
+          featured: articles.slice(0, 3),
+          secondary: articles.slice(3, articles.length),
+        },
+      });
     }
-    res.send({
-      articles: articles,
-    });
-  }).sort({ _id: -1 });
+  ).sort({ _id: -1 });
 });
 
 // POST
 router.post("/", (req, res) => {
   var db = req.db;
   var title = req.body.title;
-  var description = req.body.description;
+  var title_classification = req.body.title_classification;
+  var summary = req.body.summary;
+  var summary_classification = req.body.summary_classification;
+  var date_published = moment.utc();
   var new_article = new Article({
-    title: title,
-    description: description,
+    attributes: {
+      title: title,
+      title_classification: title_classification,
+      summary: summary,
+      summary_classification: summary_classification,
+      date_published: date_published,
+    },
   });
 
   new_article.save(function (error) {
@@ -34,6 +50,7 @@ router.post("/", (req, res) => {
     res.send({
       success: true,
       message: "Article saved successfully!",
+      article: new_article,
     });
   });
 });
@@ -43,7 +60,7 @@ router.get("/:id", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
-    "title description",
+    "title title_classification summary summary_classification date_published",
     function (error, article) {
       if (error) {
         console.error(error);
@@ -58,20 +75,24 @@ router.put("/:id", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
-    "title description",
+    "title title_classification summary summary_classification date_published",
     function (error, article) {
       if (error) {
         console.error(error);
       }
 
       article.title = req.body.title;
-      article.description = req.body.description;
+      article.title_classification = req.body.title_classification;
+      article.summary = req.body.summary;
+      article.summary_classification = req.body.summary_classification;
+      article.date_published = req.body.date_published;
       article.save(function (error) {
         if (error) {
           console.log(error);
         }
         res.send({
           success: true,
+          article: article,
         });
       });
     }

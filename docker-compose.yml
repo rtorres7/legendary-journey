@@ -28,9 +28,14 @@ services:
     container_name: server
 
   server-database:
-    image: mongo
+    build: ./mongo
     ports:
       - 27017:27017
+    restart: always
     volumes:
-      - ./db:/data/db
+      - ./mongo/data:/data/db
     container_name: database
+    environment:
+      #MONGO_INITDB_ROOT_USERNAME: {{USERNAME}}
+      #MONGO_INITDB_ROOT_PASSWORD: {{PWD}}
+      MONGO_INITDB_DATABASE: articles

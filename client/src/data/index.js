@@ -17,7 +17,7 @@ export const user = {
 };
 
 export { articles } from "./articles";
-export { danielArticles, articlesForWire } from "./danielArticles";
+export { danielArticles, articlesForWire } from "./danielArticles.js";
 export { countries, regions } from "./regions";
 export { getSitreps, getSearchDataFromUrl } from "./search";
 export { danielArticlesDetails } from "./danielArticlesDetails";
