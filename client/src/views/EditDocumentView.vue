@@ -224,7 +224,7 @@
                   :items="formData.selectedActors.items"
                   multiple
                   @update:modelValue="
-                    updateField($event, 'non_state-actors', 'multiple')
+                    updateField($event, 'non_state_actors', 'multiple')
                   "
                   class="lg:w-1/2"
                 />
