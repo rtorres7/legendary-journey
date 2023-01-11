@@ -276,7 +276,7 @@
               <div class="flex flex-col space-y-4">
                 <DropZone
                   v-slot="{ dropZoneActive }"
-                  class="w-full p-4 text-center shadow-md border dark:border-0 energy:border-0  border-gray-200 bg-white dark:bg-slate-700 energy:bg-zinc-600"
+                  class="lg:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
                   @files-dropped="onDrop"
                 >
                   <label for="file-input" class="cursor-pointer">
