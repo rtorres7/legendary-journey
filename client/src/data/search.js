@@ -19,7 +19,7 @@ const chinaResult = {
     "China’s military responded to the surprise arrival in Taiwan of a new delegation of U.S. lawmakers by announcing a resumption of military drills around the island, in the latest flare-up of tensions in the region. The delegation, led by Senate Foreign Relations Committee member Ed Markey (D., Mass.), met with Taiwanese President Tsai Ing-wen on Monday to discuss maintenance of regional stability and deepening U.S.-Taiwan trade, according to Taiwan’s presidential office. The group arrived in Taipei on Sunday without having...",
   summary_classification: "U",
   highlighted_result: "",
-  doc_num: "WIReWIRe_sample_",
+  doc_num: "WIRe001_sample_",
   id: "87599999",
   posted_at: "2022-08-17T14:45:58Z",
   date_published: "2022-08-17",
@@ -841,7 +841,7 @@ export const getSitreps = [
   {
     attributes: {
       date_published: "01-02-23",
-      doc_num: "WIReWIRe_sample_",
+      doc_num: "WIRe001_sample_",
       product_type_name: "CT Weekly",
       title: "(U) Russian CT Weekly",
       org_restricted: true,
@@ -851,7 +851,7 @@ export const getSitreps = [
   {
     attributes: {
       date_published: "01-01-23",
-      doc_num: "WIReWIRe_sample_",
+      doc_num: "WIRe001_sample_",
       product_type_name: "Daily Brief",
       title: "(U) Chinese Daily Brief",
       org_restricted: false,
@@ -861,7 +861,7 @@ export const getSitreps = [
   {
     attributes: {
       date_published: "12-30-22",
-      doc_num: "WIReWIRe_sample_",
+      doc_num: "WIRe001_sample_",
       product_type_name: "Daily Brief",
       title: "(U) Iranian Daily Brief",
       org_restricted: false,
