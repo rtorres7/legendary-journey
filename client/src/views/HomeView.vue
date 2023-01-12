@@ -49,14 +49,7 @@
                   <template v-if="sitreps.length > 0">
                     <template v-for="item in sitreps" :key="item">
                       <div class="w-full h-40">
-                        <router-link
-                          :to="{
-                            name: 'article',
-                            params: { doc_num: item.doc_num },
-                          }"
-                        >
-                          <SituationalAwarenessCard :sitrep="item" />
-                        </router-link>
+                        <SituationalAwarenessCard :sitrep="item" />
                       </div>
                     </template>
                   </template>

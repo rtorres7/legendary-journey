@@ -43,7 +43,7 @@
             class="flex w-[200px] justify-center items-center font-medium cursor-pointer"
             hoverable
           >
-            <p class="z-5 p-10 text-2xl font-bold">{{ product.title }}</p>
+            <p class="z-5 p-10 text-2xl font-bold">{{ product.name }}</p>
             <BaseProductIcon
               class="absolute w-28 h-28 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
               :icon="product.type"
@@ -111,7 +111,10 @@
                       <span class="font-medium pr-1">{{
                         article.product_type
                       }}</span>
-                      | <span class="pl-1">{{ article.doc_num }}</span>
+                      |
+                      <span class="pl-1">{{
+                        transformWireUrl(article.doc_num)
+                      }}</span>
                     </p>
                     <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
@@ -163,6 +166,7 @@
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
+import { transformWireUrl } from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -218,7 +222,7 @@ export default {
           params: {
             date: route.params.date,
             id: 25,
-            doc_num: "WIReWIRe_sample_6",
+            doc_num: "WIRe001_sample_6",
           },
         });
       } else {
@@ -262,6 +266,7 @@ export default {
     );
 
     return {
+      transformWireUrl,
       products,
       goToArticle,
       selectedDate,

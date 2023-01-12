@@ -6,54 +6,63 @@
   "product_types": {
     "current": {
       "title": "Current",
+      "name": "Current",
       "summary": "",
       "topics": ["TERR"],
       "poc_info": "NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)"
     },
     "daily_brief": {
       "title": "Daily Brief",
+      "name": "Daily Brief",
       "summary": "The Daily Brief summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "ct_weekly": {
       "title": "CT Weekly",
+      "name": "CT Weekly",
       "summary": "The CT Weekly summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "ct_digest": {
       "title": "CT Digest",
+      "name": "CT Digest",
       "summary": "The CT Digest summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "svtc_notes": {
       "title": "SVTC Notes",
+      "name": "SVTC Notes",
       "summary": "The SVTC Notes summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "special_threat_matrix": {
       "title": "Reported Threats",
+      "name": "Reported Threats",
       "summary": "The Special Threat Matrix summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "threat_matrix": {
       "title": "Threat Matrix",
+      "name": "Threat Matrix",
       "summary": "The Threat Matrix summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "terrorism_summary": {
       "title": "Terrorism Summary",
+      "name": "Terrorism Summary",
       "summary": "The Terrorism summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
     },
     "terrorism_digest": {
       "title": "Terrorism Digest",
+      "name": "Terrorism Digest",
       "summary": "The Terrorism Digest summary description goes here.",
       "topics": ["TERR"],
       "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
