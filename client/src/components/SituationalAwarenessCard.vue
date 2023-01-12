@@ -2,13 +2,13 @@
   <a @click="goToArticle(sitrep)">
     <BaseCard
       :class="[
-        'h-full px-4 py-4', 
-        loading ? 'animate-pulse' : '', 
-        isLocked(sitrep) 
-          ? 'bg-slate-50 dark:bg-slate-800/75 energy:bg-zinc-700/75' 
+        'h-full px-4 py-4',
+        loading ? 'animate-pulse' : '',
+        isLocked(sitrep)
+          ? 'bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-600/50'
           : 'cursor-pointer',
-        ]"
-      hoverable
+      ]"
+      :hoverable="!isLocked(sitrep) ? true : false"
       :rounded="false"
     >
       <template v-if="loading">
