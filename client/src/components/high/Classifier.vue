@@ -73,7 +73,7 @@ export default {
     //TODO: There could be potential issues if we don't default the ClassifiedBy using the Tool's API. We need to look at some identifier to base this on.
 
     const assignModels = (xmlVal) => {
-      classificationBlock.value.setClassificationXML(xmlVal);
+      classification.setClassificationXML(xmlVal);
       classificationXml.value = xmlVal;
       classificationMarking.value = classification.getClassificationMarking();
       const { ClassificationHeader } = classification.getClassificationInJSON();

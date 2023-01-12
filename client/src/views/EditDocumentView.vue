@@ -224,7 +224,7 @@
                   :items="formData.selectedActors.items"
                   multiple
                   @update:modelValue="
-                    updateField($event, 'non_state-actors', 'multiple')
+                    updateField($event, 'non_state_actors', 'multiple')
                   "
                   class="lg:w-1/2"
                 />
@@ -275,15 +275,21 @@
               </div>
               <div class="flex flex-col space-y-4">
                 <DropZone
+                  v-slot="{ dropZoneActive }"
                   class="lg:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
-                  @files-dropped="addFiles"
+                  @files-dropped="onDrop"
                 >
                   <label for="file-input" class="cursor-pointer">
+                    <template v-if="dropZoneActive">
+                      <p>Drop files here</p>
+                    </template>
+                    <template v-else>
                     <p>Drag your files here or</p>
                     <p>
                       <span class="font-semibold">click here</span> to select
                       files
                     </p>
+                    </template>
                     <input
                       id="file-input"
                       type="file"
@@ -293,7 +299,7 @@
                     />
                   </label>
                 </DropZone>
-                <div v-if="files?.length" class="pb-4">
+                <div v-if="formData.attachments?.length || files?.length">
                   <h2 class="font-medium">Uploaded Files</h2>
                   <ul>
                     <FilePreview
@@ -313,7 +319,7 @@
                       :id="'attachment' + attachment.id"
                       :key="attachment"
                     >
-                      <div class="flex space-x-2 pb-2">
+                      <div class="flex space-x-2 pt-2 pb-2">
                         {{ attachment.file_name }} &nbsp;
                         <router-link
                           :to="
@@ -741,6 +747,11 @@ export default {
       uploadFiles(files.value);
     };
 
+    const onDrop = (file) => {
+      addFiles(file);
+      uploadFiles(files.value);
+    };
+
     const removeDocument = (attachmentID, doc_num) => {
       fetch("/documents/" + doc_num + "/attachments/" + attachmentID, {
         method: "DELETE",
@@ -830,6 +841,7 @@ export default {
       closePreviewDialog,
       openDialog,
       onInputChange,
+      onDrop,
       removeDocument,
       publishDisabled,
       documentNumber,
