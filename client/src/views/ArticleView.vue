@@ -216,7 +216,7 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { useDate } from "@/composables/date";
+import { formatDate } from "@/helpers";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -256,7 +256,6 @@ export default {
     },
   },
   setup(props) {
-    const { formatDate } = useDate();
     const store = useStore();
     const route = useRoute();
     const url = computed(() => window.location);

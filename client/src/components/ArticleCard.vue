@@ -42,8 +42,7 @@
 </template>
 
 <script>
-import { useDate } from "@/composables/date";
-import { isEmpty } from "@/helpers";
+import { isEmpty, formatDate } from "@/helpers";
 import { useRouter } from "vue-router";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import ArticleImage from "@/components/ArticleImage";
@@ -58,7 +57,6 @@ export default {
     },
   },
   setup() {
-    const { formatDate } = useDate();
     const router = useRouter();
 
     const isLocked = (article) => {

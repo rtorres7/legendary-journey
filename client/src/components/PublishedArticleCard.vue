@@ -79,7 +79,7 @@
   </BaseCard>
 </template>
 <script>
-import { useDate } from "@/composables/date";
+import { formatDate } from "@/helpers";
 import ArticleImage from "@/components/ArticleImage";
 
 export default {
@@ -101,8 +101,6 @@ export default {
     },
   },
   setup() {
-    const { formatDate } = useDate();
-
     return {
       formatDate,
     };

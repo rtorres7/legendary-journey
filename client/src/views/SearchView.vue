@@ -743,8 +743,12 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { useDate } from "@/composables/date";
-import { isEmpty, getValueForCode, getValueForName } from "@/helpers";
+import {
+  isEmpty,
+  getValueForCode,
+  getValueForName,
+  formatDate,
+} from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -805,7 +809,6 @@ export default {
     SearchResultsPagination,
   },
   setup() {
-    const { formatDate } = useDate();
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
