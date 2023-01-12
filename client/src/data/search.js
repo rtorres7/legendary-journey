@@ -844,6 +844,8 @@ export const getSitreps = [
       doc_num: "WIReWIRe_sample_",
       product_type_name: "CT Weekly",
       title: "(U) Russian CT Weekly",
+      org_restricted: true,
+      needed: {},
     },
   },
   {
@@ -852,6 +854,8 @@ export const getSitreps = [
       doc_num: "WIReWIRe_sample_",
       product_type_name: "Daily Brief",
       title: "(U) Chinese Daily Brief",
+      org_restricted: false,
+      needed: {},
     },
   },
   {
@@ -860,6 +864,8 @@ export const getSitreps = [
       doc_num: "WIReWIRe_sample_",
       product_type_name: "Daily Brief",
       title: "(U) Iranian Daily Brief",
+      org_restricted: false,
+      needed: {},
     },
   },
 ];
