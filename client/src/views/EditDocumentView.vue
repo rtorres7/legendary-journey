@@ -426,7 +426,6 @@ import {
   PaperClipIcon,
   LockClosedIcon,
 } from "@heroicons/vue/24/outline";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import axios from "@/config/wireAxios";
 import { getValueForCode, getValueForName } from "@/helpers";
 import DropZone from "@/components/DropZone";
@@ -434,6 +433,24 @@ import FilePreview from "@/components/FilePreview";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
 import ArticleView from "@/views/ArticleView";
+//ckEditor
+import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
+import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
+import ItalicPlugin from "@ckeditor/ckeditor5-basic-styles/src/italic";
+import Font from "@ckeditor/ckeditor5-font/src/font";
+import LinkPlugin from "@ckeditor/ckeditor5-link/src/link";
+import Heading from "@ckeditor/ckeditor5-heading/src/heading";
+import ParagraphPlugin from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+import DocumentListProperties from "@ckeditor/ckeditor5-list/src/documentlistproperties";
+import Image from "@ckeditor/ckeditor5-image/src/image";
+import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
+import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
+import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
+import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
+import ImageLink from "@ckeditor/ckeditor5-link/src/linkimage";
+import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
   {
@@ -494,7 +511,82 @@ export default {
       () => store.state.formMetadata.dissem_orgs.loading
     );
     const editor = ClassicEditor;
-    const editorConfig = ref({});
+    const editorConfig = ref({
+      plugins: [
+        EssentialsPlugin,
+        BoldPlugin,
+        ItalicPlugin,
+        Font,
+        LinkPlugin,
+        Heading,
+        ParagraphPlugin,
+        DocumentListProperties,
+        Image,
+        ImageInsert,
+        ImageToolbar,
+        ImageCaption,
+        ImageStyle,
+        ImageResize,
+        ImageLink,
+        SimpleUploadAdapter,
+      ],
+      toolbar: {
+        items: [
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "|",
+          "fontSize",
+          "fontFamily",
+          "fontColor",
+          "|",
+          "numberedList",
+          "bulletedList",
+          "|",
+          "link",
+          "insertImage",
+          "|",
+          "undo",
+          "redo",
+          "|",
+        ],
+      },
+      list: {
+        properties: {
+          styles: true,
+          startIndex: true,
+          reversed: true,
+        },
+      },
+      image: {
+        toolbar: [
+          "resizeImage:original",
+          "resizeImage:50",
+          "resizeImage:75",
+          "|",
+          "imageStyle:block",
+          "imageStyle:side",
+          "|",
+          "toggleImageCaption",
+          "imageTextAlternative",
+          "|",
+          "linkImage",
+        ],
+      },
+      simpleUpload: {
+        //the URL that images are uploaded to.
+        uploadUrl:
+          "https://hcxb0fjew5.execute-api.us-east-1.amazonaws.com/dev/upload",
+          //Enable the XMLHttpRequest.withCredentials property.
+          withCredentials: true,
+          //Headers sent along with the XMLHttpRequest to the upload server.
+          headers: {
+            "X-CSRF-TOKEN": "CSRF-Token",
+            Authorization: "Bearer <JSON Web Token",
+          },
+      },
+    });
     const { files, addFiles, removeFile } = useFileList();
     const { uploadFiles } = createUploader(
       "/documents/" + documentNumber + "/attachments/"
@@ -860,5 +952,25 @@ export default {
 <style>
 .ck-editor__editable_inline {
   height: 450px;
+}
+.ck.ck-content ul,
+.ck.ck-content ul li {
+  list-style-type: inherit;
+}
+.ck.ck-content ol,
+.ck.ck-content ul {
+  padding-left: 40px;
+}
+.ck.ck-content h2 {
+  font-size: 1.5em;
+}
+.ck.ck-content h3 {
+  font-size: 1.3em;
+}
+.ck.ck-content h4 {
+  font-size: 1.1em;
+}
+.ck.ck-content p {
+  font-size: 0.9em;
 }
 </style>
