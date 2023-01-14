@@ -407,4 +407,10 @@ export default {
 ::v-deep .source-reference {
   @apply hidden align-top;
 }
+.summary >>> figure {
+  display: inline-block;
+}
+.summary >>> figcaption {
+  text-align: center;
+}
 </style>

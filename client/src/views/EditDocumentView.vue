@@ -20,6 +20,7 @@
           >
             <template v-for="category in categories" :key="category">
               <div
+                class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75"
                 @click="
                   document
                     .getElementById(`${category.target}Section`)
@@ -29,10 +30,9 @@
                       inline: 'nearest',
                     })
                 "
-                class="cursor-pointer inline-flex lg:w-[200px] rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800/75 energy:hover:bg-zinc-700/75"
               >
                 <span class="sr-only">{{ category.name }}</span>
-                <component class="h-6 w-6" :is="category.icon" /><span
+                <component :is="category.icon" class="h-6 w-6" /><span
                   class="hidden lg:block pl-4"
                   >{{ category.name }}</span
                 >
@@ -59,9 +59,9 @@
                 v-model="formData.selectedProductType.model"
                 :label="formData.selectedProductType.label"
                 :items="formData.selectedProductType.items"
+                class="lg:w-1/3"
                 @update:modelValue="updateField($event, 'product_type_id')"
                 @clicked="openProductTypeDialog"
-                class="lg:w-1/3"
               />
             </div>
             <div
@@ -183,10 +183,10 @@
                     :items="formData.selectedTopics.items"
                     multiple
                     required
+                    class="lg:w-1/3"
                     @update:modelValue="
                       updateField($event, 'topics', 'multiple')
                     "
-                    class="lg:w-1/3"
                   />
                 </div>
               </div>
@@ -223,10 +223,10 @@
                   :label="formData.selectedActors.label"
                   :items="formData.selectedActors.items"
                   multiple
+                  class="lg:w-1/2"
                   @update:modelValue="
                     updateField($event, 'non_state_actors', 'multiple')
                   "
-                  class="lg:w-1/2"
                 />
                 <div class="lg:w-1/2">
                   <BaseTextarea
@@ -560,13 +560,15 @@ export default {
         },
       },
       image: {
+        styles: ["full", "side", "alignLeft", "alignRight"],
         toolbar: [
           "resizeImage:original",
           "resizeImage:50",
           "resizeImage:75",
           "|",
           "imageStyle:block",
-          "imageStyle:side",
+          "imageStyle:alignRight",
+          "imageStyle:alignLeft",
           "|",
           "toggleImageCaption",
           "imageTextAlternative",
@@ -576,15 +578,14 @@ export default {
       },
       simpleUpload: {
         //the URL that images are uploaded to.
-        uploadUrl:
-          "https://hcxb0fjew5.execute-api.us-east-1.amazonaws.com/dev/upload",
-          //Enable the XMLHttpRequest.withCredentials property.
-          withCredentials: true,
-          //Headers sent along with the XMLHttpRequest to the upload server.
-          headers: {
-            "X-CSRF-TOKEN": "CSRF-Token",
-            Authorization: "Bearer <JSON Web Token",
-          },
+        uploadUrl:"/documents/" + documentNumber + "/attachments/",
+        //Enable the XMLHttpRequest.withCredentials property.
+        withCredentials: true,
+        //Headers sent along with the XMLHttpRequest to the upload server.
+        headers: {
+          "X-CSRF-TOKEN": "CSRF-Token",
+          Authorization: "Bearer <JSON Web Token",
+        },
       },
     });
     const { files, addFiles, removeFile } = useFileList();
