@@ -3,10 +3,12 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "serve": "cross-env NODE_ENV=high vue-cli-service serve --mode high",
+    "serve": "cross-env NODE_ENV=highvue-cli-service serve --mode high",
     "build": "cross-env NODE_ENV=high vue-cli-service build --mode high",
     "serve:low": "cross-env NODE_ENV=low vue-cli-service serve --mode low",
     "build:low": "cross-env NODE_ENV=low vue-cli-service build --mode low",
+    "serve:container": "cross-env NODE_ENV=development vue-cli-service serve --mode low",
+    "build:container": "cross-env NODE_ENV=development vue-cli-service build --mode low",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

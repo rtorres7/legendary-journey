@@ -19,6 +19,7 @@ router.get("/", (req, res) => {
           articles: articles,
           featured: articles.slice(0, 3),
           secondary: articles.slice(3, articles.length),
+          briefs: articles.slice(0, 3), //TODO: need to only return sit awareness
         },
       });
     }
@@ -60,7 +61,7 @@ router.get("/:id", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
-    "title title_classification summary summary_classification date_published",
+    "attributes doc_num title title_classification summary summary_classification date_published",
     function (error, article) {
       if (error) {
         console.error(error);
@@ -75,7 +76,7 @@ router.put("/:id", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
-    "title title_classification summary summary_classification date_published",
+    "attributes doc_num title title_classification summary summary_classification date_published",
     function (error, article) {
       if (error) {
         console.error(error);
@@ -113,6 +114,45 @@ router.delete("/:id", (req, res) => {
       });
     }
   );
+});
+
+//TODO need to return date, id, doc_num
+//{"title":"15 January 2023 Current","summary":"","topics":["TERR"],"poc_info":"NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)","document_action":"create","html_body":"<p></p>","producing_office":"DNI/NCTC","publication_number":11914421479,"wire_id":"2023-01-15"}
+// router.post("/processDocument", (req, res) => {
+//   res.send({
+//     success: true,
+//   });
+// });
+
+//TODO need to return date, id, doc_num
+//{"title":"15 January 2023 Current","summary":"","topics":["TERR"],"poc_info":"NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)","document_action":"create","html_body":"<p></p>","producing_office":"DNI/NCTC","publication_number":11914421479,"wire_id":"2023-01-15"}
+router.post("/processDocument", (req, res) => {
+  var new_article = new Article({
+    //attributes: {
+    title: req.body.title,
+    summary: req.body.summary,
+    topics: req.body.topics,
+    poc_info: req.body.poc_info,
+    html_body: req.body.html_body,
+    publication_number: req.body.publication_number,
+    wire_id: req.body.wire_id,
+    date_published: moment.utc(),
+    doc_num: this._id,
+    id: this._id,
+    //},
+  });
+
+  new_article.save(function (error) {
+    if (error) {
+      console.log(error);
+    }
+    res.send({
+      article: new_article,
+      date: moment.utc(),
+      doc_num: new_article._id,
+      id: new_article._id,
+    });
+  });
 });
 
 /* router.get("/articles", (req, res) => {

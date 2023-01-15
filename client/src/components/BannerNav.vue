@@ -777,7 +777,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const environment = ref(process.env.NODE_ENV);
+    const environment = ref("process.env.NODE_ENV");
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
     });

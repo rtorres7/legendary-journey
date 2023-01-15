@@ -61,6 +61,11 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/articles", articlesRouter);
 app.use("/home", legacyRouter);
+app.use("/preload", legacyRouter);
+app.use("/wires", legacyRouter);
+app.use("/my_wire", legacyRouter);
+app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
+app.use("/special_editions", legacyRouter);
 
 module.exports = app;
