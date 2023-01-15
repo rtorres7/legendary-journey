@@ -116,16 +116,6 @@ router.delete("/:id", (req, res) => {
   );
 });
 
-//TODO need to return date, id, doc_num
-//{"title":"15 January 2023 Current","summary":"","topics":["TERR"],"poc_info":"NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)","document_action":"create","html_body":"<p></p>","producing_office":"DNI/NCTC","publication_number":11914421479,"wire_id":"2023-01-15"}
-// router.post("/processDocument", (req, res) => {
-//   res.send({
-//     success: true,
-//   });
-// });
-
-//TODO need to return date, id, doc_num
-//{"title":"15 January 2023 Current","summary":"","topics":["TERR"],"poc_info":"NCTC/DI Managing Editor, 932-4533 (secure), (571) 280-3627 (open)","document_action":"create","html_body":"<p></p>","producing_office":"DNI/NCTC","publication_number":11914421479,"wire_id":"2023-01-15"}
 router.post("/processDocument", (req, res) => {
   var new_article = new Article({
     //attributes: {
