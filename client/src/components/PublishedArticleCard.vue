@@ -72,14 +72,14 @@
             'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
           ]"
         >
-          {{ dayjs(article.date_published).format("ddd, MMMM D, YYYY") }}
+          {{ formatDate(article.date_published) }}
         </p>
       </div>
     </template>
   </BaseCard>
 </template>
 <script>
-import * as dayjs from "dayjs";
+import { formatDate } from "@/helpers";
 import ArticleImage from "@/components/ArticleImage";
 
 export default {
@@ -102,7 +102,7 @@ export default {
   },
   setup() {
     return {
-      dayjs,
+      formatDate,
     };
   },
 };

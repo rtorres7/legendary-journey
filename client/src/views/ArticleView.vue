@@ -66,7 +66,7 @@
         <div class="flex space-x-4 text-sm md:text-md">
           <p class="capitalize">
             {{ `${article.state} -` }}
-            {{ dayjs(article.date_published).format("ddd, MMMM D, YYYY") }}
+            {{ formatDate(article.date_published) }}
           </p>
           <p aria-hidden="true">●</p>
           <p v-if="article.authors?.length > 0">
@@ -121,11 +121,11 @@
               </p>
               <p>
                 <span class="font-semibold">Posted: </span
-                >{{ dayjs(article.posted_at).format("DD MMM YYYY hh:mm:ss") }}
+                >{{ formatDate(article.posted_at) }}
               </p>
               <p>
                 <span class="font-semibold">Publication Date: </span
-                >{{ dayjs(article.date_published).format("DD MMM YYYY") }}
+                >{{ formatDate(article.date_published) }}
               </p>
               <p>
                 <span class="font-semibold">Contact: </span
@@ -180,7 +180,7 @@
                       :minDate="article.display_date"
                       :maxDate="new Date()"
                       :enableTimePicker="false"
-                      format="MMM dd, yyyy"
+                      format="dd MMMM yyyy"
                       week-start="0"
                       auto-apply
                     />
@@ -193,7 +193,7 @@
                       :minDate="article.display_date"
                       :maxDate="new Date()"
                       :enableTimePicker="false"
-                      format="MMM dd, yyyy"
+                      format="dd MMMM yyyy"
                       week-start="0"
                       auto-apply
                     />
@@ -216,6 +216,7 @@
 
 <script>
 import * as dayjs from "dayjs";
+import { formatDate } from "@/helpers";
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -292,10 +293,6 @@ export default {
       store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
     });
 
-    const formatDate = (date) => {
-      return dayjs(date).format("YYYY-MM-DD");
-    };
-
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== "article-preview") {
         metricStartDate.value = dayjs(article.value.display_date).toDate();
@@ -370,7 +367,7 @@ export default {
     );
 
     return {
-      dayjs,
+      formatDate,
       article,
       loadingArticle,
       loadingFeaturedArticles,

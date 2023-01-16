@@ -45,7 +45,7 @@
           <div
             class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
           >
-            Posted {{ sitrep.date_published }}
+            Posted {{ formatDate(sitrep.date_published) }}
           </div>
         </div>
       </template>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { isEmpty } from "@/helpers";
+import { isEmpty, formatDate } from "@/helpers";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import { useRouter } from "vue-router";
 
@@ -90,6 +90,7 @@ export default {
     };
 
     return {
+      formatDate,
       isLocked,
       goToArticle,
     };
