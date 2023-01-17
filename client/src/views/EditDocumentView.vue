@@ -4,7 +4,8 @@
   >
     Edit Product
   </p>
-  <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
+  <template 
+    v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -757,14 +758,23 @@ export default {
     onMounted(() => {
       store.dispatch("formMetadata/getDissemOrgs");
       store.dispatch("formMetadata/getProductTypes");
-      store.dispatch("document/getDocument", {
-        date: route.params.date,
-        id: route.params.id,
-      });
     });
 
     watch([loadingMetadata, loadingDissemOrgs], () => {
       if (!loadingMetadata.value && !loadingDissemOrgs.value) {
+        store.dispatch("document/getDocument", {
+          date: route.params.date,
+          id: route.params.id,
+        });
+      }
+    });
+
+    watch([loadingMetadata, loadingDissemOrgs, loadingDocument], () => {
+      if (
+          !loadingMetadata.value && 
+          !loadingDissemOrgs.value && 
+          !loadingDocument.value
+      ) {
         formData.value = buildFormData();
       }
     });
