@@ -89,7 +89,7 @@
             class="h-[350px] w-[350px] float-right"
           />
           <p v-if="article.html_body" class="whitespace-pre-line">
-            <span class="summary" v-html="article.html_body" />
+            <span class="ck-content summary" v-html="article.html_body" />
           </p>
         </div>
         <p
@@ -403,11 +403,5 @@ export default {
 
 ::v-deep .source-reference {
   @apply hidden align-top;
-}
-.summary >>> figure {
-  display: inline-block;
-}
-.summary >>> figcaption {
-  text-align: center;
 }
 </style>

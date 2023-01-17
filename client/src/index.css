@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "content-styles.css";
 
 /* Setting highlight colors globally for emphasized text */
 @layer base {
