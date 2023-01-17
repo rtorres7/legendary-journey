@@ -284,11 +284,11 @@
                       <p>Drop files here</p>
                     </template>
                     <template v-else>
-                    <p>Drag your files here or</p>
-                    <p>
-                      <span class="font-semibold">click here</span> to select
-                      files
-                    </p>
+                      <p>Drag your files here or</p>
+                      <p>
+                        <span class="font-semibold">click here</span> to select
+                        files
+                      </p>
                     </template>
                     <input
                       id="file-input"
@@ -578,7 +578,7 @@ export default {
       },
       simpleUpload: {
         //the URL that images are uploaded to.
-        uploadUrl:"/documents/" + documentNumber + "/attachments/",
+        uploadUrl: "/documents/" + documentNumber + "/attachments/",
         //Enable the XMLHttpRequest.withCredentials property.
         withCredentials: true,
         //Headers sent along with the XMLHttpRequest to the upload server.
@@ -702,7 +702,7 @@ export default {
           break;
         default:
           payload.value[property] =
-            property === "product_type_id" ? model.id : model;
+            property === "product_type_id" ? model.code : model;
           if (property === "worldwide" && model) {
             payload.value.countries = [];
             formData.value.selectedCountries.model = [];
