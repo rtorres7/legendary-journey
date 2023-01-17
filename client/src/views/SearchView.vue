@@ -572,7 +572,7 @@
       <!-- Search Results Filters -->
       <BaseCard
         v-show="selectedView.label === 'List'"
-        class="hidden lg:block basis-1/4 ml-4 h-full sticky top-[130px]"
+        class="hidden lg:block basis-1/4 ml-4 h-full"
       >
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
