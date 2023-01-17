@@ -4,7 +4,14 @@
   >
     Edit Product
   </p>
-  <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
+  <template 
+    v-if="
+      loadingMetadata || 
+      loadingDissemOrgs || 
+      loadingProductTypes || 
+      loadingDocument
+    "
+  >
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -513,6 +520,9 @@ export default {
     const loadingDissemOrgs = computed(
       () => store.state.formMetadata.dissem_orgs.loading
     );
+    const loadingProductTypes = computed(
+      () => store.state.formMetadata.product_types.loading
+    );
     const editor = ClassicEditor;
     const editorConfig = ref({
       plugins: [
@@ -752,14 +762,28 @@ export default {
     onMounted(() => {
       store.dispatch("formMetadata/getDissemOrgs");
       store.dispatch("formMetadata/getProductTypes");
-      store.dispatch("document/getDocument", {
-        date: route.params.date,
-        id: route.params.id,
-      });
     });
 
-    watch([loadingMetadata, loadingDissemOrgs], () => {
-      if (!loadingMetadata.value && !loadingDissemOrgs.value) {
+    watch([loadingMetadata, loadingDissemOrgs, loadingProductTypes], () => {
+      if (
+        !loadingMetadata.value &&
+        !loadingDissemOrgs.value &&
+        !loadingProductTypes.value
+      ) {
+        store.dispatch("document/getDocument", {
+          date: route.params.date,
+          id: route.params.id,
+        });
+      }
+    });
+
+    watch([loadingMetadata, loadingDissemOrgs, loadingProductTypes, loadingDocument], () => {
+      if (
+          !loadingMetadata.value && 
+          !loadingDissemOrgs.value && 
+          !loadingProductTypes.value && 
+          !loadingDocument.value
+      ) {
         formData.value = buildFormData();
       }
     });
@@ -954,6 +978,7 @@ export default {
       loadingMetadata,
       loadingDocument,
       loadingDissemOrgs,
+      loadingProductTypes,
       editor,
       editorConfig,
       files,
