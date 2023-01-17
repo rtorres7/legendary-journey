@@ -404,6 +404,9 @@
             </BaseDialog>
           </BaseButton>
           <BaseButton @click.prevent="cancel">Cancel</BaseButton>
+          <BaseButton type="danger" @click.prevent="deleteDocument"
+            >Delete</BaseButton
+          >
         </div>
       </div>
     </form>
@@ -856,6 +859,43 @@ export default {
         .catch(console.log("Failed"));
     };
 
+    const deleteDocument = () => {
+      if (process.env.NODE_ENV === "low") {
+        createNotification({
+          title: "Successfully Deleted",
+          message: "The product has been deleted successfully.",
+          type: "success",
+        });
+        router.push({
+          name: "publish",
+          params: { date: route.params.date },
+        });
+      } else {
+        axios
+          .post("/documents/" + route.params.doc_num + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Successfully Deleted",
+                message: response.data.status,
+                type: "success",
+              });
+              router.push({
+                name: "publish",
+                params: { date: route.params.date },
+              });
+            }
+          });
+      }
+    };
+
     const submit = (action) => {
       if (action === "publish" && publishDisabled.value) {
         console.warn(
@@ -936,6 +976,7 @@ export default {
       onInputChange,
       onDrop,
       removeDocument,
+      deleteDocument,
       publishDisabled,
       documentNumber,
       updateField,
