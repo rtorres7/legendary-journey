@@ -53,7 +53,7 @@ export default {
       facetsList.value[key].expand = !facetsList.value[key].expand;
     };
 
-    //TODO: This is a copy from SearchView. Figure out a clean way to refactor this to avoid repeating code.
+    //TODO: This is copied from SearchView. Figure out a clean way to refactor this to avoid repeating code.
     const getBooleanMapping = (queryKey) => {
       if (queryKey === "product_types[]") {
         return false;
