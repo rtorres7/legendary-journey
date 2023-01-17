@@ -766,7 +766,7 @@ export default {
         .catch(console.log("Failed"));
     };
 
-    const deleteDocument = (doc_num) => {
+    const deleteDocument = () => {
       if (process.env.NODE_ENV === "low") {
         createNotification({
           title: "Successfully Deleted",
@@ -778,26 +778,28 @@ export default {
           params: { date: route.params.date },
         });
       } else {
-        axios.delete("/documents/" + doc_num).then((response) => {
-          if (response.data.error) {
-            createNotification({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              autoClose: false,
-            });
-          } else {
-            createNotification({
-              title: "Successfully Deleted",
-              message: response.data.status,
-              type: "success",
-            });
-            router.push({
-              name: "publish",
-              params: { date: route.params.date },
-            });
-          }
-        });
+        axios
+          .post("/documents/" + route.params.doc_num + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Successfully Deleted",
+                message: response.data.status,
+                type: "success",
+              });
+              router.push({
+                name: "publish",
+                params: { date: route.params.date },
+              });
+            }
+          });
       }
     };
 
