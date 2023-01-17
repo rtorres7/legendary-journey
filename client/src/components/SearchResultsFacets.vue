@@ -53,11 +53,43 @@ export default {
       facetsList.value[key].expand = !facetsList.value[key].expand;
     };
 
-    const filter = (type, code) => {
+    //TODO: This is a copy from SearchView. Figure out a clean way to refactor this to avoid repeating code.
+    const getBooleanMapping = (queryKey) => {
+      if (queryKey === "product_types[]") {
+        return false;
+      } else {
+        const bracketIndex = queryKey.indexOf("[]");
+        if (bracketIndex !== -1) {
+          return queryKey.slice(0, bracketIndex).concat("_bool");
+        }
+        return false;
+      }
+    };
+
+    const filter = (facetType, code) => {
       let query = {
         ...route.query,
       };
-      query[`${type}[]`] = code;
+      const type = `${facetType}[]`;
+      if (query[type]) {
+        query[type].push(code);
+      } else {
+        query[type] = [code];
+      }
+      //TODO: This is copied from SearchView. Figure out a clean way to refactor this to avoid repeating code.
+      const booleanMapping = getBooleanMapping(type);
+      if (booleanMapping) {
+        const mappingFound = Object.keys(query).find(
+          (queryKey) => queryKey === booleanMapping
+        );
+        if (!mappingFound && query[type] && query[type].length > 1) {
+          query[booleanMapping] = "and";
+        }
+        if (mappingFound && query[type].length <= 1) {
+          delete query[booleanMapping];
+        }
+      }
+      console.log("query: ", query);
       router.push({
         name: "search",
         query,
