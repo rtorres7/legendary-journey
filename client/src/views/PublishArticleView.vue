@@ -203,6 +203,7 @@ export default {
       html_body: "<p></p>",
       producing_office: "DNI/NCTC",
       publication_number: Math.floor(100000 * Math.random() * 900000),
+      product_type_id: 10376,
       title: "Draft Document Title",
       topics: ["TERR"],
       wire_id: route.params.date,
@@ -227,6 +228,7 @@ export default {
         } else {
           product.payload = { ...defaultPayload };
         }
+        product.payload.product_type_id = product.code;
         availableProducts.push({ icon: "wave", ...product });
       });
       if (isCommunityExclusive.value) {
