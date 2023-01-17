@@ -9,7 +9,7 @@ export const user = {
   },
   name: "Jonathan Oszczakiewicz",
   email: "jonathan@gmail.com",
-  roles: ["wire_editor", "ntk", "role_manager"],
+  roles: ["ntk", "role_manager", "wire_editor", "community_editor"],
   has_org: true,
   organization: "DNI",
   phone_number: "999-9999",

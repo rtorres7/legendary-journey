@@ -61,7 +61,6 @@
                 :items="formData.selectedProductType.items"
                 class="lg:w-1/3"
                 @update:modelValue="updateField($event, 'product_type_id')"
-                @clicked="openProductTypeDialog"
               />
             </div>
             <div
@@ -502,7 +501,9 @@ export default {
     const router = useRouter();
     const createNotification = inject("create-notification");
     const documentNumber = route.params.doc_num;
-
+    const isCommunityExclusive = computed(
+      () => store.getters["user/isCommunityExclusive"]
+    );
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
     const loadingDocument = computed(() => store.state.document.loading);
@@ -629,7 +630,11 @@ export default {
         selectedProductType: {
           label: "Product Type",
           model: [],
-          items: criteria.value.product_types,
+          items: isCommunityExclusive.value
+            ? criteria.value.product_types.filter(
+                (product) => product.name === "Community Product"
+              )
+            : criteria.value.product_types,
         },
         selectedTopics: {
           label: "Topics",
