@@ -765,7 +765,7 @@ export default {
       payload.value.countries = data.countries.map((country) => country.code);
       payload.value.topics = data.topics.map((topic) => topic.code);
       payload.value.non_state_actors = data.non_state_actors.map(
-        (nonStateActors) => nonStateActors.code
+        (nonStateActors) => nonStateActors.name
       );
     };
 
