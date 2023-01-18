@@ -399,7 +399,7 @@
               :isOpen="isPreviewDialogOpen"
               @close="closePreviewDialog"
             >
-              <ArticleView :doc_num="documentNumber" :wantsPreview="true" />
+              <ProductView :doc_num="documentNumber" :wantsPreview="true" />
             </BaseDialog>
           </BaseButton>
           <BaseButton @click.prevent="cancel">Cancel</BaseButton>
@@ -448,7 +448,7 @@ import DropZone from "@/components/DropZone";
 import FilePreview from "@/components/FilePreview";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
-import ArticleView from "@/views/ArticleView";
+import ProductView from "@/views/ProductView";
 //ckEditor
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
@@ -507,7 +507,7 @@ export default {
     DocumentMinusIcon,
     DropZone,
     FilePreview,
-    ArticleView,
+    ProductView,
   },
   setup() {
     const store = useStore();

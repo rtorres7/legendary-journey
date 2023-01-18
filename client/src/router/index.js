@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
 import { metadata } from "@/config";
-import ArticleView from "../views/ArticleView.vue";
 import AttachmentView from "../views/AttachmentView.vue";
-import EditDocumentView from "../views/EditDocumentView";
+import EditProductView from "../views/EditProductView.vue";
 import HomeView from "../views/HomeView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
-import PublishArticleView from "../views/PublishArticleView.vue";
+import ProductView from "../views/ProductView.vue";
+import PublishProductView from "../views/PublishProductView.vue";
 import SearchView from "../views/SearchView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
@@ -21,15 +21,15 @@ const routes = [
     },
   },
   {
-    path: "/article/:doc_num",
-    name: "article",
-    component: ArticleView,
+    path: "/product/:doc_num",
+    name: "product",
+    component: ProductView,
     props: true,
   },
   {
-    path: "/article/:doc_num/preview",
-    name: "article-preview",
-    component: ArticleView,
+    path: "/product/:doc_num/preview",
+    name: "product-preview",
+    component: ProductView,
     props: true,
   },
   {
@@ -81,9 +81,9 @@ const routes = [
   {
     path: "/:date/publish",
     name: "publish",
-    component: PublishArticleView,
+    component: PublishProductView,
     meta: {
-      title: "Publish an Article",
+      title: "Publish a Product",
     },
   },
   {
@@ -103,11 +103,11 @@ const routes = [
     },
   },
   {
-    path: "/article/:date/:id/:doc_num/edit",
+    path: "/product/:date/:id/:doc_num/edit",
     name: "edit",
-    component: EditDocumentView,
+    component: EditProductView,
     meta: {
-      title: "Edit Document",
+      title: "Edit Product",
     },
   },
   {

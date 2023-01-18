@@ -29,7 +29,7 @@
         </div>
       </div>
       <div v-show="article.hasImage">
-        <ArticleImage
+        <ProductImage
           class="w-[165px] h-[165px] sm:max-w-full h-full"
           :article="article"
           smartRender
@@ -45,11 +45,11 @@
 import { isEmpty, formatDate } from "@/helpers";
 import { useRouter } from "vue-router";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
-import ArticleImage from "@/components/ArticleImage";
+import ProductImage from "@/components/ProductImage";
 export default {
   components: {
     LockClosedIcon,
-    ArticleImage,
+    ProductImage,
   },
   props: {
     article: {
@@ -66,7 +66,7 @@ export default {
     const goToArticle = (article) => {
       if (!isLocked(article)) {
         router.push({
-          name: "article",
+          name: "product",
           params: { doc_num: article.doc_num },
         });
       }
