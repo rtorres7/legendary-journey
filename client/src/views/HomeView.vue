@@ -87,7 +87,7 @@
                   <div class="w-full h-36 text-left mr-4">
                     <router-link
                       :to="{
-                        name: 'article',
+                        name: 'product',
                         params: { doc_num: item.doc_num },
                       }"
                     >
@@ -114,17 +114,17 @@
           class="py-4 lg:py-0 h-[425px] lg:h-full lg:basis-2/3 xl:basis-2/3 lg:pl-4 xl:pr-4"
         >
           <template v-if="loadingDanielArticles">
-            <PublishedArticleCard loading headline />
+            <PublishedProductCard loading headline />
           </template>
           <template v-else>
             <template v-if="danielArticles.length > 0">
               <router-link
                 :to="{
-                  name: 'article',
+                  name: 'product',
                   params: { doc_num: danielArticles[0].attributes.doc_num },
                 }"
               >
-                <PublishedArticleCard
+                <PublishedProductCard
                   :article="danielArticles[0].attributes"
                   headline
                 />
@@ -153,7 +153,7 @@
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
               <div class="w-full h-[288px]">
-                <PublishedArticleCard :loading="true" />
+                <PublishedProductCard :loading="true" />
               </div>
             </template>
           </template>
@@ -165,11 +165,11 @@
               <div class="w-full h-[288px] max-w-[591px]">
                 <router-link
                   :to="{
-                    name: 'article',
+                    name: 'product',
                     params: { doc_num: article.attributes.doc_num },
                   }"
                 >
-                  <PublishedArticleCard :article="article.attributes" />
+                  <PublishedProductCard :article="article.attributes" />
                 </router-link>
               </div>
             </template>
@@ -187,7 +187,7 @@
       <template v-if="loadingDanielArticles">
         <template v-for="n in 12" :key="n">
           <div class="w-full h-[264px]">
-            <PublishedArticleCard loading />
+            <PublishedProductCard loading />
           </div>
         </template>
       </template>
@@ -200,11 +200,11 @@
             <div class="w-full h-[264px]">
               <router-link
                 :to="{
-                  name: 'article',
+                  name: 'product',
                   params: { doc_num: article.attributes.doc_num },
                 }"
               >
-                <PublishedArticleCard :article="article.attributes" />
+                <PublishedProductCard :article="article.attributes" />
               </router-link>
             </div>
           </template>
@@ -224,7 +224,7 @@ import * as dayjs from "dayjs";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import PublishedArticleCard from "@/components/PublishedArticleCard";
+import PublishedProductCard from "@/components/PublishedProductCard";
 import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
 
 const carouselSettings = {
@@ -244,7 +244,7 @@ export default {
     Carousel,
     Slide,
     Navigation,
-    PublishedArticleCard,
+    PublishedProductCard,
     SituationalAwarenessCard,
   },
   setup() {

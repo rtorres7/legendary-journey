@@ -174,7 +174,7 @@
                             type="file"
                             class="sr-only"
                             accept="image/jpeg, image/png, image/jpg"
-                            @change="changeArticleImage"
+                            @change="changeProductImage"
                           />
                         </label>
                       </div>
@@ -187,7 +187,7 @@
                         type="button"
                         class="w-8 h-8 flex items-center justify-center"
                         tabindex="0"
-                        @click="removeArticleImage"
+                        @click="removeProductImage"
                       >
                         <span class="sr-only">Remove Current Image</span>
                         <XMarkIcon class="h-5 w-5" aria-hidden="true" />
@@ -466,12 +466,12 @@ export default {
       store.dispatch("search/setLoading", enabled);
     });
 
-    const removeArticleImage = () => {
+    const removeProductImage = () => {
       store.dispatch("testConsole/setUploadBinary", null);
       uploadFileName.value = null;
     };
 
-    const changeArticleImage = (event) => {
+    const changeProductImage = (event) => {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         store.dispatch("testConsole/setUploadBinary", reader.result);
@@ -553,8 +553,8 @@ export default {
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
       loadingSituationalAwarenessEnabled,
-      removeArticleImage,
-      changeArticleImage,
+      removeProductImage,
+      changeProductImage,
       toggleNotificationToast,
       changePublishedArticleCount,
       feedCountFromStore,

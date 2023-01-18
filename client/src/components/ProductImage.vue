@@ -11,7 +11,7 @@
         id="article-img"
         :class="[
           smartRender ? '' : 'inset-x-0',
-          'absolute h-full mx-auto z-[5]',
+          'absolute h-full mx-auto z-[3]',
         ]"
         :src="getImgUrl(article)"
         alt=""

@@ -38,7 +38,7 @@
           type="button"
           class="w-8 h-8 flex items-center justify-center"
           tabindex="0"
-          @click="removeArticleImage"
+          @click="removeProductImage"
         >
           <span class="sr-only">Remove Current Image</span>
           <XMarkIcon class="h-5 w-5" aria-hidden="true" />
@@ -97,7 +97,7 @@ export default {
       event.target.value = null;
     };
 
-    const removeArticleImage = () => {
+    const removeProductImage = () => {
       uploadFile.value = null;
       emit("onImageRemoved");
     };
@@ -111,7 +111,7 @@ export default {
 
     return {
       changeImage,
-      removeArticleImage,
+      removeProductImage,
       uploadFile,
       close,
       getImgUrl,

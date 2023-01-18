@@ -36,25 +36,30 @@
       <h3 class="font-semibold text-lg">Create a Product</h3>
       <p>Select the product you'd like to create</p>
     </div>
-    <div class="flex space-x-4 mb-4">
-      <template v-for="product in products.slice(0, 2)" :key="product">
-        <a @click="goToArticle(product.type)">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mb-6"
+    >
+      <template v-for="product in availableProductTypes" :key="product">
+        <div class="" @click="goToArticle(product.payload)">
           <BaseCard
-            class="flex w-[200px] justify-center items-center font-medium cursor-pointer"
+            class="flex justify-center items-center font-medium cursor-pointer"
             hoverable
           >
-            <p class="z-5 p-10 text-2xl font-bold">{{ product.name }}</p>
+            <p class="z-5 p-10 text-2xl font-bold">
+              {{ product.displayName }}
+            </p>
             <BaseProductIcon
-              class="absolute w-28 h-28 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
-              :icon="product.type"
-          /></BaseCard>
-        </a>
+              class="absolute w-24 h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
+              :icon="product.icon"
+            />
+          </BaseCard>
+        </div>
       </template>
     </div>
     <p>
-      Or
+      Not sure which product to choose?
       <a class="font-semibold cursor-pointer" @click="goToArticle()"
-        >click here</a
+        >Click here</a
       >
       to start with a blank template.
     </p>
@@ -77,7 +82,7 @@
             >
               <div class="flex px-2">
                 <div class="pr-4">
-                  <ArticleImage
+                  <ProductImage
                     class="h-[125px] w-[125px]"
                     :article="article"
                   />
@@ -171,13 +176,13 @@ import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
-import ArticleImage from "@/components/ArticleImage";
+import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
     CalendarIcon,
     PencilIcon,
-    ArticleImage,
+    ProductImage,
   },
   setup() {
     const route = useRoute();
@@ -185,37 +190,67 @@ export default {
     const store = useStore();
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
+    const loadingCriteria = computed(() => store.state.metadata.loading);
+    const criteria = computed(() => store.state.metadata.criteria);
+    const articles = computed(() => store.state.wires.articles);
+    const loadingArticles = computed(() => store.state.wires.loading);
+    const isCommunityExclusive = computed(
+      () => store.getters["user/isCommunityExclusive"]
+    );
 
-    const products = [];
-    Object.keys(metadata.product_types).forEach((type) => {
-      products.push({
-        type,
-        ...metadata.product_types[type],
-      });
-    });
-
-    const getPayload = (type) => {
-      const metadataPayload = type
-        ? {
-            ...metadata.product_types[type],
-            title: `${dayjs().format("DD MMMM YYYY")} ${
-              metadata.product_types[type].title
-            }`,
-          }
-        : {
-            title: "Draft Document Title",
-          };
-      return {
-        ...metadataPayload,
-        document_action: "create",
-        html_body: "<p></p>",
-        producing_office: "DNI/NCTC",
-        publication_number: Math.floor(100000 * Math.random() * 900000),
-        wire_id: route.params.date,
-      };
+    const defaultPayload = {
+      document_action: "create",
+      html_body: "<p></p>",
+      producing_office: "DNI/NCTC",
+      publication_number: Math.floor(100000 * Math.random() * 900000),
+      product_type_id: 10376,
+      title: "Draft Document Title",
+      topics: ["TERR"],
+      wire_id: route.params.date,
     };
 
-    const goToArticle = (type) => {
+    const buildAvailableProducts = () => {
+      let availableProducts = [];
+      criteria.value.product_types.forEach((type) => {
+        const match = metadata.product_types.find(
+          ({ code }) => code === type.code
+        );
+        const product = { ...match };
+        if (product.payload) {
+          const formattedTitle = `${dayjs().format("DD MMMM YYYY")} ${
+            product.payload.title
+          }`;
+          product.payload = {
+            ...defaultPayload,
+            ...product.payload,
+            title: formattedTitle,
+          };
+        } else {
+          product.payload = { ...defaultPayload };
+        }
+        product.payload.product_type_id = product.code;
+        availableProducts.push({ icon: "wave", ...product });
+      });
+      if (isCommunityExclusive.value) {
+        availableProducts = availableProducts.filter(
+          (product) => product.displayName === "Community Product"
+        );
+      }
+      return availableProducts;
+    };
+
+    const availableProductTypes = ref(buildAvailableProducts());
+
+    watch([loadingCriteria], () => {
+      if (!loadingCriteria.value) {
+        availableProductTypes.value = buildAvailableProducts();
+      }
+    });
+
+    const goToArticle = (payload) => {
+      if (!payload) {
+        payload = { ...defaultPayload };
+      }
       if (process.env.NODE_ENV === "low") {
         router.push({
           name: "edit",
@@ -226,19 +261,17 @@ export default {
           },
         });
       } else {
-        axios
-          .post("/articles/processDocument", getPayload(type))
-          .then((response) => {
-            console.log("/articles/processDocument :", response);
-            router.push({
-              name: "edit",
-              params: {
-                date: route.params.date,
-                id: response.data.article.id,
-                doc_num: response.data.doc_num,
-              },
-            });
+        axios.post("/articles/processDocument", payload).then((response) => {
+          console.log("/articles/processDocument :", response);
+          router.push({
+            name: "edit",
+            params: {
+              date: route.params.date,
+              id: response.data.article.id,
+              doc_num: response.data.doc_num,
+            },
           });
+        });
       }
     };
 
@@ -246,9 +279,6 @@ export default {
       const date = dayjs(selectedDate.value).format("YYYY-MM-DD");
       router.push({ name: "publish", params: { date } });
     };
-
-    const articles = computed(() => store.state.wires.articles);
-    const loadingArticles = computed(() => store.state.wires.loading);
 
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
@@ -267,7 +297,7 @@ export default {
 
     return {
       transformWireUrl,
-      products,
+      availableProductTypes,
       goToArticle,
       selectedDate,
       routeDate,

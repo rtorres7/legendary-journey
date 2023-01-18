@@ -61,7 +61,6 @@
                 :items="formData.selectedProductType.items"
                 class="lg:w-1/3"
                 @update:modelValue="updateField($event, 'product_type_id')"
-                @clicked="openProductTypeDialog"
               />
             </div>
             <div
@@ -284,11 +283,11 @@
                       <p>Drop files here</p>
                     </template>
                     <template v-else>
-                    <p>Drag your files here or</p>
-                    <p>
-                      <span class="font-semibold">click here</span> to select
-                      files
-                    </p>
+                      <p>Drag your files here or</p>
+                      <p>
+                        <span class="font-semibold">click here</span> to select
+                        files
+                      </p>
                     </template>
                     <input
                       id="file-input"
@@ -400,13 +399,30 @@
               :isOpen="isPreviewDialogOpen"
               @close="closePreviewDialog"
             >
-              <ArticleView :doc_num="documentNumber" :wantsPreview="true" />
+              <ProductView :doc_num="documentNumber" :wantsPreview="true" />
             </BaseDialog>
           </BaseButton>
           <BaseButton @click.prevent="cancel">Cancel</BaseButton>
+          <BaseButton type="danger" @click.prevent="openDeleteDialog"
+            >Delete</BaseButton
+          >
         </div>
       </div>
     </form>
+    <BaseDialog
+      :isOpen="isDeleteDialogOpen"
+      :title="'Delete Product'"
+      class="max-w-fit"
+      @close="closeDeleteDialog"
+    >
+      <p class="py-4 pr-4">Are you sure you want to do this?</p>
+      <template #actions>
+        <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
+        <BaseButton type="danger" @click.prevent="deleteDocument">
+          Delete
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </template>
 </template>
 
@@ -432,7 +448,7 @@ import DropZone from "@/components/DropZone";
 import FilePreview from "@/components/FilePreview";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
-import ArticleView from "@/views/ArticleView";
+import ProductView from "@/views/ProductView";
 //ckEditor
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
@@ -491,7 +507,7 @@ export default {
     DocumentMinusIcon,
     DropZone,
     FilePreview,
-    ArticleView,
+    ProductView,
   },
   setup() {
     const store = useStore();
@@ -499,7 +515,9 @@ export default {
     const router = useRouter();
     const createNotification = inject("create-notification");
     const documentNumber = route.params.doc_num;
-
+    const isCommunityExclusive = computed(
+      () => store.getters["user/isCommunityExclusive"]
+    );
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
     const loadingDocument = computed(() => store.state.document.loading);
@@ -578,26 +596,24 @@ export default {
       },
       simpleUpload: {
         //the URL that images are uploaded to.
-        uploadUrl:"/documents/" + documentNumber + "/attachments/",
+        uploadUrl:
+          "/documents/" + documentNumber + "/attachments?is_visible=false",
         //Enable the XMLHttpRequest.withCredentials property.
         withCredentials: true,
         //Headers sent along with the XMLHttpRequest to the upload server.
-        headers: {
-          "X-CSRF-TOKEN": "CSRF-Token",
-          Authorization: "Bearer <JSON Web Token",
-        },
+        headers: {},
       },
     });
     const { files, addFiles, removeFile } = useFileList();
     const { uploadFiles } = createUploader(
       "/documents/" + documentNumber + "/attachments/"
     );
-    const isProductTypeDialogOpen = ref(false);
-    const openProductTypeDialog = () => {
-      isProductTypeDialogOpen.value = true;
+    const isDeleteDialogOpen = ref(false);
+    const openDeleteDialog = () => {
+      isDeleteDialogOpen.value = true;
     };
-    const closeProductTypeDialog = () => {
-      isProductTypeDialogOpen.value = false;
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
     };
 
     const buildFormData = () => {
@@ -629,7 +645,11 @@ export default {
         selectedProductType: {
           label: "Product Type",
           model: [],
-          items: criteria.value.product_types,
+          items: isCommunityExclusive.value
+            ? criteria.value.product_types.filter(
+                (product) => product.name === "Community Product"
+              )
+            : criteria.value.product_types,
         },
         selectedTopics: {
           label: "Topics",
@@ -702,7 +722,7 @@ export default {
           break;
         default:
           payload.value[property] =
-            property === "product_type_id" ? model.id : model;
+            property === "product_type_id" ? model.code : model;
           if (property === "worldwide" && model) {
             payload.value.countries = [];
             formData.value.selectedCountries.model = [];
@@ -752,14 +772,23 @@ export default {
     onMounted(() => {
       store.dispatch("formMetadata/getDissemOrgs");
       store.dispatch("formMetadata/getProductTypes");
-      store.dispatch("document/getDocument", {
-        date: route.params.date,
-        id: route.params.id,
-      });
     });
 
     watch([loadingMetadata, loadingDissemOrgs], () => {
       if (!loadingMetadata.value && !loadingDissemOrgs.value) {
+        store.dispatch("document/getDocument", {
+          date: route.params.date,
+          id: route.params.id,
+        });
+      }
+    });
+
+    watch([loadingMetadata, loadingDissemOrgs, loadingDocument], () => {
+      if (
+        !loadingMetadata.value &&
+        !loadingDissemOrgs.value &&
+        !loadingDocument.value
+      ) {
         formData.value = buildFormData();
       }
     });
@@ -856,6 +885,43 @@ export default {
         .catch(console.log("Failed"));
     };
 
+    const deleteDocument = () => {
+      if (process.env.NODE_ENV === "low") {
+        createNotification({
+          title: "Successfully Deleted",
+          message: "The product has been deleted successfully.",
+          type: "success",
+        });
+        router.push({
+          name: "publish",
+          params: { date: route.params.date },
+        });
+      } else {
+        axios
+          .post("/documents/" + route.params.doc_num + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Successfully Deleted",
+                message: response.data.status,
+                type: "success",
+              });
+              router.push({
+                name: "publish",
+                params: { date: route.params.date },
+              });
+            }
+          });
+      }
+    };
+
     const submit = (action) => {
       if (action === "publish" && publishDisabled.value) {
         console.warn(
@@ -919,6 +985,9 @@ export default {
       loadingDissemOrgs,
       editor,
       editorConfig,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
       files,
       addFiles,
       removeFile,
@@ -936,15 +1005,13 @@ export default {
       onInputChange,
       onDrop,
       removeDocument,
+      deleteDocument,
       publishDisabled,
       documentNumber,
       updateField,
       updateSelectedDate,
       submit,
       cancel,
-      isProductTypeDialogOpen,
-      openProductTypeDialog,
-      closeProductTypeDialog,
     };
   },
 };

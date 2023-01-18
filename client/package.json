@@ -33,7 +33,6 @@
     "core-js": "^3.8.3",
     "postcss-loader": "^4.0.0",
     "dayjs": "^1.11.1",
-    "fuse.js": "^6.6.2",
     "inter-ui": "^3.19.3",
     "lodash": "^4.17.21",
     "raw-loader": "^4.0.2",

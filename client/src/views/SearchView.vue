@@ -482,7 +482,7 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <ArticleCard :article="result" />
+                <ProductCard :article="result" />
               </template>
             </div>
           </template>
@@ -572,7 +572,7 @@
       <!-- Search Results Filters -->
       <BaseCard
         v-show="selectedView.label === 'List'"
-        class="hidden lg:block basis-1/4 ml-4 h-full sticky top-[130px]"
+        class="hidden lg:block basis-1/4 ml-4 h-full"
       >
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
@@ -772,7 +772,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
-import ArticleCard from "@/components/ArticleCard";
+import ProductCard from "@/components/ProductCard";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 import SearchResultsPagination from "@/components/SearchResultsPagination";
 const sortOptions = [
@@ -804,7 +804,7 @@ export default {
     ChevronUpDownIcon,
     XMarkIcon,
     LockClosedIcon,
-    ArticleCard,
+    ProductCard,
     SearchResultsFacets,
     SearchResultsPagination,
   },
@@ -1414,7 +1414,7 @@ export default {
     const goToArticle = (result) => {
       if (!isLocked(result)) {
         router.push({
-          name: "article",
+          name: "product",
           params: { doc_num: result.doc_num },
         });
       }
