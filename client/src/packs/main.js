@@ -7,7 +7,7 @@ import App from "../App.vue";
 import router from "../router";
 import store from "../store";
 import "vue3-carousel/dist/carousel.css";
-import "./content-styles.css";
+import "../content-styles.css";
 import "../index.css";
 import * as CKEditor from "@ckeditor/ckeditor5-vue";
 
