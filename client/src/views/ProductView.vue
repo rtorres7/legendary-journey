@@ -315,6 +315,7 @@ export default {
 
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== "product-preview") {
+        document.title = article.value.title;
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
       }

@@ -1,7 +1,6 @@
 import { createStore } from "vuex";
 import articles from "./modules/articles";
 import daniel from "./modules/daniel";
-import danielSearch from "./modules/daniel-search";
 import search from "./modules/search";
 import specialEdition from "./modules/specialEdition";
 import specialEditions from "./modules/specialEditions";
@@ -30,7 +29,6 @@ export default createStore({
   modules: {
     articles,
     daniel,
-    danielSearch,
     search,
     specialEdition,
     specialEditions,
