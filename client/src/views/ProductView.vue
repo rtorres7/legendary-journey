@@ -40,6 +40,13 @@
             </p>
           </div>
         </div>
+        <div>
+          <LinkIcon
+            class="h-6 w-6 cursor-pointer"
+            aria-hidden="true"
+            @click="copyUrl"
+          />
+        </div>
         <div v-show="canManageWire">
           <router-link
             :to="{
@@ -220,11 +227,12 @@
 <script>
 import * as dayjs from "dayjs";
 import { formatDate } from "@/helpers";
-import { onMounted, computed, ref, watch } from "vue";
+import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   ChevronDownIcon,
+  LinkIcon,
   EnvelopeIcon,
   PencilIcon,
 } from "@heroicons/vue/24/outline";
@@ -237,6 +245,7 @@ import ProductMetrics from "@/components/ProductMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    LinkIcon,
     EnvelopeIcon,
     PencilIcon,
     Disclosure,
@@ -262,7 +271,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const url = computed(() => window.location);
-
+    const createNotification = inject("create-notification");
     const article = computed(() => store.state.danielDetails.document);
     const loadingArticle = computed(() => store.state.danielDetails.loading);
     const featuredArticles = computed(() => store.state.daniel.articles);
@@ -284,6 +293,14 @@ export default {
     );
     const updateEmailCount = () => {
       store.dispatch("danielDetails/saveEmailCount");
+    };
+    const copyUrl = () => {
+      navigator.clipboard.writeText(url.value);
+      createNotification({
+        message: "URL Copied to Clipboard",
+        type: "success",
+        canClose: false,
+      });
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
@@ -385,6 +402,7 @@ export default {
       isDraft,
       emailCount,
       updateEmailCount,
+      copyUrl,
       canManageWire,
       url,
     };
