@@ -41,8 +41,8 @@
           </div>
         </div>
         <div>
-          <ClipboardDocumentIcon 
-            class="h-6 w-6 cursor-pointer" 
+          <ClipboardDocumentIcon
+            class="h-6 w-6 cursor-pointer"
             aria-hidden="true"
             @click="copyUrl"
           />
@@ -297,9 +297,9 @@ export default {
     const copyUrl = () => {
       navigator.clipboard.writeText(url.value);
       createNotification({
-        title: "URL Copied to Clipboard",
-        message: "Product URL has been copied to the clipboard",
+        message: "URL Copied to Clipboard",
         type: "success",
+        canClose: false,
       });
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
