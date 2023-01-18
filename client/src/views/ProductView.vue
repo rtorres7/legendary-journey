@@ -154,6 +154,9 @@
             </ol>
           </DisclosurePanel>
         </Disclosure>
+        <div class="text-center pb-2 text-sm lg:text-md">
+          {{ article.classification }}
+        </div>
       </div>
       <div
         class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
