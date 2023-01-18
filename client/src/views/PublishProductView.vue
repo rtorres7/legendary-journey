@@ -92,8 +92,8 @@
                     :to="{
                       name:
                         article.state === 'draft'
-                          ? 'article-preview'
-                          : 'article',
+                          ? 'product-preview'
+                          : 'product',
                       params: { doc_num: article.doc_num },
                     }"
                   >
