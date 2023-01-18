@@ -41,7 +41,7 @@
           </div>
         </div>
         <div>
-          <ClipboardDocumentIcon
+          <LinkIcon
             class="h-6 w-6 cursor-pointer"
             aria-hidden="true"
             @click="copyUrl"
@@ -232,7 +232,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   ChevronDownIcon,
-  ClipboardDocumentIcon,
+  LinkIcon,
   EnvelopeIcon,
   PencilIcon,
 } from "@heroicons/vue/24/outline";
@@ -245,7 +245,7 @@ import ProductMetrics from "@/components/ProductMetrics";
 export default {
   components: {
     ChevronDownIcon,
-    ClipboardDocumentIcon,
+    LinkIcon,
     EnvelopeIcon,
     PencilIcon,
     Disclosure,
