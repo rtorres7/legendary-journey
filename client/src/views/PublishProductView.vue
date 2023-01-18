@@ -82,7 +82,7 @@
             >
               <div class="flex px-2">
                 <div class="pr-4">
-                  <ArticleImage
+                  <ProductImage
                     class="h-[125px] w-[125px]"
                     :article="article"
                   />
@@ -176,13 +176,13 @@ import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
-import ArticleImage from "@/components/ArticleImage";
+import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
     CalendarIcon,
     PencilIcon,
-    ArticleImage,
+    ProductImage,
   },
   setup() {
     const route = useRoute();
@@ -203,6 +203,7 @@ export default {
       html_body: "<p></p>",
       producing_office: "DNI/NCTC",
       publication_number: Math.floor(100000 * Math.random() * 900000),
+      product_type_id: 10376,
       title: "Draft Document Title",
       topics: ["TERR"],
       wire_id: route.params.date,
@@ -227,6 +228,7 @@ export default {
         } else {
           product.payload = { ...defaultPayload };
         }
+        product.payload.product_type_id = product.code;
         availableProducts.push({ icon: "wave", ...product });
       });
       if (isCommunityExclusive.value) {

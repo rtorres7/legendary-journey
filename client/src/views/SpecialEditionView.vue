@@ -67,7 +67,7 @@
             :key="article.id"
           >
             <BaseCard class="h-full" hoverable :rounded="false">
-              <ArticleCard :article="article" />
+              <ProductCard :article="article" />
             </BaseCard>
           </template>
         </template>
@@ -86,7 +86,7 @@
               :key="article.id"
             >
               <BaseCard class="h-full" hoverable :rounded="false">
-                <ArticleCard :article="article" />
+                <ProductCard :article="article" />
               </BaseCard>
             </template>
           </div>
@@ -119,7 +119,7 @@
               >
                 <router-link
                   :to="{
-                    name: 'article',
+                    name: 'product',
                     params: { doc_num: reading.doc_num },
                   }"
                   class="hover:underline"
@@ -180,7 +180,7 @@
                           >
                             <router-link
                               :to="{
-                                name: 'article',
+                                name: 'product',
                                 params: { doc_num: article.doc_num },
                               }"
                               class="hover:underline text-md lg:text-sm"
@@ -234,7 +234,7 @@ import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import ArticleCard from "@/components/ArticleCard";
+import ProductCard from "@/components/ProductCard";
 import Pagination from "@/components/Pagination";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
@@ -244,7 +244,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronUpIcon,
-    ArticleCard,
+    ProductCard,
     Pagination,
     SpecialEditionCreateEditDialog,
   },

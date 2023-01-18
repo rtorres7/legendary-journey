@@ -62,6 +62,7 @@ const russiaResult = {
   regions: ["UKR", "RUS"],
 };
 
+//TODO: Had to change this to WIRE001_sample_ for this to work
 const zelenskyResult = {
   title: "Inside Zelensky's World",
   title_classification: "U",
@@ -69,7 +70,7 @@ const zelenskyResult = {
   summary_classification: "U",
   highlighted_result:
     '... awake and wonders whether he missed something, forgot someone. “It’s pointless,” Volodymyr \u003cem\u003eZelensky\u003c/em\u003e," told me... "last defenders are besieged. A critical battle has started in the east. Amid all this, \u003cem\u003eZelensky\u003c/em\u003e, the comedian...',
-  doc_num: "BBK303597595551223",
+  doc_num: "WIRe001_sample_",
   id: "87599999",
   posted_at: "2022-05-02T14:45:58Z",
   date_published: "2022-05-02",

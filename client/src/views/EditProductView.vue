@@ -4,8 +4,7 @@
   >
     Edit Product
   </p>
-  <template 
-    v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
+  <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -400,16 +399,30 @@
               :isOpen="isPreviewDialogOpen"
               @close="closePreviewDialog"
             >
-              <ArticleView :doc_num="documentNumber" :wantsPreview="true" />
+              <ProductView :doc_num="documentNumber" :wantsPreview="true" />
             </BaseDialog>
           </BaseButton>
           <BaseButton @click.prevent="cancel">Cancel</BaseButton>
-          <BaseButton type="danger" @click.prevent="deleteDocument"
+          <BaseButton type="danger" @click.prevent="openDeleteDialog"
             >Delete</BaseButton
           >
         </div>
       </div>
     </form>
+    <BaseDialog
+      :isOpen="isDeleteDialogOpen"
+      :title="'Delete Product'"
+      class="max-w-fit"
+      @close="closeDeleteDialog"
+    >
+      <p class="py-4 pr-4">Are you sure you want to do this?</p>
+      <template #actions>
+        <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
+        <BaseButton type="danger" @click.prevent="deleteDocument">
+          Delete
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </template>
 </template>
 
@@ -435,7 +448,7 @@ import DropZone from "@/components/DropZone";
 import FilePreview from "@/components/FilePreview";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
-import ArticleView from "@/views/ArticleView";
+import ProductView from "@/views/ProductView";
 //ckEditor
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
@@ -494,7 +507,7 @@ export default {
     DocumentMinusIcon,
     DropZone,
     FilePreview,
-    ArticleView,
+    ProductView,
   },
   setup() {
     const store = useStore();
@@ -583,7 +596,8 @@ export default {
       },
       simpleUpload: {
         //the URL that images are uploaded to.
-        uploadUrl: "/documents/" + documentNumber + "/attachments?is_visible=false",
+        uploadUrl:
+          "/documents/" + documentNumber + "/attachments?is_visible=false",
         //Enable the XMLHttpRequest.withCredentials property.
         withCredentials: true,
         //Headers sent along with the XMLHttpRequest to the upload server.
@@ -594,12 +608,12 @@ export default {
     const { uploadFiles } = createUploader(
       "/documents/" + documentNumber + "/attachments/"
     );
-    const isProductTypeDialogOpen = ref(false);
-    const openProductTypeDialog = () => {
-      isProductTypeDialogOpen.value = true;
+    const isDeleteDialogOpen = ref(false);
+    const openDeleteDialog = () => {
+      isDeleteDialogOpen.value = true;
     };
-    const closeProductTypeDialog = () => {
-      isProductTypeDialogOpen.value = false;
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
     };
 
     const buildFormData = () => {
@@ -771,9 +785,9 @@ export default {
 
     watch([loadingMetadata, loadingDissemOrgs, loadingDocument], () => {
       if (
-          !loadingMetadata.value && 
-          !loadingDissemOrgs.value && 
-          !loadingDocument.value
+        !loadingMetadata.value &&
+        !loadingDissemOrgs.value &&
+        !loadingDocument.value
       ) {
         formData.value = buildFormData();
       }
@@ -971,6 +985,9 @@ export default {
       loadingDissemOrgs,
       editor,
       editorConfig,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
       files,
       addFiles,
       removeFile,
@@ -995,9 +1012,6 @@ export default {
       updateSelectedDate,
       submit,
       cancel,
-      isProductTypeDialogOpen,
-      openProductTypeDialog,
-      closeProductTypeDialog,
     };
   },
 };

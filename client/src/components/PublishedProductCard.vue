@@ -38,7 +38,7 @@
       </div>
     </template>
     <template v-else>
-      <ArticleImage
+      <ProductImage
         :class="[headline ? 'h-3/5' : 'h-2/3']"
         :article="article"
       />
@@ -80,11 +80,11 @@
 </template>
 <script>
 import { formatDate } from "@/helpers";
-import ArticleImage from "@/components/ArticleImage";
+import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
-    ArticleImage,
+    ProductImage,
   },
   props: {
     article: {

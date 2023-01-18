@@ -82,7 +82,7 @@ export default {
     const goToArticle = (sitrep) => {
       if (!isLocked(sitrep)) {
         router.push({
-          name: "article",
+          name: "product",
           params: { doc_num: sitrep.doc_num },
         });
         console.log(sitrep.org_restricted);
