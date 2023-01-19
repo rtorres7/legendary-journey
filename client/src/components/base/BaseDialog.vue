@@ -36,6 +36,7 @@
               >
                 {{ title }}
                 <button
+                  v-show="canClose"
                   type="button"
                   class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center"
                   tabindex="0"
@@ -53,7 +54,7 @@
               >
                 <div class="flex space-x-3">
                   <slot name="actions">
-                    <BaseButton @click.prevent="close">Close</BaseButton>
+                    <BaseButton v-show="canClose" @click.prevent="close">Close</BaseButton>
                   </slot>
                 </div>
               </div>
@@ -90,6 +91,10 @@ export default {
     title: {
       type: String,
     },
+    canClose: {
+      type: Boolean,
+      default: true,
+    }
   },
   emits: ["close"],
   setup(props, { emit }) {

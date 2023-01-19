@@ -11,7 +11,20 @@
   </template>
   <template v-else>
     <form ref="publishingForm">
-      <BaseCard class="flex mt-4 p-6">
+      <BaseCard class="flex mt-4 p-6" :class="savingDocument ? 'blur-sm' : ''">
+        <template v-if="savingDocument">
+          <BaseDialog
+            class="w-80"
+            :isOpen="savingDocument"
+            :canClose=false
+            @close="!savingDocument"
+          >
+            <div class="flex flex-col items-center">
+              <p class="pb-8 text-lg">Saving changes ... Please wait</p>
+              <BaseLoadingSpinner class="h-16 w-16"/>
+            </div>
+          </BaseDialog>
+        </template>
         <div
           class="lg:min-w-[215px] border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
@@ -386,13 +399,13 @@
         <div class="flex flex-wrap gap-4">
           <BaseButton
             type="submit"
-            :disabled="publishDisabled"
+            :disabled="publishDisabled || savingDocument"
             @click.prevent="submit('publish')"
           >
             Publish
           </BaseButton>
-          <BaseButton @click.prevent="submit('save')">Save</BaseButton>
-          <BaseButton @click.prevent="openDialog"
+          <BaseButton :disabled="savingDocument" @click.prevent="submit('save')">Save</BaseButton>
+          <BaseButton :disabled="savingDocument" @click.prevent="openDialog"
             >Preview
             <BaseDialog
               class="max-w-[1300px]"
@@ -402,8 +415,8 @@
               <ProductView :doc_num="documentNumber" :wantsPreview="true" />
             </BaseDialog>
           </BaseButton>
-          <BaseButton @click.prevent="cancel">Cancel</BaseButton>
-          <BaseButton type="danger" @click.prevent="openDeleteDialog"
+          <BaseButton :disabled="savingDocument" @click.prevent="cancel">Cancel</BaseButton>
+          <BaseButton type="danger" :disabled="savingDocument" @click.prevent="openDeleteDialog"
             >Delete</BaseButton
           >
         </div>
@@ -611,7 +624,9 @@ export default {
     );
     const isDeleteDialogOpen = ref(false);
     const openDeleteDialog = () => {
-      isDeleteDialogOpen.value = true;
+      if (!savingDocument.value) {
+        isDeleteDialogOpen.value = true;
+      }
     };
     const closeDeleteDialog = () => {
       isDeleteDialogOpen.value = false;
@@ -789,7 +804,9 @@ export default {
       isPreviewDialogOpen.value = false;
     };
     const openDialog = () => {
-      isPreviewDialogOpen.value = true;
+      if (!savingDocument.value) {
+        isPreviewDialogOpen.value = true;
+      }
     };
 
     const preloadPayload = (data) => {
@@ -919,40 +936,47 @@ export default {
 
     const deleteDocument = () => {
       if (process.env.NODE_ENV === "low") {
-        createNotification({
-          title: "Successfully Deleted",
-          message: "The product has been deleted successfully.",
-          type: "success",
-        });
-        router.push({
-          name: "publish",
-          params: { date: route.params.date },
-        });
-      } else {
-        axios
-          .post("/documents/" + route.params.doc_num + "/deleteMe")
-          .then((response) => {
-            if (response.data.error) {
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              createNotification({
-                title: "Successfully Deleted",
-                message: response.data.status,
-                type: "success",
-              });
-              router.push({
-                name: "publish",
-                params: { date: route.params.date },
-              });
-            }
+        if (!savingDocument.value) {
+          createNotification({
+            title: "Successfully Deleted",
+            message: "The product has been deleted successfully.",
+            type: "success",
           });
+          router.push({
+            name: "publish",
+            params: { date: route.params.date },
+          });
+        }
+      } else {
+        if (!savingDocument.value) {
+          axios
+            .post("/documents/" + route.params.doc_num + "/deleteMe")
+            .then((response) => {
+              if (response.data.error) {
+                createNotification({
+                  title: "Error",
+                  message: response.data.error,
+                  type: "error",
+                  autoClose: false,
+                });
+              } else {
+                createNotification({
+                  title: "Successfully Deleted",
+                  message: response.data.status,
+                  type: "success",
+                });
+                router.push({
+                  name: "publish",
+                  params: { date: route.params.date },
+                });
+              }
+            });
+        }
       }
     };
+
+    let save = ref(false);
+    const savingDocument = computed(() => { return save.value});
 
     const submit = (action) => {
       if (action === "publish" && publishDisabled.value) {
@@ -960,6 +984,7 @@ export default {
           "You're attempting to publish an article without the required fields."
         );
       } else {
+        save.value = true;
         axios
           .post("/articles/processDocument", {
             document_action: action,
@@ -1003,11 +1028,24 @@ export default {
               }
             }
           });
+          if (process.env.NODE_ENV === "low") {
+            setTimeout(() => {
+              save.value = false;
+              createNotification({
+                    message: "Successfully Saved",
+                    type: "success",
+                  });
+            }, 3000)
+          } else {
+            save.value = false;
+          }
       }
     };
 
     const cancel = () => {
-      router.push({ name: "publish", params: { date: route.params.date } });
+      if(!savingDocument.value) {
+        router.push({ name: "publish", params: { date: route.params.date } });
+      }
     };
 
     return {
@@ -1043,6 +1081,8 @@ export default {
       updateField,
       updateSelectedDate,
       submit,
+      save,
+      savingDocument,
       cancel,
     };
   },
