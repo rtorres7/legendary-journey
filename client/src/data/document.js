@@ -1,5 +1,5 @@
 export const document = {
-  control_to: [],
+  control_to: false,
   dissem_orgs: [],
   countries: [],
   topics: [{ code: "TERR" }],

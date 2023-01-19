@@ -883,7 +883,9 @@ export default {
           documentData.value.classification_xml;
         formData.value.pocInfo = documentData.value.poc_info;
         formData.value.title = documentData.value.title;
-        formData.value.attachments = documentData.value.attachments;
+        formData.value.attachments = documentData.value.attachments?.filter(
+          (attachment) => attachment.visible === true
+        );
         formData.value.summary = documentData.value.summary;
         formData.value.summaryClassificationXML =
           documentData.value.summary_classif_xml;
@@ -987,7 +989,7 @@ export default {
                   type: "success",
                 });
                 router.push({
-                  name: "article",
+                  name: "product",
                   params: { doc_num: route.params.doc_num },
                 });
               } else {
