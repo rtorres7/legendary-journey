@@ -134,7 +134,7 @@
             </div>
           </DisclosurePanel>
         </Disclosure>
-        <Disclosure v-slot="{ open }">
+        <!-- <Disclosure v-slot="{ open }">
           <DisclosureButton class="flex space-x-2 text-sm">
             <span>SOURCES</span>
             <ChevronDownIcon
@@ -153,7 +153,7 @@
               </div>
             </ol>
           </DisclosurePanel>
-        </Disclosure>
+        </Disclosure> -->
         <div class="text-center pb-2 text-sm lg:text-md">
           {{ article.classification }}
         </div>
