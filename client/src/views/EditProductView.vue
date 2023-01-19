@@ -442,6 +442,7 @@ import {
   PaperClipIcon,
   LockClosedIcon,
 } from "@heroicons/vue/24/outline";
+import { metadata } from "@/config";
 import axios from "@/config/wireAxios";
 import { getValueForCode, getValueForName } from "@/helpers";
 import DropZone from "@/components/DropZone";
@@ -692,6 +693,34 @@ export default {
         document.querySelector(".fileUpload").files[0];
     };
 
+    const prepopulateFields = (model) => {
+      const { payload } = metadata.product_types.find(
+        ({ code }) => code === model.code
+      );
+      const product = { ...payload };
+      if (product.title) {
+        formData.value.title = `${dayjs().format("DD MMMM YYYY")} ${
+          product.title
+        }`;
+      }
+      if (product.summary) {
+        formData.value.summary = product.summary;
+      }
+      if (product.poc_info) {
+        formData.value.pocInfo = product.poc_info;
+      }
+      const topics = product.topics ? product.topics : ["TERR"];
+      const topicsToSelect = [];
+      topics.forEach((topic) => {
+        const topicValue = getValueForCode(
+          formData.value.selectedTopics.items,
+          topic
+        );
+        topicsToSelect.push(topicValue);
+      });
+      formData.value.selectedTopics.model = topicsToSelect;
+    };
+
     const updateField = (model, property, type) => {
       const codes = [];
       switch (type) {
@@ -721,6 +750,9 @@ export default {
           payload.value[property] = codes;
           break;
         default:
+          if (property === "product_type_id") {
+            prepopulateFields(model);
+          }
           payload.value[property] =
             property === "product_type_id" ? model.code : model;
           if (property === "worldwide" && model) {
@@ -765,7 +797,7 @@ export default {
       payload.value.countries = data.countries.map((country) => country.code);
       payload.value.topics = data.topics.map((topic) => topic.code);
       payload.value.non_state_actors = data.non_state_actors.map(
-        (nonStateActors) => nonStateActors.code
+        (nonStateActors) => nonStateActors.name
       );
     };
 

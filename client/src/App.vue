@@ -46,6 +46,7 @@
         :title="item.title"
         :message="item.message"
         :auto-close="item.autoClose"
+        :can-close="item.canClose"
         :duration="item.duration"
         @close="
           () => {

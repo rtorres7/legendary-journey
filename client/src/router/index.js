@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "@/store";
 import { metadata } from "@/config";
 import AttachmentView from "../views/AttachmentView.vue";
 import EditProductView from "../views/EditProductView.vue";
@@ -37,13 +36,16 @@ const routes = [
     name: "attachment",
     component: AttachmentView,
     props: true,
+    meta: {
+      viewType: "attachment",
+    },
   },
   {
     path: "/issues/:name",
     name: "issues",
     component: SearchView,
     meta: {
-      title: "Issues",
+      viewType: "search",
     },
   },
   {
@@ -51,7 +53,7 @@ const routes = [
     name: "regions",
     component: SearchView,
     meta: {
-      title: "Regions",
+      viewType: "search",
     },
   },
   {
@@ -59,7 +61,7 @@ const routes = [
     name: "subregions",
     component: SearchView,
     meta: {
-      title: "Subregions",
+      viewType: "search",
     },
   },
   {
@@ -67,7 +69,7 @@ const routes = [
     name: "countries",
     component: SearchView,
     meta: {
-      title: "Countries",
+      viewType: "search",
     },
   },
   {
@@ -75,7 +77,7 @@ const routes = [
     name: "search",
     component: SearchView,
     meta: {
-      title: "Search",
+      viewType: "search",
     },
   },
   {
@@ -131,33 +133,19 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  //TODO: Handle 403s appropriately for admin-level pages
-  if (to.meta.admin) {
-    if (store.state.admin) {
-      next();
-    } else {
-      next({ name: "home" });
+  if (to.meta.viewType) {
+    switch (to.meta.viewType) {
+      case "attachment":
+        document.title = to.params.url;
+        break;
+      case "search":
+        document.title = to.params.name ? to.params.name : "Search";
+        break;
     }
   } else {
-    if (to.meta.title) {
-      if (
-        to.name === "issues" ||
-        to.name === "regions" ||
-        to.name === "subregions" ||
-        (to.name === "countries" && to.params.name)
-      ) {
-        document.title = to.params.name;
-      } else {
-        document.title = `${to.meta.title}`;
-      }
-      next();
-    } else if (to.params.url) {
-      document.title = `${to.params.url}`;
-      next();
-    } else {
-      next();
-    }
+    document.title = to.meta.title ? to.meta.title : metadata.application_name;
   }
+  next();
 });
 
 export default router;

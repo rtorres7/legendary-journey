@@ -99,6 +99,7 @@
       "icon": "analytics",
       "payload": {
         "title": "Threat Matrix",
+        "topics": ["TERR", "HSEC"],
         "summary": "The Threat Matrix summary description goes here.",
         "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
       }

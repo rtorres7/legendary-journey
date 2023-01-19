@@ -3,15 +3,15 @@ import uniqueID from "@/composables/uniqueID";
 
 const defaultNotificationOptions = {
   type: "info",
-  message: "Ooops! A message was not provided",
   autoClose: true,
+  canClose: true,
   duration: 5,
 };
 
 export default function useNotifications() {
   const notifications = ref([]);
 
-  const createNotification= (options) => {
+  const createNotification = (options) => {
     const _options = Object.assign({ ...defaultNotificationOptions }, options);
 
     notifications.value.push(

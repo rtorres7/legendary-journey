@@ -4,6 +4,7 @@
     :style="`--toast-duration: ${duration}s`"
   >
     <div
+      v-if="canClose"
       class="absolute top-4 right-4 flex items-center justify-center cursor-pointer"
       title="Close"
       @click="close"
@@ -66,10 +67,15 @@ export default {
     },
     message: {
       type: String,
-      default: "Ooops! A message was not provided.",
+      default: null,
       required: false,
     },
     autoClose: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
+    canClose: {
       type: Boolean,
       default: true,
       required: false,
