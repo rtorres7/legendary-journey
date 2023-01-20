@@ -11,12 +11,12 @@
   </template>
   <template v-else>
     <form ref="publishingForm">
-      <BaseCard class="flex mt-4 p-6" :class="savingDocument ? 'blur-sm' : ''">
+      <BaseCard class="flex mt-4 p-6" :class="savingDocument ? 'blur-md' : ''">
         <template v-if="savingDocument">
           <BaseDialog
             class="w-80"
             :isOpen="savingDocument"
-            :canClose=false
+            :savingOverlay=true
             @close="!savingDocument"
           >
             <div class="flex flex-col items-center">

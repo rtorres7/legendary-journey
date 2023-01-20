@@ -27,16 +27,19 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="inline-block w-full p-6 text-left align-middle transition-all transform text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-800 energy:bg-zinc-800 shadow-lg rounded-lg"
+              class="inline-block w-full p-6 text-left align-middle transition-all transform text-slate-900 dark:text-slate-300 energy:text-zinc-300"
+              :class="!savingOverlay ? 'bg-white dark:bg-slate-800 energy:bg-zinc-800 shadow-lg rounded-lg' : ''"
               v-bind="$attrs"
             >
               <div
-                class="border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
-                :class="title ? 'pb-4 text-lg' : 'pb-10'"
+                :class="[
+                  title ? 'pb-4 text-lg' : 'pb-10', 
+                  !savingOverlay ? 'border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50' : ''
+                ]"
               >
                 {{ title }}
                 <button
-                  v-show="canClose"
+                  v-show="!savingOverlay"
                   type="button"
                   class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center"
                   tabindex="0"
@@ -50,11 +53,11 @@
                 <slot />
               </div>
               <div
-                class="flex justify-end pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
+                :class="!savingOverlay ? 'flex justify-end pt-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50' : ''"
               >
                 <div class="flex space-x-3">
                   <slot name="actions">
-                    <BaseButton v-show="canClose" @click.prevent="close">Close</BaseButton>
+                    <BaseButton v-show="!savingOverlay" @click.prevent="close">Close</BaseButton>
                   </slot>
                 </div>
               </div>
@@ -91,9 +94,9 @@ export default {
     title: {
       type: String,
     },
-    canClose: {
+    savingOverlay: {
       type: Boolean,
-      default: true,
+      default: false,
     }
   },
   emits: ["close"],
