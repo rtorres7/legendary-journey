@@ -458,7 +458,7 @@
                             :value="country"
                             as="template"
                             class="capitalize px-2 py-1 cursor-pointer"
-                            @click="navigateToCountry(country)"
+                            @click="verifyCountry(country)"
                           >
                             <li
                               :class="[
@@ -890,6 +890,14 @@ export default {
       });
     };
 
+    const verifyCountry = (country) => {
+      if (country.name !== "Worldwide" || country.code !== "WW") {
+        navigateToCountry(country);
+      } else {
+        navigateToRegion(country);
+      }
+    };
+
     const navigateToRegion = (region) => {
       let query = {
         view: "grid",
@@ -986,6 +994,7 @@ export default {
       openTestConsoleModalMobile,
       removeAlertMessage,
       navigateToIssue,
+      verifyCountry,
       navigateToRegion,
       formattedSubregions,
       navigateToSubregion,
