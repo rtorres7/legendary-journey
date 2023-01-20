@@ -11,7 +11,7 @@
   </template>
   <template v-else>
     <form ref="publishingForm">
-      <BaseCard class="flex mt-4 p-6" :class="savingDocument ? 'blur-md' : ''">
+      <BaseCard class="flex mt-4 p-6" :class="savingDocument ? 'blur-sm opacity-60' : ''">
         <template v-if="savingDocument">
           <BaseDialog
             class="w-80"
