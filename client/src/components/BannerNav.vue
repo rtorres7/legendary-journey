@@ -452,13 +452,15 @@
                           class="absolute w-full py-1 mt-1 overflow-auto text-slate-800 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                         >
                           <ListboxOption
-                            v-for="country in criteria.countries"
+                            v-for="country in criteria.countries.filter(
+                              (country) => country.code !== 'WW'
+                            )"
                             v-slot="{ active }"
                             :key="country"
                             :value="country"
                             as="template"
                             class="capitalize px-2 py-1 cursor-pointer"
-                            @click="verifyCountry(country)"
+                            @click="navigateToCountry(country)"
                           >
                             <li
                               :class="[
@@ -890,14 +892,6 @@ export default {
       });
     };
 
-    const verifyCountry = (country) => {
-      if (country.name !== "Worldwide" || country.code !== "WW") {
-        navigateToCountry(country);
-      } else {
-        navigateToRegion(country);
-      }
-    };
-
     const navigateToRegion = (region) => {
       let query = {
         view: "grid",
@@ -994,7 +988,6 @@ export default {
       openTestConsoleModalMobile,
       removeAlertMessage,
       navigateToIssue,
-      verifyCountry,
       navigateToRegion,
       formattedSubregions,
       navigateToSubregion,
