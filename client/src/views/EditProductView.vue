@@ -980,7 +980,6 @@ export default {
         );
       } else {
         save.value = true;
-        document.body.classList.add("stop-scrolling");
         axios
           .post("/articles/processDocument", {
             document_action: action,
@@ -1027,7 +1026,6 @@ export default {
           if (process.env.NODE_ENV === "low") {
             setTimeout(() => {
               save.value = false;
-              document.body.classList.remove("stop-scrolling");
               createNotification({
                     message: "Successfully Saved",
                     type: "success",
@@ -1035,7 +1033,6 @@ export default {
             }, 3000)
           } else {
             save.value = false;
-            document.body.classList.remove("stop-scrolling");
           }
       }
     };
@@ -1110,9 +1107,5 @@ export default {
 }
 .ck.ck-content p {
   font-size: 0.9em;
-}
-.stop-scrolling {
-  height: 100%;
-  overflow: hidden;
 }
 </style>
