@@ -467,6 +467,8 @@ import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
 import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
 import ImageLink from "@ckeditor/ckeditor5-link/src/linkimage";
+import Indent from '@ckeditor/ckeditor5-indent/src/indent';
+import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock';
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
@@ -547,6 +549,8 @@ export default {
         ImageStyle,
         ImageResize,
         ImageLink,
+        Indent,
+        IndentBlock,
         SimpleUploadAdapter,
       ],
       toolbar: {
@@ -562,6 +566,9 @@ export default {
           "|",
           "numberedList",
           "bulletedList",
+          "|",
+          "outdent",
+          "indent",
           "|",
           "link",
           "insertImage",
