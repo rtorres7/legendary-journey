@@ -10,21 +10,16 @@
     </div>
   </template>
   <template v-else>
+    <template v-if="savingDocument">
+      <div class="text-lg fixed left-0 top-0 w-full h-full z-[998]">
+        <div class="flex flex-col items-center absolute bottom-1/2 left-1/2 z-[999]">
+          <p class="pb-8">Saving changes...Please wait</p>
+          <BaseLoadingSpinner class="h-16 w-16"/>
+        </div>
+      </div>
+    </template>
     <form ref="publishingForm">
       <BaseCard class="flex mt-4 p-6" :class="savingDocument ? 'blur-sm opacity-60' : ''">
-        <template v-if="savingDocument">
-          <BaseDialog
-            class="w-80"
-            :isOpen="savingDocument"
-            :savingOverlay=true
-            @close="!savingDocument"
-          >
-            <div class="flex flex-col items-center">
-              <p class="pb-8 text-lg">Saving changes ... Please wait</p>
-              <BaseLoadingSpinner class="h-16 w-16"/>
-            </div>
-          </BaseDialog>
-        </template>
         <div
           class="lg:min-w-[215px] border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
@@ -985,6 +980,7 @@ export default {
         );
       } else {
         save.value = true;
+        document.body.classList.add("stop-scrolling");
         axios
           .post("/articles/processDocument", {
             document_action: action,
@@ -1031,6 +1027,7 @@ export default {
           if (process.env.NODE_ENV === "low") {
             setTimeout(() => {
               save.value = false;
+              document.body.classList.remove("stop-scrolling");
               createNotification({
                     message: "Successfully Saved",
                     type: "success",
@@ -1112,5 +1109,9 @@ export default {
 }
 .ck.ck-content p {
   font-size: 0.9em;
+}
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
 }
 </style>
