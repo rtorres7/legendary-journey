@@ -101,7 +101,7 @@
                       class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
                     >
                       {{
-                        article.title_classif
+                        article.title_classif && article.title_classif !== 'X'
                           ? `(${article.title_classif})`
                           : ""
                       }}
@@ -123,7 +123,7 @@
                     </p>
                     <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
-                        article.summary_classif
+                        article.summary_classif && article.summary_classif !== 'X'
                           ? `(${article.summary_classif})`
                           : ""
                       }}

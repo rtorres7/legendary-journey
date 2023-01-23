@@ -63,12 +63,17 @@
         </div>
       </div>
       <div class="w-full flex flex-col space-y-4 pb-6 lg:pb-0">
-        <div class="text-center pb-2 text-sm lg:text-md">
+        <div v-if="article.classification !== 'INVALID'" class="text-center pb-2 text-sm lg:text-md">
           {{ article.classification }}
         </div>
         <p class="font-semibold text-sm lg:text-md uppercase">product</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
-          ({{ article.title_classif }}) {{ article.title }}
+          <span v-if="article.title_classif !== 'X'">
+            ({{ article.title_classif }})
+          </span>
+          <span>
+            {{ article.title }}
+          </span>
         </h1>
         <div class="flex space-x-4 text-sm md:text-md">
           <p class="capitalize">
@@ -161,7 +166,7 @@
             </ol>
           </DisclosurePanel>
         </Disclosure> -->
-        <div class="text-center pb-2 text-sm lg:text-md">
+        <div v-if="article.classification !== 'INVALID'" class="text-center pb-2 text-sm lg:text-md">
           {{ article.classification }}
         </div>
       </div>
