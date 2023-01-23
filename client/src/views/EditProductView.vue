@@ -1035,6 +1035,7 @@ export default {
             }, 3000)
           } else {
             save.value = false;
+            document.body.classList.remove("stop-scrolling");
           }
       }
     };
