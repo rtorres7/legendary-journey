@@ -1,6 +1,6 @@
 <template>
   <div
-    class="no-print max-w-8xl mx-auto bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800 text-slate-200 dark:text-slate-300 energy:text-zinc-300"
+    class="no-print max-w-8xl mx-auto bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800 text-slate-200 dark:text-slate-300 energy:text-zinc-300 relative z-20"
   >
     <div class="border-b border-slate-700/50 energy:border-zinc-700/50">
       <div class="hidden max-w-fit mx-auto py-6 lg:grid grid-cols-3 gap-20">
