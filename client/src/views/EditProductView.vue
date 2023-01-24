@@ -205,6 +205,27 @@
                 </div>
                 <div class="flex flex-col space-y-4">
                   <div>
+                    <label class="text-sm font-medium">Thumbnail</label>
+                    <div
+                      class="w-fit mt-1 rounded shadow-sm text-xs md:text-sm bg-transparent border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
+                    >
+                      <label
+                        for="image-input"
+                        class="relative cursor-pointer focus-within:ring-2 font-medium"
+                      >
+                        <div class="px-2 md:px-4 py-2">Choose File</div>
+                        <input
+                          id="image-input"
+                          name="image-input"
+                          type="file"
+                          class="sr-only"
+                          accept=".jpeg,.png,.jpg"
+                          @change="uploadThumbnail"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div>
                     <BaseCkEditor
                       v-model="formData.editorData"
                       :label="'Product Content'"
@@ -747,6 +768,17 @@ export default {
       );
     };
 
+    const uploadThumbnail = (event) => {
+      const uploadedFile = event.target.files[0];
+      const extension = uploadedFile.type.split("/").pop();
+      const changedFile = new File([uploadedFile], `article.${extension}`, {
+        type: uploadedFile.type,
+      });
+      addFiles([changedFile]);
+      event.target.value = null;
+      uploadFiles(files.value);
+    };
+
     onMounted(() => {
       store.dispatch("formMetadata/getDissemOrgs");
     });
@@ -1002,6 +1034,7 @@ export default {
       submit,
       cancel,
       canEditProduct,
+      uploadThumbnail,
     };
   },
 };
