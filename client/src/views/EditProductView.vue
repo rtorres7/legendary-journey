@@ -10,9 +10,7 @@
     </div>
   </template>
   <template v-else>
-    <BaseSavingOverlay :visible="savingDocument"/>
-    <form ref="publishingForm">
-      <BaseCard class="flex mt-4 p-6">
+    <BaseFormCard :saveState="savingDocument">
         <div
           class="lg:min-w-[215px] border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
@@ -381,35 +379,35 @@
               </div>
             </div>
           </div>
+          <div class="flex my-4 mt-10">
+            <div class="flex flex-wrap gap-4">
+              <BaseButton
+                type="submit"
+                :disabled="publishDisabled"
+                @click.prevent="submit('publish')"
+              >
+                Publish
+              </BaseButton>
+              <BaseButton @click.prevent="submit('save')">Save</BaseButton>
+              <BaseButton @click.prevent="openDialog"
+                >Preview
+                <BaseDialog
+                  class="max-w-[1300px]"
+                  :isOpen="isPreviewDialogOpen"
+                  @close="closePreviewDialog"
+                >
+                  <ProductView :doc_num="documentNumber" :wantsPreview="true" />
+                </BaseDialog>
+              </BaseButton>
+              <BaseButton @click.prevent="cancel">Cancel</BaseButton>
+              <BaseButton type="danger" @click.prevent="openDeleteDialog"
+                >Delete</BaseButton
+              >
+            </div>
+          </div>
         </div>
-      </BaseCard>
-      <div class="flex my-4">
-        <div class="flex flex-wrap gap-4">
-          <BaseButton
-            type="submit"
-            :disabled="publishDisabled"
-            @click.prevent="submit('publish')"
-          >
-            Publish
-          </BaseButton>
-          <BaseButton @click.prevent="submit('save')">Save</BaseButton>
-          <BaseButton @click.prevent="openDialog"
-            >Preview
-            <BaseDialog
-              class="max-w-[1300px]"
-              :isOpen="isPreviewDialogOpen"
-              @close="closePreviewDialog"
-            >
-              <ProductView :doc_num="documentNumber" :wantsPreview="true" />
-            </BaseDialog>
-          </BaseButton>
-          <BaseButton @click.prevent="cancel">Cancel</BaseButton>
-          <BaseButton type="danger" @click.prevent="openDeleteDialog"
-            >Delete</BaseButton
-          >
-        </div>
-      </div>
-    </form>
+      </BaseFormCard>
+   
     <BaseDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Product'"
