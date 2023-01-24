@@ -4,7 +4,7 @@
       <div
         v-show="!smartRender"
         id="article-blur"
-        class="h-full w-full absolute blur-lg bg-center bg-no-repeat bg-cover"
+        class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
         :style="{ background: 'url(' + getImgUrl(article) + ')' }"
       ></div>
       <img
