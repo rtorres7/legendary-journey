@@ -1387,46 +1387,67 @@ export const metadata = {
         {
           name: "Current",
           code: 10376,
+          publishable: true,
         },
         {
           name: "Daily Brief",
           code: 10377,
+          publishable: true,
         },
         {
           name: "Community Product",
           code: 10378,
+          publishable: true,
         },
         {
           name: "CT Digest",
           code: 10379,
+          publishable: true,
         },
         {
           name: "CT Weekly",
           code: 10380,
+          publishable: true,
         },
         {
           name: "Foreign Product",
           code: 10381,
+          publishable: true,
         },
         {
           name: "Special Threat Matrix",
           code: 10382,
+          publishable: true,
         },
         {
           name: "SVTC Notes",
           code: 10383,
+          publishable: true,
         },
         {
           name: "Terrorism Digest",
           code: 10384,
+          publishable: true,
         },
         {
           name: "Terrorism Summary",
           code: 10385,
+          publishable: true,
         },
         {
           name: "Threat Matrix",
           code: 10386,
+          publishable: true,
+        },
+        {
+          name: "Miscellaneous",
+          code: 10387,
+          publishable: false,
+        },
+        {
+          name: "Legacy",
+          code: 10388,
+          publishable: false,
         },
       ],
     },

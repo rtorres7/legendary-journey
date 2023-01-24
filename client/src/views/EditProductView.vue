@@ -467,8 +467,8 @@ import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
 import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
 import ImageLink from "@ckeditor/ckeditor5-link/src/linkimage";
-import Indent from '@ckeditor/ckeditor5-indent/src/indent';
-import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock';
+import Indent from "@ckeditor/ckeditor5-indent/src/indent";
+import IndentBlock from "@ckeditor/ckeditor5-indent/src/indentblock";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
@@ -654,10 +654,12 @@ export default {
           label: "Product Type",
           model: [],
           items: isCommunityExclusive.value
-            ? criteria.value.product_types.filter(
-                (product) => product.name === "Community Product"
-              )
-            : criteria.value.product_types,
+            ? criteria.value.product_types
+                .filter((product) => product.name === "Community Product")
+                .filter((product) => product.publishable === true)
+            : criteria.value.product_types.filter(
+                (product) => product.publishable === true
+              ),
         },
         selectedTopics: {
           label: "Topics",
