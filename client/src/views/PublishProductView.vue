@@ -117,9 +117,7 @@
                         article.product_type
                       }}</span>
                       |
-                      <span class="pl-1">{{
-                        transformWireUrl(article.doc_num)
-                      }}</span>
+                      <span class="pl-1">{{ article.doc_num }}</span>
                     </p>
                     <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
@@ -144,18 +142,20 @@
                 >
                   {{ article.state }}
                 </p>
-                <router-link
-                  :to="{
-                    name: 'edit',
-                    params: {
-                      date: routeDate,
-                      id: article.id,
-                      doc_num: article.doc_num,
-                    },
-                  }"
-                >
-                  <PencilIcon class="h-5 w-5" />
-                </router-link>
+                <template v-if="canEditProduct(article.product_type)">
+                  <router-link
+                    :to="{
+                      name: 'edit',
+                      params: {
+                        date: routeDate,
+                        id: article.id,
+                        doc_num: article.doc_num,
+                      },
+                    }"
+                  >
+                    <PencilIcon class="h-5 w-5" />
+                  </router-link>
+                </template>
               </div>
             </div>
           </template>
@@ -172,7 +172,6 @@
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { transformWireUrl } from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -283,6 +282,17 @@ export default {
       router.push({ name: "publish", params: { date } });
     };
 
+    const canEditProduct = (product) => {
+      if (!isCommunityExclusive.value) {
+        return true;
+      } else {
+        if (product === "Community Product") {
+          return true;
+        }
+        return false;
+      }
+    };
+
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
@@ -299,15 +309,15 @@ export default {
     );
 
     return {
-      transformWireUrl,
-      availableProductTypes,
-      goToArticle,
-      selectedDate,
+      dayjs,
       routeDate,
-      selectDate,
+      selectedDate,
       articles,
       loadingArticles,
-      dayjs,
+      availableProductTypes,
+      goToArticle,
+      selectDate,
+      canEditProduct,
     };
   },
 };

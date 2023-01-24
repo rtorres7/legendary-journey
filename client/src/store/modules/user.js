@@ -30,6 +30,7 @@ export default {
     },
     isCommunityExclusive: (state) => {
       if (
+        state.user.authorizations.canManageWire &&
         state.user.roles.includes("community_editor") &&
         !state.user.roles.includes("wire_editor")
       ) {

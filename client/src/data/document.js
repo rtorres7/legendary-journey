@@ -19,6 +19,6 @@ export const document = {
   date_published: "",
   poc_info: "",
   publication_number: "",
-  product_type_id: 10376,
+  product_type_id: 10378,
   worldwide: null,
 };
