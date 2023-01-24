@@ -10,10 +10,8 @@
     </div>
   </template>
   <template v-else>
-    <template v-if="savingDocument">
-      <BaseSavingOverlay />
-    </template>
-    <form ref="publishingForm" :class="savingDocument ? 'blur-sm opacity-60' : ''">
+    <BaseSavingOverlay :visible="savingDocument"/>
+    <form ref="publishingForm">
       <BaseCard class="flex mt-4 p-6">
         <div
           class="lg:min-w-[215px] border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"

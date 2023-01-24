@@ -1,5 +1,5 @@
 <template>
-  <div class="text-lg fixed left-0 top-0 w-full h-full z-10">
+  <div v-if="visible" class="backdrop-blur-sm fixed inset-0 w-full h-full text-lg z-10">
     <div class="flex flex-col items-center absolute bottom-1/2 left-1/2">
       <p class="pb-8">Saving changes...Please wait</p>
       <BaseLoadingSpinner class="h-16 w-16"/>
@@ -9,6 +9,12 @@
 <script>
 export default {
   components: {},
+  props: {
+    visible: {
+      default: false,
+      type: Boolean,
+    },
+  },
 }
 </script>
 <style lang="scss"></style>
