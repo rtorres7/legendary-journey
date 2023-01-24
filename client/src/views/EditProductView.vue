@@ -591,10 +591,12 @@ export default {
           label: "Product Type",
           model: [],
           items: isCommunityExclusive.value
-            ? criteria.value.product_types.filter(
-                (product) => product.name === "Community Product"
-              )
-            : criteria.value.product_types,
+            ? criteria.value.product_types
+                .filter((product) => product.name === "Community Product")
+                .filter((product) => product.publishable === true)
+            : criteria.value.product_types.filter(
+                (product) => product.publishable === true
+              ),
         },
         selectedTopics: {
           label: "Topics",

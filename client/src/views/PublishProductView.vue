@@ -211,26 +211,28 @@ export default {
 
     const buildAvailableProducts = () => {
       let availableProducts = [];
-      criteria.value.product_types.forEach((type) => {
-        const match = metadata.product_types.find(
-          ({ code }) => code === type.code
-        );
-        const product = { ...match };
-        if (product.payload) {
-          const formattedTitle = `${dayjs().format("DD MMMM YYYY")} ${
-            product.payload.title
-          }`;
-          product.payload = {
-            ...defaultPayload,
-            ...product.payload,
-            title: formattedTitle,
-          };
-        } else {
-          product.payload = { ...defaultPayload };
-        }
-        product.payload.product_type_id = product.code;
-        availableProducts.push({ icon: "wave", ...product });
-      });
+      criteria.value.product_types
+        .filter((product) => product.publishable === true)
+        .forEach((type) => {
+          const match = metadata.product_types.find(
+            ({ code }) => code === type.code
+          );
+          const product = { ...match };
+          if (product.payload) {
+            const formattedTitle = `${dayjs().format("DD MMMM YYYY")} ${
+              product.payload.title
+            }`;
+            product.payload = {
+              ...defaultPayload,
+              ...product.payload,
+              title: formattedTitle,
+            };
+          } else {
+            product.payload = { ...defaultPayload };
+          }
+          product.payload.product_type_id = product.code;
+          availableProducts.push({ icon: "wave", ...product });
+        });
       if (isCommunityExclusive.value) {
         availableProducts = availableProducts.filter(
           (product) => product.displayName === "Community Product"
