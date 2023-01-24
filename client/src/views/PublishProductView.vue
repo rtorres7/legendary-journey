@@ -101,7 +101,7 @@
                       class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
                     >
                       {{
-                        article.title_classif && article.title_classif !== 'X'
+                        article.title_classif && article.title_classif !== "X"
                           ? `(${article.title_classif})`
                           : ""
                       }}
@@ -123,7 +123,8 @@
                     </p>
                     <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
-                        article.summary_classif && article.summary_classif !== 'X'
+                        article.summary_classif &&
+                        article.summary_classif !== "X"
                           ? `(${article.summary_classif})`
                           : ""
                       }}
@@ -211,26 +212,28 @@ export default {
 
     const buildAvailableProducts = () => {
       let availableProducts = [];
-      criteria.value.product_types.forEach((type) => {
-        const match = metadata.product_types.find(
-          ({ code }) => code === type.code
-        );
-        const product = { ...match };
-        if (product.payload) {
-          const formattedTitle = `${dayjs().format("DD MMMM YYYY")} ${
-            product.payload.title
-          }`;
-          product.payload = {
-            ...defaultPayload,
-            ...product.payload,
-            title: formattedTitle,
-          };
-        } else {
-          product.payload = { ...defaultPayload };
-        }
-        product.payload.product_type_id = product.code;
-        availableProducts.push({ icon: "wave", ...product });
-      });
+      criteria.value.product_types
+        .filter((product) => product.publishable === true)
+        .forEach((type) => {
+          const match = metadata.product_types.find(
+            ({ code }) => code === type.code
+          );
+          const product = { ...match };
+          if (product.payload) {
+            const formattedTitle = `${dayjs().format("DD MMMM YYYY")} ${
+              product.payload.title
+            }`;
+            product.payload = {
+              ...defaultPayload,
+              ...product.payload,
+              title: formattedTitle,
+            };
+          } else {
+            product.payload = { ...defaultPayload };
+          }
+          product.payload.product_type_id = product.code;
+          availableProducts.push({ icon: "wave", ...product });
+        });
       if (isCommunityExclusive.value) {
         availableProducts = availableProducts.filter(
           (product) => product.displayName === "Community Product"
