@@ -15,11 +15,6 @@ export const getValueForName = (list, name) => {
   return list.find((item) => item.name === name);
 };
 
-export const transformWireUrl = (wireDoc) => {
-  //regex to block WIRe prefix should go here
-  return wireDoc;
-};
-
 export const formatDate = (date) => {
   return dayjs(date).format("DD MMMM YYYY");
 };

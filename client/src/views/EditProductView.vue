@@ -1,16 +1,17 @@
 <template>
-  <p
-    class="font-semibold text-2xl py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-  >
-    Edit Product
-  </p>
   <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
   </template>
   <template v-else>
-    <BaseFormCard :saveState="savingDocument">
+    <template v-if="canEditProduct(formData.selectedProductType.model)">
+      <p
+        class="font-semibold text-2xl py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+      >
+        Edit Product
+      </p>
+      <BaseFormCard :saveState="savingDocument">
         <div
           class="lg:min-w-[215px] border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
@@ -50,8 +51,8 @@
                 <p
                   class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
                 >
-                  Changing the product type will prepopulate existing fields so
-                  be careful when changing it.
+                  Changing the product type will prepopulate existing fields
+                  so be careful when changing it.
                 </p>
               </div>
               <BaseListbox
@@ -203,18 +204,33 @@
               </div>
               <div class="flex flex-col space-y-4">
                 <div>
-                  <label for="body" class="font-medium text-sm"
-                    >Product Content</label
+                  <label class="text-sm font-medium">Thumbnail</label>
+                  <div
+                    class="w-fit mt-1 rounded shadow-sm text-xs md:text-sm bg-transparent border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
                   >
-                  <div class="mt-1 w-[95%]">
-                    <ckeditor
-                      id="body"
-                      v-model="formData.editorData"
-                      :editor="editor"
-                      :config="editorConfig"
-                      @update:modelValue="updateField($event, 'html_body')"
-                    ></ckeditor>
+                    <label
+                      for="image-input"
+                      class="relative cursor-pointer focus-within:ring-2 font-medium"
+                    >
+                      <div class="px-2 md:px-4 py-2">Choose File</div>
+                      <input
+                        id="image-input"
+                        name="image-input"
+                        type="file"
+                        class="sr-only"
+                        accept=".jpeg,.png,.jpg"
+                        @change="uploadThumbnail"
+                      />
+                    </label>
                   </div>
+                </div>
+                <div>
+                  <BaseCkEditor
+                    v-model="formData.editorData"
+                    :label="'Product Content'"
+                    :extraConfig="extraConfig"
+                    @update:modelValue="updateField($event, 'html_body')"
+                  />
                 </div>
                 <BaseListbox
                   v-model="formData.selectedActors.model"
@@ -284,8 +300,8 @@
                     <template v-else>
                       <p>Drag your files here or</p>
                       <p>
-                        <span class="font-semibold">click here</span> to select
-                        files
+                        <span class="font-semibold">click here</span> to
+                        select files
                       </p>
                     </template>
                     <input
@@ -338,7 +354,11 @@
                           to=""
                           target="_blank"
                           @click.prevent="
-                            removeDocument(attachment.id, documentNumber, index)
+                            removeDocument(
+                              attachment.id,
+                              documentNumber,
+                              index
+                            )
                           "
                         >
                           <DocumentMinusIcon
@@ -379,7 +399,7 @@
               </div>
             </div>
           </div>
-          <div class="flex my-4 mt-10">
+          <div class="flex my-4">
             <div class="flex flex-wrap gap-4">
               <BaseButton
                 type="submit"
@@ -407,21 +427,24 @@
           </div>
         </div>
       </BaseFormCard>
-   
-    <BaseDialog
-      :isOpen="isDeleteDialogOpen"
-      :title="'Delete Product'"
-      class="max-w-fit"
-      @close="closeDeleteDialog"
-    >
-      <p class="py-4 pr-4">Are you sure you want to do this?</p>
-      <template #actions>
-        <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
-        <BaseButton type="danger" @click.prevent="deleteDocument">
-          Delete
-        </BaseButton>
-      </template>
-    </BaseDialog>
+      <BaseDialog
+        :isOpen="isDeleteDialogOpen"
+        :title="'Delete Product'"
+        class="max-w-fit"
+        @close="closeDeleteDialog"
+      >
+        <p class="py-4 pr-4">Are you sure you want to do this?</p>
+        <template #actions>
+          <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
+          <BaseButton type="danger" @click.prevent="deleteDocument">
+            Delete
+          </BaseButton>
+        </template>
+      </BaseDialog>
+    </template>
+    <template v-else>
+      <NotAuthorized />
+    </template>
   </template>
 </template>
 
@@ -446,26 +469,10 @@ import axios from "@/config/wireAxios";
 import { getValueForCode, getValueForName } from "@/helpers";
 import DropZone from "@/components/DropZone";
 import FilePreview from "@/components/FilePreview";
+import NotAuthorized from "@/components/NotAuthorized";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
 import ProductView from "@/views/ProductView";
-//ckEditor
-import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
-import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
-import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
-import ItalicPlugin from "@ckeditor/ckeditor5-basic-styles/src/italic";
-import Font from "@ckeditor/ckeditor5-font/src/font";
-import LinkPlugin from "@ckeditor/ckeditor5-link/src/link";
-import Heading from "@ckeditor/ckeditor5-heading/src/heading";
-import ParagraphPlugin from "@ckeditor/ckeditor5-paragraph/src/paragraph";
-import DocumentListProperties from "@ckeditor/ckeditor5-list/src/documentlistproperties";
-import Image from "@ckeditor/ckeditor5-image/src/image";
-import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
-import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
-import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
-import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
-import ImageLink from "@ckeditor/ckeditor5-link/src/linkimage";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
@@ -507,6 +514,7 @@ export default {
     DocumentMinusIcon,
     DropZone,
     FilePreview,
+    NotAuthorized,
     ProductView,
   },
   setup() {
@@ -528,54 +536,10 @@ export default {
     const loadingDissemOrgs = computed(
       () => store.state.formMetadata.dissem_orgs.loading
     );
-    const editor = ClassicEditor;
-    const editorConfig = ref({
-      plugins: [
-        EssentialsPlugin,
-        BoldPlugin,
-        ItalicPlugin,
-        Font,
-        LinkPlugin,
-        Heading,
-        ParagraphPlugin,
-        DocumentListProperties,
-        Image,
-        ImageInsert,
-        ImageToolbar,
-        ImageCaption,
-        ImageStyle,
-        ImageResize,
-        ImageLink,
-        SimpleUploadAdapter,
-      ],
+    const extraConfig = {
+      plugins: [SimpleUploadAdapter],
       toolbar: {
-        items: [
-          "heading",
-          "|",
-          "bold",
-          "italic",
-          "|",
-          "fontSize",
-          "fontFamily",
-          "fontColor",
-          "|",
-          "numberedList",
-          "bulletedList",
-          "|",
-          "link",
-          "insertImage",
-          "|",
-          "undo",
-          "redo",
-          "|",
-        ],
-      },
-      list: {
-        properties: {
-          styles: true,
-          startIndex: true,
-          reversed: true,
-        },
+        items: ["insertImage"],
       },
       image: {
         styles: ["full", "side", "alignLeft", "alignRight"],
@@ -603,7 +567,7 @@ export default {
         //Headers sent along with the XMLHttpRequest to the upload server.
         headers: {},
       },
-    });
+    };
     const { files, addFiles, removeFile } = useFileList();
     const { uploadFiles } = createUploader(
       "/documents/" + documentNumber + "/attachments/"
@@ -646,10 +610,12 @@ export default {
           label: "Product Type",
           model: [],
           items: isCommunityExclusive.value
-            ? criteria.value.product_types.filter(
-                (product) => product.name === "Community Product"
-              )
-            : criteria.value.product_types,
+            ? criteria.value.product_types
+                .filter((product) => product.name === "Community Product")
+                .filter((product) => product.publishable === true)
+            : criteria.value.product_types.filter(
+                (product) => product.publishable === true
+              ),
         },
         selectedTopics: {
           label: "Topics",
@@ -726,7 +692,7 @@ export default {
         case "classification":
           switch (property) {
             case "document":
-              payload.value.classification = model.marking;
+              payload.value.classification = model.name;
               payload.value.classification_xml = model.xml;
               payload.value.classification_decl_fmt = model.block
                 ? `Classified By: ${model.block.classifiedBy}\nDerived From: ${model.block.derivedFrom}\nDeclassify On: ${model.block.declassOn}`
@@ -800,9 +766,19 @@ export default {
       );
     };
 
+    const uploadThumbnail = (event) => {
+      const uploadedFile = event.target.files[0];
+      const extension = uploadedFile.type.split("/").pop();
+      const changedFile = new File([uploadedFile], `article.${extension}`, {
+        type: uploadedFile.type,
+      });
+      addFiles([changedFile]);
+      event.target.value = null;
+      uploadFiles(files.value);
+    };
+
     onMounted(() => {
       store.dispatch("formMetadata/getDissemOrgs");
-      store.dispatch("formMetadata/getProductTypes");
     });
 
     watch([loadingMetadata, loadingDissemOrgs], () => {
@@ -882,7 +858,9 @@ export default {
           documentData.value.classification_xml;
         formData.value.pocInfo = documentData.value.poc_info;
         formData.value.title = documentData.value.title;
-        formData.value.attachments = documentData.value.attachments;
+        formData.value.attachments = documentData.value.attachments?.filter(
+          (attachment) => attachment.visible === true
+        );
         formData.value.summary = documentData.value.summary;
         formData.value.summaryClassificationXML =
           documentData.value.summary_classif_xml;
@@ -989,7 +967,7 @@ export default {
                   type: "success",
                 });
                 router.push({
-                  name: "article",
+                  name: "product",
                   params: { doc_num: route.params.doc_num },
                 });
               } else {
@@ -1023,13 +1001,23 @@ export default {
       router.push({ name: "publish", params: { date: route.params.date } });
     };
 
+    const canEditProduct = (product_id) => {
+      if (!isCommunityExclusive.value) {
+        return true;
+      } else {
+        if (product_id === 10378) {
+          return true;
+        }
+        return false;
+      }
+    };
+
     return {
       categories,
       loadingMetadata,
       loadingDocument,
       loadingDissemOrgs,
-      editor,
-      editorConfig,
+      extraConfig,
       isDeleteDialogOpen,
       openDeleteDialog,
       closeDeleteDialog,
@@ -1058,33 +1046,9 @@ export default {
       submit,
       savingDocument,
       cancel,
+      canEditProduct,
+      uploadThumbnail,
     };
   },
 };
 </script>
-
-<style>
-.ck-editor__editable_inline {
-  height: 450px;
-}
-.ck.ck-content ul,
-.ck.ck-content ul li {
-  list-style-type: inherit;
-}
-.ck.ck-content ol,
-.ck.ck-content ul {
-  padding-left: 40px;
-}
-.ck.ck-content h2 {
-  font-size: 1.5em;
-}
-.ck.ck-content h3 {
-  font-size: 1.3em;
-}
-.ck.ck-content h4 {
-  font-size: 1.1em;
-}
-.ck.ck-content p {
-  font-size: 0.9em;
-}
-</style>
