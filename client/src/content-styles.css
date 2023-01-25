@@ -412,38 +412,47 @@
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ol {
   list-style-type: decimal;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ol ol {
   list-style-type: lower-latin;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ol ol ol {
   list-style-type: lower-roman;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ol ol ol ol {
   list-style-type: upper-latin;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ol ol ol ol ol {
   list-style-type: upper-roman;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ul {
   list-style-type: circle;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ul ul {
   list-style-type: disc;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ul ul ul {
   list-style-type: square;
+  padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ul ul ul ul {
   list-style-type: square;
+  padding-left: 3em;
 }
 /* ckeditor5-mention/theme/mention.css */
 .ck-content .mention {
