@@ -47,4 +47,8 @@
   .energy .digression {
     @apply bg-zinc-800;
   }
+
+  .ck.ck-sticky-panel .ck-sticky-panel__content_sticky {
+    @apply top-[58px] lg:top-[100px] xl:top-[122px];
+  }
 }
