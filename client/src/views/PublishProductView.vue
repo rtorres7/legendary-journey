@@ -142,7 +142,11 @@
                 >
                   {{ article.state }}
                 </p>
-                <template v-if="canEditProduct(article.product_type)">
+                <template
+                  v-if="
+                    canEditProduct(article.product_type) && !article?.legacy
+                  "
+                >
                   <router-link
                     :to="{
                       name: 'edit',
