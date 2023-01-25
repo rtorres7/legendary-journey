@@ -22,10 +22,12 @@
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <BaseButton type="danger" @click.prevent="openDeleteDialog">
+          <BaseButton color="danger" @click.prevent="openDeleteDialog">
             Delete
           </BaseButton>
-          <BaseButton @click.prevent="openEditDialog"> Edit </BaseButton>
+          <BaseButton color="secondary" @click.prevent="openEditDialog">
+            Edit
+          </BaseButton>
         </template>
       </template>
     </div>
@@ -219,7 +221,7 @@
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
         <BaseButton @click.prevent="closeDeleteDialog"> Cancel </BaseButton>
-        <BaseButton type="danger" @click.prevent="deleteSpecialEdition">
+        <BaseButton color="danger" @click.prevent="deleteSpecialEdition">
           Delete
         </BaseButton>
       </template>
