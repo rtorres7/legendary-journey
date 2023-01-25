@@ -47,7 +47,13 @@
             @click="copyUrl"
           />
         </div>
-        <div v-show="canManageWire">
+        <div
+          v-show="
+            canManageWire &&
+            canEditProduct(article.product_type_id) &&
+            !article?.legacy
+          "
+        >
           <router-link
             :to="{
               name: 'edit',
@@ -63,12 +69,20 @@
         </div>
       </div>
       <div class="w-full flex flex-col space-y-4 pb-6 lg:pb-0">
-        <div class="text-center pb-2 text-sm lg:text-md">
+        <div
+          v-if="article.classification !== 'INVALID'"
+          class="text-center pb-2 text-sm lg:text-md"
+        >
           {{ article.classification }}
         </div>
         <p class="font-semibold text-sm lg:text-md uppercase">product</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
-          ({{ article.title_classif }}) {{ article.title }}
+          <span v-if="article.title_classif !== 'X'">
+            ({{ article.title_classif }})
+          </span>
+          <span>
+            {{ article.title }}
+          </span>
         </h1>
         <div class="flex space-x-4 text-sm md:text-md">
           <p class="capitalize">
@@ -90,11 +104,11 @@
           </p>
         </div>
         <div class="w-full pr-2">
-          <img
+          <!-- <img
             v-if="article.product_image"
             :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
             class="h-[350px] w-[350px] float-right"
-          />
+          /> -->
           <p v-if="article.html_body" class="whitespace-pre-line">
             <span class="ck-content summary" v-html="article.html_body" />
           </p>
@@ -161,7 +175,10 @@
             </ol>
           </DisclosurePanel>
         </Disclosure> -->
-        <div class="text-center pb-2 text-sm lg:text-md">
+        <div
+          v-if="article.classification !== 'INVALID'"
+          class="text-center pb-2 text-sm lg:text-md"
+        >
           {{ article.classification }}
         </div>
       </div>
@@ -291,6 +308,10 @@ export default {
     const emailCount = computed(
       () => store.state.danielDetails.document.email_count
     );
+    const isCommunityExclusive = computed(
+      () => store.getters["user/isCommunityExclusive"]
+    );
+
     const updateEmailCount = () => {
       store.dispatch("danielDetails/saveEmailCount");
     };
@@ -364,6 +385,17 @@ export default {
       }
     };
 
+    const canEditProduct = (product_id) => {
+      if (!isCommunityExclusive.value) {
+        return true;
+      } else {
+        if (product_id === 10378) {
+          return true;
+        }
+        return false;
+      }
+    };
+
     watch([loadingFeaturedArticles], () => {
       if (!loadingFeaturedArticles.value) {
         buildNavigation();
@@ -405,6 +437,7 @@ export default {
       copyUrl,
       canManageWire,
       url,
+      canEditProduct,
     };
   },
 };

@@ -72,6 +72,7 @@ export default {
       };
       const type = `${facetType}[]`;
       if (query[type]) {
+        query[type] = Array.from(query[type]);
         query[type].push(code);
       } else {
         query[type] = [code];
