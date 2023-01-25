@@ -47,7 +47,13 @@
             @click="copyUrl"
           />
         </div>
-        <div v-show="canManageWire && canEditProduct(article.product_type_id)">
+        <div
+          v-show="
+            canManageWire &&
+            canEditProduct(article.product_type_id) &&
+            !article?.legacy
+          "
+        >
           <router-link
             :to="{
               name: 'edit',
