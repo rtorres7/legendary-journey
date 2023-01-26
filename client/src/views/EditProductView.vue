@@ -1,5 +1,5 @@
 <template>
-  <template v-if="loadingMetadata || loadingDissemOrgs || loadingDocument">
+  <template v-if="loadingMetadata || loadingDocument">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -555,12 +555,6 @@ export default {
     const criteria = computed(() => store.state.metadata.criteria);
     const loadingDocument = computed(() => store.state.document.loading);
     const documentData = computed(() => store.state.document.data);
-    const dissemOrgs = computed(
-      () => store.state.formMetadata.dissem_orgs.items
-    );
-    const loadingDissemOrgs = computed(
-      () => store.state.formMetadata.dissem_orgs.loading
-    );
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
       toolbar: {
@@ -629,7 +623,7 @@ export default {
         selectedDissemOrgs: {
           label: "Dissem Orgs",
           model: [],
-          items: dissemOrgs.value,
+          items: criteria.value.dissem_orgs,
         },
         selectedProductType: {
           label: "Product Type",
@@ -663,7 +657,7 @@ export default {
     let checkAllOrgs = ref(false);
 
     const toggleAllOrgs = () => {
-      dissemOrgs.value.forEach((org) => {
+      formData.value.selectedDissemOrgs.items.forEach((org) => {
         if (!checkAllOrgs.value) {
           if (!formData.value.selectedDissemOrgs.model.includes(org)) {
             formData.value.selectedDissemOrgs.model.push(org);
@@ -793,7 +787,8 @@ export default {
 
     const uploadThumbnail = (event) => {
       const uploadedFile = event.target.files[0];
-      const extension = uploadedFile.type.split("/").pop();
+      let extension = uploadedFile.type.split("/").pop();
+      extension = extension === "jpeg" ? "jpg" : extension;
       const changedFile = new File([uploadedFile], `article.${extension}`, {
         type: uploadedFile.type,
       });
@@ -803,24 +798,14 @@ export default {
     };
 
     onMounted(() => {
-      store.dispatch("formMetadata/getDissemOrgs");
+      store.dispatch("document/getDocument", {
+        date: route.params.date,
+        id: route.params.id,
+      });
     });
 
-    watch([loadingMetadata, loadingDissemOrgs], () => {
-      if (!loadingMetadata.value && !loadingDissemOrgs.value) {
-        store.dispatch("document/getDocument", {
-          date: route.params.date,
-          id: route.params.id,
-        });
-      }
-    });
-
-    watch([loadingMetadata, loadingDissemOrgs, loadingDocument], () => {
-      if (
-        !loadingMetadata.value &&
-        !loadingDissemOrgs.value &&
-        !loadingDocument.value
-      ) {
+    watch([loadingMetadata, loadingDocument], () => {
+      if (!loadingMetadata.value && !loadingDocument.value) {
         formData.value = buildFormData();
       }
     });
@@ -977,6 +962,7 @@ export default {
             ...payload.value,
           })
           .then((response) => {
+            savingDocument.value = false;
             if (response.data.error) {
               createNotification({
                 title: "Error",
@@ -1016,8 +1002,6 @@ export default {
               type: "success",
             });
           }, 3000);
-        } else {
-          savingDocument.value = false;
         }
       }
     };
@@ -1026,11 +1010,11 @@ export default {
       router.push({ name: "publish", params: { date: route.params.date } });
     };
 
-    const canEditProduct = (product_id) => {
+    const canEditProduct = ({ code }) => {
       if (!isCommunityExclusive.value) {
         return true;
       } else {
-        if (product_id === 10378) {
+        if (code === 10378) {
           return true;
         }
         return false;
@@ -1041,7 +1025,6 @@ export default {
       categories,
       loadingMetadata,
       loadingDocument,
-      loadingDissemOrgs,
       extraConfig,
       isDeleteDialogOpen,
       openDeleteDialog,

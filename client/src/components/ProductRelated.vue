@@ -10,7 +10,7 @@
       <ul class="space-y-1">
         <li v-for="relatedProduct in relatedProducts" :key="relatedProduct">
           <router-link
-            :to="relatedProductLink + '/' + relatedProduct.id + '.json'"
+            :to="'/product/' + relatedProduct.doc_num"
             target="_blank"
           >
             {{ relatedProduct.document.title }}

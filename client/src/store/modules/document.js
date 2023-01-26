@@ -7,8 +7,9 @@ export default {
     document: {},
     data: {
       control_to: [],
-      dissem_orgs: [],
       countries: [],
+      dissem_orgs: [],
+      images: [],
       topics: [],
       non_state_actors: [],
       title: "",
@@ -55,6 +56,7 @@ export default {
               control_to: response?.data?.control_to,
               countries: response?.data?.countries,
               dissem_orgs: response?.data?.dissem_orgs,
+              images: response?.data?.images,
               topics: response?.data?.topics,
               non_state_actors: response?.data?.non_state_actors,
               title: response?.data?.title,
@@ -85,6 +87,7 @@ export default {
       state.data.attachments = data.attachments;
       state.data.control_to = data.control_to;
       state.data.dissem_orgs = data.dissem_orgs;
+      state.data.images = data.images;
       state.data.countries = data.countries;
       state.data.topics = data.topics;
       state.data.non_state_actors = data.non_state_actors;

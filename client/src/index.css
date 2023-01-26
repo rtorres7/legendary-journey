@@ -53,7 +53,8 @@
   }
 
   /* indents lists that are not part of ck-content on ProductView */
-  .summary ol, ul {
+  .summary ol,
+  .summary ul {
     padding-left: 3em;
   }
 }

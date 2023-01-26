@@ -6,7 +6,6 @@ import specialEdition from "./modules/specialEdition";
 import specialEditions from "./modules/specialEditions";
 import user from "./modules/user";
 import feeds from "./modules/feeds";
-import formMetadata from "./modules/formMetadata";
 import savedSearches from "./modules/saved-searches";
 import danielDetails from "./modules/danielDetails";
 import testConsole from "./modules/test-console";
@@ -34,7 +33,6 @@ export default createStore({
     specialEditions,
     user,
     feeds,
-    formMetadata,
     savedSearches,
     danielDetails,
     testConsole,

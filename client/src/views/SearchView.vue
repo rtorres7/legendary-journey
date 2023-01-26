@@ -815,6 +815,7 @@ export default {
 
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
+    const producingOfficesList = [{ name: "DNI/NCTC", code: "DNI/NCTC" }];
     const loadingResults = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
@@ -1039,6 +1040,10 @@ export default {
         ),
         types: ["non_state_actors[]"],
       };
+      const producingOffices = {
+        items: buildItems(producingOfficesList, "producing_offices[]"),
+        types: ["producing_offices[]"],
+      };
       return {
         regions: {
           label: "Regions & Countries",
@@ -1078,10 +1083,9 @@ export default {
         },
         producing_offices: {
           label: "Producing Offices",
-          model: [],
-          list: [],
-          types: ["producing_offices[]"],
-          disabled: true,
+          model: currentModel(producingOffices),
+          list: producingOffices.items,
+          types: producingOffices.types,
         },
         frontpage_featured: {
           label: "Front Page Featured",
@@ -1126,6 +1130,8 @@ export default {
           return criteria.value.reporting_types;
         case "product_types[]":
           return criteria.value.product_types;
+        case "producing_offices[]":
+          return producingOfficesList;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":
