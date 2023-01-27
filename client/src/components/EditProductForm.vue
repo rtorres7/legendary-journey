@@ -701,6 +701,9 @@ export default {
         let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
         dissemsToSelect.push(dissemValue);
       });
+      if (dissemsToSelect.length !== lists.dissemOrgs.length) {
+        checkAllOrgs.value = false;
+      }
       form.value.dissemOrgs = dissemsToSelect;
       form.value.productType = lists.productTypes.find(
         (productFromBackend) =>
