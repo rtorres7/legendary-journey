@@ -29,7 +29,7 @@ import { computed, inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
-import { document } from "@/data";
+import { mockDocument } from "@/data";
 import EditProductForm from "@/components/EditProductForm";
 import NotAuthorized from "@/components/NotAuthorized";
 
@@ -77,8 +77,8 @@ export default {
     onMounted(() => {
       if (process.env.NODE_ENV === "low") {
         setTimeout(() => {
-          console.log("document/getDocument: ", document);
-          product.value = document;
+          console.log("document/getDocument: ", mockDocument);
+          product.value = mockDocument;
           loadingProduct.value = false;
         }, 1000);
       } else {

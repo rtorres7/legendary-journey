@@ -429,7 +429,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { document } from "@/data";
+import { mockDocument } from "@/data";
 import { getValueForCode } from "@/helpers";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
@@ -896,7 +896,7 @@ export default {
       savingProduct.value = true;
       if (process.env.NODE_ENV === "low") {
         setTimeout(() => {
-          console.log("document/getDocument: ", document);
+          console.log("document/getDocument: ", mockDocument);
           product.value = document;
           savingProduct.value = false;
           createNotification({
