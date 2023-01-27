@@ -23,12 +23,18 @@
 import { ref } from "vue";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
+import GeneralHtmlSupport from '@ckeditor/ckeditor5-html-support/src/generalhtmlsupport';
 import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import ItalicPlugin from "@ckeditor/ckeditor5-basic-styles/src/italic";
+import UnderlinePlugin from "@ckeditor/ckeditor5-basic-styles/src/underline";
+import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import Font from "@ckeditor/ckeditor5-font/src/font";
 import LinkPlugin from "@ckeditor/ckeditor5-link/src/link";
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
 import ParagraphPlugin from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+import Style from '@ckeditor/ckeditor5-style/src/style';
 import DocumentListProperties from "@ckeditor/ckeditor5-list/src/documentlistproperties";
 import Image from "@ckeditor/ckeditor5-image/src/image";
 import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
@@ -75,12 +81,18 @@ export default {
     const baseConfig = {
       plugins: [
         EssentialsPlugin,
+        GeneralHtmlSupport,
         BoldPlugin,
         ItalicPlugin,
+        UnderlinePlugin,
+        Strikethrough,
+        Subscript,
+        Superscript,
         Font,
         LinkPlugin,
         Heading,
         ParagraphPlugin,
+        Style,
         DocumentListProperties,
         Image,
         ImageInsert,
@@ -96,8 +108,14 @@ export default {
         items: [
           "heading",
           "|",
+          "style",
+          "|",
           "bold",
           "italic",
+          "underline",
+          "strikethrough",
+          "subscript",
+          "superscript",
           "|",
           "fontSize",
           "fontFamily",
@@ -116,13 +134,23 @@ export default {
           "|",
         ],
       },
-      list: {
-        properties: {
-          styles: true,
-          startIndex: true,
-          reversed: true,
-        },
-      },
+      // Not currently functional
+      // list: {
+      //   properties: {
+      //     styles: true,
+      //     startIndex: true,
+      //     reversed: true,
+      //   },
+      // },
+      style: {
+        definitions: [
+          {
+            name: 'Info box',
+            element: 'p',
+            classes: [ 'info-box' ]
+          },
+        ]
+      }
     };
 
     const config = ref(baseConfig);
@@ -195,5 +223,17 @@ export default {
 }
 .ck.ck-content p {
   font-size: 0.9em;
+}
+.ck.ck-content p.info-box {
+  @apply shadow-md;
+  background-color: white;
+  padding: 1.2em 2em;
+  margin: 1.5em;
+}
+.dark .ck.ck-content p.info-box {
+  @apply bg-slate-800;
+}
+.energy .ck.ck-content p.info-box {
+  @apply bg-zinc-800;
 }
 </style>
