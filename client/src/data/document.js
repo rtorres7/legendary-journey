@@ -1,4 +1,4 @@
-export const document = {
+export const mockDocument = {
   control_to: false,
   countries: [],
   dissem_orgs: [],

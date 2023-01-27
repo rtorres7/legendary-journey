@@ -9,7 +9,6 @@ import feeds from "./modules/feeds";
 import savedSearches from "./modules/saved-searches";
 import danielDetails from "./modules/danielDetails";
 import testConsole from "./modules/test-console";
-import document from "./modules/document";
 import metadata from "./modules/metadata";
 import relatedProducts from "./modules/relatedProducts";
 import metrics from "./modules/metrics";
@@ -36,7 +35,6 @@ export default createStore({
     savedSearches,
     danielDetails,
     testConsole,
-    document,
     metadata,
     relatedProducts,
     metrics,
