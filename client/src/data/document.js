@@ -1,7 +1,7 @@
 export const document = {
   control_to: false,
-  dissem_orgs: [],
   countries: [],
+  dissem_orgs: [],
   topics: [{ code: "TERR" }],
   non_state_actors: [],
   title: "",

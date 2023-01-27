@@ -1,5 +1,5 @@
-import { metadata } from '@/data'
-import axios from '@/config/wireAxios'
+import { metadata } from "@/data";
+import axios from "@/config/wireAxios";
 
 export default {
   namespaced: true,
@@ -10,6 +10,7 @@ export default {
     criteria: {
       classification: [],
       countries: [],
+      dissem_orgs: [],
       domestic_regions: [],
       fisa_role: [],
       issues: [],
@@ -20,7 +21,7 @@ export default {
       reporting_types: [],
       selected_for: [],
       subregions: [],
-      topics: []
+      topics: [],
     },
     featuresAvailable: {},
     highlightsBanner: "",
@@ -35,29 +36,30 @@ export default {
   },
   actions: {
     loadMetadata({ commit }) {
-      if (process.env.NODE_ENV === 'low') {
-        console.log('[store] loadMetadata: ', metadata)
-        setTimeout(() => commit("importMetadata", metadata), 750)
+      if (process.env.NODE_ENV === "low") {
+        console.log("[store] loadMetadata: ", metadata);
+        setTimeout(() => commit("importMetadata", metadata), 750);
       } else {
         axios.get("/metadata").then((response) => {
-          console.log('[store] loadMetadata: ', response.data.metadata)
+          console.log("[store] loadMetadata: ", response.data.metadata);
           commit("importMetadata", response.data.metadata);
         });
       }
     },
     removeMetadata({ commit }) {
       commit("resetMetadata");
-    }
+    },
   },
 
   mutations: {
     importMetadata(state, metadata) {
-      state.loading = false
-      state.agency = metadata.agency
-      state.contactEmail = metadata.contactEmail
+      state.loading = false;
+      state.agency = metadata.agency;
+      state.contactEmail = metadata.contactEmail;
       state.criteria = {
         classification: metadata.criteria.classification.values,
         countries: metadata.criteria.countries.values,
+        dissem_orgs: metadata.criteria.dissem_orgs,
         domestic_regions: metadata.criteria.domestic_regions.values,
         fisa_role: metadata.criteria.fisa_role.values,
         issues: metadata.criteria.issues.values,
@@ -68,24 +70,25 @@ export default {
         reporting_types: metadata.criteria.reporting_types.values,
         selected_for: metadata.criteria.selected_for.values,
         subregions: metadata.criteria.subregions.values,
-        topics: metadata.criteria.topics.values
-      }
-      state.featuresAvailable = metadata.features_available
-      state.highlightsBanner = metadata.highlightsBanner
-      state.highlightsNavHeader = metadata.highlightsNavHeader
-      state.name = metadata.name
-      state.nonProduction = metadata.nonProduction
-      state.project = metadata.project
-      state.resourceLinks = metadata.resourceLinks
-      state.searchFilters = metadata.searchFilters
-      state.siteClassification = metadata.siteClassification
-      state.siteDefaultTitle = metadata.siteDefaultTitle
+        topics: metadata.criteria.topics.values,
+      };
+      state.featuresAvailable = metadata.features_available;
+      state.highlightsBanner = metadata.highlightsBanner;
+      state.highlightsNavHeader = metadata.highlightsNavHeader;
+      state.name = metadata.name;
+      state.nonProduction = metadata.nonProduction;
+      state.project = metadata.project;
+      state.resourceLinks = metadata.resourceLinks;
+      state.searchFilters = metadata.searchFilters;
+      state.siteClassification = metadata.siteClassification;
+      state.siteDefaultTitle = metadata.siteDefaultTitle;
     },
     resetMetadata(state) {
       state.loading = true;
       state.criteria = {
         classification: [],
         countries: [],
+        dissem_orgs: [],
         domestic_regions: [],
         fisa_role: [],
         issues: [],
@@ -96,8 +99,8 @@ export default {
         reporting_types: [],
         selected_for: [],
         subregions: [],
-        topics: []
-      }
-    }
+        topics: [],
+      };
+    },
   },
 };

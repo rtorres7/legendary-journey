@@ -1,6 +1,7 @@
+<!-- TODO: Style this better -->
 <template>
   <div
-    class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg p-5 transition duration-300 ease-in-out"
+    class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg px-5 py-[1.1rem] transition duration-300 ease-in-out"
     :style="`--toast-duration: ${duration}s`"
   >
     <div

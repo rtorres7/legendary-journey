@@ -56,7 +56,7 @@
         </div>
       </template>
     </div>
-    <p>
+    <p v-if="!isCommunityExclusive">
       Not sure which product to choose?
       <a class="font-semibold cursor-pointer" @click="goToArticle()"
         >Click here</a
@@ -318,6 +318,7 @@ export default {
       selectedDate,
       articles,
       loadingArticles,
+      isCommunityExclusive,
       availableProductTypes,
       goToArticle,
       selectDate,
