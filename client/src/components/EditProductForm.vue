@@ -172,7 +172,7 @@
                 description="Further enhance your product by adding more details."
               >
                 <div class="flex flex-col space-y-4">
-                  <div>
+                  <!-- <div>
                     <label class="text-sm font-medium">Thumbnail</label>
                     <div
                       class="w-fit mt-1 rounded shadow-sm text-xs md:text-sm bg-transparent border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
@@ -192,7 +192,7 @@
                         />
                       </label>
                     </div>
-                  </div>
+                  </div> -->
                   <div>
                     <BaseCkEditor
                       v-model="form.editorData"
@@ -229,7 +229,9 @@
                         @click="toggleAllOrgs()"
                       />
                       <label for="allOrgs" class="ml-2 text-sm"
-                        >Select All Orgs</label
+                        >Select All Orgs<span class="ml-2 italic"
+                          >(includes NT50 Organizations)</span
+                        ></label
                       >
                     </div>
                   </div>
