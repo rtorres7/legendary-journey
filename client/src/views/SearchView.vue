@@ -145,9 +145,9 @@
               >
                 <template
                   v-for="n in [
-                    queryFilters.nonstate_actors,
-                    queryFilters.producing_offices,
-                    queryFilters.frontpage_featured,
+                    // queryFilters.nonstate_actors,
+                    // queryFilters.producing_offices,
+                    // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
                 >
@@ -1033,17 +1033,13 @@ export default {
         items: buildItems(criteria.value.media_tags, "media_tags[]"),
         types: ["media_tags[]"],
       };
-      const nonStateActors = {
-        items: buildItems(
-          criteria.value.non_state_actors,
-          "non_state_actors[]"
-        ),
-        types: ["non_state_actors[]"],
-      };
-      const producingOffices = {
-        items: buildItems(producingOfficesList, "producing_offices[]"),
-        types: ["producing_offices[]"],
-      };
+      // const nonStateActors = {
+      //   items: buildItems(
+      //     criteria.value.non_state_actors,
+      //     "non_state_actors[]"
+      //   ),
+      //   types: ["non_state_actors[]"],
+      // };
       return {
         regions: {
           label: "Regions & Countries",
@@ -1075,25 +1071,25 @@ export default {
           list: mediaTypes.items,
           types: mediaTypes.types,
         },
-        nonstate_actors: {
-          label: "Non State Actors",
-          model: currentModel(nonStateActors),
-          list: nonStateActors.items,
-          types: nonStateActors.types,
-        },
-        producing_offices: {
-          label: "Producing Offices",
-          model: currentModel(producingOffices),
-          list: producingOffices.items,
-          types: producingOffices.types,
-        },
-        frontpage_featured: {
-          label: "Front Page Featured",
-          model: [],
-          list: [],
-          types: ["selected_for[]"],
-          disabled: true,
-        },
+        // nonstate_actors: {
+        //   label: "Non State Actors",
+        //   model: currentModel(nonStateActors),
+        //   list: nonStateActors.items,
+        //   types: nonStateActors.types,
+        // },
+        // producing_offices: {
+        //   label: "Producing Offices",
+        //   model: currentModel(producingOffices),
+        //   list: producingOffices.items,
+        //   types: producingOffices.types,
+        // },
+        // frontpage_featured: {
+        //   label: "Front Page Featured",
+        //   model: [],
+        //   list: [],
+        //   types: ["selected_for[]"],
+        //   disabled: true,
+        // },
       };
     };
     const queryText = ref(

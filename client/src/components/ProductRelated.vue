@@ -10,10 +10,13 @@
       <ul class="space-y-1">
         <li v-for="relatedProduct in relatedProducts" :key="relatedProduct">
           <router-link
-            :to="'/product/' + relatedProduct.doc_num"
+            class="flex hover:underline"
+            :to="relatedProductLink + '/' + relatedProduct.id + '.json'"
             target="_blank"
           >
-            {{ relatedProduct.document.title }}
+            <span class="block truncate">{{
+              relatedProduct.document.title
+            }}</span>
           </router-link>
         </li>
       </ul>
