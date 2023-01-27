@@ -25,6 +25,10 @@ import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor"
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
 import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import ItalicPlugin from "@ckeditor/ckeditor5-basic-styles/src/italic";
+import UnderlinePlugin from "@ckeditor/ckeditor5-basic-styles/src/underline";
+import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import Font from "@ckeditor/ckeditor5-font/src/font";
 import LinkPlugin from "@ckeditor/ckeditor5-link/src/link";
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
@@ -77,6 +81,10 @@ export default {
         EssentialsPlugin,
         BoldPlugin,
         ItalicPlugin,
+        UnderlinePlugin,
+        Strikethrough,
+        Subscript,
+        Superscript,
         Font,
         LinkPlugin,
         Heading,
@@ -98,6 +106,10 @@ export default {
           "|",
           "bold",
           "italic",
+          "underline",
+          "strikethrough",
+          "subscript",
+          "superscript",
           "|",
           "fontSize",
           "fontFamily",
