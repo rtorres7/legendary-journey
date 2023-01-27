@@ -897,7 +897,7 @@ export default {
       if (process.env.NODE_ENV === "low") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
-          product.value = document;
+          product.value = mockDocument;
           savingProduct.value = false;
           createNotification({
             title: "Product Saved",
