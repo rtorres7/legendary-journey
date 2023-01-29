@@ -586,15 +586,15 @@ export default {
     };
 
     const toggleAllOrgs = () => {
-      lists.dissemOrgs.forEach((org) => {
-        if (!checkAllOrgs.value) {
-          if (!form.value.dissemOrgs.includes(org)) {
-            form.value.dissemOrgs.push(org);
-          }
-        } else {
-          form.value.dissemOrgs = [];
-        }
-      });
+      let payloadOrgs = [];
+      form.value.dissemOrgs = [];
+      if (!checkAllOrgs.value) {
+        lists.dissemOrgs.forEach((org) => {
+          form.value.dissemOrgs.push(org);
+          payloadOrgs.push(org.code);
+        });
+      }
+      payload.value["dissem_orgs"] = payloadOrgs;
     };
 
     const prepopulateFields = (model) => {
@@ -633,11 +633,11 @@ export default {
                 : "";
               break;
             case "title":
-              payload.value.title_classif = model.marking;
+              payload.value.title_classif = model.name;
               payload.value.title_classif_xml = model.xml;
               break;
             case "summary":
-              payload.value.summary_classif = model.marking;
+              payload.value.summary_classif = model.name;
               payload.value.summary_classif_xml = model.xml;
               break;
           }
@@ -949,7 +949,9 @@ export default {
                     product.value = response.data;
                     createNotification({
                       title: "Product Saved",
-                      message: response.data.status,
+                      message: response.data.status
+                        ? response.data.status
+                        : `Product ${props.documentNumber} has beeen successfully saved.`,
                       type: "success",
                     });
                   } else {
