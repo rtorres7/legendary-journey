@@ -468,6 +468,18 @@
 .ck-content h4 {
   font-size: 1.1em;
 }
+.ck-content p.info-box {
+  @apply shadow-md;
+  background-color: white;
+  padding: 1.2em 2em;
+  margin: 1.5em;
+}
+.dark .ck-content p.info-box {
+  @apply bg-slate-800;
+}
+.energy .ck-content p.info-box {
+  @apply bg-zinc-800;
+}
 @media print {
   /* ckeditor5-page-break/theme/pagebreak.css */
   .ck-content .page-break {
