@@ -2,6 +2,7 @@ export const mockDocument = {
   control_to: false,
   countries: [],
   dissem_orgs: [],
+  images: [],
   topics: [{ code: "TERR" }],
   non_state_actors: [],
   title: "",

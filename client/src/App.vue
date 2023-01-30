@@ -12,7 +12,7 @@
     >
       <div
         ref="mainContent"
-        class="max-w-8xl min-h-[80vh] md:min-h-[88vh] lg:min-h-[82vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
+        class="max-w-8xl min-h-[80vh] md:min-h-[88vh] lg:min-h-[65vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
         tabindex="-1"
       >
         <template v-if="loadingUser">
