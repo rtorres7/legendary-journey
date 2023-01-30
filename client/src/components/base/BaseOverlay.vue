@@ -4,7 +4,7 @@
       <div class="fixed z-20 inset-0 overflow-y-auto">
         <div class="min-h-screen px-4 text-center">
           <div
-            class="fixed inset-0 bg-black/20 dark:bg-black/25 energy:bg-black/25"
+            class="fixed inset-0 bg-white/20 dark:bg-black/20 energy:bg-black/25"
           />
           <span class="inline-block h-screen align-middle" aria-hidden="true">
             &ZeroWidthSpace;
