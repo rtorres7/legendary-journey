@@ -35,7 +35,7 @@ import LinkPlugin from "@ckeditor/ckeditor5-link/src/link";
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
 import ParagraphPlugin from "@ckeditor/ckeditor5-paragraph/src/paragraph";
 import Style from '@ckeditor/ckeditor5-style/src/style';
-import DocumentListProperties from "@ckeditor/ckeditor5-list/src/documentlistproperties";
+import List from "@ckeditor/ckeditor5-list/src/list";
 import Image from "@ckeditor/ckeditor5-image/src/image";
 import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
 import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
@@ -93,7 +93,7 @@ export default {
         Heading,
         ParagraphPlugin,
         Style,
-        DocumentListProperties,
+        List,
         Image,
         ImageInsert,
         ImageToolbar,
@@ -204,13 +204,18 @@ export default {
 .ck-editor__editable_inline {
   height: 450px;
 }
-.ck.ck-content ul,
-.ck.ck-content ul li {
-  list-style-type: inherit;
-}
 .ck.ck-content ol,
 .ck.ck-content ul {
-  padding-left: 40px;
+  padding-left: 3em;
+}
+.ck.ck-content ul {
+  list-style-type: disc;
+}
+.ck.ck-content ul ul {
+  list-style-type: circle;
+}
+.ck.ck-content ul ul ul {
+  list-style-type: square;
 }
 .ck.ck-content h2 {
   font-size: 1.5em;
