@@ -263,17 +263,24 @@
                       @update:modelValue="updateField($event, 'poc_info')"
                     ></BaseTextarea>
                   </div>
-                  <div class="lg:w-1/3 space-y-4">
+                  <div class="lg:w-1/2 space-y-4">
                     <BaseListbox
                       v-model="form.dissemOrgs"
-                      :label="'Dissem Orgs'"
+                      :label="'Restrict Dissemination by Organization'"
                       :items="lists.dissemOrgs"
+                      aria-label="No selection disseminates to all (includes NT-50 Organizations)."
                       multiple
                       @update:modelValue="
                         updateField($event, 'dissem_orgs', 'multiple')
                       "
                     />
-                    <div class="flex">
+                    <p class="ml-2 text-sm">
+                      No selection disseminates to all
+                      <span class="ml-1 italic"
+                        >(includes NT-50 Organizations).</span
+                      >
+                    </p>
+                    <!-- <div class="flex">
                       <input
                         id="allOrgs"
                         v-model="checkAllOrgs"
@@ -283,10 +290,10 @@
                       />
                       <label for="allOrgs" class="ml-2 text-sm"
                         >Select All Orgs<span class="ml-2 italic"
-                          >(includes NT50 Organizations)</span
+                          >(includes NT-50 Organizations)</span
                         ></label
                       >
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </EditProductFormSection>
