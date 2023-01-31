@@ -22,10 +22,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .default-btn {
-  @apply bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75;
+  @apply bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 disabled:bg-inherit disabled:dark:bg-inherit disabled:energy:bg-inherit;
 }
 .secondary-btn {
-  @apply bg-white dark:bg-slate-800/50 energy:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 disabled:hover:bg-white disabled:dark:bg-slate-800/50 disabled:energy:bg-zinc-800;
+  @apply bg-white dark:bg-slate-800/50 energy:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 disabled:bg-inherit disabled:dark:bg-inherit disabled:energy:bg-inherit;
 }
 .danger-btn {
   @apply text-white border-transparent bg-red-600 hover:bg-red-700 disabled:bg-red-400/70;
