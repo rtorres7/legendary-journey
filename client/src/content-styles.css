@@ -436,21 +436,16 @@
 }
 /* ckeditor5-list/theme/liststyles.css */
 .ck-content ul {
-  list-style-type: circle;
-  padding-left: 3em;
-}
-/* ckeditor5-list/theme/liststyles.css */
-.ck-content ul ul {
   list-style-type: disc;
   padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
-.ck-content ul ul ul {
-  list-style-type: square;
+.ck-content ul ul {
+  list-style-type: circle;
   padding-left: 3em;
 }
 /* ckeditor5-list/theme/liststyles.css */
-.ck-content ul ul ul ul {
+.ck-content ul ul ul {
   list-style-type: square;
   padding-left: 3em;
 }

@@ -172,27 +172,80 @@
                 description="Further enhance your product by adding more details."
               >
                 <div class="flex flex-col space-y-4">
-                  <!-- <div>
-                    <label class="text-sm font-medium">Thumbnail</label>
-                    <div
-                      class="w-fit mt-1 rounded shadow-sm text-xs md:text-sm bg-transparent border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
-                    >
-                      <label
-                        for="image-input"
-                        class="relative cursor-pointer focus-within:ring-2 font-medium"
+                  <div class="flex flex-col space-y-4">
+                    <div>
+                      <label class="text-sm font-medium"
+                        >Thumbnail<span class="ml-2 italic font-normal"
+                          >(Shown when the product is featured)</span
+                        ></label
                       >
-                        <div class="px-2 md:px-4 py-2">Choose File</div>
-                        <input
-                          id="image-input"
-                          name="image-input"
-                          type="file"
-                          class="sr-only"
-                          accept=".jpeg,.png,.jpg"
-                          @change="uploadThumbnail"
-                        />
-                      </label>
+                      <div class="flex space-x-3">
+                        <div
+                          class="w-fit mt-1 rounded shadow-sm text-xs md:text-sm bg-transparent border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
+                        >
+                          <label
+                            for="image-input"
+                            class="relative cursor-pointer focus-within:ring-2 font-medium"
+                          >
+                            <div class="flex items-center px-2 md:px-6 py-3">
+                              <template
+                                v-if="thumbnailFile?.status === 'loading'"
+                              >
+                                <BaseLoadingSpinner class="h-5 w-5" />
+                                Uploading...
+                              </template>
+                              <template v-else>
+                                {{
+                                  form.thumbnailImage ||
+                                  (thumbnailBinary &&
+                                    thumbnailFile?.status === true)
+                                    ? "Change File"
+                                    : "Choose File"
+                                }}
+                              </template>
+                            </div>
+                            <input
+                              id="image-input"
+                              name="image-input"
+                              type="file"
+                              class="sr-only"
+                              accept=".jpeg,.png,.jpg"
+                              @change="uploadThumbnail"
+                            />
+                          </label>
+                        </div>
+                        <template v-if="thumbnailFile?.status === false">
+                          <div
+                            class="flex items-center text-red-700 dark:text-red-400 energy:text-red-400"
+                          >
+                            <ExclamationCircleIcon class="h-6 w-6 mr-2" />
+                            Upload failed!
+                          </div>
+                        </template>
+                      </div>
                     </div>
-                  </div> -->
+                    <div
+                      v-if="
+                        form.thumbnailImage ||
+                        (thumbnailBinary && thumbnailFile?.status === true)
+                      "
+                      class="cursor-pointer relative h-full w-[200px]"
+                      @click="openPreviewThumbnailDialog"
+                    >
+                      <img
+                        class="w-full h-full"
+                        :src="
+                          thumbnailBinary
+                            ? thumbnailBinary
+                            : form.thumbnailImage
+                        "
+                        alt="Preview Image"
+                      />
+                      <div
+                        class="absolute hover:bg-black/25 h-full w-full top-0 z-[3]"
+                      />
+                    </div>
+                  </div>
                   <div>
                     <BaseCkEditor
                       v-model="form.editorData"
@@ -210,17 +263,24 @@
                       @update:modelValue="updateField($event, 'poc_info')"
                     ></BaseTextarea>
                   </div>
-                  <div class="lg:w-1/3 space-y-4">
+                  <div class="lg:w-1/2 space-y-4">
                     <BaseListbox
                       v-model="form.dissemOrgs"
-                      :label="'Dissem Orgs'"
+                      :label="'Restrict Dissemination by Organization'"
                       :items="lists.dissemOrgs"
+                      aria-label="No selection disseminates to all (includes NT-50 Organizations)."
                       multiple
                       @update:modelValue="
                         updateField($event, 'dissem_orgs', 'multiple')
                       "
                     />
-                    <div class="flex">
+                    <p class="ml-2 text-sm">
+                      No selection disseminates to all
+                      <span class="ml-1 italic"
+                        >(includes NT-50 Organizations).</span
+                      >
+                    </p>
+                    <!-- <div class="flex">
                       <input
                         id="allOrgs"
                         v-model="checkAllOrgs"
@@ -230,10 +290,10 @@
                       />
                       <label for="allOrgs" class="ml-2 text-sm"
                         >Select All Orgs<span class="ml-2 italic"
-                          >(includes NT50 Organizations)</span
+                          >(includes NT-50 Organizations)</span
                         ></label
                       >
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </EditProductFormSection>
@@ -394,6 +454,37 @@
       </BaseButton>
     </template>
   </BaseDialog>
+  <BaseDialog
+    :isOpen="isPreviewThumbnailDialogOpen"
+    :title="'Thumbnail Preview'"
+    class="max-w-fit"
+    @close="closePreviewThumbnailDialog"
+  >
+    <div
+      id="img-container"
+      class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+    >
+      <div
+        id="product-blur"
+        class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
+        :style="{
+          background:
+            'url(' + thumbnailBinary
+              ? thumbnailBinary
+              : form.thumbnailImage + ')',
+        }"
+      ></div>
+      <img
+        id="product-img"
+        class="inset-x-0 absolute h-full mx-auto z-[3]"
+        :src="thumbnailBinary ? thumbnailBinary : form.thumbnailImage"
+        alt=""
+      />
+    </div>
+    <p class="italic">
+      Only shown when the product is featured on the front page.
+    </p>
+  </BaseDialog>
   <BaseOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
@@ -422,6 +513,7 @@ import {
 } from "@heroicons/vue/24/solid";
 import {
   BriefcaseIcon,
+  ExclamationCircleIcon,
   KeyIcon,
   PlusCircleIcon,
   PaperClipIcon,
@@ -430,7 +522,12 @@ import {
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
 import { mockDocument } from "@/data";
-import { getValueForCode } from "@/helpers";
+import {
+  UploadableFile,
+  getValueForCode,
+  hasProductImage,
+  getProductImageUrl,
+} from "@/helpers";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
 import DropZone from "@/components/DropZone";
@@ -470,6 +567,7 @@ const categories = [
 export default {
   components: {
     BriefcaseIcon,
+    ExclamationCircleIcon,
     KeyIcon,
     PlusCircleIcon,
     PaperClipIcon,
@@ -534,7 +632,9 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
     const { files, addFiles, removeFile } = useFileList();
-    const { uploadFiles } = createUploader(
+    const thumbnailFile = ref(null);
+    const thumbnailBinary = ref(null);
+    const { uploadFile, uploadFiles } = createUploader(
       "/documents/" + props.documentNumber + "/attachments/"
     );
     const product = ref(props.product);
@@ -569,6 +669,7 @@ export default {
       title: "",
       titleClassificationXML: "",
       topics: [],
+      thumbnailImage: false,
       worldwide: null,
     });
     const payload = ref({});
@@ -678,6 +779,9 @@ export default {
     };
 
     const updateForm = (updatedProduct) => {
+      form.value.thumbnailImage = hasProductImage(updatedProduct.images)
+        ? getProductImageUrl(updatedProduct.images, props.documentNumber)
+        : false;
       form.value.worldwide = updatedProduct.worldwide;
       if (!form.value.worldwide) {
         const countriesToSelect = [];
@@ -752,6 +856,13 @@ export default {
     const closeDeleteDialog = () => {
       isDeleteDialogOpen.value = false;
     };
+    const isPreviewThumbnailDialogOpen = ref(false);
+    const openPreviewThumbnailDialog = () => {
+      isPreviewThumbnailDialogOpen.value = true;
+    };
+    const closePreviewThumbnailDialog = () => {
+      isPreviewThumbnailDialogOpen.value = false;
+    };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
       isPreviewDialogOpen.value = false;
@@ -761,15 +872,21 @@ export default {
     };
 
     const uploadThumbnail = (event) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        thumbnailBinary.value = reader.result;
+      });
       const uploadedFile = event.target.files[0];
+      reader.readAsDataURL(uploadedFile);
       let extension = uploadedFile.type.split("/").pop();
       extension = extension === "jpeg" ? "jpg" : extension;
-      const changedFile = new File([uploadedFile], `article.${extension}`, {
-        type: uploadedFile.type,
-      });
-      addFiles([changedFile]);
+      thumbnailFile.value = new UploadableFile(
+        new File([uploadedFile], `article.${extension}`, {
+          type: uploadedFile.type,
+        })
+      );
       event.target.value = null;
-      uploadFiles(files.value);
+      uploadFile(thumbnailFile.value);
     };
 
     watch([savingProduct], () => {
@@ -977,9 +1094,11 @@ export default {
       document,
       categories,
       extraConfig,
+      thumbnailFile,
       files,
       addFiles,
       removeFile,
+      thumbnailBinary,
       savingProduct,
       publishingProduct,
       lists,
@@ -996,6 +1115,9 @@ export default {
       isDeleteDialogOpen,
       openDeleteDialog,
       closeDeleteDialog,
+      isPreviewThumbnailDialogOpen,
+      openPreviewThumbnailDialog,
+      closePreviewThumbnailDialog,
       isPreviewDialogOpen,
       closePreviewDialog,
       openPreviewDialog,
