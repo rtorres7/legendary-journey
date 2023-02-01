@@ -141,8 +141,13 @@
                 >{{ article.doc_num }}
               </p>
               <p>
-                <span class="font-semibold">Posted: </span
-                >{{ formatDate(article.posted_at) }}
+                <span class="font-semibold">Posted: </span>
+                <template v-if="article.posted_at">
+                  {{ formatDate(article.posted_at) }}
+                </template>
+                <template v-else>
+                  {{ formatDate(article.posted_on) }}
+                </template>
               </p>
               <p>
                 <span class="font-semibold">Publication Date: </span
