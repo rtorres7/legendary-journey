@@ -414,8 +414,16 @@
               <div
                 class="flex p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
                 :class="
-                  isLocked(result)
-                    ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
+                  isProductLocked(result)
+                    ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
+                    : ''
+                "
+                :aria-label="
+                  isProductLocked(result) ? 'restricted product' : ''
+                "
+                :title="
+                  isProductLocked(result)
+                    ? 'This product has restricted access.'
                     : ''
                 "
               >
@@ -430,17 +438,17 @@
                     dayjs(result.date_published).format("YYYY")
                   }}</span>
                 </div>
-                <div class="px-2 w-full">
-                  <template v-if="isLocked(result)">
-                    <div class="flex mb-2 items-center">
-                      <LockClosedIcon class="mr-2 h-4 w-4" aria-hidden="true" />
-                      <span class="uppercase text-sm">Locked</span>
-                    </div>
+                <div class="relative px-2 w-full">
+                  <template v-if="isProductLocked(result)">
+                    <BaseProductIcon
+                      class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+                      icon="locked"
+                    />
                   </template>
                   <div class="flex justify-between">
                     <div
                       class="basis-[768px] hover:underline"
-                      :class="isLocked(result) ? '' : 'cursor-pointer'"
+                      :class="isProductLocked(result) ? '' : 'cursor-pointer'"
                     >
                       <ProductRestrictedLink :product="result">
                         <span
@@ -741,7 +749,7 @@
 <script>
 import * as dayjs from "dayjs";
 import {
-  isEmpty,
+  isProductLocked,
   getValueForCode,
   getValueForName,
   formatDate,
@@ -768,7 +776,6 @@ import {
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import ProductCard from "@/components/ProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
@@ -801,7 +808,6 @@ export default {
     ChevronUpIcon,
     ChevronUpDownIcon,
     XMarkIcon,
-    LockClosedIcon,
     ProductCard,
     ProductRestrictedLink,
     SearchResultsFacets,
@@ -1411,19 +1417,6 @@ export default {
       return false;
     };
 
-    const isLocked = (result) => {
-      return !isEmpty(result.needed) || result.org_restricted;
-    };
-
-    const goToArticle = (result) => {
-      if (!isLocked(result)) {
-        router.push({
-          name: "product",
-          params: { doc_num: result.doc_num },
-        });
-      }
-    };
-
     const toggleImgContainer = (result, value) => {
       result.hasImage = value;
     };
@@ -1547,6 +1540,7 @@ export default {
 
     return {
       dayjs,
+      isProductLocked,
       formatDate,
       loadingMetadata,
       loadingResults,
@@ -1563,8 +1557,6 @@ export default {
       queryDisabled,
       searchQueryText,
       showHighlightedResult,
-      goToArticle,
-      isLocked,
       toggleImgContainer,
       queryFilters,
       booleanFilters,

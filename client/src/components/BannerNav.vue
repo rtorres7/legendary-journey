@@ -36,7 +36,7 @@
     </div>
     <div class="mx-auto pt-2 px-6 lg:px-8">
       <div
-        class="flex items-center justify-between h-18 pb-2 lg:border-b lg:border-slate-700/50 lg:energy:border-zinc-700/50"
+        class="relative flex items-center justify-between h-18 pb-2 lg:border-b lg:border-slate-700/50 lg:energy:border-zinc-700/50"
       >
         <!-- Left Nav Bar -->
         <div class="flex h-full items-center">
