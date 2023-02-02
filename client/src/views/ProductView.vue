@@ -58,7 +58,7 @@
             :to="{
               name: 'edit',
               params: {
-                date: article?.date_published,
+                date: article?.posted_on,
                 id: article?.feature_id ? article.feature_id : -1,
                 doc_num: article?.doc_num,
               },
@@ -128,10 +128,10 @@
           </DisclosureButton>
           <DisclosurePanel>
             <div class="ml-4 space-y-2 text-sm">
-              <p>
+              <!-- <p>
                 <span class="font-semibold">Produced By: </span
                 >{{ article.producing_office }}
-              </p>
+              </p> -->
               <p>
                 <span class="font-semibold">Product Type: </span
                 >{{ article.product_type_name }}

@@ -33,9 +33,6 @@ export const formatDate = (date) => {
 };
 
 export const isProductLocked = (product) => {
-  //TODO: Remove this later
-  // console.log(product);
-  // return true;
   return !isEmpty(product.needed) || product.org_restricted;
 };
 

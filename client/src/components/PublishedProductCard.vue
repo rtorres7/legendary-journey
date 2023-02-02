@@ -8,6 +8,14 @@
         ? 'bg-slate-200/50 dark:bg-slate-700/60 energy:bg-zinc-600/50'
         : '',
     ]"
+    :aria-label="
+      !loading && isProductLocked(article) ? 'restricted product' : ''
+    "
+    :title="
+      !loading && isProductLocked(article)
+        ? 'This product has restricted access.'
+        : ''
+    "
     :hoverable="!loading && !isProductLocked(article) ? true : false"
     :rounded="false"
   >
@@ -52,7 +60,7 @@
       <div
         :class="[
           headline ? 'h-2/5' : 'h-1/3',
-          'flex flex-col justify-between pt-2 px-4',
+          'relative flex flex-col justify-between pt-2 px-4',
         ]"
       >
         <div>
@@ -64,12 +72,6 @@
               'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium',
             ]"
           >
-            <template v-if="isProductLocked(article)">
-              <LockClosedIcon
-                class="h-5 w-5 float-left mr-2"
-                aria-hidden="true"
-              />
-            </template>
             {{ `(${article.title_classification}) ${article.title}` }}
           </h1>
           <p
@@ -87,18 +89,22 @@
         >
           {{ formatDate(article.date_published) }}
         </p>
+        <template v-if="isProductLocked(article)">
+          <BaseProductIcon
+            class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+            icon="locked"
+          />
+        </template>
       </div>
     </template>
   </BaseCard>
 </template>
 <script>
 import { isProductLocked, formatDate } from "@/helpers";
-import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
-    LockClosedIcon,
     ProductImage,
   },
   props: {
