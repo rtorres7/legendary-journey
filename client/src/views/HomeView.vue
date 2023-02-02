@@ -49,7 +49,9 @@
                   <template v-if="sitreps.length > 0">
                     <template v-for="item in sitreps" :key="item">
                       <div class="w-full h-40">
-                        <SituationalAwarenessCard :sitrep="item" />
+                        <ProductRestrictedLink :product="item">
+                          <SituationalAwarenessCard :sitrep="item" />
+                        </ProductRestrictedLink>
                       </div>
                     </template>
                   </template>
@@ -85,14 +87,9 @@
               <template v-else>
                 <Slide v-for="item in sitreps" :key="item">
                   <div class="w-full h-36 text-left mr-4">
-                    <router-link
-                      :to="{
-                        name: 'product',
-                        params: { doc_num: item.doc_num },
-                      }"
-                    >
+                    <ProductRestrictedLink :product="item">
                       <SituationalAwarenessCard :sitrep="item" />
-                    </router-link>
+                    </ProductRestrictedLink>
                   </div>
                 </Slide>
               </template>
@@ -118,17 +115,12 @@
           </template>
           <template v-else>
             <template v-if="danielArticles.length > 0">
-              <router-link
-                :to="{
-                  name: 'product',
-                  params: { doc_num: danielArticles[0].attributes.doc_num },
-                }"
-              >
+              <ProductRestrictedLink :product="danielArticles[0].attributes">
                 <PublishedProductCard
                   :article="danielArticles[0].attributes"
                   headline
                 />
-              </router-link>
+              </ProductRestrictedLink>
             </template>
             <template v-else>
               <div class="text-sm italic">
@@ -163,14 +155,9 @@
               :key="article"
             >
               <div class="w-full h-[288px] max-w-[591px]">
-                <router-link
-                  :to="{
-                    name: 'product',
-                    params: { doc_num: article.attributes.doc_num },
-                  }"
-                >
+                <ProductRestrictedLink :product="article.attributes">
                   <PublishedProductCard :article="article.attributes" />
-                </router-link>
+                </ProductRestrictedLink>
               </div>
             </template>
           </template>
@@ -198,14 +185,9 @@
             :key="article"
           >
             <div class="w-full h-[264px]">
-              <router-link
-                :to="{
-                  name: 'product',
-                  params: { doc_num: article.attributes.doc_num },
-                }"
-              >
+              <ProductRestrictedLink :product="article.attributes">
                 <PublishedProductCard :article="article.attributes" />
-              </router-link>
+              </ProductRestrictedLink>
             </div>
           </template>
         </template>
@@ -224,6 +206,7 @@ import * as dayjs from "dayjs";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import PublishedProductCard from "@/components/PublishedProductCard";
 import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
 
@@ -244,6 +227,7 @@ export default {
     Carousel,
     Slide,
     Navigation,
+    ProductRestrictedLink,
     PublishedProductCard,
     SituationalAwarenessCard,
   },

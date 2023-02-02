@@ -442,7 +442,7 @@
                       class="basis-[768px] hover:underline"
                       :class="isLocked(result) ? '' : 'cursor-pointer'"
                     >
-                      <a @click="goToArticle(result)">
+                      <ProductRestrictedLink :product="result">
                         <span
                           class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
                           >{{
@@ -454,7 +454,7 @@
                           class="text-black dark:text-white energy:text-white"
                           >{{ result.title }}</span
                         >
-                      </a>
+                      </ProductRestrictedLink>
                     </div>
                     <div class="text-xs lg:text-sm">
                       {{ result.doc_num }}
@@ -770,6 +770,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import ProductCard from "@/components/ProductCard";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 import SearchResultsPagination from "@/components/SearchResultsPagination";
 const sortOptions = [
@@ -802,6 +803,7 @@ export default {
     XMarkIcon,
     LockClosedIcon,
     ProductCard,
+    ProductRestrictedLink,
     SearchResultsFacets,
     SearchResultsPagination,
   },
@@ -1237,6 +1239,7 @@ export default {
     const removeFilter = (item) => {
       let query = {
         ...route.query,
+        page: 1,
       };
       if (item.type === "text" || item.type === "query") {
         delete query["text"];
@@ -1298,6 +1301,7 @@ export default {
           console.log("local watcher triggered.", newValue);
           let query = {
             ...route.query,
+            page: 1,
           };
           newValue.types.forEach((type) => {
             delete query[type];
@@ -1387,6 +1391,7 @@ export default {
     const searchQueryText = () => {
       let query = {
         ...route.query,
+        page: 1,
       };
       if (!queryText.value) {
         delete query["text"];

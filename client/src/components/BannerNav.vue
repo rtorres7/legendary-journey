@@ -101,12 +101,17 @@
                 class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b border-slate-700/50 energy:border-zinc-700/50"
               >
                 <MenuItem v-show="canManageWire">
-                  <a
+                  <router-link
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
-                    @click="navigateToPublish"
+                    :to="{
+                      name: 'publish',
+                      params: {
+                        date: dayjs().format('YYYY-MM-DD'),
+                      },
+                    }"
                   >
                     Publish a Product
-                  </a>
+                  </router-link>
                 </MenuItem>
                 <MenuItem v-show="canManageSpecialEditions">
                   <router-link
@@ -592,12 +597,17 @@
                     >
                   </li>
                   <li v-show="canManageWire">
-                    <a
+                    <router-link
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
-                      @click="navigateToPublish"
+                      :to="{
+                        name: 'publish',
+                        params: {
+                          date: dayjs().format('YYYY-MM-DD'),
+                        },
+                      }"
                     >
                       Publish a Product
-                    </a>
+                    </router-link>
                   </li>
                   <li v-show="canManageSpecialEditions">
                     <router-link
@@ -957,6 +967,7 @@ export default {
     };
 
     return {
+      dayjs,
       metadata,
       environment,
       isLiveDemo,
