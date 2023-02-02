@@ -204,13 +204,13 @@ export default {
 
     const defaultPayload = {
       document_action: "create",
+      dissem_orgs: ["DNI"],
       html_body: "<p></p>",
       producing_office: "DNI/NCTC",
       publication_number: Math.floor(100000 * Math.random() * 900000),
       product_type_id: 10376,
       title: "Draft Document Title",
       topics: ["TERR"],
-      wire_id: route.params.date,
     };
 
     const buildAvailableProducts = () => {
@@ -257,6 +257,7 @@ export default {
       if (!payload) {
         payload = { ...defaultPayload };
       }
+      payload["wire_id"] = dayjs(selectedDate.value).format("YYYY-MM-DD");
       if (process.env.NODE_ENV === "low") {
         router.push({
           name: "edit",

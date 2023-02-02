@@ -779,7 +779,7 @@ export default {
     };
 
     const updateForm = (updatedProduct) => {
-      form.value.thumbnailImage = hasProductImage(updatedProduct.images)
+      form.value.thumbnailImage = hasProductImage(updatedProduct)
         ? getProductImageUrl(updatedProduct.images, props.documentNumber)
         : false;
       form.value.worldwide = updatedProduct.worldwide;
@@ -826,7 +826,6 @@ export default {
       form.value.summary = updatedProduct.summary;
       form.value.summaryClassificationXML = updatedProduct.summary_classif_xml;
       form.value.titleClassificationXML = updatedProduct.title_classif_xml;
-      form.value.summaryClassificationXML = updatedProduct.summary_classif_xml;
       form.value.editorData = updatedProduct.html_body;
     };
 
@@ -1068,7 +1067,7 @@ export default {
                       title: "Product Saved",
                       message: response.data.status
                         ? response.data.status
-                        : `Product ${props.documentNumber} has beeen successfully saved.`,
+                        : `Product ${props.documentNumber} has been successfully saved.`,
                       type: "success",
                     });
                   } else {

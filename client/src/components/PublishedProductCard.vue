@@ -1,7 +1,14 @@
 <template>
   <BaseCard
-    :class="['h-full', loading ? 'animate-pulse' : '']"
-    hoverable
+    :class="[
+      'h-full',
+      loading
+        ? 'animate-pulse'
+        : isProductLocked(article)
+        ? 'bg-slate-200/50 dark:bg-slate-700/60 energy:bg-zinc-600/50'
+        : '',
+    ]"
+    :hoverable="!loading && !isProductLocked(article) ? true : false"
     :rounded="false"
   >
     <template v-if="loading">
@@ -57,6 +64,12 @@
               'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium',
             ]"
           >
+            <template v-if="isProductLocked(article)">
+              <LockClosedIcon
+                class="h-5 w-5 float-left mr-2"
+                aria-hidden="true"
+              />
+            </template>
             {{ `(${article.title_classification}) ${article.title}` }}
           </h1>
           <p
@@ -79,11 +92,13 @@
   </BaseCard>
 </template>
 <script>
-import { formatDate } from "@/helpers";
+import { isProductLocked, formatDate } from "@/helpers";
+import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
+    LockClosedIcon,
     ProductImage,
   },
   props: {
@@ -102,6 +117,7 @@ export default {
   },
   setup() {
     return {
+      isProductLocked,
       formatDate,
     };
   },

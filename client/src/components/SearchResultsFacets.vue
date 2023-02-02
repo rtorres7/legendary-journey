@@ -69,6 +69,7 @@ export default {
     const filter = (facetType, code) => {
       let query = {
         ...route.query,
+        page: 1,
       };
       const type = `${facetType}[]`;
       if (query[type]) {
