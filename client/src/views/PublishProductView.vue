@@ -71,12 +71,27 @@
   </template>
   <template v-else>
     <div class="py-6">
-      <h3 class="font-semibold mb-6 text-lg">
-        Edit Existing Products ({{ articles.length }})
-      </h3>
+      <div class="flex justify-between">
+        <h3 class="font-semibold mb-6 text-lg">
+          Edit Existing Products ({{ filterArticles().length }})
+        </h3>
+        <div class="flex items-center">
+          <input
+            id="showDrafts"
+            v-model="showOnlyDrafts"
+            type="checkbox"
+            name="showDrafts"
+            value="Drafts"
+            @change="filterArticles()"
+          />
+          <label for="showDrafts" class="ml-2 text-sm"
+            >Show Drafts Only</label
+          >
+        </div>
+      </div>
       <template v-if="articles.length > 0">
         <BaseCard>
-          <template v-for="{ attributes: article } in articles" :key="article">
+          <template v-for="{ attributes: article } in filterArticles()" :key="article">
             <div
               class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
             >
@@ -201,6 +216,14 @@ export default {
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
+    const showOnlyDrafts = ref(false);
+    const filterArticles = () => {
+      if(showOnlyDrafts.value) {
+        return articles.value.filter((a) => a.attributes.state === "draft");
+      } else {
+        return articles.value
+      }
+    };
 
     const defaultPayload = {
       document_action: "create",
@@ -319,6 +342,8 @@ export default {
       articles,
       loadingArticles,
       isCommunityExclusive,
+      showOnlyDrafts,
+      filterArticles,
       availableProductTypes,
       goToArticle,
       selectDate,
