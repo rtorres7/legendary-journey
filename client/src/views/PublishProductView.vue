@@ -100,6 +100,7 @@
                   <ProductImage
                     class="h-[125px] w-[125px]"
                     :article="article"
+                    @click="openPreviewThumbnailDialog(article)"
                   />
                 </div>
                 <div>
@@ -177,7 +178,31 @@
                 </template>
               </div>
             </div>
+           
           </template>
+          <BaseDialog
+            :isOpen="isPreviewThumbnailDialogOpen"
+            :title="'Thumbnail Preview'"
+            class="max-w-fit"
+            @close="closePreviewThumbnailDialog"
+          >
+            <div
+              id="img-container"
+              class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            >
+              <div
+                id="product-blur"
+                class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
+              ></div>
+              <ProductImage 
+                :article="selectedArticle"
+                class="inset-x-0 absolute h-full mx-auto z-[3]"
+              />
+            </div>
+            <p class="italic">
+              Only shown when the product is featured on the front page.
+            </p>
+          </BaseDialog>
         </BaseCard>
       </template>
       <template v-else>
@@ -224,7 +249,7 @@ export default {
         return articles.value
       }
     };
-
+    
     const defaultPayload = {
       document_action: "create",
       html_body: "<p></p>",
@@ -320,6 +345,16 @@ export default {
       }
     };
 
+    const selectedArticle = ref({});
+    const isPreviewThumbnailDialogOpen = ref(false);
+    const openPreviewThumbnailDialog = (article) => {
+      selectedArticle.value = article;
+      isPreviewThumbnailDialogOpen.value = true;
+    };
+    const closePreviewThumbnailDialog = () => {
+      isPreviewThumbnailDialogOpen.value = false;
+    };
+
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
@@ -348,6 +383,10 @@ export default {
       goToArticle,
       selectDate,
       canEditProduct,
+      selectedArticle,
+      isPreviewThumbnailDialogOpen,
+      openPreviewThumbnailDialog,
+      closePreviewThumbnailDialog,
     };
   },
 };
