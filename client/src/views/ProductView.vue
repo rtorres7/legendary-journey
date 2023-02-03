@@ -58,7 +58,7 @@
             :to="{
               name: 'edit',
               params: {
-                date: article?.created_on,
+                date: article?.posted_on,
                 id: article?.feature_id ? article.feature_id : -1,
                 doc_num: article?.doc_num,
               },
@@ -128,10 +128,10 @@
           </DisclosureButton>
           <DisclosurePanel>
             <div class="ml-4 space-y-2 text-sm">
-              <p>
+              <!-- <p>
                 <span class="font-semibold">Produced By: </span
                 >{{ article.producing_office }}
-              </p>
+              </p> -->
               <p>
                 <span class="font-semibold">Product Type: </span
                 >{{ article.product_type_name }}
@@ -141,8 +141,13 @@
                 >{{ article.doc_num }}
               </p>
               <p>
-                <span class="font-semibold">Posted: </span
-                >{{ formatDate(article.posted_at) }}
+                <span class="font-semibold">Posted: </span>
+                <template v-if="article.posted_at">
+                  {{ formatDate(article.posted_at) }}
+                </template>
+                <template v-else>
+                  {{ formatDate(article.posted_on) }}
+                </template>
               </p>
               <p>
                 <span class="font-semibold">Publication Date: </span

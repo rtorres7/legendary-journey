@@ -19,15 +19,23 @@ export const isEmpty = (value) => {
     (typeof value === "string" && value.trim().length === 0)
   );
 };
+
 export const getValueForCode = (list, code) => {
   return list.find((item) => item.code === code);
 };
+
 export const getValueForName = (list, name) => {
   return list.find((item) => item.name === name);
 };
+
 export const formatDate = (date) => {
   return dayjs(date).format("DD MMMM YYYY");
 };
+
+export const isProductLocked = (product) => {
+  return !isEmpty(product.needed) || product.org_restricted;
+};
+
 export const hasProductImage = (product) => {
   let hasImage = true;
   if (isEmpty(product.images)) {
@@ -39,6 +47,7 @@ export const hasProductImage = (product) => {
   }
   return hasImage;
 };
+
 export const getProductImageUrl = (images, docNum) => {
   let updatedAt;
   if (Array.isArray(images)) {

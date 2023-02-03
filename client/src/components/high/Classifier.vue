@@ -11,24 +11,24 @@
     v-bind="$attrs"
     :id="uuid"
     autocomplete="off"
-    :value="classificationName"
+    :value="getClassificationName(modelValue)"
     class="min-h-[2rem] flex w-full py-1 px-2 mt-1 bg-white dark:bg-slate-700 energy:bg-zinc-600 disabled:bg-slate-100/80 disabled:dark:bg-slate-800 disabled:energy:bg-zinc-700 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 placeholder:italic"
     @input="$emit('update:modelValue', $event.target.value)"
     @click="classify"
   />
-  <template v-if="showClassBlock && classificationBlock">
+  <template v-if="showClassBlock && getClassificationBlock(modelValue)">
     <div class="mt-4 flex flex-col space-y-1 text-sm">
       <p>
         <span class="font-medium pr-2">Classified By:</span
-        >{{ classificationBlock.classifiedBy }}
+        >{{ getClassificationBlock(modelValue).classifiedBy }}
       </p>
       <p>
         <span class="font-medium pr-2">Derived From:</span
-        >{{ classificationBlock.derivedFrom }}
+        >{{ getClassificationBlock(modelValue).derivedFrom }}
       </p>
       <p>
         <span class="font-medium pr-2">Declassify On:</span
-        >{{ classificationBlock.declassOn }}
+        >{{ getClassificationBlock(modelValue).declassOn }}
       </p>
     </div>
   </template>
@@ -106,6 +106,33 @@ export default {
       destroyAcgWindow();
     });
 
+    const getClassificationName = (xmlVal) => {
+      if (xmlVal) {
+        classification.setClassificationXML(xmlVal);
+        const { ClassificationHeader } =
+          classification.getClassificationInJSON();
+        return ClassificationHeader
+          ? ClassificationHeader.ClassificationBanner.text
+          : "";
+      }
+      return "";
+    };
+
+    const getClassificationBlock = (xmlVal) => {
+      if (xmlVal) {
+        classification.setClassificationXML(xmlVal);
+        const block = classification.getBlock();
+        return block
+          ? {
+              classifiedBy: block.getCLBy(),
+              derivedFrom: block.getDrvFrom(),
+              declassOn: block.getDeclOn(),
+            }
+          : null;
+      }
+      return null;
+    };
+
     const updateModels = (xmlVal) => {
       assignModels(xmlVal);
 
@@ -154,8 +181,8 @@ export default {
 
     return {
       uuid,
-      classificationName,
-      classificationBlock,
+      getClassificationName,
+      getClassificationBlock,
       classify,
     };
   },

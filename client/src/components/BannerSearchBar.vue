@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center pointer-events-auto px-3 mx-4 max-w-[640px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
+    class="lg:absolute mx-3 lg:mx-auto lg:inset-x-0 flex items-center pointer-events-auto px-3 max-w-[650px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
   >
     <button type="button" tabindex="0" @click="onClickSearch">
       <span class="sr-only">Search</span>
@@ -11,6 +11,7 @@
     </button>
     <vue3-simple-typeahead
       id="typeahead_id"
+      ref="typeaheadRef"
       class="ml-2 focus-visible:outline-none bg-transparent w-full text-slate-200 dark:text-slate-300 energy:text-zinc-300"
       placeholder="Search for keywords, documents, or pages"
       :items="searches"
@@ -21,7 +22,6 @@
         }
       "
       :select-on-tab="false"
-      :value="modelValue"
       @selectItem="selectItemEventHandler"
       @onInput="onInputEventHandler"
       @keydown.enter.prevent="onEnter"
@@ -68,7 +68,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const modelValue = ref("");
+    const typeaheadRef = ref(null);
     const removeSearch = ref(false);
 
     const searches = computed(() => store.state.savedSearches.searches);
@@ -76,14 +76,13 @@ export default {
 
     onMounted(() => {
       store.dispatch("savedSearches/getAllSearches");
-      //console.log("searches: ", searches);
     });
 
     watch(
       () => route.query,
       () => {
         if (route.name === "search") {
-          modelValue.value = route.query.text;
+          typeaheadRef.value.input = route.query.text;
         }
       }
     );
@@ -100,7 +99,6 @@ export default {
             text: item.text,
           },
         });
-        modelValue.value = item.text;
       }
     };
 
@@ -109,22 +107,19 @@ export default {
     //   store.dispatch("savedSearches/getAllSearches");
     // };
 
-    const onInputEventHandler = (event) => {
-      //console.log("onInputEventHandler: ", event);
-      modelValue.value = event.input;
-    };
+    // const onInputEventHandler = (event) => {
+    //   console.log("onInputEventHandler: ", event);
+    // };
 
     // const onBlurEventHandler = (event) => {
     //   console.log("blur event: ", event);
     // };
 
     const onEnter = (e) => {
-      //console.log("onEnter: ", e);
       store.dispatch("savedSearches/addSearch", {
         text: e.target.value,
         type: "user",
       });
-      modelValue.value = e.target.value;
       router.push({
         name: "search",
         query: {
@@ -137,7 +132,7 @@ export default {
       router.push({
         name: "search",
         query: {
-          text: modelValue.value,
+          text: typeaheadRef.value.input,
         },
       });
     };
@@ -148,18 +143,15 @@ export default {
     };
 
     return {
+      typeaheadRef,
       metadata,
       searches,
       loading,
-      modelValue,
       searchMatches,
       selectItemEventHandler,
       onEnter,
       onClickSearch,
-      onInputEventHandler,
       deleteSearch,
-      // onFocusEventHandler,
-      //onBlurEventHandler,
     };
   },
 };

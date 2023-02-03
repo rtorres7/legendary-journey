@@ -25,28 +25,31 @@ export default {
   },
   setup() {
     const scrollTopButton = ref(null);
-    const hasStartedScrolling = ref(false);
     const currentScrollPosition = ref(0);
     const previousScrollPosition = ref(0);
+    const targetScrollPosition = ref(0);
+    const resetTarget = ref(true);
 
     const handleScroll = () => {
-      if (hasStartedScrolling.value) {
-        previousScrollPosition.value = currentScrollPosition.value;
-        currentScrollPosition.value = window.scrollY;
-
+      previousScrollPosition.value = currentScrollPosition.value;
+      currentScrollPosition.value = window.scrollY;
+      if (currentScrollPosition.value < previousScrollPosition.value) {
+        // User is scrolling up
+        if (resetTarget.value) {
+          targetScrollPosition.value = window.scrollY - 500;
+          resetTarget.value = false;
+        }
         if (currentScrollPosition.value === 0) {
           scrollTopButton.value.classList.add("invisible");
         } else {
-          //Detecting scroll direction
-          if (currentScrollPosition.value > previousScrollPosition.value) {
-            scrollTopButton.value.classList.add("invisible");
-          } else {
+          if (currentScrollPosition.value < targetScrollPosition.value) {
             scrollTopButton.value.classList.remove("invisible");
           }
         }
       } else {
-        currentScrollPosition.value = window.scrollY;
-        hasStartedScrolling.value = true;
+        // User is scrolling down
+        scrollTopButton.value.classList.add("invisible");
+        resetTarget.value = true;
       }
     };
 
