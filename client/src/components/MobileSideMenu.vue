@@ -48,11 +48,22 @@
                     <ul class="list-disc list-inside ml-4 mt-4">
                       <template v-for="issue in metadata.issues" :key="issue">
                         <li>
-                          <a
+                          <router-link
+                            :to="{
+                              name: 'issues',
+                              params: {
+                                name: issue.name,
+                              },
+                              query: {
+                                view: 'grid',
+                                landing: true,
+                                text: issue.query,
+                              },
+                            }"
                             class="hover:underline cursor-pointer"
-                            @click="navigateToIssue(issue)"
-                            >{{ issue.name }}</a
                           >
+                            {{ issue.name }}
+                          </router-link>
                         </li>
                       </template>
                     </ul>
@@ -84,13 +95,22 @@
                             >
                               <DisclosurePanel>
                                 <ul class="list-disc list-inside ml-4 my-2">
-                                  <a
-                                    href=""
+                                  <router-link
+                                    :to="{
+                                      name: 'regions',
+                                      params: {
+                                        name: region.name,
+                                      },
+                                      query: {
+                                        view: 'grid',
+                                        landing: true,
+                                        'regions[]': region.code,
+                                      },
+                                    }"
                                     class="lg:text-lg hover:underline cursor-pointer"
-                                    @click.prevent="navigateToRegion(region)"
                                   >
                                     {{ region.name }}
-                                  </a>
+                                  </router-link>
                                   <template v-if="region.subregions.length > 1">
                                     <template
                                       v-for="subregionItem in formattedSubregions(
@@ -99,15 +119,23 @@
                                       :key="subregionItem"
                                     >
                                       <li>
-                                        <a
-                                          href=""
+                                        <router-link
+                                          :to="{
+                                            name: 'subregions',
+                                            params: {
+                                              name: subregionItem.name,
+                                            },
+                                            query: {
+                                              view: 'grid',
+                                              landing: true,
+                                              'subregions[]':
+                                                subregionItem.code,
+                                            },
+                                          }"
                                           class="hover:underline cursor-pointer font-light"
-                                          @click.prevent="
-                                            navigateToSubregion(subregionItem)
-                                          "
                                         >
                                           {{ subregionItem.name }}
-                                        </a>
+                                        </router-link>
                                       </li>
                                     </template>
                                   </template>
@@ -348,36 +376,6 @@ export default {
       emit("close");
     };
 
-    const navigateToIssue = (issue) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["text"] = issue.query;
-      router.push({
-        name: "issues",
-        params: {
-          name: issue.name,
-        },
-        query,
-      });
-    };
-
-    const navigateToRegion = (region) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["regions[]"] = region.code;
-      router.push({
-        name: "regions",
-        params: {
-          name: region.name,
-        },
-        query,
-      });
-    };
-
     const formattedSubregions = (codes) => {
       const subregions = [];
       codes.forEach((code) => {
@@ -385,21 +383,6 @@ export default {
         subregions.push(subregion);
       });
       return subregions;
-    };
-
-    const navigateToSubregion = (subregion) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["subregions[]"] = subregion.code;
-      router.push({
-        name: "subregions",
-        params: {
-          name: subregion.name,
-        },
-        query,
-      });
     };
 
     const navigateToCountry = (country) => {
@@ -425,10 +408,7 @@ export default {
       loadingSpecialEditionLinks,
       specialEditionLinks,
       selectedCountry,
-      navigateToIssue,
-      navigateToRegion,
       formattedSubregions,
-      navigateToSubregion,
       navigateToCountry,
     };
   },
