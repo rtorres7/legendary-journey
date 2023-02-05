@@ -39,7 +39,10 @@ export default {
     PopoverPanel,
   },
   props: {
-    title: String,
+    title: {
+      type: String,
+      required: true,
+    },
     //Popover width expands when screen size is shrunk to cover the horizontal width of the screen
     wideShrunk: {
       default: false,

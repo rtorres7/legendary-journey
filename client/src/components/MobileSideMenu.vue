@@ -358,6 +358,7 @@ export default {
   props: {
     isOpen: Boolean,
   },
+  emits: ["close"],
   setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
