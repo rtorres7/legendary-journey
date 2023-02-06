@@ -100,7 +100,10 @@
                   <ProductImage
                     class="h-[125px] w-[125px]"
                     :article="article"
-                    @click="openPreviewThumbnailDialog(article)"
+                    @click="
+                      article.images.length > 0 
+                      ? openPreviewThumbnailDialog(article) 
+                      : null"
                   />
                 </div>
                 <div>
