@@ -66,6 +66,7 @@ export default {
   props: {
     binary: {
       type: String,
+      required: true,
     },
     file: {
       type: File,

@@ -35,7 +35,10 @@ export default {
     ChevronDownIcon,
   },
   props: {
-    title: String,
+    title: {
+      type: String,
+      required: true,
+    },
   },
 };
 </script>

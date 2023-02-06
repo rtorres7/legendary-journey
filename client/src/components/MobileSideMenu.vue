@@ -204,7 +204,9 @@
                                 class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-600 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                               >
                                 <ListboxOption
-                                  v-for="country in criteria.countries"
+                                  v-for="country in criteria.countries.filter(
+                                    (country) => country.code !== 'WW'
+                                  )"
                                   v-slot="{ active }"
                                   :key="country"
                                   :value="country"
@@ -358,6 +360,7 @@ export default {
   props: {
     isOpen: Boolean,
   },
+  emits: ["close"],
   setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
