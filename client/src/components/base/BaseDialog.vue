@@ -89,6 +89,7 @@ export default {
     },
     title: {
       type: String,
+      default: "",
     },
   },
   emits: ["close"],

@@ -115,8 +115,6 @@
                           label="Publication Date"
                           type="text"
                           required
-                          disabled
-                          :disabledColor="false"
                         />
                       </template>
                     </BaseDatepicker>
@@ -639,6 +637,7 @@ export default {
     );
     const product = ref(props.product);
     const savingProduct = ref(false);
+    const savingSucceed = ref(true);
     const publishingProduct = ref(false);
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
@@ -889,9 +888,11 @@ export default {
     };
 
     watch([savingProduct], () => {
-      if (!savingProduct.value) {
+      if (!savingProduct.value && savingSucceed.value) {
         updatePayload(product.value);
         updateForm(product.value);
+      } else {
+        savingSucceed.value = true;
       }
     });
 
@@ -1040,6 +1041,7 @@ export default {
           .then((response) => {
             if (response.data.error) {
               savingProduct.value = false;
+              savingSucceed.value = false;
               createNotification({
                 title: "Error",
                 message: response.data.error,

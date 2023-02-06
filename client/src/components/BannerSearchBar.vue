@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div
     class="lg:absolute mx-3 lg:mx-auto lg:inset-x-0 flex items-center pointer-events-auto px-3 max-w-[650px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
