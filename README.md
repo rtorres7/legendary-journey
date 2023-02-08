@@ -71,3 +71,32 @@ npm run lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Docker setup
+### Prerequistes
+ - Install Docker & Docker-Compose (https://docs.docker.com/get-docker/)
+ - (Optional) Install a MongoDB Client (MongoDB Compass - https://www.mongodb.com/try/download/compass)
+ 
+### Building the Container Images
+```
+docker-compose build
+```
+
+### Running the Containers
+```
+docker-compose up
+# App is running on localhost:8080
+# Server (Node.js + Express.js) is running on localhost:3001
+# MongoDB is running on localhost:27017
+```
+
+### Stopping the Containers
+```
+docker-compose stop # this will safely maintain data in your MongoDB database container
+```
+
+### Destroying the Containers
+```
+docker-compose down # this will delete any data persisted in your MongoDB database container
+```
+
