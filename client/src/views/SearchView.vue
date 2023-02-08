@@ -85,7 +85,8 @@
               :key="n"
             >
               <div class="lg:w-1/4">
-                <BaseListbox
+                <component
+                  :is="n.component"
                   v-model="n.model"
                   :label="n.label"
                   :items="n.list"
@@ -127,7 +128,8 @@
                     :key="n"
                   >
                     <div class="w-full lg:w-1/2">
-                      <BaseListbox
+                      <component
+                        :is="n.component"
                         v-model="n.model"
                         :label="n.label"
                         :items="n.list"
@@ -150,7 +152,8 @@
                   :key="n"
                 >
                   <div class="lg:w-1/2">
-                    <BaseListbox
+                    <component
+                      :is="n.component"
                       v-model="n.model"
                       :label="n.label"
                       :items="n.list"
@@ -1052,30 +1055,35 @@ export default {
           model: currentModel(regions),
           list: regions.items,
           types: regions.types,
+          component: "BaseCombobox",
         },
         issues: {
           label: "Counterterrorism and Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
+          component: "BaseListbox",
         },
         reporting: {
           label: "Product Types",
           model: currentModel(reportings),
           list: reportings.items,
           types: reportings.types,
+          component: "BaseListbox",
         },
         classifications: {
           label: "Classifications",
           model: currentModel(classifications),
           list: classifications.items,
           types: classifications.types,
+          component: "BaseListbox",
         },
         media_types: {
           label: "Media Types",
           model: currentModel(mediaTypes),
           list: mediaTypes.items,
           types: mediaTypes.types,
+          component: "BaseListbox",
         },
         // nonstate_actors: {
         //   label: "Non State Actors",
