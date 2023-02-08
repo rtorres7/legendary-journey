@@ -82,7 +82,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Building the Container Images
 
 ```
-npm run install-all-deps # run from project root
 docker-compose build
 ```
 

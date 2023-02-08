@@ -10,6 +10,7 @@ services:
     restart: always
     volumes:
       - ./client:/data
+      - /data/node_modules
     environment:
       - API_URL=http://localhost:8081/
     container_name: client
@@ -23,6 +24,7 @@ services:
     restart: always
     volumes:
       - ./:/data
+      - /data/node_modules
     depends_on:
       - server-database
     environment:
