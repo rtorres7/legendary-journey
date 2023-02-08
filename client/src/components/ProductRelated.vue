@@ -11,7 +11,7 @@
         <li v-for="relatedProduct in relatedProducts" :key="relatedProduct">
           <router-link
             class="flex hover:underline"
-            :to="relatedProductLink + '/' + relatedProduct.id + '.json'"
+            :to="'/product/' + relatedProduct.document.doc_num"
             target="_blank"
           >
             <span class="block truncate">{{
