@@ -1,33 +1,37 @@
 <template>
   <Combobox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
+    <ComboboxLabel
+      :class="[
+        'text-sm font-medium',
+        required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none',
+      ]"
+    >
+      {{ label }}
+      <template v-if="required">
+        <span class="sr-only">Required</span>
+        <span class="pl-1 text-red-500">*</span>
+      </template>
+    </ComboboxLabel>
     <div class="relative">
-      <ComboboxLabel
-        :class="[
-          'text-sm font-medium',
-          required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none',
-        ]"
+      <span
+        ref="displayEl"
+        :class="['absolute truncate max-w-[calc(100%-20px)] px-2 mt-1']"
+        >{{ displayValue(modelValue) }}</span
       >
-        {{ label }}
-        <template v-if="required">
-          <span class="sr-only">Required</span>
-          <span class="pl-1 text-red-500">*</span>
-        </template>
-      </ComboboxLabel>
       <ComboboxInput
-        :displayValue="(modelValue) => displayValue(modelValue)"
-        class="min-h-[2rem] max-h-[2.5rem] flex relative w-full py-1 px-2 mt-1 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+        ref="inputEl"
+        class="flex relative w-full rounded-lg cursor-default py-1 px-2 mt-1 border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
         :class="
           disabled
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
-            : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
+            : 'bg-transparent'
         "
-        @click="$emit('clicked')"
         @change="query = $event.target.value"
+        @input="hideDisplayValue()"
+        @focusout="showDisplayValue()"
       >
       </ComboboxInput>
-      <ComboboxButton
-        class="absolute inset-y-0 right-0 flex items-center top-1/3 pr-2"
-      >
+      <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
         <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
       </ComboboxButton>
       <transition
@@ -141,6 +145,9 @@ export default {
   },
   emits: ["update:modelValue", "clicked"],
   setup(props, { emit }) {
+    const displayEl = ref(null);
+    const inputEl = ref(null);
+
     const selectedItem = computed({
       get: () => props.modelValue,
       set: (value) => {
@@ -172,19 +179,59 @@ export default {
 
     const query = ref("");
 
-    let filteredItems = computed(() =>
-      query.value === ""
+    //TODO: Attempted to implement sorting the selected items at the top. This presented a new bug
+    // where sorted items was triggering a refresh due to repositioning the countries_bool in the URL.
+    // The bug could reside in SearchView but further investigation is needed.
+    // Update: The behavior is definetly unique to countries/regions and also exists when using
+    // BaseListbox, however, it is still odd that a refresh is triggered by simply clicking the selector icon.
+
+    // const hasSelectedItem = (item) => {
+    //   return selectedItem.value.find((selected) => selected.name === item.name);
+    // };
+
+    // const compareSelected = (a, b) => {
+    //   if (hasSelectedItem(a) && !hasSelectedItem(b)) {
+    //     return -1;
+    //   }
+    //   if (!hasSelectedItem(a) && hasSelectedItem(b)) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // };
+
+    // const sortBySelected = (items) => {
+    //   return items.sort(compareSelected);
+    // };
+
+    const filteredItems = computed(() => {
+      return query.value === ""
         ? props.items
         : props.items.filter((item) => {
             return item.name.toLowerCase().includes(query.value.toLowerCase());
-          })
-    );
+          });
+    });
+
+    const hideDisplayValue = () => {
+      if (!displayEl.value.classList.contains("hidden")) {
+        displayEl.value.classList.add("hidden");
+      }
+    };
+
+    const showDisplayValue = () => {
+      if (displayEl.value.classList.contains("hidden")) {
+        displayEl.value.classList.remove("hidden");
+      }
+    };
 
     return {
+      displayEl,
+      inputEl,
       selectedItem,
       displayValue,
       query,
       filteredItems,
+      hideDisplayValue,
+      showDisplayValue,
     };
   },
 };

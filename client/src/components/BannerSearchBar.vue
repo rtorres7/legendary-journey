@@ -1,15 +1,8 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div
-    class="lg:absolute mx-3 lg:mx-auto lg:inset-x-0 flex items-center pointer-events-auto px-3 max-w-[650px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
+    class="lg:absolute mx-3 lg:mx-auto lg:inset-x-0 flex items-center pointer-events-auto pl-3 max-w-[650px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
   >
-    <button type="button" tabindex="0" @click="onClickSearch">
-      <span class="sr-only">Search</span>
-      <MagnifyingGlassIcon
-        class="w-5 h-5 text-slate-400 dark:text-slate-500/90 energy:text-zinc-500/90"
-        aria-hidden="true"
-      />
-    </button>
     <vue3-simple-typeahead
       id="typeahead_id"
       ref="typeaheadRef"
@@ -24,7 +17,6 @@
       "
       :select-on-tab="false"
       @selectItem="selectItemEventHandler"
-      @onInput="onInputEventHandler"
       @keydown.enter.prevent="onEnter"
     >
       <template #list-item-text="slot">
@@ -48,6 +40,18 @@
         </div>
       </template>
     </vue3-simple-typeahead>
+    <button
+      type="button"
+      class="h-[2.5rem] px-3 rounded-r-md border-l border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80"
+      tabindex="0"
+      @click="onClickSearch"
+    >
+      <span class="sr-only">Search</span>
+      <MagnifyingGlassIcon
+        class="w-5 h-5 text-white dark:text-slate-300 energy:text-zinc-300"
+        aria-hidden="true"
+      />
+    </button>
   </div>
 </template>
 
