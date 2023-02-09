@@ -1,124 +1,124 @@
 export const articleMetrics = [
   {
-    doc_num: "WIReWIRe_sample_",
+    doc_num: "WIRe001_sample_",
     readership: [
       {
         name: "Intelligence",
-        y: 35
+        y: 35,
       },
       {
         name: "Law Enforcement",
-        y: 25
+        y: 25,
       },
       {
         name: "Policy",
-        y: 10
+        y: 10,
       },
       {
         name: "Warfighters",
-        y: 30
-      },               
+        y: 30,
+      },
     ],
-    uniqueReadership: 100
+    uniqueReadership: 100,
   },
   {
-    doc_num: "WIReWIRe_sample_2",
+    doc_num: "WIRe001_sample_2",
     readership: [
       {
         name: "Intelligence",
-        y: 100
+        y: 100,
       },
       {
         name: "Law Enforcement",
-        y: 30
+        y: 30,
       },
       {
         name: "Policy",
-        y: 15
+        y: 15,
       },
       {
         name: "Unknown",
-        y: 5
-      },      
+        y: 5,
+      },
       {
         name: "Warfighters",
-        y: 150
-      },               
+        y: 150,
+      },
     ],
-    uniqueReadership: 300
+    uniqueReadership: 300,
   },
   {
-    doc_num: "WIReWIRe_sample_3",
+    doc_num: "WIRe001_sample_3",
     readership: [
       {
         name: "Intelligence",
-        y: 450
+        y: 450,
       },
       {
         name: "Law Enforcement",
-        y: 50
+        y: 50,
       },
       {
         name: "Policy",
-        y: 40
+        y: 40,
       },
       {
         name: "Unknown",
-        y: 10
+        y: 10,
       },
       {
         name: "Warfighters",
-        y: 250
-      },               
+        y: 250,
+      },
     ],
-    uniqueReadership: 800
+    uniqueReadership: 800,
   },
   {
-    doc_num: "WIReWIRe_sample_4",
+    doc_num: "WIRe001_sample_4",
     readership: [
       {
         name: "Intelligence",
-        y: 300
+        y: 300,
       },
       {
         name: "Law Enforcement",
-        y: 40
+        y: 40,
       },
       {
         name: "Policy",
-        y: 8
+        y: 8,
       },
       {
         name: "Unknown",
-        y: 2
-      },      
+        y: 2,
+      },
       {
         name: "Warfighters",
-        y: 150
-      },               
+        y: 150,
+      },
     ],
-    uniqueReadership: 500
+    uniqueReadership: 500,
   },
   {
-    doc_num: "WIReWIRe_sample_5",
+    doc_num: "WIRe001_sample_5",
     readership: [
       {
         name: "Intelligence",
-        y: 125
+        y: 125,
       },
       {
         name: "Law Enforcement",
-        y: 20
+        y: 20,
       },
       {
         name: "Policy",
-        y: 5
+        y: 5,
       },
       {
         name: "Warfighters",
-        y: 50
-      },               
+        y: 50,
+      },
     ],
-    uniqueReadership: 200
-  },      
-]
+    uniqueReadership: 200,
+  },
+];

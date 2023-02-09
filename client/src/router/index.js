@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "@/store";
 import { metadata } from "@/config";
-import ArticleView from "../views/ArticleView.vue";
 import AttachmentView from "../views/AttachmentView.vue";
-import EditDocumentView from "../views/EditDocumentView";
+import EditProductView from "../views/EditProductView.vue";
 import HomeView from "../views/HomeView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
-import PublishArticleView from "../views/PublishArticleView.vue";
+import ProductView from "../views/ProductView.vue";
+import PublishProductView from "../views/PublishProductView.vue";
 import SearchView from "../views/SearchView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
@@ -21,15 +20,15 @@ const routes = [
     },
   },
   {
-    path: "/article/:doc_num",
-    name: "article",
-    component: ArticleView,
+    path: "/product/:doc_num",
+    name: "product",
+    component: ProductView,
     props: true,
   },
   {
-    path: "/article/:doc_num/preview",
-    name: "article-preview",
-    component: ArticleView,
+    path: "/product/:doc_num/preview",
+    name: "product-preview",
+    component: ProductView,
     props: true,
   },
   {
@@ -37,13 +36,16 @@ const routes = [
     name: "attachment",
     component: AttachmentView,
     props: true,
+    meta: {
+      viewType: "attachment",
+    },
   },
   {
     path: "/issues/:name",
     name: "issues",
     component: SearchView,
     meta: {
-      title: "Issues",
+      viewType: "search",
     },
   },
   {
@@ -51,7 +53,7 @@ const routes = [
     name: "regions",
     component: SearchView,
     meta: {
-      title: "Regions",
+      viewType: "search",
     },
   },
   {
@@ -59,7 +61,7 @@ const routes = [
     name: "subregions",
     component: SearchView,
     meta: {
-      title: "Subregions",
+      viewType: "search",
     },
   },
   {
@@ -67,7 +69,7 @@ const routes = [
     name: "countries",
     component: SearchView,
     meta: {
-      title: "Countries",
+      viewType: "search",
     },
   },
   {
@@ -75,15 +77,15 @@ const routes = [
     name: "search",
     component: SearchView,
     meta: {
-      title: "Search",
+      viewType: "search",
     },
   },
   {
     path: "/:date/publish",
     name: "publish",
-    component: PublishArticleView,
+    component: PublishProductView,
     meta: {
-      title: "Publish an Article",
+      title: "Publish a Product",
     },
   },
   {
@@ -103,11 +105,11 @@ const routes = [
     },
   },
   {
-    path: "/article/:date/:id/:doc_num/edit",
+    path: "/product/:date/:id/:doc_num/edit",
     name: "edit",
-    component: EditDocumentView,
+    component: EditProductView,
     meta: {
-      title: "Edit Document",
+      title: "Edit Product",
     },
   },
   {
@@ -131,33 +133,19 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  //TODO: Handle 403s appropriately for admin-level pages
-  if (to.meta.admin) {
-    if (store.state.admin) {
-      next();
-    } else {
-      next({ name: "home" });
+  if (to.meta.viewType) {
+    switch (to.meta.viewType) {
+      case "attachment":
+        document.title = to.params.url;
+        break;
+      case "search":
+        document.title = to.params.name ? to.params.name : "Search";
+        break;
     }
   } else {
-    if (to.meta.title) {
-      if (
-        to.name === "issues" ||
-        to.name === "regions" ||
-        to.name === "subregions" ||
-        (to.name === "countries" && to.params.name)
-      ) {
-        document.title = to.params.name;
-      } else {
-        document.title = `${to.meta.title}`;
-      }
-      next();
-    } else if (to.params.url) {
-      document.title = `${to.params.url}`;
-      next();
-    } else {
-      next();
-    }
+    document.title = to.meta.title ? to.meta.title : metadata.application_name;
   }
+  next();
 });
 
 export default router;

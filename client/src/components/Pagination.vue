@@ -103,6 +103,7 @@ export default {
     },
     totalCount: {
       type: Number,
+      required: true,
     },
     maxPerPage: {
       type: Number,
@@ -110,6 +111,7 @@ export default {
     },
     pages: {
       type: Number,
+      required: true,
     },
   },
   setup(props) {

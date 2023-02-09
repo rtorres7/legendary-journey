@@ -25,11 +25,11 @@
           }}</span>
         </div>
         <div class="mt-2 text-sm">
-          {{ dayjs(article.date_published).format("DD MMM YYYY") }}
+          {{ formatDate(article.date_published) }}
         </div>
       </div>
       <div v-show="article.hasImage">
-        <ArticleImage
+        <ProductImage
           class="w-[165px] h-[165px] sm:max-w-full h-full"
           :article="article"
           smartRender
@@ -42,19 +42,19 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
-import { isEmpty } from "@/helpers";
+import { isEmpty, formatDate } from "@/helpers";
 import { useRouter } from "vue-router";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
-import ArticleImage from "@/components/ArticleImage";
+import ProductImage from "@/components/ProductImage";
 export default {
   components: {
     LockClosedIcon,
-    ArticleImage,
+    ProductImage,
   },
   props: {
     article: {
       type: Object,
+      required: true,
     },
   },
   setup() {
@@ -67,7 +67,7 @@ export default {
     const goToArticle = (article) => {
       if (!isLocked(article)) {
         router.push({
-          name: "article",
+          name: "product",
           params: { doc_num: article.doc_num },
         });
       }
@@ -78,7 +78,7 @@ export default {
     };
 
     return {
-      dayjs,
+      formatDate,
       goToArticle,
       isLocked,
       toggleImgContainer,

@@ -1,7 +1,22 @@
 <template>
   <BaseCard
-    :class="['h-full px-4 py-4', loading ? 'animate-pulse' : '']"
-    hoverable
+    :class="[
+      'relative h-full px-4 py-4',
+      loading
+        ? 'animate-pulse'
+        : isProductLocked(sitrep)
+        ? 'bg-slate-200/50 dark:bg-slate-700/60 energy:bg-zinc-600/50'
+        : '',
+    ]"
+    :aria-label="
+      !loading && isProductLocked(sitrep) ? 'restricted product' : ''
+    "
+    :title="
+      !loading && isProductLocked(sitrep)
+        ? 'This product has restricted access.'
+        : ''
+    "
+    :hoverable="!loading && !isProductLocked(sitrep) ? true : false"
     :rounded="false"
   >
     <template v-if="loading">
@@ -32,14 +47,22 @@
         <div
           class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
         >
-          Posted {{ sitrep.date_published }}
+          Posted {{ formatDate(sitrep.date_published) }}
         </div>
       </div>
+      <template v-if="isProductLocked(sitrep)">
+        <BaseProductIcon
+          class="absolute w-10 h-10 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+          icon="locked"
+        />
+      </template>
     </template>
   </BaseCard>
 </template>
 
 <script>
+import { isProductLocked, formatDate } from "@/helpers";
+
 export default {
   props: {
     sitrep: {
@@ -52,7 +75,10 @@ export default {
     },
   },
   setup() {
-    return {};
+    return {
+      formatDate,
+      isProductLocked,
+    };
   },
 };
 </script>

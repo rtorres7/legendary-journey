@@ -32,11 +32,11 @@
     @apply text-zinc-300;
   }
 
-  .dark .ck.ck-editor__main>.ck-editor__editable {
+  .dark .ck.ck-editor__main > .ck-editor__editable {
     @apply bg-slate-700;
   }
 
-  .energy .ck.ck-editor__main>.ck-editor__editable {
+  .energy .ck.ck-editor__main > .ck-editor__editable {
     @apply bg-zinc-700;
   }
 
@@ -46,5 +46,15 @@
 
   .energy .digression {
     @apply bg-zinc-800;
+  }
+
+  .ck .ck-sticky-panel .ck-sticky-panel__content_sticky {
+    @apply top-[58px] lg:top-[100px] xl:top-[122px] !important;
+  }
+
+  /* indents lists that are not part of ck-content on ProductView */
+  .summary ol,
+  .summary ul {
+    padding-left: 3em;
   }
 }

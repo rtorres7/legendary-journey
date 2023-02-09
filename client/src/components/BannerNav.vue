@@ -36,7 +36,7 @@
     </div>
     <div class="mx-auto pt-2 px-6 lg:px-8">
       <div
-        class="flex items-center justify-between h-18 pb-2 lg:border-b lg:border-slate-700/50 lg:energy:border-zinc-700/50"
+        class="relative flex items-center justify-between h-18 pb-2 lg:border-b lg:border-slate-700/50 lg:energy:border-zinc-700/50"
       >
         <!-- Left Nav Bar -->
         <div class="flex h-full items-center">
@@ -101,12 +101,17 @@
                 class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b border-slate-700/50 energy:border-zinc-700/50"
               >
                 <MenuItem v-show="canManageWire">
-                  <a
+                  <router-link
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
-                    @click="navigateToPublish"
+                    :to="{
+                      name: 'publish',
+                      params: {
+                        date: dayjs().format('YYYY-MM-DD'),
+                      },
+                    }"
                   >
                     Publish a Product
-                  </a>
+                  </router-link>
                 </MenuItem>
                 <MenuItem v-show="canManageSpecialEditions">
                   <router-link
@@ -318,13 +323,22 @@
                     aria-label="select an issue"
                   >
                     <template v-for="issue in metadata.issues" :key="issue">
-                      <a
-                        href=""
+                      <router-link
+                        :to="{
+                          name: 'issues',
+                          params: {
+                            name: issue.name,
+                          },
+                          query: {
+                            view: 'grid',
+                            landing: true,
+                            text: issue.query,
+                          },
+                        }"
                         class="hover:underline cursor-pointer"
-                        @click.prevent="navigateToIssue(issue)"
                       >
                         {{ issue.name }}
-                      </a>
+                      </router-link>
                     </template>
                   </div>
                 </template>
@@ -351,13 +365,22 @@
                     aria-label="select a region or subregion"
                   >
                     <div v-for="region in criteria.regions" :key="region">
-                      <a
-                        href=""
+                      <router-link
+                        :to="{
+                          name: 'regions',
+                          params: {
+                            name: region.name,
+                          },
+                          query: {
+                            view: 'grid',
+                            landing: true,
+                            'regions[]': region.code,
+                          },
+                        }"
                         class="lg:text-lg hover:underline cursor-pointer"
-                        @click.prevent="navigateToRegion(region)"
                       >
                         {{ region.name }}
-                      </a>
+                      </router-link>
                       <template v-if="region.subregions.length > 1">
                         <ul class="pt-2 list-disc list-inside">
                           <template
@@ -367,15 +390,22 @@
                             :key="subregionItem"
                           >
                             <li>
-                              <a
-                                href=""
+                              <router-link
+                                :to="{
+                                  name: 'subregions',
+                                  params: {
+                                    name: subregionItem.name,
+                                  },
+                                  query: {
+                                    view: 'grid',
+                                    landing: true,
+                                    'subregions[]': subregionItem.code,
+                                  },
+                                }"
                                 class="hover:underline cursor-pointer font-light"
-                                @click.prevent="
-                                  navigateToSubregion(subregionItem)
-                                "
                               >
                                 {{ subregionItem.name }}
-                              </a>
+                              </router-link>
                             </li>
                           </template>
                         </ul>
@@ -452,7 +482,9 @@
                           class="absolute w-full py-1 mt-1 overflow-auto text-slate-800 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                         >
                           <ListboxOption
-                            v-for="country in criteria.countries"
+                            v-for="country in criteria.countries.filter(
+                              (country) => country.code !== 'WW'
+                            )"
                             v-slot="{ active }"
                             :key="country"
                             :value="country"
@@ -590,12 +622,17 @@
                     >
                   </li>
                   <li v-show="canManageWire">
-                    <a
+                    <router-link
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
-                      @click="navigateToPublish"
+                      :to="{
+                        name: 'publish',
+                        params: {
+                          date: dayjs().format('YYYY-MM-DD'),
+                        },
+                      }"
                     >
                       Publish a Product
-                    </a>
+                    </router-link>
                   </li>
                   <li v-show="canManageSpecialEditions">
                     <router-link
@@ -777,7 +814,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const environment = ref("process.env.NODE_ENV");
+    const environment = ref(process.env.NODE_ENV);
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
     });
@@ -875,36 +912,6 @@ export default {
       setTimeout(() => (isTestConsoleMenuOpen.value = true), 500);
     };
 
-    const navigateToIssue = (issue) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["text"] = issue.query;
-      router.push({
-        name: "issues",
-        params: {
-          name: issue.name,
-        },
-        query,
-      });
-    };
-
-    const navigateToRegion = (region) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["regions[]"] = region.code;
-      router.push({
-        name: "regions",
-        params: {
-          name: region.name,
-        },
-        query,
-      });
-    };
-
     const formattedSubregions = (codes) => {
       const subregions = [];
       codes.forEach((code) => {
@@ -912,21 +919,6 @@ export default {
         subregions.push(subregion);
       });
       return subregions;
-    };
-
-    const navigateToSubregion = (subregion) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["subregions[]"] = subregion.code;
-      router.push({
-        name: "subregions",
-        params: {
-          name: subregion.name,
-        },
-        query,
-      });
     };
 
     const navigateToCountry = (country) => {
@@ -955,6 +947,7 @@ export default {
     };
 
     return {
+      dayjs,
       metadata,
       environment,
       isLiveDemo,
@@ -985,10 +978,7 @@ export default {
       openTestConsoleModal,
       openTestConsoleModalMobile,
       removeAlertMessage,
-      navigateToIssue,
-      navigateToRegion,
       formattedSubregions,
-      navigateToSubregion,
       navigateToCountry,
       navigateToPublish,
     };

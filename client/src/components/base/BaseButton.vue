@@ -1,71 +1,33 @@
 <template>
   <button
     :class="[
-      'select-none text-sm shadow-lg rounded-md px-4 py-2 min-h-[2rem]',
-      'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500',
-      computedClass,
+      'select-none text-sm shadow-sm rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25',
+      'disabled:text-slate-400 disabled:dark:text-slate-500 disabled:energy:text-zinc-500 disabled:cursor-not-allowed',
+      `${color}-btn`,
     ]"
   >
     <slot />
   </button>
 </template>
 <script>
-import { computed } from "vue";
-
 export default {
   components: {},
   props: {
-    type: {
+    color: {
       type: String,
-      default: "",
+      default: "default",
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const computedClass = computed(() => {
-      const classes = [];
-      if (props.disabled) {
-        classes.push("cursor-not-allowed focus:ring-0 focus:ring-offset-0");
-      }
-      switch (props.type) {
-        case "danger":
-          classes.push(
-            "text-white dark:text-slate-300 energy:text-gray-300 border-transparent"
-          );
-          if (props.disabled) {
-            classes.push("bg-red-400/70");
-          } else {
-            classes.push(
-              "bg-red-600 hover:bg-red-600/80 dark:bg-red-800 dark:hover:bg-red-700/70 energy:bg-red-800 energy:hover:bg-red-700/70"
-            );
-          }
-          break;
-        default:
-          classes.push(
-            "bg-white dark:bg-slate-800 energy:bg-zinc-800",
-            "border border-gray-300 dark:border-slate-600 energy:border-zinc-600"
-          );
-          if (props.disabled) {
-            classes.push(
-              "text-gray-300 dark:text-slate-500 energy:text-zinc-500"
-            );
-          } else {
-            classes.push(
-              "hover:bg-slate-50/80 dark:hover:bg-slate-700/80 energy:hover:bg-zinc-700/80"
-            );
-          }
-      }
-      return classes;
-    });
-    return {
-      computedClass,
-    };
   },
 };
 </script>
 <style lang="scss" scoped>
-/* Empty on Purpose */
+.default-btn {
+  @apply bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 disabled:bg-inherit disabled:dark:bg-inherit disabled:energy:bg-inherit;
+}
+.secondary-btn {
+  @apply bg-white dark:bg-slate-800/50 energy:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 disabled:bg-inherit disabled:dark:bg-inherit disabled:energy:bg-inherit;
+}
+.danger-btn {
+  @apply text-white border-transparent bg-red-600 hover:bg-red-700 disabled:bg-red-400/70;
+}
 </style>

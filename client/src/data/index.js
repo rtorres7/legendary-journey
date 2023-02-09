@@ -9,7 +9,8 @@ export const user = {
   },
   name: "Jonathan Oszczakiewicz",
   email: "jonathan@gmail.com",
-  roles: ["wire_editor", "ntk", "role_manager"],
+  roles: ["ntk", "role_manager", "wire_editor", "community_editor"],
+  //roles: ["ntk", "role_manager", "community_editor"],
   has_org: true,
   organization: "DNI",
   phone_number: "999-9999",
@@ -17,7 +18,7 @@ export const user = {
 };
 
 export { articles } from "./articles";
-export { danielArticles, articlesForWire } from "./danielArticles.js";
+export { danielArticles, articlesForWire } from "./danielArticles";
 export { countries, regions } from "./regions";
 export { getSitreps, getSearchDataFromUrl } from "./search";
 export { danielArticlesDetails } from "./danielArticlesDetails";
@@ -25,5 +26,4 @@ export { metadata } from "./metadata";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
 export { relatedProducts } from "./relatedProducts";
 export { articleMetrics } from "./articleMetrics";
-export { document } from "./document";
-export { dissemOrgs } from "./formMetadata";
+export { mockDocument } from "./document";

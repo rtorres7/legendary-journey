@@ -28,7 +28,7 @@
                 class="text-sm hover:text-black dark:hover:text-white energy:hover:text-white"
               >
                 <router-link
-                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385"
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10386&product_types[]=10383"
                 >
                   View More
                 </router-link>
@@ -49,14 +49,9 @@
                   <template v-if="sitreps.length > 0">
                     <template v-for="item in sitreps" :key="item">
                       <div class="w-full h-40">
-                        <router-link
-                          :to="{
-                            name: 'article',
-                            params: { doc_num: item.doc_num },
-                          }"
-                        >
+                        <ProductRestrictedLink :product="item">
                           <SituationalAwarenessCard :sitrep="item" />
-                        </router-link>
+                        </ProductRestrictedLink>
                       </div>
                     </template>
                   </template>
@@ -71,7 +66,7 @@
                 class="text-sm text-right hover:text-black dark:hover:text-white energy:hover:text-white"
               >
                 <router-link
-                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385"
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10386&product_types[]=10383"
                 >
                   More >
                 </router-link>
@@ -92,14 +87,9 @@
               <template v-else>
                 <Slide v-for="item in sitreps" :key="item">
                   <div class="w-full h-36 text-left mr-4">
-                    <router-link
-                      :to="{
-                        name: 'article',
-                        params: { doc_num: item.doc_num },
-                      }"
-                    >
+                    <ProductRestrictedLink :product="item">
                       <SituationalAwarenessCard :sitrep="item" />
-                    </router-link>
+                    </ProductRestrictedLink>
                   </div>
                 </Slide>
               </template>
@@ -121,21 +111,16 @@
           class="py-4 lg:py-0 h-[425px] lg:h-full lg:basis-2/3 xl:basis-2/3 lg:pl-4 xl:pr-4"
         >
           <template v-if="loadingDanielArticles">
-            <PublishedArticleCard loading headline />
+            <PublishedProductCard loading headline />
           </template>
           <template v-else>
             <template v-if="danielArticles.length > 0">
-              <router-link
-                :to="{
-                  name: 'article',
-                  params: { doc_num: danielArticles[0].attributes.doc_num },
-                }"
-              >
-                <PublishedArticleCard
+              <ProductRestrictedLink :product="danielArticles[0].attributes">
+                <PublishedProductCard
                   :article="danielArticles[0].attributes"
                   headline
                 />
-              </router-link>
+              </ProductRestrictedLink>
             </template>
             <template v-else>
               <div class="text-sm italic">
@@ -160,7 +145,7 @@
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
               <div class="w-full h-[288px]">
-                <PublishedArticleCard :loading="true" />
+                <PublishedProductCard :loading="true" />
               </div>
             </template>
           </template>
@@ -170,14 +155,9 @@
               :key="article"
             >
               <div class="w-full h-[288px] max-w-[591px]">
-                <router-link
-                  :to="{
-                    name: 'article',
-                    params: { doc_num: article.attributes.doc_num },
-                  }"
-                >
-                  <PublishedArticleCard :article="article.attributes" />
-                </router-link>
+                <ProductRestrictedLink :product="article.attributes">
+                  <PublishedProductCard :article="article.attributes" />
+                </ProductRestrictedLink>
               </div>
             </template>
           </template>
@@ -194,7 +174,7 @@
       <template v-if="loadingDanielArticles">
         <template v-for="n in 12" :key="n">
           <div class="w-full h-[264px]">
-            <PublishedArticleCard loading />
+            <PublishedProductCard loading />
           </div>
         </template>
       </template>
@@ -205,14 +185,9 @@
             :key="article"
           >
             <div class="w-full h-[264px]">
-              <router-link
-                :to="{
-                  name: 'article',
-                  params: { doc_num: article.attributes.doc_num },
-                }"
-              >
-                <PublishedArticleCard :article="article.attributes" />
-              </router-link>
+              <ProductRestrictedLink :product="article.attributes">
+                <PublishedProductCard :article="article.attributes" />
+              </ProductRestrictedLink>
             </div>
           </template>
         </template>
@@ -231,7 +206,8 @@ import * as dayjs from "dayjs";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import PublishedArticleCard from "@/components/PublishedArticleCard";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
+import PublishedProductCard from "@/components/PublishedProductCard";
 import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
 
 const carouselSettings = {
@@ -251,7 +227,8 @@ export default {
     Carousel,
     Slide,
     Navigation,
-    PublishedArticleCard,
+    ProductRestrictedLink,
+    PublishedProductCard,
     SituationalAwarenessCard,
   },
   setup() {

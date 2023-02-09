@@ -13,7 +13,7 @@ export default {
     getRelatedDocuments({ state, commit }, wantsPreview) {
       state.loading = true;
       let route = router.currentRoute.value;
-      if (!wantsPreview && route.name !== "article-preview") {
+      if (!wantsPreview && route.name !== "product-preview") {
         if (process.env.NODE_ENV === "low") {
           let relatedDocuments = relatedProducts.filter(
             (relatedProduct) =>

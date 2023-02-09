@@ -4,14 +4,14 @@
       <div
         v-show="!smartRender"
         id="article-blur"
-        class="h-full w-full absolute blur-lg bg-center bg-no-repeat bg-cover"
+        class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
         :style="{ background: 'url(' + getImgUrl(article) + ')' }"
       ></div>
       <img
         id="article-img"
         :class="[
           smartRender ? '' : 'inset-x-0',
-          'absolute h-full mx-auto z-[5]',
+          'absolute h-full mx-auto z-[3]',
         ]"
         :src="getImgUrl(article)"
         alt=""

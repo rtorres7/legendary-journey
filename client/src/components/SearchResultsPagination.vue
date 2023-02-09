@@ -26,9 +26,11 @@ export default {
   props: {
     totalCount: {
       type: Number,
+      required: true,
     },
     currentPage: {
       type: Number,
+      required: true,
     },
     maxPerPage: {
       type: Number,
@@ -51,5 +53,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

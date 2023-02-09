@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div
     class="py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
@@ -37,9 +38,9 @@
       <Disclosure v-slot="{ open }" default-open>
         <div class="flex flex-col justify-between">
           <div
-            class="grid-cols-1 md:grid md:grid-cols-2 md:gap-4 space-y-3 md:space-y-0 lg:flex lg:space-x-6 lg:gap-0 flex-col lg:flex-row w-full"
+            class="grid-cols-1 md:grid md:gap-4 space-y-3 md:space-y-0 lg:flex lg:space-x-6 lg:gap-0 flex-col lg:flex-row w-full"
           >
-            <div class="lg:w-2/5 flex space-x-3">
+            <div class="lg:w-1/2 flex space-x-3">
               <div class="w-full">
                 <BaseInput
                   v-model="queryText"
@@ -80,15 +81,12 @@
               </div>
             </div>
             <template
-              v-for="n in [
-                queryFilters.regions,
-                queryFilters.issues,
-                queryFilters.reporting,
-              ]"
+              v-for="n in [queryFilters.regions, queryFilters.issues]"
               :key="n"
             >
-              <div class="lg:w-1/5">
-                <BaseListbox
+              <div class="lg:w-1/4">
+                <component
+                  :is="n.component"
                   v-model="n.model"
                   :label="n.label"
                   :items="n.list"
@@ -120,17 +118,18 @@
         >
           <DisclosurePanel class="my-2">
             <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
-              <div class="lg:w-2/5 flex space-x-4 lg:max-w-none lg:pr-6">
+              <div class="lg:w-1/2 flex space-x-4 lg:max-w-none lg:pr-6">
                 <template v-if="!loadingMetadata">
                   <template
                     v-for="n in [
                       queryFilters.classifications,
-                      queryFilters.media_types,
+                      queryFilters.reporting,
                     ]"
                     :key="n"
                   >
-                    <div class="w-1/2">
-                      <BaseListbox
+                    <div class="w-full lg:w-1/2">
+                      <component
+                        :is="n.component"
                         v-model="n.model"
                         :label="n.label"
                         :items="n.list"
@@ -141,18 +140,20 @@
                 </template>
               </div>
               <div
-                class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-0 lg:grid-cols-0 lg:flex lg:w-3/5 lg:space-x-6 lg:max-w-none"
+                class="grid grid-cols-2 gap-4 lg:gap-0 lg:grid-cols-0 lg:flex lg:w-1/2 lg:space-x-6 lg:max-w-none"
               >
                 <template
                   v-for="n in [
-                    queryFilters.nonstate_actors,
-                    queryFilters.producing_offices,
-                    queryFilters.frontpage_featured,
+                    queryFilters.media_types,
+                    // queryFilters.nonstate_actors,
+                    // queryFilters.producing_offices,
+                    // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
                 >
-                  <div class="lg:w-1/3">
-                    <BaseListbox
+                  <div class="lg:w-1/2">
+                    <component
+                      :is="n.component"
                       v-model="n.model"
                       :label="n.label"
                       :items="n.list"
@@ -417,8 +418,16 @@
               <div
                 class="flex p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
                 :class="
-                  isLocked(result)
-                    ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
+                  isProductLocked(result)
+                    ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
+                    : ''
+                "
+                :aria-label="
+                  isProductLocked(result) ? 'restricted product' : ''
+                "
+                :title="
+                  isProductLocked(result)
+                    ? 'This product has restricted access.'
                     : ''
                 "
               >
@@ -427,25 +436,25 @@
                     dayjs(result.date_published).format("DD")
                   }}</span>
                   <span class="block text-sm">{{
-                    dayjs(result.date_published).format("MMM")
+                    dayjs(result.date_published).format("MMMM")
                   }}</span>
                   <span class="block text-sm">{{
                     dayjs(result.date_published).format("YYYY")
                   }}</span>
                 </div>
-                <div class="px-2 w-full">
-                  <template v-if="isLocked(result)">
-                    <div class="flex mb-2 items-center">
-                      <LockClosedIcon class="mr-2 h-4 w-4" aria-hidden="true" />
-                      <span class="uppercase text-sm">Locked</span>
-                    </div>
+                <div class="relative px-2 w-full">
+                  <template v-if="isProductLocked(result)">
+                    <BaseProductIcon
+                      class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+                      icon="locked"
+                    />
                   </template>
                   <div class="flex justify-between">
                     <div
                       class="basis-[768px] hover:underline"
-                      :class="isLocked(result) ? '' : 'cursor-pointer'"
+                      :class="isProductLocked(result) ? '' : 'cursor-pointer'"
                     >
-                      <a @click="goToArticle(result)">
+                      <ProductRestrictedLink :product="result">
                         <span
                           class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
                           >{{
@@ -457,7 +466,7 @@
                           class="text-black dark:text-white energy:text-white"
                           >{{ result.title }}</span
                         >
-                      </a>
+                      </ProductRestrictedLink>
                     </div>
                     <div class="text-xs lg:text-sm">
                       {{ result.doc_num }}
@@ -482,7 +491,7 @@
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
             >
               <template v-for="result in results" :key="result">
-                <ArticleCard :article="result" />
+                <ProductCard :article="result" />
               </template>
             </div>
           </template>
@@ -550,7 +559,7 @@
                         </span>
                       </div>
                       <div>
-                        {{ dayjs(result.date_published).format("DD MMM YYYY") }}
+                        {{ formatDate(result.date_published) }}
                       </div>
                     </div>
                   </div>
@@ -572,7 +581,7 @@
       <!-- Search Results Filters -->
       <BaseCard
         v-show="selectedView.label === 'List'"
-        class="hidden lg:block basis-1/4 ml-4 h-full sticky top-[130px]"
+        class="hidden lg:block basis-1/4 ml-4 h-full"
       >
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
@@ -743,7 +752,12 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { isEmpty, getValueForCode, getValueForName } from "@/helpers";
+import {
+  isProductLocked,
+  getValueForCode,
+  getValueForName,
+  formatDate,
+} from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -766,8 +780,8 @@ import {
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import { LockClosedIcon } from "@heroicons/vue/24/solid";
-import ArticleCard from "@/components/ArticleCard";
+import ProductCard from "@/components/ProductCard";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 import SearchResultsPagination from "@/components/SearchResultsPagination";
 const sortOptions = [
@@ -798,8 +812,8 @@ export default {
     ChevronUpIcon,
     ChevronUpDownIcon,
     XMarkIcon,
-    LockClosedIcon,
-    ArticleCard,
+    ProductCard,
+    ProductRestrictedLink,
     SearchResultsFacets,
     SearchResultsPagination,
   },
@@ -810,6 +824,7 @@ export default {
 
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
+    const producingOfficesList = [{ name: "DNI/NCTC", code: "DNI/NCTC" }];
     const loadingResults = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
@@ -1027,64 +1042,68 @@ export default {
         items: buildItems(criteria.value.media_tags, "media_tags[]"),
         types: ["media_tags[]"],
       };
-      const nonStateActors = {
-        items: buildItems(
-          criteria.value.non_state_actors,
-          "non_state_actors[]"
-        ),
-        types: ["non_state_actors[]"],
-      };
+      // const nonStateActors = {
+      //   items: buildItems(
+      //     criteria.value.non_state_actors,
+      //     "non_state_actors[]"
+      //   ),
+      //   types: ["non_state_actors[]"],
+      // };
       return {
         regions: {
           label: "Regions & Countries",
           model: currentModel(regions),
           list: regions.items,
           types: regions.types,
+          component: "BaseCombobox",
         },
         issues: {
           label: "Counterterrorism and Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
+          component: "BaseListbox",
         },
         reporting: {
           label: "Product Types",
           model: currentModel(reportings),
           list: reportings.items,
           types: reportings.types,
+          component: "BaseListbox",
         },
         classifications: {
           label: "Classifications",
           model: currentModel(classifications),
           list: classifications.items,
           types: classifications.types,
+          component: "BaseListbox",
         },
         media_types: {
           label: "Media Types",
           model: currentModel(mediaTypes),
           list: mediaTypes.items,
           types: mediaTypes.types,
+          component: "BaseListbox",
         },
-        nonstate_actors: {
-          label: "Non State Actors",
-          model: currentModel(nonStateActors),
-          list: nonStateActors.items,
-          types: nonStateActors.types,
-        },
-        producing_offices: {
-          label: "Producing Offices",
-          model: [],
-          list: [],
-          types: ["producing_offices[]"],
-          disabled: true,
-        },
-        frontpage_featured: {
-          label: "Front Page Featured",
-          model: [],
-          list: [],
-          types: ["selected_for[]"],
-          disabled: true,
-        },
+        // nonstate_actors: {
+        //   label: "Non State Actors",
+        //   model: currentModel(nonStateActors),
+        //   list: nonStateActors.items,
+        //   types: nonStateActors.types,
+        // },
+        // producing_offices: {
+        //   label: "Producing Offices",
+        //   model: currentModel(producingOffices),
+        //   list: producingOffices.items,
+        //   types: producingOffices.types,
+        // },
+        // frontpage_featured: {
+        //   label: "Front Page Featured",
+        //   model: [],
+        //   list: [],
+        //   types: ["selected_for[]"],
+        //   disabled: true,
+        // },
       };
     };
     const queryText = ref(
@@ -1121,6 +1140,8 @@ export default {
           return criteria.value.reporting_types;
         case "product_types[]":
           return criteria.value.product_types;
+        case "producing_offices[]":
+          return producingOfficesList;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":
@@ -1233,6 +1254,7 @@ export default {
     const removeFilter = (item) => {
       let query = {
         ...route.query,
+        page: 1,
       };
       if (item.type === "text" || item.type === "query") {
         delete query["text"];
@@ -1294,6 +1316,7 @@ export default {
           console.log("local watcher triggered.", newValue);
           let query = {
             ...route.query,
+            page: 1,
           };
           newValue.types.forEach((type) => {
             delete query[type];
@@ -1383,6 +1406,7 @@ export default {
     const searchQueryText = () => {
       let query = {
         ...route.query,
+        page: 1,
       };
       if (!queryText.value) {
         delete query["text"];
@@ -1400,19 +1424,6 @@ export default {
         return true;
       }
       return false;
-    };
-
-    const isLocked = (result) => {
-      return !isEmpty(result.needed) || result.org_restricted;
-    };
-
-    const goToArticle = (result) => {
-      if (!isLocked(result)) {
-        router.push({
-          name: "article",
-          params: { doc_num: result.doc_num },
-        });
-      }
     };
 
     const toggleImgContainer = (result, value) => {
@@ -1538,6 +1549,8 @@ export default {
 
     return {
       dayjs,
+      isProductLocked,
+      formatDate,
       loadingMetadata,
       loadingResults,
       results,
@@ -1553,8 +1566,6 @@ export default {
       queryDisabled,
       searchQueryText,
       showHighlightedResult,
-      goToArticle,
-      isLocked,
       toggleImgContainer,
       queryFilters,
       booleanFilters,

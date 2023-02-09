@@ -24,7 +24,7 @@ export default {
         setTimeout(() => commit("saveDocument", displayedDocument.data), 750);
       } else {
         const url =
-          route.name === "article-preview" || wantsPreview
+          route.name === "product-preview" || wantsPreview
             ? `/documents/${route.params.doc_num}/preview.json`
             : `/preload/documents/${route.params.doc_num}.json`;
         axios.get(url).then((response) => {

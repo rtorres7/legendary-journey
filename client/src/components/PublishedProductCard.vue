@@ -1,7 +1,22 @@
 <template>
   <BaseCard
-    :class="['h-full', loading ? 'animate-pulse' : '']"
-    hoverable
+    :class="[
+      'h-full',
+      loading
+        ? 'animate-pulse'
+        : isProductLocked(article)
+        ? 'bg-slate-200/50 dark:bg-slate-700/60 energy:bg-zinc-600/50'
+        : '',
+    ]"
+    :aria-label="
+      !loading && isProductLocked(article) ? 'restricted product' : ''
+    "
+    :title="
+      !loading && isProductLocked(article)
+        ? 'This product has restricted access.'
+        : ''
+    "
+    :hoverable="!loading && !isProductLocked(article) ? true : false"
     :rounded="false"
   >
     <template v-if="loading">
@@ -38,14 +53,14 @@
       </div>
     </template>
     <template v-else>
-      <ArticleImage
+      <ProductImage
         :class="[headline ? 'h-3/5' : 'h-2/3']"
         :article="article"
       />
       <div
         :class="[
           headline ? 'h-2/5' : 'h-1/3',
-          'flex flex-col justify-between pt-2 px-4',
+          'relative flex flex-col justify-between pt-2 px-4',
         ]"
       >
         <div>
@@ -72,19 +87,25 @@
             'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
           ]"
         >
-          {{ dayjs(article.date_published).format("ddd, MMMM D, YYYY") }}
+          {{ formatDate(article.date_published) }}
         </p>
+        <template v-if="isProductLocked(article)">
+          <BaseProductIcon
+            class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+            icon="locked"
+          />
+        </template>
       </div>
     </template>
   </BaseCard>
 </template>
 <script>
-import * as dayjs from "dayjs";
-import ArticleImage from "@/components/ArticleImage";
+import { isProductLocked, formatDate } from "@/helpers";
+import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
-    ArticleImage,
+    ProductImage,
   },
   props: {
     article: {
@@ -102,7 +123,8 @@ export default {
   },
   setup() {
     return {
-      dayjs,
+      isProductLocked,
+      formatDate,
     };
   },
 };

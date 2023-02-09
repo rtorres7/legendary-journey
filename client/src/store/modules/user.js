@@ -8,6 +8,7 @@ export default {
     pretend: null,
     user: {
       authorizations: {},
+      roles: [],
     },
   },
 
@@ -24,6 +25,16 @@ export default {
     hasRole: (state) => (roleName) => {
       if (state.user.roles) {
         return state.user.roles.includes(roleName);
+      }
+      return false;
+    },
+    isCommunityExclusive: (state) => {
+      if (
+        state.user.authorizations.canManageWire &&
+        state.user.roles.includes("community_editor") &&
+        !state.user.roles.includes("wire_editor")
+      ) {
+        return true;
       }
       return false;
     },

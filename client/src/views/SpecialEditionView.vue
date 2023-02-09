@@ -9,7 +9,7 @@
     </template>
     <template v-else>
       <p class="font-semibold text-2xl">
-        {{ specialEdition.name }}
+        ({{ specialEdition.name_classification }}) {{ specialEdition.name }}
       </p>
     </template>
   </div>
@@ -22,10 +22,12 @@
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <BaseButton type="danger" @click.prevent="openDeleteDialog">
+          <BaseButton color="danger" @click.prevent="openDeleteDialog">
             Delete
           </BaseButton>
-          <BaseButton @click.prevent="openEditDialog"> Edit </BaseButton>
+          <BaseButton color="secondary" @click.prevent="openEditDialog">
+            Edit
+          </BaseButton>
         </template>
       </template>
     </div>
@@ -67,7 +69,7 @@
             :key="article.id"
           >
             <BaseCard class="h-full" hoverable :rounded="false">
-              <ArticleCard :article="article" />
+              <ProductCard :article="article" />
             </BaseCard>
           </template>
         </template>
@@ -86,7 +88,7 @@
               :key="article.id"
             >
               <BaseCard class="h-full" hoverable :rounded="false">
-                <ArticleCard :article="article" />
+                <ProductCard :article="article" />
               </BaseCard>
             </template>
           </div>
@@ -119,7 +121,7 @@
               >
                 <router-link
                   :to="{
-                    name: 'article',
+                    name: 'product',
                     params: { doc_num: reading.doc_num },
                   }"
                   class="hover:underline"
@@ -180,7 +182,7 @@
                           >
                             <router-link
                               :to="{
-                                name: 'article',
+                                name: 'product',
                                 params: { doc_num: article.doc_num },
                               }"
                               class="hover:underline text-md lg:text-sm"
@@ -219,7 +221,7 @@
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
         <BaseButton @click.prevent="closeDeleteDialog"> Cancel </BaseButton>
-        <BaseButton type="danger" @click.prevent="deleteSpecialEdition">
+        <BaseButton color="danger" @click.prevent="deleteSpecialEdition">
           Delete
         </BaseButton>
       </template>
@@ -234,7 +236,7 @@ import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import ArticleCard from "@/components/ArticleCard";
+import ProductCard from "@/components/ProductCard";
 import Pagination from "@/components/Pagination";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
@@ -244,7 +246,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronUpIcon,
-    ArticleCard,
+    ProductCard,
     Pagination,
     SpecialEditionCreateEditDialog,
   },
