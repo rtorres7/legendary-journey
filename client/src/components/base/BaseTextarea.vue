@@ -10,7 +10,7 @@
     v-bind="$attrs"
     :id="uuid"
     :value="modelValue"
-    class="min-h-[2rem] w-full py-1 px-2 mt-1 text-left bg-white dark:bg-slate-700 energy:bg-zinc-700 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 resize-none placeholder:italic"
+    class="min-h-[2rem] w-full rounded-lg cursor-default py-1 px-2 mt-1 text-left bg-transparent disabled:bg-slate-100/80 disabled:dark:bg-slate-800 disabled:energy:bg-zinc-700 border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 resize-none placeholder:italic"
     @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
