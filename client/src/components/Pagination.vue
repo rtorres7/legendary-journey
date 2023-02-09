@@ -111,7 +111,7 @@ export default {
     },
     pages: {
       type: Number,
-      required: true,
+      default: null,
     },
   },
   setup(props) {

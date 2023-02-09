@@ -17,7 +17,6 @@
       "
       :select-on-tab="false"
       @selectItem="selectItemEventHandler"
-      @onInput="onInputEventHandler"
       @keydown.enter.prevent="onEnter"
     >
       <template #list-item-text="slot">
