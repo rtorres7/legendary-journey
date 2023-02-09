@@ -23,18 +23,18 @@
 import { ref } from "vue";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials";
-import GeneralHtmlSupport from '@ckeditor/ckeditor5-html-support/src/generalhtmlsupport';
+import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
 import BoldPlugin from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import ItalicPlugin from "@ckeditor/ckeditor5-basic-styles/src/italic";
 import UnderlinePlugin from "@ckeditor/ckeditor5-basic-styles/src/underline";
-import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
-import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
-import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+import Strikethrough from "@ckeditor/ckeditor5-basic-styles/src/strikethrough";
+import Subscript from "@ckeditor/ckeditor5-basic-styles/src/subscript";
+import Superscript from "@ckeditor/ckeditor5-basic-styles/src/superscript";
 import Font from "@ckeditor/ckeditor5-font/src/font";
 import LinkPlugin from "@ckeditor/ckeditor5-link/src/link";
 import Heading from "@ckeditor/ckeditor5-heading/src/heading";
 import ParagraphPlugin from "@ckeditor/ckeditor5-paragraph/src/paragraph";
-import Style from '@ckeditor/ckeditor5-style/src/style';
+import Style from "@ckeditor/ckeditor5-style/src/style";
 import List from "@ckeditor/ckeditor5-list/src/list";
 import Image from "@ckeditor/ckeditor5-image/src/image";
 import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
@@ -145,12 +145,12 @@ export default {
       style: {
         definitions: [
           {
-            name: 'Info box',
-            element: 'p',
-            classes: [ 'info-box' ]
+            name: "Info box",
+            element: "p",
+            classes: ["info-box"],
           },
-        ]
-      }
+        ],
+      },
     };
 
     const config = ref(baseConfig);

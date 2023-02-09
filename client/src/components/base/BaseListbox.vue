@@ -1,6 +1,6 @@
 <template>
   <Listbox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
-    <div class="relative mt-1">
+    <div class="relative">
       <ListboxLabel
         :class="[
           'text-sm font-medium',
@@ -14,13 +14,12 @@
         </template>
       </ListboxLabel>
       <ListboxButton
-        class="min-h-[2rem] flex relative w-full py-1 px-2 mt-1 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+        class="relative w-full min-h-[2.125rem] rounded-lg cursor-default pl-3 pr-10 mt-1 text-left border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
         :class="
           disabled
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
-            : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
+            : 'bg-transparent'
         "
-        @click="$emit('clicked')"
       >
         <span
           class="block truncate max-w-[calc(100%-20px)]"
