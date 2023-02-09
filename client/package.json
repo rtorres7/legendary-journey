@@ -34,6 +34,7 @@
     "@vuepic/vue-datepicker": "^3.5.2",
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
+    "cypress": "^12.5.1",
     "dayjs": "^1.11.1",
     "inter-ui": "^3.19.3",
     "lodash": "^4.17.21",
@@ -80,6 +81,9 @@
       "plugin:vue/vue3-recommended",
       "plugin:vue/vue3-strongly-recommended",
       "prettier"
+    ],
+    "ignorePatterns": [
+      "*.cy.js"
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"
