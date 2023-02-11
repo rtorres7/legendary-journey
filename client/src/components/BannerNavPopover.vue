@@ -1,7 +1,7 @@
 <template>
   <Popover class="static">
     <PopoverButton
-      class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
+      class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow h-[2.5rem]"
       tabindex="0"
     >
       <slot name="heading"></slot>

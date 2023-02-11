@@ -1,5 +1,5 @@
 <template>
-  <label v-if="label" :for="uuid" class="inline-flex text-sm font-medium"
+  <label v-if="label" :id="uuid" class="inline-flex text-sm font-medium"
     >{{ label }}
     <template v-if="required">
       <span class="sr-only">Required</span>
@@ -8,7 +8,7 @@
   </label>
   <input
     v-bind="$attrs"
-    :id="uuid"
+    :aria-labelledby="uuid"
     autocomplete="off"
     :value="modelValue"
     class="min-h-[2rem] flex w-full rounded-lg cursor-default py-1 px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 placeholder:italic"

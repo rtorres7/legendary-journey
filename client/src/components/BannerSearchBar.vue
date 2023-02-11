@@ -6,7 +6,7 @@
     <vue3-simple-typeahead
       id="typeahead_id"
       ref="typeaheadRef"
-      class="ml-2 focus-visible:outline-none bg-transparent w-full text-slate-200 dark:text-slate-300 energy:text-zinc-300"
+      class="px-2 focus-visible:outline-none bg-transparent w-full text-slate-200 dark:text-slate-300 energy:text-zinc-300 placeholder-shown:truncate"
       placeholder="Search for keywords, documents, or pages"
       :items="searches"
       :min-input-length="1"
