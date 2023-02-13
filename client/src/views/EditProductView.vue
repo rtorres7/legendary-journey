@@ -83,17 +83,10 @@ export default {
         }, 1000);
       } else {
         axios
-          .get(
-            "/wires/" +
-              route.params.date +
-              "/articles/" +
-              route.params.id +
-              "/getDocumentData",
-            {
-              date: route.params.date,
-              id: route.params.id,
-            }
-          )
+          .get("/articles/" + route.params.id, {
+            date: route.params.date,
+            id: route.params.id,
+          })
           .then((response) => {
             loadingProduct.value = false;
             if (response.data) {

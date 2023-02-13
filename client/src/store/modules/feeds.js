@@ -15,7 +15,7 @@ export default {
         console.log("[store] getSitrepFeeds: ", getSitreps);
         setTimeout(() => commit("importSitrepData", getSitreps), 750);
       } else {
-        axios.get("/home/daniel").then((response) => {
+        axios.get("/articles").then((response) => {
           console.log("[store] getSitrepFeeds: ", response.data?.woah?.briefs);
           commit("importSitrepData", response.data?.woah?.briefs);
         });

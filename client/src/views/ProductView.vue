@@ -59,7 +59,8 @@
               name: 'edit',
               params: {
                 date: article?.feature_date,
-                id: article?.feature_id ? article.feature_id : -1,
+                // id: article?.feature_id ? article.feature_id : -1,
+                id: article?.id,
                 doc_num: article?.doc_num,
               },
             }"

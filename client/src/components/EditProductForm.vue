@@ -65,7 +65,7 @@
                       />
                     </div>
                     <div class="lg:w-1/4">
-                      <BaseClassifier
+                      <!-- <BaseClassifier
                         v-model="form.titleClassificationXML"
                         label="Title PM"
                         required
@@ -73,7 +73,7 @@
                         @update:classObj="
                           updateField($event, 'title', 'classification')
                         "
-                      />
+                      /> -->
                     </div>
                   </div>
                   <div
@@ -90,7 +90,7 @@
                       />
                     </div>
                     <div class="lg:w-1/4">
-                      <BaseClassifier
+                      <!-- <BaseClassifier
                         v-model="form.summaryClassificationXML"
                         label="Summary PM"
                         required
@@ -98,7 +98,7 @@
                         @update:classObj="
                           updateField($event, 'summary', 'classification')
                         "
-                      />
+                      /> -->
                     </div>
                   </div>
                   <div class="lg:w-1/4">
@@ -390,7 +390,7 @@
                     highest level."
               >
                 <div class="lg:w-1/2">
-                  <BaseClassifier
+                  <!-- <BaseClassifier
                     v-model="form.classificationXML"
                     label="Document Classification"
                     required
@@ -398,7 +398,7 @@
                     @update:classObj="
                       updateField($event, 'document', 'classification')
                     "
-                  />
+                  /> -->
                 </div>
               </EditProductFormSection>
             </div>
@@ -1050,17 +1050,10 @@ export default {
               });
             } else {
               axios
-                .get(
-                  "/wires/" +
-                    route.params.date +
-                    "/articles/" +
-                    route.params.id +
-                    "/getDocumentData",
-                  {
-                    date: route.params.date,
-                    id: route.params.id,
-                  }
-                )
+                .get("/articles/" + route.params.id, {
+                  date: route.params.date,
+                  id: route.params.id,
+                })
                 .then((response) => {
                   savingProduct.value = false;
                   if (response.data) {

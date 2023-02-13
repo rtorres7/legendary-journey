@@ -26,6 +26,39 @@ router.get("/", (req, res) => {
   ).sort({ _id: -1 });
 });
 
+//GET articles by date
+router.get("/:date", (req, res) => {
+  var start = moment(req.params.date).startOf("day");
+  var end = moment(req.params.date).endOf("day");
+  Article.find(
+    {
+      date_published: { $gte: start, $lte: end },
+    },
+    function (error, articles) {
+      if (error) {
+        console.error(error);
+      }
+      console.log("!!!!!!!!????????:", start, end);
+      var articlesForDate = articles.map((article, index) => {
+        return {
+          attributes: {
+            ...article.attributes,
+            id: article._id,
+            product_type: article.product_type,
+            title_classif: article.title_classification,
+            summary_classif: article.summary_classification,
+            state: article.state,
+          },
+          data: { ...article.data },
+        };
+      });
+      console.log(articlesForDate);
+
+      res.send(articlesForDate);
+    }
+  );
+});
+
 // POST
 router.post("/", (req, res) => {
   var db = req.db;

@@ -40,7 +40,7 @@
       class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mb-6"
     >
       <template v-for="product in availableProductTypes" :key="product">
-        <div class="" @click="goToArticle(product.payload)">
+        <div class="" @click="goToProduct(product.payload)">
           <BaseCard
             class="flex justify-center items-center font-medium cursor-pointer"
             hoverable
@@ -58,13 +58,13 @@
     </div>
     <p v-if="!isCommunityExclusive">
       Not sure which product to choose?
-      <a class="font-semibold cursor-pointer" @click="goToArticle()"
+      <a class="font-semibold cursor-pointer" @click="goToProduct()"
         >Click here</a
       >
       to start with a blank template.
     </p>
   </div>
-  <template v-if="loadingArticles">
+  <template v-if="loadingProducts">
     <div class="max-w-fit m-auto mt-[20vh]">
       <BaseLoadingSpinner class="h-24 w-24" />
     </div>
@@ -73,7 +73,7 @@
     <div class="py-6">
       <div class="flex justify-between">
         <h3 class="font-semibold mb-6 text-lg">
-          Edit Existing Products ({{ filterArticles().length }})
+          Edit Existing Products ({{ filterProducts().length }})
         </h3>
         <div class="flex items-center">
           <input
@@ -82,16 +82,17 @@
             type="checkbox"
             name="showDrafts"
             value="Drafts"
-            @change="filterArticles()"
+            @change="filterProducts()"
           />
-          <label for="showDrafts" class="ml-2 text-sm"
-            >Show Drafts Only</label
-          >
+          <label for="showDrafts" class="ml-2 text-sm">Show Drafts Only</label>
         </div>
       </div>
-      <template v-if="articles.length > 0">
+      <template v-if="products?.length > 0">
         <BaseCard>
-          <template v-for="{ attributes: article } in filterArticles()" :key="article">
+          <template
+            v-for="{ attributes: product } in filterProducts()"
+            :key="product"
+          >
             <div
               class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
             >
@@ -99,53 +100,54 @@
                 <div class="pr-4">
                   <ProductImage
                     class="h-[125px] w-[125px]"
-                    :article="article"
+                    :article="product"
                     @click="
-                      article.images.length > 0 
-                      ? openPreviewThumbnailDialog(article) 
-                      : null"
+                      product.images.length > 0
+                        ? openPreviewThumbnailDialog(product)
+                        : null
+                    "
                   />
                 </div>
                 <div>
                   <router-link
                     :to="{
                       name:
-                        article.state === 'draft'
+                        product.state === 'draft'
                           ? 'product-preview'
                           : 'product',
-                      params: { doc_num: article.doc_num },
+                      params: { doc_num: product.doc_num },
                     }"
                   >
                     <h4
                       class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
                     >
                       {{
-                        article.title_classif && article.title_classif !== "X"
-                          ? `(${article.title_classif})`
+                        product.title_classif && product.title_classif !== "X"
+                          ? `(${product.title_classif})`
                           : ""
                       }}
-                      {{ article.title }}
+                      {{ product.title }}
                     </h4>
                   </router-link>
                   <div class="text-sm break-all">
                     <p
                       class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
                     >
-                      {{ dayjs(article.date_published).format("D MMM") }} -
+                      {{ dayjs(product.date_published).format("D MMM") }} -
                       <span class="font-medium pr-1">{{
-                        article.product_type
+                        product.product_type
                       }}</span>
                       |
-                      <span class="pl-1">{{ article.doc_num }}</span>
+                      <span class="pl-1">{{ product.doc_num }}</span>
                     </p>
                     <p class="line-clamp-5 md:line-clamp-3 break-all">
                       {{
-                        article.summary_classif &&
-                        article.summary_classif !== "X"
-                          ? `(${article.summary_classif})`
+                        product.summary_classif &&
+                        product.summary_classif !== "X"
+                          ? `(${product.summary_classif})`
                           : ""
                       }}
-                      {{ article.summary }}
+                      {{ product.summary }}
                     </p>
                   </div>
                 </div>
@@ -154,16 +156,16 @@
                 <p
                   :class="[
                     'min-w-[100px] capitalize pr-4',
-                    article.state === 'draft'
+                    product.state === 'draft'
                       ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
                       : 'italic text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
                   ]"
                 >
-                  {{ article.state }}
+                  {{ product.state }}
                 </p>
                 <template
                   v-if="
-                    canEditProduct(article.product_type) && !article?.legacy
+                    canEditProduct(product.product_type) && !product?.legacy
                   "
                 >
                   <router-link
@@ -171,8 +173,8 @@
                       name: 'edit',
                       params: {
                         date: routeDate,
-                        id: article.id,
-                        doc_num: article.doc_num,
+                        id: product.id,
+                        doc_num: product.doc_num,
                       },
                     }"
                   >
@@ -181,7 +183,6 @@
                 </template>
               </div>
             </div>
-           
           </template>
           <BaseDialog
             :isOpen="isPreviewThumbnailDialogOpen"
@@ -197,8 +198,8 @@
                 id="product-blur"
                 class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
               ></div>
-              <ProductImage 
-                :article="selectedArticle"
+              <ProductImage
+                :article="selectedProduct"
                 class="inset-x-0 absolute h-full mx-auto z-[3]"
               />
             </div>
@@ -209,7 +210,7 @@
         </BaseCard>
       </template>
       <template v-else>
-        <p class="pt-2 italic">No articles found.</p>
+        <p class="pt-2 italic">No products found.</p>
       </template>
     </div>
   </template>
@@ -239,20 +240,20 @@ export default {
     const selectedDate = ref();
     const loadingCriteria = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
-    const articles = computed(() => store.state.wires.articles);
-    const loadingArticles = computed(() => store.state.wires.loading);
+    const products = computed(() => store.state.wires.articles);
+    const loadingProducts = computed(() => store.state.wires.loading);
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
     const showOnlyDrafts = ref(false);
-    const filterArticles = () => {
-      if(showOnlyDrafts.value) {
-        return articles.value.filter((a) => a.attributes.state === "draft");
+    const filterProducts = () => {
+      if (showOnlyDrafts.value) {
+        return products.value.filter((p) => p.attributes.state === "draft");
       } else {
-        return articles.value
+        return products.value;
       }
     };
-    
+
     const defaultPayload = {
       document_action: "create",
       dissem_orgs: ["DNI"],
@@ -304,7 +305,7 @@ export default {
       }
     });
 
-    const goToArticle = (payload) => {
+    const goToProduct = (payload) => {
       if (!payload) {
         payload = { ...defaultPayload };
       }
@@ -349,10 +350,10 @@ export default {
       }
     };
 
-    const selectedArticle = ref({});
+    const selectedProduct = ref({});
     const isPreviewThumbnailDialogOpen = ref(false);
-    const openPreviewThumbnailDialog = (article) => {
-      selectedArticle.value = article;
+    const openPreviewThumbnailDialog = (product) => {
+      selectedProduct.value = product;
       isPreviewThumbnailDialogOpen.value = true;
     };
     const closePreviewThumbnailDialog = () => {
@@ -362,6 +363,7 @@ export default {
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
+      console.log(loadingProducts.value);
     });
 
     watch(
@@ -378,16 +380,16 @@ export default {
       dayjs,
       routeDate,
       selectedDate,
-      articles,
-      loadingArticles,
+      products,
+      loadingProducts,
       isCommunityExclusive,
       showOnlyDrafts,
-      filterArticles,
+      filterProducts,
       availableProductTypes,
-      goToArticle,
+      goToProduct,
       selectDate,
       canEditProduct,
-      selectedArticle,
+      selectedProduct,
       isPreviewThumbnailDialogOpen,
       openPreviewThumbnailDialog,
       closePreviewThumbnailDialog,
