@@ -85,6 +85,7 @@ var MetadataSchema = new Schema(
           {
             name: String,
             code: Number,
+            publishable: Boolean,
           },
         ],
       },
