@@ -16,7 +16,7 @@ export default {
       } else {
         axios.get("/articles/" + date).then((response) => {
           console.log("[store] getWireByDate: ", response.data);
-          commit("saveArticles", response?.data?.features);
+          commit("saveArticles", response?.data);
         });
       }
     },

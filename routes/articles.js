@@ -38,7 +38,6 @@ router.get("/:date", (req, res) => {
       if (error) {
         console.error(error);
       }
-      console.log("!!!!!!!!????????:", start, end);
       var articlesForDate = articles.map((article, index) => {
         return {
           attributes: {
@@ -90,11 +89,11 @@ router.post("/", (req, res) => {
 });
 
 // Fetch single post
-router.get("/:id", (req, res) => {
+router.get("/:id/getData", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
-    "attributes doc_num title title_classification summary summary_classification date_published",
+    "attributes doc_num title title_classification summary summary_classification date_published countries topics product_type html_body dissem_orgs images poc_info",
     function (error, article) {
       if (error) {
         console.error(error);
