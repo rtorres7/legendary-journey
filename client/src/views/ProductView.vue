@@ -22,6 +22,13 @@
         v-if="!isDraft && !wantsPreview"
         class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
       >
+        <div>
+          <PrinterIcon
+            class="h-6 w-6 cursor-pointer"
+            aria-hidden="true"
+            @click="printDocument"
+          />
+        </div>
         <div class="flex">
           <a
             :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
@@ -254,6 +261,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   ChevronDownIcon,
+  PrinterIcon,
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
@@ -267,6 +275,7 @@ import ProductMetrics from "@/components/ProductMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    PrinterIcon,
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
@@ -310,6 +319,9 @@ export default {
     const metricEndDate = ref(null);
     const navigation = ref(null);
     const isDraft = ref(route.name === "product-preview" ? true : false);
+    const printCount = computed(
+      () => store.state.danielDetails.document.print_count
+    );
     const emailCount = computed(
       () => store.state.danielDetails.document.email_count
     );
@@ -317,6 +329,24 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
 
+    const printDocument = () => {
+      const pdfs = article.value.attachments_metadata.filter(
+        (attachment) =>
+          attachment.pdf_version === true && attachment.visible === true
+      );
+      if (pdfs.length === 0) {
+        window.print();
+      } else {
+        const pdfLink =
+          window.location.origin +
+          "/documents/" +
+          article.value.doc_num +
+          "/attachments/" +
+          pdfs[0].file_name;
+        window.open(pdfLink);
+      }
+    };
+    const updatePrintCount = () => {};
     const updateEmailCount = () => {
       store.dispatch("danielDetails/saveEmailCount");
     };
@@ -437,7 +467,10 @@ export default {
       metricEndDate,
       navigation,
       isDraft,
+      printCount,
       emailCount,
+      printDocument,
+      updatePrintCount,
       updateEmailCount,
       copyUrl,
       canManageWire,
