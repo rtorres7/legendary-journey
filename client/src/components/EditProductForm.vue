@@ -642,7 +642,7 @@ export default {
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
-      dissemOrgs: criteria.value.dissem_orgs,
+      dissemOrgs: criteria.value.dissem_orgs.values,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -745,6 +745,8 @@ export default {
         case "multiple":
           model.forEach((option) => {
             codes.push(option.code);
+            console.log(criteria.value.topics);
+            console.log(criteria.value.dissem_orgs.values);
           });
           payload.value[property] = codes;
           break;

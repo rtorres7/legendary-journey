@@ -89,7 +89,7 @@ router.post("/", (req, res) => {
 });
 
 // Fetch single post
-router.get("/:id/getData", (req, res) => {
+router.get("/:id/edit", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
@@ -101,6 +101,15 @@ router.get("/:id/getData", (req, res) => {
       res.send(article);
     }
   );
+});
+
+router.get("/:id/view", function (req, res) {
+  Article.findById(req.params.id, function (error, article) {
+    if (error) {
+      console.error(error);
+    }
+    res.send(article.data.details);
+  });
 });
 
 // Update an article

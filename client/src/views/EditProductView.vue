@@ -83,7 +83,7 @@ export default {
         }, 1000);
       } else {
         axios
-          .get("/articles/" + route.params.id + "/getData", {
+          .get("/articles/" + route.params.id + "/edit", {
             date: route.params.date,
             id: route.params.id,
           })
