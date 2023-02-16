@@ -233,9 +233,13 @@ export default {
   },
   setup() {
     const store = useStore();
-    const danielArticles = computed(() => store.state.daniel.articles);
+    const danielArticles = computed(() =>
+      store.state.daniel.articles.filter((a) => a.state === "posted")
+    );
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
-    const sitreps = computed(() => store.state.feeds.sitreps);
+    const sitreps = computed(() =>
+      store.state.feeds.sitreps.filter((a) => a.state === "posted")
+    );
     const loadingSitreps = computed(() => store.state.feeds.loading);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 

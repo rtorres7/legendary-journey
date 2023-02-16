@@ -9,7 +9,7 @@ var Article = require("../models/articles");
 router.get("/", (req, res) => {
   Article.find(
     {},
-    "attributes doc_num title title_classification summary summary_classification date_published",
+    "attributes doc_num title title_classification summary summary_classification date_published state",
     function (error, articles) {
       if (error) {
         console.error(error);
@@ -170,6 +170,7 @@ router.post("/processDocument", (req, res) => {
     date_published: moment.utc(),
     doc_num: this._id,
     id: this._id,
+    state: "draft",
     //},
   });
 
@@ -182,6 +183,7 @@ router.post("/processDocument", (req, res) => {
       date: moment.utc(),
       doc_num: new_article._id,
       id: new_article._id,
+      state: "draft",
     });
   });
 });

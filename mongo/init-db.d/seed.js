@@ -2888,6 +2888,10 @@ db.metadata.insertOne({
           code: "GLI",
         },
         {
+          name: "Health",
+          code: "HLTH",
+        },
+        {
           name: "Interest Rates",
           code: "INR",
         },

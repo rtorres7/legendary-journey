@@ -711,6 +711,9 @@ export default {
       if (product.poc_info) {
         form.value.pocInfo = product.poc_info;
       }
+      if (product.html_body) {
+        form.value.editorData = product.html_body;
+      }
       const topics = product.topics ? product.topics : ["TERR"];
       const topicsToSelect = [];
       topics.forEach((topic) => {
