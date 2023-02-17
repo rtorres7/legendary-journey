@@ -262,7 +262,12 @@ export default {
       publication_number: Math.floor(100000 * Math.random() * 900000),
       product_type_id: 10376,
       title: "Draft Document Title",
-      topics: ["TERR"],
+      topics: [
+        {
+          name: "Terrorism",
+          code: "TERR",
+        },
+      ],
     };
 
     const buildAvailableProducts = () => {
