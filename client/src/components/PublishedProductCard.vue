@@ -5,7 +5,7 @@
       loading
         ? 'animate-pulse'
         : isProductLocked(article)
-        ? 'bg-slate-200/50 dark:bg-slate-700/60 energy:bg-zinc-600/50'
+        ? 'bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-700/50'
         : '',
     ]"
     :aria-label="

@@ -363,7 +363,6 @@ export default {
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
-      console.log(loadingProducts.value);
     });
 
     watch(

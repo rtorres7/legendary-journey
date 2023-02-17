@@ -1,9 +1,8 @@
 <template>
   <Popover class="static">
     <PopoverButton
-      class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
+      class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow h-[2.5rem]"
       tabindex="0"
-      :title="title"
     >
       <slot name="heading"></slot>
     </PopoverButton>
@@ -39,10 +38,6 @@ export default {
     PopoverPanel,
   },
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
     //Popover width expands when screen size is shrunk to cover the horizontal width of the screen
     wideShrunk: {
       default: false,

@@ -272,26 +272,24 @@
                         updateField($event, 'dissem_orgs', 'multiple')
                       "
                     />
-                    <p class="ml-2 text-sm">
+                    <p class="text-sm">
                       No selection disseminates to all
-                      <span class="ml-1 italic"
+                      <span class="italic"
                         >(includes NT-50 Organizations).</span
                       >
                     </p>
-                    <!-- <div class="flex">
+                    <div class="flex">
                       <input
-                        id="allOrgs"
-                        v-model="checkAllOrgs"
+                        id="intelOrgs"
+                        v-model="checkAllIntelOrgs"
                         type="checkbox"
-                        name="allOrgs"
-                        @click="toggleAllOrgs()"
+                        name="intelOrgs"
+                        @click="toggleAllIntelOrgs()"
                       />
-                      <label for="allOrgs" class="ml-2 text-sm"
-                        >Select All Orgs<span class="ml-2 italic"
-                          >(includes NT-50 Organizations)</span
-                        ></label
+                      <label for="intelOrgs" class="ml-2 text-sm"
+                        >Restrict Dissemination to IC Members Only</label
                       >
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </EditProductFormSection>
@@ -672,7 +670,7 @@ export default {
       worldwide: null,
     });
     const payload = ref({});
-    const checkAllOrgs = ref(false);
+    const checkAllIntelOrgs = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
 
@@ -685,13 +683,15 @@ export default {
         document.querySelector(".fileUpload").files[0];
     };
 
-    const toggleAllOrgs = () => {
+    const toggleAllIntelOrgs = () => {
       let payloadOrgs = [];
       form.value.dissemOrgs = [];
-      if (!checkAllOrgs.value) {
+      if (!checkAllIntelOrgs.value) {
         lists.dissemOrgs.forEach((org) => {
-          form.value.dissemOrgs.push(org);
-          payloadOrgs.push(org.code);
+          if (org.category == "IC") {
+            form.value.dissemOrgs.push(org);
+            payloadOrgs.push(org.code);
+          }
         });
       }
       payload.value["dissem_orgs"] = payloadOrgs;
@@ -710,9 +710,6 @@ export default {
       }
       if (product.poc_info) {
         form.value.pocInfo = product.poc_info;
-      }
-      if (product.html_body) {
-        form.value.editorData = product.html_body;
       }
       const topics = product.topics ? product.topics : ["TERR"];
       const topicsToSelect = [];
@@ -748,8 +745,6 @@ export default {
         case "multiple":
           model.forEach((option) => {
             codes.push(option.code);
-            console.log(criteria.value.topics);
-            console.log(criteria.value.dissem_orgs.values);
           });
           payload.value[property] = codes;
           break;
@@ -809,8 +804,16 @@ export default {
         let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
         dissemsToSelect.push(dissemValue);
       });
-      if (dissemsToSelect.length !== lists.dissemOrgs.length) {
-        checkAllOrgs.value = false;
+      const allIntelOrgs = lists.dissemOrgs.filter(
+        (org) => org.category == "IC"
+      );
+      const isAllIntel = allIntelOrgs.every((org) =>
+        dissemsToSelect.includes(org)
+      );
+      if (isAllIntel && dissemsToSelect.length == allIntelOrgs.length) {
+        checkAllIntelOrgs.value == true;
+      } else {
+        checkAllIntelOrgs.value == false;
       }
       form.value.dissemOrgs = dissemsToSelect;
       form.value.productType = lists.productTypes.find(
@@ -1102,12 +1105,12 @@ export default {
       publishingProduct,
       lists,
       form,
-      checkAllOrgs,
+      checkAllIntelOrgs,
       selectedPublicationDate,
       attachmentDropzoneFile,
       attachmentDrop,
       attachmentSelectedFile,
-      toggleAllOrgs,
+      toggleAllIntelOrgs,
       updateField,
       updateSelectedDate,
       publishDisabled,

@@ -1,47 +1,42 @@
 <template>
   <Combobox
-    v-slot="{ open }"
     v-model="selectedItem"
     :multiple="multiple"
     :disabled="disabled"
+    as="div"
   >
-    <div class="relative mt-1">
-      <ComboboxLabel
-        :class="[
-          'text-sm font-medium',
-          required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none',
-        ]"
-      >
-        {{ label }}
-        <template v-if="required">
-          <span class="sr-only">Required</span>
-          <span class="pl-1 text-red-500">*</span>
-        </template>
-      </ComboboxLabel>
+    <ComboboxLabel
+      :class="[
+        'text-sm font-medium',
+        required ? 'inline-flex' : 'line-clamp-1 xl:line-clamp-none',
+      ]"
+    >
+      {{ label }}
+      <template v-if="required">
+        <span class="sr-only">Required</span>
+        <span class="pl-1 text-red-500">*</span>
+      </template>
+    </ComboboxLabel>
+    <div class="relative">
       <span
         ref="displayEl"
-        :class="[
-          'absolute min-h-[2rem] max-h-[2.5rem] w-full py-1 px-2 mt-1 z-[2]',
-          open ? 'hidden' : '',
-        ]"
-        @click="hideElement($event)"
+        :class="['absolute truncate max-w-[calc(100%-20px)] px-2 mt-1']"
         >{{ displayValue(modelValue) }}</span
       >
       <ComboboxInput
         ref="inputEl"
-        class="min-h-[2rem] max-h-[2.5rem] flex relative w-full py-1 px-2 mt-1 border border-gray-200 dark:border-slate-800 energy:border-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+        class="flex relative w-full rounded-lg cursor-default py-1 px-2 mt-1 border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
         :class="
           disabled
             ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
-            : 'bg-white dark:bg-slate-700 energy:bg-zinc-600'
+            : 'bg-transparent'
         "
-        @focusout="showElement"
         @change="query = $event.target.value"
+        @input="hideDisplayValue()"
+        @focusout="showDisplayValue()"
       >
       </ComboboxInput>
-      <ComboboxButton
-        class="absolute inset-y-0 right-0 flex items-center top-1/3 pr-2 z-[3]"
-      >
+      <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
         <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
       </ComboboxButton>
       <transition
@@ -54,7 +49,7 @@
         @after-leave="query = ''"
       >
         <ComboboxOptions
-          class="absolute py-1 mt-1 w-full overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+          class="absolute py-1 mt-1 w-full overflow-auto text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
         >
           <div
             v-if="filteredItems.length === 0 && query !== ''"
@@ -221,14 +216,13 @@ export default {
           });
     });
 
-    const hideElement = (e) => {
-      if (!e.target.classList.contains("hidden")) {
-        e.target.classList.add("hidden");
-        inputEl.value.$el.focus();
+    const hideDisplayValue = () => {
+      if (!displayEl.value.classList.contains("hidden")) {
+        displayEl.value.classList.add("hidden");
       }
     };
 
-    const showElement = () => {
+    const showDisplayValue = () => {
       if (displayEl.value.classList.contains("hidden")) {
         displayEl.value.classList.remove("hidden");
       }
@@ -241,8 +235,8 @@ export default {
       displayValue,
       query,
       filteredItems,
-      hideElement,
-      showElement,
+      hideDisplayValue,
+      showDisplayValue,
     };
   },
 };

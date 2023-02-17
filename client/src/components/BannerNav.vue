@@ -262,47 +262,7 @@
         </div>
       </div>
       <!-- Desktop Navigation -->
-      <ul class="hidden lg:flex space-x-10 text-sm leading-10 justify-center">
-        <!-- <li>
-          <Menu as="div" class="relative">
-            <MenuButton
-              class="flex items-center font-semibold hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
-              tabindex="0"
-            >
-              Issues<ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
-            </MenuButton>
-            <transition
-              enter-active-class="transition ease-out duration-100"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
-            >
-              <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-52 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300"
-              >
-                <MenuItem
-                  v-for="issue in metadata.issues"
-                  :key="issue"
-                  v-slot="{ active }"
-                  as="a"
-                  @click="navigateToIssue(issue)"
-                >
-                  <span
-                    :class="[
-                      active
-                        ? 'bg-slate-700/80 dark:bg-slate-600/80 energy:bg-zinc-600/80'
-                        : '',
-                      'py-1 px-3 flex cursor-pointer',
-                    ]"
-                    >{{ issue.name }}</span
-                  >
-                </MenuItem>
-              </MenuItems>
-            </transition>
-          </Menu>
-        </li> -->
+      <ul class="hidden lg:flex space-x-10 text-sm justify-center items-center">
         <li>
           <BannerNavPopover :wideShrunk="loadingMetadata ? false : true">
             <template #heading>
@@ -319,7 +279,7 @@
                 </template>
                 <template v-else>
                   <div
-                    class="grid lg:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-1 pb-4"
+                    class="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-4"
                     aria-label="select an issue"
                   >
                     <template v-for="issue in metadata.issues" :key="issue">
@@ -361,7 +321,7 @@
               <template v-else>
                 <div class="hidden lg:block lg:m-auto">
                   <div
-                    class="grid lg:grid-cols-5 xl:grid-cols-7 gap-x-4 gap-y-2 pb-4"
+                    class="grid lg:grid-cols-5 xl:grid-cols-7 gap-4 pb-4"
                     aria-label="select a region or subregion"
                   >
                     <div v-for="region in criteria.regions" :key="region">
@@ -382,7 +342,7 @@
                         {{ region.name }}
                       </router-link>
                       <template v-if="region.subregions.length > 1">
-                        <ul class="pt-2 list-disc list-inside">
+                        <ul class="pt-2 list-disc list-inside space-y-3">
                           <template
                             v-for="subregionItem in formattedSubregions(
                               region.subregions
@@ -444,68 +404,19 @@
                 </div>
               </template>
               <template v-else>
-                <div class="flex justify-center mb-4 m-auto">
-                  <label for="country" aria-hidden="true"
-                    >Select a country from the map or the dropdown</label
+                <div class="flex justify-center items-center mb-4 m-auto">
+                  <span aria-hidden="true"
+                    >Select a country from the map or the dropdown</span
                   >
-                  <Listbox
+                  <BaseCombobox
                     v-model="selectedCountry"
-                    aria-label="select a country from the dropdown"
-                  >
-                    <div class="relative w-full max-w-[400px] ml-4">
-                      <ListboxButton
-                        class="flex w-full px-2 text-left capitalize text-slate-800 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-600 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                      >
-                        <span class="block truncate">{{
-                          selectedCountry
-                            ? selectedCountry.name
-                            : criteria.countries[0].name
-                        }}</span>
-                        <span
-                          class="absolute inset-y-0 right-0 flex items-center pr-2"
-                        >
-                          <ChevronUpDownIcon
-                            class="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </ListboxButton>
-                      <transition
-                        enterActiveClass="transition ease-out duration-100"
-                        enterFromClass="transform opacity-0 scale-95"
-                        enterToClass="transform opacity-100 scale-100"
-                        leaveActiveClass="transition ease-in duration-75"
-                        leaveFromClass="transform opacity-100 scale-100"
-                        leaveToClass="transform opacity-0 scale-95"
-                      >
-                        <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-slate-800 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                        >
-                          <ListboxOption
-                            v-for="country in criteria.countries.filter(
-                              (country) => country.code !== 'WW'
-                            )"
-                            v-slot="{ active }"
-                            :key="country"
-                            :value="country"
-                            as="template"
-                            class="capitalize px-2 py-1 cursor-pointer"
-                            @click="navigateToCountry(country)"
-                          >
-                            <li
-                              :class="[
-                                active
-                                  ? 'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700'
-                                  : 'bg-none',
-                              ]"
-                            >
-                              {{ country.name }}
-                            </li>
-                          </ListboxOption>
-                        </ListboxOptions>
-                      </transition>
-                    </div>
-                  </Listbox>
+                    :items="
+                      criteria.countries.filter(
+                        (country) => country.code !== 'WW'
+                      )
+                    "
+                    class="w-full max-w-[400px] ml-4"
+                  />
                 </div>
                 <BannerNavMap aria-hidden="true" />
               </template>
@@ -766,7 +677,7 @@ import {
   Bars3Icon,
   MoonIcon,
   //SearchIcon,
-  ChevronUpDownIcon,
+  //ChevronUpDownIcon,
   SunIcon,
   WrenchIcon,
   UserCircleIcon,
@@ -805,7 +716,7 @@ export default {
     Bars3Icon,
     MoonIcon,
     //SearchIcon,
-    ChevronUpDownIcon,
+    //ChevronUpDownIcon,
     SunIcon,
     UserCircleIcon,
     XMarkIcon,
@@ -920,6 +831,10 @@ export default {
       });
       return subregions;
     };
+
+    watch([selectedCountry], () => {
+      navigateToCountry(selectedCountry.value);
+    });
 
     const navigateToCountry = (country) => {
       let query = {

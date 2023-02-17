@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'shadow-md dark:shadow-none energy:shadow-none bg-white dark:bg-slate-800/50 energy:bg-zinc-800',
+      'shadow-md dark:shadow-none energy:shadow-none bg-white dark:bg-slate-800/50 energy:bg-zinc-800/50',
       computedClass,
     ]"
   >
@@ -23,6 +23,7 @@ export default {
     },
   },
   setup(props) {
+    //TODO: Add alternate color option. For easy use with Locked Documents.
     const computedClass = computed(() => {
       const classes = [];
       if (props.hoverable) {
