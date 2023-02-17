@@ -22,12 +22,21 @@
         v-if="!isDraft && !wantsPreview"
         class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
       >
-        <div>
-          <PrinterIcon
-            class="h-6 w-6 cursor-pointer"
-            aria-hidden="true"
-            @click="printDocument"
-          />
+        <div class="flex">
+          <div>
+            <PrinterIcon
+              class="h-6 w-6 cursor-pointer"
+              aria-hidden="true"
+              @click="printDocument"
+            />
+          </div>
+          <div
+            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+          >
+            <p>
+              {{ article.print_count }}
+            </p>
+          </div>
         </div>
         <div class="flex">
           <a
@@ -345,8 +354,11 @@ export default {
           pdfs[0].file_name;
         window.open(pdfLink);
       }
+      updatePrintCount();
     };
-    const updatePrintCount = () => {};
+    const updatePrintCount = () => {
+      store.dispatch("danielDetails/savePrintCount");
+    };
     const updateEmailCount = () => {
       store.dispatch("danielDetails/saveEmailCount");
     };
