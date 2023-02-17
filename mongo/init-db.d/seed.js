@@ -79,7 +79,13 @@ db.articles.insertMany([
     coi_level: 4,
     congress: true,
     control_to: [],
-    countries: [],
+    countries: [
+      {
+        code: "AFG",
+        name: "Afghanistan",
+        digraph: "AF",
+      },
+    ],
     countries_fn: [],
     created_at: "2022/09/01 13:16:43 -0400",
     created_by_id: null,
@@ -167,7 +173,12 @@ db.articles.insertMany([
     to_param: "WIReWIRe_sample_1",
     to_param_feature: "20",
     to_param_wire: "2022-09-01",
-    topics: ["HLTH"],
+    topics: [
+      {
+        name: "Belarus Relations",
+        code: "BRL",
+      },
+    ],
     topics_fn: [],
     type: "WireDocument",
     uniqueReadership: 100,
@@ -246,7 +257,13 @@ db.articles.insertMany([
     coi_level: 4,
     congress: true,
     control_to: [],
-    countries: [],
+    countries: [
+      {
+        code: "CHE",
+        name: "Switzerland",
+        digraph: "SZ",
+      },
+    ],
     countries_fn: [],
     created_at: "2022/08/31 13:00:00 -0400",
     created_by_id: null,
@@ -356,7 +373,12 @@ db.articles.insertMany([
     to_param: "WIReWIRe_sample_2",
     to_param_feature: "21",
     to_param_wire: "2022-09-01",
-    topics: ["HLTH"],
+    topics: [
+      {
+        name: "Belarus Relations",
+        code: "BRL",
+      },
+    ],
     topics_fn: [],
     type: "WireDocument",
     uniqueReadership: 300,
@@ -435,7 +457,13 @@ db.articles.insertMany([
     coi_level: 4,
     congress: true,
     control_to: [],
-    countries: [],
+    countries: [
+      {
+        code: "CHE",
+        name: "Switzerland",
+        digraph: "SZ",
+      },
+    ],
     countries_fn: [],
     created_at: "2022/08/30 13:00:00 -0400",
     created_by_id: null,
@@ -537,7 +565,12 @@ db.articles.insertMany([
     to_param: "WIReWIRe_sample_3",
     to_param_feature: "23",
     to_param_wire: "2022-09-01",
-    topics: ["HLTH"],
+    topics: [
+      {
+        name: "Belarus Relations",
+        code: "BRL",
+      },
+    ],
     topics_fn: [],
     type: "WireDocument",
     uniqueReadership: 800,
@@ -616,7 +649,13 @@ db.articles.insertMany([
     coi_level: 4,
     congress: true,
     control_to: [],
-    countries: [],
+    countries: [
+      {
+        code: "CHE",
+        name: "Switzerland",
+        digraph: "SZ",
+      },
+    ],
     countries_fn: [],
     created_at: "2022/08/29 13:00:00 -0400",
     created_by_id: null,
@@ -711,7 +750,12 @@ db.articles.insertMany([
     to_param: "WIReWIRe_sample_4",
     to_param_feature: "23",
     to_param_wire: "2022-09-01",
-    topics: ["HLTH"],
+    topics: [
+      {
+        name: "Belarus Relations",
+        code: "BRL",
+      },
+    ],
     topics_fn: [],
     type: "WireDocument",
     uniqueReadership: 500,
@@ -790,7 +834,7 @@ db.articles.insertMany([
     coi_level: 4,
     congress: true,
     control_to: [],
-    countries: [],
+    countries: [{}],
     countries_fn: [],
     created_at: "2022/08/28 13:00:00 -0400",
     created_by_id: null,
@@ -881,7 +925,12 @@ db.articles.insertMany([
     to_param: "WIReWIRe_sample_5",
     to_param_feature: "24",
     to_param_wire: "2022-09-01",
-    topics: ["HLTH"],
+    topics: [
+      {
+        name: "Belarus Relations",
+        code: "BRL",
+      },
+    ],
     topics_fn: [],
     type: "WireDocument",
     uniqueReadership: 200,

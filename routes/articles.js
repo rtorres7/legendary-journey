@@ -93,7 +93,7 @@ router.get("/:id/edit", (req, res) => {
   var db = req.db;
   Article.findById(
     req.params.id,
-    "attributes doc_num title title_classification summary summary_classification date_published countries topics product_type html_body dissem_orgs images poc_info",
+    "attributes doc_num title title_classification summary summary_classification date_published countries topics product_type_id html_body dissem_orgs images poc_info",
     function (error, article) {
       if (error) {
         console.error(error);
@@ -171,6 +171,7 @@ router.post("/processDocument", (req, res) => {
     doc_num: this._id,
     id: this._id,
     state: "draft",
+    product_type_id: req.body.product_type_id,
     //},
   });
 

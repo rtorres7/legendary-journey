@@ -328,6 +328,7 @@ export default {
               date: route.params.date,
               id: response.data.article.id,
               doc_num: response.data.doc_num,
+              product_type_id: response.data.product_type_id,
             },
           });
         });

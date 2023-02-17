@@ -1271,11 +1271,7 @@ export const metadata = {
       {
         ancestry: "1000",
         ancestry_depth: 1,
-<<<<<<< HEAD
-        category: "POLICY",
-=======
         category: "IC",
->>>>>>> develop
         code: "ANCESTRY",
         created_at: "2011-07-30T16:38:33.000-04:00",
         description: "Dept of Ancestry",
@@ -1292,11 +1288,7 @@ export const metadata = {
       {
         ancestry: "1000",
         ancestry_depth: 1,
-<<<<<<< HEAD
-        category: "POLICY",
-=======
         category: "IC",
->>>>>>> develop
         code: "AGRICULTURE",
         created_at: "2011-07-30T16:38:33.000-04:00",
         description: "Dept of Agriculture",
