@@ -1,13 +1,6 @@
 <template>
   <BaseCard
-    :class="[
-      'relative h-full px-4 py-4',
-      loading
-        ? 'animate-pulse'
-        : isProductLocked(sitrep)
-        ? 'bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-700/50'
-        : '',
-    ]"
+    :class="['relative h-full px-4 py-4', loading ? 'animate-pulse' : '']"
     :aria-label="
       !loading && isProductLocked(sitrep) ? 'restricted product' : ''
     "
@@ -16,6 +9,7 @@
         ? 'This product has restricted access.'
         : ''
     "
+    :alternate="!loading && isProductLocked(sitrep)"
     :hoverable="!loading && !isProductLocked(sitrep) ? true : false"
     :rounded="false"
   >

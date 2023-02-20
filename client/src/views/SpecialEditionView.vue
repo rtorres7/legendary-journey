@@ -47,7 +47,7 @@
         <template v-else>
           <template v-if="specialEdition.totalPages > 1">
             <div class="pb-4">
-              <Pagination
+              <BasePagination
                 :currentPage="currentPage"
                 :pages="specialEdition.totalPages"
               />
@@ -237,7 +237,6 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import ProductCard from "@/components/ProductCard";
-import Pagination from "@/components/Pagination";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
 export default {
@@ -247,7 +246,6 @@ export default {
     DisclosurePanel,
     ChevronUpIcon,
     ProductCard,
-    Pagination,
     SpecialEditionCreateEditDialog,
   },
   setup() {

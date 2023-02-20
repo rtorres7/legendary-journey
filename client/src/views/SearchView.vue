@@ -402,181 +402,83 @@
           </div>
         </div>
         <!-- Search Results Table -->
-        <BaseCard>
-          <!-- Top Pagination -->
-          <div
-            class="px-4 py-3 flex items-center border-b border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
-          >
-            <SearchResultsPagination
-              :total-count="totalCount"
-              :current-page="currentPage"
-            />
-          </div>
-          <!-- Results -->
-          <template v-if="selectedView.label === 'List'">
-            <template v-for="result in results" :key="result">
-              <div
-                class="flex p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
-                :class="
-                  isProductLocked(result)
-                    ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
-                    : ''
-                "
-                :aria-label="
-                  isProductLocked(result) ? 'restricted product' : ''
-                "
-                :title="
-                  isProductLocked(result)
-                    ? 'This product has restricted access.'
-                    : ''
-                "
-              >
-                <div class="h-fit px-2 text-center">
-                  <span class="block font-semibold">{{
-                    dayjs(result.date_published).format("DD")
-                  }}</span>
-                  <span class="block text-sm">{{
-                    dayjs(result.date_published).format("MMMM")
-                  }}</span>
-                  <span class="block text-sm">{{
-                    dayjs(result.date_published).format("YYYY")
-                  }}</span>
-                </div>
-                <div class="relative px-2 w-full">
-                  <template v-if="isProductLocked(result)">
-                    <BaseProductIcon
-                      class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
-                      icon="locked"
-                    />
-                  </template>
-                  <div class="flex justify-between">
-                    <div
-                      class="basis-[768px] hover:underline"
-                      :class="isProductLocked(result) ? '' : 'cursor-pointer'"
-                    >
-                      <ProductRestrictedLink :product="result">
-                        <span
-                          class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
-                          >{{
-                            `${"(" + result.title_classification + ") "}`
-                          }}</span
-                        >
-
-                        <span
-                          class="text-black dark:text-white energy:text-white"
-                          >{{ result.title }}</span
-                        >
-                      </ProductRestrictedLink>
-                    </div>
-                    <div class="text-xs lg:text-sm">
-                      {{ result.doc_num }}
-                    </div>
-                  </div>
+        <BaseTable
+          :items="results"
+          :totalCount="totalCount"
+          :currentPage="currentPage"
+          :isGrid="selectedView.label === 'Grid'"
+        >
+          <template #default="{ item }">
+            <div
+              class="flex p-4"
+              :class="
+                isProductLocked(item)
+                  ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
+                  : ''
+              "
+              :aria-label="isProductLocked(item) ? 'restricted product' : ''"
+              :title="
+                isProductLocked(item)
+                  ? 'This product has restricted access.'
+                  : ''
+              "
+            >
+              <div class="h-fit px-2 text-center">
+                <span class="block font-semibold">{{
+                  dayjs(item.date_published).format("DD")
+                }}</span>
+                <span class="block text-sm">{{
+                  dayjs(item.date_published).format("MMMM")
+                }}</span>
+                <span class="block text-sm">{{
+                  dayjs(item.date_published).format("YYYY")
+                }}</span>
+              </div>
+              <div class="relative px-2 w-full">
+                <template v-if="isProductLocked(item)">
+                  <BaseProductIcon
+                    class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+                    icon="locked"
+                  />
+                </template>
+                <div class="flex justify-between">
                   <div
-                    class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                    class="basis-[768px] hover:underline"
+                    :class="isProductLocked(item) ? '' : 'cursor-pointer'"
                   >
-                    <template v-if="showHighlightedResult()">
-                      <span v-html="result.highlighted_result" />
-                    </template>
-                    <template v-else>
-                      <span>{{ result.summary }}</span>
-                    </template>
+                    <ProductRestrictedLink :product="item">
+                      <span
+                        class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                        >{{ `${"(" + item.title_classification + ") "}` }}</span
+                      >
+
+                      <span
+                        class="text-black dark:text-white energy:text-white"
+                        >{{ item.title }}</span
+                      >
+                    </ProductRestrictedLink>
                   </div>
+                  <div class="text-xs lg:text-sm">
+                    {{ item.doc_num }}
+                  </div>
+                </div>
+                <div
+                  class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                >
+                  <template v-if="showHighlightedResult()">
+                    <span v-html="item.highlighted_result" />
+                  </template>
+                  <template v-else>
+                    <span>{{ item.summary }}</span>
+                  </template>
                 </div>
               </div>
-            </template>
-          </template>
-          <template v-else-if="selectedView.label === 'Grid'">
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
-            >
-              <template v-for="result in results" :key="result">
-                <ProductCard :article="result" />
-              </template>
             </div>
           </template>
-          <template v-else-if="selectedView.label === 'Visuals'">
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 m-4"
-            >
-              <template v-for="result in results" :key="result">
-                <div class="flex p-4">
-                  <div class="group">
-                    <div class="relative">
-                      <div
-                        class="invisible group-hover:visible absolute h-full p-2 py-5 inset-x-0 text-white bg-mission-blue/[.90] dark:bg-dark-space-blue/[.90] energy:bg-zinc-800/[.90]"
-                      >
-                        <div class="flex flex-col">
-                          <div class="line-clamp-3">
-                            <span>{{
-                              `${"(" + result.title_classification + ") "}`
-                            }}</span>
-                            <span>{{ result.title }}</span>
-                          </div>
-                          <div
-                            class="flex justify-around absolute inset-x-0 bottom-2 text-sm"
-                          >
-                            <button
-                              class="hover:underline"
-                              @click="openMedia(result.images.table.secondary)"
-                            >
-                              VIEW MEDIA
-                              <span class="sr-only"
-                                >Open media for {{ result.title }}</span
-                              >
-                            </button>
-                            <p>|</p>
-                            <router-link
-                              class="hover:underline"
-                              :to="{
-                                name: 'demo-article',
-                                params: { doc_num: result.doc_num },
-                              }"
-                            >
-                              VIEW ARTICLE
-                            </router-link>
-                          </div>
-                        </div>
-                      </div>
-                      <img
-                        :src="getImgUrl(result.images.table.secondary)"
-                        alt=""
-                        class="object-cover"
-                      />
-                    </div>
-                    <div
-                      class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50 text-sm"
-                    >
-                      <div>
-                        <span
-                          v-for="(region, ind) in result.regions"
-                          :key="ind"
-                        >
-                          {{ region
-                          }}<span v-if="ind < result.regions.length - 1"
-                            >,&nbsp;</span
-                          >
-                        </span>
-                      </div>
-                      <div>
-                        {{ formatDate(result.date_published) }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
+          <template #grid="{ item }">
+            <ProductCard :article="item" />
           </template>
-          <!-- Bottom Pagination -->
-          <div
-            class="px-4 py-3 flex items-center border-t border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
-          >
-            <SearchResultsPagination
-              :total-count="totalCount"
-              :current-page="currentPage"
-            />
-          </div>
-        </BaseCard>
+        </BaseTable>
       </div>
       <!-- Search Results Filters -->
       <BaseCard
@@ -783,7 +685,6 @@ import {
 import ProductCard from "@/components/ProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
-import SearchResultsPagination from "@/components/SearchResultsPagination";
 const sortOptions = [
   { label: "Newest", key: "desc", type: "sort_dir" },
   { label: "Oldest", key: "asc", type: "sort_dir" },
@@ -815,7 +716,6 @@ export default {
     ProductCard,
     ProductRestrictedLink,
     SearchResultsFacets,
-    SearchResultsPagination,
   },
   setup() {
     const store = useStore();
