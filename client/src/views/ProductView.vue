@@ -78,8 +78,8 @@
         </div>
         <p class="font-semibold text-sm lg:text-md uppercase">product</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
-          <span v-if="article.title_classif !== 'X'">
-            ({{ article.title_classif }})
+          <span v-if="article.title_classification !== 'X'">
+            ({{ article.title_classification }})
           </span>
           <span>
             {{ article.title }}

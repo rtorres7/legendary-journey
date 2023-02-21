@@ -227,6 +227,7 @@ ArticleSchema.virtual("data.details").get(function () {
     summary_sci: this.summary_sci,
     title: this.title,
     title_classif: this.title_classif,
+    title_classification: this.title_classification,
     title_sci: this.title_sci,
     topics: this.topics,
     topics_fn: this.topics_fn,
