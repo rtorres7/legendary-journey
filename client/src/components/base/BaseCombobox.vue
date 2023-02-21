@@ -1,5 +1,10 @@
 <template>
-  <Combobox v-model="selectedItem" :multiple="multiple" :disabled="disabled">
+  <Combobox
+    v-model="selectedItem"
+    :multiple="multiple"
+    :disabled="disabled"
+    as="div"
+  >
     <ComboboxLabel
       :class="[
         'text-sm font-medium',
@@ -44,7 +49,7 @@
         @after-leave="query = ''"
       >
         <ComboboxOptions
-          class="absolute py-1 mt-1 w-full overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+          class="absolute py-1 mt-1 w-full overflow-auto text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-600 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
         >
           <div
             v-if="filteredItems.length === 0 && query !== ''"
