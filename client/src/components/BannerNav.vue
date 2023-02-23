@@ -48,9 +48,9 @@
             <span class="sr-only">Open main menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <router-link class="h-auto" to="/">
+          <router-link class="hidden lg:block" to="/">
             <img
-              class="h-48 w-48"
+              class="w-40 h-16 xl:w-48 xl:h-16"
               src="@/assets/nctc_logo.svg"
               alt="NCTC. Seal. Link to homepage."
             />
