@@ -148,7 +148,7 @@
                               tabindex="0"
                               @click="removeItem(country.name, 'countries')"
                             >
-                              <span class="sr-only">Remove filter</span>
+                              <span class="sr-only">Remove country</span>
                               <XMarkIcon
                                 class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                                 aria-hidden="true"
@@ -198,7 +198,7 @@
                               tabindex="0"
                               @click="removeItem(topic.name, 'topics')"
                             >
-                              <span class="sr-only">Remove filter</span>
+                              <span class="sr-only">Remove topic</span>
                               <XMarkIcon
                                 class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                                 aria-hidden="true"
