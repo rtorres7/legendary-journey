@@ -390,6 +390,56 @@
                 </div>
               </Listbox>
             </div>
+            <div class="inline-flex">
+              <label class="self-center">Results Per Page</label>
+              <Listbox v-model="selectedResultCount" class="ml-3 min-w-[100px]">
+                <div class="relative">
+                  <ListboxButton
+                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                  >
+                    <span class="block truncate">{{
+                      selectedResultCount.label
+                    }}</span>
+                    <span
+                      class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    >
+                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  </ListboxButton>
+                  <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                  >
+                    <ListboxOptions
+                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                    >
+                      <ListboxOption
+                        v-for="item in resultCounts"
+                        v-slot="{ active }"
+                        :key="item"
+                        :value="item"
+                        as="template"
+                        class="capitalize px-2 py-1 cursor-pointer"
+                      >
+                        <li
+                          :class="[
+                            active
+                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
+                              : 'bg-none',
+                          ]"
+                        >
+                          {{ item.label }}
+                        </li>
+                      </ListboxOption>
+                    </ListboxOptions>
+                  </transition>
+                </div>
+              </Listbox>
+            </div>
           </div>
           <div
             v-show="
@@ -410,6 +460,7 @@
             <SearchResultsPagination
               :total-count="totalCount"
               :current-page="currentPage"
+              :maxPerPage="selectedResultCount.key"
             />
           </div>
           <!-- Results -->
@@ -793,6 +844,12 @@ const viewOptions = [
   { label: "List", key: "list" },
   { label: "Grid", key: "grid" },
   //{ label: "Visuals", key: "visuals" },
+];
+const resultCounts = [
+  { label: "5", key: 5 },
+  { label: "10", key: 10 },
+  { label: "25", key: 25 },
+  { label: "50", key: 50 },
 ];
 
 export default {
@@ -1391,6 +1448,18 @@ export default {
         ? viewOptions[2]
         : viewOptions[0]
     );
+    const getResultCount = (query) => {
+      let numResults;
+      if (query.count) {
+        numResults = resultCounts.find((result) => result.key == query.count);
+        return numResults;
+      } else {
+        numResults = resultCounts[1];
+        return numResults;
+      }
+    };
+    const selectedResultCount = ref(getResultCount(route.query));
+
     const currentPage = ref(parseInt(route.query.page) || 1);
 
     const getImgUrl = (url) => {
@@ -1536,6 +1605,16 @@ export default {
       }
     });
 
+    watch([selectedResultCount], () => {
+      console.log("selectedResultCount watcher triggered.");
+      router.push({
+        query: {
+          ...route.query,
+          count: selectedResultCount.value.key,
+        },
+      });
+    });
+
     const closeMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = false);
 
@@ -1577,6 +1656,9 @@ export default {
       selectedSort,
       viewOptions,
       selectedView,
+      resultCounts,
+      selectedResultCount,
+      getResultCount,
       currentPage,
       getImgUrl,
       isMobileFacetsDialogOpen,
