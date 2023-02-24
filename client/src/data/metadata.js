@@ -869,7 +869,7 @@ export const metadata = {
         },
         {
           code: "PSE",
-          name: "Palestinian territories",
+          name: "Palestinian Territories",
         },
         {
           code: "PAN",
