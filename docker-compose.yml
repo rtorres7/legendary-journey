@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
   client:
@@ -27,7 +27,8 @@ services:
       - ./:/data
       - /data/node_modules
     depends_on:
-      - server-database
+      elasticsearch:
+        condition: service_healthy
     environment:
       - DATABASE_URL=server-database:27017
     container_name: server
@@ -44,3 +45,45 @@ services:
       #MONGO_INITDB_ROOT_USERNAME: {{USERNAME}}
       #MONGO_INITDB_ROOT_PASSWORD: {{PWD}}
       MONGO_INITDB_DATABASE: articles
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    healthcheck:
+      test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.6.1
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+volumes:
+  elasticsearch-data:
+    driver: local

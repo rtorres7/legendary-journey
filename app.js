@@ -9,6 +9,8 @@ var legacyRouter = require("./routes/legacy");
 var articlesRouter = require("./routes/articles");
 var usersRouter = require("./routes/users");
 
+const constant = require("./util/constant");
+
 var app = express();
 
 // DB Setup
@@ -47,6 +49,31 @@ db.on("error", function (error) {
 db.once("open", function (callback) {
   console.log("Connection Succeeded");
 });
+
+var elasticsearch = require("@elastic/elasticsearch");
+var esClient = new elasticsearch.Client({
+  node: "http://elasticsearch:9200",
+});
+
+esClient.cluster.health({}, function (err, resp, status) {
+  if (err) {
+    console.log("-- ES Client Health ERROR --", err);
+  } else {
+    console.log("-- ES Health --", resp);
+  }
+});
+
+(async () => {
+  await constant.indices?.every((v) => {
+    if (esClient.indices.exists({ index: v.index })) {
+      return false;
+    }
+    return esClient.indices.create({
+      index: v.index,
+      mappings: v.mappings,
+    });
+  });
+})();
 
 app.use(logger("dev"));
 app.use(express.json());

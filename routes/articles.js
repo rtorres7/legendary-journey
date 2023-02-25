@@ -5,6 +5,9 @@ const arxiv = require("arxiv-api");
 
 var Article = require("../models/articles");
 
+const IndexService = require("../services/index.js");
+const indexService = new IndexService();
+
 // GET
 router.get("/", (req, res) => {
   Article.find(
@@ -187,6 +190,16 @@ router.post("/processDocument", (req, res) => {
       state: "draft",
     });
   });
+
+  (async () => {
+    await indexService.create(new_article.indexable);
+    // const retrievedArticle = await indexService.getById(new_article.id);
+    // console.log("Retrieved article:", retrievedArticle);
+    // await indexService.update(new_article.indexable);
+    // const updatedArticle = await indexService.getById(new_article.id);
+    // console.log("Updated article:", updatedArticle);
+    // await indexService.delete(new_article.id);
+  })();
 });
 
 /* router.get("/articles", (req, res) => {

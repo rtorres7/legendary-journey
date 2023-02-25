@@ -145,6 +145,29 @@ ArticleSchema.virtual("attributes").get(function () {
   };
 });
 
+ArticleSchema.virtual("indexable").get(function () {
+  return {
+    classification: this.classification,
+    classification_xml: this.classification_xml,
+    control_to: this.control_to,
+    //countries: this.countries,
+    date_published: this.date_published,
+    //dissem_orgs: this.dissem_orgs,
+    html_body: this.html_body,
+    id: this.get("_id"),
+    non_state_actors: this.non_state_actors,
+    poc_info: this.poc_info,
+    product_type_id: this.product_type_id,
+    product_type: this.product_type,
+    summary_classif: this.summary_classif,
+    summary_classif_xml: this.summary_classif_xml,
+    title_classif: this.title_classif,
+    title_classif_xml: this.title_classif_xml,
+    //topics: this.topics,
+    worldwide: this.worldwide,
+  };
+});
+
 ArticleSchema.virtual("data.document").get(function () {
   return {
     attachments: this.attachments,
@@ -239,5 +262,15 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
+// ArticleSchema.set("toJSON", {
+//   virtuals: true,
+//   transform: (doc, ret, options) => {
+//     delete ret.__v;
+//     ret.id = ret._id.toString();
+//     delete ret._id;
+//   },
+// });
+
 var Article = mongoose.model("Article", ArticleSchema, "articles");
+
 module.exports = Article;
