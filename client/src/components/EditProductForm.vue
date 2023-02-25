@@ -811,9 +811,9 @@ export default {
         dissemsToSelect.includes(org)
       );
       if (isAllIntel && dissemsToSelect.length == allIntelOrgs.length) {
-        checkAllIntelOrgs.value == true;
+        checkAllIntelOrgs.value = true;
       } else {
-        checkAllIntelOrgs.value == false;
+        checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
       form.value.productType = lists.productTypes.find(
