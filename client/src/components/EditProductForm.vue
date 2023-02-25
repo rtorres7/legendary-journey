@@ -134,6 +134,29 @@
                           updateField($event, 'countries', 'multiple')
                         "
                       />
+                      <div class="grid grid-cols-2 gap-2">
+                        <div v-for="country in form.countries" :key="country">
+                          <div
+                            class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                          >
+                            <div class="line-clamp-1 text-sm">
+                              {{ country.name }}
+                            </div>
+                            <button
+                              type="button"
+                              class="w-5 h-5 flex items-center justify-center"
+                              tabindex="0"
+                              @click="removeItem(country.name, 'countries')"
+                            >
+                              <span class="sr-only">Remove country</span>
+                              <XMarkIcon
+                                class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                       <div class="flex">
                         <input
                           id="worldwide"
@@ -150,17 +173,41 @@
                         >
                       </div>
                     </div>
-                    <BaseListbox
-                      v-model="form.topics"
-                      :label="'Topics'"
-                      :items="lists.topics"
-                      multiple
-                      required
-                      class="lg:w-1/3"
-                      @update:modelValue="
-                        updateField($event, 'topics', 'multiple')
-                      "
-                    />
+                    <div class="lg:w-1/3 space-y-4">
+                      <BaseListbox
+                        v-model="form.topics"
+                        :label="'Topics'"
+                        :items="lists.topics"
+                        multiple
+                        required
+                        @update:modelValue="
+                          updateField($event, 'topics', 'multiple')
+                        "
+                      />
+                      <div class="grid grid-cols-2 gap-2">
+                        <div v-for="topic in form.topics" :key="topic">
+                          <div
+                            class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                          >
+                            <div class="line-clamp-1 text-sm">
+                              {{ topic.name }}
+                            </div>
+                            <button
+                              type="button"
+                              class="w-5 h-5 flex items-center justify-center"
+                              tabindex="0"
+                              @click="removeItem(topic.name, 'topics')"
+                            >
+                              <span class="sr-only">Remove topic</span>
+                              <XMarkIcon
+                                class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </EditProductFormSection>
@@ -514,6 +561,7 @@ import {
   PlusCircleIcon,
   PaperClipIcon,
   LockClosedIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -568,6 +616,7 @@ export default {
     PlusCircleIcon,
     PaperClipIcon,
     LockClosedIcon,
+    XMarkIcon,
     DocumentArrowDownIcon,
     DocumentMinusIcon,
     DropZone,
@@ -695,6 +744,17 @@ export default {
         });
       }
       payload.value["dissem_orgs"] = payloadOrgs;
+    };
+
+    const removeItem = (name, formItem) => {
+      console.log(formItem, "selection removed");
+      if (formItem === "countries") {
+        form.value.countries = form.value.countries.filter(
+          (i) => i.name != name
+        );
+      } else if (formItem === "topics") {
+        form.value.topics = form.value.topics.filter((i) => i.name != name);
+      }
     };
 
     const prepopulateFields = (model) => {
@@ -1118,6 +1178,7 @@ export default {
       attachmentDrop,
       attachmentSelectedFile,
       toggleAllIntelOrgs,
+      removeItem,
       updateField,
       updateSelectedDate,
       publishDisabled,
