@@ -134,7 +134,9 @@
                           updateField($event, 'countries', 'multiple')
                         "
                       />
-                      <div class="grid grid-cols-2 gap-2">
+                      <div
+                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                      >
                         <div v-for="country in form.countries" :key="country">
                           <div
                             class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
@@ -184,7 +186,9 @@
                           updateField($event, 'topics', 'multiple')
                         "
                       />
-                      <div class="grid grid-cols-2 gap-2">
+                      <div
+                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                      >
                         <div v-for="topic in form.topics" :key="topic">
                           <div
                             class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
