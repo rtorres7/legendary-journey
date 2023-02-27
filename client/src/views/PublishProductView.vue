@@ -84,14 +84,15 @@
             value="Drafts"
             @change="filterArticles()"
           />
-          <label for="showDrafts" class="ml-2 text-sm"
-            >Show Drafts Only</label
-          >
+          <label for="showDrafts" class="ml-2 text-sm">Show Drafts Only</label>
         </div>
       </div>
       <template v-if="articles.length > 0">
         <BaseCard>
-          <template v-for="{ attributes: article } in filterArticles()" :key="article">
+          <template
+            v-for="{ attributes: article } in filterArticles()"
+            :key="article"
+          >
             <div
               class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
             >
@@ -101,9 +102,10 @@
                     class="h-[125px] w-[125px]"
                     :article="article"
                     @click="
-                      article.images.length > 0 
-                      ? openPreviewThumbnailDialog(article) 
-                      : null"
+                      article.images.length > 0
+                        ? openPreviewThumbnailDialog(article)
+                        : null
+                    "
                   />
                 </div>
                 <div>
@@ -181,7 +183,6 @@
                 </template>
               </div>
             </div>
-           
           </template>
           <BaseDialog
             :isOpen="isPreviewThumbnailDialogOpen"
@@ -197,7 +198,7 @@
                 id="product-blur"
                 class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
               ></div>
-              <ProductImage 
+              <ProductImage
                 :article="selectedArticle"
                 class="inset-x-0 absolute h-full mx-auto z-[3]"
               />
@@ -246,16 +247,16 @@ export default {
     );
     const showOnlyDrafts = ref(false);
     const filterArticles = () => {
-      if(showOnlyDrafts.value) {
+      if (showOnlyDrafts.value) {
         return articles.value.filter((a) => a.attributes.state === "draft");
       } else {
-        return articles.value
+        return articles.value;
       }
     };
-    
+
     const defaultPayload = {
       document_action: "create",
-      dissem_orgs: ["DNI"],
+      //dissem_orgs: ["DNI"],
       html_body: "<p></p>",
       producing_office: "DNI/NCTC",
       publication_number: Math.floor(100000 * Math.random() * 900000),
