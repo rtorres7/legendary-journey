@@ -169,6 +169,10 @@
                 <span class="font-semibold">Publication Date: </span
                 >{{ formatDate(article.date_published) }}
               </p>
+              <p v-if="article.dissem_orgs.length !== 0">
+                <span class="font-semibold">Dissem Orgs: </span>
+                {{ article.dissem_orgs.join(", ") }}
+              </p>
               <p>
                 <span class="font-semibold">Contact: </span
                 >{{ article.poc_info }}
