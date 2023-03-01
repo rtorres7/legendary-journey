@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <nav
     class="hidden md:block rounded-md shadow-sm border border-slate-300 dark:border-slate-600 energy:border-zinc-600"
@@ -18,7 +17,11 @@
           role="button"
           :aria-disabled="isDisabled('previous') ? true : null"
           :disabled="isDisabled('previous') ? true : null"
+          :tabindex="isDisabled('previous') ? null : '0'"
           @click="isDisabled('previous') ? null : navigatePrevious(currentPage)"
+          @keyup.enter="
+            isDisabled('previous') ? null : navigatePrevious(currentPage)
+          "
         >
           <span class="sr-only">Previous</span>
           <ChevronLeftIcon class="h-5 w-5" />
@@ -29,7 +32,7 @@
         :key="n"
       >
         <li
-          class="z-[5] hover:z-0 border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
+          class="z-[5] border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
         >
           <div
             :class="[
@@ -43,7 +46,9 @@
             :aria-current="n === currentPage ? `Current Page, Page ${n}` : null"
             :aria-label="`Page ${n}`"
             :role="isDisabled(n) ? null : 'button'"
+            :tabindex="isDisabled(n) ? null : '0'"
             @click="isDisabled(n) ? null : navigatePage(n)"
+            @keyup.enter="isDisabled(n) ? null : navigatePage(n)"
           >
             {{ n }}
           </div>
@@ -56,7 +61,9 @@
             isDisabled('next') ? 'disabled cursor-not-allowed' : 'hoverable',
           ]"
           role="button"
+          :tabindex="isDisabled('next') ? null : '0'"
           @click="isDisabled('next') ? null : navigateNext(currentPage)"
+          @keyup.enter="isDisabled('next') ? null : navigateNext(currentPage)"
         >
           <span class="sr-only">Next</span>
           <ChevronRightIcon class="h-5 w-5" />
@@ -64,6 +71,7 @@
       </li>
     </ol>
   </nav>
+  <!-- Mobile Pagination -->
   <nav
     class="relative inline-flex md:hidden text-sm"
     aria-label="Pagination Navigation"
@@ -236,6 +244,6 @@ export default {
   @apply text-slate-400 dark:text-slate-500 energy:text-zinc-500;
 }
 .hoverable {
-  @apply hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75;
+  @apply hover:bg-slate-100/75 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75;
 }
 </style>

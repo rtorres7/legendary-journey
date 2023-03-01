@@ -286,7 +286,7 @@
       <div
         class="h-fit"
         :class="[
-          selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+          selectedView.name === 'Grid' || selectedView.name === 'Visuals'
             ? 'basis-full'
             : 'basis-3/4',
         ]"
@@ -294,106 +294,20 @@
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
-            <div class="inline-flex">
-              <label class="self-center font-medium">Sort By</label>
-              <Listbox v-model="selectedSort" class="ml-3 min-w-[115px]">
-                <div class="relative">
-                  <ListboxButton
-                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                  >
-                    <span class="block truncate">{{ selectedSort.label }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
-                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                    >
-                      <ListboxOption
-                        v-for="item in sortOptions"
-                        v-slot="{ active }"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
-                          {{ item.label }}
-                        </li>
-                      </ListboxOption>
-                    </ListboxOptions>
-                  </transition>
-                </div>
-              </Listbox>
-            </div>
-            <div class="inline-flex">
-              <label class="self-center">View</label>
-              <Listbox v-model="selectedView" class="ml-3 min-w-[100px]">
-                <div class="relative">
-                  <ListboxButton
-                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                  >
-                    <span class="block truncate">{{ selectedView.label }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
-                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                    >
-                      <ListboxOption
-                        v-for="item in viewOptions"
-                        v-slot="{ active }"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
-                          {{ item.label }}
-                        </li>
-                      </ListboxOption>
-                    </ListboxOptions>
-                  </transition>
-                </div>
-              </Listbox>
-            </div>
+            <BaseListboxTest
+              v-model="selectedSort"
+              label="Sort By"
+              :items="sortOptions"
+            />
+            <BaseListboxTest
+              v-model="selectedView"
+              label="View"
+              :items="viewOptions"
+            />
           </div>
           <div
             v-show="
-              selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+              selectedView.name === 'Grid' || selectedView.name === 'Visuals'
             "
             class="cursor-pointer text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow self-center"
             @click="openMobileFacetsDialog"
@@ -406,7 +320,7 @@
           :items="results"
           :totalCount="totalCount"
           :currentPage="currentPage"
-          :isGrid="selectedView.label === 'Grid'"
+          :isGrid="selectedView.name === 'Grid'"
         >
           <template #default="{ item }">
             <div
@@ -482,109 +396,23 @@
       </div>
       <!-- Search Results Filters -->
       <BaseCard
-        v-show="selectedView.label === 'List'"
+        v-show="selectedView.name === 'List'"
         class="hidden lg:block basis-1/4 ml-4 h-full"
       >
         <SearchResultsFacets :facets="aggregations" />
       </BaseCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
         <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
-          <div class="inline-flex">
-            <label class="self-center min-w-[58px] sm:min-w-0">Sort By</label>
-            <Listbox v-model="selectedSort" class="ml-3 min-w-[110px]">
-              <div class="relative">
-                <ListboxButton
-                  class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                >
-                  <span class="block truncate">{{ selectedSort.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                  </span>
-                </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
-                    class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                  >
-                    <ListboxOption
-                      v-for="item in sortOptions"
-                      v-slot="{ active }"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                            : 'bg-none',
-                        ]"
-                      >
-                        {{ item.label }}
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-          </div>
-          <div class="inline-flex">
-            <label class="self-center min-w-[58px] sm:min-w-0">View</label>
-            <Listbox v-model="selectedView" class="ml-3 min-w-[110px]">
-              <div class="relative">
-                <ListboxButton
-                  class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                >
-                  <span class="block truncate">{{ selectedView.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                  </span>
-                </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
-                    class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                  >
-                    <ListboxOption
-                      v-for="item in viewOptions"
-                      v-slot="{ active }"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                            : 'bg-none',
-                        ]"
-                      >
-                        {{ item.label }}
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-          </div>
+          <BaseListboxTest
+            v-model="selectedSort"
+            label="Sort By"
+            :items="sortOptions"
+          />
+          <BaseListboxTest
+            v-model="selectedView"
+            label="View"
+            :items="viewOptions"
+          />
         </div>
         <div
           class="cursor-pointer text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow self-center"
@@ -686,13 +514,13 @@ import ProductCard from "@/components/ProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
 const sortOptions = [
-  { label: "Newest", key: "desc", type: "sort_dir" },
-  { label: "Oldest", key: "asc", type: "sort_dir" },
-  { label: "Relevance", key: "score", type: "sort_field" },
+  { name: "Newest", key: "desc", type: "sort_dir" },
+  { name: "Oldest", key: "asc", type: "sort_dir" },
+  { name: "Relevance", key: "score", type: "sort_field" },
 ];
 const viewOptions = [
-  { label: "List", key: "list" },
-  { label: "Grid", key: "grid" },
+  { name: "List", key: "list" },
+  { name: "Grid", key: "grid" },
   //{ label: "Visuals", key: "visuals" },
 ];
 
