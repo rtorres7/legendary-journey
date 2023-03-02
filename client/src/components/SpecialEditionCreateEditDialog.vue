@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog
+  <MaxDialog
     :is-open="isOpen"
     class="max-w-[950px]"
     :title="`${editMode ? 'Edit' : 'Create'} Special Edition`"
@@ -9,7 +9,7 @@
       <div class="block lg:flex my-4 lg:space-x-5">
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseInput
+            <MaxInput
               v-model="editionEvent.name"
               label="Name"
               autocomplete="off"
@@ -18,7 +18,7 @@
             />
           </div>
           <div>
-            <BaseInput
+            <MaxInput
               v-model="editionEvent.search_params"
               label="Search params"
               autocomplete="off"
@@ -28,7 +28,7 @@
             />
           </div>
           <div>
-            <BaseTextarea
+            <MaxTextarea
               v-model="editionEvent.key_readings"
               v-model.trim="editionEvent.key_readings"
               maxlength="4000"
@@ -38,7 +38,7 @@
             />
           </div>
           <div>
-            <BaseListbox
+            <MaxListbox
               v-model="editionEvent.state"
               :label="'State'"
               :items="stateOptions"
@@ -48,7 +48,7 @@
         </div>
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseListbox
+            <MaxListbox
               v-model="editionEvent.position"
               :label="'Order'"
               :items="orderOptions"
@@ -59,7 +59,7 @@
               :label="'Classification'" show-selection :selection="editionEvent.name_classification"
               required @classificationSelected="updateClassification"
             /> -->
-            <BaseClassifier
+            <MaxClassifier
               v-model="editionEvent.name_classification_xml"
               label="Classification"
               required
@@ -68,7 +68,7 @@
             />
           </div>
           <div>
-            <BaseImageFileChooser
+            <MaxImageFileChooser
               :label="'File Attachment'"
               :binary="editionEvent.icon"
               :file="imageFile"
@@ -81,12 +81,12 @@
       </div>
     </form>
     <template #actions>
-      <BaseButton @click.prevent="closeDialog"> Cancel </BaseButton>
-      <BaseButton :disabled="isDisabled()" type="submit" form="se_form">
+      <MaxButton @click.prevent="closeDialog"> Cancel </MaxButton>
+      <MaxButton :disabled="isDisabled()" type="submit" form="se_form">
         {{ editMode ? "Save" : "Create" }}
-      </BaseButton>
+      </MaxButton>
     </template>
-  </BaseDialog>
+  </MaxDialog>
 </template>
 
 <script>

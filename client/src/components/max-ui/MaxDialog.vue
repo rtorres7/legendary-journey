@@ -53,7 +53,7 @@
               >
                 <div class="flex space-x-3">
                   <slot name="actions">
-                    <BaseButton @click.prevent="close">Close</BaseButton>
+                    <MaxButton @click.prevent="close">Close</MaxButton>
                   </slot>
                 </div>
               </div>

@@ -3,25 +3,25 @@
     class="no-print flex flex-wrap justify-between py-4 mb-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-gray-700/25"
   >
     <div>
-      <BaseButton tabIndex="0" @click="returnHome" @keyup.enter="returnHome">
+      <MaxButton tabIndex="0" @click="returnHome" @keyup.enter="returnHome">
         Home
-      </BaseButton>
+      </MaxButton>
     </div>
     <div
       class="flex flex-wrap sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2"
     >
       <div>
         <template v-if="!navigation.previousArticle">
-          <BaseButton disabled> Previous </BaseButton>
+          <MaxButton disabled> Previous </MaxButton>
         </template>
         <template v-else>
-          <BaseButton
+          <MaxButton
             tabIndex="0"
             @click="goToArticle(navigation.previousArticle)"
             @keyup.enter="goToArticle(navigation.previousArticle)"
           >
             Previous
-          </BaseButton>
+          </MaxButton>
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
@@ -34,16 +34,16 @@
       </div>
       <div>
         <template v-if="!navigation.nextArticle">
-          <BaseButton disabled> Next </BaseButton>
+          <MaxButton disabled> Next </MaxButton>
         </template>
         <template v-else>
-          <BaseButton
+          <MaxButton
             tabIndex="0"
             @click="goToArticle(navigation.nextArticle)"
             @keyup.enter="goToArticle(navigation.nextArticle)"
           >
             Next
-          </BaseButton>
+          </MaxButton>
         </template>
       </div>
     </div>

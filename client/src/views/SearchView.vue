@@ -26,7 +26,7 @@
       </button>
     </template>
   </div>
-  <BaseCard
+  <MaxCard
     :class="[
       'p-4',
       loadingMetadata
@@ -42,7 +42,7 @@
           >
             <div class="lg:w-1/2 flex space-x-3">
               <div class="w-full">
-                <BaseInput
+                <MaxInput
                   v-model="queryText"
                   label="Keyword Search or Query"
                   type="text"
@@ -54,7 +54,7 @@
               </div>
               <div class="flex flex-col mt-1 justify-between">
                 <label class="text-sm font-medium">Date</label>
-                <BaseDatepicker
+                <MaxDatepicker
                   v-model="queryDateRange"
                   :enable-time-picker="false"
                   range
@@ -77,7 +77,7 @@
                       <button @click="selectDate('1YR')">Past Year</button>
                     </div>
                   </template>
-                </BaseDatepicker>
+                </MaxDatepicker>
               </div>
             </div>
             <template
@@ -168,7 +168,7 @@
         </transition>
       </Disclosure>
     </div>
-  </BaseCard>
+  </MaxCard>
   <div class="flex flex-row-reverse py-1 mt-2">
     <template v-if="!loadingMetadata && booleanFilters.length > 0">
       <button
@@ -187,7 +187,7 @@
   <template
     v-if="!loadingMetadata && showSelectors && booleanFilters.length > 0"
   >
-    <BaseCard class="mt-2 px-4 py-2 w-fit text-sm">
+    <MaxCard class="mt-2 px-4 py-2 w-fit text-sm">
       <div class="flex flex-wrap">
         <template v-for="(n, index) in booleanFilters" :key="n">
           <div
@@ -242,7 +242,7 @@
           </template>
         </template>
       </div>
-    </BaseCard>
+    </MaxCard>
   </template>
   <!-- Results Container -->
   <template v-if="loadingResults">
@@ -286,7 +286,7 @@
       <div
         class="h-fit"
         :class="[
-          selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+          selectedView.name === 'Grid' || selectedView.name === 'Visuals'
             ? 'basis-full'
             : 'basis-3/4',
         ]"
@@ -294,156 +294,25 @@
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
-            <div class="inline-flex">
-              <label class="self-center font-medium">Sort By</label>
-              <Listbox v-model="selectedSort" class="ml-3 min-w-[115px]">
-                <div class="relative">
-                  <ListboxButton
-                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                  >
-                    <span class="block truncate">{{ selectedSort.label }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
-                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                    >
-                      <ListboxOption
-                        v-for="item in sortOptions"
-                        v-slot="{ active }"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
-                          {{ item.label }}
-                        </li>
-                      </ListboxOption>
-                    </ListboxOptions>
-                  </transition>
-                </div>
-              </Listbox>
-            </div>
-            <div class="inline-flex">
-              <label class="self-center">View</label>
-              <Listbox v-model="selectedView" class="ml-3 min-w-[100px]">
-                <div class="relative">
-                  <ListboxButton
-                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                  >
-                    <span class="block truncate">{{ selectedView.label }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
-                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                    >
-                      <ListboxOption
-                        v-for="item in viewOptions"
-                        v-slot="{ active }"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
-                          {{ item.label }}
-                        </li>
-                      </ListboxOption>
-                    </ListboxOptions>
-                  </transition>
-                </div>
-              </Listbox>
-            </div>
-            <div class="inline-flex">
-              <label class="self-center">Results Per Page</label>
-              <Listbox v-model="selectedResultCount" class="ml-3 min-w-[100px]">
-                <div class="relative">
-                  <ListboxButton
-                    class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                  >
-                    <span class="block truncate">{{
-                      selectedResultCount.label
-                    }}</span>
-                    <span
-                      class="absolute inset-y-0 right-0 flex items-center pr-2"
-                    >
-                      <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </ListboxButton>
-                  <transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95"
-                    enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100"
-                    leave-to-class="transform opacity-0 scale-95"
-                  >
-                    <ListboxOptions
-                      class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                    >
-                      <ListboxOption
-                        v-for="item in resultCounts"
-                        v-slot="{ active }"
-                        :key="item"
-                        :value="item"
-                        as="template"
-                        class="capitalize px-2 py-1 cursor-pointer"
-                      >
-                        <li
-                          :class="[
-                            active
-                              ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                              : 'bg-none',
-                          ]"
-                        >
-                          {{ item.label }}
-                        </li>
-                      </ListboxOption>
-                    </ListboxOptions>
-                  </transition>
-                </div>
-              </Listbox>
-            </div>
+            <MaxAppListbox
+              v-model="selectedSort"
+              label="Sort By"
+              :items="sortOptions"
+            />
+            <MaxAppListbox
+              v-model="selectedView"
+              label="View"
+              :items="viewOptions"
+            />
+            <MaxAppListbox
+              v-model="selectedResultCount"
+              label="Results Per Page"
+              :items="resultOptions"
+            />
           </div>
           <div
             v-show="
-              selectedView.label === 'Grid' || selectedView.label === 'Visuals'
+              selectedView.name === 'Grid' || selectedView.name === 'Visuals'
             "
             class="cursor-pointer text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow self-center"
             @click="openMobileFacetsDialog"
@@ -452,289 +321,108 @@
           </div>
         </div>
         <!-- Search Results Table -->
-        <BaseCard>
-          <!-- Top Pagination -->
-          <div
-            class="px-4 py-3 flex items-center border-b border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
-          >
-            <SearchResultsPagination
-              :total-count="totalCount"
-              :current-page="currentPage"
-              :maxPerPage="selectedResultCount.key"
-            />
-          </div>
-          <!-- Results -->
-          <template v-if="selectedView.label === 'List'">
-            <template v-for="result in results" :key="result">
-              <div
-                class="flex p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
-                :class="
-                  isProductLocked(result)
-                    ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
-                    : ''
-                "
-                :aria-label="
-                  isProductLocked(result) ? 'restricted product' : ''
-                "
-                :title="
-                  isProductLocked(result)
-                    ? 'This product has restricted access.'
-                    : ''
-                "
-              >
-                <div class="h-fit px-2 text-center">
-                  <span class="block font-semibold">{{
-                    dayjs(result.date_published).format("DD")
-                  }}</span>
-                  <span class="block text-sm">{{
-                    dayjs(result.date_published).format("MMMM")
-                  }}</span>
-                  <span class="block text-sm">{{
-                    dayjs(result.date_published).format("YYYY")
-                  }}</span>
-                </div>
-                <div class="relative px-2 w-full">
-                  <template v-if="isProductLocked(result)">
-                    <BaseProductIcon
-                      class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
-                      icon="locked"
-                    />
-                  </template>
-                  <div class="flex justify-between">
-                    <div
-                      class="basis-[768px] hover:underline"
-                      :class="isProductLocked(result) ? '' : 'cursor-pointer'"
-                    >
-                      <ProductRestrictedLink :product="result">
-                        <span
-                          class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
-                          >{{
-                            `${"(" + result.title_classification + ") "}`
-                          }}</span
-                        >
-
-                        <span
-                          class="text-black dark:text-white energy:text-white"
-                          >{{ result.title }}</span
-                        >
-                      </ProductRestrictedLink>
-                    </div>
-                    <div class="text-xs lg:text-sm">
-                      {{ result.doc_num }}
-                    </div>
-                  </div>
+        <MaxTable
+          :items="results"
+          :totalCount="totalCount"
+          :currentPage="currentPage"
+          :isGrid="selectedView.name === 'Grid'"
+        >
+          <template #default="{ item }">
+            <div
+              class="flex p-4"
+              :class="
+                isProductLocked(item)
+                  ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
+                  : ''
+              "
+              :aria-label="isProductLocked(item) ? 'restricted product' : ''"
+              :title="
+                isProductLocked(item)
+                  ? 'This product has restricted access.'
+                  : ''
+              "
+            >
+              <div class="h-fit px-2 text-center">
+                <span class="block font-semibold">{{
+                  dayjs(item.date_published).format("DD")
+                }}</span>
+                <span class="block text-sm">{{
+                  dayjs(item.date_published).format("MMMM")
+                }}</span>
+                <span class="block text-sm">{{
+                  dayjs(item.date_published).format("YYYY")
+                }}</span>
+              </div>
+              <div class="relative px-2 w-full">
+                <template v-if="isProductLocked(item)">
+                  <MaxProductIcon
+                    class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+                    icon="locked"
+                  />
+                </template>
+                <div class="flex justify-between">
                   <div
-                    class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                    class="basis-[768px] hover:underline"
+                    :class="isProductLocked(item) ? '' : 'cursor-pointer'"
                   >
-                    <template v-if="showHighlightedResult()">
-                      <span v-html="result.highlighted_result" />
-                    </template>
-                    <template v-else>
-                      <span>{{ result.summary }}</span>
-                    </template>
+                    <ProductRestrictedLink :product="item">
+                      <span
+                        class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                        >{{ `${"(" + item.title_classification + ") "}` }}</span
+                      >
+
+                      <span
+                        class="text-black dark:text-white energy:text-white"
+                        >{{ item.title }}</span
+                      >
+                    </ProductRestrictedLink>
                   </div>
+                  <div class="text-xs lg:text-sm">
+                    {{ item.doc_num }}
+                  </div>
+                </div>
+                <div
+                  class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                >
+                  <template v-if="showHighlightedResult()">
+                    <span v-html="item.highlighted_result" />
+                  </template>
+                  <template v-else>
+                    <span>{{ item.summary }}</span>
+                  </template>
                 </div>
               </div>
-            </template>
-          </template>
-          <template v-else-if="selectedView.label === 'Grid'">
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4"
-            >
-              <template v-for="result in results" :key="result">
-                <ProductCard :article="result" />
-              </template>
             </div>
           </template>
-          <template v-else-if="selectedView.label === 'Visuals'">
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 m-4"
-            >
-              <template v-for="result in results" :key="result">
-                <div class="flex p-4">
-                  <div class="group">
-                    <div class="relative">
-                      <div
-                        class="invisible group-hover:visible absolute h-full p-2 py-5 inset-x-0 text-white bg-mission-blue/[.90] dark:bg-dark-space-blue/[.90] energy:bg-zinc-800/[.90]"
-                      >
-                        <div class="flex flex-col">
-                          <div class="line-clamp-3">
-                            <span>{{
-                              `${"(" + result.title_classification + ") "}`
-                            }}</span>
-                            <span>{{ result.title }}</span>
-                          </div>
-                          <div
-                            class="flex justify-around absolute inset-x-0 bottom-2 text-sm"
-                          >
-                            <button
-                              class="hover:underline"
-                              @click="openMedia(result.images.table.secondary)"
-                            >
-                              VIEW MEDIA
-                              <span class="sr-only"
-                                >Open media for {{ result.title }}</span
-                              >
-                            </button>
-                            <p>|</p>
-                            <router-link
-                              class="hover:underline"
-                              :to="{
-                                name: 'demo-article',
-                                params: { doc_num: result.doc_num },
-                              }"
-                            >
-                              VIEW ARTICLE
-                            </router-link>
-                          </div>
-                        </div>
-                      </div>
-                      <img
-                        :src="getImgUrl(result.images.table.secondary)"
-                        alt=""
-                        class="object-cover"
-                      />
-                    </div>
-                    <div
-                      class="flex justify-between p-2 border border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/50 text-sm"
-                    >
-                      <div>
-                        <span
-                          v-for="(region, ind) in result.regions"
-                          :key="ind"
-                        >
-                          {{ region
-                          }}<span v-if="ind < result.regions.length - 1"
-                            >,&nbsp;</span
-                          >
-                        </span>
-                      </div>
-                      <div>
-                        {{ formatDate(result.date_published) }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
+          <template #grid="{ item }">
+            <ProductCard :article="item" />
           </template>
-          <!-- Bottom Pagination -->
-          <div
-            class="px-4 py-3 flex items-center border-t border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
-          >
-            <SearchResultsPagination
-              :total-count="totalCount"
-              :current-page="currentPage"
-              :maxPerPage="selectedResultCount.key"
-            />
-          </div>
-        </BaseCard>
+        </MaxTable>
       </div>
       <!-- Search Results Filters -->
-      <BaseCard
-        v-show="selectedView.label === 'List'"
+      <MaxCard
+        v-show="selectedView.name === 'List'"
         class="hidden lg:block basis-1/4 ml-4 h-full"
       >
         <SearchResultsFacets :facets="aggregations" />
-      </BaseCard>
+      </MaxCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
         <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
-          <div class="inline-flex">
-            <label class="self-center min-w-[58px] sm:min-w-0">Sort By</label>
-            <Listbox v-model="selectedSort" class="ml-3 min-w-[110px]">
-              <div class="relative">
-                <ListboxButton
-                  class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                >
-                  <span class="block truncate">{{ selectedSort.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                  </span>
-                </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
-                    class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                  >
-                    <ListboxOption
-                      v-for="item in sortOptions"
-                      v-slot="{ active }"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                            : 'bg-none',
-                        ]"
-                      >
-                        {{ item.label }}
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-          </div>
-          <div class="inline-flex">
-            <label class="self-center min-w-[58px] sm:min-w-0">View</label>
-            <Listbox v-model="selectedView" class="ml-3 min-w-[110px]">
-              <div class="relative">
-                <ListboxButton
-                  class="min-h-[2rem] flex relative w-full py-1 px-2 text-left capitalize bg-white dark:bg-slate-700 energy:bg-zinc-700 border-t border-t-gray-100 dark:border-t-slate-800 energy:border-t-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                >
-                  <span class="block truncate">{{ selectedView.label }}</span>
-                  <span
-                    class="absolute inset-y-0 right-0 flex items-center pr-2"
-                  >
-                    <ChevronUpDownIcon class="h-5 w-5" aria-hidden="true" />
-                  </span>
-                </ListboxButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <ListboxOptions
-                    class="absolute w-full py-1 mt-1 overflow-auto bg-white dark:bg-slate-700 energy:bg-zinc-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                  >
-                    <ListboxOption
-                      v-for="item in viewOptions"
-                      v-slot="{ active }"
-                      :key="item"
-                      :value="item"
-                      as="template"
-                      class="capitalize px-2 py-1 cursor-pointer"
-                    >
-                      <li
-                        :class="[
-                          active
-                            ? 'bg-slate-200/80 dark:bg-slate-600 energy:bg-zinc-600'
-                            : 'bg-none',
-                        ]"
-                      >
-                        {{ item.label }}
-                      </li>
-                    </ListboxOption>
-                  </ListboxOptions>
-                </transition>
-              </div>
-            </Listbox>
-          </div>
+          <MaxAppListbox
+            v-model="selectedSort"
+            label="Sort By"
+            :items="sortOptions"
+          />
+          <MaxAppListbox
+            v-model="selectedView"
+            label="View"
+            :items="viewOptions"
+          />
+          <MaxAppListbox
+            v-model="selectedResultCount"
+            label="Results Per Page"
+            :items="resultOptions"
+          />
         </div>
         <div
           class="cursor-pointer text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow self-center"
@@ -832,25 +520,25 @@ import {
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
+import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox";
 import ProductCard from "@/components/ProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
-import SearchResultsPagination from "@/components/SearchResultsPagination";
 const sortOptions = [
-  { label: "Newest", key: "desc", type: "sort_dir" },
-  { label: "Oldest", key: "asc", type: "sort_dir" },
-  { label: "Relevance", key: "score", type: "sort_field" },
+  { name: "Newest", key: "desc", type: "sort_dir" },
+  { name: "Oldest", key: "asc", type: "sort_dir" },
+  { name: "Relevance", key: "score", type: "sort_field" },
 ];
 const viewOptions = [
-  { label: "List", key: "list" },
-  { label: "Grid", key: "grid" },
+  { name: "List", key: "list" },
+  { name: "Grid", key: "grid" },
   //{ label: "Visuals", key: "visuals" },
 ];
-const resultCounts = [
-  { label: "5", key: 5 },
-  { label: "10", key: 10 },
-  { label: "25", key: 25 },
-  { label: "50", key: 50 },
+const resultOptions = [
+  { name: "5", key: 5 },
+  { name: "10", key: 10 },
+  { name: "25", key: 25 },
+  { name: "50", key: 50 },
 ];
 
 export default {
@@ -870,10 +558,10 @@ export default {
     ChevronUpIcon,
     ChevronUpDownIcon,
     XMarkIcon,
+    MaxAppListbox,
     ProductCard,
     ProductRestrictedLink,
     SearchResultsFacets,
-    SearchResultsPagination,
   },
   setup() {
     const store = useStore();
@@ -1000,7 +688,7 @@ export default {
       router.push({ name: "search", query: {} });
     };
 
-    /* 
+    /*
       - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
       - 1) Looks in the route query if any of types are present there
       - 2) For each type found in the query, it loops through the values for that query property
@@ -1113,35 +801,35 @@ export default {
           model: currentModel(regions),
           list: regions.items,
           types: regions.types,
-          component: "BaseCombobox",
+          component: "MaxCombobox",
         },
         issues: {
           label: "Counterterrorism and Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         reporting: {
           label: "Product Types",
           model: currentModel(reportings),
           list: reportings.items,
           types: reportings.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         classifications: {
           label: "Classifications",
           model: currentModel(classifications),
           list: classifications.items,
           types: classifications.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         media_types: {
           label: "Media Types",
           model: currentModel(mediaTypes),
           list: mediaTypes.items,
           types: mediaTypes.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         // nonstate_actors: {
         //   label: "Non State Actors",
@@ -1452,12 +1140,12 @@ export default {
     const getResultCount = (query) => {
       let numResults;
       if (query.per_page) {
-        numResults = resultCounts.find(
+        numResults = resultOptions.find(
           (result) => result.key == query.per_page
         );
         return numResults;
       } else {
-        numResults = resultCounts[1];
+        numResults = resultOptions[1];
         return numResults;
       }
     };
@@ -1534,7 +1222,7 @@ export default {
               ? viewOptions[2]
               : viewOptions[0];
           selectedResultCount.value = route.query.per_page
-            ? resultCounts.find((a) => a.key == route.query.per_page)
+            ? resultOptions.find((a) => a.key == route.query.per_page)
             : selectedResultCount.value;
         }
       }
@@ -1663,7 +1351,7 @@ export default {
       selectedSort,
       viewOptions,
       selectedView,
-      resultCounts,
+      resultOptions,
       selectedResultCount,
       getResultCount,
       currentPage,

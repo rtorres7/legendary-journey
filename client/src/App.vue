@@ -8,7 +8,7 @@
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
-      class="text-slate-900 bg-slate-100 dark:text-slate-300 dark:bg-dark-navy energy:text-zinc-300 energy:bg-zinc-900"
+      class="bg-white dark:bg-dark-navy energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
     >
       <div
         ref="mainContent"
@@ -17,7 +17,7 @@
       >
         <template v-if="loadingUser">
           <div class="max-w-fit m-auto mt-[30vh]">
-            <BaseLoadingSpinner class="w-32 h-32" />
+            <MaxLoadingSpinner class="w-32 h-32" />
           </div>
         </template>
         <template v-else>

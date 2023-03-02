@@ -77,7 +77,7 @@
           >
             <div>
               <MenuButton
-                class="max-w-xs bg-slate-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 <span class="sr-only">Admin Menu</span>
                 <WrenchIcon class="h-6 w-6" aria-hidden="true" />
@@ -131,9 +131,9 @@
               focus:ring-white
             ">
             <span class="sr-only">View notifications</span>
-            <BaseTooltip placement="bottom" icon>
+            <MaxTooltip placement="bottom" icon>
               <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </BaseTooltip>
+            </MaxTooltip>
           </button> -->
           <Menu as="div" class="hidden lg:block relative">
             <div>
@@ -268,7 +268,7 @@
                 <p class="text-lg font-medium mb-4">Issues</p>
                 <template v-if="loadingMetadata">
                   <div class="flex justify-center">
-                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
                   </div>
                 </template>
                 <template v-else>
@@ -309,7 +309,7 @@
             <template #content>
               <template v-if="loadingMetadata">
                 <div class="hidden lg:block lg:m-auto w-fit">
-                  <BaseLoadingSpinner class="text-slate-100 h-20 w-20" />
+                  <MaxLoadingSpinner class="text-slate-100 h-20 w-20" />
                 </div>
               </template>
               <template v-else>
@@ -394,7 +394,7 @@
             <template #content>
               <template v-if="loadingMetadata">
                 <div class="hidden lg:block lg:m-auto w-fit">
-                  <BaseLoadingSpinner class="text-slate-100 h-20 w-20" />
+                  <MaxLoadingSpinner class="text-slate-100 h-20 w-20" />
                 </div>
               </template>
               <template v-else>
@@ -402,7 +402,7 @@
                   <span aria-hidden="true"
                     >Select a country from the map or the dropdown</span
                   >
-                  <BaseCombobox
+                  <MaxCombobox
                     v-model="selectedCountry"
                     :items="
                       criteria.countries.filter(
@@ -446,7 +446,7 @@
                 <p class="text-lg font-medium mb-4">Special Editions</p>
                 <template v-if="loadingSpecialEditionLinks">
                   <div class="flex justify-center">
-                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
                   </div>
                 </template>
                 <template v-else>
