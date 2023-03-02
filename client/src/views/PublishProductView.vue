@@ -6,7 +6,7 @@
       <h1 class="font-semibold text-2xl">Publish a Product</h1>
       <h2>Get started by selecting from the following options.</h2>
     </div>
-    <BaseDatepicker
+    <MaxDatepicker
       v-model="selectedDate"
       class="w-fit h-fit"
       :enable-time-picker="false"
@@ -16,7 +16,7 @@
       @update:modelValue="selectDate"
     >
       <template #trigger>
-        <BaseCard class="p-2 cursor-pointer">
+        <MaxCard class="p-2 cursor-pointer">
           <div class="flex items-center">
             <CalendarIcon
               class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
@@ -25,9 +25,9 @@
               {{ routeDate }}
             </span>
           </div>
-        </BaseCard>
+        </MaxCard>
       </template>
-    </BaseDatepicker>
+    </MaxDatepicker>
   </div>
   <div
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
@@ -40,33 +40,42 @@
       class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mb-6"
     >
       <template v-for="product in availableProductTypes" :key="product">
-        <div class="" @click="goToArticle(product.payload)">
-          <BaseCard
-            class="flex justify-center items-center font-medium cursor-pointer"
-            hoverable
-          >
-            <p class="z-5 p-10 text-2xl font-bold">
-              {{ product.displayName }}
-            </p>
-            <BaseProductIcon
-              class="absolute w-24 h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
-              :icon="product.icon"
-            />
-          </BaseCard>
-        </div>
+        <MaxCard
+          class="flex justify-center items-center font-medium cursor-pointer"
+          hoverable
+          tabindex="0"
+          role="button"
+          :aria-label="`Create a ${product.displayName}`"
+          @click="goToArticle(product.payload)"
+          @keyup.enter="goToArticle(product.payload)"
+        >
+          <span class="z-5 px-9 py-10 text-2xl font-bold">
+            {{ product.displayName }}
+          </span>
+          <MaxProductIcon
+            class="absolute w-24 h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
+            :icon="product.icon"
+          />
+        </MaxCard>
       </template>
     </div>
     <p v-if="!isCommunityExclusive">
       Not sure which product to choose?
-      <a class="font-semibold cursor-pointer" @click="goToArticle()"
-        >Click here</a
+      <span
+        class="font-semibold cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-label="Create a blank template"
+        @click="goToArticle()"
+        @keyup.enter="goToArticle()"
+        >Click here</span
       >
       to start with a blank template.
     </p>
   </div>
   <template v-if="loadingArticles">
     <div class="max-w-fit m-auto mt-[20vh]">
-      <BaseLoadingSpinner class="h-24 w-24" />
+      <MaxLoadingSpinner class="h-24 w-24" />
     </div>
   </template>
   <template v-else>
@@ -88,7 +97,7 @@
         </div>
       </div>
       <template v-if="articles.length > 0">
-        <BaseCard>
+        <MaxCard>
           <template
             v-for="{ attributes: article } in filterArticles()"
             :key="article"
@@ -184,7 +193,7 @@
               </div>
             </div>
           </template>
-          <BaseDialog
+          <MaxDialog
             :isOpen="isPreviewThumbnailDialogOpen"
             :title="'Thumbnail Preview'"
             class="max-w-fit"
@@ -206,8 +215,8 @@
             <p class="italic">
               Only shown when the product is featured on the front page.
             </p>
-          </BaseDialog>
-        </BaseCard>
+          </MaxDialog>
+        </MaxCard>
       </template>
       <template v-else>
         <p class="pt-2 italic">No articles found.</p>

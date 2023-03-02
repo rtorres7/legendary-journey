@@ -1,7 +1,7 @@
 <template>
   <template v-if="loadingArticle">
     <div class="max-w-fit m-auto mt-[24vh]">
-      <BaseLoadingSpinner class="h-28 w-28" />
+      <MaxLoadingSpinner class="h-28 w-28" />
     </div>
   </template>
   <template v-else>
@@ -169,6 +169,10 @@
                 <span class="font-semibold">Publication Date: </span
                 >{{ formatDate(article.date_published) }}
               </p>
+              <p v-if="article.dissem_orgs.length !== 0">
+                <span class="font-semibold">Dissem Orgs: </span>
+                {{ article.dissem_orgs.join(", ") }}
+              </p>
               <p>
                 <span class="font-semibold">Contact: </span
                 >{{ article.poc_info }}
@@ -223,7 +227,7 @@
                 <div class="flex items-center">
                   <div class="flex flex-col">
                     <label class="text-sm font-medium mb-1">Start Date</label>
-                    <BaseDatepicker
+                    <MaxDatepicker
                       v-model="metricStartDate"
                       :minDate="article.display_date"
                       :maxDate="new Date()"
@@ -236,7 +240,7 @@
                   <p class="px-3 pt-4">to</p>
                   <div class="flex flex-col">
                     <label class="text-sm font-medium mb-1">End Date</label>
-                    <BaseDatepicker
+                    <MaxDatepicker
                       v-model="metricEndDate"
                       :minDate="article.display_date"
                       :maxDate="new Date()"
@@ -253,7 +257,7 @@
           </template>
           <template v-else>
             <div class="m-auto pt-8">
-              <BaseLoadingSpinner class="h-20 w-20" />
+              <MaxLoadingSpinner class="h-20 w-20" />
             </div>
           </template>
         </template>

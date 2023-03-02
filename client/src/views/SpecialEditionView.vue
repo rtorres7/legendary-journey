@@ -22,12 +22,12 @@
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <BaseButton color="danger" @click.prevent="openDeleteDialog">
+          <MaxButton color="danger" @click.prevent="openDeleteDialog">
             Delete
-          </BaseButton>
-          <BaseButton color="secondary" @click.prevent="openEditDialog">
+          </MaxButton>
+          <MaxButton color="secondary" @click.prevent="openEditDialog">
             Edit
-          </BaseButton>
+          </MaxButton>
         </template>
       </template>
     </div>
@@ -47,7 +47,7 @@
         <template v-else>
           <template v-if="specialEdition.totalPages > 1">
             <div class="pb-4">
-              <Pagination
+              <MaxPagination
                 :currentPage="currentPage"
                 :pages="specialEdition.totalPages"
               />
@@ -68,9 +68,9 @@
             v-for="article in specialEdition.articles"
             :key="article.id"
           >
-            <BaseCard class="h-full" hoverable :rounded="false">
+            <MaxCard class="h-full" hoverable :rounded="false">
               <ProductCard :article="article" />
-            </BaseCard>
+            </MaxCard>
           </template>
         </template>
       </div>
@@ -87,9 +87,9 @@
               v-for="article in specialEdition.restrictedArticles"
               :key="article.id"
             >
-              <BaseCard class="h-full" hoverable :rounded="false">
+              <MaxCard class="h-full" hoverable :rounded="false">
                 <ProductCard :article="article" />
-              </BaseCard>
+              </MaxCard>
             </template>
           </div>
         </template>
@@ -212,7 +212,7 @@
       @closeDialog="closeEditDialog"
       @specialEditionUpdated="reloadSpecialEdition"
     />
-    <BaseDialog
+    <MaxDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Special Edition'"
       class="max-w-fit"
@@ -220,12 +220,12 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <BaseButton @click.prevent="closeDeleteDialog"> Cancel </BaseButton>
-        <BaseButton color="danger" @click.prevent="deleteSpecialEdition">
+        <MaxButton @click.prevent="closeDeleteDialog"> Cancel </MaxButton>
+        <MaxButton color="danger" @click.prevent="deleteSpecialEdition">
           Delete
-        </BaseButton>
+        </MaxButton>
       </template>
-    </BaseDialog>
+    </MaxDialog>
   </template>
 </template>
 
@@ -237,7 +237,6 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import ProductCard from "@/components/ProductCard";
-import Pagination from "@/components/Pagination";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
 export default {
@@ -247,7 +246,6 @@ export default {
     DisclosurePanel,
     ChevronUpIcon,
     ProductCard,
-    Pagination,
     SpecialEditionCreateEditDialog,
   },
   setup() {

@@ -1,12 +1,13 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div
-    class="lg:absolute mx-3 lg:mx-auto lg:inset-x-0 flex items-center pointer-events-auto pl-3 max-w-[650px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
+    class="lg:absolute mx-3 lg:mx-auto lg:inset-x-0 flex items-center pointer-events-auto pl-3 max-w-[600px] rounded-md shadow-sm w-full border border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80 bg-transparent dark:bg-transparent energy:bg-zinc-900 leading-8 text-sm text-primary"
   >
     <vue3-simple-typeahead
       id="typeahead_id"
       ref="typeaheadRef"
       class="px-2 focus-visible:outline-none bg-transparent w-full text-slate-200 dark:text-slate-300 energy:text-zinc-300 placeholder-shown:truncate"
+      aria-label="Search"
       placeholder="Search for keywords, documents, or pages"
       :items="searches"
       :min-input-length="1"
@@ -79,6 +80,8 @@ export default {
     const searches = computed(() => store.state.savedSearches.searches);
     const loading = computed(() => store.state.savedSearches.loading);
 
+    const lastSort = ref(localStorage.getItem("lastSort"));
+
     onMounted(() => {
       store.dispatch("savedSearches/getAllSearches");
     });
@@ -88,6 +91,11 @@ export default {
       () => {
         if (route.name === "search") {
           typeaheadRef.value.input = route.query.text;
+          if (route.query.sort_dir) {
+            localStorage.setItem("lastSort", route.query.sort_dir);
+          } else if (route.query.sort_field) {
+            localStorage.setItem("lastSort", route.query.sort_field);
+          }
         }
       }
     );
@@ -125,21 +133,69 @@ export default {
         text: e.target.value,
         type: "user",
       });
-      router.push({
-        name: "search",
-        query: {
-          text: e.target.value,
-        },
-      });
+      if (
+        localStorage.getItem("lastSort") === "asc" ||
+        localStorage.getItem("lastSort") === "desc"
+      ) {
+        router.push({
+          name: "search",
+          query: {
+            text: e.target.value,
+            per_page: 10,
+            sort_dir: localStorage.getItem("lastSort"),
+          },
+        });
+      } else if (localStorage.getItem("lastSort") === "score") {
+        router.push({
+          name: "search",
+          query: {
+            text: e.target.value,
+            per_page: 10,
+            sort_field: localStorage.getItem("lastSort"),
+          },
+        });
+      } else {
+        router.push({
+          name: "search",
+          query: {
+            text: e.target.value,
+            per_page: 10,
+          },
+        });
+      }
     };
 
     const onClickSearch = () => {
-      router.push({
-        name: "search",
-        query: {
-          text: typeaheadRef.value.input,
-        },
-      });
+      if (
+        localStorage.getItem("lastSort") === "asc" ||
+        localStorage.getItem("lastSort") === "desc"
+      ) {
+        router.push({
+          name: "search",
+          query: {
+            text: typeaheadRef.value.input,
+            per_page: 10,
+            sort_dir: localStorage.getItem("lastSort"),
+          },
+        });
+      } else if (localStorage.getItem("lastSort") === "score") {
+        router.push({
+          name: "search",
+          query: {
+            text: typeaheadRef.value.input,
+            per_page: 10,
+            sort_field: localStorage.getItem("lastSort"),
+          },
+        });
+      } else {
+        router.push({
+          name: "search",
+          query: {
+            text: typeaheadRef.value.input,
+            per_page: 10,
+          },
+        });
+      }
     };
 
     const deleteSearch = (item) => {
@@ -157,6 +213,7 @@ export default {
       onEnter,
       onClickSearch,
       deleteSearch,
+      lastSort,
     };
   },
 };

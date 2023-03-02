@@ -188,7 +188,7 @@ export default {
     // where sorted items was triggering a refresh due to repositioning the countries_bool in the URL.
     // The bug could reside in SearchView but further investigation is needed.
     // Update: The behavior is definetly unique to countries/regions and also exists when using
-    // BaseListbox, however, it is still odd that a refresh is triggered by simply clicking the selector icon.
+    // MaxListbox, however, it is still odd that a refresh is triggered by simply clicking the selector icon.
 
     // const hasSelectedItem = (item) => {
     //   return selectedItem.value.find((selected) => selected.name === item.name);

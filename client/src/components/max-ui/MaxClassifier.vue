@@ -3,17 +3,17 @@
 </template>
 <script>
 import { computed } from "vue";
-import Classifier from "@/components/Classifier";
-import HighClassifier from "@/components/high/Classifier";
+import LowClassifier from "@/components/max-ui/core/LowClassifier";
+import HighClassifier from "@/components/max-ui/core/HighClassifier";
 
 export default {
   components: {
-    Classifier,
+    LowClassifier,
     HighClassifier,
   },
   setup() {
     const computedComponent = computed(() =>
-      process.env.NODE_ENV === "low" ? "Classifier" : "HighClassifier"
+      process.env.NODE_ENV === "low" ? "LowClassifier" : "HighClassifier"
     );
     return {
       computedComponent,

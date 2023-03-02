@@ -2,7 +2,7 @@
   <!-- For configurable options, see https://vue3datepicker.com/ -->
   <!-- Do not use Vue Datepicker's Light/Dark mode feature, see styling below -->
   <Datepicker :id="uuid">
-    <template v-for="(_, name) in $slots" v-slot:[name]="slotData">
+    <template v-for="(_, name) in $slots" #[name]="slotData">
       <slot :name="name" v-bind="slotData" />
     </template>
   </Datepicker>
@@ -20,7 +20,7 @@ export default {
   setup() {
     const uuid = uniqueID().getID();
     return {
-      uuid
+      uuid,
     };
   },
 };
@@ -131,4 +131,3 @@ export default {
   --dp-highlight-color: rgba(25, 118, 210, 0.1);
 }
 </style>
-

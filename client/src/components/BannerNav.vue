@@ -48,18 +48,12 @@
             <span class="sr-only">Open main menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <router-link class="hidden xl:block h-auto" to="/">
+          <router-link class="hidden lg:block" to="/">
             <img
-              class="h-16 w-16"
-              src="@/assets/nctc_seal_color.svg"
+              class="w-40 h-16 xl:w-48 xl:h-16"
+              src="@/assets/nctc_logo.svg"
               alt="NCTC. Seal. Link to homepage."
             />
-          </router-link>
-          <router-link
-            class="hidden lg:block ml-4 uppercase text-2xl text-white dark:text-slate-100 energy:text-energy-yellow font-semibold tracking-[.05em]"
-            to="/"
-          >
-            {{ metadata.application_name }}
           </router-link>
         </div>
         <!-- Middle Nav Bar -->
@@ -83,7 +77,7 @@
           >
             <div>
               <MenuButton
-                class="max-w-xs bg-slate-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 <span class="sr-only">Admin Menu</span>
                 <WrenchIcon class="h-6 w-6" aria-hidden="true" />
@@ -137,9 +131,9 @@
               focus:ring-white
             ">
             <span class="sr-only">View notifications</span>
-            <BaseTooltip placement="bottom" icon>
+            <MaxTooltip placement="bottom" icon>
               <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </BaseTooltip>
+            </MaxTooltip>
           </button> -->
           <Menu as="div" class="hidden lg:block relative">
             <div>
@@ -274,7 +268,7 @@
                 <p class="text-lg font-medium mb-4">Issues</p>
                 <template v-if="loadingMetadata">
                   <div class="flex justify-center">
-                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
                   </div>
                 </template>
                 <template v-else>
@@ -315,7 +309,7 @@
             <template #content>
               <template v-if="loadingMetadata">
                 <div class="hidden lg:block lg:m-auto w-fit">
-                  <BaseLoadingSpinner class="text-slate-100 h-20 w-20" />
+                  <MaxLoadingSpinner class="text-slate-100 h-20 w-20" />
                 </div>
               </template>
               <template v-else>
@@ -400,7 +394,7 @@
             <template #content>
               <template v-if="loadingMetadata">
                 <div class="hidden lg:block lg:m-auto w-fit">
-                  <BaseLoadingSpinner class="text-slate-100 h-20 w-20" />
+                  <MaxLoadingSpinner class="text-slate-100 h-20 w-20" />
                 </div>
               </template>
               <template v-else>
@@ -408,7 +402,7 @@
                   <span aria-hidden="true"
                     >Select a country from the map or the dropdown</span
                   >
-                  <BaseCombobox
+                  <MaxCombobox
                     v-model="selectedCountry"
                     :items="
                       criteria.countries.filter(
@@ -452,7 +446,7 @@
                 <p class="text-lg font-medium mb-4">Special Editions</p>
                 <template v-if="loadingSpecialEditionLinks">
                   <div class="flex justify-center">
-                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
                   </div>
                 </template>
                 <template v-else>

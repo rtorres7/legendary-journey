@@ -1,67 +1,84 @@
-
 <template>
-  <BaseDialog :isOpen="isOpen" @close="closeDialog" class="max-w-[950px]"
-    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`">
+  <MaxDialog
+    :isOpen="isOpen"
+    class="max-w-[950px]"
+    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`"
+    @close="closeDialog"
+  >
     <form id="se_form" @submit.prevent="submit">
       <div class="block lg:flex my-4 lg:space-x-5">
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseInputWIP label="Name" :modelValue="name" @change="handleChange" @blur="handleChange"
-              :error="errors.name" autocomplete="off" type="text" required />
+            <BaseInputWIP
+              label="Name"
+              :modelValue="name"
+              :error="errors.name"
+              autocomplete="off"
+              type="text"
+              required
+              @change="handleChange"
+              @blur="handleChange"
+            />
           </div>
           <div>
-            <BaseInputWIP2 name="search_params" type="text" label="Search params" autocomplete="off"
-              placeholder="Run a search, copy the URL, and paste it here." required />
+            <BaseInputWIP2
+              name="search_params"
+              type="text"
+              label="Search params"
+              autocomplete="off"
+              placeholder="Run a search, copy the URL, and paste it here."
+              required
+            />
           </div>
           <!-- <div>
-            <BaseTextarea maxlength="4000" rows="5" v-model="key_readings" :error="errors.key_readings"
+            <MaxTextarea maxlength="4000" rows="5" v-model="key_readings" :error="errors.key_readings"
               label="Selected Readings" placeholder="One document number per line, ex: WIRe110416-02."
               v-model.trim="editionEvent.key_readings">
-            </BaseTextarea>
+            </MaxTextarea>
           </div>
           <div>
-            <BaseListbox :label="'State'" :items="stateOptions" v-model="state" :error="errors.state" required />
+            <MaxListbox :label="'State'" :items="stateOptions" v-model="state" :error="errors.state" required />
           </div> -->
         </div>
         <div class="basis-1/2 flex flex-col space-y-4">
           <!-- <div>
-            <BaseListbox :label="'Order'" :items="orderOptions" v-model="position" :error="errors.position" />
+            <MaxListbox :label="'Order'" :items="orderOptions" v-model="position" :error="errors.position" />
           </div> -->
           <!-- <div class="flex flex-col">
             <BaseClassify :label="'Classification'" showSelection :selection="name_classification"
               :error="errors.name_classification" @classificationSelected="updateClassification" required />
           </div> -->
           <!-- <div>
-            <BaseImageFileChooser :label="'File Attachment'" :binary="edition.icon" :file="file" :error="errors.file"
+            <MaxImageFileChooser :label="'File Attachment'" :binary="edition.icon" :file="file" :error="errors.file"
               @onImageAdded="updateImageFile" @onImageRemoved="removeImageFile" required />
           </div> -->
         </div>
       </div>
     </form>
     <template #actions>
-      <BaseButton @click.prevent="closeDialog">Cancel</BaseButton>
-      <BaseButton :disabled="!meta.valid" type="submit" form="se_form">{{
-          editMode ? "Save" : "Create"
-      }}</BaseButton>
+      <MaxButton @click.prevent="closeDialog">Cancel</MaxButton>
+      <MaxButton :disabled="!meta.valid" type="submit" form="se_form">{{
+        editMode ? "Save" : "Create"
+      }}</MaxButton>
     </template>
-  </BaseDialog>
+  </MaxDialog>
 </template>
 
 <script>
-import BaseInputWIP from "@/components/base/BaseInputWIP"
-import BaseInputWIP2 from "@/components/base/BaseInputWIP2"
+import BaseInputWIP from "@/components/base/BaseInputWIP";
+import BaseInputWIP2 from "@/components/base/BaseInputWIP2";
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 //import axios from "@/config/wireAxios";
-import { useField, useForm } from 'vee-validate'
-import { object, string } from 'yup'; //mixed, number
+import { useField, useForm } from "vee-validate";
+import { object, string } from "yup"; //mixed, number
 
 const stateOptions = ["draft", "archived", "posted"];
 
 export default {
   components: {
     BaseInputWIP,
-    BaseInputWIP2
+    BaseInputWIP2,
   },
   props: {
     isOpen: {
@@ -108,17 +125,17 @@ export default {
       //position: number(),
       //name_classification: string().required(),
       //icon: mixed().required('File is required.')
-    })
+    });
 
     const { handleSubmit, errors, meta } = useForm({
       validationSchema,
       // initialValues: {
       //   position: 1,
       // }
-    })
+    });
 
-    const { value: name, handleChange } = useField('name')
-    const { value: search_params } = useField('search_params')
+    const { value: name, handleChange } = useField("name");
+    const { value: search_params } = useField("search_params");
     // const { value: key_readings } = useField('key_readings')
     // const { value: state } = useField('state')
     //const { value: position } = useField('position')
@@ -126,8 +143,6 @@ export default {
     //const { value: file } = useField('file')
 
     // setFieldValue('name')
-
-
 
     const closeDialog = () => {
       emit("closeDialog");
@@ -196,13 +211,13 @@ export default {
       }
     });
 
-    const submit = handleSubmit(values => {
-      console.log('submit', values)
-    })
+    const submit = handleSubmit((values) => {
+      console.log("submit", values);
+    });
 
     const submit2 = () => {
-      console.log('submit2 clicked')
-    }
+      console.log("submit2 clicked");
+    };
 
     // const isDisabled = () => {
     //   return (
@@ -285,7 +300,7 @@ export default {
       submit,
       submit2,
       errors,
-      meta
+      meta,
     };
   },
 };
