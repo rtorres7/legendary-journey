@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const moment = require("moment");
+const dayjs = require("dayjs");
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 var Article = require("../models/articles");
 var SpecialEditions = require("../models/special_editions");
@@ -65,8 +67,8 @@ router.get("/:doc_num", function (req, res) {
 });
 
 router.get("/:date_published/getWireByDate", function (req, res) {
-  var start = moment(req.params.date_published).startOf("day");
-  var end = moment(req.params.date_published).endOf("day");
+  var start = dayjs(req.params.date_published).startOf("day");
+  var end = dayjs(req.params.date_published).endOf("day");
   Article.find(
     { date_published: { $gte: start, $lte: end } },
     function (error, article) {

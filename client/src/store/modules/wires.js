@@ -14,7 +14,7 @@ export default {
         console.log("[store] getWireByDate: ", articlesForWire);
         setTimeout(() => commit("saveArticles", articlesForWire), 750);
       } else {
-        axios.get("/articles/" + date).then((response) => {
+        axios.get("/articles/date/" + date).then((response) => {
           console.log("[store] getWireByDate: ", response.data);
           commit("saveArticles", response?.data);
         });

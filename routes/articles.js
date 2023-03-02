@@ -1,7 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const moment = require("moment");
-const arxiv = require("arxiv-api");
+const dayjs = require("dayjs");
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 var Article = require("../models/articles");
 
@@ -30,9 +31,9 @@ router.get("/", (req, res) => {
 });
 
 //GET articles by date
-router.get("/:date", (req, res) => {
-  var start = moment(req.params.date).startOf("day");
-  var end = moment(req.params.date).endOf("day");
+router.get("/date/:date", (req, res) => {
+  var start = dayjs(req.params.date).utc().startOf("day");
+  var end = dayjs(req.params.date).utc().endOf("day");
   Article.find(
     {
       date_published: { $gte: start, $lte: end },
@@ -54,41 +55,49 @@ router.get("/:date", (req, res) => {
           data: { ...article.data },
         };
       });
-      console.log(articlesForDate);
 
       res.send(articlesForDate);
     }
   );
 });
 
+//GET articles by id
+router.get("/:id", (req, res) => {
+  Article.findById(req.params.id, function (error, article) {
+    if (error) {
+      console.error(error);
+    }
+    res.send(article);
+  });
+});
+
 // POST
 router.post("/", (req, res) => {
   var db = req.db;
-  var title = req.body.title;
-  var title_classification = req.body.title_classification;
-  var summary = req.body.summary;
-  var summary_classification = req.body.summary_classification;
-  var date_published = moment.utc();
-  var new_article = new Article({
-    attributes: {
-      title: title,
-      title_classification: title_classification,
-      summary: summary,
-      summary_classification: summary_classification,
-      date_published: date_published,
-    },
+  var article = new Article({
+    date_published: req.body.date_published || dayjs.utc().format(),
+    product_type_id: req.body.product_type_id,
+    document_action: req.body.document_action,
+    html_body: req.body.html_body,
+    poc_info: req.body.poc_info,
+    producing_office: req.body.producing_office,
+    publication_number: req.body.publication_number,
+    summary: req.body.summary,
+    title: req.body.title,
+    topics: req.body.topics,
+    wire_id: req.body.wire_id,
   });
 
-  new_article.save(function (error) {
+  article.save(function (error) {
     if (error) {
       console.log(error);
     }
-    res.send({
-      success: true,
-      message: "Article saved successfully!",
-      article: new_article,
-    });
+    res.send(article);
   });
+
+  // (async () => {
+  //   await indexService.create(article.indexable);
+  // })();
 });
 
 // Fetch single post
@@ -101,6 +110,12 @@ router.get("/:id/edit", (req, res) => {
       if (error) {
         console.error(error);
       }
+
+      var article = article.toJSON();
+      article.date_published = dayjs(req.body.date_published).format(
+        "YYYY-MM-DD"
+      );
+      console.log("the date is ", article.date_published);
       res.send(article);
     }
   );
@@ -118,30 +133,35 @@ router.get("/:id/view", function (req, res) {
 // Update an article
 router.put("/:id", (req, res) => {
   var db = req.db;
-  Article.findById(
-    req.params.id,
-    "attributes doc_num title title_classification summary summary_classification date_published",
-    function (error, article) {
-      if (error) {
-        console.error(error);
-      }
 
-      article.title = req.body.title;
-      article.title_classification = req.body.title_classification;
-      article.summary = req.body.summary;
-      article.summary_classification = req.body.summary_classification;
-      article.date_published = req.body.date_published;
-      article.save(function (error) {
-        if (error) {
-          console.log(error);
-        }
-        res.send({
-          success: true,
-          article: article,
-        });
-      });
+  var article = {
+    title: req.body.title,
+    summary: req.body.summary,
+    topics: req.body.topics,
+    countries: req.body.countries,
+    dissem_orgs: req.body.dissem_orgs,
+    poc_info: req.body.poc_info,
+    html_body: req.body.html_body,
+    publication_number: req.body.publication_number,
+    wire_id: req.body.wire_id,
+    date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
+    state: "draft",
+    product_type_id: req.body.product_type_id,
+  };
+
+  Article.updateOne({ _id: req.params.id }, article, function (error, article) {
+    if (error) {
+      console.error(error);
     }
-  );
+    res.send({
+      success: true,
+      article: article,
+      date: article.date_published,
+      doc_num: article._id,
+      id: article._id,
+      state: "draft",
+    });
+  });
 });
 
 // Delete an article
@@ -159,71 +179,5 @@ router.delete("/:id", (req, res) => {
     }
   );
 });
-
-router.post("/processDocument", (req, res) => {
-  var new_article = new Article({
-    //attributes: {
-    title: req.body.title,
-    summary: req.body.summary,
-    topics: req.body.topics,
-    poc_info: req.body.poc_info,
-    html_body: req.body.html_body,
-    publication_number: req.body.publication_number,
-    wire_id: req.body.wire_id,
-    date_published: moment.utc(),
-    doc_num: this._id,
-    id: this._id,
-    state: "draft",
-    product_type_id: req.body.product_type_id,
-    //},
-  });
-
-  new_article.save(function (error) {
-    if (error) {
-      console.log(error);
-    }
-    res.send({
-      article: new_article,
-      date: moment.utc(),
-      doc_num: new_article._id,
-      id: new_article._id,
-      state: "draft",
-    });
-  });
-
-  (async () => {
-    await indexService.create(new_article.indexable);
-    // const retrievedArticle = await indexService.getById(new_article.id);
-    // console.log("Retrieved article:", retrievedArticle);
-    // await indexService.update(new_article.indexable);
-    // const updatedArticle = await indexService.getById(new_article.id);
-    // console.log("Updated article:", updatedArticle);
-    // await indexService.delete(new_article.id);
-  })();
-});
-
-/* router.get("/articles", (req, res) => {
-  const papers = arxiv
-    .search({
-      searchQueryParams: [
-        {
-          include: [{ name: "cs.*" }],
-        },
-        {
-          include: [{ name: "econ.*" }],
-        },
-      ],
-      start: 0,
-      maxResults: 10,
-    })
-    .then((papers) => res.send(papers))
-    .catch((error) => console.log(error));
-});
-
-router.get("/article/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const article = null; //TODO
-  res.send(article);
-}); */
 
 module.exports = router;

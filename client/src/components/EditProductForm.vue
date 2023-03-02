@@ -988,7 +988,7 @@ export default {
           }, 3000);
         } else {
           axios
-            .post("/articles/processDocument", {
+            .put("/articles/" + route.params.id, {
               document_action: "publish",
               // analysis_type_id: form.selectedProductType.id,
               analysis_type_id: 5,
@@ -1039,7 +1039,7 @@ export default {
         }, 1000);
       } else {
         axios
-          .post("/articles/processDocument", {
+          .put("/articles/" + route.params.id, {
             document_action: "save",
             // analysis_type_id: form.selectedProductType.id,
             analysis_type_id: 5,

@@ -17,38 +17,13 @@ var ArticleSchema = new Schema(
     coi_level: Number,
     congress: Boolean,
     control_to: [],
-    countries: [
-      {
-        code: String,
-        name: String,
-        digraph: String,
-      },
-    ],
+    countries: [],
     countries_fn: [],
     created_at: Date,
     created_by_id: String,
     created_on: Date,
     date_published: Date,
-    dissem_orgs: [
-      {
-        ancestry: String,
-        ancestry_depth: Number,
-        category: String,
-        code: String,
-        created_at: Date,
-        description: String,
-        id: Number,
-        label: String,
-        legacy: Boolean,
-        name: String,
-        ntk_org: Boolean,
-        position: Number,
-        updated_at: Date,
-        usgov_org: Boolean,
-        visible: Boolean,
-      },
-    ],
-    doc_num: String,
+    dissem_orgs: [],
     document_type: String,
     email_count: Number,
     feature_date: Date,
@@ -114,12 +89,7 @@ var ArticleSchema = new Schema(
     to_param: String,
     to_param_feature: String,
     to_param_wire: Date,
-    topics: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    topics: [],
     topics_fn: [],
     type: String,
     uniqueReadership: Number,
@@ -143,6 +113,10 @@ ArticleSchema.virtual("attributes").get(function () {
     title: this.title,
     title_classification: this.title_classification,
   };
+});
+
+ArticleSchema.virtual("doc_num").get(function () {
+  return this.get("_id");
 });
 
 ArticleSchema.virtual("indexable").get(function () {
@@ -250,7 +224,6 @@ ArticleSchema.virtual("data.details").get(function () {
     summary_sci: this.summary_sci,
     title: this.title,
     title_classif: this.title_classif,
-    title_classification: this.title_classification,
     title_sci: this.title_sci,
     topics: this.topics,
     topics_fn: this.topics_fn,

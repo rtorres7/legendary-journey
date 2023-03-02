@@ -256,7 +256,7 @@ export default {
 
     const defaultPayload = {
       document_action: "create",
-      dissem_orgs: ["DNI"],
+      //dissem_orgs: ["DNI"],
       html_body: "<p></p>",
       producing_office: "DNI/NCTC",
       publication_number: Math.floor(100000 * Math.random() * 900000),
@@ -325,13 +325,12 @@ export default {
           },
         });
       } else {
-        axios.post("/articles/processDocument", payload).then((response) => {
-          console.log("/articles/processDocument :", response);
+        axios.post("/articles", payload).then((response) => {
           router.push({
             name: "edit",
             params: {
               date: route.params.date,
-              id: response.data.article.id,
+              id: response.data.id,
               doc_num: response.data.doc_num,
               product_type_id: response.data.product_type_id,
             },
