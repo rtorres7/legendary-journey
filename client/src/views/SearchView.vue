@@ -625,6 +625,7 @@
             <SearchResultsPagination
               :total-count="totalCount"
               :current-page="currentPage"
+              :maxPerPage="selectedResultCount.key"
             />
           </div>
         </BaseCard>
@@ -1450,8 +1451,10 @@ export default {
     );
     const getResultCount = (query) => {
       let numResults;
-      if (query.count) {
-        numResults = resultCounts.find((result) => result.key == query.count);
+      if (query.per_page) {
+        numResults = resultCounts.find(
+          (result) => result.key == query.per_page
+        );
         return numResults;
       } else {
         numResults = resultCounts[1];
@@ -1530,6 +1533,9 @@ export default {
               : route.query.view === "visuals"
               ? viewOptions[2]
               : viewOptions[0];
+          selectedResultCount.value = route.query.per_page
+            ? resultCounts.find((a) => a.key == route.query.per_page)
+            : selectedResultCount.value;
         }
       }
     );
@@ -1572,6 +1578,7 @@ export default {
       router.push({
         query,
       });
+      localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     watch([selectedView], () => {
@@ -1610,7 +1617,7 @@ export default {
       router.push({
         query: {
           ...route.query,
-          count: selectedResultCount.value.key,
+          per_page: selectedResultCount.value.key,
         },
       });
     });
