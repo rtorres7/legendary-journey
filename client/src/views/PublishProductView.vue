@@ -265,7 +265,7 @@ export default {
 
     const defaultPayload = {
       document_action: "create",
-      dissem_orgs: ["DNI"],
+      //dissem_orgs: ["DNI"],
       html_body: "<p></p>",
       producing_office: "DNI/NCTC",
       publication_number: Math.floor(100000 * Math.random() * 900000),

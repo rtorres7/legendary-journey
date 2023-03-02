@@ -1,5 +1,5 @@
 <template>
-  <div ref="chartdiv" class="w-[325px] sm:w-[400px] h-[325px] sm:h-[400px] text-xs" />
+  <div ref="chartdiv" class="w-[480px] lg:w-[425px] h-[200px] text-xs" />
 </template>
 <script>
 import { ref, onMounted } from "vue";
@@ -11,9 +11,9 @@ export default {
   props: {
     metrics: {
       type: Array,
-      required: true
+      required: true,
     },
-  },  
+  },
   setup(props) {
     const chartdiv = ref(null);
 
@@ -22,7 +22,7 @@ export default {
       root.setThemes([am5themes_Animated.new(root)]);
       let chart = root.container.children.push(
         am5percent.PieChart.new(root, {
-          layout: root.verticalLayout,
+          layout: root.horizontalLayout,
         })
       );
       let series = chart.series.push(
@@ -41,7 +41,8 @@ export default {
 
       let legend = chart.children.push(
         am5.Legend.new(root, {
-          x: am5.percent(50),
+          y: am5.percent(50),
+          centerY: am5.percent(50),
           layout: root.verticalLayout,
         })
       );

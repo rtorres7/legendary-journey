@@ -83,19 +83,14 @@
       class="py-6 px-4 flex flex-col-reverse lg:flex-row justify-between items-center"
     >
       <div class="flex items-center pt-6 lg:pt-0">
-        <router-link to="/">
-          <img
-            class="w-14"
-            src="@/assets/nctc_seal_color.svg"
-            alt="NCTC seal. Link to top of the homepage"
-          />
-        </router-link>
         <div class="ml-4">
-          <div
-            class="uppercase text-xl text-white dark:text-slate-200 energy:text-energy-yellow font-semibold tracking-[.05em]"
-          >
-            {{ metadata.application_name }}
-          </div>
+          <router-link to="/">
+            <img
+              class="w-48"
+              src="@/assets/nctc_logo.svg"
+              alt="NCTC seal. Link to top of the homepage"
+            />
+          </router-link>
           <p class="text-slate-300 energy:text-zinc-300 text-sm italic">
             {{ metadata.footer_note }}
           </p>

@@ -134,6 +134,31 @@
                           updateField($event, 'countries', 'multiple')
                         "
                       />
+                      <div
+                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                      >
+                        <div v-for="country in form.countries" :key="country">
+                          <div
+                            class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                          >
+                            <div class="line-clamp-1 text-sm">
+                              {{ country.name }}
+                            </div>
+                            <button
+                              type="button"
+                              class="w-5 h-5 flex items-center justify-center"
+                              tabindex="0"
+                              @click="removeItem(country.name, 'countries')"
+                            >
+                              <span class="sr-only">Remove country</span>
+                              <XMarkIcon
+                                class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                       <div class="flex">
                         <input
                           id="worldwide"
@@ -150,17 +175,43 @@
                         >
                       </div>
                     </div>
-                    <MaxListbox
-                      v-model="form.topics"
-                      :label="'Topics'"
-                      :items="lists.topics"
-                      multiple
-                      required
-                      class="lg:w-1/3"
-                      @update:modelValue="
-                        updateField($event, 'topics', 'multiple')
-                      "
-                    />
+                    <div class="lg:w-1/3 space-y-4">
+                      <MaxListbox
+                        v-model="form.topics"
+                        :label="'Topics'"
+                        :items="lists.topics"
+                        multiple
+                        required
+                        @update:modelValue="
+                          updateField($event, 'topics', 'multiple')
+                        "
+                      />
+                      <div
+                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                      >
+                        <div v-for="topic in form.topics" :key="topic">
+                          <div
+                            class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                          >
+                            <div class="line-clamp-1 text-sm">
+                              {{ topic.name }}
+                            </div>
+                            <button
+                              type="button"
+                              class="w-5 h-5 flex items-center justify-center"
+                              tabindex="0"
+                              @click="removeItem(topic.name, 'topics')"
+                            >
+                              <span class="sr-only">Remove topic</span>
+                              <XMarkIcon
+                                class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </EditProductFormSection>
@@ -272,26 +323,24 @@
                         updateField($event, 'dissem_orgs', 'multiple')
                       "
                     />
-                    <p class="ml-2 text-sm">
+                    <p class="text-sm">
                       No selection disseminates to all
-                      <span class="ml-1 italic"
+                      <span class="italic"
                         >(includes NT-50 Organizations).</span
                       >
                     </p>
-                    <!-- <div class="flex">
+                    <div class="flex">
                       <input
-                        id="allOrgs"
-                        v-model="checkAllOrgs"
+                        id="intelOrgs"
+                        v-model="checkAllIntelOrgs"
                         type="checkbox"
-                        name="allOrgs"
-                        @click="toggleAllOrgs()"
+                        name="intelOrgs"
+                        @click="toggleAllIntelOrgs()"
                       />
-                      <label for="allOrgs" class="ml-2 text-sm"
-                        >Select All Orgs<span class="ml-2 italic"
-                          >(includes NT-50 Organizations)</span
-                        ></label
+                      <label for="intelOrgs" class="ml-2 text-sm"
+                        >Restrict Dissemination to IC Members Only</label
                       >
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </EditProductFormSection>
@@ -516,6 +565,7 @@ import {
   PlusCircleIcon,
   PaperClipIcon,
   LockClosedIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -570,6 +620,7 @@ export default {
     PlusCircleIcon,
     PaperClipIcon,
     LockClosedIcon,
+    XMarkIcon,
     DocumentArrowDownIcon,
     DocumentMinusIcon,
     DropZone,
@@ -672,7 +723,7 @@ export default {
       worldwide: null,
     });
     const payload = ref({});
-    const checkAllOrgs = ref(false);
+    const checkAllIntelOrgs = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
 
@@ -685,16 +736,29 @@ export default {
         document.querySelector(".fileUpload").files[0];
     };
 
-    const toggleAllOrgs = () => {
+    const toggleAllIntelOrgs = () => {
       let payloadOrgs = [];
       form.value.dissemOrgs = [];
-      if (!checkAllOrgs.value) {
+      if (!checkAllIntelOrgs.value) {
         lists.dissemOrgs.forEach((org) => {
-          form.value.dissemOrgs.push(org);
-          payloadOrgs.push(org.code);
+          if (org.category == "IC") {
+            form.value.dissemOrgs.push(org);
+            payloadOrgs.push(org.code);
+          }
         });
       }
       payload.value["dissem_orgs"] = payloadOrgs;
+    };
+
+    const removeItem = (name, formItem) => {
+      console.log(formItem, "selection removed");
+      if (formItem === "countries") {
+        form.value.countries = form.value.countries.filter(
+          (i) => i.name != name
+        );
+      } else if (formItem === "topics") {
+        form.value.topics = form.value.topics.filter((i) => i.name != name);
+      }
     };
 
     const prepopulateFields = (model) => {
@@ -804,8 +868,16 @@ export default {
         let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
         dissemsToSelect.push(dissemValue);
       });
-      if (dissemsToSelect.length !== lists.dissemOrgs.length) {
-        checkAllOrgs.value = false;
+      const allIntelOrgs = lists.dissemOrgs.filter(
+        (org) => org.category == "IC"
+      );
+      const isAllIntel = allIntelOrgs.every((org) =>
+        dissemsToSelect.includes(org)
+      );
+      if (isAllIntel && dissemsToSelect.length == allIntelOrgs.length) {
+        checkAllIntelOrgs.value = true;
+      } else {
+        checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
       form.value.productType = lists.productTypes.find(
@@ -1104,12 +1176,13 @@ export default {
       publishingProduct,
       lists,
       form,
-      checkAllOrgs,
+      checkAllIntelOrgs,
       selectedPublicationDate,
       attachmentDropzoneFile,
       attachmentDrop,
       attachmentSelectedFile,
-      toggleAllOrgs,
+      toggleAllIntelOrgs,
+      removeItem,
       updateField,
       updateSelectedDate,
       publishDisabled,

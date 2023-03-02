@@ -23,6 +23,22 @@
         class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
       >
         <div class="flex">
+          <div>
+            <PrinterIcon
+              class="h-6 w-6 cursor-pointer"
+              aria-hidden="true"
+              @click="printDocument"
+            />
+          </div>
+          <div
+            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+          >
+            <p>
+              {{ article.print_count }}
+            </p>
+          </div>
+        </div>
+        <div class="flex">
           <a
             :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
           >
@@ -153,6 +169,10 @@
                 <span class="font-semibold">Publication Date: </span
                 >{{ formatDate(article.date_published) }}
               </p>
+              <p v-if="article.dissem_orgs.length !== 0">
+                <span class="font-semibold">Dissem Orgs: </span>
+                {{ article.dissem_orgs.join(", ") }}
+              </p>
               <p>
                 <span class="font-semibold">Contact: </span
                 >{{ article.poc_info }}
@@ -254,6 +274,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   ChevronDownIcon,
+  PrinterIcon,
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
@@ -267,6 +288,7 @@ import ProductMetrics from "@/components/ProductMetrics";
 export default {
   components: {
     ChevronDownIcon,
+    PrinterIcon,
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
@@ -310,6 +332,9 @@ export default {
     const metricEndDate = ref(null);
     const navigation = ref(null);
     const isDraft = ref(route.name === "product-preview" ? true : false);
+    const printCount = computed(
+      () => store.state.danielDetails.document.print_count
+    );
     const emailCount = computed(
       () => store.state.danielDetails.document.email_count
     );
@@ -317,6 +342,27 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
 
+    const printDocument = () => {
+      const pdfs = article.value.attachments_metadata.filter(
+        (attachment) =>
+          attachment.pdf_version === true && attachment.visible === true
+      );
+      if (pdfs.length === 0) {
+        window.print();
+      } else {
+        const pdfLink =
+          window.location.origin +
+          "/documents/" +
+          article.value.doc_num +
+          "/attachments/" +
+          pdfs[0].file_name;
+        window.open(pdfLink);
+      }
+      updatePrintCount();
+    };
+    const updatePrintCount = () => {
+      store.dispatch("danielDetails/savePrintCount");
+    };
     const updateEmailCount = () => {
       store.dispatch("danielDetails/saveEmailCount");
     };
@@ -437,7 +483,10 @@ export default {
       metricEndDate,
       navigation,
       isDraft,
+      printCount,
       emailCount,
+      printDocument,
+      updatePrintCount,
       updateEmailCount,
       copyUrl,
       canManageWire,

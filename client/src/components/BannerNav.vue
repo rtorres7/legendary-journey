@@ -48,18 +48,12 @@
             <span class="sr-only">Open main menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <router-link class="hidden xl:block h-auto" to="/">
+          <router-link class="hidden lg:block" to="/">
             <img
-              class="h-16 w-16"
-              src="@/assets/nctc_seal_color.svg"
+              class="w-40 h-16 xl:w-48 xl:h-16"
+              src="@/assets/nctc_logo.svg"
               alt="NCTC. Seal. Link to homepage."
             />
-          </router-link>
-          <router-link
-            class="hidden lg:block ml-4 uppercase text-2xl text-white dark:text-slate-100 energy:text-energy-yellow font-semibold tracking-[.05em]"
-            to="/"
-          >
-            {{ metadata.application_name }}
           </router-link>
         </div>
         <!-- Middle Nav Bar -->
