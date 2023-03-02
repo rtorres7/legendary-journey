@@ -1,5 +1,5 @@
 <template>
-  <BaseCard
+  <MaxCard
     :class="['relative h-full px-4 py-4', loading ? 'animate-pulse' : '']"
     :aria-label="
       !loading && isProductLocked(sitrep) ? 'restricted product' : ''
@@ -45,13 +45,13 @@
         </div>
       </div>
       <template v-if="isProductLocked(sitrep)">
-        <BaseProductIcon
+        <MaxProductIcon
           class="absolute w-10 h-10 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
           icon="locked"
         />
       </template>
     </template>
-  </BaseCard>
+  </MaxCard>
 </template>
 
 <script>

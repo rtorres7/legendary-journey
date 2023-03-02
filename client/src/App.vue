@@ -17,7 +17,7 @@
       >
         <template v-if="loadingUser">
           <div class="max-w-fit m-auto mt-[30vh]">
-            <BaseLoadingSpinner class="w-32 h-32" />
+            <MaxLoadingSpinner class="w-32 h-32" />
           </div>
         </template>
         <template v-else>

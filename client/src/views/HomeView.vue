@@ -68,7 +68,7 @@
                 <router-link
                   to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10386&product_types[]=10383"
                 >
-                  More >
+                  View More
                 </router-link>
               </p>
             </div>

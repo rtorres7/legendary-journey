@@ -13,9 +13,9 @@
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <BaseButton color="secondary" @click.prevent="openDialog">
+          <MaxButton color="secondary" @click.prevent="openDialog">
             Create
-          </BaseButton>
+          </MaxButton>
         </template>
       </template>
     </div>
@@ -38,9 +38,9 @@
         <template v-else>
           <template v-if="links.posted && links.posted.length > 0">
             <template v-for="link in links.posted" :key="link">
-              <BaseCard hoverable :rounded="false">
+              <MaxCard hoverable :rounded="false">
                 <SpecialEditionLink :link="link" />
-              </BaseCard>
+              </MaxCard>
             </template>
           </template>
           <template v-else>
@@ -67,9 +67,9 @@
           <template v-else>
             <template v-if="links.draft && links.draft.length > 0">
               <template v-for="link in links.draft" :key="link">
-                <BaseCard hoverable :rounded="false">
+                <MaxCard hoverable :rounded="false">
                   <SpecialEditionLink :link="link" />
-                </BaseCard>
+                </MaxCard>
               </template>
             </template>
             <template v-else>
@@ -95,9 +95,9 @@
           <template v-else>
             <template v-if="links.archived && links.archived.length > 0">
               <template v-for="link in links.archived" :key="link">
-                <BaseCard hoverable :rounded="false">
+                <MaxCard hoverable :rounded="false">
                   <SpecialEditionLink :link="link" />
-                </BaseCard>
+                </MaxCard>
               </template>
             </template>
             <template v-else>

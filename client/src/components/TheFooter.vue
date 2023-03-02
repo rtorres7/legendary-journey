@@ -153,7 +153,7 @@
       </p>
     </div>
   </div>
-  <BaseDialog
+  <MaxDialog
     class="max-w-[600px]"
     :isOpen="isMissionDialogOpen"
     @close="closeMissionDialog"
@@ -168,8 +168,8 @@
         </div>
       </template>
     </div>
-  </BaseDialog>
-  <BaseDialog
+  </MaxDialog>
+  <MaxDialog
     class="max-w-[600px]"
     :isOpen="isSecurityDialogOpen"
     @close="closeSecurityDialog"
@@ -184,8 +184,8 @@
         </div>
       </template>
     </div>
-  </BaseDialog>
-  <BaseDialog
+  </MaxDialog>
+  <MaxDialog
     class="max-w-[600px]"
     :isOpen="isFAQDialogOpen"
     @close="closeFAQDialog"
@@ -200,7 +200,7 @@
         </div>
       </template>
     </div>
-  </BaseDialog>
+  </MaxDialog>
 </template>
 <script>
 import { metadata } from "@/config";

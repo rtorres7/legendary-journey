@@ -14,7 +14,7 @@ import * as CKEditor from "@ckeditor/ckeditor5-vue";
 const requireComponent = require.context(
   "./components/max-ui",
   false,
-  /Base[A-Z]\w+\.(vue|js)$/
+  /Max[A-Z]\w+\.(vue|js)$/
 );
 
 const app = createApp(App);

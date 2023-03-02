@@ -1,5 +1,5 @@
 <template>
-  <BaseCard
+  <MaxCard
     :class="[
       'h-full',
       loading
@@ -90,14 +90,14 @@
           {{ formatDate(article.date_published) }}
         </p>
         <template v-if="isProductLocked(article)">
-          <BaseProductIcon
+          <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
             icon="locked"
           />
         </template>
       </div>
     </template>
-  </BaseCard>
+  </MaxCard>
 </template>
 <script>
 import { isProductLocked, formatDate } from "@/helpers";

@@ -1,6 +1,6 @@
 <template>
   <form ref="publishingForm">
-    <BaseCard class="mt-4">
+    <MaxCard class="mt-4">
       <div class="flex">
         <div
           class="lg:min-w-[215px] p-6 border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
@@ -38,7 +38,7 @@
                 title="Product Type"
                 description="Changing the product type will prepopulate existing fields so be careful when changing it."
               >
-                <BaseListbox
+                <MaxListbox
                   v-model="form.productType"
                   :label="'Product Type'"
                   :items="lists.productTypes"
@@ -56,7 +56,7 @@
                     class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                   >
                     <div class="lg:w-3/4">
-                      <BaseInput
+                      <MaxInput
                         v-model="form.title"
                         label="Title"
                         type="text"
@@ -65,7 +65,7 @@
                       />
                     </div>
                     <div class="lg:w-1/4">
-                      <BaseClassifier
+                      <MaxClassifier
                         v-model="form.titleClassificationXML"
                         label="Title PM"
                         required
@@ -80,7 +80,7 @@
                     class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                   >
                     <div class="lg:w-3/4">
-                      <BaseTextarea
+                      <MaxTextarea
                         v-model="form.summary"
                         maxlength="4000"
                         rows="6"
@@ -90,7 +90,7 @@
                       />
                     </div>
                     <div class="lg:w-1/4">
-                      <BaseClassifier
+                      <MaxClassifier
                         v-model="form.summaryClassificationXML"
                         label="Summary PM"
                         required
@@ -102,7 +102,7 @@
                     </div>
                   </div>
                   <div class="lg:w-1/4">
-                    <BaseDatepicker
+                    <MaxDatepicker
                       v-model="selectedPublicationDate"
                       :enableTimePicker="false"
                       week-start="0"
@@ -110,20 +110,20 @@
                       @update:modelValue="updateSelectedDate"
                     >
                       <template #trigger>
-                        <BaseInput
+                        <MaxInput
                           v-model="form.publicationDate"
                           label="Publication Date"
                           type="text"
                           required
                         />
                       </template>
-                    </BaseDatepicker>
+                    </MaxDatepicker>
                   </div>
                   <div
                     class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                   >
                     <div class="lg:w-1/3 space-y-4">
-                      <BaseListbox
+                      <MaxListbox
                         v-model="form.countries"
                         :label="'Countries'"
                         :items="lists.countries"
@@ -150,7 +150,7 @@
                         >
                       </div>
                     </div>
-                    <BaseListbox
+                    <MaxListbox
                       v-model="form.topics"
                       :label="'Topics'"
                       :items="lists.topics"
@@ -189,7 +189,7 @@
                               <template
                                 v-if="thumbnailFile?.status === 'loading'"
                               >
-                                <BaseLoadingSpinner class="h-5 w-5" />
+                                <MaxLoadingSpinner class="h-5 w-5" />
                                 Uploading...
                               </template>
                               <template v-else>
@@ -245,7 +245,7 @@
                     </div>
                   </div>
                   <div>
-                    <BaseCkEditor
+                    <MaxCkEditor
                       v-model="form.editorData"
                       :label="'Product Content'"
                       :extraConfig="extraConfig"
@@ -253,16 +253,16 @@
                     />
                   </div>
                   <div class="lg:w-1/2">
-                    <BaseTextarea
+                    <MaxTextarea
                       v-model="form.pocInfo"
                       maxlength="4000"
                       rows="4"
                       label="POC Info"
                       @update:modelValue="updateField($event, 'poc_info')"
-                    ></BaseTextarea>
+                    ></MaxTextarea>
                   </div>
                   <div class="lg:w-1/2 space-y-4">
-                    <BaseListbox
+                    <MaxListbox
                       v-model="form.dissemOrgs"
                       :label="'Restrict Dissemination by Organization'"
                       :items="lists.dissemOrgs"
@@ -390,7 +390,7 @@
                     highest level."
               >
                 <div class="lg:w-1/2">
-                  <BaseClassifier
+                  <MaxClassifier
                     v-model="form.classificationXML"
                     label="Document Classification"
                     required
@@ -405,40 +405,40 @@
             <div
               class="flex flex-wrap gap-4 justify-end py-6 px-8 bg-slate-50 dark:bg-slate-800/75 energy:bg-zinc-700/25"
             >
-              <BaseButton
+              <MaxButton
                 color="secondary"
                 type="submit"
                 :disabled="publishDisabled"
                 @click.prevent="publishProduct"
               >
                 Publish
-              </BaseButton>
-              <BaseButton color="secondary" @click.prevent="saveProduct"
-                >Save</BaseButton
+              </MaxButton>
+              <MaxButton color="secondary" @click.prevent="saveProduct"
+                >Save</MaxButton
               >
-              <BaseButton color="secondary" @click.prevent="openPreviewDialog"
+              <MaxButton color="secondary" @click.prevent="openPreviewDialog"
                 >Preview
-                <BaseDialog
+                <MaxDialog
                   class="max-w-[1300px]"
                   :isOpen="isPreviewDialogOpen"
                   @close="closePreviewDialog"
                 >
                   <ProductView :doc_num="documentNumber" :wantsPreview="true" />
-                </BaseDialog>
-              </BaseButton>
-              <BaseButton color="secondary" @click.prevent="cancel"
-                >Cancel</BaseButton
+                </MaxDialog>
+              </MaxButton>
+              <MaxButton color="secondary" @click.prevent="cancel"
+                >Cancel</MaxButton
               >
-              <BaseButton color="danger" @click.prevent="openDeleteDialog"
-                >Delete</BaseButton
+              <MaxButton color="danger" @click.prevent="openDeleteDialog"
+                >Delete</MaxButton
               >
             </div>
           </div>
         </div>
       </div>
-    </BaseCard>
+    </MaxCard>
   </form>
-  <BaseDialog
+  <MaxDialog
     :isOpen="isDeleteDialogOpen"
     :title="'Delete Product'"
     class="max-w-fit"
@@ -446,13 +446,13 @@
   >
     <p class="py-4 pr-4">Are you sure you want to do this?</p>
     <template #actions>
-      <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
-      <BaseButton type="danger" @click.prevent="deleteDocument">
+      <MaxButton @click.prevent="closeDeleteDialog">Cancel</MaxButton>
+      <MaxButton type="danger" @click.prevent="deleteDocument">
         Delete
-      </BaseButton>
+      </MaxButton>
     </template>
-  </BaseDialog>
-  <BaseDialog
+  </MaxDialog>
+  <MaxDialog
     :isOpen="isPreviewThumbnailDialogOpen"
     :title="'Thumbnail Preview'"
     class="max-w-fit"
@@ -482,23 +482,23 @@
     <p class="italic">
       Only shown when the product is featured on the front page.
     </p>
-  </BaseDialog>
-  <BaseOverlay :show="savingProduct">
+  </MaxDialog>
+  <MaxOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
       <div class="w-fit m-auto">
-        <BaseLoadingSpinner class="h-16 w-16" />
+        <MaxLoadingSpinner class="h-16 w-16" />
       </div>
     </div>
-  </BaseOverlay>
-  <BaseOverlay :show="publishingProduct">
+  </MaxOverlay>
+  <MaxOverlay :show="publishingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Publishing Product...</p>
       <div class="w-fit m-auto">
-        <BaseLoadingSpinner class="h-16 w-16" />
+        <MaxLoadingSpinner class="h-16 w-16" />
       </div>
     </div>
-  </BaseOverlay>
+  </MaxOverlay>
 </template>
 <script>
 import { computed, inject, onMounted, ref, watch } from "vue";

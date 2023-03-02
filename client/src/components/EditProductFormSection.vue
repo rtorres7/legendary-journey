@@ -4,7 +4,7 @@
     class="flex flex-col space-y-8 pb-8 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div>
-      <h2 class="font-medium text-xl">{{ title }}</h2>
+      <p class="font-medium text-xl">{{ title }}</p>
       <p
         class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
       >

@@ -26,7 +26,7 @@
       </button>
     </template>
   </div>
-  <BaseCard
+  <MaxCard
     :class="[
       'p-4',
       loadingMetadata
@@ -42,7 +42,7 @@
           >
             <div class="lg:w-1/2 flex space-x-3">
               <div class="w-full">
-                <BaseInput
+                <MaxInput
                   v-model="queryText"
                   label="Keyword Search or Query"
                   type="text"
@@ -54,7 +54,7 @@
               </div>
               <div class="flex flex-col mt-1 justify-between">
                 <label class="text-sm font-medium">Date</label>
-                <BaseDatepicker
+                <MaxDatepicker
                   v-model="queryDateRange"
                   :enable-time-picker="false"
                   range
@@ -77,7 +77,7 @@
                       <button @click="selectDate('1YR')">Past Year</button>
                     </div>
                   </template>
-                </BaseDatepicker>
+                </MaxDatepicker>
               </div>
             </div>
             <template
@@ -168,7 +168,7 @@
         </transition>
       </Disclosure>
     </div>
-  </BaseCard>
+  </MaxCard>
   <div class="flex flex-row-reverse py-1 mt-2">
     <template v-if="!loadingMetadata && booleanFilters.length > 0">
       <button
@@ -187,7 +187,7 @@
   <template
     v-if="!loadingMetadata && showSelectors && booleanFilters.length > 0"
   >
-    <BaseCard class="mt-2 px-4 py-2 w-fit text-sm">
+    <MaxCard class="mt-2 px-4 py-2 w-fit text-sm">
       <div class="flex flex-wrap">
         <template v-for="(n, index) in booleanFilters" :key="n">
           <div
@@ -242,7 +242,7 @@
           </template>
         </template>
       </div>
-    </BaseCard>
+    </MaxCard>
   </template>
   <!-- Results Container -->
   <template v-if="loadingResults">
@@ -294,12 +294,12 @@
         <!-- Search Sorting Listbox -->
         <div class="hidden lg:flex justify-between py-4">
           <div class="flex gap-x-8">
-            <BaseListboxTest
+            <MaxAppListbox
               v-model="selectedSort"
               label="Sort By"
               :items="sortOptions"
             />
-            <BaseListboxTest
+            <MaxAppListbox
               v-model="selectedView"
               label="View"
               :items="viewOptions"
@@ -316,7 +316,7 @@
           </div>
         </div>
         <!-- Search Results Table -->
-        <BaseTable
+        <MaxTable
           :items="results"
           :totalCount="totalCount"
           :currentPage="currentPage"
@@ -350,7 +350,7 @@
               </div>
               <div class="relative px-2 w-full">
                 <template v-if="isProductLocked(item)">
-                  <BaseProductIcon
+                  <MaxProductIcon
                     class="absolute w-16 h-16 m-auto inset-x-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
                     icon="locked"
                   />
@@ -392,23 +392,23 @@
           <template #grid="{ item }">
             <ProductCard :article="item" />
           </template>
-        </BaseTable>
+        </MaxTable>
       </div>
       <!-- Search Results Filters -->
-      <BaseCard
+      <MaxCard
         v-show="selectedView.name === 'List'"
         class="hidden lg:block basis-1/4 ml-4 h-full"
       >
         <SearchResultsFacets :facets="aggregations" />
-      </BaseCard>
+      </MaxCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
         <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
-          <BaseListboxTest
+          <MaxAppListbox
             v-model="selectedSort"
             label="Sort By"
             :items="sortOptions"
           />
-          <BaseListboxTest
+          <MaxAppListbox
             v-model="selectedView"
             label="View"
             :items="viewOptions"
@@ -510,6 +510,7 @@ import {
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
+import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox";
 import ProductCard from "@/components/ProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
@@ -541,6 +542,7 @@ export default {
     ChevronUpIcon,
     ChevronUpDownIcon,
     XMarkIcon,
+    MaxAppListbox,
     ProductCard,
     ProductRestrictedLink,
     SearchResultsFacets,
@@ -670,7 +672,7 @@ export default {
       router.push({ name: "search", query: {} });
     };
 
-    /* 
+    /*
       - Takes a list of types (e.g: ['countries[]', 'regions[]']) and a list of list box items
       - 1) Looks in the route query if any of types are present there
       - 2) For each type found in the query, it loops through the values for that query property
@@ -783,35 +785,35 @@ export default {
           model: currentModel(regions),
           list: regions.items,
           types: regions.types,
-          component: "BaseCombobox",
+          component: "MaxCombobox",
         },
         issues: {
           label: "Counterterrorism and Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         reporting: {
           label: "Product Types",
           model: currentModel(reportings),
           list: reportings.items,
           types: reportings.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         classifications: {
           label: "Classifications",
           model: currentModel(classifications),
           list: classifications.items,
           types: classifications.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         media_types: {
           label: "Media Types",
           model: currentModel(mediaTypes),
           list: mediaTypes.items,
           types: mediaTypes.types,
-          component: "BaseListbox",
+          component: "MaxListbox",
         },
         // nonstate_actors: {
         //   label: "Non State Actors",
