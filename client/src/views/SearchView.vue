@@ -304,6 +304,11 @@
               label="View"
               :items="viewOptions"
             />
+            <MaxAppListbox
+              v-model="selectedResultCount"
+              label="Results Per Page"
+              :items="resultOptions"
+            />
           </div>
           <div
             v-show="
@@ -412,6 +417,11 @@
             v-model="selectedView"
             label="View"
             :items="viewOptions"
+          />
+          <MaxAppListbox
+            v-model="selectedResultCount"
+            label="Results Per Page"
+            :items="resultOptions"
           />
         </div>
         <div
@@ -523,6 +533,12 @@ const viewOptions = [
   { name: "List", key: "list" },
   { name: "Grid", key: "grid" },
   //{ label: "Visuals", key: "visuals" },
+];
+const resultOptions = [
+  { name: "5", key: 5 },
+  { name: "10", key: 10 },
+  { name: "25", key: 25 },
+  { name: "50", key: 50 },
 ];
 
 export default {
@@ -1121,6 +1137,20 @@ export default {
         ? viewOptions[2]
         : viewOptions[0]
     );
+    const getResultCount = (query) => {
+      let numResults;
+      if (query.per_page) {
+        numResults = resultOptions.find(
+          (result) => result.key == query.per_page
+        );
+        return numResults;
+      } else {
+        numResults = resultOptions[1];
+        return numResults;
+      }
+    };
+    const selectedResultCount = ref(getResultCount(route.query));
+
     const currentPage = ref(parseInt(route.query.page) || 1);
 
     const getImgUrl = (url) => {
@@ -1191,6 +1221,9 @@ export default {
               : route.query.view === "visuals"
               ? viewOptions[2]
               : viewOptions[0];
+          selectedResultCount.value = route.query.per_page
+            ? resultOptions.find((a) => a.key == route.query.per_page)
+            : selectedResultCount.value;
         }
       }
     );
@@ -1233,6 +1266,7 @@ export default {
       router.push({
         query,
       });
+      localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     watch([selectedView], () => {
@@ -1264,6 +1298,16 @@ export default {
           query,
         });
       }
+    });
+
+    watch([selectedResultCount], () => {
+      console.log("selectedResultCount watcher triggered.");
+      router.push({
+        query: {
+          ...route.query,
+          per_page: selectedResultCount.value.key,
+        },
+      });
     });
 
     const closeMobileFacetsDialog = () =>
@@ -1307,6 +1351,9 @@ export default {
       selectedSort,
       viewOptions,
       selectedView,
+      resultOptions,
+      selectedResultCount,
+      getResultCount,
       currentPage,
       getImgUrl,
       isMobileFacetsDialogOpen,

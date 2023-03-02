@@ -80,6 +80,8 @@ export default {
     const searches = computed(() => store.state.savedSearches.searches);
     const loading = computed(() => store.state.savedSearches.loading);
 
+    const lastSort = ref(localStorage.getItem("lastSort"));
+
     onMounted(() => {
       store.dispatch("savedSearches/getAllSearches");
     });
@@ -89,6 +91,11 @@ export default {
       () => {
         if (route.name === "search") {
           typeaheadRef.value.input = route.query.text;
+          if (route.query.sort_dir) {
+            localStorage.setItem("lastSort", route.query.sort_dir);
+          } else if (route.query.sort_field) {
+            localStorage.setItem("lastSort", route.query.sort_field);
+          }
         }
       }
     );
@@ -126,21 +133,69 @@ export default {
         text: e.target.value,
         type: "user",
       });
-      router.push({
-        name: "search",
-        query: {
-          text: e.target.value,
-        },
-      });
+      if (
+        localStorage.getItem("lastSort") === "asc" ||
+        localStorage.getItem("lastSort") === "desc"
+      ) {
+        router.push({
+          name: "search",
+          query: {
+            text: e.target.value,
+            per_page: 10,
+            sort_dir: localStorage.getItem("lastSort"),
+          },
+        });
+      } else if (localStorage.getItem("lastSort") === "score") {
+        router.push({
+          name: "search",
+          query: {
+            text: e.target.value,
+            per_page: 10,
+            sort_field: localStorage.getItem("lastSort"),
+          },
+        });
+      } else {
+        router.push({
+          name: "search",
+          query: {
+            text: e.target.value,
+            per_page: 10,
+          },
+        });
+      }
     };
 
     const onClickSearch = () => {
-      router.push({
-        name: "search",
-        query: {
-          text: typeaheadRef.value.input,
-        },
-      });
+      if (
+        localStorage.getItem("lastSort") === "asc" ||
+        localStorage.getItem("lastSort") === "desc"
+      ) {
+        router.push({
+          name: "search",
+          query: {
+            text: typeaheadRef.value.input,
+            per_page: 10,
+            sort_dir: localStorage.getItem("lastSort"),
+          },
+        });
+      } else if (localStorage.getItem("lastSort") === "score") {
+        router.push({
+          name: "search",
+          query: {
+            text: typeaheadRef.value.input,
+            per_page: 10,
+            sort_field: localStorage.getItem("lastSort"),
+          },
+        });
+      } else {
+        router.push({
+          name: "search",
+          query: {
+            text: typeaheadRef.value.input,
+            per_page: 10,
+          },
+        });
+      }
     };
 
     const deleteSearch = (item) => {
@@ -158,6 +213,7 @@ export default {
       onEnter,
       onClickSearch,
       deleteSearch,
+      lastSort,
     };
   },
 };
