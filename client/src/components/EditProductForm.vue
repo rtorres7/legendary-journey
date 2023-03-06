@@ -3,7 +3,7 @@
     <MaxCard class="mt-4">
       <div class="flex">
         <div
-          class="lg:min-w-[215px] p-6 border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+          class="lg:min-w-[215px] p-6 border-r border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
         >
           <div
             class="sticky top-[75px] lg:top-[125px] flex flex-col space-y-2 pr-6"

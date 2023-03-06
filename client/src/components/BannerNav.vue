@@ -508,7 +508,7 @@
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel
-                class="inline-block w-full fixed max-w-xs top-2 right-4 p-6 my-8 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg rounded-lg"
+                class="inline-block w-full fixed max-w-xs top-2 right-4 p-6 my-8 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-800 shadow-lg rounded-lg"
               >
                 <button
                   type="button"
@@ -556,7 +556,7 @@
                     <Listbox v-model="selectedTheme">
                       <div class="relative mt-1">
                         <ListboxButton
-                          class="flex items-center relative w-full p-2 text-left capitalize bg-white dark:bg-dark-navy energy:bg-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500"
+                          class="flex items-center relative w-full p-2 text-left capitalize bg-white dark:bg-slate-900 energy:bg-zinc-900 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500"
                         >
                           <template v-if="selectedTheme === 'dark'">
                             <MoonIcon class="h-6 w-6 mr-2" aria-hidden="true" />
@@ -588,7 +588,7 @@
                           />
                         </ListboxButton>
                         <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white dark:bg-dark-navy energy:bg-zinc-800 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                          class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white dark:bg-slate-900 energy:bg-zinc-900 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                         >
                           <ListboxOption
                             v-for="theme in themeOptions"

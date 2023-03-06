@@ -34,7 +34,7 @@
           <p class="text-sm mb-2 line-clamp-2">
             {{ sitrep.product_type_name }}
           </p>
-          <p class="line-clamp-2 font-medium">
+          <p class="line-clamp-2 font-medium" :title="sitrep.title">
             {{ sitrep.title }}
           </p>
         </div>

@@ -8,7 +8,7 @@
     <TheBanner v-if="!['attachment'].includes($route.name)" />
     <main
       role="main"
-      class="bg-white dark:bg-dark-navy energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
+      class="bg-white dark:bg-slate-900 energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
     >
       <div
         ref="mainContent"
