@@ -96,7 +96,7 @@
               <template #addons>
                 <Navigation
                   v-if="!loadingSitreps && sitreps.length > 0"
-                  class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-dark-navy dark:hover:text-dark-navy energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
+                  class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-slate-900 dark:hover:text-slate-900 energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
                 />
               </template>
             </Carousel>

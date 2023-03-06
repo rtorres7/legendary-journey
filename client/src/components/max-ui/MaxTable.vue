@@ -2,7 +2,7 @@
   <MaxCard>
     <!-- Top Pagination -->
     <div
-      class="px-4 py-3 flex items-center border-b border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
+      class="px-4 py-3 flex items-center border-b border-gray-200 dark:border-slate-700/50 energy:border-zinc-700/50"
     >
       <div class="flex-1 flex items-center justify-between">
         <div>

@@ -27,7 +27,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="inline-block w-full min-w-[300px] sm:min-w-[400px] lg:min-w-[500px] max-w-xs p-6 my-8 text-left text-sm md:text-base align-middle transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg rounded-lg"
+              class="inline-block w-full min-w-[300px] sm:min-w-[400px] lg:min-w-[500px] max-w-xs p-6 my-8 text-left text-sm md:text-base align-middle transition-all transform text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-800 energy:bg-zinc-800 shadow-lg rounded-lg"
             >
               <div class="pt-6">
                 <button
@@ -57,8 +57,8 @@
                             v-model="userAuthorizations[authorization]"
                             :class="
                               userAuthorizations[authorization]
-                                ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                                : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                                ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                                : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                             "
                             class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                           >
@@ -88,8 +88,8 @@
                           v-model="alertEnabled"
                           :class="
                             alertEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
                           class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
@@ -111,8 +111,8 @@
                           v-model="loadingMetadataEnabled"
                           :class="
                             loadingMetadataEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
                           class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
@@ -136,8 +136,8 @@
                           v-model="sampleImageEnabled"
                           :class="
                             sampleImageEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
                           class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
@@ -157,7 +157,7 @@
                         >Upload Your Own Product Image</label
                       >
                       <div
-                        class="rounded shadow-md text-xs md:text-sm bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
+                        class="rounded shadow-md text-xs md:text-sm bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
                       >
                         <label
                           for="image-input"
@@ -205,7 +205,7 @@
                         >Notification Toast</label
                       >
                       <button
-                        class="rounded shadow-md text-xs md:text-sm px-2 md:px-4 py-2 focus-within:ring-2 font-medium text-white dark:text-slate-300 energy:text-zinc-300 bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
+                        class="rounded shadow-md text-xs md:text-sm px-2 md:px-4 py-2 focus-within:ring-2 font-medium text-white dark:text-slate-300 energy:text-zinc-300 bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
                         @click="toggleNotificationToast"
                       >
                         Toggle
@@ -224,10 +224,10 @@
                         >Published Articles (max. 5)</label
                       >
                       <div
-                        class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-zinc-900/30"
+                        class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
                       >
                         <button
-                          class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
+                          class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-500 energy:hover:bg-zinc-500 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
                             changePublishedArticleCount(
                               publishedArticleCountFromStore - 1
@@ -242,7 +242,7 @@
                           {{ publishedArticleCountFromStore }}
                         </div>
                         <button
-                          class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-900/70 energy:hover:bg-zinc-900/50 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
+                          class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-500 energy:hover:bg-zinc-500 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
                             changePublishedArticleCount(
                               publishedArticleCountFromStore + 1
@@ -262,8 +262,8 @@
                           v-model="loadingPublishedArticlesEnabled"
                           :class="
                             loadingPublishedArticlesEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
                           class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
@@ -287,8 +287,8 @@
                           v-model="loadingSituationalAwarenessEnabled"
                           :class="
                             loadingSituationalAwarenessEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
                           class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
@@ -325,8 +325,8 @@
                           v-model="loadingResultsEnabled"
                           :class="
                             loadingResultsEnabled
-                              ? 'bg-mission-blue dark:bg-dark-navy energy:bg-slate-800'
-                              : 'bg-mission-blue/30 dark:bg-dark-navy/30 energy:bg-slate-800/30'
+                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
+                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
                           class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
                         >
