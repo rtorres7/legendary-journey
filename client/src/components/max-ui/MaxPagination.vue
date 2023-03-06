@@ -121,7 +121,7 @@ export default {
     },
     maxPerPage: {
       type: Number,
-      default: 50,
+      default: 10,
     },
     pages: {
       type: Number,
