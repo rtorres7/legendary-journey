@@ -326,6 +326,7 @@
           :totalCount="totalCount"
           :currentPage="currentPage"
           :isGrid="selectedView.name === 'Grid'"
+          :maxPerPage="selectedResultCount.key"
         >
           <template #default="{ item }">
             <div

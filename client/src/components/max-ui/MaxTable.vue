@@ -18,7 +18,11 @@
             results
           </p>
         </div>
-        <MaxPagination :totalCount="totalCount" :currentPage="currentPage" />
+        <MaxPagination
+          :totalCount="totalCount"
+          :currentPage="currentPage"
+          :maxPerPage="maxPerPage"
+        />
       </div>
     </div>
     <!-- Items -->
@@ -58,7 +62,11 @@
             results
           </p>
         </div>
-        <MaxPagination :totalCount="totalCount" :currentPage="currentPage" />
+        <MaxPagination
+          :totalCount="totalCount"
+          :currentPage="currentPage"
+          :maxPerPage="maxPerPage"
+        />
       </div>
     </div>
   </MaxCard>
@@ -81,7 +89,7 @@ export default {
     },
     maxPerPage: {
       type: Number,
-      default: 50,
+      default: 10,
     },
     isGrid: {
       type: Boolean,
