@@ -323,6 +323,31 @@
                         updateField($event, 'dissem_orgs', 'multiple')
                       "
                     />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.dissemOrgs" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'dissemOrgs')"
+                          >
+                            <span class="sr-only">Remove topic</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                     <p class="text-sm">
                       No selection disseminates to all
                       <span class="italic"
@@ -750,6 +775,20 @@ export default {
       payload.value["dissem_orgs"] = payloadOrgs;
     };
 
+    const updateToggleAllIntelOrgs = () => {
+      const allIntelOrgs = lists.dissemOrgs.filter(
+        (org) => org.category == "IC"
+      );
+      const isAllIntel = allIntelOrgs.every((org) =>
+        form.value.dissemOrgs.includes(org)
+      );
+      if (isAllIntel && form.value.dissemOrgs.length == allIntelOrgs.length) {
+        checkAllIntelOrgs.value = true;
+      } else {
+        checkAllIntelOrgs.value = false;
+      }
+    };
+
     const removeItem = (name, formItem) => {
       console.log(formItem, "selection removed");
       if (formItem === "countries") {
@@ -758,6 +797,11 @@ export default {
         );
       } else if (formItem === "topics") {
         form.value.topics = form.value.topics.filter((i) => i.name != name);
+      } else if (formItem === "dissemOrgs") {
+        form.value.dissemOrgs = form.value.dissemOrgs.filter(
+          (i) => i.name != name
+        );
+        updateToggleAllIntelOrgs();
       }
     };
 
@@ -811,6 +855,9 @@ export default {
             codes.push(option.code);
           });
           payload.value[property] = codes;
+          if (property === "dissem_orgs") {
+            updateToggleAllIntelOrgs();
+          }
           break;
         default:
           if (property === "product_type_id") {
@@ -1182,6 +1229,7 @@ export default {
       attachmentDrop,
       attachmentSelectedFile,
       toggleAllIntelOrgs,
+      updateToggleAllIntelOrgs,
       removeItem,
       updateField,
       updateSelectedDate,
