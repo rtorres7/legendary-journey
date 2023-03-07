@@ -795,13 +795,16 @@ export default {
         form.value.countries = form.value.countries.filter(
           (i) => i.name != name
         );
+        updateField(form.value.countries, "countries", "multiple");
       } else if (formItem === "topics") {
         form.value.topics = form.value.topics.filter((i) => i.name != name);
+        updateField(form.value.topics, "topics", "multiple");
       } else if (formItem === "dissemOrgs") {
         form.value.dissemOrgs = form.value.dissemOrgs.filter(
           (i) => i.name != name
         );
         updateToggleAllIntelOrgs();
+        updateField(form.value.dissemOrgs, "dissem_orgs", "multiple");
       }
     };
 
