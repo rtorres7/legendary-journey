@@ -5,6 +5,7 @@ var utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
 var Article = require("../models/articles");
+var Metadata = require("../models/metadata");
 
 const IndexService = require("../services/index.js");
 const indexService = new IndexService();
@@ -92,12 +93,11 @@ router.post("/", (req, res) => {
     if (error) {
       console.log(error);
     }
+    (async () => {
+      await indexService.create(article.indexable);
+    })();
     res.send(article);
   });
-
-  // (async () => {
-  //   await indexService.create(article.indexable);
-  // })();
 });
 
 // Fetch single post
@@ -115,7 +115,6 @@ router.get("/:id/edit", (req, res) => {
       article.date_published = dayjs(req.body.date_published).format(
         "YYYY-MM-DD"
       );
-      console.log("the date is ", article.date_published);
       res.send(article);
     }
   );
@@ -129,39 +128,87 @@ router.get("/:id/view", function (req, res) {
     res.send(article.data.details);
   });
 });
+function getCountriesByCodes(codes, metadata) {
+  const countries = metadata.criteria.countries.values;
+  const result = [];
+
+  for (const code of codes) {
+    const country = countries.find((c) => c.code === code);
+    if (country) {
+      result.push(country);
+    }
+  }
+
+  return result;
+}
+
+function getTopicsByCodes(codes, metadata) {
+  const topics = metadata.criteria.topics.values;
+  const result = [];
+
+  for (const code of codes) {
+    const topic = topics.find((c) => c.code === code);
+    if (topic) {
+      result.push(topic);
+    }
+  }
+
+  return result;
+}
+
+async function getMetadata() {
+  const metadata = await Metadata.findOne().lean();
+  return metadata;
+}
 
 // Update an article
 router.put("/:id", (req, res) => {
   var db = req.db;
 
-  var article = {
-    title: req.body.title,
-    summary: req.body.summary,
-    topics: req.body.topics,
-    countries: req.body.countries,
-    dissem_orgs: req.body.dissem_orgs,
-    poc_info: req.body.poc_info,
-    html_body: req.body.html_body,
-    publication_number: req.body.publication_number,
-    wire_id: req.body.wire_id,
-    date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
-    state: "draft",
-    product_type_id: req.body.product_type_id,
-  };
+  (async () => {
+    const metadata = await getMetadata();
+    const countries = getCountriesByCodes(req.body.countries, metadata);
+    const topics = getTopicsByCodes(req.body.topics, metadata);
 
-  Article.updateOne({ _id: req.params.id }, article, function (error, article) {
-    if (error) {
-      console.error(error);
-    }
-    res.send({
-      success: true,
-      article: article,
-      date: article.date_published,
-      doc_num: article._id,
-      id: article._id,
-      state: "draft",
-    });
-  });
+    var article = {
+      title: req.body.title,
+      summary: req.body.summary,
+      topics: topics,
+      countries: countries,
+      dissem_orgs: req.body.dissem_orgs,
+      poc_info: req.body.poc_info,
+      html_body: req.body.html_body,
+      publication_number: req.body.publication_number,
+      wire_id: req.body.wire_id,
+      date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
+      //state: "draft",
+      product_type_id: req.body.product_type_id,
+    };
+
+    Article.findByIdAndUpdate(
+      { _id: req.params.id },
+      article,
+      function (error, article) {
+        if (error) {
+          console.error(error);
+        }
+
+        console.error("the article is ", article);
+
+        (async () => {
+          var result = await indexService.create(article.indexable);
+          res.send({
+            success: true,
+            article: article,
+            date: article.date_published,
+            doc_num: article._id,
+            id: article._id,
+            state: "draft",
+          });
+        })();
+      }
+    );
+  })();
 });
 
 // Delete an article

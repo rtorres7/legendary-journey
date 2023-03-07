@@ -17,7 +17,12 @@ var ArticleSchema = new Schema(
     coi_level: Number,
     congress: Boolean,
     control_to: [],
-    countries: [],
+    countries: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     countries_fn: [],
     created_at: Date,
     created_by_id: String,
@@ -74,7 +79,10 @@ var ArticleSchema = new Schema(
     restriction: {},
     sources: [],
     "staged?": Boolean,
-    state: String,
+    state: {
+      type: String,
+      default: "draft",
+    },
     subregions: [],
     summary: String,
     summary_classif: String,
@@ -89,7 +97,12 @@ var ArticleSchema = new Schema(
     to_param: String,
     to_param_feature: String,
     to_param_wire: Date,
-    topics: [],
+    topics: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     topics_fn: [],
     type: String,
     uniqueReadership: Number,
