@@ -71,12 +71,14 @@
                 : 'line-clamp-2',
               'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium',
             ]"
+            :title="article.title"
           >
             {{ `(${article.title_classification}) ${article.title}` }}
           </h1>
           <p
             v-show="headline"
             class="hidden mt-3 text-md lg:line-clamp-2 xl:line-clamp-3"
+            :title="article.summary"
           >
             {{ `(${article.summary_classification}) ${article.summary}` }}
           </p>

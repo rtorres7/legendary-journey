@@ -24,7 +24,7 @@
             leave-to="-translate-x-full"
           >
             <DialogPanel
-              class="relative min-h-screen w-80 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg"
+              class="relative min-h-screen w-96 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-800 shadow-lg"
             >
               <button
                 type="button"

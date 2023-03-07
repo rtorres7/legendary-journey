@@ -67,7 +67,7 @@
                       <a
                         role="button"
                         tabindex="0"
-                        @click="openSecurityDialog"
+                        @click="openDialog(link.key)"
                         >{{ link.name }}</a
                       >
                     </template>

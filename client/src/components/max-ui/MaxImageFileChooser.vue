@@ -8,7 +8,7 @@
   </label>
   <div class="flex flex-col space-y-3">
     <div
-      class="min-h-[2rem] max-w-fit mt-1 rounded shadow-md text-xs md:text-sm bg-white dark:bg-dark-navy/30 energy:bg-zinc-900/30"
+      class="min-h-[2rem] max-w-fit mt-1 rounded shadow-md text-xs md:text-sm bg-white dark:bg-slate-600 energy:bg-zinc-900/30"
     >
       <label
         for="image-input"

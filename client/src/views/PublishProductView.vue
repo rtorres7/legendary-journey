@@ -17,14 +17,14 @@
     >
       <template #trigger>
         <MaxCard class="p-2 cursor-pointer">
-          <div class="flex items-center">
+          <button class="flex items-center">
             <CalendarIcon
               class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
             />
             <span class="pl-2 text-lg">
               {{ routeDate }}
             </span>
-          </div>
+          </button>
         </MaxCard>
       </template>
     </MaxDatepicker>

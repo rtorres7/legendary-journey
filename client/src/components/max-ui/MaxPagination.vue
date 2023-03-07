@@ -5,7 +5,7 @@
   >
     <ol class="inline-flex -space-x-px text-sm">
       <li
-        class="z-[5] hover:z-0 border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
+        class="z-[3] hover:z-0 border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
       >
         <div
           :class="[
@@ -32,7 +32,7 @@
         :key="n"
       >
         <li
-          class="z-[5] border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
+          class="z-[3] border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
         >
           <div
             :class="[
@@ -54,7 +54,7 @@
           </div>
         </li>
       </template>
-      <li class="z-[5] hover:z-0">
+      <li class="z-[3] hover:z-0">
         <div
           :class="[
             'h-full inline-flex items-center rounded-r-md px-4 py-2',
@@ -121,7 +121,7 @@ export default {
     },
     maxPerPage: {
       type: Number,
-      default: 50,
+      default: 10,
     },
     pages: {
       type: Number,

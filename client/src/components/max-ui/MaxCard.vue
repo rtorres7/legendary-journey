@@ -56,9 +56,9 @@ export default {
   @apply rounded-lg;
 }
 .default {
-  @apply bg-white dark:bg-slate-800/50 energy:bg-zinc-800/50;
+  @apply bg-white dark:bg-slate-800 energy:bg-zinc-800;
 }
 .alternate {
-  @apply bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-700/50;
+  @apply bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700;
 }
 </style>
