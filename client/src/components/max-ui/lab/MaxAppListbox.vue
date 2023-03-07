@@ -5,15 +5,12 @@
     as="div"
     class="inline-flex items-center"
   >
-    <ListboxLabel
-      v-if="label"
-      class="font-medium line-clamp-1 xl:line-clamp-none"
-    >
+    <ListboxLabel v-if="label" class="font-medium">
       {{ label }}
     </ListboxLabel>
     <div class="relative items-center ml-3">
       <ListboxButton
-        class="relative w-full min-h-[2.125rem] rounded-lg cursor-default pl-3 pr-10 text-left shadow-sm dark:shadow-none energy:shadow-none border border-slate-300 dark:border-none energy:border-none dark:bg-slate-800/50 energy:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+        class="relative w-full min-h-[2.125rem] rounded-lg cursor-default pl-3 pr-10 text-left shadow-sm dark:shadow-none energy:shadow-none border border-slate-300 dark:border-none energy:border-none dark:bg-slate-800 energy:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
       >
         <span class="block truncate" :class="multiple ? '' : 'capitalize'">{{
           displayValue(modelValue)

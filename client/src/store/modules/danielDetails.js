@@ -8,7 +8,6 @@ export default {
     document: {},
     loading: true,
   },
-
   actions: {
     getDanielArticlesDetails({ state, commit }, wantsPreview) {
       state.loading = true;

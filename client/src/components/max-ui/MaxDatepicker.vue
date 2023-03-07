@@ -88,7 +88,7 @@ export default {
 }
 
 .dark .dp__theme_light {
-  --dp-background-color: var(--color-slate-700);
+  --dp-background-color: var(--color-slate-800);
   --dp-text-color: var(--color-slate-300);
   --dp-hover-color: var(--color-slate-800);
   --dp-hover-text-color: var(--color-slate-300);
@@ -110,7 +110,7 @@ export default {
 }
 
 .energy .dp__theme_light {
-  --dp-background-color: var(--color-zinc-600);
+  --dp-background-color: var(--color-zinc-800);
   --dp-text-color: var(--color-zinc-300);
   --dp-hover-color: var(--color-zinc-700);
   --dp-hover-text-color: var(--color-zinc-300);

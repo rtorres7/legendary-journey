@@ -408,7 +408,7 @@
         <SearchResultsFacets :facets="aggregations" />
       </MaxCard>
       <div class="lg:hidden flex justify-between gap-4 py-4">
-        <div class="flex gap-y-4 sm:gap-y-0 sm:gap-x-4 flex-col sm:flex-row">
+        <div class="flex gap-y-4 md:gap-y-0 md:gap-x-4 flex-col md:flex-row">
           <MaxAppListbox
             v-model="selectedSort"
             label="Sort By"
@@ -426,7 +426,7 @@
           />
         </div>
         <div
-          class="cursor-pointer text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow self-center"
+          class="cursor-pointer text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow self-end md:self-center"
           @click="openMobileFacetsDialog"
         >
           Show Filters
