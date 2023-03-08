@@ -93,7 +93,10 @@
         </div>
         <p class="font-semibold text-sm lg:text-md uppercase">product</p>
         <h1 class="font-semibold text-2xl lg:text-3xl">
-          <span v-if="article.title_classif !== 'X'">
+          <span
+            v-if="article.title_classif !== 'X'"
+            class="text-gray-500 dark:text-gray-400 energy:text-gray-400"
+          >
             ({{ article.title_classif }})
           </span>
           <span>
