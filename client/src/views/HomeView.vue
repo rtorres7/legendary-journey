@@ -13,10 +13,10 @@
     >
       <!-- Main Section Sit. Awareness & Headline Container -->
       <div
-        class="h-[39rem] md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-[37rem]"
+        class="h-[39rem] md:h-full lg:pb-4 xl:pb-0 lg:flex xl:w-2/3 lg:h-[37rem]"
       >
         <div
-          class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:basis-1/3 lg:pr-4 lg:border-r xl:basis-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+          class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:w-1/3 lg:pr-4 lg:border-r xl:w-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
           <div class="flex flex-col h-full">
             <div class="hidden lg:block font-semibold mb-4">
@@ -108,7 +108,7 @@
           </div>
         </div>
         <div
-          class="py-4 lg:py-0 h-[425px] lg:h-full lg:basis-2/3 xl:basis-2/3 lg:pl-4 xl:pr-4"
+          class="py-4 lg:py-0 h-[425px] lg:h-full lg:w-2/3 xl:w-2/3 lg:pl-4 xl:pr-4"
         >
           <template v-if="loadingDanielArticles">
             <PublishedProductCard loading headline />
@@ -133,7 +133,7 @@
       </div>
       <!-- Main Section Published Articles -->
       <div
-        class="pt-4 xl:basis-1/3 xl:pt-0 border-t xl:border-t-0 xl:pl-4 xl:border-l border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+        class="pt-4 xl:w-1/3 xl:pt-0 border-t xl:border-t-0 xl:pl-4 xl:border-l border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
       >
         <!-- Only shows in screens smaller than XL -->
         <div class="block xl:hidden font-semibold mb-4">
