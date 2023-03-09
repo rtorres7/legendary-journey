@@ -28,7 +28,7 @@
         class="flex relative w-full rounded-lg cursor-default py-1 px-2 mt-1 border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
         :class="
           disabled
-            ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
+            ? 'bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700'
             : 'bg-transparent'
         "
         @change="query = $event.target.value"
