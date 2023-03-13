@@ -9,7 +9,6 @@ export default {
       state.loading = true;
       let theme = localStorage.getItem("theme");
       commit("importData", theme);
-      console.log(theme);
     },
     saveTheme({ state, commit }, selectedTheme) {
       state.loading = true;
