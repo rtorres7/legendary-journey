@@ -376,6 +376,8 @@ export default {
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
+    const theme = computed(() => store.state.localStorage.currentTheme);
+
     onMounted(() => {
       store.dispatch(
         "danielDetails/getDanielArticlesDetails",
@@ -383,6 +385,7 @@ export default {
       );
       store.dispatch("daniel/getDanielArticles");
       store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
+      store.dispatch("localStorage/getTheme");
     });
 
     watch([loadingArticle], () => {
@@ -400,6 +403,13 @@ export default {
           end: formatDate(metricEndDate.value),
         });
       }
+    });
+
+    watch([theme], () => {
+      store.dispatch("metrics/getMetrics", {
+        start: formatDate(metricStartDate.value),
+        end: formatDate(metricEndDate.value),
+      });
     });
 
     const buildNavigation = () => {
@@ -492,6 +502,7 @@ export default {
       canManageWire,
       url,
       canEditProduct,
+      theme,
     };
   },
 };
