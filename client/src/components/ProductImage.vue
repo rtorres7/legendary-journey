@@ -72,7 +72,7 @@ export default {
 
     const getImgUrl = (article) => {
       if (sampleImage.value) {
-        return require("@/assets/ukraine.jpg");
+        return new URL("@/assets/ukraine.jpg", import.meta.url).href;
       }
       if (uploadBinary.value) {
         return uploadBinary.value;

@@ -1,1 +1,3 @@
-export const metadata = require(`./${process.env.NODE_ENV}.metadata.json`)
+//export const metadata = `./${import.meta.env.MODE}.metadata.json`;
+import test from "./development.metadata.json";
+export const metadata = test;

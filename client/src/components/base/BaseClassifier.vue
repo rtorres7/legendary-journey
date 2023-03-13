@@ -3,8 +3,8 @@
 </template>
 <script>
 import { computed } from "vue";
-import Classifier from "@/components/Classifier";
-import HighClassifier from "@/components/high/Classifier";
+import Classifier from "@/components/Classifier.vue";
+import HighClassifier from "@/components/high/Classifier.vue";
 
 export default {
   components: {
@@ -13,7 +13,7 @@ export default {
   },
   setup() {
     const computedComponent = computed(() =>
-      process.env.NODE_ENV === "low" ? "Classifier" : "HighClassifier"
+      import.meta.env.MODE === "low" ? "Classifier" : "HighClassifier"
     );
     return {
       computedComponent,

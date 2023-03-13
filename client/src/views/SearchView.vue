@@ -780,10 +780,10 @@ import {
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import ProductCard from "@/components/ProductCard";
-import ProductRestrictedLink from "@/components/ProductRestrictedLink";
-import SearchResultsFacets from "@/components/SearchResultsFacets";
-import SearchResultsPagination from "@/components/SearchResultsPagination";
+import ProductCard from "@/components/ProductCard.vue";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
+import SearchResultsFacets from "@/components/SearchResultsFacets.vue";
+import SearchResultsPagination from "@/components/SearchResultsPagination.vue";
 const sortOptions = [
   { label: "Newest", key: "desc", type: "sort_dir" },
   { label: "Oldest", key: "asc", type: "sort_dir" },
@@ -1394,7 +1394,7 @@ export default {
     const currentPage = ref(parseInt(route.query.page) || 1);
 
     const getImgUrl = (url) => {
-      return require("@/assets/" + url);
+      return new URL("@/assets/" + url, import.meta.url).href;
     };
     const isMobileFacetsDialogOpen = ref(false);
 

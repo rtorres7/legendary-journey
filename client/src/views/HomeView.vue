@@ -206,9 +206,9 @@ import * as dayjs from "dayjs";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import ProductRestrictedLink from "@/components/ProductRestrictedLink";
-import PublishedProductCard from "@/components/PublishedProductCard";
-import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
+import PublishedProductCard from "@/components/PublishedProductCard.vue";
+import SituationalAwarenessCard from "@/components/SituationalAwarenessCard.vue";
 
 const carouselSettings = {
   itemsToShow: 1.75,

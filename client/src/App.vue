@@ -63,11 +63,11 @@ import { computed, onMounted, provide, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import useNotifications from "@/composables/notifications";
-import AuthorizatonWrapper from "@/components/AuthorizationWrapper";
-import ScrollToTopButton from "@/components/ScrollToTopButton";
-import TheBanner from "@/components/TheBanner";
-import TheFooter from "@/components/TheFooter";
-import ToastNotification from "@/components/ToastNotification";
+import AuthorizatonWrapper from "@/components/AuthorizationWrapper.vue";
+import ScrollToTopButton from "@/components/ScrollToTopButton.vue";
+import TheBanner from "@/components/TheBanner.vue";
+import TheFooter from "@/components/TheFooter.vue";
+import ToastNotification from "@/components/ToastNotification.vue";
 
 export default {
   components: {

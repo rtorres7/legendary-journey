@@ -526,10 +526,10 @@ import {
 } from "@/helpers";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
-import DropZone from "@/components/DropZone";
-import FilePreview from "@/components/FilePreview";
-import EditProductFormSection from "@/components/EditProductFormSection";
-import ProductView from "@/views/ProductView";
+import DropZone from "@/components/DropZone.vue";
+import FilePreview from "@/components/FilePreview.vue";
+import EditProductFormSection from "@/components/EditProductFormSection.vue";
+import ProductView from "@/views/ProductView.vue";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
@@ -930,7 +930,7 @@ export default {
     };
 
     const deleteDocument = () => {
-      if (process.env.NODE_ENV === "low") {
+      if (import.meta.env.MODE === "low") {
         createNotification({
           title: "Product Deleted",
           message: "The product has been deleted successfully.",
@@ -973,7 +973,7 @@ export default {
         );
       } else {
         publishingProduct.value = true;
-        if (process.env.NODE_ENV === "low") {
+        if (import.meta.env.MODE === "low") {
           setTimeout(() => {
             publishingProduct.value = false;
             createNotification({
@@ -1025,7 +1025,7 @@ export default {
 
     const saveProduct = () => {
       savingProduct.value = true;
-      if (process.env.NODE_ENV === "low") {
+      if (import.meta.env.MODE === "low") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
           product.value = mockDocument;

@@ -10,7 +10,7 @@ export default {
   actions: {
     getWireByDate({ state, commit }, date) {
       state.loading = true;
-      if (process.env.NODE_ENV === "low") {
+      if (import.meta.env.MODE === "low") {
         console.log("[store] getWireByDate: ", articlesForWire);
         setTimeout(() => commit("saveArticles", articlesForWire), 750);
       } else {
