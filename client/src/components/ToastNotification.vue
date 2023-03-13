@@ -4,16 +4,17 @@
     class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg px-5 py-[1.1rem] transition duration-300 ease-in-out"
     :style="`--toast-duration: ${duration}s`"
   >
-    <div
+    <button
       v-if="canClose"
       class="absolute top-4 right-4 flex items-center justify-center cursor-pointer"
       title="Close"
       @click="close"
     >
       <XMarkIcon class="h-5 w-5" aria-hidden="true" />
-    </div>
+    </button>
     <div class="flex gap-4 place-items-center">
       <div
+        id="icon-container"
         class="flex items-center h-12 pr-4 border-r border-slate-700/50 energy:border-zinc-700/50"
       >
         <component :is="toastIcon" :class="['h-8 w-8', toastColor]" />
@@ -52,10 +53,6 @@ export default {
     XMarkIcon,
   },
   props: {
-    id: {
-      type: Number,
-      required: true,
-    },
     type: {
       type: String,
       default: "info",
