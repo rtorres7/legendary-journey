@@ -36,7 +36,7 @@ export default {
   },
   actions: {
     loadMetadata({ commit }) {
-      if (process.env.NODE_ENV === "low") {
+      if (import.meta.env.MODE === "low") {
         console.log("[store] loadMetadata: ", metadata);
         setTimeout(() => commit("importMetadata", metadata), 750);
       } else {

@@ -10,7 +10,7 @@ export default {
   actions: {
     getDanielArticles({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "low") {
+      if (import.meta.env.MODE === "low") {
         console.log("[store] getDanielArticles: ", danielArticles);
         setTimeout(() => commit("saveArticles", danielArticles), 750);
       } else {

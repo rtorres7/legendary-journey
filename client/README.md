@@ -2,7 +2,7 @@
 
 # Requirements to run the project
 
-- Node + NPM (16.15.0 LTS - https://nodejs.org/en/)
+- Node + NPM (18.15.0 LTS - https://nodejs.org/en/)
 - Git (Windows Users - https://git-scm.com/downloads)
 
 # Required editor for development

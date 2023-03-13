@@ -88,7 +88,7 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
-import PaginationButton from "./PaginationButton";
+import PaginationButton from "./PaginationButton.vue";
 
 export default {
   components: {

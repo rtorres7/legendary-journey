@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination.vue";
 
 export default {
   components: {

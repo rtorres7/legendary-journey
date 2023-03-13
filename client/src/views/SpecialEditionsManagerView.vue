@@ -117,8 +117,8 @@
 <script>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import SpecialEditionLink from "@/components/SpecialEditionLink";
-import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
+import SpecialEditionLink from "@/components/SpecialEditionLink.vue";
+import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog.vue";
 
 export default {
   components: {
@@ -149,8 +149,8 @@ export default {
     };
 
     const getImgUrl = (link) => {
-      if (process.env.NODE_ENV === "low") {
-        return require("@/assets/ukraine_flag_70x70.png");
+      if (import.meta.env.MODE === "low") {
+        return new URL("@/assets/ukraine_flag_70x70.png", import.meta.url).href;
       }
       return link.image_path;
     };

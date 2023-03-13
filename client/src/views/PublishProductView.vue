@@ -224,7 +224,7 @@ import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
-import ProductImage from "@/components/ProductImage";
+import ProductImage from "@/components/ProductImage.vue";
 
 export default {
   components: {
@@ -315,7 +315,7 @@ export default {
         payload = { ...defaultPayload };
       }
       payload["wire_id"] = dayjs(selectedDate.value).format("YYYY-MM-DD");
-      if (process.env.NODE_ENV === "low") {
+      if (import.meta.env.MODE === "low") {
         router.push({
           name: "edit",
           params: {
