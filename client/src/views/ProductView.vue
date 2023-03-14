@@ -379,6 +379,8 @@ export default {
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
+    const theme = computed(() => store.getters["localStorage/theme"]);
+
     onMounted(() => {
       store.dispatch(
         "danielDetails/getDanielArticlesDetails",
@@ -403,6 +405,13 @@ export default {
           end: formatDate(metricEndDate.value),
         });
       }
+    });
+
+    watch([theme], () => {
+      store.dispatch("metrics/getMetrics", {
+        start: formatDate(metricStartDate.value),
+        end: formatDate(metricEndDate.value),
+      });
     });
 
     const buildNavigation = () => {
@@ -495,6 +504,7 @@ export default {
       canManageWire,
       url,
       canEditProduct,
+      theme,
     };
   },
 };
