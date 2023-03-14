@@ -314,8 +314,44 @@
                   </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
+                      v-model="form.coordinators"
+                      :label="'Coordinated With Organizations'"
+                      :items="lists.coordinators"
+                      multiple
+                      @update:modelValue="
+                        updateField($event, 'coordinators', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.coordinators" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'coordinators')"
+                          >
+                            <span class="sr-only">Remove topic</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
                       v-model="form.dissemOrgs"
-                      :label="'Restrict Dissemination by Organization'"
+                      :label="'Restrict Dissemination by Organizations'"
                       :items="lists.dissemOrgs"
                       aria-label="No selection disseminates to all (includes NT-50 Organizations)."
                       multiple
@@ -719,6 +755,7 @@ export default {
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
       dissemOrgs: criteria.value.dissem_orgs,
+      coordinators: criteria.value.coordinators,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -734,6 +771,7 @@ export default {
       classificationXML: "",
       countries: [],
       dissemOrgs: [],
+      coordinators: [],
       editorData: "",
       pocInfo: "",
       productType: [],
@@ -795,13 +833,21 @@ export default {
         form.value.countries = form.value.countries.filter(
           (i) => i.name != name
         );
+        updateField(form.value.countries, "countries", "multiple");
       } else if (formItem === "topics") {
         form.value.topics = form.value.topics.filter((i) => i.name != name);
+        updateField(form.value.topics, "topics", "multiple");
       } else if (formItem === "dissemOrgs") {
         form.value.dissemOrgs = form.value.dissemOrgs.filter(
           (i) => i.name != name
         );
         updateToggleAllIntelOrgs();
+        updateField(form.value.dissemOrgs, "dissem_orgs", "multiple");
+      } else if (formItem === "coordinators") {
+        form.value.coordinators = form.value.coordinators.filter(
+          (i) => i.name != name
+        );
+        updateField(form.value.coordinators, "coordinators", "multiple");
       }
     };
 

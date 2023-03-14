@@ -18,7 +18,7 @@
         class="relative w-full min-h-[2.125rem] rounded-lg cursor-default pl-3 pr-10 text-left border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
         :class="[
           disabled
-            ? 'bg-slate-100/80 dark:bg-slate-800 energy:bg-zinc-700'
+            ? 'bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700'
             : 'bg-transparent',
           label ? 'mt-1' : '',
         ]"
