@@ -755,6 +755,7 @@ export default {
         );
         document.documentElement.classList.add(localStorage.theme);
       }
+      store.dispatch("localStorage/saveTheme", selectedTheme.value);
     };
     watch(selectedTheme, (newTheme) => {
       changeTheme(newTheme);
