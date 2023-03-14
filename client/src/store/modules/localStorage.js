@@ -5,14 +5,15 @@ export default {
     loading: true,
   },
   actions: {
-    getTheme({ state, commit }) {
-      state.loading = true;
-      let theme = localStorage.getItem("theme");
-      commit("importData", theme);
-    },
     saveTheme({ state, commit }, selectedTheme) {
       state.loading = true;
       commit("importData", selectedTheme);
+    },
+  },
+
+  getters: {
+    theme: (state) => {
+      return state.currentTheme;
     },
   },
 

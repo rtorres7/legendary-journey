@@ -376,7 +376,7 @@ export default {
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
-    const theme = computed(() => store.state.localStorage.currentTheme);
+    const theme = computed(() => store.getters["localStorage/theme"]);
 
     onMounted(() => {
       store.dispatch(
@@ -385,7 +385,6 @@ export default {
       );
       store.dispatch("daniel/getDanielArticles");
       store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
-      store.dispatch("localStorage/getTheme");
     });
 
     watch([loadingArticle], () => {
