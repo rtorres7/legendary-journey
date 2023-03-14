@@ -20,6 +20,7 @@ export const mockDocument = {
   date_published: "",
   poc_info: "",
   publication_number: "",
+  coordinators: [],
   product_type_id: 10378,
   worldwide: null,
 };
