@@ -314,8 +314,56 @@
                   </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
+                      v-model="form.coordinators"
+                      :label="'Coordinated With Organizations'"
+                      :items="lists.coordinators"
+                      multiple
+                      @update:modelValue="
+                        updateField($event, 'coordinators', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.coordinators" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'coordinators')"
+                          >
+                            <span class="sr-only">Remove topic</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex">
+                      <input
+                        id="coordWith"
+                        v-model="checkAllCoordinators"
+                        type="checkbox"
+                        name="coordWith"
+                        @click="toggleAllCoordinators()"
+                      />
+                      <label for="coordWith" class="ml-2 text-sm"
+                        >Toggle All Coordinated With Organizations</label
+                      >
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
                       v-model="form.dissemOrgs"
-                      :label="'Restrict Dissemination by Organization'"
+                      :label="'Restrict Dissemination by Organizations'"
                       :items="lists.dissemOrgs"
                       aria-label="No selection disseminates to all (includes NT-50 Organizations)."
                       multiple
@@ -719,6 +767,7 @@ export default {
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
       dissemOrgs: criteria.value.dissem_orgs,
+      coordinators: criteria.value.coordinators,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -734,6 +783,7 @@ export default {
       classificationXML: "",
       countries: [],
       dissemOrgs: [],
+      coordinators: [],
       editorData: "",
       pocInfo: "",
       productType: [],
@@ -749,6 +799,7 @@ export default {
     });
     const payload = ref({});
     const checkAllIntelOrgs = ref(false);
+    const checkAllCoordinators = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
 
@@ -789,6 +840,33 @@ export default {
       }
     };
 
+    const toggleAllCoordinators = () => {
+      let payloadOrgs = [];
+      form.value.coordinators = [];
+      if (!checkAllCoordinators.value) {
+        lists.coordinators.forEach((org) => {
+          form.value.coordinators.push(org);
+          payloadOrgs.push(org.code);
+        });
+      }
+      payload.value["coordinators"] = payloadOrgs;
+    };
+
+    const updateToggleAllCoordinators = () => {
+      const allCoordinators = lists.coordinators;
+      const isAllCoordinators = allCoordinators.every((org) =>
+        form.value.coordinators.includes(org)
+      );
+      if (
+        isAllCoordinators &&
+        form.value.coordinators.length == allCoordinators.length
+      ) {
+        checkAllCoordinators.value = true;
+      } else {
+        checkAllCoordinators.value = false;
+      }
+    };
+
     const removeItem = (name, formItem) => {
       console.log(formItem, "selection removed");
       if (formItem === "countries") {
@@ -805,6 +883,12 @@ export default {
         );
         updateToggleAllIntelOrgs();
         updateField(form.value.dissemOrgs, "dissem_orgs", "multiple");
+      } else if (formItem === "coordinators") {
+        form.value.coordinators = form.value.coordinators.filter(
+          (i) => i.name != name
+        );
+        updateToggleAllCoordinators();
+        updateField(form.value.coordinators, "coordinators", "multiple");
       }
     };
 
@@ -1227,11 +1311,13 @@ export default {
       lists,
       form,
       checkAllIntelOrgs,
+      checkAllCoordinators,
       selectedPublicationDate,
       attachmentDropzoneFile,
       attachmentDrop,
       attachmentSelectedFile,
       toggleAllIntelOrgs,
+      toggleAllCoordinators,
       updateToggleAllIntelOrgs,
       removeItem,
       updateField,

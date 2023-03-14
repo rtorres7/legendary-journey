@@ -50,6 +50,7 @@ export default {
     const loadingProduct = ref(true);
     const product = ref({
       control_to: [],
+      coordinators: [],
       countries: [],
       dissem_orgs: [],
       images: [],
