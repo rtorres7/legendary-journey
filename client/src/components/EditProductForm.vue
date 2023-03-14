@@ -347,18 +347,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="flex">
-                      <input
-                        id="coordWith"
-                        v-model="checkAllCoordinators"
-                        type="checkbox"
-                        name="coordWith"
-                        @click="toggleAllCoordinators()"
-                      />
-                      <label for="coordWith" class="ml-2 text-sm"
-                        >Toggle All Coordinated With Organizations</label
-                      >
-                    </div>
                   </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
@@ -799,7 +787,6 @@ export default {
     });
     const payload = ref({});
     const checkAllIntelOrgs = ref(false);
-    const checkAllCoordinators = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
 
@@ -840,33 +827,6 @@ export default {
       }
     };
 
-    const toggleAllCoordinators = () => {
-      let payloadOrgs = [];
-      form.value.coordinators = [];
-      if (!checkAllCoordinators.value) {
-        lists.coordinators.forEach((org) => {
-          form.value.coordinators.push(org);
-          payloadOrgs.push(org.code);
-        });
-      }
-      payload.value["coordinators"] = payloadOrgs;
-    };
-
-    const updateToggleAllCoordinators = () => {
-      const allCoordinators = lists.coordinators;
-      const isAllCoordinators = allCoordinators.every((org) =>
-        form.value.coordinators.includes(org)
-      );
-      if (
-        isAllCoordinators &&
-        form.value.coordinators.length == allCoordinators.length
-      ) {
-        checkAllCoordinators.value = true;
-      } else {
-        checkAllCoordinators.value = false;
-      }
-    };
-
     const removeItem = (name, formItem) => {
       console.log(formItem, "selection removed");
       if (formItem === "countries") {
@@ -887,7 +847,6 @@ export default {
         form.value.coordinators = form.value.coordinators.filter(
           (i) => i.name != name
         );
-        updateToggleAllCoordinators();
         updateField(form.value.coordinators, "coordinators", "multiple");
       }
     };
@@ -1311,13 +1270,11 @@ export default {
       lists,
       form,
       checkAllIntelOrgs,
-      checkAllCoordinators,
       selectedPublicationDate,
       attachmentDropzoneFile,
       attachmentDrop,
       attachmentSelectedFile,
       toggleAllIntelOrgs,
-      toggleAllCoordinators,
       updateToggleAllIntelOrgs,
       removeItem,
       updateField,
