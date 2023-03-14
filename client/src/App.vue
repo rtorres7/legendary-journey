@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div
     ref="topOfApp"
@@ -10,6 +11,28 @@
       role="main"
       class="bg-white dark:bg-slate-900 energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
     >
+      <div v-if="!loadingAlerts && undismissedAlerts.length > 0">
+        <ul class="bg-orange-200 text-slate-900 py-4 px-10">
+          <template v-for="alert in undismissedAlerts" :key="alert">
+            <li
+              v-if="!alert.destroyed"
+              class="flex justify-between items-center pb-4 last:pb-0"
+            >
+              <div class="flex items-center">
+                <ExclamationCircleIcon class="h-6 w-6" aria-hidden="true" />
+                <div class="pl-4">
+                  <div class="font-semibold">{{ alert.title }}</div>
+                  <span v-html="alert.message"></span>
+                </div>
+              </div>
+              <button @click="storeDismissedAlertInCookie(alert)">
+                <span class="sr-only">Close</span>
+                <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+              </button>
+            </li>
+          </template>
+        </ul>
+      </div>
       <div
         ref="mainContent"
         class="max-w-8xl min-h-[80vh] md:min-h-[88vh] lg:min-h-[65vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
@@ -62,12 +85,15 @@
 import { computed, onMounted, provide, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import { useCookies } from "vue3-cookies";
+import { reject } from "lodash";
 import useNotifications from "@/composables/notifications";
 import AuthorizatonWrapper from "@/components/AuthorizationWrapper";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import TheBanner from "@/components/TheBanner";
 import TheFooter from "@/components/TheFooter";
 import ToastNotification from "@/components/ToastNotification";
+import { ExclamationCircleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -76,13 +102,23 @@ export default {
     TheBanner,
     TheFooter,
     ToastNotification,
+    ExclamationCircleIcon,
+    XMarkIcon,
   },
   setup() {
     const route = useRoute();
     const store = useStore();
+    const { cookies } = useCookies();
     const topOfApp = ref(null);
     const mainContent = ref(null);
     const loadingUser = computed(() => store.state.user.loading);
+    const loadingAlerts = computed(() => store.state.alerts.loading);
+    const alerts = computed(() => store.state.alerts.alerts);
+    const undismissedAlerts = computed(() => {
+      return reject(alerts.value, function (alert) {
+        return cookies.get("alert_" + alert.id);
+      });
+    });
 
     const {
       notifications,
@@ -103,6 +139,7 @@ export default {
     });
 
     onMounted(() => {
+      store.dispatch("alerts/loadAlerts");
       store.dispatch("user/loadUser");
       store.dispatch("metadata/loadMetadata");
       store.dispatch("specialEditions/loadConceptsLinks");
@@ -127,12 +164,19 @@ export default {
       }
     });
 
+    const storeDismissedAlertInCookie = (alert) => {
+      cookies.set("alert_" + alert.id, true, alert.expiresIn);
+      alert.destroyed = true;
+    };
+
     const skipToMain = () => {
       mainContent.value.focus();
     };
 
     return {
       loadingUser,
+      loadingAlerts,
+      undismissedAlerts,
       notifications,
       createNotification,
       removeNotifications,
@@ -141,6 +185,7 @@ export default {
       isLiveDemo,
       topOfApp,
       mainContent,
+      storeDismissedAlertInCookie,
       skipToMain,
     };
   },

@@ -17,6 +17,27 @@ export const user = {
   dn: "Sample DN",
 };
 
+export const alerts = {
+  alerts: [
+    {
+      id: 1,
+      title: "System Alert 1",
+      message: "this is a test message for a first alert",
+      expiresIn: 50964.292772868,
+      start_at: "2023-03-10T06:00:00.000-05:00",
+      end_at: "2023-04-02T23:59:00.000-04:00",
+    },
+    {
+      id: 2,
+      title: "System Alert 2",
+      message: "this is a test message for a second alert",
+      expiresIn: 50964.292772868,
+      start_at: "2023-03-13T06:00:00.000-05:00",
+      end_at: "2023-04-14T23:59:00.000-04:00",
+    },
+  ],
+};
+
 export { articles } from "./articles";
 export { danielArticles, articlesForWire } from "./danielArticles";
 export { countries, regions } from "./regions";
