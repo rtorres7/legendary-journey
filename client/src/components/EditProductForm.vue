@@ -932,6 +932,9 @@ export default {
         (country) => country.code
       );
       payload.value.topics = updatedProduct.topics.map((topic) => topic.code);
+      payload.value.coordinators = updatedProduct.coordinators.map(
+        (coordinator) => coordinator.code
+      );
     };
 
     const updateForm = (updatedProduct) => {
