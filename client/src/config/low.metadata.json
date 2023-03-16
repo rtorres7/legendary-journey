@@ -20,7 +20,7 @@
       "payload": {
         "title": "Daily Brief",
         "summary": "The Daily Brief summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -35,7 +35,7 @@
       "payload": {
         "title": "CT Digest",
         "summary": "The CT Digest summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -45,7 +45,7 @@
       "payload": {
         "title": "CT Weekly",
         "summary": "The CT Weekly summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -60,7 +60,7 @@
       "payload": {
         "title": "Reported Threats",
         "summary": "The Special Threat Matrix summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -70,7 +70,7 @@
       "payload": {
         "title": "SVTC Notes",
         "summary": "The SVTC Notes summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -80,7 +80,7 @@
       "payload": {
         "title": "Terrorism Digest",
         "summary": "The Terrorism Digest summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -90,7 +90,7 @@
       "payload": {
         "title": "Terrorism Summary",
         "summary": "The Terrorism summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -101,7 +101,7 @@
         "title": "Threat Matrix",
         "topics": ["TERR", "HSEC"],
         "summary": "The Threat Matrix summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     }
   ],

@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import alerts from "./modules/alerts";
 import articles from "./modules/articles";
 import daniel from "./modules/daniel";
 import search from "./modules/search";
@@ -26,6 +27,7 @@ export default createStore({
   actions: {},
   mutations: {},
   modules: {
+    alerts,
     articles,
     daniel,
     search,
