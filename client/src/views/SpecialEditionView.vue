@@ -25,9 +25,7 @@
           <MaxButton color="danger" @click.prevent="openDeleteDialog">
             Delete
           </MaxButton>
-          <MaxButton color="secondary" @click.prevent="openEditDialog">
-            Edit
-          </MaxButton>
+          <MaxButton @click.prevent="openEditDialog"> Edit </MaxButton>
         </template>
       </template>
     </div>

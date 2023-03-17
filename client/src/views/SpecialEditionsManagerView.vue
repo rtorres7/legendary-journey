@@ -13,9 +13,7 @@
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <MaxButton color="secondary" @click.prevent="openDialog">
-            Create
-          </MaxButton>
+          <MaxButton @click.prevent="openDialog"> Create </MaxButton>
         </template>
       </template>
     </div>
