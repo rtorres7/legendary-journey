@@ -513,7 +513,7 @@
               </EditProductFormSection>
             </div>
             <div
-              class="flex flex-wrap gap-4 justify-end py-6 px-8 bg-slate-50 dark:bg-slate-800/75 energy:bg-zinc-700/25"
+              class="flex flex-wrap gap-4 justify-end py-6 px-8 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
             >
               <MaxButton
                 color="secondary"

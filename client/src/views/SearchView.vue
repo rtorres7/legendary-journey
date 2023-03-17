@@ -84,7 +84,7 @@
               v-for="n in [queryFilters.regions, queryFilters.issues]"
               :key="n"
             >
-              <div class="lg:w-1/4">
+              <div class="lg:w-1/4 self-end">
                 <component
                   :is="n.component"
                   v-model="n.model"
