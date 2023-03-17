@@ -26,7 +26,7 @@ export const alerts = {
         "Maecenas eu diam ac diam mattis egestas id at lorem. Quisque pharetra quam in leo mollis, et hendrerit est lacinia. Sed condimentum, nunc vitae ullamcorper interdum, diam erat eleifend mi, lacinia vehicula ipsum ex nec nisl. Nulla nec dui porttitor turpis consequat sagittis.",
       expiresIn: 50964.292772868,
       start_at: "2023-03-10T06:00:00.000-05:00",
-      end_at: "2023-04-02T23:59:00.000-04:00",
+      end_at: "2023-12-02T23:59:00.000-04:00",
     },
     {
       id: 2,
@@ -35,7 +35,7 @@ export const alerts = {
         'ed dignissim bibendum leo, ut ullamcorper ligula porta eu. Sed at tristique sem. Donec ut enim eu tellus pretium porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque ut elementum ante. Nullam ac urna ex. Maecenas commodo odio id egestas condimentum. Morbi et orci ligula. Aenean sed pharetra leo. Donec lacinia feugiat justo eu cursus. <a href="https://www.google.com/">Click Here to find out more!</a>',
       expiresIn: 50964.292772868,
       start_at: "2023-03-13T06:00:00.000-05:00",
-      end_at: "2023-04-14T23:59:00.000-04:00",
+      end_at: "2023-12-14T23:59:00.000-04:00",
     },
   ],
 };
