@@ -1,7 +1,7 @@
 <template>
   <section
     :id="`${id}-section`"
-    class="flex flex-col space-y-8 pb-8 border-b border-slate-900/10 dark:border-slate-700/50 energy:border-zinc-700/50"
+    class="flex flex-col space-y-8 pb-8 last:pb-0 border-b last:border-b-0 border-slate-900/10 dark:border-slate-700/50 energy:border-zinc-700/50"
   >
     <div>
       <p class="font-medium text-xl">{{ title }}</p>

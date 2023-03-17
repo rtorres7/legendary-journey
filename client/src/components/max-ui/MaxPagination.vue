@@ -3,7 +3,7 @@
     class="hidden md:block rounded-md shadow-sm border border-slate-300 dark:border-slate-600 energy:border-zinc-600"
     aria-label="Pagination Navigation"
   >
-    <ol class="inline-flex -space-x-px text-sm">
+    <ol class="inline-flex -space-x-px text-sm items-center">
       <li
         class="z-[3] hover:z-0 border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
       >
