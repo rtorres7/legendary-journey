@@ -1,7 +1,11 @@
 <template>
   <!-- For configurable options, see https://vue3datepicker.com/ -->
   <!-- Do not use Vue Datepicker's Light/Dark mode feature, see styling below -->
-  <Datepicker :id="uuid" :clearable="false">
+  <Datepicker
+    :id="uuid"
+    :clearable="false"
+    :input-class-name="customStyle ? 'dp-custom-input' : ''"
+  >
     <template v-for="(_, name) in $slots" #[name]="slotData">
       <slot :name="name" v-bind="slotData" />
     </template>
@@ -16,6 +20,12 @@ import "@vuepic/vue-datepicker/dist/main.css";
 export default {
   components: {
     Datepicker,
+  },
+  props: {
+    customStyle: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const uuid = uniqueID().getID();
@@ -34,12 +44,15 @@ export default {
 .dp__input {
   font-family: "Inter", "system-ui";
   font-size: 0.9rem;
-  border: transparent;
-  cursor: default;
 }
 
 .dp__input_icons {
   font-size: 0.9rem;
+}
+
+.dp-custom-input {
+  border: transparent;
+  cursor: default;
 }
 
 .dp__menu {
