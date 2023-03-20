@@ -173,7 +173,7 @@
                 >{{ formatDate(article.date_published) }}
               </p>
               <p>
-                <span class="font-semibold">Dissem Orgs: </span>
+                <span class="font-semibold">Audience: </span>
                 <template
                   v-if="article.dissem_orgs && article.dissem_orgs?.length > 0"
                 >
