@@ -102,9 +102,7 @@
                     </div>
                   </div>
                   <div class="lg:w-1/3">
-                    <label
-                      class="text-sm font-medium"
-                      aria-label="Publication date required star. press enter to open the calendar widget."
+                    <label class="text-sm font-medium"
                       >Publication Date
                       <span class="sr-only">Required</span>
                       <span class="pl-1 text-red-500">*</span>
@@ -922,7 +920,6 @@ export default {
     };
 
     const updateSelectedDate = (model) => {
-      form.value.publicationDate = selectedPublicationDate;
       form.value.publicationDate = dayjs(model).format("YYYY-MM-DD");
       payload.value.date_published = form.value.publicationDate;
     };

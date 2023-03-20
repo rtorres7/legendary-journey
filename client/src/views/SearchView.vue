@@ -67,7 +67,7 @@
                         class="cursor-pointer hover:text-black dark:hover:text-white energy:hover:text-white h-9 w-9"
                       />
                       <span class="sr-only"
-                        >select a date from the calendar widget</span
+                        >select a date from the calendar</span
                       >
                     </button>
                   </template>

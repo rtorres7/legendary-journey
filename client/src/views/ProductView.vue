@@ -229,29 +229,33 @@
                 <p>Unique Readers ({{ metrics.uniqueReaders }})</p>
                 <div class="flex items-center">
                   <div class="flex flex-col">
-                    <label class="text-sm font-medium mb-1">Start Date</label>
-                    <MaxDatepicker
-                      v-model="metricStartDate"
-                      :minDate="article.display_date"
-                      :maxDate="new Date()"
-                      :enableTimePicker="false"
-                      format="dd MMMM yyyy"
-                      week-start="0"
-                      auto-apply
-                    />
+                    <label class="text-sm font-medium mb-1"
+                      >Start Date
+                      <MaxDatepicker
+                        v-model="metricStartDate"
+                        :minDate="article.display_date"
+                        :maxDate="new Date()"
+                        :enableTimePicker="false"
+                        format="dd MMMM yyyy"
+                        week-start="0"
+                        auto-apply
+                      />
+                    </label>
                   </div>
                   <p class="px-3 pt-4">to</p>
                   <div class="flex flex-col">
-                    <label class="text-sm font-medium mb-1">End Date</label>
-                    <MaxDatepicker
-                      v-model="metricEndDate"
-                      :minDate="article.display_date"
-                      :maxDate="new Date()"
-                      :enableTimePicker="false"
-                      format="dd MMMM yyyy"
-                      week-start="0"
-                      auto-apply
-                    />
+                    <label class="text-sm font-medium mb-1"
+                      >End Date
+                      <MaxDatepicker
+                        v-model="metricEndDate"
+                        :minDate="article.display_date"
+                        :maxDate="new Date()"
+                        :enableTimePicker="false"
+                        format="dd MMMM yyyy"
+                        week-start="0"
+                        auto-apply
+                      />
+                    </label>
                   </div>
                 </div>
                 <ProductMetrics :metrics="metrics.readership" />
