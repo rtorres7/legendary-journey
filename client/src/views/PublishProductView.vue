@@ -21,6 +21,7 @@
             <CalendarIcon
               class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
             />
+            <span class="sr-only">select a date from the calendar</span>
             <span class="pl-2 text-lg">
               {{ routeDate }}
             </span>
