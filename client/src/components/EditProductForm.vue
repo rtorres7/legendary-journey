@@ -111,6 +111,7 @@
                         :enableTimePicker="false"
                         week-start="0"
                         auto-apply
+                        customStyle
                         class="min-h-[2rem] flex w-full rounded-lg cursor-default px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus-within:ring-2 focus-within:ring-offset-2"
                         @update:modelValue="updateSelectedDate"
                       >
