@@ -173,8 +173,12 @@
                 >{{ formatDate(article.date_published) }}
               </p>
               <p v-if="article.dissem_orgs.length !== 0">
-                <span class="font-semibold">Dissem Orgs: </span>
+                <span class="font-semibold">Audience: </span>
                 {{ article.dissem_orgs.join(", ") }}
+              </p>
+              <p v-if="article.coordinators.length !== 0">
+                <span class="font-semibold">Coordinated With: </span>
+                {{ article.coordinators.join(", ") }}
               </p>
               <p>
                 <span class="font-semibold">Contact: </span
