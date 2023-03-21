@@ -172,9 +172,16 @@
                 <span class="font-semibold">Publication Date: </span
                 >{{ formatDate(article.date_published) }}
               </p>
-              <p v-if="article.dissem_orgs.length !== 0">
+              <p>
                 <span class="font-semibold">Audience: </span>
-                {{ article.dissem_orgs.join(", ") }}
+                <template
+                  v-if="article.dissem_orgs && article.dissem_orgs?.length > 0"
+                >
+                  {{ article.dissem_orgs.join(", ") }}
+                </template>
+                <template v-else>
+                  <span class="italic">Viewable to all.</span>
+                </template>
               </p>
               <p v-if="article.coordinators.length !== 0">
                 <span class="font-semibold">Coordinated With: </span>
