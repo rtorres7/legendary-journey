@@ -183,6 +183,10 @@
                   <span class="italic">Viewable to all.</span>
                 </template>
               </p>
+              <p v-if="article.coordinators.length !== 0">
+                <span class="font-semibold">Coordinated With: </span>
+                {{ article.coordinators.join(", ") }}
+              </p>
               <p>
                 <span class="font-semibold">Contact: </span
                 >{{ article.poc_info }}
