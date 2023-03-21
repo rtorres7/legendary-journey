@@ -19,6 +19,7 @@ export default {
 
     const createChart = () => {
       let root = am5.Root.new(chartdiv.value);
+      root._logo.dispose();
       let myTheme = am5.Theme.new(root);
 
       if (localStorage.getItem("theme") === "dark") {

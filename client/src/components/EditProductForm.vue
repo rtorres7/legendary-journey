@@ -101,23 +101,22 @@
                       />
                     </div>
                   </div>
-                  <div class="lg:w-1/4">
-                    <MaxDatepicker
-                      v-model="selectedPublicationDate"
-                      :enableTimePicker="false"
-                      week-start="0"
-                      auto-apply
-                      @update:modelValue="updateSelectedDate"
-                    >
-                      <template #trigger>
-                        <MaxInput
-                          v-model="form.publicationDate"
-                          label="Publication Date"
-                          type="text"
-                          required
-                        />
-                      </template>
-                    </MaxDatepicker>
+                  <div class="lg:w-1/3">
+                    <label class="text-sm font-medium"
+                      >Publication Date
+                      <span class="sr-only">Required</span>
+                      <span class="pl-1 text-red-500">*</span>
+                      <MaxDatepicker
+                        v-model="selectedPublicationDate"
+                        :enableTimePicker="false"
+                        week-start="0"
+                        auto-apply
+                        customStyle
+                        class="min-h-[2rem] flex w-full rounded-lg cursor-default px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus-within:ring-2 focus-within:ring-offset-2"
+                        @update:modelValue="updateSelectedDate"
+                      >
+                      </MaxDatepicker>
+                    </label>
                   </div>
                   <div
                     class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
