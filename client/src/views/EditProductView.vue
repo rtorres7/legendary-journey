@@ -51,6 +51,7 @@ export default {
     const product = ref({
       control_to: [],
       coordinators: [],
+      producing_offices: [],
       countries: [],
       dissem_orgs: [],
       images: [],
