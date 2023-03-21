@@ -313,6 +313,42 @@
                   </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
+                      v-model="form.producing_offices"
+                      :label="'Produced By'"
+                      :items="lists.producing_offices"
+                      multiple
+                      @update:modelValue="
+                        updateField($event, 'producing_offices', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.producing_offices" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'producing_offices')"
+                          >
+                            <span class="sr-only">Remove office</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
                       v-model="form.coordinators"
                       :label="'Coordinated With Organizations'"
                       :items="lists.coordinators"
@@ -337,7 +373,7 @@
                             tabindex="0"
                             @click="removeItem(org.name, 'coordinators')"
                           >
-                            <span class="sr-only">Remove topic</span>
+                            <span class="sr-only">Remove coordinator</span>
                             <XMarkIcon
                               class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                               aria-hidden="true"
@@ -374,7 +410,9 @@
                             tabindex="0"
                             @click="removeItem(org.name, 'dissemOrgs')"
                           >
-                            <span class="sr-only">Remove topic</span>
+                            <span class="sr-only"
+                              >Remove Dissemination org</span
+                            >
                             <XMarkIcon
                               class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                               aria-hidden="true"
@@ -754,6 +792,7 @@ export default {
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
       dissemOrgs: criteria.value.dissem_orgs,
+      producing_offices: criteria.value.producing_offices,
       coordinators: criteria.value.coordinators,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
@@ -771,11 +810,12 @@ export default {
       countries: [],
       dissemOrgs: [],
       coordinators: [],
+      producing_offices: [],
       editorData: "",
       pocInfo: "",
       productType: [],
       publicationDate: "",
-      //producingOffice: "DNI/NCTC",
+      //producing_office: "DNI/NCTC",
       summary: "",
       summaryClassificationXML: "",
       title: "",
@@ -847,6 +887,15 @@ export default {
           (i) => i.name != name
         );
         updateField(form.value.coordinators, "coordinators", "multiple");
+      } else if (formItem === "producing_offices") {
+        form.value.producing_offices = form.value.producing_offices.filter(
+          (i) => i.name != name
+        );
+        updateField(
+          form.value.producing_offices,
+          "producing_offices",
+          "multiple"
+        );
       }
     };
 
@@ -934,6 +983,9 @@ export default {
       payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
+      payload.value.producing_offices = updatedProduct.producing_offices.map(
+        (producing_office) => producing_office.code
+      );
     };
 
     const updateForm = (updatedProduct) => {
@@ -975,6 +1027,17 @@ export default {
         checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
+      const producing_officesToSelect = [];
+      updatedProduct.producing_offices.forEach(
+        (producing_officesFromBackend) => {
+          let producing_officesValue = getValueForCode(
+            lists.producing_offices,
+            producing_officesFromBackend.code
+          );
+          producing_officesToSelect.push(producing_officesValue);
+        }
+      );
+      form.value.producing_offices = producing_officesToSelect;
       form.value.productType = lists.productTypes.find(
         (productFromBackend) =>
           productFromBackend.code === updatedProduct.product_type_id
@@ -1150,7 +1213,7 @@ export default {
               analysis_type_id: 5,
               id: route.params.id,
               wire_id: route.params.date,
-              producing_office: "DNI/NCTC",
+              // producing_office: "DNI/NCTC",
               publication_date: route.params.date,
               ...payload.value,
             })
@@ -1201,7 +1264,7 @@ export default {
             analysis_type_id: 5,
             id: route.params.id,
             wire_id: route.params.date,
-            producing_office: "DNI/NCTC",
+            // producing_office: "DNI/NCTC",
             publication_date: route.params.date,
             ...payload.value,
           })
