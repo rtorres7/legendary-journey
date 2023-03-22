@@ -183,6 +183,10 @@
                   <span class="italic">Viewable to all.</span>
                 </template>
               </p>
+              <p v-if="article.producing_offices.length !== 0">
+                <span class="font-semibold">Produced By: </span>
+                {{ article.producing_offices.join(", ") }}
+              </p>
               <p v-if="article.coordinators.length !== 0">
                 <span class="font-semibold">Coordinated With: </span>
                 {{ article.coordinators.join(", ") }}
