@@ -4,7 +4,7 @@
  * For more information, check out https://ckeditor.com/docs/ckeditor5/latest/installation/advanced/content-styles.html
  */
 
- :root {
+:root {
   --ck-color-image-caption-background: hsl(0, 0%, 97%);
   --ck-color-image-caption-text: hsl(0, 0%, 20%);
   --ck-color-mention-background: hsla(341, 100%, 30%, 0.1);
@@ -248,7 +248,7 @@
   height: 100%;
   border: 1px solid hsl(0, 0%, 20%);
   border-radius: 2px;
-  transition: 250ms ease-in-out box-shadow, 250ms ease-in-out background, 
+  transition: 250ms ease-in-out box-shadow, 250ms ease-in-out background,
     250ms ease-in-out border;
 }
 /* ckeditor5-list/theme/todolist.css */
@@ -264,7 +264,7 @@
   height: calc(var(--ck-todo-list-checkmark-size) / 2.6);
   border-style: solid;
   border-color: transparent;
-  border-width: 0 calc(var(--ck-todo-list-checkmark-size) / 8) 
+  border-width: 0 calc(var(--ck-todo-list-checkmark-size) / 8)
     calc(var(--ck-todo-list-checkmark-size) / 8) 0;
   transform: rotate(45deg);
 }
@@ -463,25 +463,27 @@
 .ck-content h4 {
   font-size: 1.1em;
 }
-.ck-content p.info-box {
-  @apply shadow-md;
-  background-color: white;
+.ck-content p.info-box,
+.ck-content.info-box {
+  @apply border-4 border-slate-300;
   padding: 1.2em 2em;
   margin: 1.5em;
 }
-.dark .ck-content p.info-box {
-  @apply bg-slate-800;
+.dark .ck-content p.info-box,
+.dark .ck-content.info-box {
+  @apply border-slate-600;
 }
-.energy .ck-content p.info-box {
-  @apply bg-zinc-800;
+.energy .ck-content p.info-box,
+.energy .ck-content.info-box {
+  @apply border-zinc-600;
 }
 @media print {
   /* ckeditor5-page-break/theme/pagebreak.css */
   .ck-content .page-break {
-      padding: 0;
+    padding: 0;
   }
   /* ckeditor5-page-break/theme/pagebreak.css */
   .ck-content .page-break::after {
-      display: none;
+    display: none;
   }
 }

@@ -83,7 +83,7 @@
       class="py-6 px-4 flex flex-col-reverse lg:flex-row justify-between items-center"
     >
       <div class="flex items-center pt-6 lg:pt-0">
-        <div class="ml-4">
+        <div class="ml-4 flex flex-col">
           <router-link to="/">
             <img
               class="w-48"
@@ -91,6 +91,7 @@
               alt="NCTC seal. Link to top of the homepage"
             />
           </router-link>
+          <span class="text-xs self-end mb-2">{{ version }}</span>
           <p class="text-slate-300 energy:text-zinc-300 text-sm italic">
             {{ metadata.footer_note }}
           </p>
@@ -214,6 +215,7 @@ export default {
     const isMissionDialogOpen = ref(false);
     const isSecurityDialogOpen = ref(false);
     const isFAQDialogOpen = ref(false);
+    const version = `v${process.env.VUE_APP_VERSION}`;
 
     const closeMissionDialog = () => {
       isMissionDialogOpen.value = false;
@@ -250,6 +252,7 @@ export default {
       closeSecurityDialog,
       closeFAQDialog,
       openDialog,
+      version,
     };
   },
 };
