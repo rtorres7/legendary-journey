@@ -1582,13 +1582,6 @@ export const metadata = {
         },
       ],
     },
-    // producing_offices: {
-    //   displayName: "Producing Offices",
-    //   values: [
-    //     "The Center",
-    //     [["Africa", "China", "Russia"], ["Test 1", "Test 2", "Test 3"]]
-    //   ]
-    // },
     producing_offices: [
       {
         ancestry: "1000",
