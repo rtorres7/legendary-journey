@@ -230,15 +230,14 @@ export default {
   font-size: 0.9em;
 }
 .ck.ck-content p.info-box {
-  @apply shadow-md;
-  background-color: white;
+  @apply border-2 border-slate-300;
   padding: 1.2em 2em;
   margin: 1.5em;
 }
 .dark .ck.ck-content p.info-box {
-  @apply bg-slate-800;
+  @apply border-slate-600;
 }
 .energy .ck.ck-content p.info-box {
-  @apply bg-zinc-800;
+  @apply border-zinc-600;
 }
 </style>
