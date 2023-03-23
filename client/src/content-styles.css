@@ -463,16 +463,18 @@
 .ck-content h4 {
   font-size: 1.1em;
 }
-.ck-content p.info-box {
-  @apply border-2 border-slate-300;
+.ck-content p.info-box,
+.ck-content.info-box {
+  @apply border-2 border-slate-300 shadow-md;
   padding: 1.2em 2em;
   margin: 1.5em;
 }
 .dark .ck-content p.info-box {
   @apply border-slate-600;
 }
-.energy .ck-content p.info-box {
-  @apply border-zinc-600;
+.energy .ck-content p.info-box,
+.energy .ck-content.info-box {
+  @apply border-zinc-300;
 }
 @media print {
   /* ckeditor5-page-break/theme/pagebreak.css */
