@@ -150,8 +150,8 @@
                 <template
                   v-for="n in [
                     queryFilters.media_types,
+                    queryFilters.producing_offices,
                     // queryFilters.nonstate_actors,
-                    // queryFilters.producing_offices,
                     // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
@@ -576,7 +576,6 @@ export default {
 
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
-    const producingOfficesList = [{ name: "DNI/NCTC", code: "DNI/NCTC" }];
     const loadingResults = computed(() => store.state.search.loading);
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
@@ -794,6 +793,13 @@ export default {
         items: buildItems(criteria.value.media_tags, "media_tags[]"),
         types: ["media_tags[]"],
       };
+      const producingOffices = {
+        items: buildItems(
+          criteria.value.producing_offices,
+          "producing_offices[]"
+        ),
+        types: ["producing_offices[]"],
+      };
       // const nonStateActors = {
       //   items: buildItems(
       //     criteria.value.non_state_actors,
@@ -843,12 +849,13 @@ export default {
         //   list: nonStateActors.items,
         //   types: nonStateActors.types,
         // },
-        // producing_offices: {
-        //   label: "Producing Offices",
-        //   model: currentModel(producingOffices),
-        //   list: producingOffices.items,
-        //   types: producingOffices.types,
-        // },
+        producing_offices: {
+          label: "Producing Offices",
+          model: currentModel(producingOffices),
+          list: producingOffices.items,
+          types: producingOffices.types,
+          component: "MaxListbox",
+        },
         // frontpage_featured: {
         //   label: "Front Page Featured",
         //   model: [],
@@ -893,7 +900,7 @@ export default {
         case "product_types[]":
           return criteria.value.product_types;
         case "producing_offices[]":
-          return producingOfficesList;
+          return criteria.value.producing_offices;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":

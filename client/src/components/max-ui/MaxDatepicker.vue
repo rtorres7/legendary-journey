@@ -78,6 +78,9 @@ export default {
 
 .dp__main {
   font-family: "Inter", "system-ui";
+  > div {
+    display: flex;
+  }
 }
 
 .dp__theme_light {
