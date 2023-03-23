@@ -2,6 +2,7 @@ const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
 const CKEditorWebpackPlugin = require("@ckeditor/ckeditor5-dev-webpack-plugin");
 const { styles } = require("@ckeditor/ckeditor5-dev-utils");
+process.env.VUE_APP_VERSION = require("./package.json").version;
 
 module.exports = defineConfig({
   transpileDependencies: [/ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/],
