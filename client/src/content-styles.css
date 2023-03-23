@@ -465,16 +465,17 @@
 }
 .ck-content p.info-box,
 .ck-content.info-box {
-  @apply border-2 border-slate-300 shadow-md;
+  @apply border-4 border-slate-300 shadow-lg;
   padding: 1.2em 2em;
   margin: 1.5em;
 }
-.dark .ck-content p.info-box {
+.dark .ck-content p.info-box,
+.dark .ck-content.info-box {
   @apply border-slate-600;
 }
 .energy .ck-content p.info-box,
 .energy .ck-content.info-box {
-  @apply border-zinc-300;
+  @apply border-zinc-600;
 }
 @media print {
   /* ckeditor5-page-break/theme/pagebreak.css */

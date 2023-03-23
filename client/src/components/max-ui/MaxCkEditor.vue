@@ -230,7 +230,7 @@ export default {
   font-size: 0.9em;
 }
 .ck.ck-content p.info-box {
-  @apply border-2 border-slate-300;
+  @apply border-4 border-slate-300 shadow-lg;
   padding: 1.2em 2em;
   margin: 1.5em;
 }
