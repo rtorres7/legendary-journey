@@ -36,6 +36,14 @@ export const isProductLocked = (product) => {
   return !isEmpty(product.needed) || product.org_restricted;
 };
 
+export const hasProductAccess = (product) => {
+  let hasAccess = true;
+  if (product.status === 403) {
+    hasAccess = false;
+  }
+  return hasAccess;
+};
+
 export const hasProductImage = (product) => {
   let hasImage = true;
   if (isEmpty(product.images)) {

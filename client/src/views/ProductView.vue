@@ -290,7 +290,7 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { formatDate } from "@/helpers";
+import { formatDate, hasProductAccess } from "@/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -406,7 +406,12 @@ export default {
         props.wantsPreview
       );
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
+      if (hasProductAccess(article)) {
+        store.dispatch(
+          "relatedProducts/getRelatedDocuments",
+          props.wantsPreview
+        );
+      }
     });
 
     watch([loadingArticle], () => {

@@ -9,9 +9,9 @@
       You don't have access to this page.
     </p>
     <p class="font-light mt-6">
-      The page you are trying to access is limited to to users with special
-      privileges. If you reached this page from another part of the site, please
-      contact us so we can correct the problem.
+      The page you are attempting to access is limited to users
+      {{ userAccess() }}. If you reached this page from another part of the
+      site, please contact us to correct the problem.
     </p>
     <br />
     <p>NCTC/DI Managing Editor, NCTC Current</p>
@@ -42,14 +42,39 @@
 <script>
 import { metadata } from "@/config";
 import { EnvelopeIcon } from "@heroicons/vue/24/outline";
+import { hasProductAccess } from "@/helpers";
 
 export default {
   components: {
     EnvelopeIcon,
   },
-  setup() {
+  props: {
+    article: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  setup(props) {
+    const userAccess = () => {
+      if (!hasProductAccess(props.article)) {
+        let document = props.article.document;
+        if (
+          document.org_restricted &&
+          document.needed.orgs &&
+          document.needed.orgs?.length > 0
+        ) {
+          return `affiliated with ${
+            document.needed.orgs.slice(0, -1).join(", ") +
+            " and " +
+            document.needed.orgs.slice(-1)
+          }`;
+        }
+      }
+      return "who have the required accesses";
+    };
     return {
       metadata,
+      userAccess,
     };
   },
 };
