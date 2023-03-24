@@ -290,7 +290,7 @@
 
 <script>
 import * as dayjs from "dayjs";
-import { formatDate, hasProductAccess } from "@/helpers";
+import { formatDate } from "@/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -406,16 +406,14 @@ export default {
         props.wantsPreview
       );
       store.dispatch("daniel/getDanielArticles");
-      if (hasProductAccess(article)) {
-        store.dispatch(
-          "relatedProducts/getRelatedDocuments",
-          props.wantsPreview
-        );
-      }
     });
 
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== "product-preview") {
+        store.dispatch(
+          "relatedProducts/getRelatedDocuments",
+          props.wantsPreview
+        );
         document.title = article.value.title;
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
@@ -498,10 +496,6 @@ export default {
             props.wantsPreview
           );
           store.dispatch("daniel/getDanielArticles");
-          store.dispatch(
-            "relatedProducts/getRelatedDocuments",
-            props.wantsPreview
-          );
         }
       }
     );
