@@ -139,7 +139,7 @@
                       {{ article.title }}
                     </h4>
                   </router-link>
-                  <div class="text-sm break-all">
+                  <div class="text-sm wrap_anywhere">
                     <p
                       class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
                     >
@@ -150,7 +150,7 @@
                       |
                       <span class="pl-1">{{ article.doc_num }}</span>
                     </p>
-                    <p class="line-clamp-5 md:line-clamp-3 break-all">
+                    <p class="line-clamp-5 md:line-clamp-3 wrap_anywhere">
                       {{
                         article.summary_classif &&
                         article.summary_classif !== "X"
@@ -407,4 +407,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.wrap_anywhere {
+  overflow-wrap: anywhere;
+}
+</style>

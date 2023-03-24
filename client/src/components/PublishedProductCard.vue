@@ -131,7 +131,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .wrap_anywhere {
   overflow-wrap: anywhere;
 }
