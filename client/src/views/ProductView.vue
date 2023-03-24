@@ -92,7 +92,7 @@
           {{ article.classification }}
         </div>
         <p class="font-semibold text-sm lg:text-md uppercase">product</p>
-        <h1 class="font-semibold text-2xl lg:text-3xl">
+        <h1 class="font-semibold text-2xl lg:text-3xl wrap_anywhere">
           <span
             v-if="article.title_classif !== 'X'"
             class="text-slate-500 dark:text-slate-400 energy:text-zinc-400"
@@ -128,7 +128,7 @@
             :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
             class="h-[350px] w-[350px] float-right"
           /> -->
-          <p v-if="article.html_body" class="whitespace-pre-line">
+          <p v-if="article.html_body" class="whitespace-pre-line wrap_anywhere">
             <span class="ck-content summary" v-html="article.html_body" />
           </p>
         </div>
@@ -544,5 +544,9 @@ export default {
 
 ::v-deep .source-reference {
   @apply hidden align-top;
+}
+
+.wrap_anywhere {
+  overflow-wrap: anywhere;
 }
 </style>
