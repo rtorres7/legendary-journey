@@ -23,9 +23,10 @@ export default {
     const route = useRoute();
     const article = computed(() => store.state.danielDetails.document);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
+    const organization = computed(() => store.getters["user/organization"]);
 
     const authorized = computed(() => {
-      if (!hasProductAccess(article)) {
+      if (!hasProductAccess(article.value, organization.value)) {
         return false;
       }
       if (

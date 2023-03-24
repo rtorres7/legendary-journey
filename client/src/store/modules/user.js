@@ -28,6 +28,9 @@ export default {
       }
       return false;
     },
+    organization: (state) => {
+      return state.user.organization;
+    },
     isCommunityExclusive: (state) => {
       if (
         state.user.authorizations.canManageWire &&

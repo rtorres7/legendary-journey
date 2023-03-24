@@ -56,19 +56,20 @@ export default {
   },
   setup(props) {
     const userAccess = () => {
-      if (!hasProductAccess(props.article)) {
+      if (props.article.status === 403) {
         let document = props.article.document;
-        if (
-          document.org_restricted &&
-          document.needed.orgs &&
-          document.needed.orgs?.length > 0
-        ) {
-          return `affiliated with ${
-            document.needed.orgs.slice(0, -1).join(", ") +
-            " and " +
-            document.needed.orgs.slice(-1)
-          }`;
-        }
+        return `affiliated with ${
+          document.needed.orgs.slice(0, -1).join(", ") +
+          " and " +
+          document.needed.orgs.slice(-1)
+        }`;
+      }
+      if (!hasProductAccess(props.article)) {
+        return `affiliated with ${
+          props.article.needed.orgs.slice(0, -1).join(", ") +
+          " and " +
+          props.article.needed.orgs.slice(-1)
+        }`;
       }
       return "who have the required accesses";
     };
