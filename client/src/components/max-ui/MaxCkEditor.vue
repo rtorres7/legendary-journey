@@ -203,6 +203,7 @@ export default {
 <style>
 .ck-editor__editable_inline {
   height: 450px;
+  overflow-wrap: anywhere;
 }
 .ck.ck-content ol,
 .ck.ck-content ul {

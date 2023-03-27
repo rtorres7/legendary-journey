@@ -69,7 +69,7 @@
               headline
                 ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
                 : 'line-clamp-2',
-              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium break-words',
+              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere',
             ]"
             :title="article.title"
           >
@@ -77,7 +77,7 @@
           </h1>
           <p
             v-show="headline"
-            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 break-words"
+            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
             :title="article.summary"
           >
             {{ `(${article.summary_classification}) ${article.summary}` }}
