@@ -22,13 +22,13 @@
     <template v-if="loading">
       <div
         :class="[
-          headline ? 'h-3/5' : 'h-2/3',
+          headline ? 'h-[45%]' : 'h-2/3',
           'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700',
         ]"
       ></div>
       <div
         :class="[
-          headline ? 'h-2/5 pt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
+          headline ? 'h-[55%] pt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
           'flex flex-col justify-between ',
         ]"
       >
@@ -54,20 +54,20 @@
     </template>
     <template v-else>
       <ProductImage
-        :class="[headline ? 'h-3/5' : 'h-2/3']"
+        :class="[headline ? 'h-[45%]' : 'h-2/3']"
         :article="article"
       />
       <div
         :class="[
-          headline ? 'h-2/5' : 'h-1/3',
-          'relative flex flex-col justify-between pt-2 px-4',
+          headline ? 'h-[55%] pt-4' : 'h-1/3 pt-2',
+          'relative flex flex-col justify-between px-4',
         ]"
       >
         <div>
           <h1
             :class="[
               headline
-                ? 'text-lg line-clamp-4 md:line-clamp-3'
+                ? 'text-lg md:text-xl line-clamp-5 md:line-clamp-4 lg:line-clamp-3'
                 : 'line-clamp-2',
               'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium break-words',
             ]"
