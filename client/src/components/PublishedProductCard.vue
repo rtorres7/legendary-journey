@@ -41,7 +41,7 @@
           ></h1>
           <p
             v-show="headline"
-            class="hidden lg:block mt-4 h-12 xl:h-16 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
+            class="hidden md:block mt-4 h-12 xl:h-16 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
           ></p>
         </div>
         <p
@@ -67,7 +67,7 @@
           <h1
             :class="[
               headline
-                ? 'text-lg md:text-xl line-clamp-5 md:line-clamp-4 lg:line-clamp-3'
+                ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
                 : 'line-clamp-2',
               'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium break-words',
             ]"
@@ -77,7 +77,7 @@
           </h1>
           <p
             v-show="headline"
-            class="hidden mt-3 text-md lg:line-clamp-2 xl:line-clamp-3 break-words"
+            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 break-words"
             :title="article.summary"
           >
             {{ `(${article.summary_classification}) ${article.summary}` }}
@@ -86,7 +86,7 @@
         <p
           :class="[
             headline ? '' : 'xl:mt-1',
-            'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
+            'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
           ]"
         >
           {{ formatDate(article.date_published) }}

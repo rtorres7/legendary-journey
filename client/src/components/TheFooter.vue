@@ -84,14 +84,18 @@
     >
       <div class="flex items-center pt-6 lg:pt-0">
         <div class="ml-4 flex flex-col">
-          <router-link to="/">
-            <img
-              class="w-48"
-              src="@/assets/nctc_logo.svg"
-              alt="NCTC seal. Link to top of the homepage"
-            />
-          </router-link>
-          <span class="text-xs self-end mb-2">{{ version }}</span>
+          <div class="relative">
+            <router-link to="/">
+              <img
+                class="w-48"
+                src="@/assets/nctc_logo.svg"
+                alt="NCTC seal. Link to top of the homepage"
+              />
+            </router-link>
+            <span class="absolute text-xs top-0 right-0 mt-[.33rem]">{{
+              version
+            }}</span>
+          </div>
           <p class="text-slate-300 energy:text-zinc-300 text-sm italic">
             {{ metadata.footer_note }}
           </p>
