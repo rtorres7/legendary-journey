@@ -15,7 +15,7 @@
             <span class="uppercase text-sm">Locked</span>
           </div>
         </template>
-        <div class="wrap_anywhere">
+        <div class="wrap-anywhere">
           <span
             class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
             >{{ `${"(" + article.title_classification + ") "}` }}</span
@@ -86,8 +86,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-.wrap_anywhere {
-  overflow-wrap: anywhere;
-}
-</style>
+<style scoped lang="scss"></style>
