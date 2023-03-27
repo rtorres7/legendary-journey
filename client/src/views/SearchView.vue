@@ -368,7 +368,7 @@
                 </template>
                 <div class="flex justify-between">
                   <div
-                    class="basis-[768px] hover:underline"
+                    class="basis-[768px] hover:underline wrap-anywhere"
                     :class="isProductLocked(item) ? '' : 'cursor-pointer'"
                   >
                     <ProductRestrictedLink :product="item">
@@ -388,7 +388,7 @@
                   </div>
                 </div>
                 <div
-                  class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300"
+                  class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300 wrap-anywhere"
                 >
                   <template v-if="showHighlightedResult()">
                     <span v-html="item.highlighted_result" />

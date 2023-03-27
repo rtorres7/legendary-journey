@@ -74,4 +74,9 @@
   .summary ul {
     padding-left: 3em;
   }
+
+  /* for ensuring word breaks to stop content from overflowing */
+  .wrap-anywhere {
+    overflow-wrap: anywhere;
+  }
 }
