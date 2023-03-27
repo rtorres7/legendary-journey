@@ -15,7 +15,7 @@
             <span class="uppercase text-sm">Locked</span>
           </div>
         </template>
-        <div>
+        <div class="wrap-anywhere">
           <span
             class="text-slate-600 dark:text-slate-300 energy:text-zinc-300"
             >{{ `${"(" + article.title_classification + ") "}` }}</span

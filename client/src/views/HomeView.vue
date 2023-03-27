@@ -12,9 +12,7 @@
       class="flex flex-col lg:block xl:flex xl:flex-row xl:max-h-max h-full xl:h-[37rem]"
     >
       <!-- Main Section Sit. Awareness & Headline Container -->
-      <div
-        class="h-[39rem] md:h-full lg:pb-4 xl:pb-0 lg:flex xl:w-2/3 lg:h-[37rem]"
-      >
+      <div class="md:h-full lg:pb-4 xl:pb-0 lg:flex xl:w-2/3 lg:h-[37rem]">
         <div
           class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:w-1/3 lg:pr-4 lg:border-r xl:w-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
@@ -108,7 +106,7 @@
           </div>
         </div>
         <div
-          class="py-4 lg:py-0 h-[425px] lg:h-full lg:w-2/3 xl:w-2/3 lg:pl-4 xl:pr-4"
+          class="py-4 lg:py-0 h-[475px] md:h-[600px] lg:h-full lg:w-2/3 xl:w-2/3 lg:pl-4 xl:pr-4"
         >
           <template v-if="loadingDanielArticles">
             <PublishedProductCard loading headline />
@@ -140,11 +138,11 @@
           More Published Products
         </div>
         <div
-          class="flex flex-col md:flex-row xl:flex-col h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
+          class="flex flex-col md:flex-row xl:flex-col justify-between h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
         >
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <div class="w-full h-[288px]">
+              <div class="w-full h-[288px] md:max-w-[575px]">
                 <PublishedProductCard :loading="true" />
               </div>
             </template>
@@ -154,7 +152,7 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="w-full h-[288px] max-w-[591px]">
+              <div class="w-full h-[288px] md:max-w-[575px]">
                 <ProductRestrictedLink :product="article.attributes">
                   <PublishedProductCard :article="article.attributes" />
                 </ProductRestrictedLink>
@@ -170,10 +168,11 @@
     <div class="hidden xl:block font-semibold mb-4">
       More Published Products
     </div>
+    <!-- TODO: There's a small gap here when going from XL to LG media screen that needs to be addressed. -->
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 12" :key="n">
-          <div class="w-full h-[264px]">
+          <div class="w-full h-[288px] md:max-w-[575px]">
             <PublishedProductCard loading />
           </div>
         </template>
@@ -184,7 +183,7 @@
             v-for="article in danielArticles.slice(3, 15)"
             :key="article"
           >
-            <div class="w-full h-[264px]">
+            <div class="w-full h-[288px] md:max-w-[575px]">
               <ProductRestrictedLink :product="article.attributes">
                 <PublishedProductCard :article="article.attributes" />
               </ProductRestrictedLink>
