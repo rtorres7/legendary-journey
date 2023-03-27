@@ -101,7 +101,7 @@
                       />
                     </div>
                   </div>
-                  <div class="lg:w-1/3">
+                  <div class="lg:w-1/4">
                     <label class="text-sm font-medium"
                       >Publication Date
                       <span class="sr-only">Required</span>
@@ -118,96 +118,92 @@
                       </MaxDatepicker>
                     </label>
                   </div>
-                  <div
-                    class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
-                  >
-                    <div class="lg:w-1/3 space-y-4">
-                      <MaxListbox
-                        v-model="form.countries"
-                        :label="'Countries'"
-                        :items="lists.countries"
-                        :disabled="form.worldwide"
-                        multiple
-                        required
-                        @update:modelValue="
-                          updateField($event, 'countries', 'multiple')
-                        "
-                      />
-                      <div
-                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
-                      >
-                        <div v-for="country in form.countries" :key="country">
-                          <div
-                            class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
-                          >
-                            <div class="line-clamp-1 text-sm">
-                              {{ country.name }}
-                            </div>
-                            <button
-                              type="button"
-                              class="w-5 h-5 flex items-center justify-center"
-                              tabindex="0"
-                              @click="removeItem(country.name, 'countries')"
-                            >
-                              <span class="sr-only">Remove country</span>
-                              <XMarkIcon
-                                class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
-                                aria-hidden="true"
-                              />
-                            </button>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.countries"
+                      :label="'Countries'"
+                      :items="lists.countries"
+                      :disabled="form.worldwide"
+                      multiple
+                      required
+                      @update:modelValue="
+                        updateField($event, 'countries', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="country in form.countries" :key="country">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ country.name }}
                           </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(country.name, 'countries')"
+                          >
+                            <span class="sr-only">Remove country</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
                         </div>
                       </div>
-                      <div class="flex">
-                        <input
-                          id="worldwide"
-                          v-model="form.worldwide"
-                          type="checkbox"
-                          name="worldwide"
-                          value="Worldwide"
-                          @change="
-                            updateField($event.target.checked, 'worldwide')
-                          "
-                        />
-                        <label for="worldwide" class="ml-2 text-sm"
-                          >Worldwide</label
-                        >
-                      </div>
                     </div>
-                    <div class="lg:w-1/3 space-y-4">
-                      <MaxListbox
-                        v-model="form.topics"
-                        :label="'Topics'"
-                        :items="lists.topics"
-                        multiple
-                        required
-                        @update:modelValue="
-                          updateField($event, 'topics', 'multiple')
+                    <div class="flex">
+                      <input
+                        id="worldwide"
+                        v-model="form.worldwide"
+                        type="checkbox"
+                        name="worldwide"
+                        value="Worldwide"
+                        @change="
+                          updateField($event.target.checked, 'worldwide')
                         "
                       />
-                      <div
-                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                      <label for="worldwide" class="ml-2 text-sm"
+                        >Worldwide</label
                       >
-                        <div v-for="topic in form.topics" :key="topic">
-                          <div
-                            class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
-                          >
-                            <div class="line-clamp-1 text-sm">
-                              {{ topic.name }}
-                            </div>
-                            <button
-                              type="button"
-                              class="w-5 h-5 flex items-center justify-center"
-                              tabindex="0"
-                              @click="removeItem(topic.name, 'topics')"
-                            >
-                              <span class="sr-only">Remove topic</span>
-                              <XMarkIcon
-                                class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
-                                aria-hidden="true"
-                              />
-                            </button>
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.topics"
+                      :label="'Topics'"
+                      :items="lists.topics"
+                      multiple
+                      required
+                      @update:modelValue="
+                        updateField($event, 'topics', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="topic in form.topics" :key="topic">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ topic.name }}
                           </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(topic.name, 'topics')"
+                          >
+                            <span class="sr-only">Remove topic</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
                         </div>
                       </div>
                     </div>
