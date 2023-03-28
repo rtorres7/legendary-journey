@@ -129,7 +129,7 @@
                     }"
                   >
                     <h4
-                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
+                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline wrap-anywhere"
                     >
                       {{
                         article.title_classif && article.title_classif !== "X"
