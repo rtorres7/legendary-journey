@@ -406,11 +406,14 @@ export default {
         props.wantsPreview
       );
       store.dispatch("daniel/getDanielArticles");
-      store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
     });
 
     watch([loadingArticle], () => {
       if (!loadingArticle.value && route.name !== "product-preview") {
+        store.dispatch(
+          "relatedProducts/getRelatedDocuments",
+          props.wantsPreview
+        );
         document.title = article.value.title;
         metricStartDate.value = dayjs(article.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
@@ -493,10 +496,6 @@ export default {
             props.wantsPreview
           );
           store.dispatch("daniel/getDanielArticles");
-          store.dispatch(
-            "relatedProducts/getRelatedDocuments",
-            props.wantsPreview
-          );
         }
       }
     );

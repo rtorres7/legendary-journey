@@ -36,6 +36,17 @@ export const isProductLocked = (product) => {
   return !isEmpty(product.needed) || product.org_restricted;
 };
 
+export const hasProductAccess = (product, organization) => {
+  let hasAccess = true;
+  if (
+    product.status === 403 ||
+    (product.org_restricted && !product.needed.orgs.includes(organization))
+  ) {
+    hasAccess = false;
+  }
+  return hasAccess;
+};
+
 export const hasProductImage = (product) => {
   let hasImage = true;
   if (isEmpty(product.images)) {
