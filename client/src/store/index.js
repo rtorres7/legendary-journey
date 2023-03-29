@@ -8,7 +8,7 @@ import specialEditions from "./modules/specialEditions";
 import user from "./modules/user";
 import feeds from "./modules/feeds";
 import savedSearches from "./modules/saved-searches";
-import danielDetails from "./modules/danielDetails";
+import product from "./modules/product";
 import testConsole from "./modules/test-console";
 import metadata from "./modules/metadata";
 import localStorage from "./modules/localStorage";
@@ -36,7 +36,7 @@ export default createStore({
     user,
     feeds,
     savedSearches,
-    danielDetails,
+    product,
     testConsole,
     metadata,
     localStorage,

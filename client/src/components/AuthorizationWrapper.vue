@@ -3,7 +3,7 @@
     <slot />
   </template>
   <template v-else>
-    <NotAuthorized :article="article" />
+    <NotAuthorized :product="product" />
   </template>
 </template>
 
@@ -21,12 +21,12 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
-    const article = computed(() => store.state.danielDetails.document);
+    const product = computed(() => store.state.product.document);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const organization = computed(() => store.getters["user/organization"]);
 
     const authorized = computed(() => {
-      if (!hasProductAccess(article.value, organization.value)) {
+      if (!hasProductAccess(product.value, organization.value)) {
         return false;
       }
       if (
@@ -41,7 +41,7 @@ export default {
     });
 
     return {
-      article,
+      product,
       authorized,
     };
   },

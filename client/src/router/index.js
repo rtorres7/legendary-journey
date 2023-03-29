@@ -23,13 +23,6 @@ const routes = [
     path: "/product/:doc_num",
     name: "product",
     component: ProductView,
-    props: true,
-  },
-  {
-    path: "/product/:doc_num/preview",
-    name: "product-preview",
-    component: ProductView,
-    props: true,
   },
   {
     path: "/attachment/:url?",
