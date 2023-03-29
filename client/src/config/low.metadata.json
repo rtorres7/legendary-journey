@@ -187,7 +187,11 @@
       "header": "Resources",
       "links": [
         {
-          "name": "DI Tradecraft",
+          "name": "NGT",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "JEMS",
           "href": "https://www.google.com/"
         },
         {
@@ -203,10 +207,6 @@
     {
       "header": "NCTC Tools",
       "links": [
-        {
-          "name": "Collaboration",
-          "href": "https://www.google.com/"
-        },
         {
           "name": "Kingfisher",
           "href": "https://www.google.com/"
