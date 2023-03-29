@@ -80,7 +80,9 @@
                 class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 <span class="sr-only">Admin Menu</span>
-                <WrenchIcon class="h-6 w-6" aria-hidden="true" />
+                <tippy content="Admin Menu">
+                  <WrenchIcon class="h-6 w-6" aria-hidden="true" />
+                </tippy>
               </MenuButton>
             </div>
             <transition

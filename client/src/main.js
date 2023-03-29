@@ -10,6 +10,8 @@ import "vue3-carousel/dist/carousel.css";
 import "./content-styles.css";
 import "./index.css";
 import * as CKEditor from "@ckeditor/ckeditor5-vue";
+import { plugin as VueTippy } from "vue-tippy";
+import "tippy.js/dist/tippy.css"; // optional for styling
 
 const requireComponent = require.context(
   "./components/max-ui",
@@ -29,4 +31,10 @@ requireComponent.keys().forEach((fileName) => {
   app.component(componentName, componentConfig.default || componentConfig);
 });
 
-app.use(SimpleTypeahead).use(store).use(router).use(CKEditor).mount("#app");
+app
+  .use(SimpleTypeahead)
+  .use(store)
+  .use(router)
+  .use(CKEditor)
+  .use(VueTippy)
+  .mount("#app");
