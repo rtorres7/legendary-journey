@@ -41,6 +41,8 @@
 
 <script>
 import { metadata } from "@/config";
+import { watch } from "vue";
+import { useRoute } from "vue-router";
 import { EnvelopeIcon } from "@heroicons/vue/24/outline";
 import { hasProductAccess } from "@/helpers";
 
@@ -49,30 +51,42 @@ export default {
     EnvelopeIcon,
   },
   props: {
-    article: {
+    product: {
       type: Object,
       default: () => {},
     },
   },
   setup(props) {
+    const route = useRoute();
+    //const router = useRouter();
     const userAccess = () => {
-      if (props.article.status === 403) {
-        let document = props.article.document;
+      if (props.product.status === 403) {
+        let document = props.product.document;
         return `affiliated with ${
           document.needed.orgs.slice(0, -1).join(", ") +
           " and " +
           document.needed.orgs.slice(-1)
         }`;
       }
-      if (!hasProductAccess(props.article)) {
+      if (!hasProductAccess(props.product)) {
         return `affiliated with ${
-          props.article.needed.orgs.slice(0, -1).join(", ") +
+          props.product.needed.orgs.slice(0, -1).join(", ") +
           " and " +
-          props.article.needed.orgs.slice(-1)
+          props.product.needed.orgs.slice(-1)
         }`;
       }
       return "who have the required accesses";
     };
+
+    //TODO: I'd label this is as a 'hack' that forces a reload when navigating via the browser's history to avoid a blank page
+    // It's worth looking into this at some point in the future to evaluate.
+    watch(
+      () => route.query,
+      () => {
+        window.location.reload();
+      }
+    );
+
     return {
       metadata,
       userAccess,

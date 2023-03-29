@@ -566,7 +566,13 @@
                   :isOpen="isPreviewDialogOpen"
                   @close="closePreviewDialog"
                 >
-                  <ProductView :doc_num="documentNumber" :wantsPreview="true" />
+                  <template v-if="loadingPreview"
+                    ><div class="max-w-fit m-auto">
+                      <MaxLoadingSpinner class="h-20 w-20" /></div
+                  ></template>
+                  <template v-else>
+                    <ProductContent :product="previewProduct" isPreview />
+                  </template>
                 </MaxDialog>
               </MaxButton>
               <MaxButton color="secondary" @click.prevent="cancel"
@@ -644,6 +650,7 @@
   </MaxOverlay>
 </template>
 <script>
+import { productDetails } from "@/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -675,7 +682,7 @@ import createUploader from "@/composables/file-uploader";
 import DropZone from "@/components/DropZone";
 import FilePreview from "@/components/FilePreview";
 import EditProductFormSection from "@/components/EditProductFormSection";
-import ProductView from "@/views/ProductView";
+import ProductContent from "@/components/ProductContent";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
@@ -720,7 +727,7 @@ export default {
     DropZone,
     FilePreview,
     EditProductFormSection,
-    ProductView,
+    ProductContent,
   },
   props: {
     product: {
@@ -784,6 +791,8 @@ export default {
     const savingProduct = ref(false);
     const savingSucceed = ref(true);
     const publishingProduct = ref(false);
+    const loadingPreview = ref(true);
+    const previewProduct = ref(null);
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
@@ -1092,6 +1101,21 @@ export default {
       isPreviewDialogOpen.value = false;
     };
     const openPreviewDialog = () => {
+      loadingPreview.value = true;
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === route.params.doc_num
+        );
+        previewProduct.value = documentMatch.data;
+        setTimeout(() => (loadingPreview.value = false), 750);
+      } else {
+        axios
+          .get(`/preload/documents/${route.params.doc_num}.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
+      }
       isPreviewDialogOpen.value = true;
     };
 
@@ -1328,6 +1352,8 @@ export default {
       thumbnailBinary,
       savingProduct,
       publishingProduct,
+      loadingPreview,
+      previewProduct,
       lists,
       form,
       checkAllIntelOrgs,
