@@ -44,7 +44,7 @@ export { articles } from "./articles";
 export { danielArticles, articlesForWire } from "./danielArticles";
 export { countries, regions } from "./regions";
 export { getSitreps, getSearchDataFromUrl } from "./search";
-export { danielArticlesDetails } from "./danielArticlesDetails";
+export { productDetails } from "./productDetails";
 export { metadata } from "./metadata";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
 export { relatedProducts } from "./relatedProducts";

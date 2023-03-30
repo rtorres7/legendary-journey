@@ -32,11 +32,10 @@
       <div class="flex flex-col h-full justify-between">
         <div>
           <p class="text-sm mb-2 line-clamp-2">
-            ({{ sitrep.title_classification }})
             {{ sitrep.product_type_name }}
           </p>
           <p class="line-clamp-2 font-medium" :title="sitrep.title">
-            {{ sitrep.title }}
+            ({{ sitrep.title_classification }}) {{ sitrep.title }}
           </p>
         </div>
         <div
