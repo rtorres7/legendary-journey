@@ -816,7 +816,7 @@ export default {
           component: "MaxCombobox",
         },
         issues: {
-          label: "Counterterrorism and Subtopics",
+          label: "Counterterrorism & Subtopics",
           model: currentModel(issues),
           list: issues.items,
           types: issues.types,
