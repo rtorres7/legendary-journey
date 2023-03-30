@@ -17,6 +17,7 @@ export const productDetails = [
       coi_level: 4,
       title_sci: 0,
       summary_sci: 0,
+      published_by: "Jack Smith",
       summary:
         "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
       xml_schema_ver: null,
@@ -154,6 +155,7 @@ export const productDetails = [
       coi_level: 4,
       title_sci: 0,
       summary_sci: 0,
+      published_by: "Jane Smith",
       summary:
         "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system.",
       xml_schema_ver: null,
@@ -292,6 +294,7 @@ export const productDetails = [
       coi_level: 4,
       title_sci: 0,
       summary_sci: 0,
+      published_by: "Bruce Willis",
       summary:
         "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system.",
       xml_schema_ver: null,
@@ -427,6 +430,7 @@ export const productDetails = [
       coi_level: 4,
       title_sci: 0,
       summary_sci: 0,
+      published_by: "Shaun Johnson",
       summary:
         "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system.",
       xml_schema_ver: null,
@@ -558,6 +562,7 @@ export const productDetails = [
       coi_level: 4,
       title_sci: 0,
       summary_sci: 0,
+      published_by: "John Wayne",
       summary:
         "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system.",
       xml_schema_ver: null,
