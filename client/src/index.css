@@ -75,6 +75,19 @@
     padding-left: 3em;
   }
 
+  .tippy-box[data-theme~="pegasus"],
+  .light .tippy-box[data-theme~="pegasus"] {
+    @apply border border-gray-300 bg-white text-slate-900;
+  }
+
+  .dark .tippy-box[data-theme~="pegasus"] {
+    @apply border border-slate-500 bg-slate-700 text-slate-300;
+  }
+
+  .energy .tippy-box[data-theme~="pegasus"] {
+    @apply border border-zinc-500 bg-zinc-700 text-zinc-300;
+  }
+
   /* for ensuring word breaks to stop content from overflowing */
   .wrap-anywhere {
     overflow-wrap: anywhere;

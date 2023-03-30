@@ -24,11 +24,13 @@
       >
         <div class="flex">
           <div>
-            <PrinterIcon
-              class="h-6 w-6 cursor-pointer"
-              aria-hidden="true"
-              @click="printDocument"
-            />
+            <tippy content="Print this Product">
+              <PrinterIcon
+                class="h-6 w-6 cursor-pointer"
+                aria-hidden="true"
+                @click="printDocument"
+              />
+            </tippy>
           </div>
           <div
             class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
@@ -42,11 +44,13 @@
           <a
             :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
           >
-            <EnvelopeIcon
-              class="h-6 w-6 cursor-pointer"
-              aria-hidden="true"
-              @click="updateEmailCount"
-            />
+            <tippy content="Email a link to this Product">
+              <EnvelopeIcon
+                class="h-6 w-6 cursor-pointer"
+                aria-hidden="true"
+                @click="updateEmailCount"
+              />
+            </tippy>
           </a>
           <div
             class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
@@ -57,11 +61,13 @@
           </div>
         </div>
         <div>
-          <LinkIcon
-            class="h-6 w-6 cursor-pointer"
-            aria-hidden="true"
-            @click="copyUrl"
-          />
+          <tippy content="Copy URL to Clipboard">
+            <LinkIcon
+              class="h-6 w-6 cursor-pointer"
+              aria-hidden="true"
+              @click="copyUrl"
+            />
+          </tippy>
         </div>
         <div
           v-show="
@@ -80,7 +86,9 @@
               },
             }"
           >
-            <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+            <tippy content="Edit this Product">
+              <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+            </tippy>
           </router-link>
         </div>
       </div>

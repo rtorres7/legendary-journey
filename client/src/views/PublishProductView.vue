@@ -16,17 +16,19 @@
       @update:modelValue="selectDate"
     >
       <template #trigger>
-        <MaxCard class="p-2 cursor-pointer">
-          <button class="flex items-center">
-            <CalendarIcon
-              class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
-            />
-            <span class="sr-only">select a date from the calendar</span>
-            <span class="pl-2 text-lg">
-              {{ routeDate }}
-            </span>
-          </button>
-        </MaxCard>
+        <tippy content="Select a date">
+          <MaxCard class="p-2 cursor-pointer">
+            <button class="flex items-center">
+              <CalendarIcon
+                class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
+              />
+              <span class="sr-only">select a date from the calendar</span>
+              <span class="pl-2 text-lg">
+                {{ routeDate }}
+              </span>
+            </button>
+          </MaxCard>
+        </tippy>
       </template>
     </MaxDatepicker>
   </div>
@@ -129,7 +131,7 @@
                     }"
                   >
                     <h4
-                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
+                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline wrap-anywhere"
                     >
                       {{
                         article.title_classif && article.title_classif !== "X"
@@ -188,7 +190,9 @@
                       },
                     }"
                   >
-                    <PencilIcon class="h-5 w-5" />
+                    <tippy content="Edit this Product">
+                      <PencilIcon class="h-5 w-5" />
+                    </tippy>
                   </router-link>
                 </template>
               </div>
