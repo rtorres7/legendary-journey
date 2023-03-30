@@ -104,15 +104,24 @@
               <span class="italic">Viewable to all.</span>
             </template>
           </p>
-          <p v-if="product.producing_offices.length !== 0">
+          <p
+            v-if="
+              product.producing_offices &&
+              product.producing_offices.length !== 0
+            "
+          >
             <span class="font-semibold">Produced By: </span>
             {{ product.producing_offices.join(", ") }}
           </p>
-          <p v-if="product.coordinators.length !== 0">
+          <p v-if="product.coordinators && product.coordinators.length !== 0">
             <span class="font-semibold">Coordinated With: </span>
             {{ product.coordinators.join(", ") }}
           </p>
-          <p>
+          <p v-if="product.published_by && canManageWire">
+            <span class="font-semibold">Published By: </span>
+            {{ product.published_by }}
+          </p>
+          <p v-if="product.poc_info">
             <span class="font-semibold">Contact: </span>{{ product.poc_info }}
           </p>
         </div>
@@ -131,6 +140,7 @@
 import { formatDate } from "@/helpers";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -138,6 +148,9 @@ export default {
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+  },
+  computed: {
+    ...mapGetters("user", ["canManageWire", "canViewDocumentAdminTools"]),
   },
   props: {
     product: {
