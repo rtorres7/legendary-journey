@@ -55,7 +55,7 @@ export const metadata = {
         },
         {
           code: "ATG",
-          name: "Antigua and Barbuda",
+          name: "Antigua & Barbuda",
           digraph: "AC",
         },
         {
@@ -145,11 +145,11 @@ export const metadata = {
         },
         {
           code: "BES",
-          name: "Bonaire, Sint Eustatius, and Saba",
+          name: "Bonaire, Sint Eustatius, & Saba",
         },
         {
           code: "BIH",
-          name: "Bosnia and Herzegovina",
+          name: "Bosnia & Herzegovina",
           digraph: "BK",
         },
         {
@@ -419,7 +419,7 @@ export const metadata = {
         },
         {
           code: "ATF",
-          name: "French Southern and Antarctic Lands",
+          name: "French Southern & Antarctic Lands",
           digraph: "FS",
         },
         {
@@ -509,7 +509,7 @@ export const metadata = {
         },
         {
           code: "HMD",
-          name: "Heard Island and McDonald Islands",
+          name: "Heard Island & McDonald Islands",
           digraph: "HM",
         },
         {
@@ -948,12 +948,12 @@ export const metadata = {
         },
         {
           code: "SHN",
-          name: "Saint Helena, Ascension, and Tristan da Cunha",
+          name: "Saint Helena, Ascension, & Tristan da Cunha",
           digraph: "SH",
         },
         {
           code: "KNA",
-          name: "Saint Kitts and Nevis",
+          name: "Saint Kitts & Nevis",
           digraph: "SC",
         },
         {
@@ -968,12 +968,12 @@ export const metadata = {
         },
         {
           code: "SPM",
-          name: "Saint Pierre and Miquelon",
+          name: "Saint Pierre & Miquelon",
           digraph: "SB",
         },
         {
           code: "VCT",
-          name: "Saint Vincent and the Grenadines",
+          name: "Saint Vincent & the Grenadines",
           digraph: "VC",
         },
         {
@@ -988,7 +988,7 @@ export const metadata = {
         },
         {
           code: "STP",
-          name: "Sao Tome and Principe",
+          name: "Sao Tome & Principe",
           digraph: "TP",
         },
         {
@@ -1053,7 +1053,7 @@ export const metadata = {
         },
         {
           code: "SGS",
-          name: "South Georgia and South Sandwich Islands",
+          name: "South Georgia & South Sandwich Islands",
           digraph: "SX",
         },
         {
@@ -1088,7 +1088,7 @@ export const metadata = {
         },
         {
           code: "SJM",
-          name: "Svalbard and Jan Mayen",
+          name: "Svalbard & Jan Mayen",
           digraph: "SV",
         },
         {
@@ -1148,7 +1148,7 @@ export const metadata = {
         },
         {
           code: "TTO",
-          name: "Trinidad and Tobago",
+          name: "Trinidad & Tobago",
           digraph: "TD",
         },
         {
@@ -1168,7 +1168,7 @@ export const metadata = {
         },
         {
           code: "TCA",
-          name: "Turks and Caicos Islands",
+          name: "Turks & Caicos Islands",
           digraph: "TK",
         },
         {
@@ -1233,7 +1233,7 @@ export const metadata = {
         },
         {
           code: "WLF",
-          name: "Wallis and Futuna",
+          name: "Wallis & Futuna",
           digraph: "WF",
         },
         {
@@ -2043,7 +2043,7 @@ export const metadata = {
           country_codes: ["KAZ", "KGZ", "TJK", "TKM", "UZB"],
         },
         {
-          name: "Eurasia, Western and Russia",
+          name: "Eurasia, Western & Russia",
           code: "EAru",
           country_codes: ["BLR", "MDA", "RUS", "UKR"],
         },
