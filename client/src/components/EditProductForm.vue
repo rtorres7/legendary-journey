@@ -1110,7 +1110,7 @@ export default {
         setTimeout(() => (loadingPreview.value = false), 750);
       } else {
         axios
-          .get(`/preload/documents/${route.params.doc_num}.json`)
+          .get(`/documents/${route.params.doc_num}/preview.json`)
           .then((response) => {
             loadingPreview.value = false;
             previewProduct.value = response.data;
