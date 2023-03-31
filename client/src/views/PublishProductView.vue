@@ -121,7 +121,10 @@
                 <div>
                   <router-link
                     :to="{
-                      name: 'product',
+                      name:
+                        article.state === 'draft'
+                          ? 'product-preview'
+                          : 'product',
                       params: { doc_num: article.doc_num },
                     }"
                   >

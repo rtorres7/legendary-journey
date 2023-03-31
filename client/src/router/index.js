@@ -20,6 +20,11 @@ const routes = [
     },
   },
   {
+    path: "/product/:doc_num/preview",
+    name: "product-preview",
+    component: ProductView,
+  },
+  {
     path: "/product/:doc_num",
     name: "product",
     component: ProductView,
