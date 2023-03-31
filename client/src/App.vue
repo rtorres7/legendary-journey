@@ -60,6 +60,7 @@
       name="toast-notification"
       tag="div"
       class="z-[100] fixed top-2 right-2 flex flex-col-reverse gap-3"
+      role="status"
       @before-enter="stopBodyOverflow"
       @after-enter="allowBodyOverflow"
       @before-leave="stopBodyOverflow"
