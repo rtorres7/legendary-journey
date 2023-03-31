@@ -41,7 +41,7 @@
         </div>
       </template>
     </vue3-simple-typeahead>
-    <tippy content="Click or hit Enter to search">
+    <tippy content="Search">
       <button
         type="button"
         class="h-[2.5rem] px-3 rounded-r-md border-l border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80"

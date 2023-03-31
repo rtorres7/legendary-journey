@@ -76,7 +76,7 @@
             class="hidden lg:block ml-3 relative"
           >
             <div>
-              <tippy content="Admin Menu">
+              <tippy content="Admin options">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
@@ -139,7 +139,7 @@
           </button> -->
           <Menu as="div" class="hidden lg:block relative">
             <div>
-              <tippy content="Theme Menu">
+              <tippy content="Themes">
                 <MenuButton
                   class="max-w-xs flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                   :class="
