@@ -391,10 +391,13 @@
                   class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300 wrap-anywhere"
                 >
                   <template v-if="showHighlightedResult()">
-                    <span v-html="item.highlighted_result" />
+                    <span
+                      class="line-clamp-5"
+                      v-html="item.highlighted_result"
+                    />
                   </template>
                   <template v-else>
-                    <span>{{ item.summary }}</span>
+                    <span class="line-clamp-5">{{ item.summary }}</span>
                   </template>
                 </div>
               </div>

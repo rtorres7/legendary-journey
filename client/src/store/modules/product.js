@@ -19,7 +19,10 @@ export default {
         console.log("[store] getProductDetails: ", displayedDocument.data);
         setTimeout(() => commit("saveDocument", displayedDocument.data), 750);
       } else {
-        const url = `/preload/documents/${route.params.doc_num}.json`;
+        const url =
+          route.name === "product-preview"
+            ? `/documents/${route.params.doc_num}/preview.json`
+            : `/preload/documents/${route.params.doc_num}.json`;
         axios.get(url).then((response) => {
           console.log("[store] getProductDetails: ", response.data);
           commit("saveDocument", response.data);

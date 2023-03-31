@@ -1,13 +1,7 @@
 <template>
   <MaxCard
-    :class="[
-      'h-full',
-      loading
-        ? 'animate-pulse'
-        : isProductLocked(article)
-        ? 'bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-700/50'
-        : '',
-    ]"
+    :class="['h-full', loading ? 'animate-pulse' : '']"
+    :alternate="!loading && isProductLocked(article)"
     :aria-label="
       !loading && isProductLocked(article) ? 'restricted product' : ''
     "
