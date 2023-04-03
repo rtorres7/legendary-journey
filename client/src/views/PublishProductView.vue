@@ -87,7 +87,7 @@
         <h3 class="font-semibold mb-6 text-lg">
           Edit Existing Products ({{ filterArticles().length }})
         </h3>
-        <div class="flex items-center">
+        <div v-if="filterArticles().length > 0" class="flex items-center">
           <input
             id="showDrafts"
             v-model="showOnlyDrafts"
