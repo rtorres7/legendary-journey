@@ -7,25 +7,29 @@
       <li
         class="z-[3] hover:z-0 border-r border-slate-900/10 dark:border-slate-600 energy:border-zinc-600"
       >
-        <div
-          :class="[
-            'h-full inline-flex rounded-l-md items-center px-4 py-2',
-            isDisabled('previous')
-              ? 'disabled cursor-not-allowed'
-              : 'hoverable',
-          ]"
-          role="button"
-          :aria-disabled="isDisabled('previous') ? true : null"
-          :disabled="isDisabled('previous') ? true : null"
-          :tabindex="isDisabled('previous') ? null : '0'"
-          @click="isDisabled('previous') ? null : navigatePrevious(currentPage)"
-          @keyup.enter="
-            isDisabled('previous') ? null : navigatePrevious(currentPage)
-          "
-        >
-          <span class="sr-only">Previous</span>
-          <ChevronLeftIcon class="h-5 w-5" />
-        </div>
+        <tippy content="Previous page">
+          <div
+            :class="[
+              'h-full inline-flex rounded-l-md items-center px-4 py-2',
+              isDisabled('previous')
+                ? 'disabled cursor-not-allowed'
+                : 'hoverable',
+            ]"
+            role="button"
+            :aria-disabled="isDisabled('previous') ? true : null"
+            :disabled="isDisabled('previous') ? true : null"
+            :tabindex="isDisabled('previous') ? null : '0'"
+            @click="
+              isDisabled('previous') ? null : navigatePrevious(currentPage)
+            "
+            @keyup.enter="
+              isDisabled('previous') ? null : navigatePrevious(currentPage)
+            "
+          >
+            <span class="sr-only">Previous</span>
+            <ChevronLeftIcon class="h-5 w-5" />
+          </div>
+        </tippy>
       </li>
       <template
         v-for="n in buildPageButtons(currentPage, totalPages(totalCount))"
@@ -55,19 +59,21 @@
         </li>
       </template>
       <li class="z-[3] hover:z-0">
-        <div
-          :class="[
-            'h-full inline-flex items-center rounded-r-md px-4 py-2',
-            isDisabled('next') ? 'disabled cursor-not-allowed' : 'hoverable',
-          ]"
-          role="button"
-          :tabindex="isDisabled('next') ? null : '0'"
-          @click="isDisabled('next') ? null : navigateNext(currentPage)"
-          @keyup.enter="isDisabled('next') ? null : navigateNext(currentPage)"
-        >
-          <span class="sr-only">Next</span>
-          <ChevronRightIcon class="h-5 w-5" />
-        </div>
+        <tippy content="Next page">
+          <div
+            :class="[
+              'h-full inline-flex items-center rounded-r-md px-4 py-2',
+              isDisabled('next') ? 'disabled cursor-not-allowed' : 'hoverable',
+            ]"
+            role="button"
+            :tabindex="isDisabled('next') ? null : '0'"
+            @click="isDisabled('next') ? null : navigateNext(currentPage)"
+            @keyup.enter="isDisabled('next') ? null : navigateNext(currentPage)"
+          >
+            <span class="sr-only">Next</span>
+            <ChevronRightIcon class="h-5 w-5" />
+          </div>
+        </tippy>
       </li>
     </ol>
   </nav>
