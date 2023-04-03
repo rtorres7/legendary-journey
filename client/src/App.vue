@@ -24,7 +24,7 @@
             >
               <div class="inline-block leading-relaxed">
                 <MegaphoneIcon class="inline h-6 w-6" aria-hidden="true" />
-                <span class="sr-only">new notification from Current.</span>
+                <span class="sr-only">new notification from Current</span>
                 <strong class="font-semibold mx-2">{{ alert.title }}</strong>
                 <span v-html="alert.message"></span>
               </div>
