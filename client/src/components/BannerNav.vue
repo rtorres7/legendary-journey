@@ -76,7 +76,7 @@
             class="hidden lg:block ml-3 relative"
           >
             <div>
-              <tippy content="Admin options">
+              <tippy content="Admin Options">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
