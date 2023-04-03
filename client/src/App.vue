@@ -15,13 +15,14 @@
         <ul
           id="app-announcements"
           class="print:hidden bg-orange-200 text-slate-900"
+          role="alert"
         >
           <template v-for="alert in undismissedAlerts" :key="alert">
             <li
               v-if="!alert.destroyed"
               class="flex justify-between items-center px-10 py-2 first:pt-4 last:pb-4"
             >
-              <div class="inline-block leading-relaxed" role="alert">
+              <div class="inline-block leading-relaxed">
                 <MegaphoneIcon class="inline h-6 w-6" aria-hidden="true" />
                 <span class="sr-only">new notification from Current.</span>
                 <strong class="font-semibold mx-2">{{ alert.title }}</strong>
