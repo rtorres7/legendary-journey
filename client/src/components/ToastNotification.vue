@@ -20,7 +20,7 @@
       </div>
       <div class="flex flex-col gap-3">
         <div v-show="title" class="font-semibold">
-          <span class="sr-only">New notification from Current.</span>
+          <span class="sr-only">New notification from Current</span>
           {{ title }}
         </div>
         <p>
