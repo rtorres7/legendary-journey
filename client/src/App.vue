@@ -21,8 +21,9 @@
               v-if="!alert.destroyed"
               class="flex justify-between items-center px-10 py-2 first:pt-4 last:pb-4"
             >
-              <div class="inline-block leading-relaxed">
+              <div class="inline-block leading-relaxed" role="alert">
                 <MegaphoneIcon class="inline h-6 w-6" aria-hidden="true" />
+                <span class="sr-only">new notification from Current.</span>
                 <strong class="font-semibold mx-2">{{ alert.title }}</strong>
                 <span v-html="alert.message"></span>
               </div>
@@ -60,6 +61,7 @@
       name="toast-notification"
       tag="div"
       class="z-[100] fixed top-2 right-2 flex flex-col-reverse gap-3"
+      role="status"
       @before-enter="stopBodyOverflow"
       @after-enter="allowBodyOverflow"
       @before-leave="stopBodyOverflow"

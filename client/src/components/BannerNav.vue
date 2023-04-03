@@ -18,7 +18,8 @@
     >
       <div class="flex items-center">
         <ExclamationCircleIcon class="h-6 w-1/3 md:w-20 lg:w-6 mx-3 my-2" />
-        <p class="text-sm ml-1">
+        <p class="text-sm ml-1" role="alert">
+          <span class="sr-only">new notification from Current.</span>
           ALERT: This is a system alert. Ut est iusto decore nonumy, cum no
           mollis saperet. Esse percipitur id sea, mea no dicam aperiri. Ex assum
           quando aliquip his, vero porro voluptaria cum ea. Vero labore
