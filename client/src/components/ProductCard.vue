@@ -1,14 +1,23 @@
 <template>
   <a @click="goToArticle(article)">
     <div
-      class="flex justify-between p-4 border border-slate-900/10 dark:border-slate-50/[0.12] energy:border-zinc-700 h-full hover:underline"
+      class="flex flex-col justify-between p-4 border border-slate-900/10 dark:border-slate-50/[0.12] energy:border-zinc-700 h-full hover:underline"
       :class="
         isLocked(article)
           ? 'bg-slate-100 dark:bg-slate-800 energy:bg-zinc-700'
           : 'cursor-pointer'
       "
     >
-      <div class="px-2 flex flex-col justify-between">
+      <div v-show="article.hasImage">
+        <ProductImage
+          class="w-[300px] h-[100px] sm:max-w-full"
+          :article="article"
+          smartRender
+          @imageNotFound="toggleImgContainer(article, false)"
+          @imageLoaded="toggleImgContainer(article, true)"
+        />
+      </div>
+      <div class="py-4 flex flex-col justify-between">
         <template v-if="isLocked(article)">
           <div class="flex mb-2 items-center">
             <LockClosedIcon class="mr-2 h-4 w-4" aria-hidden="true" />
@@ -27,15 +36,6 @@
         <div class="mt-2 text-sm">
           {{ formatDate(article.date_published) }}
         </div>
-      </div>
-      <div v-show="article.hasImage">
-        <ProductImage
-          class="w-[165px] h-[165px] sm:max-w-full h-full"
-          :article="article"
-          smartRender
-          @imageNotFound="toggleImgContainer(article, false)"
-          @imageLoaded="toggleImgContainer(article, true)"
-        />
       </div>
     </div>
   </a>
