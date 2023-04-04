@@ -111,7 +111,7 @@
               <div class="flex px-2">
                 <div class="pr-4">
                   <ProductImage
-                    class="h-[125px] w-[125px]"
+                    class="h-[100px] w-[300px]"
                     :article="article"
                     @click="
                       article.images.length > 0
