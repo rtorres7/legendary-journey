@@ -1,6 +1,8 @@
 <template>
-  <template v-if="authorized">
-    <slot />
+  <template v-if="accessProduct">
+    <template v-if="manageProduct">
+      <slot />
+    </template>
   </template>
   <template v-else>
     <NotAuthorized :product="product" />
@@ -25,10 +27,18 @@ export default {
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const organization = computed(() => store.getters["user/organization"]);
 
-    const authorized = computed(() => {
-      if (!hasProductAccess(product.value, organization.value)) {
+    const accessProduct = computed(() => {
+      if (
+        route.name === "product-preview" ||
+        (route.name === "product" &&
+          !hasProductAccess(product.value, organization.value))
+      ) {
         return false;
       }
+      return true;
+    });
+
+    const manageProduct = computed(() => {
       if (
         (route.name === "publish" ||
           route.name === "edit" ||
@@ -42,7 +52,8 @@ export default {
 
     return {
       product,
-      authorized,
+      accessProduct,
+      manageProduct,
     };
   },
 };
