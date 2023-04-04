@@ -338,7 +338,7 @@
               class="flex p-4"
               :class="
                 isProductLocked(item)
-                  ? 'bg-slate-50 dark:bg-slate-800 energy:bg-zinc-700'
+                  ? 'bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700'
                   : ''
               "
               :aria-label="isProductLocked(item) ? 'restricted product' : ''"

@@ -18,7 +18,8 @@
     >
       <div class="flex items-center">
         <ExclamationCircleIcon class="h-6 w-1/3 md:w-20 lg:w-6 mx-3 my-2" />
-        <p class="text-sm ml-1">
+        <p class="text-sm ml-1" role="alert">
+          <span class="sr-only">new notification from Current.</span>
           ALERT: This is a system alert. Ut est iusto decore nonumy, cum no
           mollis saperet. Esse percipitur id sea, mea no dicam aperiri. Ex assum
           quando aliquip his, vero porro voluptaria cum ea. Vero labore
@@ -76,12 +77,14 @@
             class="hidden lg:block ml-3 relative"
           >
             <div>
-              <MenuButton
-                class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-              >
-                <span class="sr-only">Admin Menu</span>
-                <WrenchIcon class="h-6 w-6" aria-hidden="true" />
-              </MenuButton>
+              <tippy content="Admin Options">
+                <MenuButton
+                  class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span class="sr-only">Admin Menu</span>
+                  <WrenchIcon class="h-6 w-6" aria-hidden="true" />
+                </MenuButton>
+              </tippy>
             </div>
             <transition
               enterActiveClass="transition ease-out duration-100"
@@ -137,35 +140,37 @@
           </button> -->
           <Menu as="div" class="hidden lg:block relative">
             <div>
-              <MenuButton
-                class="max-w-xs flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                :class="
-                  selectedTheme === 'system'
-                    ? 'text-slate-400'
-                    : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
-                "
-              >
-                <span class="sr-only"
-                  >Open menu for toggling color palettes.</span
+              <tippy content="Themes">
+                <MenuButton
+                  class="max-w-xs flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  :class="
+                    selectedTheme === 'system'
+                      ? 'text-slate-400'
+                      : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
+                  "
                 >
-                <template v-if="selectedTheme === 'dark'">
-                  <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                </template>
-                <template v-else-if="selectedTheme === 'energy'">
-                  <BoltIcon class="h-6 w-6" aria-hidden="true" />
-                </template>
-                <template v-else-if="selectedTheme === 'system'">
-                  <template v-if="isDark">
+                  <span class="sr-only"
+                    >Open menu for toggling color palettes.</span
+                  >
+                  <template v-if="selectedTheme === 'dark'">
                     <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else-if="selectedTheme === 'energy'">
+                    <BoltIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else-if="selectedTheme === 'system'">
+                    <template v-if="isDark">
+                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <SunIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
                   </template>
                   <template v-else>
                     <SunIcon class="h-6 w-6" aria-hidden="true" />
                   </template>
-                </template>
-                <template v-else>
-                  <SunIcon class="h-6 w-6" aria-hidden="true" />
-                </template>
-              </MenuButton>
+                </MenuButton>
+              </tippy>
             </div>
             <transition
               enterActiveClass="transition ease-out duration-100"
@@ -207,12 +212,14 @@
           <!-- Profile dropdown -->
           <Menu as="div" class="hidden lg:block ml-3 relative">
             <div>
-              <MenuButton
-                class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-              >
-                <span class="sr-only">Open user menu.</span>
-                <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
-              </MenuButton>
+              <tippy content="User Menu">
+                <MenuButton
+                  class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span class="sr-only">Open user menu.</span>
+                  <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
+                </MenuButton>
+              </tippy>
             </div>
             <transition
               enterActiveClass="transition ease-out duration-100"

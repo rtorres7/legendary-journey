@@ -41,18 +41,20 @@
         </div>
       </template>
     </vue3-simple-typeahead>
-    <button
-      type="button"
-      class="h-[2.5rem] px-3 rounded-r-md border-l border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80"
-      tabindex="0"
-      @click="onClickSearch"
-    >
-      <span class="sr-only">Search</span>
-      <MagnifyingGlassIcon
-        class="w-5 h-5 text-white dark:text-slate-300 energy:text-zinc-300"
-        aria-hidden="true"
-      />
-    </button>
+    <tippy content="Search">
+      <button
+        type="button"
+        class="h-[2.5rem] px-3 rounded-r-md border-l border-slate-400 dark:border-slate-700/80 energy:border-zinc-700/80"
+        tabindex="0"
+        @click="onClickSearch"
+      >
+        <span class="sr-only">Search</span>
+        <MagnifyingGlassIcon
+          class="w-5 h-5 text-white dark:text-slate-300 energy:text-zinc-300"
+          aria-hidden="true"
+        />
+      </button>
+    </tippy>
   </div>
 </template>
 

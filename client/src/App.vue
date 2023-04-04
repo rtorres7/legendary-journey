@@ -15,6 +15,7 @@
         <ul
           id="app-announcements"
           class="print:hidden bg-orange-200 text-slate-900"
+          role="alert"
         >
           <template v-for="alert in undismissedAlerts" :key="alert">
             <li
@@ -23,6 +24,7 @@
             >
               <div class="inline-block leading-relaxed">
                 <MegaphoneIcon class="inline h-6 w-6" aria-hidden="true" />
+                <span class="sr-only">new notification from Current</span>
                 <strong class="font-semibold mx-2">{{ alert.title }}</strong>
                 <span v-html="alert.message"></span>
               </div>
@@ -60,6 +62,7 @@
       name="toast-notification"
       tag="div"
       class="z-[100] fixed top-2 right-2 flex flex-col-reverse gap-3"
+      role="status"
       @before-enter="stopBodyOverflow"
       @after-enter="allowBodyOverflow"
       @before-leave="stopBodyOverflow"
