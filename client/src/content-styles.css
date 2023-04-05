@@ -463,6 +463,15 @@
 .ck-content h4 {
   font-size: 1.1em;
 }
+.ck-content a {
+  @apply text-mission-light-blue hover:underline;
+}
+.dark .ck-content a {
+  @apply text-teal-300;
+}
+.energy .ck-content a {
+  @apply text-energy-yellow;
+}
 .ck-content p.info-box,
 .ck-content.info-box {
   @apply border-4 border-slate-300;
