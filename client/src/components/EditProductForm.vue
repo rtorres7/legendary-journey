@@ -1170,14 +1170,14 @@ export default {
 
     const deleteDocument = () => {
       if (process.env.NODE_ENV === "low") {
+        router.push({
+          name: "publish",
+          params: { date: route.params.date },
+        });
         createNotification({
           title: "Product Deleted",
           message: "The product has been deleted successfully.",
           type: "success",
-        });
-        router.push({
-          name: "publish",
-          params: { date: route.params.date },
         });
       } else {
         axios
@@ -1191,14 +1191,14 @@ export default {
                 autoClose: false,
               });
             } else {
+              router.push({
+                name: "publish",
+                params: { date: route.params.date },
+              });
               createNotification({
                 title: "Product Deleted",
                 message: response.data.status,
                 type: "success",
-              });
-              router.push({
-                name: "publish",
-                params: { date: route.params.date },
               });
             }
           });
@@ -1215,14 +1215,14 @@ export default {
         if (process.env.NODE_ENV === "low") {
           setTimeout(() => {
             publishingProduct.value = false;
-            createNotification({
-              title: "Product Pulished",
-              message: "Great job! You successfully published the product.",
-              type: "success",
-            });
             router.push({
               name: "product",
               params: { doc_num: route.params.doc_num },
+            });
+            createNotification({
+              title: "Product Published",
+              message: "Great job! You successfully published the product.",
+              type: "success",
             });
           }, 3000);
         } else {
@@ -1247,14 +1247,14 @@ export default {
                   autoClose: false,
                 });
               } else {
+                router.push({
+                  name: "product",
+                  params: { doc_num: route.params.doc_num },
+                });
                 createNotification({
                   title: "Product Published",
                   message: response.data.status,
                   type: "success",
-                });
-                router.push({
-                  name: "product",
-                  params: { doc_num: route.params.doc_num },
                 });
               }
             });
