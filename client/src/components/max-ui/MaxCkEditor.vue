@@ -119,7 +119,6 @@ export default {
           "|",
           "fontSize",
           "fontFamily",
-          "fontColor",
           "|",
           "numberedList",
           "bulletedList",
@@ -201,6 +200,15 @@ export default {
 };
 </script>
 <style>
+.ck.ck-content a {
+  @apply text-mission-light-blue hover:underline;
+}
+.dark .ck.ck-content a {
+  @apply text-teal-300;
+}
+.energy .ck.ck-content a {
+  @apply text-energy-yellow;
+}
 .ck-editor__editable_inline {
   height: 450px;
   overflow-wrap: anywhere;
