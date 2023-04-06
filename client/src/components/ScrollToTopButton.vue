@@ -1,7 +1,7 @@
 <template>
   <div
     ref="scrollTopButton"
-    class="invisible sticky w-full flex justify-end bottom-0 pb-3 transition"
+    class="invisible sticky w-full flex justify-end bottom-0 pb-3 transition z-[5]"
   >
     <button
       role="button"
