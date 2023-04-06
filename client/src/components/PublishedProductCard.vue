@@ -1,16 +1,16 @@
 <template>
   <MaxCard
     :class="['h-full', loading ? 'animate-pulse' : '']"
-    :alternate="!loading && isProductLocked(article)"
+    :alternate="!loading && isProductLocked(product)"
     :aria-label="
-      !loading && isProductLocked(article) ? 'restricted product' : ''
+      !loading && isProductLocked(product) ? 'restricted product' : ''
     "
     :title="
-      !loading && isProductLocked(article)
+      !loading && isProductLocked(product)
         ? 'This product has restricted access.'
         : ''
     "
-    :hoverable="!loading && !isProductLocked(article) ? true : false"
+    :hoverable="!loading && !isProductLocked(product) ? true : false"
     :rounded="false"
   >
     <template v-if="loading">
@@ -49,7 +49,7 @@
     <template v-else>
       <ProductImage
         :class="[headline ? 'h-[45%]' : 'h-2/3']"
-        :article="article"
+        :product="product"
       />
       <div
         :class="[
@@ -65,16 +65,16 @@
                 : 'line-clamp-2',
               'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere',
             ]"
-            :title="article.title"
+            :title="product.title"
           >
-            {{ `(${article.title_classification}) ${article.title}` }}
+            {{ `(${product.title_classification}) ${product.title}` }}
           </h1>
           <p
             v-show="headline"
             class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
-            :title="article.summary"
+            :title="product.summary"
           >
-            {{ `(${article.summary_classification}) ${article.summary}` }}
+            {{ `(${product.summary_classification}) ${product.summary}` }}
           </p>
         </div>
         <p
@@ -83,9 +83,9 @@
             'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
           ]"
         >
-          {{ formatDate(article.date_published) }}
+          {{ formatDate(product.date_published) }}
         </p>
-        <template v-if="isProductLocked(article)">
+        <template v-if="isProductLocked(product)">
           <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
             icon="locked"
@@ -104,7 +104,7 @@ export default {
     ProductImage,
   },
   props: {
-    article: {
+    product: {
       type: Object,
       default: () => {},
     },

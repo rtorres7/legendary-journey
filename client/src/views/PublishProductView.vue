@@ -112,7 +112,7 @@
                 <div class="pr-4">
                   <ProductImage
                     class="h-[100px] w-[300px]"
-                    :article="article"
+                    :product="article"
                     @click="
                       article.images.length > 0
                         ? openPreviewThumbnailDialog(article)
@@ -213,7 +213,7 @@
                 class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
               ></div>
               <ProductImage
-                :article="selectedArticle"
+                :product="selectedArticle"
                 class="inset-x-0 absolute h-full mx-auto z-[3]"
               />
             </div>

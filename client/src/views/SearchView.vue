@@ -406,7 +406,7 @@
           <template #grid="{ item }">
             <div class="w-full h-[288px] md:max-w-[575px]">
               <ProductRestrictedLink :product="item">
-                <PublishedProductCard :article="item" />
+                <PublishedProductCard :product="item" />
               </ProductRestrictedLink>
             </div>
           </template>

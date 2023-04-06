@@ -1,6 +1,6 @@
 import { specialEdition } from "@/data";
-import axios from '@/config/wireAxios'
-import router from "@/router"
+import axios from "@/config/wireAxios";
+import router from "@/router";
 
 export default {
   namespaced: true,
@@ -8,22 +8,30 @@ export default {
     loading: true,
     edition: {},
     pages: 1,
-    notFound: false
+    notFound: false,
   },
 
   actions: {
     getSpecialEdition({ state, commit }) {
       state.loading = true;
       let route = router.currentRoute.value;
-      if (process.env.NODE_ENV === 'low') {
-        setTimeout(() => commit("saveSpecialEdition", specialEdition), 750)
+      if (process.env.NODE_ENV === "low") {
+        console.log("[store] getSpecialEdition: ", specialEdition);
+        setTimeout(() => commit("saveSpecialEdition", specialEdition), 750);
       } else {
-        axios.get("/special_editions/" + `${route.params.id}`, { params: { page: route.query.page || 1 } }).then(response => {
-          console.log(`/special_editions/${route.params.id} (response):`, response);
-          commit("saveSpecialEdition", response.data);
-        })
+        axios
+          .get("/special_editions/" + `${route.params.id}`, {
+            params: { page: route.query.page || 1 },
+          })
+          .then((response) => {
+            console.log(
+              `/special_editions/${route.params.id} (response):`,
+              response
+            );
+            commit("saveSpecialEdition", response.data);
+          });
       }
-    }
+    },
   },
 
   mutations: {
@@ -32,8 +40,8 @@ export default {
       if (specialEdition.notFound === true) {
         state.notFound = true;
       } else {
-        state.edition = specialEdition
-        state.pages = specialEdition.totalPages
+        state.edition = specialEdition;
+        state.pages = specialEdition.totalPages;
       }
     },
   },
