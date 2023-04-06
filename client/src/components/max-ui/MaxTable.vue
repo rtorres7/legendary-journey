@@ -1,8 +1,20 @@
 <template>
-  <MaxCard>
+  <component
+    :is="isGrid ? 'div' : 'MaxCard'"
+    :class="
+      isGrid
+        ? 'border-t-2 border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50 mt-2'
+        : ''
+    "
+  >
     <!-- Top Pagination -->
     <div
-      class="px-4 py-3 flex items-center border-b border-gray-200 dark:border-slate-700/50 energy:border-zinc-700/50"
+      class="flex items-center"
+      :class="
+        isGrid
+          ? 'py-4'
+          : 'py-3 px-4 border-b border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50'
+      "
     >
       <div class="flex-1 flex items-center justify-between">
         <div>
@@ -27,7 +39,7 @@
     </div>
     <!-- Items -->
     <template v-if="isGrid">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
         <template v-for="item in items" :key="item">
           <slot name="grid" :item="item" />
         </template>
@@ -46,7 +58,12 @@
     </template>
     <!-- Bottom Pagination -->
     <div
-      class="px-4 py-3 flex items-center border-t border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
+      class="flex items-center"
+      :class="
+        isGrid
+          ? 'py-4'
+          : 'px-4 py-3 border-t border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50'
+      "
     >
       <div class="flex-1 flex items-center justify-between">
         <div>
@@ -69,7 +86,7 @@
         />
       </div>
     </div>
-  </MaxCard>
+  </component>
 </template>
 <script>
 import { onMounted } from "vue";
