@@ -534,7 +534,6 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox";
-//import ProductCard from "@/components/ProductCard";
 import PublishedProductCard from "@/components/PublishedProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
@@ -573,7 +572,6 @@ export default {
     ChevronUpDownIcon,
     XMarkIcon,
     MaxAppListbox,
-    //ProductCard,
     PublishedProductCard,
     ProductRestrictedLink,
     SearchResultsFacets,
