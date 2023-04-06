@@ -1,19 +1,19 @@
 <template>
   <div id="img-container" class="relative overflow-hidden">
-    <template v-if="hasArticleImage(article)">
+    <template v-if="hasArticleImage(product)">
       <div
         v-show="!smartRender"
-        id="article-blur"
+        id="image-blur"
         class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-        :style="{ background: 'url(' + getImgUrl(article) + ')' }"
+        :style="{ background: 'url(' + getImgUrl(product) + ')' }"
       ></div>
       <img
-        id="article-img"
+        id="product-img"
         :class="[
           smartRender ? '' : 'inset-x-0',
           'absolute h-full mx-auto z-[3]',
         ]"
-        :src="getImgUrl(article)"
+        :src="getImgUrl(product)"
         alt=""
         @load="onImgLoad"
       />
@@ -36,7 +36,7 @@ import { isEmpty } from "@/helpers";
 
 export default {
   props: {
-    article: {
+    product: {
       type: Object,
       required: true,
     },
@@ -52,15 +52,15 @@ export default {
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
     const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
 
-    const hasArticleImage = (article) => {
+    const hasArticleImage = (product) => {
       if (sampleImage.value || uploadBinary.value) {
         return true;
       }
       let hasImages = true;
-      if (isEmpty(article.images)) {
+      if (isEmpty(product.images)) {
         hasImages = false;
       } else {
-        if (article.images.table && isEmpty(article.images.table.article)) {
+        if (product.images.table && isEmpty(product.images.table.article)) {
           hasImages = false;
         }
       }
@@ -70,7 +70,7 @@ export default {
       return hasImages;
     };
 
-    const getImgUrl = (article) => {
+    const getImgUrl = (product) => {
       if (sampleImage.value) {
         return require("@/assets/sydney.jpg");
       }
@@ -78,19 +78,19 @@ export default {
         return uploadBinary.value;
       }
       let updatedAt;
-      if (Array.isArray(article.images)) {
-        updatedAt = article.images.filter(
+      if (Array.isArray(product.images)) {
+        updatedAt = product.images.filter(
           (image) => image.usage == "article"
         )[0].updated_at;
-      } else if (article.images && article.images.table.article) {
-        updatedAt = article.images.table.article.table.updated_at;
+      } else if (product.images && product.images.table.article) {
+        updatedAt = product.images.table.article.table.updated_at;
       } else {
         updatedAt = "";
       }
       return (
         window.location.origin +
         "/documents/" +
-        article.doc_num +
+        product.doc_num +
         "/images/article?updated_at=" +
         updatedAt
       );
@@ -99,7 +99,7 @@ export default {
     const onImgLoad = () => {
       if (props.smartRender) {
         const articleImgWidth =
-          document.getElementById("article-img")?.clientWidth;
+          document.getElementById("product-img")?.clientWidth;
         emit("imageLoaded", articleImgWidth);
       }
     };
