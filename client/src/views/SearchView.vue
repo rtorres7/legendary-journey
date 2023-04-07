@@ -283,6 +283,11 @@
         Here's some information about your keyword search that might help you
         find what you're looking for.
       </p>
+      <p class="text-center font-semibold">
+        <router-link class="hover:underline" to="/search_tips/" target="_blank"
+          >Advanced Search Tips</router-link
+        >
+      </p>
     </div>
   </template>
   <template v-if="!loadingResults && totalCount > 0">
