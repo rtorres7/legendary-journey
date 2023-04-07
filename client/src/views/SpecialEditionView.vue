@@ -66,9 +66,11 @@
             v-for="article in specialEdition.articles"
             :key="article.id"
           >
-            <MaxCard class="h-full" hoverable :rounded="false">
-              <ProductCard :article="article" />
-            </MaxCard>
+            <div class="w-full h-[288px]">
+              <ProductRestrictedLink :product="article">
+                <PublishedProductCard :product="article" />
+              </ProductRestrictedLink>
+            </div>
           </template>
         </template>
       </div>
@@ -85,9 +87,11 @@
               v-for="article in specialEdition.restrictedArticles"
               :key="article.id"
             >
-              <MaxCard class="h-full" hoverable :rounded="false">
-                <ProductCard :article="article" />
-              </MaxCard>
+              <div class="w-full h-[288px]">
+                <ProductRestrictedLink :product="article">
+                  <PublishedProductCard :product="article" />
+                </ProductRestrictedLink>
+              </div>
             </template>
           </div>
         </template>
@@ -234,7 +238,8 @@ import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import ProductCard from "@/components/ProductCard";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
+import PublishedProductCard from "@/components/PublishedProductCard";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
 export default {
@@ -243,7 +248,8 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronUpIcon,
-    ProductCard,
+    ProductRestrictedLink,
+    PublishedProductCard,
     SpecialEditionCreateEditDialog,
   },
   setup() {

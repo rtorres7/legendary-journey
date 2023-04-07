@@ -115,7 +115,7 @@
             <template v-if="danielArticles.length > 0">
               <ProductRestrictedLink :product="danielArticles[0].attributes">
                 <PublishedProductCard
-                  :article="danielArticles[0].attributes"
+                  :product="danielArticles[0].attributes"
                   headline
                 />
               </ProductRestrictedLink>
@@ -154,7 +154,7 @@
             >
               <div class="w-full h-[288px] md:max-w-[575px]">
                 <ProductRestrictedLink :product="article.attributes">
-                  <PublishedProductCard :article="article.attributes" />
+                  <PublishedProductCard :product="article.attributes" />
                 </ProductRestrictedLink>
               </div>
             </template>
@@ -185,7 +185,7 @@
           >
             <div class="w-full h-[288px] md:max-w-[575px]">
               <ProductRestrictedLink :product="article.attributes">
-                <PublishedProductCard :article="article.attributes" />
+                <PublishedProductCard :product="article.attributes" />
               </ProductRestrictedLink>
             </div>
           </template>
