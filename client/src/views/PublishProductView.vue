@@ -39,9 +39,7 @@
       <h3 class="font-semibold text-lg">Create a Product</h3>
       <p>Select the product you'd like to create</p>
     </div>
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mb-6"
-    >
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
       <template v-for="product in availableProductTypes" :key="product">
         <MaxCard
           class="flex justify-center items-center font-medium cursor-pointer"
@@ -52,11 +50,13 @@
           @click="goToArticle(product.payload)"
           @keyup.enter="goToArticle(product.payload)"
         >
-          <span class="z-5 px-9 py-10 text-2xl font-bold">
+          <span
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+          >
             {{ product.displayName }}
           </span>
           <MaxProductIcon
-            class="absolute w-24 h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
+            class="absolute w-16 h-16 lg:w-24 lg:h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
             :icon="product.icon"
           />
         </MaxCard>
@@ -85,7 +85,7 @@
     <div class="py-6">
       <div class="flex justify-between">
         <h3 class="font-semibold mb-6 text-lg">
-          Edit Existing Products ({{ filterArticles().length }})
+          Manage Existing Products ({{ filterArticles().length }})
         </h3>
         <div v-if="filterArticles().length > 0" class="flex items-center">
           <input
@@ -102,26 +102,22 @@
       <template v-if="articles.length > 0">
         <ul class="space-y-3">
           <template
-            v-for="{ attributes: article } in filterArticles()"
-            :key="article"
+            v-for="{ attributes: product } in filterArticles()"
+            :key="product"
           >
             <MaxCard class="flex flex-col py-4">
-              <!-- <span
-                class="text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80 text-sm self-end pb-1"
-                >{{ article.doc_num }}</span
-              > -->
               <div class="flex justify-between px-4 pb-3 text-sm">
                 <div class="flex space-x-10 self-center">
                   <div class="flex flex-col">
                     <span class="text-xs uppercase">Product ID</span>
-                    <span class="line-clamp-1" :title="article.doc_num">{{
-                      article.doc_num
+                    <span class="line-clamp-1" :title="product.doc_num">{{
+                      product.doc_num
                     }}</span>
                   </div>
                   <div class="flex flex-col">
                     <span class="text-xs uppercase">TYPE</span>
-                    <span class="line-clamp-1" :title="article.product_type">{{
-                      article.product_type
+                    <span class="line-clamp-1" :title="product.product_type">{{
+                      product.product_type
                     }}</span>
                   </div>
                   <div class="flex flex-col">
@@ -129,11 +125,11 @@
                     <span
                       :class="[
                         'capitalize',
-                        article.state === 'draft'
+                        product.state === 'draft'
                           ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
                           : 'line-clamp-1',
                       ]"
-                      >{{ article.state }}</span
+                      >{{ product.state }}</span
                     >
                   </div>
                   <div class="flex flex-col">
@@ -141,18 +137,15 @@
                     <span
                       class="line-clamp-1"
                       :title="
-                        dayjs(article.date_published).format('MMMM D, YYYY')
+                        dayjs(product.date_published).format('MMMM D, YYYY')
                       "
                       >{{
-                        dayjs(article.date_published).format("MMMM D, YYYY")
+                        dayjs(product.date_published).format("MMMM D, YYYY")
                       }}</span
                     >
                   </div>
                 </div>
-                <p
-                  class="self-center text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
-                ></p>
-                <div class="flex space-x-4">
+                <div class="hidden lg:flex space-x-4">
                   <button
                     class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
                   >
@@ -169,17 +162,25 @@
                     >
                   </button>
                 </div>
+                <div class="flex lg:hidden space-x-4">
+                  <button>
+                    <PencilSquareIcon class="h-6 w-6" />
+                  </button>
+                  <button>
+                    <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                  </button>
+                </div>
               </div>
               <div
-                class="flex px-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
+                class="flex flex-col md:flex-row px-4 pt-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
               >
-                <div class="pr-4">
+                <div class="pb-4 md:pb-0 md:pr-4">
                   <ProductImage
-                    class="h-[75px] w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]"
-                    :product="article"
+                    class="h-[150px] w-full md:h-[75px] md:w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]"
+                    :product="product"
                     @click="
-                      article.images.length > 0
-                        ? openPreviewThumbnailDialog(article)
+                      product.images.length > 0
+                        ? openPreviewThumbnailDialog(product)
                         : null
                     "
                   />
@@ -188,73 +189,34 @@
                   <router-link
                     :to="{
                       name:
-                        article.state === 'draft'
+                        product.state === 'draft'
                           ? 'product-preview'
                           : 'product',
-                      params: { doc_num: article.doc_num },
+                      params: { doc_num: product.doc_num },
                     }"
                   >
                     <h4
-                      class="mb-1 font-medium line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline wrap-anywhere"
+                      class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
+                      :title="product.title"
                     >
                       {{
-                        article.title_classif && article.title_classif !== "X"
-                          ? `(${article.title_classif})`
+                        product.title_classif && product.title_classif !== "X"
+                          ? `(${product.title_classif})`
                           : ""
                       }}
-                      {{ article.title }}
+                      {{ product.title }}
                     </h4>
                   </router-link>
-                  <p class="text-sm line-clamp-5 md:line-clamp-4 wrap-anywhere">
-                    <!-- <p
-                      class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
-                    >
-                      {{ dayjs(article.date_published).format("D MMM") }} -
-                      <span class="font-medium pr-1">{{
-                        article.product_type
-                      }}</span>
-                    </p> -->
+                  <p class="hidden text-sm md:line-clamp-4 wrap-anywhere">
                     {{
-                      article.summary_classif && article.summary_classif !== "X"
-                        ? `(${article.summary_classif})`
+                      product.summary_classif && product.summary_classif !== "X"
+                        ? `(${product.summary_classif})`
                         : ""
                     }}
-                    {{ article.summary }}
+                    {{ product.summary }}
                   </p>
                 </div>
               </div>
-              <!-- <div class="flex pl-2">
-                <p
-                  :class="[
-                    'min-w-[100px] capitalize pr-4',
-                    article.state === 'draft'
-                      ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
-                      : 'italic text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
-                  ]"
-                >
-                  {{ article.state }}
-                </p>
-                <template
-                  v-if="
-                    canEditProduct(article.product_type) && !article?.legacy
-                  "
-                >
-                  <router-link
-                    :to="{
-                      name: 'edit',
-                      params: {
-                        date: routeDate,
-                        id: article.id,
-                        doc_num: article.doc_num,
-                      },
-                    }"
-                  >
-                    <tippy content="Edit this Product">
-                      <PencilIcon class="h-5 w-5" />
-                    </tippy>
-                  </router-link>
-                </template>
-              </div> -->
             </MaxCard>
           </template>
         </ul>
