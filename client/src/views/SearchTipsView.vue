@@ -17,7 +17,7 @@
               @click="scroll(section.shortName)"
             >
               <span class="sr-only">{{ section.shortName }}</span>
-              <span class="text-sm">{{ section.shortName }}</span>
+              <button class="text-sm">{{ section.shortName }}</button>
             </div>
           </template>
         </div>
