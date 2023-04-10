@@ -100,18 +100,82 @@
         </div>
       </div>
       <template v-if="articles.length > 0">
-        <MaxCard>
+        <ul class="space-y-3">
           <template
             v-for="{ attributes: article } in filterArticles()"
             :key="article"
           >
-            <div
-              class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
-            >
-              <div class="flex px-2">
+            <MaxCard class="flex flex-col py-4">
+              <!-- <span
+                class="text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80 text-sm self-end pb-1"
+                >{{ article.doc_num }}</span
+              > -->
+              <div class="flex justify-between px-4 pb-3 text-sm">
+                <div class="flex space-x-10 self-center">
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Product ID</span>
+                    <span class="line-clamp-1" :title="article.doc_num">{{
+                      article.doc_num
+                    }}</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">TYPE</span>
+                    <span class="line-clamp-1" :title="article.product_type">{{
+                      article.product_type
+                    }}</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Status</span>
+                    <span
+                      :class="[
+                        'capitalize',
+                        article.state === 'draft'
+                          ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
+                          : 'line-clamp-1',
+                      ]"
+                      >{{ article.state }}</span
+                    >
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Publishing Date</span>
+                    <span
+                      class="line-clamp-1"
+                      :title="
+                        dayjs(article.date_published).format('MMMM D, YYYY')
+                      "
+                      >{{
+                        dayjs(article.date_published).format("MMMM D, YYYY")
+                      }}</span
+                    >
+                  </div>
+                </div>
+                <p
+                  class="self-center text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
+                ></p>
+                <div class="flex space-x-4">
+                  <button
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
+                  >
+                    <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
+                      >Edit</span
+                    >
+                  </button>
+                  <button
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
+                  >
+                    <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
+                      class="pl-3"
+                      >Preview</span
+                    >
+                  </button>
+                </div>
+              </div>
+              <div
+                class="flex px-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
+              >
                 <div class="pr-4">
                   <ProductImage
-                    class="h-[100px] w-[300px]"
+                    class="h-[75px] w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]"
                     :product="article"
                     @click="
                       article.images.length > 0
@@ -131,7 +195,7 @@
                     }"
                   >
                     <h4
-                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline wrap-anywhere"
+                      class="mb-1 font-medium line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline wrap-anywhere"
                     >
                       {{
                         article.title_classif && article.title_classif !== "X"
@@ -141,30 +205,25 @@
                       {{ article.title }}
                     </h4>
                   </router-link>
-                  <div class="text-sm wrap-anywhere">
-                    <p
+                  <p class="text-sm line-clamp-5 md:line-clamp-4 wrap-anywhere">
+                    <!-- <p
                       class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
                     >
                       {{ dayjs(article.date_published).format("D MMM") }} -
                       <span class="font-medium pr-1">{{
                         article.product_type
                       }}</span>
-                      |
-                      <span class="pl-1">{{ article.doc_num }}</span>
-                    </p>
-                    <p class="line-clamp-5 md:line-clamp-3 wrap-anywhere">
-                      {{
-                        article.summary_classif &&
-                        article.summary_classif !== "X"
-                          ? `(${article.summary_classif})`
-                          : ""
-                      }}
-                      {{ article.summary }}
-                    </p>
-                  </div>
+                    </p> -->
+                    {{
+                      article.summary_classif && article.summary_classif !== "X"
+                        ? `(${article.summary_classif})`
+                        : ""
+                    }}
+                    {{ article.summary }}
+                  </p>
                 </div>
               </div>
-              <div class="flex pl-2">
+              <!-- <div class="flex pl-2">
                 <p
                   :class="[
                     'min-w-[100px] capitalize pr-4',
@@ -195,33 +254,33 @@
                     </tippy>
                   </router-link>
                 </template>
-              </div>
-            </div>
+              </div> -->
+            </MaxCard>
           </template>
-          <MaxDialog
-            :isOpen="isPreviewThumbnailDialogOpen"
-            :title="'Thumbnail Preview'"
-            class="max-w-fit"
-            @close="closePreviewThumbnailDialog"
+        </ul>
+        <MaxDialog
+          :isOpen="isPreviewThumbnailDialogOpen"
+          :title="'Thumbnail Preview'"
+          class="max-w-fit"
+          @close="closePreviewThumbnailDialog"
+        >
+          <div
+            id="img-container"
+            class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
           >
             <div
-              id="img-container"
-              class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-            >
-              <div
-                id="product-blur"
-                class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-              ></div>
-              <ProductImage
-                :product="selectedArticle"
-                class="inset-x-0 absolute h-full mx-auto z-[3]"
-              />
-            </div>
-            <p class="italic">
-              Only shown when the product is featured on the front page.
-            </p>
-          </MaxDialog>
-        </MaxCard>
+              id="product-blur"
+              class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
+            ></div>
+            <ProductImage
+              :product="selectedArticle"
+              class="inset-x-0 absolute h-full mx-auto z-[3]"
+            />
+          </div>
+          <p class="italic">
+            Only shown when the product is featured on the front page.
+          </p>
+        </MaxDialog>
       </template>
       <template v-else>
         <p class="pt-2 italic">No articles found.</p>
@@ -237,13 +296,19 @@ import { metadata } from "@/config";
 import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
+import {
+  CalendarIcon,
+  DocumentMagnifyingGlassIcon,
+  PencilSquareIcon,
+} from "@heroicons/vue/24/outline";
 import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
     CalendarIcon,
-    PencilIcon,
+    //PencilIcon,
+    DocumentMagnifyingGlassIcon,
+    PencilSquareIcon,
     ProductImage,
   },
   setup() {
