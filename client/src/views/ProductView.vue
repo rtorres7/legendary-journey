@@ -5,155 +5,161 @@
     </div>
   </template>
   <template v-else>
-    <div v-if="!loadingFeaturedArticles && navigation">
-      <ProductNavigation :navigation="navigation" />
-    </div>
-    <div
-      class="flex flex-wrap flex-col lg:flex-row lg:flex-nowrap justify-between mb-8"
-    >
+    <template v-if="!canAccessProduct">
+      <NotAuthorized :product="product" />
+    </template>
+    <template v-else>
+      <div v-if="!loadingFeaturedArticles && navigation">
+        <ProductNavigation :navigation="navigation" />
+      </div>
       <div
-        v-if="product.state !== 'draft'"
-        class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
+        class="flex flex-wrap flex-col lg:flex-row lg:flex-nowrap justify-between mb-8"
       >
-        <div class="flex">
+        <div
+          v-if="product.state !== 'draft'"
+          class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
+        >
+          <div class="flex">
+            <div>
+              <tippy content="Print this Product">
+                <PrinterIcon
+                  class="h-6 w-6 cursor-pointer"
+                  aria-hidden="true"
+                  @click="printDocument"
+                />
+              </tippy>
+            </div>
+            <div
+              class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+            >
+              <p>
+                {{ product.print_count }}
+              </p>
+            </div>
+          </div>
+          <div class="flex">
+            <a
+              :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
+            >
+              <tippy content="Email a link to this Product">
+                <EnvelopeIcon
+                  class="h-6 w-6 cursor-pointer"
+                  aria-hidden="true"
+                  @click="updateEmailCount"
+                />
+              </tippy>
+            </a>
+            <div
+              class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+            >
+              <p>
+                {{ product.email_count }}
+              </p>
+            </div>
+          </div>
           <div>
-            <tippy content="Print this Product">
-              <PrinterIcon
+            <tippy content="Copy URL to Clipboard">
+              <LinkIcon
                 class="h-6 w-6 cursor-pointer"
                 aria-hidden="true"
-                @click="printDocument"
+                @click="copyUrl"
               />
             </tippy>
           </div>
           <div
-            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+            v-show="
+              canManageWire &&
+              canEditProduct(product.product_type_id) &&
+              !product?.legacy
+            "
           >
-            <p>
-              {{ product.print_count }}
-            </p>
+            <router-link
+              :to="{
+                name: 'edit',
+                params: {
+                  date: product?.feature_date,
+                  id: product?.feature_id ? product.feature_id : -1,
+                  doc_num: product?.doc_num,
+                },
+              }"
+            >
+              <tippy content="Edit this Product">
+                <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+              </tippy>
+            </router-link>
           </div>
         </div>
-        <div class="flex">
-          <a
-            :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
-          >
-            <tippy content="Email a link to this Product">
-              <EnvelopeIcon
-                class="h-6 w-6 cursor-pointer"
-                aria-hidden="true"
-                @click="updateEmailCount"
-              />
-            </tippy>
-          </a>
-          <div
-            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
-          >
-            <p>
-              {{ product.email_count }}
-            </p>
-          </div>
-        </div>
-        <div>
-          <tippy content="Copy URL to Clipboard">
-            <LinkIcon
-              class="h-6 w-6 cursor-pointer"
-              aria-hidden="true"
-              @click="copyUrl"
-            />
-          </tippy>
+        <div class="w-full pb-6 lg:pb-0">
+          <ProductContent :product="product" />
         </div>
         <div
-          v-show="
-            canManageWire &&
-            canEditProduct(product.product_type_id) &&
-            !product?.legacy
-          "
+          class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
-          <router-link
-            :to="{
-              name: 'edit',
-              params: {
-                date: product?.feature_date,
-                id: product?.feature_id ? product.feature_id : -1,
-                doc_num: product?.doc_num,
-              },
-            }"
-          >
-            <tippy content="Edit this Product">
-              <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
-            </tippy>
-          </router-link>
+          <ProductAttachments :article="product" />
+          <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
+          <template v-if="product.state !== 'draft'">
+            <template v-if="!loadingRelatedProducts">
+              <ProductRelated :relatedProducts="relatedProducts" />
+            </template>
+          </template>
+          <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
+          <template v-if="product.state !== 'draft'">
+            <template v-if="!loadingMetrics">
+              <div class="flex flex-col space-y-4">
+                <p class="font-semibold text-lg">Metrics</p>
+                <template v-if="metrics.uniqueReaders !== 0">
+                  <p>Unique Readers ({{ metrics.uniqueReaders }})</p>
+                  <div class="flex items-center">
+                    <div class="flex flex-col">
+                      <label class="text-sm font-medium mb-1"
+                        >Start Date
+                        <MaxDatepicker
+                          v-model="metricStartDate"
+                          :minDate="product.display_date"
+                          :maxDate="new Date()"
+                          :enableTimePicker="false"
+                          format="dd MMMM yyyy"
+                          week-start="0"
+                          auto-apply
+                        />
+                      </label>
+                    </div>
+                    <p class="px-3 pt-4">to</p>
+                    <div class="flex flex-col">
+                      <label class="text-sm font-medium mb-1"
+                        >End Date
+                        <MaxDatepicker
+                          v-model="metricEndDate"
+                          :minDate="product.display_date"
+                          :maxDate="new Date()"
+                          :enableTimePicker="false"
+                          format="dd MMMM yyyy"
+                          week-start="0"
+                          auto-apply
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <ProductMetrics :metrics="metrics.readership" />
+                </template>
+              </div>
+            </template>
+            <template v-else>
+              <div class="m-auto pt-8">
+                <MaxLoadingSpinner class="h-20 w-20" />
+              </div>
+            </template>
+          </template>
         </div>
       </div>
-      <div class="w-full pb-6 lg:pb-0">
-        <ProductContent :product="product" />
-      </div>
-      <div
-        class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-      >
-        <ProductAttachments :article="product" />
-        <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
-        <template v-if="product.state !== 'draft'">
-          <template v-if="!loadingRelatedProducts">
-            <ProductRelated :relatedProducts="relatedProducts" />
-          </template>
-        </template>
-        <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="product.state !== 'draft'">
-          <template v-if="!loadingMetrics">
-            <div class="flex flex-col space-y-4">
-              <p class="font-semibold text-lg">Metrics</p>
-              <template v-if="metrics.uniqueReaders !== 0">
-                <p>Unique Readers ({{ metrics.uniqueReaders }})</p>
-                <div class="flex items-center">
-                  <div class="flex flex-col">
-                    <label class="text-sm font-medium mb-1"
-                      >Start Date
-                      <MaxDatepicker
-                        v-model="metricStartDate"
-                        :minDate="product.display_date"
-                        :maxDate="new Date()"
-                        :enableTimePicker="false"
-                        format="dd MMMM yyyy"
-                        week-start="0"
-                        auto-apply
-                      />
-                    </label>
-                  </div>
-                  <p class="px-3 pt-4">to</p>
-                  <div class="flex flex-col">
-                    <label class="text-sm font-medium mb-1"
-                      >End Date
-                      <MaxDatepicker
-                        v-model="metricEndDate"
-                        :minDate="product.display_date"
-                        :maxDate="new Date()"
-                        :enableTimePicker="false"
-                        format="dd MMMM yyyy"
-                        week-start="0"
-                        auto-apply
-                      />
-                    </label>
-                  </div>
-                </div>
-                <ProductMetrics :metrics="metrics.readership" />
-              </template>
-            </div>
-          </template>
-          <template v-else>
-            <div class="m-auto pt-8">
-              <MaxLoadingSpinner class="h-20 w-20" />
-            </div>
-          </template>
-        </template>
-      </div>
-    </div>
+    </template>
   </template>
 </template>
 
 <script>
 import * as dayjs from "dayjs";
-import { formatDate } from "@/helpers";
+import { formatDate, hasProductAccess } from "@/helpers";
+import NotAuthorized from "@/components/NotAuthorized";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -171,6 +177,7 @@ import ProductMetrics from "@/components/ProductMetrics";
 
 export default {
   components: {
+    NotAuthorized,
     PrinterIcon,
     LinkIcon,
     EnvelopeIcon,
@@ -187,6 +194,7 @@ export default {
     const url = computed(() => window.location);
     const createNotification = inject("create-notification");
     const product = computed(() => store.state.product.document);
+    const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
     const featuredArticles = computed(() => store.state.daniel.articles);
     const loadingFeaturedArticles = computed(() => store.state.daniel.loading);
@@ -245,11 +253,11 @@ export default {
 
     onMounted(() => {
       store.dispatch("product/getProductDetails");
-      store.dispatch("daniel/getDanielArticles");
     });
 
     watch([loadingProduct], () => {
-      if (!loadingProduct.value) {
+      if (!loadingProduct.value && canAccessProduct.value) {
+        store.dispatch("daniel/getDanielArticles");
         store.dispatch("relatedProducts/getRelatedDocuments");
         document.title = product.value.title;
         metricStartDate.value = dayjs(product.value.display_date).toDate();
@@ -307,6 +315,13 @@ export default {
       }
     };
 
+    const canAccessProduct = computed(() => {
+      if (hasProductAccess(product.value, organization.value)) {
+        return true;
+      }
+      return false;
+    });
+
     const canEditProduct = (product_id) => {
       if (!isCommunityExclusive.value) {
         return true;
@@ -336,7 +351,9 @@ export default {
 
     return {
       formatDate,
+      hasProductAccess,
       product,
+      organization,
       loadingProduct,
       loadingFeaturedArticles,
       relatedProducts,
@@ -354,6 +371,7 @@ export default {
       copyUrl,
       canManageWire,
       url,
+      canAccessProduct,
       canEditProduct,
       theme,
     };
