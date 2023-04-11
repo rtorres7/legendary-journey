@@ -274,6 +274,12 @@ export default {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
                 emit("specialEditionUpdated");
+                createNotification({
+                  title: "Changes saved",
+                  message: `${props.edition?.name} Special Edition has been saved.`,
+                  type: "success",
+                  duration: 4,
+                });
                 closeDialog();
               })
               .catch((err) => {
@@ -290,6 +296,12 @@ export default {
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
+                createNotification({
+                  title: "Created",
+                  message: `${props.edition?.name} Special Edition has been created`,
+                  type: "success",
+                  duration: 4,
+                });
                 resetForm();
                 closeDialog();
               })

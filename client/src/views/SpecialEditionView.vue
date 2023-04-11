@@ -232,7 +232,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, watch } from "vue";
+import { computed, inject, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
@@ -256,6 +256,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const createNotification = inject("create-notification");
 
     const loadingSpecialEdition = computed(
       () => store.state.specialEdition.loading
@@ -294,9 +295,21 @@ export default {
           .delete(`/special_editions/${specialEdition.value.id}`)
           .then(() => {
             router.push({ name: "specialEditions" });
+            createNotification({
+              title: "Deleted",
+              message: `${specialEdition.value.name} Special Edition has been deleted.`,
+              type: "success",
+              duration: 4,
+            });
           })
-          .catch(() => {
+          .catch((err) => {
             console.warn("Unable to delete Special Edition");
+            createNotification({
+              title: `Error deleting ${specialEdition.value.name} Special Edition`,
+              message: JSON.stringify(err.response.data.errors),
+              type: "error",
+              autoclose: false,
+            });
           });
       }
     };
