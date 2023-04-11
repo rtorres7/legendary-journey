@@ -50,4 +50,3 @@ export { specialEdition, specialEditionLinks } from "./specialEditions";
 export { relatedProducts } from "./relatedProducts";
 export { articleMetrics } from "./articleMetrics";
 export { mockDocument } from "./document";
-export { searchTips } from "./searchTips";
