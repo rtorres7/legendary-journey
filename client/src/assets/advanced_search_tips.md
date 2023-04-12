@@ -8,9 +8,9 @@ well-formed your query, the quicker you will find the data that you are looking 
 
 - [Terms](#terms)
 - [Operators](#operators)
-- [AND](#and)
-- [OR](#or)
-- [NOT](#not)
+  - [AND](#and)
+  - [OR](#or)
+  - [NOT](#not)
 - [Capitalization](#capitalization)
 - [Grouping](#grouping)
 - [Analyzers](#analyzers)

@@ -30,6 +30,9 @@ export default {
   a {
     @apply text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow;
   }
+  ul {
+    @apply list-disc pl-8 pb-4;
+  }
   td {
     @apply border border-mission-light-blue dark:border-teal-300 energy:border-energy-yellow text-center p-2;
   }
