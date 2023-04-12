@@ -148,13 +148,21 @@
                   </div>
                 </div>
                 <div class="hidden lg:flex space-x-4">
-                  <button
+                  <router-link
+                    :to="{
+                      name: 'edit',
+                      params: {
+                        date: routeDate,
+                        id: product.id,
+                        doc_num: product.doc_num,
+                      },
+                    }"
                     class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                   >
                     <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
                       >Edit</span
                     >
-                  </button>
+                  </router-link>
                   <button
                     class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                     @click.prevent="openPreviewDialog(product)"
@@ -167,11 +175,19 @@
                 </div>
                 <div class="flex h-fit lg:hidden space-x-4">
                   <tippy content="Edit Product">
-                    <button
+                    <router-link
+                      :to="{
+                        name: 'edit',
+                        params: {
+                          date: routeDate,
+                          id: product.id,
+                          doc_num: product.doc_num,
+                        },
+                      }"
                       class="hover:text-black dark:hover:text-white energy:hover:text-white"
                     >
                       <PencilSquareIcon class="h-6 w-6" />
-                    </button>
+                    </router-link>
                   </tippy>
                   <tippy content="Preview Product">
                     <button
