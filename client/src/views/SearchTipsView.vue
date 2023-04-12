@@ -33,5 +33,8 @@ export default {
   td {
     @apply border border-mission-light-blue dark:border-teal-300 energy:border-energy-yellow text-center p-2;
   }
+  p {
+    @apply py-2;
+  }
 }
 </style>
