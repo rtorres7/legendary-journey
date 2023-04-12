@@ -159,7 +159,6 @@
 <script>
 import * as dayjs from "dayjs";
 import { formatDate, hasProductAccess } from "@/helpers";
-import NotAuthorized from "@/components/NotAuthorized";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -169,6 +168,7 @@ import {
   EnvelopeIcon,
   PencilIcon,
 } from "@heroicons/vue/24/outline";
+import NotAuthorized from "@/components/NotAuthorized";
 import ProductNavigation from "@/components/ProductNavigation";
 import ProductContent from "@/components/ProductContent";
 import ProductAttachments from "@/components/ProductAttachments";
@@ -177,11 +177,11 @@ import ProductMetrics from "@/components/ProductMetrics";
 
 export default {
   components: {
-    NotAuthorized,
     PrinterIcon,
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
+    NotAuthorized,
     ProductNavigation,
     ProductContent,
     ProductAttachments,
@@ -344,7 +344,6 @@ export default {
       () => {
         if (route.name === "product") {
           store.dispatch("product/getProductDetails");
-          store.dispatch("daniel/getDanielArticles");
         }
       }
     );
