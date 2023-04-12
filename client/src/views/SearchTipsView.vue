@@ -22,10 +22,16 @@ export default {
     @apply font-semibold text-2xl py-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25;
   }
   h2 {
-    @apply font-medium text-xl;
+    @apply font-medium text-xl py-4;
+  }
+  h3 {
+    @apply font-medium py-4;
   }
   a {
     @apply text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow;
+  }
+  td {
+    @apply border border-mission-light-blue dark:border-teal-300 energy:border-energy-yellow text-center p-2;
   }
 }
 </style>
