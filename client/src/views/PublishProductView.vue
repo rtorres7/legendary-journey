@@ -83,8 +83,8 @@
   </template>
   <template v-else>
     <div class="py-6">
-      <div class="flex justify-between">
-        <h3 class="font-semibold mb-6 text-lg">
+      <div class="flex justify-between mb-4">
+        <h3 class="font-semibold text-lg">
           Manage Existing Products ({{ filterArticles().length }})
         </h3>
         <div v-if="filterArticles().length > 0" class="flex items-center">
@@ -107,7 +107,9 @@
           >
             <MaxCard class="flex flex-col py-4">
               <div class="flex justify-between px-4 pb-3 text-sm">
-                <div class="flex space-x-10 self-center">
+                <div
+                  class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-10 self-center"
+                >
                   <div class="flex flex-col">
                     <span class="text-xs uppercase">Product ID</span>
                     <span class="line-clamp-1" :title="product.doc_num">{{
@@ -147,14 +149,15 @@
                 </div>
                 <div class="hidden lg:flex space-x-4">
                   <button
-                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                   >
                     <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
                       >Edit</span
                     >
                   </button>
                   <button
-                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25"
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    @click.prevent="openPreviewDialog(product)"
                   >
                     <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
                       class="pl-3"
@@ -162,21 +165,33 @@
                     >
                   </button>
                 </div>
-                <div class="flex lg:hidden space-x-4">
-                  <button>
-                    <PencilSquareIcon class="h-6 w-6" />
-                  </button>
-                  <button>
-                    <DocumentMagnifyingGlassIcon class="h-6 w-6" />
-                  </button>
+                <div class="flex h-fit lg:hidden space-x-4">
+                  <tippy content="Edit Product">
+                    <button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                    >
+                      <PencilSquareIcon class="h-6 w-6" />
+                    </button>
+                  </tippy>
+                  <tippy content="Preview Product">
+                    <button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      @click.prevent="openPreviewDialog(product)"
+                    >
+                      <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                    </button>
+                  </tippy>
                 </div>
               </div>
               <div
                 class="flex flex-col md:flex-row px-4 pt-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
               >
-                <div class="pb-4 md:pb-0 md:pr-4">
+                <div class="relative pb-4 md:pb-0 md:pr-4">
                   <ProductImage
-                    class="h-[150px] w-full md:h-[75px] md:w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]"
+                    :class="[
+                      product.images.length > 0 ? 'cursor-pointer' : null,
+                      'h-[140px] w-full sm:h-[170px] sm:w-[510px] md:h-[75px] md:w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]',
+                    ]"
                     :product="product"
                     @click="
                       product.images.length > 0
@@ -228,20 +243,26 @@
         >
           <div
             id="img-container"
-            class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            class="m-2 relative overflow-hidden w-[375px] h-[125px] sm:w-[450px] sm:h-[150px] md:w-[600px] md:h-[200px] lg:w-[900px] lg:h-[300px]"
           >
-            <div
-              id="product-blur"
-              class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-            ></div>
             <ProductImage
               :product="selectedArticle"
               class="inset-x-0 absolute h-full mx-auto z-[3]"
             />
           </div>
-          <p class="italic">
-            Only shown when the product is featured on the front page.
-          </p>
+        </MaxDialog>
+        <MaxDialog
+          class="max-w-[1300px]"
+          :isOpen="isPreviewDialogOpen"
+          @close="closePreviewDialog"
+        >
+          <template v-if="loadingPreview"
+            ><div class="max-w-fit m-auto">
+              <MaxLoadingSpinner class="h-20 w-20" /></div
+          ></template>
+          <template v-else>
+            <ProductContent :product="previewProduct" isPreview />
+          </template>
         </MaxDialog>
       </template>
       <template v-else>
@@ -252,6 +273,7 @@
 </template>
 
 <script>
+import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -263,14 +285,15 @@ import {
   DocumentMagnifyingGlassIcon,
   PencilSquareIcon,
 } from "@heroicons/vue/24/outline";
+import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
     CalendarIcon,
-    //PencilIcon,
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
+    ProductContent,
     ProductImage,
   },
   setup() {
@@ -279,6 +302,8 @@ export default {
     const store = useStore();
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
+    const loadingPreview = ref(true);
+    const previewProduct = ref(null);
     const loadingCriteria = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
     const articles = computed(() => store.state.wires.articles);
@@ -293,6 +318,29 @@ export default {
       } else {
         return articles.value;
       }
+    };
+    const isPreviewDialogOpen = ref(false);
+    const closePreviewDialog = () => {
+      isPreviewDialogOpen.value = false;
+    };
+    const openPreviewDialog = (product) => {
+      console.log("product:", product);
+      loadingPreview.value = true;
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        previewProduct.value = documentMatch.data;
+        setTimeout(() => (loadingPreview.value = false), 750);
+      } else {
+        axios
+          .get(`/documents/${route.params.doc_num}/preview.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
+      }
+      isPreviewDialogOpen.value = true;
     };
 
     const defaultPayload = {
@@ -420,6 +468,8 @@ export default {
       dayjs,
       routeDate,
       selectedDate,
+      loadingPreview,
+      previewProduct,
       articles,
       loadingArticles,
       isCommunityExclusive,
@@ -430,6 +480,9 @@ export default {
       selectDate,
       canEditProduct,
       selectedArticle,
+      isPreviewDialogOpen,
+      closePreviewDialog,
+      openPreviewDialog,
       isPreviewThumbnailDialogOpen,
       openPreviewThumbnailDialog,
       closePreviewThumbnailDialog,
