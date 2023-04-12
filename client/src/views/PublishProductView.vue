@@ -39,9 +39,7 @@
       <h3 class="font-semibold text-lg">Create a Product</h3>
       <p>Select the product you'd like to create</p>
     </div>
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mb-6"
-    >
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
       <template v-for="product in availableProductTypes" :key="product">
         <MaxCard
           class="flex justify-center items-center font-medium cursor-pointer"
@@ -52,11 +50,13 @@
           @click="goToArticle(product.payload)"
           @keyup.enter="goToArticle(product.payload)"
         >
-          <span class="z-5 px-9 py-10 text-2xl font-bold">
+          <span
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+          >
             {{ product.displayName }}
           </span>
           <MaxProductIcon
-            class="absolute w-24 h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
+            class="absolute w-16 h-16 lg:w-24 lg:h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
             :icon="product.icon"
           />
         </MaxCard>
@@ -83,9 +83,9 @@
   </template>
   <template v-else>
     <div class="py-6">
-      <div class="flex justify-between">
-        <h3 class="font-semibold mb-6 text-lg">
-          Edit Existing Products ({{ filterArticles().length }})
+      <div class="flex justify-between mb-4">
+        <h3 class="font-semibold text-lg">
+          Manage Existing Products ({{ filterArticles().length }})
         </h3>
         <div v-if="filterArticles().length > 0" class="flex items-center">
           <input
@@ -100,22 +100,118 @@
         </div>
       </div>
       <template v-if="articles.length > 0">
-        <MaxCard>
+        <ul class="space-y-3">
           <template
-            v-for="{ attributes: article } in filterArticles()"
-            :key="article"
+            v-for="{ attributes: product } in filterArticles()"
+            :key="product"
           >
-            <div
-              class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
-            >
-              <div class="flex px-2">
-                <div class="pr-4">
+            <MaxCard class="flex flex-col py-4">
+              <div class="flex justify-between px-4 pb-3 text-sm">
+                <div
+                  class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-10 self-center"
+                >
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Product ID</span>
+                    <span class="line-clamp-1" :title="product.doc_num">{{
+                      product.doc_num
+                    }}</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">TYPE</span>
+                    <span class="line-clamp-1" :title="product.product_type">{{
+                      product.product_type
+                    }}</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Status</span>
+                    <span
+                      :class="[
+                        'capitalize',
+                        product.state === 'draft'
+                          ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
+                          : 'line-clamp-1',
+                      ]"
+                      >{{ product.state }}</span
+                    >
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Publishing Date</span>
+                    <span
+                      class="line-clamp-1"
+                      :title="
+                        dayjs(product.date_published).format('MMMM D, YYYY')
+                      "
+                      >{{
+                        dayjs(product.date_published).format("MMMM D, YYYY")
+                      }}</span
+                    >
+                  </div>
+                </div>
+                <div class="hidden lg:flex space-x-4">
+                  <router-link
+                    :to="{
+                      name: 'edit',
+                      params: {
+                        date: routeDate,
+                        id: product.id,
+                        doc_num: product.doc_num,
+                      },
+                    }"
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                  >
+                    <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
+                      >Edit</span
+                    >
+                  </router-link>
+                  <button
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    @click.prevent="openPreviewDialog(product)"
+                  >
+                    <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
+                      class="pl-3"
+                      >Preview</span
+                    >
+                  </button>
+                </div>
+                <div class="flex h-fit lg:hidden space-x-4">
+                  <tippy content="Edit Product">
+                    <router-link
+                      :to="{
+                        name: 'edit',
+                        params: {
+                          date: routeDate,
+                          id: product.id,
+                          doc_num: product.doc_num,
+                        },
+                      }"
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                    >
+                      <PencilSquareIcon class="h-6 w-6" />
+                    </router-link>
+                  </tippy>
+                  <tippy content="Preview Product">
+                    <button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      @click.prevent="openPreviewDialog(product)"
+                    >
+                      <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                    </button>
+                  </tippy>
+                </div>
+              </div>
+              <div
+                class="flex flex-col md:flex-row px-4 pt-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
+              >
+                <div class="relative pb-4 md:pb-0 md:pr-4">
                   <ProductImage
-                    class="h-[100px] w-[300px]"
-                    :product="article"
+                    :class="[
+                      product.images.length > 0 ? 'cursor-pointer' : null,
+                      'h-[140px] w-full sm:h-[170px] sm:w-[510px] md:h-[75px] md:w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]',
+                    ]"
+                    :product="product"
                     @click="
-                      article.images.length > 0
-                        ? openPreviewThumbnailDialog(article)
+                      product.images.length > 0
+                        ? openPreviewThumbnailDialog(product)
                         : null
                     "
                   />
@@ -124,104 +220,66 @@
                   <router-link
                     :to="{
                       name:
-                        article.state === 'draft'
+                        product.state === 'draft'
                           ? 'product-preview'
                           : 'product',
-                      params: { doc_num: article.doc_num },
+                      params: { doc_num: product.doc_num },
                     }"
                   >
                     <h4
-                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline wrap-anywhere"
+                      class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
+                      :title="product.title"
                     >
                       {{
-                        article.title_classif && article.title_classif !== "X"
-                          ? `(${article.title_classif})`
+                        product.title_classif && product.title_classif !== "X"
+                          ? `(${product.title_classif})`
                           : ""
                       }}
-                      {{ article.title }}
+                      {{ product.title }}
                     </h4>
                   </router-link>
-                  <div class="text-sm wrap-anywhere">
-                    <p
-                      class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
-                    >
-                      {{ dayjs(article.date_published).format("D MMM") }} -
-                      <span class="font-medium pr-1">{{
-                        article.product_type
-                      }}</span>
-                      |
-                      <span class="pl-1">{{ article.doc_num }}</span>
-                    </p>
-                    <p class="line-clamp-5 md:line-clamp-3 wrap-anywhere">
-                      {{
-                        article.summary_classif &&
-                        article.summary_classif !== "X"
-                          ? `(${article.summary_classif})`
-                          : ""
-                      }}
-                      {{ article.summary }}
-                    </p>
-                  </div>
+                  <p class="hidden text-sm md:line-clamp-4 wrap-anywhere">
+                    {{
+                      product.summary_classif && product.summary_classif !== "X"
+                        ? `(${product.summary_classif})`
+                        : ""
+                    }}
+                    {{ product.summary }}
+                  </p>
                 </div>
               </div>
-              <div class="flex pl-2">
-                <p
-                  :class="[
-                    'min-w-[100px] capitalize pr-4',
-                    article.state === 'draft'
-                      ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
-                      : 'italic text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
-                  ]"
-                >
-                  {{ article.state }}
-                </p>
-                <template
-                  v-if="
-                    canEditProduct(article.product_type) && !article?.legacy
-                  "
-                >
-                  <router-link
-                    :to="{
-                      name: 'edit',
-                      params: {
-                        date: routeDate,
-                        id: article.id,
-                        doc_num: article.doc_num,
-                      },
-                    }"
-                  >
-                    <tippy content="Edit this Product">
-                      <PencilIcon class="h-5 w-5" />
-                    </tippy>
-                  </router-link>
-                </template>
-              </div>
-            </div>
+            </MaxCard>
           </template>
-          <MaxDialog
-            :isOpen="isPreviewThumbnailDialogOpen"
-            :title="'Thumbnail Preview'"
-            class="max-w-fit"
-            @close="closePreviewThumbnailDialog"
+        </ul>
+        <MaxDialog
+          :isOpen="isPreviewThumbnailDialogOpen"
+          :title="'Thumbnail Preview'"
+          class="max-w-fit"
+          @close="closePreviewThumbnailDialog"
+        >
+          <div
+            id="img-container"
+            class="m-2 relative overflow-hidden w-[375px] h-[125px] sm:w-[450px] sm:h-[150px] md:w-[600px] md:h-[200px] lg:w-[900px] lg:h-[300px]"
           >
-            <div
-              id="img-container"
-              class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-            >
-              <div
-                id="product-blur"
-                class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-              ></div>
-              <ProductImage
-                :product="selectedArticle"
-                class="inset-x-0 absolute h-full mx-auto z-[3]"
-              />
-            </div>
-            <p class="italic">
-              Only shown when the product is featured on the front page.
-            </p>
-          </MaxDialog>
-        </MaxCard>
+            <ProductImage
+              :product="selectedArticle"
+              class="inset-x-0 absolute h-full mx-auto z-[3]"
+            />
+          </div>
+        </MaxDialog>
+        <MaxDialog
+          class="max-w-[1300px]"
+          :isOpen="isPreviewDialogOpen"
+          @close="closePreviewDialog"
+        >
+          <template v-if="loadingPreview"
+            ><div class="max-w-fit m-auto">
+              <MaxLoadingSpinner class="h-20 w-20" /></div
+          ></template>
+          <template v-else>
+            <ProductContent :product="previewProduct" isPreview />
+          </template>
+        </MaxDialog>
       </template>
       <template v-else>
         <p class="pt-2 italic">No articles found.</p>
@@ -231,19 +289,27 @@
 </template>
 
 <script>
+import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
 import { computed, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
+import {
+  CalendarIcon,
+  DocumentMagnifyingGlassIcon,
+  PencilSquareIcon,
+} from "@heroicons/vue/24/outline";
+import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
     CalendarIcon,
-    PencilIcon,
+    DocumentMagnifyingGlassIcon,
+    PencilSquareIcon,
+    ProductContent,
     ProductImage,
   },
   setup() {
@@ -252,6 +318,8 @@ export default {
     const store = useStore();
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
+    const loadingPreview = ref(true);
+    const previewProduct = ref(null);
     const loadingCriteria = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
     const articles = computed(() => store.state.wires.articles);
@@ -266,6 +334,29 @@ export default {
       } else {
         return articles.value;
       }
+    };
+    const isPreviewDialogOpen = ref(false);
+    const closePreviewDialog = () => {
+      isPreviewDialogOpen.value = false;
+    };
+    const openPreviewDialog = (product) => {
+      console.log("product:", product);
+      loadingPreview.value = true;
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        previewProduct.value = documentMatch.data;
+        setTimeout(() => (loadingPreview.value = false), 750);
+      } else {
+        axios
+          .get(`/documents/${route.params.doc_num}/preview.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
+      }
+      isPreviewDialogOpen.value = true;
     };
 
     const defaultPayload = {
@@ -393,6 +484,8 @@ export default {
       dayjs,
       routeDate,
       selectedDate,
+      loadingPreview,
+      previewProduct,
       articles,
       loadingArticles,
       isCommunityExclusive,
@@ -403,6 +496,9 @@ export default {
       selectDate,
       canEditProduct,
       selectedArticle,
+      isPreviewDialogOpen,
+      closePreviewDialog,
+      openPreviewDialog,
       isPreviewThumbnailDialogOpen,
       openPreviewThumbnailDialog,
       closePreviewThumbnailDialog,
