@@ -1,5 +1,32 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
+  <transition-group
+    name="toast-notification"
+    tag="div"
+    class="z-[100] fixed top-2 right-2 flex flex-col-reverse gap-3"
+    aria-live="assertive"
+    @before-enter="stopBodyOverflow"
+    @after-enter="allowBodyOverflow"
+    @before-leave="stopBodyOverflow"
+    @after-leave="allowBodyOverflow"
+  >
+    <ToastNotification
+      v-for="item in notifications"
+      :id="item.id"
+      :key="item.id"
+      :type="item.type"
+      :title="item.title"
+      :message="item.message"
+      :auto-close="item.autoClose"
+      :can-close="item.canClose"
+      :duration="item.duration"
+      @close="
+        () => {
+          removeNotifications(item.id);
+        }
+      "
+    />
+  </transition-group>
   <div
     ref="topOfApp"
     class="min-h-full bg-mission-blue dark:bg-dark-space-blue energy:bg-zinc-800"
@@ -58,33 +85,6 @@
       </div>
     </main>
     <TheFooter v-if="!['attachment'].includes($route.name)" />
-    <transition-group
-      name="toast-notification"
-      tag="div"
-      class="z-[100] fixed top-2 right-2 flex flex-col-reverse gap-3"
-      aria-live="assertive"
-      @before-enter="stopBodyOverflow"
-      @after-enter="allowBodyOverflow"
-      @before-leave="stopBodyOverflow"
-      @after-leave="allowBodyOverflow"
-    >
-      <ToastNotification
-        v-for="item in notifications"
-        :id="item.id"
-        :key="item.id"
-        :type="item.type"
-        :title="item.title"
-        :message="item.message"
-        :auto-close="item.autoClose"
-        :can-close="item.canClose"
-        :duration="item.duration"
-        @close="
-          () => {
-            removeNotifications(item.id);
-          }
-        "
-      />
-    </transition-group>
   </div>
 </template>
 
