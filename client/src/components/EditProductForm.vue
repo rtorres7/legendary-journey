@@ -1197,7 +1197,7 @@ export default {
               });
               createNotification({
                 title: "Product Deleted",
-                message: response.data.status,
+                message: `Product ${props.documentNumber} has been deleted.`,
                 type: "success",
               });
             }
@@ -1253,7 +1253,7 @@ export default {
                 });
                 createNotification({
                   title: "Product Published",
-                  message: response.data.status,
+                  message: `Product ${props.documentNumber} has been successfully published.`,
                   type: "success",
                 });
               }
