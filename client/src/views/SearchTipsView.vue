@@ -34,7 +34,7 @@ export default {
     @apply bg-transparent;
   }
   code {
-    @apply text-sm rounded-md p-1 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700;
+    @apply text-sm rounded-md p-1 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700;
   }
   a {
     @apply hover:underline text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow;
@@ -51,7 +51,7 @@ export default {
       @apply border border-slate-900/50 dark:border-slate-700 energy:border-zinc-700 text-center py-2 px-4;
     }
     tr:nth-child(2n) {
-      @apply bg-slate-400/10 dark:bg-slate-600/10 energy:bg-zinc-600/10;
+      @apply bg-slate-100/75 dark:bg-slate-600/10 energy:bg-zinc-600/10;
     }
     th {
       @apply border border-slate-900/50 dark:border-slate-700 energy:border-zinc-700 text-center py-2 px-4;
