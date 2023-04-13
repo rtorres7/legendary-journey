@@ -13,6 +13,7 @@ import * as CKEditor from "@ckeditor/ckeditor5-vue";
 import { plugin as VueTippy } from "vue-tippy";
 import "tippy.js/dist/tippy.css"; // optional for styling
 import "tippy.js/animations/scale.css";
+import Markdown from "vue3-markdown-it";
 
 const requireComponent = require.context(
   "./components/max-ui",
@@ -40,4 +41,5 @@ app
   .use(VueTippy, {
     defaultProps: { animation: "scale", arrow: false, theme: "pegasus" },
   })
+  .use(Markdown)
   .mount("#app");

@@ -7,6 +7,7 @@ import NotFoundView from "../views/NotFoundView.vue";
 import ProductView from "../views/ProductView.vue";
 import PublishProductView from "../views/PublishProductView.vue";
 import SearchView from "../views/SearchView.vue";
+import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 
@@ -76,6 +77,14 @@ const routes = [
     component: SearchView,
     meta: {
       viewType: "search",
+    },
+  },
+  {
+    path: "/search_tips",
+    name: "searchTips",
+    component: SearchTipsView,
+    meta: {
+      title: "Advanced Search Tips",
     },
   },
   {
