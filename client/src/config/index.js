@@ -1,6 +1,6 @@
 let file;
-if (process.env.NODE_ENV === "development") {
-  file = require("../../../development.metadata.json");
+if (process.env.NODE_ENV === "production") {
+  file = require("../../../production.metadata.json");
 } else {
   file = require(`./${process.env.NODE_ENV}.metadata.json`);
 }
