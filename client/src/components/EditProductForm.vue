@@ -42,30 +42,9 @@
                   v-model="form.productType"
                   :label="'Product Type'"
                   :items="lists.productTypes"
-                  :disabled="!productTypeSwitch"
                   class="lg:w-1/3"
                   @update:modelValue="updateField($event, 'product_type_id')"
                 />
-                <div class="flex flex-col space-y-2">
-                  <MaxToggleSwitch
-                    v-model="productTypeSwitch"
-                    :label="'Enable Product Type Dropdown'"
-                  />
-                  <div
-                    v-if="productTypeSwitch"
-                    class="flex space-x-2 text-yellow-700 dark:text-yellow-300 energy:text-energy-yellow"
-                    aria-live="polite"
-                  >
-                    <ExclamationTriangleIcon
-                      class="h-5 w-5"
-                      aria-hidden="true"
-                    />
-                    <p class="text-sm">
-                      Please be aware that changing the product type will clear
-                      existing fields and populate them with new data.
-                    </p>
-                  </div>
-                </div>
               </EditProductFormSection>
               <EditProductFormSection
                 id="required"
@@ -683,7 +662,6 @@ import {
 import {
   BriefcaseIcon,
   ExclamationCircleIcon,
-  ExclamationTriangleIcon,
   KeyIcon,
   PlusCircleIcon,
   PaperClipIcon,
@@ -739,7 +717,6 @@ export default {
   components: {
     BriefcaseIcon,
     ExclamationCircleIcon,
-    ExclamationTriangleIcon,
     KeyIcon,
     PlusCircleIcon,
     PaperClipIcon,
@@ -854,7 +831,6 @@ export default {
     });
     const payload = ref({});
     const checkAllIntelOrgs = ref(false);
-    const productTypeSwitch = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
 
@@ -1380,7 +1356,6 @@ export default {
       previewProduct,
       lists,
       form,
-      productTypeSwitch,
       checkAllIntelOrgs,
       selectedPublicationDate,
       attachmentDropzoneFile,
