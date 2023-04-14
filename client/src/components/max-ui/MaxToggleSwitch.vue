@@ -8,7 +8,7 @@
         v-model="enabled"
         :class="
           enabled
-            ? 'bg-mission-light-blue dark:bg-teal-300 energy:bg-energy-yellow'
+            ? 'bg-green-400'
             : 'bg-slate-200 dark:bg-slate-600 energy:bg-zinc-600'
         "
         class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
