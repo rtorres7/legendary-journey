@@ -30,10 +30,9 @@
     <br />
     <p>ITS Help -24/7 Support</p>
     <a
-      :href="`mailto:${metadata.footer_contact.email}`"
+      :href="`mailto:${metadata.user_support.email}`"
       class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow flex items-center hover:underline w-fit m-0 md:m-auto"
     >
-      {{ metadata.footer_contact.email }}
       <EnvelopeIcon class="h-5 w-5 m1-1" aria-hidden="true" />
     </a>
   </div>
