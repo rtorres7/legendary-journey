@@ -9,7 +9,10 @@ export default {
     Markdown,
   },
   setup() {
-    const search_tips = require("@/assets/advanced_search_tips.md").default;
+    const search_tips =
+      process.env.NODE_ENV === "production"
+        ? require("@/assets/advanced_search_tips.md")
+        : require("@/assets/advanced_search_tips.md").default;
     return {
       search_tips,
     };
