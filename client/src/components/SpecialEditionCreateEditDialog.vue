@@ -298,7 +298,7 @@ export default {
                 store.dispatch("specialEditions/loadConceptsLinks");
                 createNotification({
                   title: "Created",
-                  message: `${props.edition?.name} Special Edition has been created`,
+                  message: `${editionEvent.value?.name} Special Edition has been created`,
                   type: "success",
                   duration: 4,
                 });
