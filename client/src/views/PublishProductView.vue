@@ -172,6 +172,14 @@
                       >Preview</span
                     >
                   </button>
+                  <button
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    @click.prevent="openDeleteDialog(product)"
+                  >
+                    <TrashIcon class="h-5 w-5" /><span class="pl-3"
+                      >Delete</span
+                    >
+                  </button>
                 </div>
                 <div class="flex h-fit lg:hidden space-x-4">
                   <tippy content="Edit Product">
@@ -280,6 +288,20 @@
             <ProductContent :product="previewProduct" isPreview />
           </template>
         </MaxDialog>
+        <MaxDialog
+          :isOpen="isDeleteDialogOpen"
+          :title="'Delete Product'"
+          class="max-w-fit"
+          @close="closeDeleteDialog"
+        >
+          <p class="py-4 pr-4">Are you sure you want to do this?</p>
+          <template #actions>
+            <MaxButton @click.prevent="closeDeleteDialog">Cancel</MaxButton>
+            <MaxButton type="danger" @click.prevent="deleteProduct">
+              Delete
+            </MaxButton>
+          </template>
+        </MaxDialog>
       </template>
       <template v-else>
         <p class="pt-2 italic">No articles found.</p>
@@ -293,13 +315,14 @@ import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { computed, ref, onMounted, watch } from "vue";
+import { computed, inject, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import {
   CalendarIcon,
   DocumentMagnifyingGlassIcon,
   PencilSquareIcon,
+  TrashIcon,
 } from "@heroicons/vue/24/outline";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
@@ -309,6 +332,7 @@ export default {
     CalendarIcon,
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
+    TrashIcon,
     ProductContent,
     ProductImage,
   },
@@ -324,6 +348,7 @@ export default {
     const criteria = computed(() => store.state.metadata.criteria);
     const articles = computed(() => store.state.wires.articles);
     const loadingArticles = computed(() => store.state.wires.loading);
+    const createNotification = inject("create-notification");
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
@@ -357,6 +382,50 @@ export default {
           });
       }
       isPreviewDialogOpen.value = true;
+    };
+
+    const selectedProduct = ref();
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+    const deleteProduct = () => {
+      if (process.env.NODE_ENV === "low") {
+        createNotification({
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
+          type: "success",
+        });
+        closeDeleteDialog();
+        store.dispatch("wires/getWireByDate", route.params.date);
+        selectedDate.value = dayjs(route.params.date).toDate();
+      } else {
+        axios
+          .post("/documents/" + selectedProduct.value.doc_num + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
+                type: "success",
+              });
+              closeDeleteDialog();
+              store.dispatch("wires/getWireByDate", route.params.date);
+              selectedDate.value = dayjs(route.params.date).toDate();
+            }
+          });
+      }
     };
 
     const defaultPayload = {
@@ -502,6 +571,10 @@ export default {
       isPreviewThumbnailDialogOpen,
       openPreviewThumbnailDialog,
       closePreviewThumbnailDialog,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
+      deleteProduct,
     };
   },
 };
