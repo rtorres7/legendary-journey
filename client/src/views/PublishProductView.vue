@@ -87,14 +87,13 @@
         <h3 class="font-semibold text-lg">
           Manage Existing Products ({{ filterArticles().length }})
         </h3>
-        <div v-if="filterArticles().length > 0" class="flex items-center">
+        <div class="flex items-center">
           <input
             id="showDrafts"
             v-model="showOnlyDrafts"
             type="checkbox"
             name="showDrafts"
             value="Drafts"
-            @change="filterArticles()"
           />
           <label for="showDrafts" class="ml-2 text-sm">Show Drafts Only</label>
         </div>
@@ -172,6 +171,14 @@
                       >Preview</span
                     >
                   </button>
+                  <button
+                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    @click.prevent="openDeleteDialog(product)"
+                  >
+                    <TrashIcon class="h-5 w-5" /><span class="pl-3"
+                      >Delete</span
+                    >
+                  </button>
                 </div>
                 <div class="flex h-fit lg:hidden space-x-4">
                   <tippy content="Edit Product">
@@ -192,11 +199,20 @@
                   <tippy content="Preview Product">
                     <button
                       class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      aria-label="Preview product"
                       @click.prevent="openPreviewDialog(product)"
                     >
                       <DocumentMagnifyingGlassIcon class="h-6 w-6" />
                     </button>
                   </tippy>
+                  <tippy content="Delete Product"
+                    ><button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      aria-label="Delete product"
+                      @click.prevent="openDeleteDialog(product)"
+                    >
+                      <TrashIcon class="h-6 w-6" /></button
+                  ></tippy>
                 </div>
               </div>
               <div
@@ -280,6 +296,22 @@
             <ProductContent :product="previewProduct" isPreview />
           </template>
         </MaxDialog>
+        <MaxDialog
+          :isOpen="isDeleteDialogOpen"
+          :title="'Delete Product'"
+          class="max-w-fit"
+          @close="closeDeleteDialog"
+        >
+          <p class="py-4 pr-4">Are you sure you want to do this?</p>
+          <template #actions>
+            <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
+              >Cancel</MaxButton
+            >
+            <MaxButton color="danger" @click.prevent="deleteProduct">
+              Delete
+            </MaxButton>
+          </template>
+        </MaxDialog>
       </template>
       <template v-else>
         <p class="pt-2 italic">No articles found.</p>
@@ -293,13 +325,14 @@ import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { computed, ref, onMounted, watch } from "vue";
+import { computed, inject, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import {
   CalendarIcon,
   DocumentMagnifyingGlassIcon,
   PencilSquareIcon,
+  TrashIcon,
 } from "@heroicons/vue/24/outline";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
@@ -309,6 +342,7 @@ export default {
     CalendarIcon,
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
+    TrashIcon,
     ProductContent,
     ProductImage,
   },
@@ -324,13 +358,17 @@ export default {
     const criteria = computed(() => store.state.metadata.criteria);
     const articles = computed(() => store.state.wires.articles);
     const loadingArticles = computed(() => store.state.wires.loading);
+    const createNotification = inject("create-notification");
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
     const showOnlyDrafts = ref(false);
+    const drafts = computed(() =>
+      articles.value.filter((a) => a.attributes.state === "draft")
+    );
     const filterArticles = () => {
       if (showOnlyDrafts.value) {
-        return articles.value.filter((a) => a.attributes.state === "draft");
+        return drafts.value;
       } else {
         return articles.value;
       }
@@ -357,6 +395,70 @@ export default {
           });
       }
       isPreviewDialogOpen.value = true;
+    };
+
+    const selectedProduct = ref();
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+
+    const deleteProduct = () => {
+      if (process.env.NODE_ENV === "low") {
+        createNotification({
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
+          type: "success",
+        });
+        closeDeleteDialog();
+        //need to delete product from both the drafts array and the articles array
+        //drafts
+        let draft = drafts.value.find(
+          (d) => d.attributes.doc_num == selectedProduct.value.doc_num
+        );
+        let indexOfDraft = drafts.value.indexOf(draft);
+        drafts.value.splice(indexOfDraft, 1);
+        //articles
+        let article = articles.value.find(
+          (a) => a.attributes.doc_num == selectedProduct.value.doc_num
+        );
+        let indexOfArticle = articles.value.indexOf(article);
+        articles.value.splice(indexOfArticle, 1);
+      } else {
+        axios
+          .post("/documents/" + selectedProduct.value.doc_num + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
+                type: "success",
+              });
+              closeDeleteDialog();
+              let draft = drafts.value.find(
+                (d) => d.attributes.doc_num == selectedProduct.value.doc_num
+              );
+              let indexOfDraft = drafts.value.indexOf(draft);
+              drafts.value.splice(indexOfDraft, 1);
+              let article = articles.value.find(
+                (a) => a.attributes.doc_num == selectedProduct.value.doc_num
+              );
+              let indexOfArticle = articles.value.indexOf(article);
+              articles.value.splice(indexOfArticle, 1);
+            }
+          });
+      }
     };
 
     const defaultPayload = {
@@ -490,6 +592,7 @@ export default {
       loadingArticles,
       isCommunityExclusive,
       showOnlyDrafts,
+      drafts,
       filterArticles,
       availableProductTypes,
       goToArticle,
@@ -502,6 +605,10 @@ export default {
       isPreviewThumbnailDialogOpen,
       openPreviewThumbnailDialog,
       closePreviewThumbnailDialog,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
+      deleteProduct,
     };
   },
 };
