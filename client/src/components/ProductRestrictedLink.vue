@@ -5,7 +5,12 @@
   >
     <slot />
   </router-link>
-  <a v-else tabindex="0" @click="openDialog()">
+  <a 
+    v-else 
+    tabindex="0" 
+    class="hover:underline cursor-pointer" 
+    @click="openDialog()"
+  >
     <slot />
   </a>
   <MaxDialog class="max-w-[950px]" :isOpen="isDialogOpen" @close="closeDialog">
