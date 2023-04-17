@@ -56,17 +56,23 @@ export default {
     const userAccess = () => {
       if (props.product?.status === 403) {
         let document = props.product.document;
-        return `affiliated with ${
-          document.needed.orgs.slice(0, -1).join(", ") +
-          " and " +
-          document.needed.orgs.slice(-1)
-        }`;
-      } else if (props.product?.org_restricted) {
-        return `affiliated with ${
-          props.product.needed.orgs.slice(0, -1).join(", ") +
-          " and " +
-          props.product.needed.orgs.slice(-1)
-        }`;
+        if (document.org_restricted && document.needed.orgs) {
+          return document.needed.orgs.length > 1
+            ? `affiliated with ${
+                document.needed.orgs.slice(0, -1).join(", ") +
+                " and " +
+                document.needed.orgs.slice(-1)
+              }`
+            : `affiliated with ${document.needed.orgs}`;
+        }
+      } else if (props.product?.org_restricted && props.product?.needed.orgs) {
+        return props.product.needed.orgs.length > 1
+          ? `affiliated with ${
+              props.product.needed.orgs.slice(0, -1).join(", ") +
+              " and " +
+              props.product.needed.orgs.slice(-1)
+            }`
+          : `affiliated with ${props.product.needed.orgs}`;
       }
       return "who have the required accesses";
     };
