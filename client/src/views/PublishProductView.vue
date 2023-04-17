@@ -304,7 +304,9 @@
         >
           <p class="py-4 pr-4">Are you sure you want to do this?</p>
           <template #actions>
-            <MaxButton @click.prevent="closeDeleteDialog">Cancel</MaxButton>
+            <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
+              >Cancel</MaxButton
+            >
             <MaxButton color="danger" @click.prevent="deleteProduct">
               Delete
             </MaxButton>
