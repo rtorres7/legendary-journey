@@ -81,8 +81,15 @@
       </div>
     </form>
     <template #actions>
-      <MaxButton color="secondary" @click.prevent="closeDialog"> Cancel </MaxButton>
-      <MaxButton color="secondary" :disabled="isDisabled()" type="submit" form="se_form">
+      <MaxButton color="secondary" @click.prevent="closeDialog">
+        Cancel
+      </MaxButton>
+      <MaxButton
+        color="secondary"
+        :disabled="isDisabled()"
+        type="submit"
+        form="se_form"
+      >
         {{ editMode ? "Save" : "Create" }}
       </MaxButton>
     </template>
