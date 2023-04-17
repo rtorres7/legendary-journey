@@ -87,14 +87,13 @@
         <h3 class="font-semibold text-lg">
           Manage Existing Products ({{ filterArticles().length }})
         </h3>
-        <div v-if="filterArticles().length > 0" class="flex items-center">
+        <div class="flex items-center">
           <input
             id="showDrafts"
             v-model="showOnlyDrafts"
             type="checkbox"
             name="showDrafts"
             value="Drafts"
-            @change="filterArticles()"
           />
           <label for="showDrafts" class="ml-2 text-sm">Show Drafts Only</label>
         </div>
@@ -200,11 +199,20 @@
                   <tippy content="Preview Product">
                     <button
                       class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      aria-label="Preview product"
                       @click.prevent="openPreviewDialog(product)"
                     >
                       <DocumentMagnifyingGlassIcon class="h-6 w-6" />
                     </button>
                   </tippy>
+                  <tippy content="Delete Product"
+                    ><button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      aria-label="Delete product"
+                      @click.prevent="openDeleteDialog(product)"
+                    >
+                      <TrashIcon class="h-6 w-6" /></button
+                  ></tippy>
                 </div>
               </div>
               <div
@@ -353,9 +361,12 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
     const showOnlyDrafts = ref(false);
+    const drafts = computed(() =>
+      articles.value.filter((a) => a.attributes.state === "draft")
+    );
     const filterArticles = () => {
       if (showOnlyDrafts.value) {
-        return articles.value.filter((a) => a.attributes.state === "draft");
+        return drafts.value;
       } else {
         return articles.value;
       }
@@ -393,6 +404,7 @@ export default {
       selectedProduct.value = product;
       isDeleteDialogOpen.value = true;
     };
+
     const deleteProduct = () => {
       if (process.env.NODE_ENV === "low") {
         createNotification({
@@ -401,8 +413,19 @@ export default {
           type: "success",
         });
         closeDeleteDialog();
-        store.dispatch("wires/getWireByDate", route.params.date);
-        selectedDate.value = dayjs(route.params.date).toDate();
+        //need to delete product from both the drafts array and the articles array
+        //drafts
+        let draft = drafts.value.find(
+          (d) => d.attributes.doc_num == selectedProduct.value.doc_num
+        );
+        let indexOfDraft = drafts.value.indexOf(draft);
+        drafts.value.splice(indexOfDraft, 1);
+        //articles
+        let article = articles.value.find(
+          (a) => a.attributes.doc_num == selectedProduct.value.doc_num
+        );
+        let indexOfArticle = articles.value.indexOf(article);
+        articles.value.splice(indexOfArticle, 1);
       } else {
         axios
           .post("/documents/" + selectedProduct.value.doc_num + "/deleteMe")
@@ -421,8 +444,16 @@ export default {
                 type: "success",
               });
               closeDeleteDialog();
-              store.dispatch("wires/getWireByDate", route.params.date);
-              selectedDate.value = dayjs(route.params.date).toDate();
+              let draft = drafts.value.find(
+                (d) => d.attributes.doc_num == selectedProduct.value.doc_num
+              );
+              let indexOfDraft = drafts.value.indexOf(draft);
+              drafts.value.splice(indexOfDraft, 1);
+              let article = articles.value.find(
+                (a) => a.attributes.doc_num == selectedProduct.value.doc_num
+              );
+              let indexOfArticle = articles.value.indexOf(article);
+              articles.value.splice(indexOfArticle, 1);
             }
           });
       }
@@ -559,6 +590,7 @@ export default {
       loadingArticles,
       isCommunityExclusive,
       showOnlyDrafts,
+      drafts,
       filterArticles,
       availableProductTypes,
       goToArticle,
