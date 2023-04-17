@@ -251,28 +251,105 @@
   </template>
   <!-- Results Container -->
   <template v-if="loadingResults">
-    <div class="max-w-fit m-auto mt-[20vh]">
-      <svg
-        class="animate-spin -ml-1 mr-3 h-24 w-24 text-mission-blue dark:text-slate-300 energy:text-zinc-300"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          class="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="4"
-        />
-        <path
-          class="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        />
-      </svg>
-    </div>
+    <template v-if="selectedView.name === 'List'">
+      <div class="flex flex-col-reverse lg:flex-row py-4">
+        <div class="h-fit basis-3/4">
+          <div class="hidden lg:flex justify-between py-4">
+            <div class="flex gap-x-8">
+              <template v-for="n in 3" :key="n">
+                <MaxCard class="animate-pulse h-[34px] w-40" />
+              </template>
+            </div>
+          </div>
+          <MaxCard class="animate-pulse">
+            <div
+              class="flex items-center py-3 px-4 border-b border-gray-200 dark:border-slate-50/[0.06] energy:border-zinc-700/50"
+            >
+              <div class="flex-1 flex items-center justify-between">
+                <div
+                  class="h-[20px] w-[200px] bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                ></div>
+                <div
+                  class="rounded h-[40px] w-[150px] md:w-[300px] bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                ></div>
+              </div>
+            </div>
+            <ol>
+              <template v-for="n in 10" :key="n">
+                <li
+                  class="border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06] last:border-b-0"
+                >
+                  <div class="flex p-4 h-[113px]">
+                    <div
+                      class="mx-2 w-[50px] h-[64px] bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                    ></div>
+                    <div class="relative mx-2 w-full">
+                      <div
+                        class="h-[20px] bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                      ></div>
+                      <div
+                        class="h-[40px] my-2 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                      ></div>
+                    </div>
+                  </div>
+                </li>
+              </template>
+            </ol>
+          </MaxCard>
+        </div>
+        <div class="hidden lg:block basis-1/4 ml-4">
+          <MaxCard class="animate-pulse h-[910px] w-full">
+            <div class="flex flex-col p-4">
+              <template v-for="n in 6" :key="n">
+                <div class="h-[115px] my-4">
+                  <div
+                    class="h-[20px] w-[125px] bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                  ></div>
+                  <template v-for="j in 4" :key="j">
+                    <div
+                      class="my-2 h-[15px] w-[200px] bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                    ></div>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </MaxCard>
+        </div>
+        <div class="lg:hidden flex justify-between gap-4 py-4">
+          <div class="flex gap-y-4 md:gap-y-0 md:gap-x-4 flex-col md:flex-row">
+            <template v-for="n in 3" :key="n">
+              <MaxCard class="animate-pulse h-[34px] w-40" />
+            </template>
+          </div>
+          <div
+            class="h-[24px] w-[92px] self-end md:self-center bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+          />
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="max-w-fit m-auto mt-[20vh]">
+        <svg
+          class="animate-spin -ml-1 mr-3 h-24 w-24 text-mission-blue dark:text-slate-300 energy:text-zinc-300"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
+        </svg></div
+    ></template>
   </template>
   <template v-if="!loadingResults && totalCount === 0">
     <div class="mt-6">
@@ -1330,6 +1407,7 @@ export default {
       router.push({
         query: {
           ...route.query,
+          page: 1,
           per_page: selectedResultCount.value.key,
         },
       });

@@ -81,8 +81,15 @@
       </div>
     </form>
     <template #actions>
-      <MaxButton @click.prevent="closeDialog"> Cancel </MaxButton>
-      <MaxButton :disabled="isDisabled()" type="submit" form="se_form">
+      <MaxButton color="secondary" @click.prevent="closeDialog">
+        Cancel
+      </MaxButton>
+      <MaxButton
+        color="secondary"
+        :disabled="isDisabled()"
+        type="submit"
+        form="se_form"
+      >
         {{ editMode ? "Save" : "Create" }}
       </MaxButton>
     </template>
@@ -298,7 +305,7 @@ export default {
                 store.dispatch("specialEditions/loadConceptsLinks");
                 createNotification({
                   title: "Created",
-                  message: `${props.edition?.name} Special Edition has been created`,
+                  message: `${editionEvent.value?.name} Special Edition has been created`,
                   type: "success",
                   duration: 4,
                 });
