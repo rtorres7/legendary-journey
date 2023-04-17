@@ -847,7 +847,7 @@ export const getSitreps = [
       title_classification: "U",
       title: "Russian CT Weekly",
       org_restricted: true,
-      needed: {},
+      needed: { orgs: ["GHI", "PQR"] },
     },
   },
   {
