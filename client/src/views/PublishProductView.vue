@@ -107,7 +107,7 @@
             <MaxCard class="flex flex-col py-4">
               <div class="flex justify-between px-4 pb-3 text-sm">
                 <div
-                  class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-10 self-center"
+                  class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-8 lg:space-x-10 self-center"
                 >
                   <div class="flex flex-col">
                     <span class="text-xs uppercase">Product ID</span>
@@ -156,14 +156,14 @@
                         doc_num: product.doc_num,
                       },
                     }"
-                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                   >
                     <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
                       >Edit</span
                     >
                   </router-link>
                   <button
-                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                     @click.prevent="openPreviewDialog(product)"
                   >
                     <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
@@ -172,7 +172,7 @@
                     >
                   </button>
                   <button
-                    class="min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                     @click.prevent="openDeleteDialog(product)"
                   >
                     <TrashIcon class="h-5 w-5" /><span class="pl-3"
