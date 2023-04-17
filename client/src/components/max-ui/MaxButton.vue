@@ -22,7 +22,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .default-btn {
-  @apply bg-transparent dark:bg-slate-800 energy:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 dark:border-transparent energy:border-transparent disabled:bg-slate-200/50 disabled:dark:bg-slate-700 disabled:energy:bg-zinc-700;
+  @apply bg-transparent dark:bg-slate-800 energy:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-slate-700/75 energy:hover:bg-zinc-700/75 disabled:bg-slate-200/50 disabled:dark:bg-slate-700 disabled:energy:bg-zinc-700;
 }
 .secondary-btn {
   @apply bg-transparent  hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900 disabled:bg-slate-200/50 disabled:dark:bg-slate-700 disabled:energy:bg-zinc-700;
