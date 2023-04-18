@@ -1080,6 +1080,15 @@ export default {
         checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
+      const coordinatorsToSelect = [];
+      updatedProduct.coordinators.forEach((coordinatorsFromBackend) => {
+        let coordinatorsValue = getValueForCode(
+          lists.coordinators,
+          coordinatorsFromBackend.code
+        );
+        coordinatorsToSelect.push(coordinatorsValue);
+      });
+      form.value.coordinators = coordinatorsToSelect;
       const coauthorsToSelect = [];
       updatedProduct.coauthors.forEach((coauthorsFromBackend) => {
         let coauthorsValue = getValueForCode(
