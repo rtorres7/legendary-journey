@@ -1475,7 +1475,7 @@ export const metadata = {
         visible: true,
       },
     ],
-    co_authors: [
+    coauthors: [
       {
         ancestry: "1000",
         ancestry_depth: 1,

@@ -381,18 +381,18 @@
                   </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
-                      v-model="form.co_authors"
+                      v-model="form.coauthors"
                       :label="'Co-Authored By Organizations'"
-                      :items="lists.co_authors"
+                      :items="lists.coauthors"
                       multiple
                       @update:modelValue="
-                        updateField($event, 'co_authors', 'multiple')
+                        updateField($event, 'coauthors', 'multiple')
                       "
                     />
                     <div
                       class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
                     >
-                      <div v-for="org in form.co_authors" :key="org">
+                      <div v-for="org in form.coauthors" :key="org">
                         <div
                           class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
                         >
@@ -403,7 +403,7 @@
                             type="button"
                             class="w-5 h-5 flex items-center justify-center"
                             tabindex="0"
-                            @click="removeItem(org.name, 'co_authors')"
+                            @click="removeItem(org.name, 'coauthors')"
                           >
                             <span class="sr-only">Remove co-author</span>
                             <XMarkIcon
@@ -837,7 +837,7 @@ export default {
       dissemOrgs: criteria.value.dissem_orgs,
       producing_offices: criteria.value.producing_offices,
       coordinators: criteria.value.coordinators,
-      co_authors: criteria.value.co_authors,
+      coauthors: criteria.value.coauthors,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -854,7 +854,7 @@ export default {
       countries: [],
       dissemOrgs: [],
       coordinators: [],
-      co_authors: [],
+      coauthors: [],
       producing_offices: [],
       editorData: "",
       pocInfo: "",
@@ -932,11 +932,11 @@ export default {
           (i) => i.name != name
         );
         updateField(form.value.coordinators, "coordinators", "multiple");
-      } else if (formItem === "co_authors") {
-        form.value.co_authors = form.value.co_authors.filter(
+      } else if (formItem === "coauthors") {
+        form.value.coauthors = form.value.coauthors.filter(
           (i) => i.name != name
         );
-        updateField(form.value.co_authors, "co_authors", "multiple");
+        updateField(form.value.coauthors, "coauthors", "multiple");
       } else if (formItem === "producing_offices") {
         form.value.producing_offices = form.value.producing_offices.filter(
           (i) => i.name != name
@@ -1033,8 +1033,8 @@ export default {
       payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
-      payload.value.co_authors = updatedProduct.co_authors.map(
-        (co_authors) => co_authors.code
+      payload.value.coauthors = updatedProduct.coauthors.map(
+        (coauthors) => coauthors.code
       );
       payload.value.producing_offices = updatedProduct.producing_offices.map(
         (producing_office) => producing_office.code
@@ -1080,15 +1080,15 @@ export default {
         checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
-      const co_authorsToSelect = [];
-      updatedProduct.co_authors.forEach((co_authorsFromBackend) => {
-        let co_authorsValue = getValueForCode(
-          lists.co_authors,
-          co_authorsFromBackend.code
+      const coauthorsToSelect = [];
+      updatedProduct.coauthors.forEach((coauthorsFromBackend) => {
+        let coauthorsValue = getValueForCode(
+          lists.coauthors,
+          coauthorsFromBackend.code
         );
-        co_authorsToSelect.push(co_authorsValue);
+        coauthorsToSelect.push(coauthorsValue);
       });
-      form.value.co_authors = co_authorsToSelect;
+      form.value.coauthors = coauthorsToSelect;
       const producing_officesToSelect = [];
       updatedProduct.producing_offices.forEach(
         (producing_officesFromBackend) => {
