@@ -117,6 +117,10 @@
             <span class="font-semibold">Coordinated With: </span>
             {{ product.coordinators.join(", ") }}
           </p>
+          <p v-if="product.coauthors && product.coauthors.length !== 0">
+            <span class="font-semibold">Co-Authored By: </span>
+            {{ product.coauthors.join(", ") }}
+          </p>
           <p v-if="product.published_by && canManageWire">
             <span class="font-semibold">Published By: </span>
             {{ product.published_by }}

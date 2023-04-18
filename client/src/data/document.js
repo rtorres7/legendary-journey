@@ -21,7 +21,7 @@ export const mockDocument = {
   poc_info: "",
   publication_number: "",
   coordinators: [],
-  co_authors: [],
+  coauthors: [],
   producing_offices: [],
   product_type_id: 10378,
   worldwide: null,
