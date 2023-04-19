@@ -5,15 +5,15 @@
   >
     <slot />
   </router-link>
-  <a 
-    v-else 
-    tabindex="0" 
-    class="hover:underline cursor-pointer" 
+  <a
+    v-else
+    tabindex="0"
+    class="hover:underline cursor-pointer"
     @click="openDialog()"
   >
     <slot />
   </a>
-  <MaxDialog class="max-w-[950px]" :isOpen="isDialogOpen" @close="closeDialog">
+  <MaxDialog class="max-w-[600px]" :isOpen="isDialogOpen" @close="closeDialog">
     <div class="flex flex-col space-y-6">
       <div>
         <p class="font-semibold mb-2">This product has restricted access</p>
