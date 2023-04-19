@@ -148,7 +148,7 @@
       </div>
     </div>
     <div id="classification_banner">
-      <p class="text-center text-xs uppercase">
+      <p class="text-center text-xs uppercase" aria-hidden="true">
         {{ metadata.system_classification }}
       </p>
     </div>

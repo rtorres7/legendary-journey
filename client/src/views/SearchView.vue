@@ -257,7 +257,9 @@
           <div class="hidden lg:flex justify-between py-4">
             <div class="flex gap-x-8">
               <template v-for="n in 3" :key="n">
-                <MaxCard class="animate-pulse h-[34px] w-40" />
+                <div
+                  class="animate-pulse h-[34px] w-40 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
+                />
               </template>
             </div>
           </div>
