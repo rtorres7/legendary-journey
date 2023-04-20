@@ -5,26 +5,31 @@
       :key="index"
     >
       <div class="py-2">
+        <span class="sr-only">Additional search filters</span>
         <p class="text-sm font-medium">{{ displayName }}</p>
         <div class="flex flex-col">
           <template v-for="(facet, facetIndex) in rows" :key="facet">
             <div :class="facetIndex > 4 && !expand ? 'hidden' : 'block'">
               <a
                 class="cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                tabindex="0"
                 @click="filter(facetType, facet.key)"
+                @keyup.enter="filter(facetType, facet.key)"
                 >{{ facet.name }}
               </a>
               <span class="text-sm"> ({{ facet.count }}) </span>
             </div>
           </template>
           <template v-if="rows.length > 5">
-            <span
+            <a
               class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+              tabindex="0"
               @click="toggleExpand(facetType)"
+              @keyup.enter="toggleExpand(facetType)"
             >
               <template v-if="expand"> Show Less... </template>
               <template v-else> Show More... </template>
-            </span>
+            </a>
           </template>
         </div>
       </div>
