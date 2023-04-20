@@ -14,7 +14,7 @@ export default {
       state.loading = true;
       let route = router.currentRoute.value;
       if (!wantsPreview && route.name !== "product-preview") {
-        if (import.meta.env.MODE === "low") {
+        if (process.env.NODE_ENV === "low") {
           let relatedDocuments = relatedProducts.filter(
             (relatedProduct) =>
               relatedProduct.document.doc_num === route.params.doc_num

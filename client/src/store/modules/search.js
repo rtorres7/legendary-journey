@@ -45,7 +45,7 @@ export default {
     },
 
     debouncedSearch: ({ commit }, url) => {
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         setTimeout(
           () =>
             commit(

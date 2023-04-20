@@ -30,8 +30,8 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 import { mockDocument } from "@/data";
-import EditProductForm from "@/components/EditProductForm.vue";
-import NotAuthorized from "@/components/NotAuthorized.vue";
+import EditProductForm from "@/components/EditProductForm";
+import NotAuthorized from "@/components/NotAuthorized";
 
 export default {
   components: {
@@ -75,7 +75,7 @@ export default {
     });
 
     onMounted(() => {
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
           product.value = mockDocument;

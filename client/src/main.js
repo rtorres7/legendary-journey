@@ -11,22 +11,22 @@ import "./content-styles.css";
 import "./index.css";
 import * as CKEditor from "@ckeditor/ckeditor5-vue";
 
-const componentFiles = import.meta.glob("./components/base/*.vue", {
-  eager: true,
-});
+const requireComponent = require.context(
+  "./components/base",
+  false,
+  /Base[A-Z]\w+\.(vue|js)$/
+);
 
 const app = createApp(App);
 
-Object.entries(componentFiles).forEach(([path, m]) => {
+requireComponent.keys().forEach((fileName) => {
+  const componentConfig = requireComponent(fileName);
+
   const componentName = upperFirst(
-    camelCase(
-      path
-        .split("/")
-        .pop()
-        .replace(/\.\w+$/, "")
-    )
+    camelCase(fileName.replace(/^\.\/(.*)\.\w+$/, "$1"))
   );
-  app.component(componentName, m.default);
+
+  app.component(componentName, componentConfig.default || componentConfig);
 });
 
 app.use(SimpleTypeahead).use(store).use(router).use(CKEditor).mount("#app");

@@ -101,7 +101,7 @@
 </template>
 <script>
 import { isProductLocked, formatDate } from "@/helpers";
-import ProductImage from "@/components/ProductImage.vue";
+import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {

@@ -277,10 +277,10 @@ import {
   PencilIcon,
 } from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import ProductNavigation from "@/components/ProductNavigation.vue";
-import ProductAttachments from "@/components/ProductAttachments.vue";
-import ProductRelated from "@/components/ProductRelated.vue";
-import ProductMetrics from "@/components/ProductMetrics.vue";
+import ProductNavigation from "@/components/ProductNavigation";
+import ProductAttachments from "@/components/ProductAttachments";
+import ProductRelated from "@/components/ProductRelated";
+import ProductMetrics from "@/components/ProductMetrics";
 
 export default {
   components: {

@@ -13,7 +13,7 @@ export default {
     getDanielArticlesDetails({ state, commit }, wantsPreview) {
       state.loading = true;
       let route = router.currentRoute.value;
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         let displayedDocument = danielArticlesDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );
@@ -36,7 +36,7 @@ export default {
     },
     savePrintCount({ commit }) {
       let route = router.currentRoute.value;
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         let displayedDocument = danielArticlesDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );
@@ -54,7 +54,7 @@ export default {
     },
     saveEmailCount({ commit }) {
       let route = router.currentRoute.value;
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         let displayedDocument = danielArticlesDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );

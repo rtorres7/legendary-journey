@@ -248,7 +248,7 @@ export default {
         }
         console.log("Sending form...(Payload below)");
         console.log(payload);
-        if (import.meta.env.MODE === "low") {
+        if (process.env.NODE_ENV === "low") {
           if (props.editMode) {
             emit("specialEditionUpdated");
             createNotification({

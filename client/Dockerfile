@@ -11,4 +11,4 @@ RUN mkdir /data/node_modules/.cache && chmod -R 777 /data/node_modules/.cache &&
 
 EXPOSE 8080
 
-CMD ["npm", "run", "dev:container"]
+CMD ["npm", "run", "serve:container"]

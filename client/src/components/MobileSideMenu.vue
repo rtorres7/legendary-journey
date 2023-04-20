@@ -318,8 +318,8 @@ import { metadata } from "@/config";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure.vue";
-import SpecialEditionLink from "@/components/SpecialEditionLink.vue";
+import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure";
+import SpecialEditionLink from "@/components/SpecialEditionLink";
 import {
   Dialog,
   DialogPanel,

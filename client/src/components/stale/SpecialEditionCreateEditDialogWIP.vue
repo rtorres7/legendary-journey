@@ -1,34 +1,17 @@
+
 <template>
-  <BaseDialog
-    :isOpen="isOpen"
-    @close="closeDialog"
-    class="max-w-[950px]"
-    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`"
-  >
+  <BaseDialog :isOpen="isOpen" @close="closeDialog" class="max-w-[950px]"
+    :title="`${editMode ? 'Edit' : 'Create'} Special Edition`">
     <form id="se_form" @submit.prevent="submit">
       <div class="block lg:flex my-4 lg:space-x-5">
         <div class="basis-1/2 flex flex-col space-y-4">
           <div>
-            <BaseInputWIP
-              label="Name"
-              :modelValue="name"
-              @change="handleChange"
-              @blur="handleChange"
-              :error="errors.name"
-              autocomplete="off"
-              type="text"
-              required
-            />
+            <BaseInputWIP label="Name" :modelValue="name" @change="handleChange" @blur="handleChange"
+              :error="errors.name" autocomplete="off" type="text" required />
           </div>
           <div>
-            <BaseInputWIP2
-              name="search_params"
-              type="text"
-              label="Search params"
-              autocomplete="off"
-              placeholder="Run a search, copy the URL, and paste it here."
-              required
-            />
+            <BaseInputWIP2 name="search_params" type="text" label="Search params" autocomplete="off"
+              placeholder="Run a search, copy the URL, and paste it here." required />
           </div>
           <!-- <div>
             <BaseTextarea maxlength="4000" rows="5" v-model="key_readings" :error="errors.key_readings"
@@ -58,27 +41,27 @@
     <template #actions>
       <BaseButton @click.prevent="closeDialog">Cancel</BaseButton>
       <BaseButton :disabled="!meta.valid" type="submit" form="se_form">{{
-        editMode ? "Save" : "Create"
+          editMode ? "Save" : "Create"
       }}</BaseButton>
     </template>
   </BaseDialog>
 </template>
 
 <script>
-import BaseInputWIP from "@/components/stale/BaseButtonWIP.vue";
-import BaseInputWIP2 from "@/components/stale/BaseInputWIP2.vue";
+import BaseInputWIP from "@/components/base/BaseInputWIP"
+import BaseInputWIP2 from "@/components/base/BaseInputWIP2"
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 //import axios from "@/config/wireAxios";
-import { useField, useForm } from "vee-validate";
-import { object, string } from "yup"; //mixed, number
+import { useField, useForm } from 'vee-validate'
+import { object, string } from 'yup'; //mixed, number
 
 const stateOptions = ["draft", "archived", "posted"];
 
 export default {
   components: {
     BaseInputWIP,
-    BaseInputWIP2,
+    BaseInputWIP2
   },
   props: {
     isOpen: {
@@ -125,17 +108,17 @@ export default {
       //position: number(),
       //name_classification: string().required(),
       //icon: mixed().required('File is required.')
-    });
+    })
 
     const { handleSubmit, errors, meta } = useForm({
       validationSchema,
       // initialValues: {
       //   position: 1,
       // }
-    });
+    })
 
-    const { value: name, handleChange } = useField("name");
-    const { value: search_params } = useField("search_params");
+    const { value: name, handleChange } = useField('name')
+    const { value: search_params } = useField('search_params')
     // const { value: key_readings } = useField('key_readings')
     // const { value: state } = useField('state')
     //const { value: position } = useField('position')
@@ -143,6 +126,8 @@ export default {
     //const { value: file } = useField('file')
 
     // setFieldValue('name')
+
+
 
     const closeDialog = () => {
       emit("closeDialog");
@@ -211,13 +196,13 @@ export default {
       }
     });
 
-    const submit = handleSubmit((values) => {
-      console.log("submit", values);
-    });
+    const submit = handleSubmit(values => {
+      console.log('submit', values)
+    })
 
     const submit2 = () => {
-      console.log("submit2 clicked");
-    };
+      console.log('submit2 clicked')
+    }
 
     // const isDisabled = () => {
     //   return (
@@ -237,7 +222,7 @@ export default {
     //     }
     //     console.log("Sending form...(Payload below)");
     //     console.log(payload);
-    //     if (import.meta.env.MODE === "low") {
+    //     if (process.env.NODE_ENV === "low") {
     //       if (props.editMode) {
     //         emit("specialEditionUpdated");
     //         closeDialog();
@@ -300,7 +285,7 @@ export default {
       submit,
       submit2,
       errors,
-      meta,
+      meta
     };
   },
 };

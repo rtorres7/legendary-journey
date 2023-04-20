@@ -236,9 +236,9 @@ import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import ProductCard from "@/components/ProductCard.vue";
-import Pagination from "@/components/Pagination.vue";
-import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog.vue";
+import ProductCard from "@/components/ProductCard";
+import Pagination from "@/components/Pagination";
+import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
 export default {
   components: {
@@ -285,7 +285,7 @@ export default {
     };
 
     const deleteSpecialEdition = () => {
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         router.push({ name: "specialEditions" });
       } else {
         axios

@@ -11,7 +11,7 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import NotAuthorized from "@/components/NotAuthorized.vue";
+import NotAuthorized from "@/components/NotAuthorized";
 
 export default {
   components: {

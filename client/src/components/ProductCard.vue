@@ -45,7 +45,7 @@
 import { isEmpty, formatDate } from "@/helpers";
 import { useRouter } from "vue-router";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
-import ProductImage from "@/components/ProductImage.vue";
+import ProductImage from "@/components/ProductImage";
 export default {
   components: {
     LockClosedIcon,

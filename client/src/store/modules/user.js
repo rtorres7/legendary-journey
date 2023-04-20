@@ -49,7 +49,7 @@ export default {
   actions: {
     loadUser({ state, commit }) {
       state.loading = true;
-      if (import.meta.env.MODE === "low") {
+      if (process.env.NODE_ENV === "low") {
         console.log("[store] loadUser: ", user);
         setTimeout(() => commit("importUser", user), 750);
       } else {

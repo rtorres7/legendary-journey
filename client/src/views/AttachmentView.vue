@@ -6,10 +6,11 @@
 export default {
   methods: {
     getImgUrl(url) {
-      return new URL("@/assets/" + url, import.meta.url).href;
+      return require("@/assets/" + url);
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+</style>
