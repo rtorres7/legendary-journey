@@ -1237,7 +1237,7 @@ export default {
     const deleteDocument = () => {
       if (process.env.NODE_ENV === "low") {
         router.push({
-          name: "publish",
+          name: "products",
           params: { date: route.params.date },
         });
         createNotification({
@@ -1258,7 +1258,7 @@ export default {
               });
             } else {
               router.push({
-                name: "publish",
+                name: "products",
                 params: { date: route.params.date },
               });
               createNotification({
@@ -1404,7 +1404,7 @@ export default {
     };
 
     const cancel = () => {
-      router.push({ name: "publish", params: { date: route.params.date } });
+      router.push({ name: "products", params: { date: route.params.date } });
     };
 
     return {

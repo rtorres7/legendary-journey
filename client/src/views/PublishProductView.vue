@@ -3,7 +3,7 @@
     class="flex flex-col space-y-4 md:space-y-0 md:flex-row justify-between py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="flex flex-col space-y-4">
-      <h1 class="font-semibold text-2xl">Publish a Product</h1>
+      <h1 class="font-semibold text-2xl">Manage Products</h1>
       <h2>Get started by selecting from the following options.</h2>
     </div>
     <MaxDatepicker
@@ -37,7 +37,42 @@
   >
     <div class="mb-6">
       <h3 class="font-semibold text-lg">Create a Product</h3>
-      <p>Select the product you'd like to create</p>
+      <p>Start with a blank template</p>
+    </div>
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
+      <MaxCard
+        class="flex justify-center items-center font-medium cursor-pointer"
+        hoverable
+        tabindex="0"
+        role="button"
+        aria-label="Create a blank template"
+        @click="goToArticle()"
+        @keyup.enter="goToArticle()"
+      >
+        <span
+          class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+        >
+          New Product
+        </span>
+      </MaxCard>
+    </div>
+  </div>
+  <div
+    class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+  >
+    <div class="mb-6">
+      <!-- <h3 class="font-semibold text-lg">Create a Product</h3> -->
+      <p>
+        Alternatively, you can select from one of the existing
+        <button
+          class="hover:cursor-pointer underline"
+          @click="openFirstTemplateDialog"
+          @keyup.enter="openFirstTemplateDialog"
+        >
+          templates
+        </button>
+        to get started
+      </p>
     </div>
     <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
       <template v-for="product in availableProductTypes" :key="product">
@@ -543,7 +578,7 @@ export default {
 
     const selectDate = () => {
       const date = dayjs(selectedDate.value).format("YYYY-MM-DD");
-      router.push({ name: "publish", params: { date } });
+      router.push({ name: "products", params: { date } });
     };
 
     const canEditProduct = (product) => {
