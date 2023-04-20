@@ -21,7 +21,7 @@
             </div>
           </template>
           <template v-if="rows.length > 5">
-            <a
+            <span
               class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
               tabindex="0"
               @click="toggleExpand(facetType)"
@@ -29,7 +29,7 @@
             >
               <template v-if="expand"> Show Less... </template>
               <template v-else> Show More... </template>
-            </a>
+            </span>
           </template>
         </div>
       </div>
