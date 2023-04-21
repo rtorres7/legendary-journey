@@ -146,13 +146,15 @@ export default {
         if (props.multiple && model.length > 0) {
           const suffix = model.length > 1 ? ` +(${model.length - 1})` : "";
           if (type === "object") {
-            return model[0].name + suffix;
+            return model[0].displayName
+              ? model[0].displayName + suffix
+              : model[0].name + suffix;
           } else {
             return model + suffix;
           }
         } else {
           if (type === "object") {
-            return model.name;
+            return model.displayName ? model.displayName : model.name;
           } else {
             return model;
           }

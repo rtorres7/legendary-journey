@@ -66,8 +66,7 @@
         Alternatively, you can select from one of the existing
         <button
           class="hover:cursor-pointer underline"
-          @click="openFirstTemplateDialog"
-          @keyup.enter="openFirstTemplateDialog"
+          @click="openTemplateDialog"
         >
           templates
         </button>
@@ -303,6 +302,31 @@
           </template>
         </ul>
         <MaxDialog
+          :isOpen="isTemplateDialogOpen"
+          :title="'Templates'"
+          class="max-w-[700px]"
+          @close="closeTemplateDialog"
+        >
+          <div class="pb-8">
+            <p class="italic pb-4">What is a template?</p>
+            <p>
+              A template is a collection of prepopulated fields. When a template
+              is selected, a draft of the prouct will be created and stored in
+              our system with the template applied so there is not a need to
+              save the product immediately.
+            </p>
+          </div>
+          <MaxListbox
+            v-model="productType"
+            :label="'Product Type'"
+            :items="availableProductTypes"
+            class="lg:w-1/3"
+          />
+          <div>
+            <p>{{ productType.payload.producing_office }}</p>
+          </div>
+        </MaxDialog>
+        <MaxDialog
           :isOpen="isPreviewThumbnailDialogOpen"
           :title="'Thumbnail Preview'"
           class="max-w-fit"
@@ -407,6 +431,15 @@ export default {
       } else {
         return articles.value;
       }
+    };
+    const productType = ref();
+    const isTemplateDialogOpen = ref(false);
+    const closeTemplateDialog = () => {
+      isTemplateDialogOpen.value = false;
+    };
+    const openTemplateDialog = () => {
+      isTemplateDialogOpen.value = true;
+      console.log(availableProductTypes.value);
     };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
@@ -634,6 +667,10 @@ export default {
       selectDate,
       canEditProduct,
       selectedArticle,
+      productType,
+      isTemplateDialogOpen,
+      openTemplateDialog,
+      closeTemplateDialog,
       isPreviewDialogOpen,
       closePreviewDialog,
       openPreviewDialog,
