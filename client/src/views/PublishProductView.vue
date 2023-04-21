@@ -319,34 +319,23 @@
           <p class="italic text-sm pb-4">
             Preview only shows fields that are prepopulated by the template
           </p>
-          <div
-            v-if="productContent"
-            class="flex flex-col gap-y-2 p-4 rounded-lg border border-slate-300 dark:border-slate-600 energy:border-zinc-600 shadow-sm dark:shadow-none energy:shadow-none"
-          >
-            <div>
-              <p>Title</p>
-              <p class="mock-input">
-                {{ productContent.title }}
-              </p>
-            </div>
-            <div>
-              <p>Summary</p>
-              <p class="mock-input">
-                {{ productContent.summary }}
-              </p>
-            </div>
-            <div>
-              <p>Topics</p>
-              <p class="mock-input">
-                {{ productContent.topics.join(", ") }}
-              </p>
-            </div>
-            <div>
-              <p>POC Info</p>
-              <p class="mock-input">
-                {{ productContent.poc_info }}
-              </p>
-            </div>
+          <div v-if="productContent" class="flex flex-col gap-y-2">
+            <p>
+              <span class="font-semibold">Title: </span
+              >{{ productContent.title }}
+            </p>
+            <p>
+              <span class="font-semibold">Summary: </span
+              >{{ productContent.summary }}
+            </p>
+            <p>
+              <span class="font-semibold">Topics: </span
+              >{{ productContent.topics.join(", ") }}
+            </p>
+            <p>
+              <span class="font-semibold">POC Info: </span
+              >{{ productContent.poc_info }}
+            </p>
           </div>
         </MaxDialog>
         <MaxDialog
@@ -710,8 +699,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.mock-input {
-  @apply min-h-[2rem] flex lg:w-1/2 rounded-lg py-1 px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600;
-}
-</style>
+<style scoped lang="scss"></style>
