@@ -36,7 +36,7 @@
               <EditProductFormSection
                 id="product-type"
                 title="Product Type"
-                description="Changing the product type will prepopulate existing fields so be careful when changing it."
+                description="Get started by selecting the product type."
               >
                 <MaxListbox
                   v-model="form.productType"

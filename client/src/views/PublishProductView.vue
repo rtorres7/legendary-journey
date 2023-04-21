@@ -33,13 +33,14 @@
     </MaxDatepicker>
   </div>
   <div
+    v-if="!isCommunityExclusive"
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="mb-6">
       <h3 class="font-semibold text-lg">Create a Product</h3>
       <p>Start with a blank template</p>
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-fit mb-6">
       <MaxCard
         class="flex justify-center items-center font-medium cursor-pointer"
         hoverable
@@ -73,7 +74,9 @@
         to get started
       </p>
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
+    <div
+      class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-fit mb-6"
+    >
       <template v-for="product in availableProductTypes" :key="product">
         <MaxCard
           class="flex justify-center items-center font-medium cursor-pointer"
@@ -85,7 +88,7 @@
           @keyup.enter="goToArticle(product.payload)"
         >
           <span
-            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-md md:text-lg font-bold"
           >
             {{ product.displayName }}
           </span>
@@ -96,19 +99,6 @@
         </MaxCard>
       </template>
     </div>
-    <p v-if="!isCommunityExclusive">
-      Not sure which product to choose?
-      <span
-        class="font-semibold cursor-pointer"
-        tabindex="0"
-        role="button"
-        aria-label="Create a blank template"
-        @click="goToArticle()"
-        @keyup.enter="goToArticle()"
-        >Click here</span
-      >
-      to start with a blank template.
-    </p>
   </div>
   <template v-if="loadingArticles">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -311,19 +301,52 @@
             <p class="italic pb-4">What is a template?</p>
             <p>
               A template is a collection of prepopulated fields. When a template
-              is selected, a draft of the prouct will be created and stored in
-              our system with the template applied so there is not a need to
+              is selected, a draft of the product will be created and stored in
+              our system with the template applied, so there is not a need to
               save the product immediately.
             </p>
           </div>
+          <p class="pb-4">
+            Select a product type from the dropdown below to preview its
+            template contents:
+          </p>
           <MaxListbox
             v-model="productType"
             :label="'Product Type'"
             :items="availableProductTypes"
-            class="lg:w-1/3"
+            class="lg:w-1/2 pb-8"
           />
-          <div>
-            <p>{{ productType.payload.producing_office }}</p>
+          <p class="italic text-sm pb-4">
+            Preview only shows fields that are prepopulated by the template
+          </p>
+          <div
+            v-if="productContent"
+            class="flex flex-col gap-y-2 p-4 rounded-lg border border-slate-300 dark:border-slate-600 energy:border-zinc-600 shadow-sm dark:shadow-none energy:shadow-none"
+          >
+            <div>
+              <p>Title</p>
+              <p class="mock-input">
+                {{ productContent.title }}
+              </p>
+            </div>
+            <div>
+              <p>Summary</p>
+              <p class="mock-input">
+                {{ productContent.summary }}
+              </p>
+            </div>
+            <div>
+              <p>Topics</p>
+              <p class="mock-input">
+                {{ productContent.topics.join(", ") }}
+              </p>
+            </div>
+            <div>
+              <p>POC Info</p>
+              <p class="mock-input">
+                {{ productContent.poc_info }}
+              </p>
+            </div>
           </div>
         </MaxDialog>
         <MaxDialog
@@ -433,13 +456,13 @@ export default {
       }
     };
     const productType = ref();
+    const productContent = computed(() => productType.value?.payload);
     const isTemplateDialogOpen = ref(false);
     const closeTemplateDialog = () => {
       isTemplateDialogOpen.value = false;
     };
     const openTemplateDialog = () => {
       isTemplateDialogOpen.value = true;
-      console.log(availableProductTypes.value);
     };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
@@ -668,6 +691,7 @@ export default {
       canEditProduct,
       selectedArticle,
       productType,
+      productContent,
       isTemplateDialogOpen,
       openTemplateDialog,
       closeTemplateDialog,
@@ -686,4 +710,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.mock-input {
+  @apply min-h-[2rem] flex lg:w-1/2 rounded-lg py-1 px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600;
+}
+</style>
