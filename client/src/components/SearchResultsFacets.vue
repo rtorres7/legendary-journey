@@ -5,7 +5,7 @@
       :key="index"
     >
       <div class="py-2">
-        <span class="sr-only">Additional filters</span>
+        <span class="sr-only">Search facets</span>
         <p class="text-sm font-medium">{{ displayName }}</p>
         <div class="flex flex-col">
           <template v-for="(facet, facetIndex) in rows" :key="facet">
