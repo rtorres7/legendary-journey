@@ -48,7 +48,7 @@
     </template>
     <template v-else>
       <ProductImage
-        :class="[headline ? 'h-[32.6%]' : 'h-[51.25%]']"
+        :class="[headline ? 'h-[45%]' : 'h-2/3']"
         :product="product"
       />
       <div
@@ -71,7 +71,7 @@
           </h1>
           <p
             v-show="headline"
-            class="hidden mt-3 text-md md:line-clamp-3 lg:line-clamp-4 wrap-anywhere"
+            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
             :title="product.summary"
           >
             {{ `(${product.summary_classification}) ${product.summary}` }}
@@ -85,15 +85,17 @@
         >
           {{ formatDate(product.date_published) }}
         </p>
-        <button class="m-auto place-content-center">
-          <HeartIcon
-            :class="[
-              isFavoriteProduct(product) ? 'text-red-500 fill-red-500' : '',
-              'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300'
-            ]"
-            @click="updateFavoriteStatus(product, $event)"
-          />
-        </button>
+        <template v-if="lowsideMode">
+          <button class="m-auto place-content-center">
+            <HeartIcon
+              :class="[
+                isFavoriteProduct(product) ? 'text-red-500 fill-red-500' : '',
+                'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300',
+              ]"
+              @click="updateFavoriteStatus(product, $event)"
+            />
+          </button>
+        </template>
         <template v-if="isProductLocked(product)">
           <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
@@ -131,12 +133,13 @@ export default {
     },
   },
   setup() {
+    const lowsideMode = process.env.NODE_ENV === "low";
     const updateFavoriteStatus = (product, event) => {
       if (event) {
         event.preventDefault();
       }
 
-      if (process.env.NODE_ENV === 'low') {
+      if (process.env.NODE_ENV === "low") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );
@@ -145,18 +148,19 @@ export default {
       } else {
         let favoritePromise;
         if (product.favorite) {
-          favoritePromise = axios
-            .delete(`/document_favorites/${product.id}`)
+          favoritePromise = axios.delete(`/document_favorites/${product.id}`);
         } else {
-          favoritePromise = axios
-            .post('document_favorites', { id: product.id })
+          favoritePromise = axios.post("document_favorites", {
+            id: product.id,
+          });
         }
 
-        favoritePromise.then(() => product.favorite = !product.favorite )
+        favoritePromise.then(() => (product.favorite = !product.favorite));
       }
     };
 
     return {
+      lowsideMode,
       isProductLocked,
       formatDate,
       isFavoriteProduct,
