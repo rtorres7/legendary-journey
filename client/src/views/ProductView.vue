@@ -89,10 +89,10 @@
             </router-link>
           </div>
           <div>
-            <tippy :content="product.favorite ? 'Undo Favorite' : 'Make Favorite'">
+            <tippy :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'">
               <HeartIcon :class="[
-                product.favorite ? 'text-red-500 fill-red-500' : '',
-                'h-6 w-6 cursor-pointer']" aria-hidden="true" @click="updateFavoriteStatus(product, $event)" />
+                productIsFavorite ? 'text-red-500 fill-red-500' : '',
+                'h-6 w-6 cursor-pointer']" aria-hidden="true" @click="productIsFavorite = !productIsFavorite" />
             </tippy>
           </div>
         </div>
@@ -225,6 +225,7 @@ export default {
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
+    const productIsFavorite = ref(store.state.product.document.favorite);
 
     const printDocument = () => {
       const pdfs = product.value.attachments_metadata.filter(
@@ -359,28 +360,28 @@ export default {
       }
     );
 
-    const updateFavoriteStatus = (product, event) => {
-      if (event) {
-        event.preventDefault();
-      }
+    watch(productIsFavorite, () => {
+      updateFavoriteStatus()
+    });
 
+    const updateFavoriteStatus = () => {
       if (process.env.NODE_ENV === 'low') {
         let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
+          ({ data }) => data.doc_num === product.value.doc_num
         );
-        documentMatch.data.favorite = !product.favorite;
-        product.favorite = !product.favorite;
+        documentMatch.data.favorite = productIsFavorite.value;
+        product.value.favorite = productIsFavorite.value;
       } else {
         let favoritePromise;
-        if (product.favorite) {
+        if (productIsFavorite.value) {
           favoritePromise = axios
-            .delete(`/document_favorites/${product.id}`)
+            .delete(`/document_favorites/${product.value.id}`)
         } else {
           favoritePromise = axios
-            .post('document_favorites', { id: product.id })
+            .post('document_favorites', { id: product.value.id })
         }
 
-        favoritePromise.then(() => product.favorite = !product.favorite )
+        favoritePromise.then(() => product.value.favorite = productIsFavorite.value )
       }
     };
 
@@ -409,7 +410,7 @@ export default {
       canAccessProduct,
       canEditProduct,
       theme,
-      updateFavoriteStatus,
+      productIsFavorite,
     };
   },
 };
