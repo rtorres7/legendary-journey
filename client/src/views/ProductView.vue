@@ -88,6 +88,13 @@
               </tippy>
             </router-link>
           </div>
+          <div>
+            <tippy :content="product.favorite ? 'Undo Favorite' : 'Make Favorite'">
+              <HeartIcon :class="[
+                product.favorite ? 'text-red-500 fill-red-500' : '',
+                'h-6 w-6 cursor-pointer']" aria-hidden="true" @click="updateFavoriteStatus(product, $event)" />
+            </tippy>
+          </div>
         </div>
         <div class="w-full pb-6 lg:pb-0">
           <ProductContent :product="product" />
@@ -167,6 +174,7 @@ import {
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
+  HeartIcon,
 } from "@heroicons/vue/24/outline";
 import NotAuthorized from "@/components/NotAuthorized";
 import ProductNavigation from "@/components/ProductNavigation";
@@ -174,6 +182,8 @@ import ProductContent from "@/components/ProductContent";
 import ProductAttachments from "@/components/ProductAttachments";
 import ProductRelated from "@/components/ProductRelated";
 import ProductMetrics from "@/components/ProductMetrics";
+import { productDetails } from "@/data";
+import axios from "@/config/wireAxios";
 
 export default {
   components: {
@@ -181,6 +191,7 @@ export default {
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
+    HeartIcon,
     NotAuthorized,
     ProductNavigation,
     ProductContent,
@@ -348,6 +359,31 @@ export default {
       }
     );
 
+    const updateFavoriteStatus = (product, event) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (process.env.NODE_ENV === 'low') {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        documentMatch.data.favorite = !product.favorite;
+        product.favorite = !product.favorite;
+      } else {
+        let favoritePromise;
+        if (product.favorite) {
+          favoritePromise = axios
+            .delete(`/document_favorites/${product.id}`)
+        } else {
+          favoritePromise = axios
+            .post('document_favorites', { id: product.id })
+        }
+
+        favoritePromise.then(() => product.favorite = !product.favorite )
+      }
+    };
+
     return {
       formatDate,
       hasProductAccess,
@@ -373,6 +409,7 @@ export default {
       canAccessProduct,
       canEditProduct,
       theme,
+      updateFavoriteStatus,
     };
   },
 };
