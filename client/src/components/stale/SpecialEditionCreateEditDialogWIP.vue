@@ -237,7 +237,7 @@ export default {
     //     }
     //     console.log("Sending form...(Payload below)");
     //     console.log(payload);
-    //     if (process.env.NODE_ENV === "low") {
+    //     if (process.env.NODE_ENV === "offline") {
     //       if (props.editMode) {
     //         emit("specialEditionUpdated");
     //         closeDialog();

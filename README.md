@@ -48,18 +48,18 @@
 
 ## Project setup
 
-### Running the frontend (must be in client folder)
+### Running the frontend in offline mode (must be in client folder)
 
 ```
 cd client
 npm install
-npm run serve:low
+npm run serve:offline
 ```
 
-### Compiles and minifies for production (must be in client folder)
+### Compiles and minifies for production in offline mode (must be in client folder)
 
 ```
-npm run build:low
+npm run build:offline
 ```
 
 ### Lints and fixes files

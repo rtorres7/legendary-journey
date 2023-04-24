@@ -1,5 +1,5 @@
 import { danielArticles } from "@/data";
-import axios from '@/config/wireAxios'
+import axios from "@/config/wireAxios";
 
 export default {
   namespaced: true,
@@ -10,32 +10,32 @@ export default {
   actions: {
     getDanielArticles({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === 'low') {
-        console.log('[store] getDanielArticles: ', danielArticles)
-        setTimeout(() => commit("saveArticles", danielArticles), 750)
+      if (process.env.NODE_ENV === "offline") {
+        console.log("[store] getDanielArticles: ", danielArticles);
+        setTimeout(() => commit("saveArticles", danielArticles), 750);
       } else {
-        axios.get("/home/daniel").then(response => {
-          console.log('[store] getDanielArticles: ', response);
+        axios.get("/home/daniel").then((response) => {
+          console.log("[store] getDanielArticles: ", response);
           const data = response.data.woah;
-          let articles = []
+          let articles = [];
           if (data) {
             if (data.featured) {
-              articles = articles.concat(data.featured)
+              articles = articles.concat(data.featured);
             }
             if (data.secondary) {
-              articles = articles.concat(data.secondary)
+              articles = articles.concat(data.secondary);
             }
           }
-          commit("saveArticles", articles)
-        })
+          commit("saveArticles", articles);
+        });
       }
     },
     //Test Console Feature Only
     setDanielArticles({ commit }, count) {
-      commit("saveArticles", count <= 0 ? [] : danielArticles.slice(0, count))
+      commit("saveArticles", count <= 0 ? [] : danielArticles.slice(0, count));
     },
     setLoading({ commit }, value) {
-      commit("toggleLoading", value)
+      commit("toggleLoading", value);
     },
   },
   mutations: {

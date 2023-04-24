@@ -12,7 +12,7 @@ export default {
     getProductDetails({ state, commit }) {
       state.loading = true;
       let route = router.currentRoute.value;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         let displayedDocument = productDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );
@@ -31,7 +31,7 @@ export default {
     },
     savePrintCount({ commit }) {
       let route = router.currentRoute.value;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         let displayedDocument = productDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );
@@ -49,7 +49,7 @@ export default {
     },
     saveEmailCount({ commit }) {
       let route = router.currentRoute.value;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         let displayedDocument = productDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );

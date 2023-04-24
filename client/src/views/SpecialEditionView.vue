@@ -290,7 +290,7 @@ export default {
     };
 
     const deleteSpecialEdition = () => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         router.push({ name: "specialEditions" });
       } else {
         axios
