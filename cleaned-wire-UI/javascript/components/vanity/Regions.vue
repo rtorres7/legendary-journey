@@ -1,0 +1,67 @@
+<template>
+  <div>
+    <VanityHeader
+      :title="$route.params.regionName"
+      class="standard-page-margin"
+    >
+    </VanityHeader>
+    <Pills />
+    <ResultsWithNav class="standard-page-margin" />
+  </div>
+</template>
+
+<script>
+import ResultsWithNav from "../search/ResultsWithNav";
+import vanityPage from "@shared/mixins/vanityPage";
+import Pills from "../search/pills/Pills";
+import VanityHeader from "../shared/VanityHeader";
+import { mapState } from "vuex";
+import { orderBy } from "lodash";
+
+export default {
+  name: "Regions",
+  components: { VanityHeader, Pills, ResultsWithNav },
+  mixins: [vanityPage],
+  computed: {
+    ...mapState("search", ["compact", "pages", "showFilters", "showContext"]),
+    ...mapState("metadata/criteria", ["loading"]),
+    ...mapState("metadata/criteria/regions", { regions: "values" }),
+    ...mapState("metadata/criteria/countries", { storeCountries: "values" }),
+
+    region() {
+      for (const r in this.regions) {
+        if (
+          this.regions[r] &&
+          this.regions[r].name === this.$route.params.regionName
+        ) {
+          return this.regions[r];
+        }
+      }
+    },
+
+    query() {
+      return {
+        "regions[]": this.getRegionCodeFromName(this.$route.params.regionName),
+        "reporting_types[]": "analysis.all_source",
+        view: "grid",
+      };
+    },
+
+    countries() {
+      var countries = [];
+      if (!this.loading) {
+        for (const s in this.region.subregions) {
+          const subregion = this.region.subregions[s];
+          for (const c in subregion.country_codes) {
+            var country = this.storeCountries[subregion.country_codes[c]];
+            country["code"] = subregion.country_codes[c];
+            countries.push(country);
+          }
+        }
+      }
+
+      return orderBy(countries, ["name"], ["asc"]);
+    },
+  },
+};
+</script>
