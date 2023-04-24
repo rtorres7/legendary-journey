@@ -6,6 +6,8 @@
     "build": "cross-env NODE_ENV=high vue-cli-service build --mode high",
     "serve:low": "cross-env NODE_ENV=low vue-cli-service serve --mode low",
     "build:low": "cross-env NODE_ENV=low vue-cli-service build --mode low",
+    "serve:container": "cross-env NODE_ENV=low vue-cli-service serve --mode low",
+    "build:container": "cross-env NODE_ENV=low vue-cli-service build --mode low",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

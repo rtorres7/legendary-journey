@@ -37,8 +37,8 @@ export const isProductLocked = (product) => {
 };
 
 export const isFavoriteProduct = (product) => {
-  return !!product.favorite
-}
+  return !!product.favorite;
+};
 
 export const hasProductAccess = (product, organization) => {
   let hasAccess = true;
