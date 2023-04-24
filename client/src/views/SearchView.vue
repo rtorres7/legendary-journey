@@ -484,6 +484,17 @@
                     <span class="line-clamp-5">{{ item.summary }}</span>
                   </template>
                 </div>
+                <template v-if="lowsideMode">
+                  <button class="absolute -bottom-2 right-0">
+                    <HeartIcon
+                      :class="[
+                          isFavoriteProduct(item) ? 'text-red-500 fill-red-500' : '',
+                          'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300',
+                        ]"
+                      @click="updateFavoriteStatus(item)"
+                    />
+                  </button>
+                </template>
               </div>
             </div>
           </template>
@@ -593,7 +604,7 @@ import {
   isProductLocked,
   getValueForCode,
   getValueForName,
-  formatDate,
+  formatDate, isFavoriteProduct
 } from "@/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
@@ -615,12 +626,14 @@ import {
   CalendarIcon,
   ChevronUpIcon,
   ChevronUpDownIcon,
-  XMarkIcon,
+  XMarkIcon, HeartIcon
 } from "@heroicons/vue/24/outline";
 import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox";
 import PublishedProductCard from "@/components/PublishedProductCard";
 import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import SearchResultsFacets from "@/components/SearchResultsFacets";
+import { productDetails } from "@/data";
+import axios from "@/config/wireAxios";
 const sortOptions = [
   { name: "Newest", key: "desc", type: "sort_dir" },
   { name: "Oldest", key: "asc", type: "sort_dir" },
@@ -639,7 +652,9 @@ const resultOptions = [
 ];
 
 export default {
+  methods: { isFavoriteProduct },
   components: {
+    HeartIcon,
     Dialog,
     DialogPanel,
     Disclosure,
@@ -671,6 +686,7 @@ export default {
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
+    const lowsideMode = process.env.NODE_ENV === "low";
 
     const getSubregionNameForCountryCode = (code) => {
       return criteria.value.subregions.find((subregion) => {
@@ -1426,6 +1442,27 @@ export default {
       window.open(route);
     };
 
+    const updateFavoriteStatus = (product) => {
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        documentMatch.data.favorite = !product.favorite;
+        product.favorite = !product.favorite;
+      } else {
+        let favoritePromise;
+        if (product.favorite) {
+          favoritePromise = axios.delete(`/document_favorites/${product.id}`);
+        } else {
+          favoritePromise = axios.post("document_favorites", {
+            id: product.id,
+          });
+        }
+
+        favoritePromise.then(() => (product.favorite = !product.favorite));
+      }
+    };
+
     return {
       dayjs,
       isProductLocked,
@@ -1465,6 +1502,8 @@ export default {
       closeMobileFacetsDialog,
       openMobileFacetsDialog,
       openMedia,
+      lowsideMode,
+      updateFavoriteStatus,
     };
   },
 };
