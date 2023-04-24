@@ -85,7 +85,7 @@
         >
           {{ formatDate(product.date_published) }}
         </p>
-        <template v-if="lowsideMode">
+        <template v-if="offlineMode">
           <button class="m-auto place-content-center">
             <HeartIcon
               :class="[
@@ -133,13 +133,13 @@ export default {
     },
   },
   setup() {
-    const lowsideMode = process.env.NODE_ENV === "low";
+    const offlineMode = process.env.NODE_ENV === "offline";
     const updateFavoriteStatus = (product, event) => {
       if (event) {
         event.preventDefault();
       }
 
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );
@@ -160,7 +160,7 @@ export default {
     };
 
     return {
-      lowsideMode,
+      offlineMode,
       isProductLocked,
       formatDate,
       isFavoriteProduct,

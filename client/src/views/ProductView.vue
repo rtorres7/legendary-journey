@@ -88,11 +88,18 @@
               </tippy>
             </router-link>
           </div>
-          <div v-if="lowsideMode">
-            <tippy :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'">
-              <HeartIcon :class="[
-                productIsFavorite ? 'text-red-500 fill-red-500' : '',
-                'h-6 w-6 cursor-pointer']" aria-hidden="true" @click="productIsFavorite = !productIsFavorite" />
+          <div v-if="offlineMode">
+            <tippy
+              :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'"
+            >
+              <HeartIcon
+                :class="[
+                  productIsFavorite ? 'text-red-500 fill-red-500' : '',
+                  'h-6 w-6 cursor-pointer',
+                ]"
+                aria-hidden="true"
+                @click="productIsFavorite = !productIsFavorite"
+              />
             </tippy>
           </div>
         </div>
@@ -226,7 +233,7 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
     const productIsFavorite = ref(store.state.product.document.favorite);
-    const lowsideMode = process.env.NODE_ENV === "low";
+    const offlineMode = process.env.NODE_ENV === "offline";
 
     const printDocument = () => {
       const pdfs = product.value.attachments_metadata.filter(
@@ -362,11 +369,11 @@ export default {
     );
 
     watch(productIsFavorite, () => {
-      updateFavoriteStatus()
+      updateFavoriteStatus();
     });
 
     const updateFavoriteStatus = () => {
-      if (process.env.NODE_ENV === 'low') {
+      if (process.env.NODE_ENV === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.value.doc_num
         );
@@ -375,14 +382,18 @@ export default {
       } else {
         let favoritePromise;
         if (productIsFavorite.value) {
-          favoritePromise = axios
-            .delete(`/document_favorites/${product.value.id}`)
+          favoritePromise = axios.delete(
+            `/document_favorites/${product.value.id}`
+          );
         } else {
-          favoritePromise = axios
-            .post('document_favorites', { id: product.value.id })
+          favoritePromise = axios.post("document_favorites", {
+            id: product.value.id,
+          });
         }
 
-        favoritePromise.then(() => product.value.favorite = productIsFavorite.value )
+        favoritePromise.then(
+          () => (product.value.favorite = productIsFavorite.value)
+        );
       }
     };
 
@@ -412,7 +423,7 @@ export default {
       canEditProduct,
       theme,
       productIsFavorite,
-      lowsideMode,
+      offlineMode,
     };
   },
 };

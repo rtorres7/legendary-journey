@@ -1168,7 +1168,7 @@ export default {
     };
     const openPreviewDialog = () => {
       loadingPreview.value = true;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );
@@ -1235,7 +1235,7 @@ export default {
     };
 
     const deleteDocument = () => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         router.push({
           name: "publish",
           params: { date: route.params.date },
@@ -1278,7 +1278,7 @@ export default {
         );
       } else {
         publishingProduct.value = true;
-        if (process.env.NODE_ENV === "low") {
+        if (process.env.NODE_ENV === "offline") {
           setTimeout(() => {
             publishingProduct.value = false;
             router.push({
@@ -1330,7 +1330,7 @@ export default {
 
     const saveProduct = () => {
       savingProduct.value = true;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
           product.value = mockDocument;
