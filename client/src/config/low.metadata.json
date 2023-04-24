@@ -20,7 +20,7 @@
       "payload": {
         "title": "Daily Brief",
         "summary": "The Daily Brief summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -35,7 +35,7 @@
       "payload": {
         "title": "CT Digest",
         "summary": "The CT Digest summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -45,7 +45,7 @@
       "payload": {
         "title": "CT Weekly",
         "summary": "The CT Weekly summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -60,7 +60,7 @@
       "payload": {
         "title": "Reported Threats",
         "summary": "The Special Threat Matrix summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -70,7 +70,7 @@
       "payload": {
         "title": "SVTC Notes",
         "summary": "The SVTC Notes summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -80,7 +80,7 @@
       "payload": {
         "title": "Terrorism Digest",
         "summary": "The Terrorism Digest summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -90,7 +90,7 @@
       "payload": {
         "title": "Terrorism Summary",
         "summary": "The Terrorism summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     },
     {
@@ -101,13 +101,13 @@
         "title": "Threat Matrix",
         "topics": ["TERR", "HSEC"],
         "summary": "The Threat Matrix summary description goes here.",
-        "poc_info": "National Counterterrosim Center (NCTC) Operations Center, 931-6010 (secure)"
+        "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
     }
   ],
   "issues": [
     {
-      "name": "Important, Radical, Psychological and Critical (IRPC)",
+      "name": "Important, Radical, Psychological & Critical (IRPC)",
       "shortName": "IRPC",
       "query": "suspendisse OR quam OR ante OR iaculis OR eu OR finibus OR id OR tempus OR a OR sem OR Donec OR non OR fringilla OR risus OR Integer OR arcu OR est OR aliquam OR nec OR ornare OR vitae OR porttitor OR vitae OR ligula OR Morbi OR dapibus OR lacus OR vitae OR interdum OR scelerisque OR eros OR ex OR venenatis OR velit OR ac OR sollicitudin OR felis OR erat OR sed OR massa OR Nam OR tempor OR sem OR sit OR amet OR purus OR vestibulum OR auctor OR Nam OR vel OR tortor OR eu OR mauris OR finibus OR ornare OR Nullam OR id OR urna OR aliquet OR imperdiet OR nibh OR imperdiet OR dictum OR dui OR Praesent OR tempor OR lacus OR enim OR et OR euismod OR sapien OR tempus OR dictum OR Fusce OR finibus OR orci OR quis OR elit OR blandit OR porta OR Fusce OR nunc OR nunc OR faucibus OR mattis OR ullamcorper OR sit OR amet OR placerat OR in OR tellus OR Vestibulum OR ante OR ipsum OR primis OR in OR faucibus OR orci OR luctus OR et OR ultrices OR posuere OR cubilia OR curae OR Pellentesque OR at OR dui OR et OR eros OR egestas OR condimentum OR a OR eget OR augue OR Integer OR eget OR pellentesque OR felis OR et OR pellentesque OR turpis OR Sed OR accumsan OR augue OR vitae OR neque OR ultrices OR elementum OR ut OR ut OR purus OR etiam OR sed OR ligula OR velit OR Etiam OR tellus OR arcu OR aliquet OR at OR nisl OR a OR lobortis OR sollicitudin OR ex OR Aenean OR tincidunt OR accumsan OR ligula OR a OR lobortis OR Vivamus OR porttitor OR sem OR et OR velit OR viverra OR quis OR lobortis OR mi OR semper OR Vivamus OR varius OR eros OR at OR urna OR laoreet OR viverra OR Vivamus OR vestibulum OR lorem OR in OR imperdiet OR luctus OR purus OR ante OR bibendum OR enim OR vel OR ultricies OR velit OR urna OR a OR tortor OR Vivamus OR ut OR neque OR in OR lacus OR pulvinar OR pellentesque OR Duis eu OR nulla OR metus OR Praesent OR ligula OR tortor OR mattis OR ornare OR massa OR a OR gravida OR varius OR risus OR Morbi OR nec OR mollis OR dolor OR ac OR dapibus OR lectus OR In OR ut OR hendrerit OR risus OR ac OR pretium OR urna OR Quisque OR aliquam OR commodo OR magna OR sit OR amet OR congue OR purus OR iaculis OR elementum OR Proin OR quis OR mi OR sed OR eros OR semper OR placerat OR id OR ut OR justo OR Etiam OR gravida OR ultricies OR ante OR Nullam OR efficitur OR nibh"
     },
@@ -187,7 +187,11 @@
       "header": "Resources",
       "links": [
         {
-          "name": "DI Tradecraft",
+          "name": "NGT",
+          "href": "https://www.google.com/"
+        },
+        {
+          "name": "JEMS",
           "href": "https://www.google.com/"
         },
         {
@@ -203,10 +207,6 @@
     {
       "header": "NCTC Tools",
       "links": [
-        {
-          "name": "Collaboration",
-          "href": "https://www.google.com/"
-        },
         {
           "name": "Kingfisher",
           "href": "https://www.google.com/"
@@ -262,6 +262,17 @@
   "user_support": {
     "help_url": "https://www.google.com",
     "access_text": "leverages Enterprise Entitlements to protect access to restricted products and content. Please navigate to the link below to review your organization affiliation as well as to request applicable Regions and Topics.",
-    "access_url": "https://www.google.com"
-  }
+    "access_url": "https://www.google.com",
+    "email": "user_support_email"
+  },
+  "restricted_access": [
+    {
+      "header": "Additional information header",
+      "content": "Additional information content."
+    },
+    {
+      "header": "More information header",
+      "content": "More information content."
+    }
+  ]
 }

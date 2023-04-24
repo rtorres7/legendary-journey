@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import alerts from "./modules/alerts";
 import articles from "./modules/articles";
 import daniel from "./modules/daniel";
 import search from "./modules/search";
@@ -7,9 +8,10 @@ import specialEditions from "./modules/specialEditions";
 import user from "./modules/user";
 import feeds from "./modules/feeds";
 import savedSearches from "./modules/saved-searches";
-import danielDetails from "./modules/danielDetails";
+import product from "./modules/product";
 import testConsole from "./modules/test-console";
 import metadata from "./modules/metadata";
+import localStorage from "./modules/localStorage";
 import relatedProducts from "./modules/relatedProducts";
 import metrics from "./modules/metrics";
 import wires from "./modules/wires";
@@ -25,6 +27,7 @@ export default createStore({
   actions: {},
   mutations: {},
   modules: {
+    alerts,
     articles,
     daniel,
     search,
@@ -33,9 +36,10 @@ export default createStore({
     user,
     feeds,
     savedSearches,
-    danielDetails,
+    product,
     testConsole,
     metadata,
+    localStorage,
     relatedProducts,
     metrics,
     wires,

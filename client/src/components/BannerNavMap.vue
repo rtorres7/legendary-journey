@@ -37,6 +37,7 @@ export default {
     onMounted(() => {
       let root = am5.Root.new(chartdiv.value);
       root.setThemes([am5themes_Animated.new(root)]);
+      root._logo.dispose();
 
       let chart = root.container.children.push(
         am5map.MapChart.new(root, {

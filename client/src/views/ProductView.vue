@@ -1,320 +1,201 @@
 <template>
-  <template v-if="loadingArticle">
+  <template v-if="loadingProduct">
     <div class="max-w-fit m-auto mt-[24vh]">
-      <BaseLoadingSpinner class="h-28 w-28" />
+      <MaxLoadingSpinner class="h-28 w-28" />
     </div>
   </template>
   <template v-else>
-    <div v-if="!loadingFeaturedArticles && navigation && !wantsPreview">
-      <ProductNavigation :navigation="navigation" />
-    </div>
-    <div v-show="wantsPreview" class="text-center pb-8 text-sm">
-      <div>PREVIEW</div>
-      <div>
-        If you do not see changes in your document, please save the document and
-        select preview again
+    <template v-if="!canAccessProduct">
+      <NotAuthorized :product="product" />
+    </template>
+    <template v-else>
+      <div v-if="!loadingFeaturedArticles && navigation">
+        <ProductNavigation :navigation="navigation" />
       </div>
-    </div>
-    <div
-      class="flex flex-wrap flex-col lg:flex-row lg:flex-nowrap justify-between mb-8"
-    >
       <div
-        v-if="!isDraft && !wantsPreview"
-        class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
+        class="flex flex-wrap flex-col lg:flex-row lg:flex-nowrap justify-between mb-8"
       >
-        <div class="flex">
+        <div
+          v-if="product.state !== 'draft'"
+          class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
+        >
+          <div class="flex">
+            <div>
+              <tippy content="Print this Product">
+                <PrinterIcon
+                  class="h-6 w-6 cursor-pointer"
+                  aria-hidden="true"
+                  @click="printDocument"
+                />
+              </tippy>
+            </div>
+            <div
+              class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+            >
+              <p>
+                {{ product.print_count }}
+              </p>
+            </div>
+          </div>
+          <div class="flex">
+            <a
+              :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
+            >
+              <tippy content="Email a link to this Product">
+                <EnvelopeIcon
+                  class="h-6 w-6 cursor-pointer"
+                  aria-hidden="true"
+                  @click="updateEmailCount"
+                />
+              </tippy>
+            </a>
+            <div
+              class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+            >
+              <p>
+                {{ product.email_count }}
+              </p>
+            </div>
+          </div>
           <div>
-            <PrinterIcon
-              class="h-6 w-6 cursor-pointer"
-              aria-hidden="true"
-              @click="printDocument"
-            />
+            <tippy content="Copy URL to Clipboard">
+              <LinkIcon
+                class="h-6 w-6 cursor-pointer"
+                aria-hidden="true"
+                @click="copyUrl"
+              />
+            </tippy>
           </div>
           <div
-            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
+            v-show="
+              canManageWire &&
+              canEditProduct(product.product_type_id) &&
+              !product?.legacy
+            "
           >
-            <p>
-              {{ article.print_count }}
-            </p>
+            <router-link
+              :to="{
+                name: 'edit',
+                params: {
+                  date: product?.feature_date,
+                  id: product?.feature_id ? product.feature_id : -1,
+                  doc_num: product?.doc_num,
+                },
+              }"
+            >
+              <tippy content="Edit this Product">
+                <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+              </tippy>
+            </router-link>
           </div>
         </div>
-        <div class="flex">
-          <a
-            :href="`mailto:?subject=Check%20out%20this%20Current...&amp;body=${url}`"
-          >
-            <EnvelopeIcon
-              class="h-6 w-6 cursor-pointer"
-              aria-hidden="true"
-              @click="updateEmailCount"
-            />
-          </a>
-          <div
-            class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
-          >
-            <p>
-              {{ article.email_count }}
-            </p>
-          </div>
-        </div>
-        <div>
-          <LinkIcon
-            class="h-6 w-6 cursor-pointer"
-            aria-hidden="true"
-            @click="copyUrl"
-          />
+        <div class="w-full pb-6 lg:pb-0">
+          <ProductContent :product="product" />
         </div>
         <div
-          v-show="
-            canManageWire &&
-            canEditProduct(article.product_type_id) &&
-            !article?.legacy
-          "
+          class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
-          <router-link
-            :to="{
-              name: 'edit',
-              params: {
-                date: article?.feature_date,
-                // id: article?.feature_id ? article.feature_id : -1,
-                id: article?.id,
-                doc_num: article?.doc_num,
-              },
-            }"
-          >
-            <PencilIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
-          </router-link>
-        </div>
-      </div>
-      <div class="w-full flex flex-col space-y-4 pb-6 lg:pb-0">
-        <div
-          v-if="article.classification !== 'INVALID'"
-          class="text-center pb-2 text-sm lg:text-md"
-        >
-          {{ article.classification }}
-        </div>
-        <p class="font-semibold text-sm lg:text-md uppercase">product</p>
-        <h1 class="font-semibold text-2xl lg:text-3xl">
-          <span v-if="article.title_classification !== 'X'">
-            ({{ article.title_classification }})
-          </span>
-          <span>
-            {{ article.title }}
-          </span>
-        </h1>
-        <div class="flex space-x-4 text-sm md:text-md">
-          <p class="capitalize">
-            {{ `${article.state} -` }}
-            {{ formatDate(article.date_published) }}
-          </p>
-          <p aria-hidden="true">●</p>
-          <p v-if="article.authors?.length > 0">
-            <template v-for="(author, index) in article.authors" :key="index">
-              {{ author.name
-              }}<span
-                v-if="
-                  article.authors?.length > 1 &&
-                  index < article.authors?.length - 1
-                "
-                >,
-              </span>
+          <ProductAttachments :article="product" />
+          <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
+          <template v-if="product.state !== 'draft'">
+            <template v-if="!loadingRelatedProducts">
+              <ProductRelated :relatedProducts="relatedProducts" />
             </template>
-          </p>
-        </div>
-        <div class="w-full pr-2">
-          <!-- <img
-            v-if="article.product_image"
-            :src="`/documents/${article.doc_num}/images/article?updated_at=${article.updated_at}`"
-            class="h-[350px] w-[350px] float-right"
-          /> -->
-          <p v-if="article.html_body" class="whitespace-pre-line">
-            <span class="ck-content summary" v-html="article.html_body" />
-          </p>
-        </div>
-        <p
-          class="font-semibold border-t-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25 pt-4"
-        >
-          Document Details
-        </p>
-        <Disclosure v-slot="{ open }">
-          <DisclosureButton class="flex space-x-2 text-sm">
-            <span>CONTENTS</span>
-            <ChevronDownIcon
-              class="h-4 w-4"
-              :class="open ? 'transform rotate-180' : ''"
-            />
-          </DisclosureButton>
-          <DisclosurePanel>
-            <div class="ml-4 space-y-2 text-sm">
-              <!-- <p>
-                <span class="font-semibold">Produced By: </span
-                >{{ article.producing_office }}
-              </p> -->
-              <p>
-                <span class="font-semibold">Product Type: </span
-                >{{ article.product_type_name }}
-              </p>
-              <p>
-                <span class="font-semibold">Document Number: </span
-                >{{ article.doc_num }}
-              </p>
-              <p>
-                <span class="font-semibold">Posted: </span>
-                <template v-if="article.posted_at">
-                  {{ formatDate(article.posted_at) }}
+          </template>
+          <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
+          <template v-if="product.state !== 'draft'">
+            <template v-if="!loadingMetrics">
+              <div class="flex flex-col space-y-4">
+                <p class="font-semibold text-lg">Metrics</p>
+                <template v-if="metrics.uniqueReaders !== 0">
+                  <p>Unique Readers ({{ metrics.uniqueReaders }})</p>
+                  <div class="flex items-center">
+                    <div class="flex flex-col">
+                      <label class="text-sm font-medium mb-1"
+                        >Start Date
+                        <MaxDatepicker
+                          v-model="metricStartDate"
+                          :minDate="product.display_date"
+                          :maxDate="new Date()"
+                          :enableTimePicker="false"
+                          format="dd MMMM yyyy"
+                          week-start="0"
+                          auto-apply
+                        />
+                      </label>
+                    </div>
+                    <p class="px-3 pt-4">to</p>
+                    <div class="flex flex-col">
+                      <label class="text-sm font-medium mb-1"
+                        >End Date
+                        <MaxDatepicker
+                          v-model="metricEndDate"
+                          :minDate="product.display_date"
+                          :maxDate="new Date()"
+                          :enableTimePicker="false"
+                          format="dd MMMM yyyy"
+                          week-start="0"
+                          auto-apply
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <ProductMetrics :metrics="metrics.readership" />
                 </template>
-                <template v-else>
-                  {{ formatDate(article.posted_on) }}
-                </template>
-              </p>
-              <p>
-                <span class="font-semibold">Publication Date: </span
-                >{{ formatDate(article.date_published) }}
-              </p>
-              <p>
-                <span class="font-semibold">Contact: </span
-                >{{ article.poc_info }}
-              </p>
-            </div>
-          </DisclosurePanel>
-        </Disclosure>
-        <!-- <Disclosure v-slot="{ open }">
-          <DisclosureButton class="flex space-x-2 text-sm">
-            <span>SOURCES</span>
-            <ChevronDownIcon
-              class="h-4 w-4"
-              :class="open ? 'transform rotate-180' : ''"
-            />
-          </DisclosureButton>
-          <DisclosurePanel>
-            <ol class="list-decimal list-inside ml-4 space-y-2">
-              <div v-for="source in article.sources" :key="source">
-                <li class="text-sm">
-                  <router-link to="#" class="hover:underline">
-                    {{ source }}
-                  </router-link>
-                </li>
               </div>
-            </ol>
-          </DisclosurePanel>
-        </Disclosure> -->
-        <div
-          v-if="article.classification !== 'INVALID'"
-          class="text-center pb-2 text-sm lg:text-md"
-        >
-          {{ article.classification }}
+            </template>
+            <template v-else>
+              <div class="m-auto pt-8">
+                <MaxLoadingSpinner class="h-20 w-20" />
+              </div>
+            </template>
+          </template>
         </div>
       </div>
-      <div
-        class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-      >
-        <ProductAttachments :article="article" />
-        <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
-        <template v-if="!isDraft && !wantsPreview">
-          <template v-if="!loadingRelatedProducts">
-            <ProductRelated :relatedProducts="relatedProducts" />
-          </template>
-        </template>
-        <!-- TODO: Use metadata featuresAvailable.metrics for condition -->
-        <template v-if="!isDraft && !wantsPreview">
-          <template v-if="!loadingMetrics">
-            <div class="flex flex-col space-y-4">
-              <p class="font-semibold text-lg">Metrics</p>
-              <template v-if="metrics.uniqueReaders !== 0">
-                <p>Unique Readers ({{ metrics.uniqueReaders }})</p>
-                <div class="flex items-center">
-                  <div class="flex flex-col">
-                    <label class="text-sm font-medium mb-1">Start Date</label>
-                    <BaseDatepicker
-                      v-model="metricStartDate"
-                      :minDate="article.display_date"
-                      :maxDate="new Date()"
-                      :enableTimePicker="false"
-                      format="dd MMMM yyyy"
-                      week-start="0"
-                      auto-apply
-                    />
-                  </div>
-                  <p class="px-3 pt-4">to</p>
-                  <div class="flex flex-col">
-                    <label class="text-sm font-medium mb-1">End Date</label>
-                    <BaseDatepicker
-                      v-model="metricEndDate"
-                      :minDate="article.display_date"
-                      :maxDate="new Date()"
-                      :enableTimePicker="false"
-                      format="dd MMMM yyyy"
-                      week-start="0"
-                      auto-apply
-                    />
-                  </div>
-                </div>
-                <ProductMetrics :metrics="metrics.readership" />
-              </template>
-            </div>
-          </template>
-          <template v-else>
-            <div class="m-auto pt-8">
-              <BaseLoadingSpinner class="h-20 w-20" />
-            </div>
-          </template>
-        </template>
-      </div>
-    </div>
+    </template>
   </template>
 </template>
 
 <script>
 import * as dayjs from "dayjs";
-import { formatDate } from "@/helpers";
+import { formatDate, hasProductAccess } from "@/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
-  ChevronDownIcon,
   PrinterIcon,
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
 } from "@heroicons/vue/24/outline";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import NotAuthorized from "@/components/NotAuthorized";
 import ProductNavigation from "@/components/ProductNavigation";
+import ProductContent from "@/components/ProductContent";
 import ProductAttachments from "@/components/ProductAttachments";
 import ProductRelated from "@/components/ProductRelated";
 import ProductMetrics from "@/components/ProductMetrics";
 
 export default {
   components: {
-    ChevronDownIcon,
     PrinterIcon,
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
+    NotAuthorized,
     ProductNavigation,
+    ProductContent,
     ProductAttachments,
     ProductRelated,
     ProductMetrics,
   },
-  props: {
-    doc_num: {
-      type: String,
-    },
-    title: {
-      type: String,
-    },
-    wantsPreview: {
-      type: Boolean,
-    },
-  },
-  setup(props) {
+  setup() {
     const store = useStore();
     const route = useRoute();
     const url = computed(() => window.location);
     const createNotification = inject("create-notification");
-    const article = computed(() => store.state.danielDetails.document);
-    const loadingArticle = computed(() => store.state.danielDetails.loading);
+    const product = computed(() => store.state.product.document);
+    const organization = computed(() => store.getters["user/organization"]);
+    const loadingProduct = computed(() => store.state.product.loading);
     const featuredArticles = computed(() => store.state.daniel.articles);
     const loadingFeaturedArticles = computed(() => store.state.daniel.loading);
     const relatedProducts = computed(
@@ -328,19 +209,14 @@ export default {
     const metricStartDate = ref(null);
     const metricEndDate = ref(null);
     const navigation = ref(null);
-    const isDraft = ref(route.name === "product-preview" ? true : false);
-    const printCount = computed(
-      () => store.state.danielDetails.document.print_count
-    );
-    const emailCount = computed(
-      () => store.state.danielDetails.document.email_count
-    );
+    const printCount = computed(() => store.state.product.document.print_count);
+    const emailCount = computed(() => store.state.product.document.email_count);
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
 
     const printDocument = () => {
-      const pdfs = article.value.attachments_metadata.filter(
+      const pdfs = product.value.attachments_metadata.filter(
         (attachment) =>
           attachment.pdf_version === true && attachment.visible === true
       );
@@ -350,7 +226,7 @@ export default {
         const pdfLink =
           window.location.origin +
           "/documents/" +
-          article.value.doc_num +
+          product.value.doc_num +
           "/attachments/" +
           pdfs[0].file_name;
         window.open(pdfLink);
@@ -358,10 +234,10 @@ export default {
       updatePrintCount();
     };
     const updatePrintCount = () => {
-      store.dispatch("danielDetails/savePrintCount");
+      store.dispatch("product/savePrintCount");
     };
     const updateEmailCount = () => {
-      store.dispatch("danielDetails/saveEmailCount");
+      store.dispatch("product/saveEmailCount");
     };
     const copyUrl = () => {
       navigator.clipboard.writeText(url.value);
@@ -373,19 +249,18 @@ export default {
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
+    const theme = computed(() => store.getters["localStorage/theme"]);
+
     onMounted(() => {
-      store.dispatch(
-        "danielDetails/getDanielArticlesDetails",
-        props.wantsPreview
-      );
-      store.dispatch("daniel/getDanielArticles");
-      store.dispatch("relatedProducts/getRelatedDocuments", props.wantsPreview);
+      store.dispatch("product/getProductDetails");
     });
 
-    watch([loadingArticle], () => {
-      if (!loadingArticle.value && route.name !== "product-preview") {
-        document.title = article.value.title;
-        metricStartDate.value = dayjs(article.value.display_date).toDate();
+    watch([loadingProduct], () => {
+      if (!loadingProduct.value && canAccessProduct.value) {
+        store.dispatch("daniel/getDanielArticles");
+        store.dispatch("relatedProducts/getRelatedDocuments");
+        document.title = product.value.title;
+        metricStartDate.value = dayjs(product.value.display_date).toDate();
         metricEndDate.value = dayjs().toDate();
       }
     });
@@ -397,6 +272,13 @@ export default {
           end: formatDate(metricEndDate.value),
         });
       }
+    });
+
+    watch([theme], () => {
+      store.dispatch("metrics/getMetrics", {
+        start: formatDate(metricStartDate.value),
+        end: formatDate(metricEndDate.value),
+      });
     });
 
     const buildNavigation = () => {
@@ -433,6 +315,13 @@ export default {
       }
     };
 
+    const canAccessProduct = computed(() => {
+      if (hasProductAccess(product.value, organization.value)) {
+        return true;
+      }
+      return false;
+    });
+
     const canEditProduct = (product_id) => {
       if (!isCommunityExclusive.value) {
         return true;
@@ -454,23 +343,17 @@ export default {
       () => route.params,
       () => {
         if (route.name === "product") {
-          store.dispatch(
-            "danielDetails/getDanielArticlesDetails",
-            props.wantsPreview
-          );
-          store.dispatch("daniel/getDanielArticles");
-          store.dispatch(
-            "relatedProducts/getRelatedDocuments",
-            props.wantsPreview
-          );
+          store.dispatch("product/getProductDetails");
         }
       }
     );
 
     return {
       formatDate,
-      article,
-      loadingArticle,
+      hasProductAccess,
+      product,
+      organization,
+      loadingProduct,
       loadingFeaturedArticles,
       relatedProducts,
       loadingRelatedProducts,
@@ -479,7 +362,6 @@ export default {
       metricStartDate,
       metricEndDate,
       navigation,
-      isDraft,
       printCount,
       emailCount,
       printDocument,
@@ -488,26 +370,10 @@ export default {
       copyUrl,
       canManageWire,
       url,
+      canAccessProduct,
       canEditProduct,
+      theme,
     };
   },
 };
 </script>
-
-<style scoped>
-::v-deep .digression {
-  @apply table w-auto p-8 mt-8 bg-white shadow-md;
-}
-
-::v-deep .digression-content > p {
-  @apply my-4;
-}
-
-::v-deep .summary > p {
-  @apply block my-4;
-}
-
-::v-deep .source-reference {
-  @apply hidden align-top;
-}
-</style>

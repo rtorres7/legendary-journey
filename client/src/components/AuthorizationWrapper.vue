@@ -21,7 +21,6 @@ export default {
     const store = useStore();
     const route = useRoute();
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
-
     const authorized = computed(() => {
       if (
         (route.name === "publish" ||
@@ -33,11 +32,11 @@ export default {
       }
       return true;
     });
-
     return {
       authorized,
     };
   },
 };
 </script>
+
 <style scoped lang="scss"></style>

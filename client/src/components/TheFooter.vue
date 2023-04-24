@@ -67,7 +67,7 @@
                       <a
                         role="button"
                         tabindex="0"
-                        @click="openSecurityDialog"
+                        @click="openDialog(link.key)"
                         >{{ link.name }}</a
                       >
                     </template>
@@ -83,18 +83,18 @@
       class="py-6 px-4 flex flex-col-reverse lg:flex-row justify-between items-center"
     >
       <div class="flex items-center pt-6 lg:pt-0">
-        <router-link to="/">
-          <img
-            class="w-14"
-            src="@/assets/nctc_seal_color.svg"
-            alt="NCTC seal. Link to top of the homepage"
-          />
-        </router-link>
-        <div class="ml-4">
-          <div
-            class="uppercase text-xl text-white dark:text-slate-200 energy:text-energy-yellow font-semibold tracking-[.05em]"
-          >
-            {{ metadata.application_name }}
+        <div class="ml-4 flex flex-col">
+          <div class="relative">
+            <router-link to="/">
+              <img
+                class="w-48"
+                src="@/assets/nctc_logo.svg"
+                alt="NCTC seal. Link to top of the homepage"
+              />
+            </router-link>
+            <span class="absolute text-xs top-0 right-0 mt-[.33rem]">{{
+              version
+            }}</span>
           </div>
           <p class="text-slate-300 energy:text-zinc-300 text-sm italic">
             {{ metadata.footer_note }}
@@ -148,12 +148,12 @@
       </div>
     </div>
     <div id="classification_banner">
-      <p class="text-center text-xs uppercase">
+      <p class="text-center text-xs uppercase" aria-hidden="true">
         {{ metadata.system_classification }}
       </p>
     </div>
   </div>
-  <BaseDialog
+  <MaxDialog
     class="max-w-[600px]"
     :isOpen="isMissionDialogOpen"
     @close="closeMissionDialog"
@@ -168,8 +168,8 @@
         </div>
       </template>
     </div>
-  </BaseDialog>
-  <BaseDialog
+  </MaxDialog>
+  <MaxDialog
     class="max-w-[600px]"
     :isOpen="isSecurityDialogOpen"
     @close="closeSecurityDialog"
@@ -184,8 +184,8 @@
         </div>
       </template>
     </div>
-  </BaseDialog>
-  <BaseDialog
+  </MaxDialog>
+  <MaxDialog
     class="max-w-[600px]"
     :isOpen="isFAQDialogOpen"
     @close="closeFAQDialog"
@@ -200,7 +200,7 @@
         </div>
       </template>
     </div>
-  </BaseDialog>
+  </MaxDialog>
 </template>
 <script>
 import { metadata } from "@/config";
@@ -219,6 +219,7 @@ export default {
     const isMissionDialogOpen = ref(false);
     const isSecurityDialogOpen = ref(false);
     const isFAQDialogOpen = ref(false);
+    const version = `v${process.env.VUE_APP_VERSION}`;
 
     const closeMissionDialog = () => {
       isMissionDialogOpen.value = false;
@@ -255,6 +256,7 @@ export default {
       closeSecurityDialog,
       closeFAQDialog,
       openDialog,
+      version,
     };
   },
 };

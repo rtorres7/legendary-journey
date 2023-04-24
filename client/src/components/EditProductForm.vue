@@ -1,9 +1,9 @@
 <template>
   <form ref="publishingForm">
-    <BaseCard class="mt-4">
+    <MaxCard class="mt-4">
       <div class="flex">
         <div
-          class="lg:min-w-[215px] p-6 border-r border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+          class="lg:min-w-[215px] p-6 border-r border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
         >
           <div
             class="sticky top-[75px] lg:top-[125px] flex flex-col space-y-2 pr-6"
@@ -38,7 +38,7 @@
                 title="Product Type"
                 description="Changing the product type will prepopulate existing fields so be careful when changing it."
               >
-                <BaseListbox
+                <MaxListbox
                   v-model="form.productType"
                   :label="'Product Type'"
                   :items="lists.productTypes"
@@ -56,7 +56,7 @@
                     class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                   >
                     <div class="lg:w-3/4">
-                      <BaseInput
+                      <MaxInput
                         v-model="form.title"
                         label="Title"
                         type="text"
@@ -65,7 +65,7 @@
                       />
                     </div>
                     <div class="lg:w-1/4">
-                      <!-- <BaseClassifier
+                      <MaxClassifier
                         v-model="form.titleClassificationXML"
                         label="Title PM"
                         required
@@ -73,14 +73,14 @@
                         @update:classObj="
                           updateField($event, 'title', 'classification')
                         "
-                      /> -->
+                      />
                     </div>
                   </div>
                   <div
                     class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
                   >
                     <div class="lg:w-3/4">
-                      <BaseTextarea
+                      <MaxTextarea
                         v-model="form.summary"
                         maxlength="4000"
                         rows="6"
@@ -90,7 +90,7 @@
                       />
                     </div>
                     <div class="lg:w-1/4">
-                      <!-- <BaseClassifier
+                      <MaxClassifier
                         v-model="form.summaryClassificationXML"
                         label="Summary PM"
                         required
@@ -98,69 +98,115 @@
                         @update:classObj="
                           updateField($event, 'summary', 'classification')
                         "
-                      /> -->
+                      />
                     </div>
                   </div>
                   <div class="lg:w-1/4">
-                    <BaseDatepicker
-                      v-model="selectedPublicationDate"
-                      :enableTimePicker="false"
-                      week-start="0"
-                      auto-apply
-                      @update:modelValue="updateSelectedDate"
-                    >
-                      <template #trigger>
-                        <BaseInput
-                          v-model="form.publicationDate"
-                          label="Publication Date"
-                          type="text"
-                          required
-                        />
-                      </template>
-                    </BaseDatepicker>
+                    <label class="text-sm font-medium"
+                      >Publication Date
+                      <span class="sr-only">Required</span>
+                      <span class="pl-1 text-red-500">*</span>
+                      <MaxDatepicker
+                        v-model="selectedPublicationDate"
+                        :enableTimePicker="false"
+                        week-start="0"
+                        auto-apply
+                        customStyle
+                        class="min-h-[2rem] flex w-full rounded-lg cursor-default px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus-within:ring-2 focus-within:ring-offset-2"
+                        @update:modelValue="updateSelectedDate"
+                      >
+                      </MaxDatepicker>
+                    </label>
                   </div>
-                  <div
-                    class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4"
-                  >
-                    <div class="lg:w-1/3 space-y-4">
-                      <BaseListbox
-                        v-model="form.countries"
-                        :label="'Countries'"
-                        :items="lists.countries"
-                        :disabled="form.worldwide"
-                        multiple
-                        required
-                        @update:modelValue="
-                          updateField($event, 'countries', 'multiple')
-                        "
-                      />
-                      <div class="flex">
-                        <input
-                          id="worldwide"
-                          v-model="form.worldwide"
-                          type="checkbox"
-                          name="worldwide"
-                          value="Worldwide"
-                          @change="
-                            updateField($event.target.checked, 'worldwide')
-                          "
-                        />
-                        <label for="worldwide" class="ml-2 text-sm"
-                          >Worldwide</label
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.countries"
+                      :label="'Countries'"
+                      :items="lists.countries"
+                      :disabled="form.worldwide"
+                      multiple
+                      required
+                      @update:modelValue="
+                        updateField($event, 'countries', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="country in form.countries" :key="country">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
                         >
+                          <div class="line-clamp-1 text-sm">
+                            {{ country.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(country.name, 'countries')"
+                          >
+                            <span class="sr-only">Remove country</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <BaseListbox
+                    <div class="flex">
+                      <input
+                        id="worldwide"
+                        v-model="form.worldwide"
+                        type="checkbox"
+                        name="worldwide"
+                        value="Worldwide"
+                        @change="
+                          updateField($event.target.checked, 'worldwide')
+                        "
+                      />
+                      <label for="worldwide" class="ml-2 text-sm"
+                        >Worldwide</label
+                      >
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
                       v-model="form.topics"
                       :label="'Topics'"
                       :items="lists.topics"
                       multiple
                       required
-                      class="lg:w-1/3"
                       @update:modelValue="
                         updateField($event, 'topics', 'multiple')
                       "
                     />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="topic in form.topics" :key="topic">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ topic.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(topic.name, 'topics')"
+                          >
+                            <span class="sr-only">Remove topic</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </EditProductFormSection>
@@ -189,7 +235,7 @@
                               <template
                                 v-if="thumbnailFile?.status === 'loading'"
                               >
-                                <BaseLoadingSpinner class="h-5 w-5" />
+                                <MaxLoadingSpinner class="h-5 w-5" />
                                 Uploading...
                               </template>
                               <template v-else>
@@ -245,7 +291,7 @@
                     </div>
                   </div>
                   <div>
-                    <BaseCkEditor
+                    <MaxCkEditor
                       v-model="form.editorData"
                       :label="'Product Content'"
                       :extraConfig="extraConfig"
@@ -253,18 +299,126 @@
                     />
                   </div>
                   <div class="lg:w-1/2">
-                    <BaseTextarea
+                    <MaxTextarea
                       v-model="form.pocInfo"
                       maxlength="4000"
                       rows="4"
                       label="POC Info"
                       @update:modelValue="updateField($event, 'poc_info')"
-                    ></BaseTextarea>
+                    ></MaxTextarea>
                   </div>
                   <div class="lg:w-1/2 space-y-4">
-                    <BaseListbox
+                    <MaxListbox
+                      v-model="form.producing_offices"
+                      :label="'Produced By Organizations'"
+                      :items="lists.producing_offices"
+                      multiple
+                      @update:modelValue="
+                        updateField($event, 'producing_offices', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.producing_offices" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'producing_offices')"
+                          >
+                            <span class="sr-only">Remove office</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.coordinators"
+                      :label="'Coordinated With Organizations'"
+                      :items="lists.coordinators"
+                      multiple
+                      @update:modelValue="
+                        updateField($event, 'coordinators', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.coordinators" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'coordinators')"
+                          >
+                            <span class="sr-only">Remove coordinator</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.coauthors"
+                      :label="'Co-Authored By Organizations'"
+                      :items="lists.coauthors"
+                      multiple
+                      @update:modelValue="
+                        updateField($event, 'coauthors', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.coauthors" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'coauthors')"
+                          >
+                            <span class="sr-only">Remove co-author</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
                       v-model="form.dissemOrgs"
-                      :label="'Restrict Dissemination by Organization'"
+                      :label="'Restrict Dissemination by Organizations'"
                       :items="lists.dissemOrgs"
                       aria-label="No selection disseminates to all (includes NT-50 Organizations)."
                       multiple
@@ -272,6 +426,33 @@
                         updateField($event, 'dissem_orgs', 'multiple')
                       "
                     />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.dissemOrgs" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'dissemOrgs')"
+                          >
+                            <span class="sr-only"
+                              >Remove Dissemination org</span
+                            >
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                     <p class="text-sm">
                       No selection disseminates to all
                       <span class="italic"
@@ -388,7 +569,7 @@
                     highest level."
               >
                 <div class="lg:w-1/2">
-                  <!-- <BaseClassifier
+                  <MaxClassifier
                     v-model="form.classificationXML"
                     label="Document Classification"
                     required
@@ -396,47 +577,53 @@
                     @update:classObj="
                       updateField($event, 'document', 'classification')
                     "
-                  /> -->
+                  />
                 </div>
               </EditProductFormSection>
             </div>
             <div
-              class="flex flex-wrap gap-4 justify-end py-6 px-8 bg-slate-50 dark:bg-slate-800/75 energy:bg-zinc-700/25"
+              class="flex flex-wrap gap-4 justify-end py-6 px-8 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
             >
-              <BaseButton
+              <MaxButton
                 color="secondary"
                 type="submit"
                 :disabled="publishDisabled"
                 @click.prevent="publishProduct"
               >
                 Publish
-              </BaseButton>
-              <BaseButton color="secondary" @click.prevent="saveProduct"
-                >Save</BaseButton
+              </MaxButton>
+              <MaxButton color="secondary" @click.prevent="saveProduct"
+                >Save</MaxButton
               >
-              <BaseButton color="secondary" @click.prevent="openPreviewDialog"
+              <MaxButton color="secondary" @click.prevent="openPreviewDialog"
                 >Preview
-                <BaseDialog
+                <MaxDialog
                   class="max-w-[1300px]"
                   :isOpen="isPreviewDialogOpen"
                   @close="closePreviewDialog"
                 >
-                  <ProductView :doc_num="documentNumber" :wantsPreview="true" />
-                </BaseDialog>
-              </BaseButton>
-              <BaseButton color="secondary" @click.prevent="cancel"
-                >Cancel</BaseButton
+                  <template v-if="loadingPreview"
+                    ><div class="max-w-fit m-auto">
+                      <MaxLoadingSpinner class="h-20 w-20" /></div
+                  ></template>
+                  <template v-else>
+                    <ProductContent :product="previewProduct" isPreview />
+                  </template>
+                </MaxDialog>
+              </MaxButton>
+              <MaxButton color="secondary" @click.prevent="cancel"
+                >Cancel</MaxButton
               >
-              <BaseButton color="danger" @click.prevent="openDeleteDialog"
-                >Delete</BaseButton
+              <MaxButton color="danger" @click.prevent="openDeleteDialog"
+                >Delete</MaxButton
               >
             </div>
           </div>
         </div>
       </div>
-    </BaseCard>
+    </MaxCard>
   </form>
-  <BaseDialog
+  <MaxDialog
     :isOpen="isDeleteDialogOpen"
     :title="'Delete Product'"
     class="max-w-fit"
@@ -444,13 +631,15 @@
   >
     <p class="py-4 pr-4">Are you sure you want to do this?</p>
     <template #actions>
-      <BaseButton @click.prevent="closeDeleteDialog">Cancel</BaseButton>
-      <BaseButton type="danger" @click.prevent="deleteDocument">
+      <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
+        >Cancel</MaxButton
+      >
+      <MaxButton color="danger" @click.prevent="deleteDocument">
         Delete
-      </BaseButton>
+      </MaxButton>
     </template>
-  </BaseDialog>
-  <BaseDialog
+  </MaxDialog>
+  <MaxDialog
     :isOpen="isPreviewThumbnailDialogOpen"
     :title="'Thumbnail Preview'"
     class="max-w-fit"
@@ -480,25 +669,26 @@
     <p class="italic">
       Only shown when the product is featured on the front page.
     </p>
-  </BaseDialog>
-  <BaseOverlay :show="savingProduct">
+  </MaxDialog>
+  <MaxOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
       <div class="w-fit m-auto">
-        <BaseLoadingSpinner class="h-16 w-16" />
+        <MaxLoadingSpinner class="h-16 w-16" />
       </div>
     </div>
-  </BaseOverlay>
-  <BaseOverlay :show="publishingProduct">
+  </MaxOverlay>
+  <MaxOverlay :show="publishingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Publishing Product...</p>
       <div class="w-fit m-auto">
-        <BaseLoadingSpinner class="h-16 w-16" />
+        <MaxLoadingSpinner class="h-16 w-16" />
       </div>
     </div>
-  </BaseOverlay>
+  </MaxOverlay>
 </template>
 <script>
+import { productDetails } from "@/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -514,6 +704,7 @@ import {
   PlusCircleIcon,
   PaperClipIcon,
   LockClosedIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -529,7 +720,7 @@ import createUploader from "@/composables/file-uploader";
 import DropZone from "@/components/DropZone";
 import FilePreview from "@/components/FilePreview";
 import EditProductFormSection from "@/components/EditProductFormSection";
-import ProductView from "@/views/ProductView";
+import ProductContent from "@/components/ProductContent";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 
 const categories = [
@@ -568,12 +759,13 @@ export default {
     PlusCircleIcon,
     PaperClipIcon,
     LockClosedIcon,
+    XMarkIcon,
     DocumentArrowDownIcon,
     DocumentMinusIcon,
     DropZone,
     FilePreview,
     EditProductFormSection,
-    ProductView,
+    ProductContent,
   },
   props: {
     product: {
@@ -637,10 +829,15 @@ export default {
     const savingProduct = ref(false);
     const savingSucceed = ref(true);
     const publishingProduct = ref(false);
+    const loadingPreview = ref(true);
+    const previewProduct = ref(null);
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
-      dissemOrgs: criteria.value.dissem_orgs.values,
+      dissemOrgs: criteria.value.dissem_orgs,
+      producing_offices: criteria.value.producing_offices,
+      coordinators: criteria.value.coordinators,
+      coauthors: criteria.value.coauthors,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -656,11 +853,14 @@ export default {
       classificationXML: "",
       countries: [],
       dissemOrgs: [],
+      coordinators: [],
+      coauthors: [],
+      producing_offices: [],
       editorData: "",
       pocInfo: "",
       productType: [],
       publicationDate: "",
-      //producingOffice: "DNI/NCTC",
+      //producing_office: "DNI/NCTC",
       summary: "",
       summaryClassificationXML: "",
       title: "",
@@ -695,6 +895,58 @@ export default {
         });
       }
       payload.value["dissem_orgs"] = payloadOrgs;
+    };
+
+    const updateToggleAllIntelOrgs = () => {
+      const allIntelOrgs = lists.dissemOrgs.filter(
+        (org) => org.category == "IC"
+      );
+      const isAllIntel = allIntelOrgs.every((org) =>
+        form.value.dissemOrgs.includes(org)
+      );
+      if (isAllIntel && form.value.dissemOrgs.length == allIntelOrgs.length) {
+        checkAllIntelOrgs.value = true;
+      } else {
+        checkAllIntelOrgs.value = false;
+      }
+    };
+
+    const removeItem = (name, formItem) => {
+      console.log(formItem, "selection removed");
+      if (formItem === "countries") {
+        form.value.countries = form.value.countries.filter(
+          (i) => i.name != name
+        );
+        updateField(form.value.countries, "countries", "multiple");
+      } else if (formItem === "topics") {
+        form.value.topics = form.value.topics.filter((i) => i.name != name);
+        updateField(form.value.topics, "topics", "multiple");
+      } else if (formItem === "dissemOrgs") {
+        form.value.dissemOrgs = form.value.dissemOrgs.filter(
+          (i) => i.name != name
+        );
+        updateToggleAllIntelOrgs();
+        updateField(form.value.dissemOrgs, "dissem_orgs", "multiple");
+      } else if (formItem === "coordinators") {
+        form.value.coordinators = form.value.coordinators.filter(
+          (i) => i.name != name
+        );
+        updateField(form.value.coordinators, "coordinators", "multiple");
+      } else if (formItem === "coauthors") {
+        form.value.coauthors = form.value.coauthors.filter(
+          (i) => i.name != name
+        );
+        updateField(form.value.coauthors, "coauthors", "multiple");
+      } else if (formItem === "producing_offices") {
+        form.value.producing_offices = form.value.producing_offices.filter(
+          (i) => i.name != name
+        );
+        updateField(
+          form.value.producing_offices,
+          "producing_offices",
+          "multiple"
+        );
+      }
     };
 
     const prepopulateFields = (model) => {
@@ -747,6 +999,9 @@ export default {
             codes.push(option.code);
           });
           payload.value[property] = codes;
+          if (property === "dissem_orgs") {
+            updateToggleAllIntelOrgs();
+          }
           break;
         default:
           if (property === "product_type_id") {
@@ -775,6 +1030,15 @@ export default {
         (country) => country.code
       );
       payload.value.topics = updatedProduct.topics.map((topic) => topic.code);
+      payload.value.coordinators = updatedProduct.coordinators.map(
+        (coordinator) => coordinator.code
+      );
+      payload.value.coauthors = updatedProduct.coauthors.map(
+        (coauthors) => coauthors.code
+      );
+      payload.value.producing_offices = updatedProduct.producing_offices.map(
+        (producing_office) => producing_office.code
+      );
     };
 
     const updateForm = (updatedProduct) => {
@@ -801,10 +1065,7 @@ export default {
       form.value.topics = topicsToSelect;
       const dissemsToSelect = [];
       updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
-        let dissemValue = getValueForCode(
-          lists.dissemOrgs,
-          dissemFromBackend.code
-        );
+        let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
         dissemsToSelect.push(dissemValue);
       });
       const allIntelOrgs = lists.dissemOrgs.filter(
@@ -814,11 +1075,40 @@ export default {
         dissemsToSelect.includes(org)
       );
       if (isAllIntel && dissemsToSelect.length == allIntelOrgs.length) {
-        checkAllIntelOrgs.value == true;
+        checkAllIntelOrgs.value = true;
       } else {
-        checkAllIntelOrgs.value == false;
+        checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
+      const coordinatorsToSelect = [];
+      updatedProduct.coordinators.forEach((coordinatorsFromBackend) => {
+        let coordinatorsValue = getValueForCode(
+          lists.coordinators,
+          coordinatorsFromBackend.code
+        );
+        coordinatorsToSelect.push(coordinatorsValue);
+      });
+      form.value.coordinators = coordinatorsToSelect;
+      const coauthorsToSelect = [];
+      updatedProduct.coauthors.forEach((coauthorsFromBackend) => {
+        let coauthorsValue = getValueForCode(
+          lists.coauthors,
+          coauthorsFromBackend.code
+        );
+        coauthorsToSelect.push(coauthorsValue);
+      });
+      form.value.coauthors = coauthorsToSelect;
+      const producing_officesToSelect = [];
+      updatedProduct.producing_offices.forEach(
+        (producing_officesFromBackend) => {
+          let producing_officesValue = getValueForCode(
+            lists.producing_offices,
+            producing_officesFromBackend.code
+          );
+          producing_officesToSelect.push(producing_officesValue);
+        }
+      );
+      form.value.producing_offices = producing_officesToSelect;
       form.value.productType = lists.productTypes.find(
         (productFromBackend) =>
           productFromBackend.code === updatedProduct.product_type_id
@@ -877,6 +1167,21 @@ export default {
       isPreviewDialogOpen.value = false;
     };
     const openPreviewDialog = () => {
+      loadingPreview.value = true;
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === route.params.doc_num
+        );
+        previewProduct.value = documentMatch.data;
+        setTimeout(() => (loadingPreview.value = false), 750);
+      } else {
+        axios
+          .get(`/documents/${route.params.doc_num}/preview.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
+      }
       isPreviewDialogOpen.value = true;
     };
 
@@ -931,14 +1236,14 @@ export default {
 
     const deleteDocument = () => {
       if (process.env.NODE_ENV === "low") {
+        router.push({
+          name: "publish",
+          params: { date: route.params.date },
+        });
         createNotification({
           title: "Product Deleted",
           message: "The product has been deleted successfully.",
           type: "success",
-        });
-        router.push({
-          name: "publish",
-          params: { date: route.params.date },
         });
       } else {
         axios
@@ -952,14 +1257,14 @@ export default {
                 autoClose: false,
               });
             } else {
-              createNotification({
-                title: "Product Deleted",
-                message: response.data.status,
-                type: "success",
-              });
               router.push({
                 name: "publish",
                 params: { date: route.params.date },
+              });
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${props.documentNumber} has been deleted.`,
+                type: "success",
               });
             }
           });
@@ -976,25 +1281,25 @@ export default {
         if (process.env.NODE_ENV === "low") {
           setTimeout(() => {
             publishingProduct.value = false;
-            createNotification({
-              title: "Product Pulished",
-              message: "Great job! You successfully published the product.",
-              type: "success",
-            });
             router.push({
               name: "product",
               params: { doc_num: route.params.doc_num },
             });
+            createNotification({
+              title: "Product Published",
+              message: "Great job! You successfully published the product.",
+              type: "success",
+            });
           }, 3000);
         } else {
           axios
-            .put("/articles/" + route.params.id, {
+            .post("/articles/processDocument", {
               document_action: "publish",
               // analysis_type_id: form.selectedProductType.id,
               analysis_type_id: 5,
               id: route.params.id,
               wire_id: route.params.date,
-              producing_office: "DNI/NCTC",
+              // producing_office: "DNI/NCTC",
               publication_date: route.params.date,
               ...payload.value,
             })
@@ -1008,14 +1313,14 @@ export default {
                   autoClose: false,
                 });
               } else {
-                createNotification({
-                  title: "Product Published",
-                  message: response.data.status,
-                  type: "success",
-                });
                 router.push({
                   name: "product",
                   params: { doc_num: route.params.doc_num },
+                });
+                createNotification({
+                  title: "Product Published",
+                  message: `Product ${props.documentNumber} has been successfully published.`,
+                  type: "success",
                 });
               }
             });
@@ -1039,13 +1344,13 @@ export default {
         }, 1000);
       } else {
         axios
-          .put("/articles/" + route.params.id, {
+          .post("/articles/processDocument", {
             document_action: "save",
             // analysis_type_id: form.selectedProductType.id,
             analysis_type_id: 5,
             id: route.params.id,
             wire_id: route.params.date,
-            producing_office: "DNI/NCTC",
+            // producing_office: "DNI/NCTC",
             publication_date: route.params.date,
             ...payload.value,
           })
@@ -1061,10 +1366,17 @@ export default {
               });
             } else {
               axios
-                .get("/articles/" + route.params.id, {
-                  date: route.params.date,
-                  id: route.params.id,
-                })
+                .get(
+                  "/wires/" +
+                    route.params.date +
+                    "/articles/" +
+                    route.params.id +
+                    "/getDocumentData",
+                  {
+                    date: route.params.date,
+                    id: route.params.id,
+                  }
+                )
                 .then((response) => {
                   savingProduct.value = false;
                   if (response.data) {
@@ -1106,6 +1418,8 @@ export default {
       thumbnailBinary,
       savingProduct,
       publishingProduct,
+      loadingPreview,
+      previewProduct,
       lists,
       form,
       checkAllIntelOrgs,
@@ -1114,6 +1428,8 @@ export default {
       attachmentDrop,
       attachmentSelectedFile,
       toggleAllIntelOrgs,
+      updateToggleAllIntelOrgs,
+      removeItem,
       updateField,
       updateSelectedDate,
       publishDisabled,

@@ -1,34 +1,28 @@
 <template>
-  <BaseCard
-    :class="[
-      'h-full',
-      loading
-        ? 'animate-pulse'
-        : isProductLocked(article)
-        ? 'bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-700/50'
-        : '',
-    ]"
+  <MaxCard
+    :class="['h-full', loading ? 'animate-pulse' : '']"
+    :alternate="!loading && isProductLocked(product)"
     :aria-label="
-      !loading && isProductLocked(article) ? 'restricted product' : ''
+      !loading && isProductLocked(product) ? 'restricted product' : ''
     "
     :title="
-      !loading && isProductLocked(article)
+      !loading && isProductLocked(product)
         ? 'This product has restricted access.'
         : ''
     "
-    :hoverable="!loading && !isProductLocked(article) ? true : false"
+    :hoverable="!loading && !isProductLocked(product) ? true : false"
     :rounded="false"
   >
     <template v-if="loading">
       <div
         :class="[
-          headline ? 'h-3/5' : 'h-2/3',
+          headline ? 'h-[45%]' : 'h-2/3',
           'bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700',
         ]"
       ></div>
       <div
         :class="[
-          headline ? 'h-2/5 pt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
+          headline ? 'h-[55%] pt-4 px-4' : 'h-1/3 pt-4 xl:pt-2 px-4',
           'flex flex-col justify-between ',
         ]"
       >
@@ -41,7 +35,7 @@
           ></h1>
           <p
             v-show="headline"
-            class="hidden lg:block mt-4 h-12 xl:h-16 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
+            class="hidden md:block mt-4 h-12 xl:h-16 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
           ></p>
         </div>
         <p
@@ -54,50 +48,52 @@
     </template>
     <template v-else>
       <ProductImage
-        :class="[headline ? 'h-3/5' : 'h-2/3']"
-        :article="article"
+        :class="[headline ? 'h-[45%]' : 'h-2/3']"
+        :product="product"
       />
       <div
         :class="[
-          headline ? 'h-2/5' : 'h-1/3',
-          'relative flex flex-col justify-between pt-2 px-4',
+          headline ? 'h-[55%] pt-4' : 'h-1/3 pt-2',
+          'relative flex flex-col justify-between px-4',
         ]"
       >
         <div>
           <h1
             :class="[
               headline
-                ? 'text-lg line-clamp-4 md:line-clamp-3'
+                ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
                 : 'line-clamp-2',
-              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium',
+              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere',
             ]"
+            :title="product.title"
           >
-            {{ `(${article.title_classification}) ${article.title}` }}
+            {{ `(${product.title_classification}) ${product.title}` }}
           </h1>
           <p
             v-show="headline"
-            class="hidden mt-3 text-md lg:line-clamp-2 xl:line-clamp-3"
+            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
+            :title="product.summary"
           >
-            {{ `(${article.summary_classification}) ${article.summary}` }}
+            {{ `(${product.summary_classification}) ${product.summary}` }}
           </p>
         </div>
         <p
           :class="[
             headline ? '' : 'xl:mt-1',
-            'mb-2 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
+            'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
           ]"
         >
-          {{ formatDate(article.date_published) }}
+          {{ formatDate(product.date_published) }}
         </p>
-        <template v-if="isProductLocked(article)">
-          <BaseProductIcon
+        <template v-if="isProductLocked(product)">
+          <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
             icon="locked"
           />
         </template>
       </div>
     </template>
-  </BaseCard>
+  </MaxCard>
 </template>
 <script>
 import { isProductLocked, formatDate } from "@/helpers";
@@ -108,7 +104,7 @@ export default {
     ProductImage,
   },
   props: {
-    article: {
+    product: {
       type: Object,
       default: () => {},
     },

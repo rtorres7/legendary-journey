@@ -1,13 +1,6 @@
 <template>
-  <BaseCard
-    :class="[
-      'relative h-full px-4 py-4',
-      loading
-        ? 'animate-pulse'
-        : isProductLocked(sitrep)
-        ? 'bg-slate-200/50 dark:bg-slate-700/50 energy:bg-zinc-700/50'
-        : '',
-    ]"
+  <MaxCard
+    :class="['relative h-full px-4 py-4', loading ? 'animate-pulse' : '']"
     :aria-label="
       !loading && isProductLocked(sitrep) ? 'restricted product' : ''
     "
@@ -16,6 +9,7 @@
         ? 'This product has restricted access.'
         : ''
     "
+    :alternate="!loading && isProductLocked(sitrep)"
     :hoverable="!loading && !isProductLocked(sitrep) ? true : false"
     :rounded="false"
   >
@@ -40,8 +34,8 @@
           <p class="text-sm mb-2 line-clamp-2">
             {{ sitrep.product_type_name }}
           </p>
-          <p class="line-clamp-2 font-medium">
-            {{ sitrep.title }}
+          <p class="line-clamp-2 font-medium text-lg" :title="sitrep.title">
+            ({{ sitrep.title_classification }}) {{ sitrep.title }}
           </p>
         </div>
         <div
@@ -51,13 +45,13 @@
         </div>
       </div>
       <template v-if="isProductLocked(sitrep)">
-        <BaseProductIcon
+        <MaxProductIcon
           class="absolute w-10 h-10 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
           icon="locked"
         />
       </template>
     </template>
-  </BaseCard>
+  </MaxCard>
 </template>
 
 <script>

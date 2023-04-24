@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'shadow-md dark:shadow-none energy:shadow-none bg-white dark:bg-slate-800/50 energy:bg-zinc-800/50',
+      'shadow-sm dark:shadow-none energy:shadow-none border border-slate-300 dark:border-none energy:border-none',
       computedClass,
     ]"
   >
@@ -21,9 +21,12 @@ export default {
       default: false,
       type: Boolean,
     },
+    alternate: {
+      default: false,
+      type: Boolean,
+    },
   },
   setup(props) {
-    //TODO: Add alternate color option. For easy use with Locked Documents.
     const computedClass = computed(() => {
       const classes = [];
       if (props.hoverable) {
@@ -31,6 +34,11 @@ export default {
       }
       if (props.rounded) {
         classes.push("rounded");
+      }
+      if (props.alternate) {
+        classes.push("alternate");
+      } else {
+        classes.push("default");
       }
       return classes;
     });
@@ -46,5 +54,11 @@ export default {
 }
 .rounded {
   @apply rounded-lg;
+}
+.default {
+  @apply bg-white dark:bg-slate-800 energy:bg-zinc-800;
+}
+.alternate {
+  @apply bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700;
 }
 </style>

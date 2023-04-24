@@ -6,7 +6,7 @@
       <h1 class="font-semibold text-2xl">Publish a Product</h1>
       <h2>Get started by selecting from the following options.</h2>
     </div>
-    <BaseDatepicker
+    <MaxDatepicker
       v-model="selectedDate"
       class="w-fit h-fit"
       :enable-time-picker="false"
@@ -16,18 +16,21 @@
       @update:modelValue="selectDate"
     >
       <template #trigger>
-        <BaseCard class="p-2 cursor-pointer">
-          <div class="flex items-center">
-            <CalendarIcon
-              class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
-            />
-            <span class="pl-2 text-lg">
-              {{ routeDate }}
-            </span>
-          </div>
-        </BaseCard>
+        <tippy content="Select a date">
+          <MaxCard class="p-2 cursor-pointer">
+            <button class="flex items-center">
+              <CalendarIcon
+                class="hover:text-black dark:hover:text-white energy:hover:text-white h-6 w-6"
+              />
+              <span class="sr-only">select a date from the calendar</span>
+              <span class="pl-2 text-lg">
+                {{ routeDate }}
+              </span>
+            </button>
+          </MaxCard>
+        </tippy>
       </template>
-    </BaseDatepicker>
+    </MaxDatepicker>
   </div>
   <div
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
@@ -36,44 +39,53 @@
       <h3 class="font-semibold text-lg">Create a Product</h3>
       <p>Select the product you'd like to create</p>
     </div>
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-full mb-6"
-    >
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
       <template v-for="product in availableProductTypes" :key="product">
-        <div class="" @click="goToProduct(product.payload)">
-          <BaseCard
-            class="flex justify-center items-center font-medium cursor-pointer"
-            hoverable
+        <MaxCard
+          class="flex justify-center items-center font-medium cursor-pointer"
+          hoverable
+          tabindex="0"
+          role="button"
+          :aria-label="`Create a ${product.displayName}`"
+          @click="goToArticle(product.payload)"
+          @keyup.enter="goToArticle(product.payload)"
+        >
+          <span
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
           >
-            <p class="z-5 p-10 text-2xl font-bold">
-              {{ product.displayName }}
-            </p>
-            <BaseProductIcon
-              class="absolute w-24 h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
-              :icon="product.icon"
-            />
-          </BaseCard>
-        </div>
+            {{ product.displayName }}
+          </span>
+          <MaxProductIcon
+            class="absolute w-16 h-16 lg:w-24 lg:h-24 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10"
+            :icon="product.icon"
+          />
+        </MaxCard>
       </template>
     </div>
     <p v-if="!isCommunityExclusive">
       Not sure which product to choose?
-      <a class="font-semibold cursor-pointer" @click="goToProduct()"
-        >Click here</a
+      <span
+        class="font-semibold cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-label="Create a blank template"
+        @click="goToArticle()"
+        @keyup.enter="goToArticle()"
+        >Click here</span
       >
       to start with a blank template.
     </p>
   </div>
-  <template v-if="loadingProducts">
+  <template v-if="loadingArticles">
     <div class="max-w-fit m-auto mt-[20vh]">
-      <BaseLoadingSpinner class="h-24 w-24" />
+      <MaxLoadingSpinner class="h-24 w-24" />
     </div>
   </template>
   <template v-else>
     <div class="py-6">
-      <div class="flex justify-between">
-        <h3 class="font-semibold mb-6 text-lg">
-          Edit Existing Products ({{ filterProducts().length }})
+      <div class="flex justify-between mb-4">
+        <h3 class="font-semibold text-lg">
+          Manage Existing Products ({{ filterArticles().length }})
         </h3>
         <div class="flex items-center">
           <input
@@ -82,25 +94,137 @@
             type="checkbox"
             name="showDrafts"
             value="Drafts"
-            @change="filterProducts()"
           />
           <label for="showDrafts" class="ml-2 text-sm">Show Drafts Only</label>
         </div>
       </div>
-      <template v-if="products?.length > 0">
-        <BaseCard>
+      <template v-if="articles.length > 0">
+        <ul class="space-y-3">
           <template
-            v-for="{ attributes: product } in filterProducts()"
+            v-for="{ attributes: product } in filterArticles()"
             :key="product"
           >
-            <div
-              class="flex justify-between p-4 border-b border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-50/[0.06]"
-            >
-              <div class="flex px-2">
-                <div class="pr-4">
+            <MaxCard class="flex flex-col py-4">
+              <div class="flex justify-between px-4 pb-3 text-sm">
+                <div
+                  class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-8 lg:space-x-10 self-center"
+                >
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Product ID</span>
+                    <span class="line-clamp-1" :title="product.doc_num">{{
+                      product.doc_num
+                    }}</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">TYPE</span>
+                    <span class="line-clamp-1" :title="product.product_type">{{
+                      product.product_type
+                    }}</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Status</span>
+                    <span
+                      :class="[
+                        'capitalize',
+                        product.state === 'draft'
+                          ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
+                          : 'line-clamp-1',
+                      ]"
+                      >{{ product.state }}</span
+                    >
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-xs uppercase">Publishing Date</span>
+                    <span
+                      class="line-clamp-1"
+                      :title="
+                        dayjs(product.date_published).format('MMMM D, YYYY')
+                      "
+                      >{{
+                        dayjs(product.date_published).format("MMMM D, YYYY")
+                      }}</span
+                    >
+                  </div>
+                </div>
+                <div class="hidden lg:flex space-x-4">
+                  <router-link
+                    :to="{
+                      name: 'edit',
+                      params: {
+                        date: routeDate,
+                        id: product.id,
+                        doc_num: product.doc_num,
+                      },
+                    }"
+                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                  >
+                    <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
+                      >Edit</span
+                    >
+                  </router-link>
+                  <button
+                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    @click.prevent="openPreviewDialog(product)"
+                  >
+                    <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
+                      class="pl-3"
+                      >Preview</span
+                    >
+                  </button>
+                  <button
+                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                    @click.prevent="openDeleteDialog(product)"
+                  >
+                    <TrashIcon class="h-5 w-5" /><span class="pl-3"
+                      >Delete</span
+                    >
+                  </button>
+                </div>
+                <div class="flex h-fit lg:hidden space-x-4">
+                  <tippy content="Edit Product">
+                    <router-link
+                      :to="{
+                        name: 'edit',
+                        params: {
+                          date: routeDate,
+                          id: product.id,
+                          doc_num: product.doc_num,
+                        },
+                      }"
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                    >
+                      <PencilSquareIcon class="h-6 w-6" />
+                    </router-link>
+                  </tippy>
+                  <tippy content="Preview Product">
+                    <button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      aria-label="Preview product"
+                      @click.prevent="openPreviewDialog(product)"
+                    >
+                      <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                    </button>
+                  </tippy>
+                  <tippy content="Delete Product"
+                    ><button
+                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      aria-label="Delete product"
+                      @click.prevent="openDeleteDialog(product)"
+                    >
+                      <TrashIcon class="h-6 w-6" /></button
+                  ></tippy>
+                </div>
+              </div>
+              <div
+                class="flex flex-col md:flex-row px-4 pt-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
+              >
+                <div class="relative pb-4 md:pb-0 md:pr-4">
                   <ProductImage
-                    class="h-[125px] w-[125px]"
-                    :article="product"
+                    :class="[
+                      product.images.length > 0 ? 'cursor-pointer' : null,
+                      'h-[140px] w-full sm:h-[170px] sm:w-[510px] md:h-[75px] md:w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]',
+                    ]"
+                    :product="product"
                     @click="
                       product.images.length > 0
                         ? openPreviewThumbnailDialog(product)
@@ -119,7 +243,8 @@
                     }"
                   >
                     <h4
-                      class="line-clamp-6 md:line-clamp-4 lg:line-clamp-2 hover:underline break-words"
+                      class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
+                      :title="product.title"
                     >
                       {{
                         product.title_classif && product.title_classif !== "X"
@@ -129,107 +254,96 @@
                       {{ product.title }}
                     </h4>
                   </router-link>
-                  <div class="text-sm break-all">
-                    <p
-                      class="uppercase py-2 text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80"
-                    >
-                      {{ dayjs(product.date_published).format("D MMM") }} -
-                      <span class="font-medium pr-1">{{
-                        product.product_type
-                      }}</span>
-                      |
-                      <span class="pl-1">{{ product.doc_num }}</span>
-                    </p>
-                    <p class="line-clamp-5 md:line-clamp-3 break-all">
-                      {{
-                        product.summary_classif &&
-                        product.summary_classif !== "X"
-                          ? `(${product.summary_classif})`
-                          : ""
-                      }}
-                      {{ product.summary }}
-                    </p>
-                  </div>
+                  <p class="hidden text-sm md:line-clamp-4 wrap-anywhere">
+                    {{
+                      product.summary_classif && product.summary_classif !== "X"
+                        ? `(${product.summary_classif})`
+                        : ""
+                    }}
+                    {{ product.summary }}
+                  </p>
                 </div>
               </div>
-              <div class="flex pl-2">
-                <p
-                  :class="[
-                    'min-w-[100px] capitalize pr-4',
-                    product.state === 'draft'
-                      ? 'text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow'
-                      : 'italic text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
-                  ]"
-                >
-                  {{ product.state }}
-                </p>
-                <template
-                  v-if="
-                    canEditProduct(product.product_type) && !product?.legacy
-                  "
-                >
-                  <router-link
-                    :to="{
-                      name: 'edit',
-                      params: {
-                        date: routeDate,
-                        id: product.id,
-                        doc_num: product.doc_num,
-                      },
-                    }"
-                  >
-                    <PencilIcon class="h-5 w-5" />
-                  </router-link>
-                </template>
-              </div>
-            </div>
+            </MaxCard>
           </template>
-          <BaseDialog
-            :isOpen="isPreviewThumbnailDialogOpen"
-            :title="'Thumbnail Preview'"
-            class="max-w-fit"
-            @close="closePreviewThumbnailDialog"
+        </ul>
+        <MaxDialog
+          :isOpen="isPreviewThumbnailDialogOpen"
+          :title="'Thumbnail Preview'"
+          class="max-w-fit"
+          @close="closePreviewThumbnailDialog"
+        >
+          <div
+            id="img-container"
+            class="m-2 relative overflow-hidden w-[375px] h-[125px] sm:w-[450px] sm:h-[150px] md:w-[600px] md:h-[200px] lg:w-[900px] lg:h-[300px]"
           >
-            <div
-              id="img-container"
-              class="m-6 relative overflow-hidden w-[443px] h-[176px] border-8 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+            <ProductImage
+              :product="selectedArticle"
+              class="inset-x-0 absolute h-full mx-auto z-[3]"
+            />
+          </div>
+        </MaxDialog>
+        <MaxDialog
+          class="max-w-[1300px]"
+          :isOpen="isPreviewDialogOpen"
+          @close="closePreviewDialog"
+        >
+          <template v-if="loadingPreview"
+            ><div class="max-w-fit m-auto">
+              <MaxLoadingSpinner class="h-20 w-20" /></div
+          ></template>
+          <template v-else>
+            <ProductContent :product="previewProduct" isPreview />
+          </template>
+        </MaxDialog>
+        <MaxDialog
+          :isOpen="isDeleteDialogOpen"
+          :title="'Delete Product'"
+          class="max-w-fit"
+          @close="closeDeleteDialog"
+        >
+          <p class="py-4 pr-4">Are you sure you want to do this?</p>
+          <template #actions>
+            <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
+              >Cancel</MaxButton
             >
-              <div
-                id="product-blur"
-                class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-              ></div>
-              <ProductImage
-                :article="selectedProduct"
-                class="inset-x-0 absolute h-full mx-auto z-[3]"
-              />
-            </div>
-            <p class="italic">
-              Only shown when the product is featured on the front page.
-            </p>
-          </BaseDialog>
-        </BaseCard>
+            <MaxButton color="danger" @click.prevent="deleteProduct">
+              Delete
+            </MaxButton>
+          </template>
+        </MaxDialog>
       </template>
       <template v-else>
-        <p class="pt-2 italic">No products found.</p>
+        <p class="pt-2 italic">No articles found.</p>
       </template>
     </div>
   </template>
 </template>
 
 <script>
+import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { computed, ref, onMounted, watch } from "vue";
+import { computed, inject, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { CalendarIcon, PencilIcon } from "@heroicons/vue/24/outline";
+import {
+  CalendarIcon,
+  DocumentMagnifyingGlassIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/vue/24/outline";
+import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
 
 export default {
   components: {
     CalendarIcon,
-    PencilIcon,
+    DocumentMagnifyingGlassIcon,
+    PencilSquareIcon,
+    TrashIcon,
+    ProductContent,
     ProductImage,
   },
   setup() {
@@ -238,19 +352,112 @@ export default {
     const store = useStore();
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
+    const loadingPreview = ref(true);
+    const previewProduct = ref(null);
     const loadingCriteria = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
-    const products = computed(() => store.state.wires.articles);
-    const loadingProducts = computed(() => store.state.wires.loading);
+    const articles = computed(() => store.state.wires.articles);
+    const loadingArticles = computed(() => store.state.wires.loading);
+    const createNotification = inject("create-notification");
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
     const showOnlyDrafts = ref(false);
-    const filterProducts = () => {
+    const drafts = computed(() =>
+      articles.value.filter((a) => a.attributes.state === "draft")
+    );
+    const filterArticles = () => {
       if (showOnlyDrafts.value) {
-        return products.value.filter((p) => p.attributes.state === "draft");
+        return drafts.value;
       } else {
-        return products.value;
+        return articles.value;
+      }
+    };
+    const isPreviewDialogOpen = ref(false);
+    const closePreviewDialog = () => {
+      isPreviewDialogOpen.value = false;
+    };
+    const openPreviewDialog = (product) => {
+      console.log("product:", product);
+      loadingPreview.value = true;
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        previewProduct.value = documentMatch.data;
+        setTimeout(() => (loadingPreview.value = false), 750);
+      } else {
+        axios
+          .get(`/documents/${product.doc_num}/preview.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
+      }
+      isPreviewDialogOpen.value = true;
+    };
+
+    const selectedProduct = ref();
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+
+    const deleteProduct = () => {
+      if (process.env.NODE_ENV === "low") {
+        createNotification({
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
+          type: "success",
+        });
+        closeDeleteDialog();
+        //need to delete product from both the drafts array and the articles array
+        //drafts
+        let draft = drafts.value.find(
+          (d) => d.attributes.doc_num == selectedProduct.value.doc_num
+        );
+        let indexOfDraft = drafts.value.indexOf(draft);
+        drafts.value.splice(indexOfDraft, 1);
+        //articles
+        let article = articles.value.find(
+          (a) => a.attributes.doc_num == selectedProduct.value.doc_num
+        );
+        let indexOfArticle = articles.value.indexOf(article);
+        articles.value.splice(indexOfArticle, 1);
+      } else {
+        axios
+          .post("/documents/" + selectedProduct.value.doc_num + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
+                type: "success",
+              });
+              closeDeleteDialog();
+              let draft = drafts.value.find(
+                (d) => d.attributes.doc_num == selectedProduct.value.doc_num
+              );
+              let indexOfDraft = drafts.value.indexOf(draft);
+              drafts.value.splice(indexOfDraft, 1);
+              let article = articles.value.find(
+                (a) => a.attributes.doc_num == selectedProduct.value.doc_num
+              );
+              let indexOfArticle = articles.value.indexOf(article);
+              articles.value.splice(indexOfArticle, 1);
+            }
+          });
       }
     };
 
@@ -262,12 +469,7 @@ export default {
       publication_number: Math.floor(100000 * Math.random() * 900000),
       product_type_id: 10376,
       title: "Draft Document Title",
-      topics: [
-        {
-          name: "Terrorism",
-          code: "TERR",
-        },
-      ],
+      topics: ["TERR"],
     };
 
     const buildAvailableProducts = () => {
@@ -310,7 +512,7 @@ export default {
       }
     });
 
-    const goToProduct = (payload) => {
+    const goToArticle = (payload) => {
       if (!payload) {
         payload = { ...defaultPayload };
       }
@@ -325,14 +527,14 @@ export default {
           },
         });
       } else {
-        axios.post("/articles", payload).then((response) => {
+        axios.post("/articles/processDocument", payload).then((response) => {
+          console.log("/articles/processDocument :", response);
           router.push({
             name: "edit",
             params: {
               date: route.params.date,
-              id: response.data.id,
+              id: response.data.article.id,
               doc_num: response.data.doc_num,
-              product_type_id: response.data.product_type_id,
             },
           });
         });
@@ -355,10 +557,10 @@ export default {
       }
     };
 
-    const selectedProduct = ref({});
+    const selectedArticle = ref({});
     const isPreviewThumbnailDialogOpen = ref(false);
-    const openPreviewThumbnailDialog = (product) => {
-      selectedProduct.value = product;
+    const openPreviewThumbnailDialog = (article) => {
+      selectedArticle.value = article;
       isPreviewThumbnailDialogOpen.value = true;
     };
     const closePreviewThumbnailDialog = () => {
@@ -384,19 +586,29 @@ export default {
       dayjs,
       routeDate,
       selectedDate,
-      products,
-      loadingProducts,
+      loadingPreview,
+      previewProduct,
+      articles,
+      loadingArticles,
       isCommunityExclusive,
       showOnlyDrafts,
-      filterProducts,
+      drafts,
+      filterArticles,
       availableProductTypes,
-      goToProduct,
+      goToArticle,
       selectDate,
       canEditProduct,
-      selectedProduct,
+      selectedArticle,
+      isPreviewDialogOpen,
+      closePreviewDialog,
+      openPreviewDialog,
       isPreviewThumbnailDialogOpen,
       openPreviewThumbnailDialog,
       closePreviewThumbnailDialog,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
+      deleteProduct,
     };
   },
 };

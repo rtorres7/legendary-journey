@@ -7,12 +7,12 @@
     </template></label
   >
   <div class="flex items-center">
-    <BaseButton
+    <MaxButton
       :id="uuid"
       v-bind="$attrs"
       class="max-w-fit mt-1"
       @click.prevent="classify"
-      >Classify</BaseButton
+      >Classify</MaxButton
     >
     <template v-if="showSelection && selection">
       <p class="ml-2">{{ selection }}</p>

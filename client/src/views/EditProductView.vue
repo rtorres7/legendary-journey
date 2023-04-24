@@ -50,6 +50,9 @@ export default {
     const loadingProduct = ref(true);
     const product = ref({
       control_to: [],
+      coordinators: [],
+      coauthors: [],
+      producing_offices: [],
       countries: [],
       dissem_orgs: [],
       images: [],
@@ -83,10 +86,17 @@ export default {
         }, 1000);
       } else {
         axios
-          .get("/articles/" + route.params.id + "/edit", {
-            date: route.params.date,
-            id: route.params.id,
-          })
+          .get(
+            "/wires/" +
+              route.params.date +
+              "/articles/" +
+              route.params.id +
+              "/getDocumentData",
+            {
+              date: route.params.date,
+              id: route.params.id,
+            }
+          )
           .then((response) => {
             loadingProduct.value = false;
             if (response.data) {

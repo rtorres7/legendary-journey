@@ -12,11 +12,9 @@
       class="flex flex-col lg:block xl:flex xl:flex-row xl:max-h-max h-full xl:h-[37rem]"
     >
       <!-- Main Section Sit. Awareness & Headline Container -->
-      <div
-        class="h-[39rem] md:h-full lg:pb-4 xl:pb-0 lg:flex xl:basis-2/3 lg:h-[37rem]"
-      >
+      <div class="md:h-full lg:pb-4 xl:pb-0 lg:flex xl:w-2/3 lg:h-[37rem]">
         <div
-          class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:basis-1/3 lg:pr-4 lg:border-r xl:basis-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+          class="pb-4 xl:pb-0 border-b lg:border-b-0 lg:w-1/3 lg:pr-4 lg:border-r xl:w-1/3 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
           <div class="flex flex-col h-full">
             <div class="hidden lg:block font-semibold mb-4">
@@ -68,7 +66,7 @@
                 <router-link
                   to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10386&product_types[]=10383"
                 >
-                  More >
+                  View More
                 </router-link>
               </p>
             </div>
@@ -96,7 +94,7 @@
               <template #addons>
                 <Navigation
                   v-if="!loadingSitreps && sitreps.length > 0"
-                  class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-dark-navy dark:hover:text-dark-navy energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
+                  class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-slate-900 dark:hover:text-slate-900 energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
                 />
               </template>
             </Carousel>
@@ -108,7 +106,7 @@
           </div>
         </div>
         <div
-          class="py-4 lg:py-0 h-[425px] lg:h-full lg:basis-2/3 xl:basis-2/3 lg:pl-4 xl:pr-4"
+          class="py-4 lg:py-0 h-[475px] md:h-[600px] lg:h-full lg:w-2/3 xl:w-2/3 lg:pl-4 xl:pr-4"
         >
           <template v-if="loadingDanielArticles">
             <PublishedProductCard loading headline />
@@ -117,7 +115,7 @@
             <template v-if="danielArticles.length > 0">
               <ProductRestrictedLink :product="danielArticles[0].attributes">
                 <PublishedProductCard
-                  :article="danielArticles[0].attributes"
+                  :product="danielArticles[0].attributes"
                   headline
                 />
               </ProductRestrictedLink>
@@ -133,18 +131,18 @@
       </div>
       <!-- Main Section Published Articles -->
       <div
-        class="pt-4 xl:basis-1/3 xl:pt-0 border-t xl:border-t-0 xl:pl-4 xl:border-l border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+        class="pt-4 xl:w-1/3 xl:pt-0 border-t xl:border-t-0 xl:pl-4 xl:border-l border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
       >
         <!-- Only shows in screens smaller than XL -->
         <div class="block xl:hidden font-semibold mb-4">
           More Published Products
         </div>
         <div
-          class="flex flex-col md:flex-row xl:flex-col h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
+          class="flex flex-col md:flex-row xl:flex-col justify-between h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
         >
           <template v-if="loadingDanielArticles">
             <template v-for="n in 2" :key="n">
-              <div class="w-full h-[288px]">
+              <div class="w-full h-[288px] md:max-w-[575px]">
                 <PublishedProductCard :loading="true" />
               </div>
             </template>
@@ -154,9 +152,9 @@
               v-for="article in danielArticles.slice(1, 3)"
               :key="article"
             >
-              <div class="w-full h-[288px] max-w-[591px]">
+              <div class="w-full h-[288px] md:max-w-[575px]">
                 <ProductRestrictedLink :product="article.attributes">
-                  <PublishedProductCard :article="article.attributes" />
+                  <PublishedProductCard :product="article.attributes" />
                 </ProductRestrictedLink>
               </div>
             </template>
@@ -170,10 +168,11 @@
     <div class="hidden xl:block font-semibold mb-4">
       More Published Products
     </div>
+    <!-- TODO: There's a small gap here when going from XL to LG media screen that needs to be addressed. -->
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
       <template v-if="loadingDanielArticles">
         <template v-for="n in 12" :key="n">
-          <div class="w-full h-[264px]">
+          <div class="w-full h-[288px] md:max-w-[575px]">
             <PublishedProductCard loading />
           </div>
         </template>
@@ -184,9 +183,9 @@
             v-for="article in danielArticles.slice(3, 15)"
             :key="article"
           >
-            <div class="w-full h-[264px]">
+            <div class="w-full h-[288px] md:max-w-[575px]">
               <ProductRestrictedLink :product="article.attributes">
-                <PublishedProductCard :article="article.attributes" />
+                <PublishedProductCard :product="article.attributes" />
               </ProductRestrictedLink>
             </div>
           </template>
@@ -233,13 +232,9 @@ export default {
   },
   setup() {
     const store = useStore();
-    const danielArticles = computed(() =>
-      store.state.daniel.articles.filter((a) => a.state === "posted")
-    );
+    const danielArticles = computed(() => store.state.daniel.articles);
     const loadingDanielArticles = computed(() => store.state.daniel.loading);
-    const sitreps = computed(() =>
-      store.state.feeds.sitreps.filter((a) => a.state === "posted")
-    );
+    const sitreps = computed(() => store.state.feeds.sitreps);
     const loadingSitreps = computed(() => store.state.feeds.loading);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 

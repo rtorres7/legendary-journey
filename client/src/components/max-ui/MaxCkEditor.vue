@@ -119,7 +119,6 @@ export default {
           "|",
           "fontSize",
           "fontFamily",
-          "fontColor",
           "|",
           "numberedList",
           "bulletedList",
@@ -201,8 +200,18 @@ export default {
 };
 </script>
 <style>
+.ck.ck-content a {
+  @apply text-mission-light-blue hover:underline;
+}
+.dark .ck.ck-content a {
+  @apply text-teal-300;
+}
+.energy .ck.ck-content a {
+  @apply text-energy-yellow;
+}
 .ck-editor__editable_inline {
   height: 450px;
+  overflow-wrap: anywhere;
 }
 .ck.ck-content ol,
 .ck.ck-content ul {
@@ -230,15 +239,14 @@ export default {
   font-size: 0.9em;
 }
 .ck.ck-content p.info-box {
-  @apply shadow-md;
-  background-color: white;
+  @apply border-4 border-slate-300;
   padding: 1.2em 2em;
   margin: 1.5em;
 }
 .dark .ck.ck-content p.info-box {
-  @apply bg-slate-800;
+  @apply border-slate-600;
 }
 .energy .ck.ck-content p.info-box {
-  @apply bg-zinc-800;
+  @apply border-zinc-600;
 }
 </style>

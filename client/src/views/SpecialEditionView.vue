@@ -22,12 +22,10 @@
       </template>
       <template v-else>
         <template v-if="canManageSpecialEditions">
-          <BaseButton color="danger" @click.prevent="openDeleteDialog">
+          <MaxButton color="danger" @click.prevent="openDeleteDialog">
             Delete
-          </BaseButton>
-          <BaseButton color="secondary" @click.prevent="openEditDialog">
-            Edit
-          </BaseButton>
+          </MaxButton>
+          <MaxButton @click.prevent="openEditDialog"> Edit </MaxButton>
         </template>
       </template>
     </div>
@@ -47,7 +45,7 @@
         <template v-else>
           <template v-if="specialEdition.totalPages > 1">
             <div class="pb-4">
-              <Pagination
+              <MaxPagination
                 :currentPage="currentPage"
                 :pages="specialEdition.totalPages"
               />
@@ -68,9 +66,11 @@
             v-for="article in specialEdition.articles"
             :key="article.id"
           >
-            <BaseCard class="h-full" hoverable :rounded="false">
-              <ProductCard :article="article" />
-            </BaseCard>
+            <div class="w-full h-[288px]">
+              <ProductRestrictedLink :product="article">
+                <PublishedProductCard :product="article" />
+              </ProductRestrictedLink>
+            </div>
           </template>
         </template>
       </div>
@@ -87,9 +87,11 @@
               v-for="article in specialEdition.restrictedArticles"
               :key="article.id"
             >
-              <BaseCard class="h-full" hoverable :rounded="false">
-                <ProductCard :article="article" />
-              </BaseCard>
+              <div class="w-full h-[288px]">
+                <ProductRestrictedLink :product="article">
+                  <PublishedProductCard :product="article" />
+                </ProductRestrictedLink>
+              </div>
             </template>
           </div>
         </template>
@@ -212,7 +214,7 @@
       @closeDialog="closeEditDialog"
       @specialEditionUpdated="reloadSpecialEdition"
     />
-    <BaseDialog
+    <MaxDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Special Edition'"
       class="max-w-fit"
@@ -220,24 +222,26 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <BaseButton @click.prevent="closeDeleteDialog"> Cancel </BaseButton>
-        <BaseButton color="danger" @click.prevent="deleteSpecialEdition">
+        <MaxButton color="secondary" @click.prevent="closeDeleteDialog">
+          Cancel
+        </MaxButton>
+        <MaxButton color="danger" @click.prevent="deleteSpecialEdition">
           Delete
-        </BaseButton>
+        </MaxButton>
       </template>
-    </BaseDialog>
+    </MaxDialog>
   </template>
 </template>
 
 <script>
-import { computed, ref, onMounted, watch } from "vue";
+import { computed, inject, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import ProductCard from "@/components/ProductCard";
-import Pagination from "@/components/Pagination";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
+import PublishedProductCard from "@/components/PublishedProductCard";
 import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
 
 export default {
@@ -246,14 +250,15 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronUpIcon,
-    ProductCard,
-    Pagination,
+    ProductRestrictedLink,
+    PublishedProductCard,
     SpecialEditionCreateEditDialog,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const createNotification = inject("create-notification");
 
     const loadingSpecialEdition = computed(
       () => store.state.specialEdition.loading
@@ -292,9 +297,21 @@ export default {
           .delete(`/special_editions/${specialEdition.value.id}`)
           .then(() => {
             router.push({ name: "specialEditions" });
+            createNotification({
+              title: "Deleted",
+              message: `${specialEdition.value.name} Special Edition has been deleted.`,
+              type: "success",
+              duration: 4,
+            });
           })
-          .catch(() => {
+          .catch((err) => {
             console.warn("Unable to delete Special Edition");
+            createNotification({
+              title: `Error deleting ${specialEdition.value.name} Special Edition`,
+              message: JSON.stringify(err.response.data.errors),
+              type: "error",
+              autoclose: false,
+            });
           });
       }
     };

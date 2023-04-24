@@ -1,8 +1,12 @@
 <template>
   <!-- For configurable options, see https://vue3datepicker.com/ -->
   <!-- Do not use Vue Datepicker's Light/Dark mode feature, see styling below -->
-  <Datepicker :id="uuid">
-    <template v-for="(_, name) in $slots" v-slot:[name]="slotData">
+  <Datepicker
+    :id="uuid"
+    :clearable="false"
+    :input-class-name="customStyle ? 'dp-custom-input' : ''"
+  >
+    <template v-for="(_, name) in $slots" #[name]="slotData">
       <slot :name="name" v-bind="slotData" />
     </template>
   </Datepicker>
@@ -17,10 +21,16 @@ export default {
   components: {
     Datepicker,
   },
+  props: {
+    customStyle: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
     const uuid = uniqueID().getID();
     return {
-      uuid
+      uuid,
     };
   },
 };
@@ -38,6 +48,11 @@ export default {
 
 .dp__input_icons {
   font-size: 0.9rem;
+}
+
+.dp-custom-input {
+  border: transparent;
+  cursor: default;
 }
 
 .dp__menu {
@@ -63,6 +78,9 @@ export default {
 
 .dp__main {
   font-family: "Inter", "system-ui";
+  > div {
+    display: flex;
+  }
 }
 
 .dp__theme_light {
@@ -88,7 +106,7 @@ export default {
 }
 
 .dark .dp__theme_light {
-  --dp-background-color: var(--color-slate-700);
+  --dp-background-color: var(--color-slate-800);
   --dp-text-color: var(--color-slate-300);
   --dp-hover-color: var(--color-slate-800);
   --dp-hover-text-color: var(--color-slate-300);
@@ -110,7 +128,7 @@ export default {
 }
 
 .energy .dp__theme_light {
-  --dp-background-color: var(--color-zinc-600);
+  --dp-background-color: var(--color-zinc-800);
   --dp-text-color: var(--color-zinc-300);
   --dp-hover-color: var(--color-zinc-700);
   --dp-hover-text-color: var(--color-zinc-300);
@@ -131,4 +149,3 @@ export default {
   --dp-highlight-color: rgba(25, 118, 210, 0.1);
 }
 </style>
-

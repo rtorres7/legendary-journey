@@ -18,7 +18,8 @@
     >
       <div class="flex items-center">
         <ExclamationCircleIcon class="h-6 w-1/3 md:w-20 lg:w-6 mx-3 my-2" />
-        <p class="text-sm ml-1">
+        <p class="text-sm ml-1" role="alert">
+          <span class="sr-only">new notification from Current.</span>
           ALERT: This is a system alert. Ut est iusto decore nonumy, cum no
           mollis saperet. Esse percipitur id sea, mea no dicam aperiri. Ex assum
           quando aliquip his, vero porro voluptaria cum ea. Vero labore
@@ -48,18 +49,12 @@
             <span class="sr-only">Open main menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <router-link class="hidden xl:block h-auto" to="/">
+          <router-link class="hidden lg:block" to="/">
             <img
-              class="h-16 w-16"
-              src="@/assets/nctc_seal_color.svg"
+              class="w-40 h-16 xl:w-48 xl:h-16"
+              src="@/assets/nctc_logo.svg"
               alt="NCTC. Seal. Link to homepage."
             />
-          </router-link>
-          <router-link
-            class="hidden lg:block ml-4 uppercase text-2xl text-white dark:text-slate-100 energy:text-energy-yellow font-semibold tracking-[.05em]"
-            to="/"
-          >
-            {{ metadata.application_name }}
           </router-link>
         </div>
         <!-- Middle Nav Bar -->
@@ -82,12 +77,14 @@
             class="hidden lg:block ml-3 relative"
           >
             <div>
-              <MenuButton
-                class="max-w-xs bg-slate-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-              >
-                <span class="sr-only">Admin Menu</span>
-                <WrenchIcon class="h-6 w-6" aria-hidden="true" />
-              </MenuButton>
+              <tippy content="Admin Options">
+                <MenuButton
+                  class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span class="sr-only">Admin Menu</span>
+                  <WrenchIcon class="h-6 w-6" aria-hidden="true" />
+                </MenuButton>
+              </tippy>
             </div>
             <transition
               enterActiveClass="transition ease-out duration-100"
@@ -137,41 +134,43 @@
               focus:ring-white
             ">
             <span class="sr-only">View notifications</span>
-            <BaseTooltip placement="bottom" icon>
+            <MaxTooltip placement="bottom" icon>
               <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </BaseTooltip>
+            </MaxTooltip>
           </button> -->
           <Menu as="div" class="hidden lg:block relative">
             <div>
-              <MenuButton
-                class="max-w-xs flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                :class="
-                  selectedTheme === 'system'
-                    ? 'text-slate-400'
-                    : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
-                "
-              >
-                <span class="sr-only"
-                  >Open menu for toggling color palettes.</span
+              <tippy content="Themes">
+                <MenuButton
+                  class="max-w-xs flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  :class="
+                    selectedTheme === 'system'
+                      ? 'text-slate-400'
+                      : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
+                  "
                 >
-                <template v-if="selectedTheme === 'dark'">
-                  <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                </template>
-                <template v-else-if="selectedTheme === 'energy'">
-                  <BoltIcon class="h-6 w-6" aria-hidden="true" />
-                </template>
-                <template v-else-if="selectedTheme === 'system'">
-                  <template v-if="isDark">
+                  <span class="sr-only"
+                    >Open menu for toggling color palettes.</span
+                  >
+                  <template v-if="selectedTheme === 'dark'">
                     <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else-if="selectedTheme === 'energy'">
+                    <BoltIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else-if="selectedTheme === 'system'">
+                    <template v-if="isDark">
+                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <SunIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
                   </template>
                   <template v-else>
                     <SunIcon class="h-6 w-6" aria-hidden="true" />
                   </template>
-                </template>
-                <template v-else>
-                  <SunIcon class="h-6 w-6" aria-hidden="true" />
-                </template>
-              </MenuButton>
+                </MenuButton>
+              </tippy>
             </div>
             <transition
               enterActiveClass="transition ease-out duration-100"
@@ -213,12 +212,14 @@
           <!-- Profile dropdown -->
           <Menu as="div" class="hidden lg:block ml-3 relative">
             <div>
-              <MenuButton
-                class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-              >
-                <span class="sr-only">Open user menu.</span>
-                <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
-              </MenuButton>
+              <tippy content="User Menu">
+                <MenuButton
+                  class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span class="sr-only">Open user menu.</span>
+                  <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
+                </MenuButton>
+              </tippy>
             </div>
             <transition
               enterActiveClass="transition ease-out duration-100"
@@ -274,7 +275,7 @@
                 <p class="text-lg font-medium mb-4">Issues</p>
                 <template v-if="loadingMetadata">
                   <div class="flex justify-center">
-                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
                   </div>
                 </template>
                 <template v-else>
@@ -315,7 +316,7 @@
             <template #content>
               <template v-if="loadingMetadata">
                 <div class="hidden lg:block lg:m-auto w-fit">
-                  <BaseLoadingSpinner class="text-slate-100 h-20 w-20" />
+                  <MaxLoadingSpinner class="text-slate-100 h-20 w-20" />
                 </div>
               </template>
               <template v-else>
@@ -400,7 +401,7 @@
             <template #content>
               <template v-if="loadingMetadata">
                 <div class="hidden lg:block lg:m-auto w-fit">
-                  <BaseLoadingSpinner class="text-slate-100 h-20 w-20" />
+                  <MaxLoadingSpinner class="text-slate-100 h-20 w-20" />
                 </div>
               </template>
               <template v-else>
@@ -408,7 +409,7 @@
                   <span aria-hidden="true"
                     >Select a country from the map or the dropdown</span
                   >
-                  <BaseCombobox
+                  <MaxCombobox
                     v-model="selectedCountry"
                     :items="
                       criteria.countries.filter(
@@ -452,7 +453,7 @@
                 <p class="text-lg font-medium mb-4">Special Editions</p>
                 <template v-if="loadingSpecialEditionLinks">
                   <div class="flex justify-center">
-                    <BaseLoadingSpinner class="text-slate-100 h-14 w-14" />
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
                   </div>
                 </template>
                 <template v-else>
@@ -514,7 +515,7 @@
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel
-                class="inline-block w-full fixed max-w-xs top-2 right-4 p-6 my-8 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg rounded-lg"
+                class="inline-block w-full fixed max-w-xs top-2 right-4 p-6 my-8 text-left align-top transition-all transform text-slate-700 dark:text-slate-300 energy:text-zinc-300 bg-slate-100 dark:bg-slate-800 energy:bg-zinc-800 shadow-lg rounded-lg"
               >
                 <button
                   type="button"
@@ -562,7 +563,7 @@
                     <Listbox v-model="selectedTheme">
                       <div class="relative mt-1">
                         <ListboxButton
-                          class="flex items-center relative w-full p-2 text-left capitalize bg-white dark:bg-dark-navy energy:bg-zinc-800 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500"
+                          class="flex items-center relative w-full p-2 text-left capitalize bg-white dark:bg-slate-900 energy:bg-zinc-900 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500"
                         >
                           <template v-if="selectedTheme === 'dark'">
                             <MoonIcon class="h-6 w-6 mr-2" aria-hidden="true" />
@@ -594,7 +595,7 @@
                           />
                         </ListboxButton>
                         <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white dark:bg-dark-navy energy:bg-zinc-800 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                          class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white dark:bg-slate-900 energy:bg-zinc-900 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                         >
                           <ListboxOption
                             v-for="theme in themeOptions"
@@ -761,6 +762,7 @@ export default {
         );
         document.documentElement.classList.add(localStorage.theme);
       }
+      store.dispatch("localStorage/saveTheme", selectedTheme.value);
     };
     watch(selectedTheme, (newTheme) => {
       changeTheme(newTheme);
