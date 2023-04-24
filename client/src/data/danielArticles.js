@@ -88,6 +88,7 @@ const articles = {
         updated_at: "2022-09-01T18:42:30Z",
         _score: null,
         _explanation: null,
+        favorite: true,
       },
       data: {
         //nothing

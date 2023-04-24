@@ -85,6 +85,17 @@
         >
           {{ formatDate(product.date_published) }}
         </p>
+        <template v-if="lowsideMode">
+          <button class="m-auto place-content-center">
+            <HeartIcon
+              :class="[
+                isFavoriteProduct(product) ? 'text-red-500 fill-red-500' : '',
+                'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300',
+              ]"
+              @click="updateFavoriteStatus(product, $event)"
+            />
+          </button>
+        </template>
         <template v-if="isProductLocked(product)">
           <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
@@ -96,11 +107,15 @@
   </MaxCard>
 </template>
 <script>
-import { isProductLocked, formatDate } from "@/helpers";
+import { isProductLocked, formatDate, isFavoriteProduct } from "@/helpers";
 import ProductImage from "@/components/ProductImage";
+import { HeartIcon } from "@heroicons/vue/24/outline";
+import axios from "@/config/wireAxios";
+import { productDetails } from "@/data";
 
 export default {
   components: {
+    HeartIcon,
     ProductImage,
   },
   props: {
@@ -118,9 +133,38 @@ export default {
     },
   },
   setup() {
+    const lowsideMode = process.env.NODE_ENV === "low";
+    const updateFavoriteStatus = (product, event) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (process.env.NODE_ENV === "low") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        documentMatch.data.favorite = !product.favorite;
+        product.favorite = !product.favorite;
+      } else {
+        let favoritePromise;
+        if (product.favorite) {
+          favoritePromise = axios.delete(`/document_favorites/${product.id}`);
+        } else {
+          favoritePromise = axios.post("document_favorites", {
+            id: product.id,
+          });
+        }
+
+        favoritePromise.then(() => (product.favorite = !product.favorite));
+      }
+    };
+
     return {
+      lowsideMode,
       isProductLocked,
       formatDate,
+      isFavoriteProduct,
+      updateFavoriteStatus,
     };
   },
 };
