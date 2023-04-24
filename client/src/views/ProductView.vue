@@ -88,7 +88,7 @@
               </tippy>
             </router-link>
           </div>
-          <div>
+          <div v-if="lowsideMode">
             <tippy :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'">
               <HeartIcon :class="[
                 productIsFavorite ? 'text-red-500 fill-red-500' : '',
@@ -226,6 +226,7 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
     const productIsFavorite = ref(store.state.product.document.favorite);
+    const lowsideMode = process.env.NODE_ENV === "low";
 
     const printDocument = () => {
       const pdfs = product.value.attachments_metadata.filter(
@@ -411,6 +412,7 @@ export default {
       canEditProduct,
       theme,
       productIsFavorite,
+      lowsideMode,
     };
   },
 };
