@@ -88,6 +88,20 @@
               </tippy>
             </router-link>
           </div>
+          <div v-if="offlineMode">
+            <tippy
+              :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'"
+            >
+              <HeartIcon
+                :class="[
+                  productIsFavorite ? 'text-red-500 fill-red-500' : '',
+                  'h-6 w-6 cursor-pointer',
+                ]"
+                aria-hidden="true"
+                @click="productIsFavorite = !productIsFavorite"
+              />
+            </tippy>
+          </div>
         </div>
         <div class="w-full pb-6 lg:pb-0">
           <ProductContent :product="product" />
@@ -167,6 +181,7 @@ import {
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
+  HeartIcon,
 } from "@heroicons/vue/24/outline";
 import NotAuthorized from "@/components/NotAuthorized";
 import ProductNavigation from "@/components/ProductNavigation";
@@ -174,6 +189,8 @@ import ProductContent from "@/components/ProductContent";
 import ProductAttachments from "@/components/ProductAttachments";
 import ProductRelated from "@/components/ProductRelated";
 import ProductMetrics from "@/components/ProductMetrics";
+import { productDetails } from "@/data";
+import axios from "@/config/wireAxios";
 
 export default {
   components: {
@@ -181,6 +198,7 @@ export default {
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
+    HeartIcon,
     NotAuthorized,
     ProductNavigation,
     ProductContent,
@@ -214,6 +232,8 @@ export default {
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
+    const productIsFavorite = ref(store.state.product.document.favorite);
+    const offlineMode = process.env.NODE_ENV === "offline";
 
     const printDocument = () => {
       const pdfs = product.value.attachments_metadata.filter(
@@ -348,6 +368,35 @@ export default {
       }
     );
 
+    watch(productIsFavorite, () => {
+      updateFavoriteStatus();
+    });
+
+    const updateFavoriteStatus = () => {
+      if (process.env.NODE_ENV === "offline") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.value.doc_num
+        );
+        documentMatch.data.favorite = productIsFavorite.value;
+        product.value.favorite = productIsFavorite.value;
+      } else {
+        let favoritePromise;
+        if (productIsFavorite.value) {
+          favoritePromise = axios.delete(
+            `/document_favorites/${product.value.id}`
+          );
+        } else {
+          favoritePromise = axios.post("document_favorites", {
+            id: product.value.id,
+          });
+        }
+
+        favoritePromise.then(
+          () => (product.value.favorite = productIsFavorite.value)
+        );
+      }
+    };
+
     return {
       formatDate,
       hasProductAccess,
@@ -373,6 +422,8 @@ export default {
       canAccessProduct,
       canEditProduct,
       theme,
+      productIsFavorite,
+      offlineMode,
     };
   },
 };

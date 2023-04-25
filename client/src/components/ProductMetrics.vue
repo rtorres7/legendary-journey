@@ -5,7 +5,6 @@
 import { ref, onMounted } from "vue";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
 export default {
   props: {
@@ -15,12 +14,15 @@ export default {
     },
   },
   setup(props) {
+    const metricsList = ref(props.metrics);
+    const sortedMetrics = metricsList.value.sort((a, b) => b.y - a.y);
     const chartdiv = ref(null);
 
     const createChart = () => {
       let root = am5.Root.new(chartdiv.value);
       root._logo.dispose();
       let myTheme = am5.Theme.new(root);
+      root.setThemes([myTheme]);
 
       if (localStorage.getItem("theme") === "dark") {
         myTheme
@@ -54,8 +56,6 @@ export default {
           ]);
       }
 
-      root.setThemes([am5themes_Animated.new(root), myTheme]);
-
       let chart = root.container.children.push(
         am5percent.PieChart.new(root, {
           layout: root.horizontalLayout,
@@ -67,21 +67,27 @@ export default {
           valueField: "y",
           categoryField: "name",
           alignLabels: false,
-          legendLabelText: "[{fill}]{category}[/]",
-          legendValueText: "[bold {fill}]{value}[/]",
+          legendLabelText: "[{fill}]{category}:[/]",
+          legendValueText:
+            "[bold {fill}]{valuePercentTotal.formatNumber('0.0')}%[/]",
         })
       );
-      series.data.setAll(props.metrics);
+      series.data.setAll(sortedMetrics);
       series.labels.template.set("forceHidden", true);
       series.ticks.template.set("forceHidden", true);
+      series.slices.template.setAll({ toggleKey: "none", tooltipText: "" });
 
       let legend = chart.children.push(
         am5.Legend.new(root, {
           y: am5.percent(50),
           centerY: am5.percent(50),
           layout: root.verticalLayout,
+          clickTarget: "none",
         })
       );
+      legend.itemContainers.template.setup = function (item) {
+        item.events.disableType("pointerover");
+      };
       legend.data.setAll(series.dataItems);
     };
 
@@ -90,6 +96,8 @@ export default {
     });
 
     return {
+      metricsList,
+      sortedMetrics,
       chartdiv,
       createChart,
     };

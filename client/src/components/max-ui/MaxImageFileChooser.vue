@@ -104,7 +104,7 @@ export default {
     };
 
     const getImgUrl = (link) => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         return require("@/assets/ukraine_flag_70x70.png");
       }
       return link;

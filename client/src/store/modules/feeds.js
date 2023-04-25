@@ -11,7 +11,7 @@ export default {
   actions: {
     getSitrepFeeds: ({ state, commit }) => {
       state.loading = true;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         console.log("[store] getSitrepFeeds: ", getSitreps);
         setTimeout(() => commit("importSitrepData", getSitreps), 750);
       } else {

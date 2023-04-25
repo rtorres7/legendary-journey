@@ -78,7 +78,7 @@ export default {
     });
 
     onMounted(() => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
           product.value = mockDocument;

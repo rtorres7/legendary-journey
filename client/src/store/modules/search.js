@@ -45,7 +45,7 @@ export default {
     },
 
     debouncedSearch: ({ commit }, url) => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         setTimeout(
           () =>
             commit(
