@@ -1257,14 +1257,14 @@ export default {
                 autoClose: false,
               });
             } else {
-              router.push({
-                name: "publish",
-                params: { date: route.params.date },
-              });
               createNotification({
                 title: "Product Deleted",
                 message: `Product ${props.documentNumber} has been deleted.`,
                 type: "success",
+              });
+              router.push({
+                name: "publish",
+                params: { date: route.params.date },
               });
             }
           });
@@ -1313,14 +1313,14 @@ export default {
                   autoClose: false,
                 });
               } else {
-                router.push({
-                  name: "product",
-                  params: { doc_num: route.params.doc_num },
-                });
                 createNotification({
                   title: "Product Published",
                   message: `Product ${props.documentNumber} has been successfully published.`,
                   type: "success",
+                });
+                router.push({
+                  name: "product",
+                  params: { doc_num: route.params.doc_num },
                 });
               }
             });
