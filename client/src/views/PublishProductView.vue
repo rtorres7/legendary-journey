@@ -84,12 +84,15 @@
           tabindex="0"
           role="button"
           :aria-label="`Create a ${product.displayName}`"
-          @click.once="openProductTemplateDialog(product)"
-          @click="clickCheck ? goToArticle(product.payload) : ''"
+          @click="
+            cards.includes(`${product.displayName}`)
+              ? goToArticle(product.payload)
+              : openProductTemplateDialog(product)
+          "
           @keyup.enter="
-            !clickCheck
-              ? openProductTemplateDialog(product)
-              : goToArticle(product.payload)
+            cards.includes(`${product.displayName}`)
+              ? goToArticle(product.payload)
+              : openProductTemplateDialog(product)
           "
         >
           <span
@@ -344,6 +347,7 @@
           </div>
         </MaxDialog>
         <MaxDialog
+          v-if="dialogPreference != 'hide'"
           :isOpen="isProductTemplateDialogOpen"
           :title="
             productContent ? `${selectedProductType.displayName} Template` : ''
@@ -371,6 +375,18 @@
               <span class="font-semibold">POC Info: </span
               >{{ productContent.poc_info }}
             </p>
+          </div>
+          <div class="flex pt-8">
+            <input
+              id="hideDialog"
+              v-model="hideDialog"
+              type="checkbox"
+              name="hideDialog"
+              @change="saveHideDialog"
+            />
+            <label for="hideDialog" class="ml-2 text-sm"
+              >Do not show again</label
+            >
           </div>
         </MaxDialog>
         <MaxDialog
@@ -491,6 +507,18 @@ export default {
     };
     const clicked = ref(false);
     const clickCheck = computed(() => clicked.value);
+    const cards = ref([]);
+    const clickedCard = (product) => {
+      cards.value.push(product.displayName);
+      console.log(cards.value);
+    };
+    const hideDialog = ref();
+    const saveHideDialog = () => {
+      if (hideDialog.value) {
+        localStorage.setItem("dialogPreference", "hide");
+      }
+    };
+    const dialogPreference = ref(localStorage.getItem("dialogPreference"));
     const isProductTemplateDialogOpen = ref(false);
     const closeProductTemplateDialog = () => {
       isProductTemplateDialogOpen.value = false;
@@ -501,6 +529,7 @@ export default {
     const openProductTemplateDialog = (product) => {
       selectedProductType.value = product;
       isProductTemplateDialogOpen.value = true;
+      clickedCard(product);
     };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
@@ -734,6 +763,11 @@ export default {
       openTemplateDialog,
       closeTemplateDialog,
       clickCheck,
+      cards,
+      clickedCard,
+      hideDialog,
+      saveHideDialog,
+      dialogPreference,
       isProductTemplateDialogOpen,
       openProductTemplateDialog,
       closeProductTemplateDialog,
