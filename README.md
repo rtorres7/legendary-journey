@@ -105,3 +105,41 @@ docker-compose stop # this will safely maintain data in your MongoDB database co
 ```
 docker-compose down # this will delete any data persisted in your MongoDB database container
 ```
+
+## How to run Sonar Analysis
+Until Jenkins and CI can be setup, these instructions will allow for the running of the sonar-scanner locally to push
+analysis to SonarQube.
+
+### Prerequisites
+
+#### Install sonar-scanner
+The binary for sonar-scanner can be downloaded from https://docs.sonarqube.org/latest/analyzing-source-code/scanners/sonarscanner/. 
+If using a mac, then it can be installed through homebrew also.
+
+#### Sonar Token
+```
+export SONAR_TOKEN=...token provided offline...
+```
+
+#### Java Keystore
+Your *.p12 certificate will need to be converted to a *.jks. The following command will ask for the p12 password and a
+password for the new jks.
+```
+keytool -v -importkeystore -srckeystore <username>.p12 -srcstoretype PKCS12 -destkeystore <username>.jks
+```
+
+#### Sonar Options
+```
+export SONAR_SCANNER_OPTS="-Djavax.net.ssl.keyStore=<path-to-jks> -Djavax.net.ssl.keyStorePassword=<jks-password>"
+```
+
+### Running analysis
+Note: It is recommended to run `npm run lint:ci` from the `client` directory prior to running the following in order to 
+have sonarqube use the project's eslint rules
+
+From the project root:
+```
+npm run sonar
+```
+
+Analysis can then be viewed from https://sonarqube.udev2dev.com/dashboard?id=mxs-devsandbox
