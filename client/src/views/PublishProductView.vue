@@ -84,8 +84,13 @@
           tabindex="0"
           role="button"
           :aria-label="`Create a ${product.displayName}`"
-          @click="goToArticle(product.payload)"
-          @keyup.enter="goToArticle(product.payload)"
+          @click.once="openProductTemplateDialog(product)"
+          @click="clickCheck ? goToArticle(product.payload) : ''"
+          @keyup.enter="
+            !clickCheck
+              ? openProductTemplateDialog(product)
+              : goToArticle(product.payload)
+          "
         >
           <span
             class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-md md:text-lg font-bold"
@@ -311,11 +316,41 @@
             template contents:
           </p>
           <MaxListbox
-            v-model="productType"
+            v-model="selectedProductType"
             :label="'Product Type'"
             :items="availableProductTypes"
             class="lg:w-1/2 pb-8"
           />
+          <p class="italic text-sm pb-4">
+            Preview only shows fields that are prepopulated by the template
+          </p>
+          <div v-if="productContent" class="flex flex-col gap-y-2">
+            <p>
+              <span class="font-semibold">Title: </span
+              >{{ productContent.title }}
+            </p>
+            <p>
+              <span class="font-semibold">Summary: </span
+              >{{ productContent.summary }}
+            </p>
+            <p>
+              <span class="font-semibold">Topics: </span
+              >{{ productContent.topics.join(", ") }}
+            </p>
+            <p>
+              <span class="font-semibold">POC Info: </span
+              >{{ productContent.poc_info }}
+            </p>
+          </div>
+        </MaxDialog>
+        <MaxDialog
+          :isOpen="isProductTemplateDialogOpen"
+          :title="
+            productContent ? `${selectedProductType.displayName} Template` : ''
+          "
+          class="max-w-[700px]"
+          @close="closeProductTemplateDialog"
+        >
           <p class="italic text-sm pb-4">
             Preview only shows fields that are prepopulated by the template
           </p>
@@ -444,14 +479,28 @@ export default {
         return articles.value;
       }
     };
-    const productType = ref();
-    const productContent = computed(() => productType.value?.payload);
+    const selectedProductType = ref();
+    const productContent = computed(() => selectedProductType.value?.payload);
     const isTemplateDialogOpen = ref(false);
     const closeTemplateDialog = () => {
       isTemplateDialogOpen.value = false;
     };
     const openTemplateDialog = () => {
+      selectedProductType.value = null;
       isTemplateDialogOpen.value = true;
+    };
+    const clicked = ref(false);
+    const clickCheck = computed(() => clicked.value);
+    const isProductTemplateDialogOpen = ref(false);
+    const closeProductTemplateDialog = () => {
+      isProductTemplateDialogOpen.value = false;
+      console.log(clicked.value);
+      console.log(clicked.value);
+      clicked.value = true;
+    };
+    const openProductTemplateDialog = (product) => {
+      selectedProductType.value = product;
+      isProductTemplateDialogOpen.value = true;
     };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
@@ -679,11 +728,15 @@ export default {
       selectDate,
       canEditProduct,
       selectedArticle,
-      productType,
+      selectedProductType,
       productContent,
       isTemplateDialogOpen,
       openTemplateDialog,
       closeTemplateDialog,
+      clickCheck,
+      isProductTemplateDialogOpen,
+      openProductTemplateDialog,
+      closeProductTemplateDialog,
       isPreviewDialogOpen,
       closePreviewDialog,
       openPreviewDialog,
