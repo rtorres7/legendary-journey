@@ -85,12 +85,12 @@
           role="button"
           :aria-label="`Create a ${product.displayName}`"
           @click="
-            cards.includes(`${product.displayName}`)
+            dialogPreference == 'hide' || hideDialog
               ? goToArticle(product.payload)
               : openProductTemplateDialog(product)
           "
           @keyup.enter="
-            cards.includes(`${product.displayName}`)
+            dialogPreference == 'hide' || hideDialog
               ? goToArticle(product.payload)
               : openProductTemplateDialog(product)
           "
@@ -347,7 +347,6 @@
           </div>
         </MaxDialog>
         <MaxDialog
-          v-if="dialogPreference != 'hide'"
           :isOpen="isProductTemplateDialogOpen"
           :title="
             productContent ? `${selectedProductType.displayName} Template` : ''
@@ -388,6 +387,16 @@
               >Do not show again</label
             >
           </div>
+          <template #actions>
+            <MaxButton
+              color="secondary"
+              @click.prevent="closeProductTemplateDialog"
+              >Cancel</MaxButton
+            >
+            <MaxButton color="secondary" @click="goToArticle(productContent)">
+              Create
+            </MaxButton>
+          </template>
         </MaxDialog>
         <MaxDialog
           :isOpen="isPreviewThumbnailDialogOpen"
@@ -505,13 +514,6 @@ export default {
       selectedProductType.value = null;
       isTemplateDialogOpen.value = true;
     };
-    const clicked = ref(false);
-    const clickCheck = computed(() => clicked.value);
-    const cards = ref([]);
-    const clickedCard = (product) => {
-      cards.value.push(product.displayName);
-      console.log(cards.value);
-    };
     const hideDialog = ref();
     const saveHideDialog = () => {
       if (hideDialog.value) {
@@ -522,14 +524,10 @@ export default {
     const isProductTemplateDialogOpen = ref(false);
     const closeProductTemplateDialog = () => {
       isProductTemplateDialogOpen.value = false;
-      console.log(clicked.value);
-      console.log(clicked.value);
-      clicked.value = true;
     };
     const openProductTemplateDialog = (product) => {
       selectedProductType.value = product;
       isProductTemplateDialogOpen.value = true;
-      clickedCard(product);
     };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
@@ -762,9 +760,6 @@ export default {
       isTemplateDialogOpen,
       openTemplateDialog,
       closeTemplateDialog,
-      clickCheck,
-      cards,
-      clickedCard,
       hideDialog,
       saveHideDialog,
       dialogPreference,
