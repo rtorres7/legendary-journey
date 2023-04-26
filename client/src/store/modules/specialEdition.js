@@ -15,7 +15,7 @@ export default {
     getSpecialEdition({ state, commit }) {
       state.loading = true;
       let route = router.currentRoute.value;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         console.log("[store] getSpecialEdition: ", specialEdition);
         setTimeout(() => commit("saveSpecialEdition", specialEdition), 750);
       } else {

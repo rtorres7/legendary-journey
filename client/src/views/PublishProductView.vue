@@ -538,7 +538,7 @@ export default {
     const openPreviewDialog = (product) => {
       console.log("product:", product);
       loadingPreview.value = true;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );
@@ -566,7 +566,7 @@ export default {
     };
 
     const deleteProduct = () => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         createNotification({
           title: "Product Deleted",
           message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
@@ -675,7 +675,7 @@ export default {
         payload = { ...defaultPayload };
       }
       payload["wire_id"] = dayjs(selectedDate.value).format("YYYY-MM-DD");
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         router.push({
           name: "edit",
           params: {

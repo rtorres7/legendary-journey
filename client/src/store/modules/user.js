@@ -52,7 +52,7 @@ export default {
   actions: {
     loadUser({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         console.log("[store] loadUser: ", user);
         setTimeout(() => commit("importUser", user), 750);
       } else {

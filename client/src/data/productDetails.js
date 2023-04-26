@@ -276,6 +276,7 @@ export const productDetails = [
       product_image: false,
       display_title:
         "(U) Questions loom over Ukraine’s counteroffensive in Kharkiv",
+      favorite: true,
     },
   },
   {

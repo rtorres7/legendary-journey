@@ -17,7 +17,7 @@ export default {
   },
   setup() {
     const getImgUrl = (link) => {
-      if (process.env.NODE_ENV === "low") {
+      if (process.env.NODE_ENV === "offline") {
         return require("@/assets/ukraine_flag_70x70.png");
       }
       return link.image_path;
@@ -29,5 +29,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

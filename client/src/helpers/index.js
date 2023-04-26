@@ -36,6 +36,10 @@ export const isProductLocked = (product) => {
   return !isEmpty(product.needed) || product.org_restricted;
 };
 
+export const isFavoriteProduct = (product) => {
+  return !!product.favorite;
+};
+
 export const hasProductAccess = (product, organization) => {
   let hasAccess = true;
   if (

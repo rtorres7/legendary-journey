@@ -248,7 +248,7 @@
                     >User Support
                   </a>
                 </MenuItem>
-                <template v-if="environment === 'low'">
+                <template v-if="environment === 'offline'">
                   <MenuItem>
                     <a
                       class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
