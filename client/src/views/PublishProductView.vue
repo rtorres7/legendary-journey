@@ -327,23 +327,23 @@
           <p class="italic text-sm pb-4">
             Preview only shows fields that are prepopulated by the template
           </p>
-          <div v-if="productContent" class="flex flex-col gap-y-2">
-            <p>
-              <span class="font-semibold">Title: </span
-              >{{ productContent.title }}
-            </p>
-            <p>
-              <span class="font-semibold">Summary: </span
-              >{{ productContent.summary }}
-            </p>
-            <p>
-              <span class="font-semibold">Topics: </span
-              >{{ productContent.topics.join(", ") }}
-            </p>
-            <p>
-              <span class="font-semibold">POC Info: </span
-              >{{ productContent.poc_info }}
-            </p>
+          <div v-if="productContent" class="flex flex-col gap-y-4">
+            <div v-if="productContent.title" class="flex">
+              <p class="basis-1/5">Title:</p>
+              <p class="basis-4/5">{{ productContent.title }}</p>
+            </div>
+            <div v-if="productContent.summary" class="flex">
+              <p class="basis-1/5">Summary:</p>
+              <p class="basis-4/5">{{ productContent.summary }}</p>
+            </div>
+            <div v-if="productContent.topics" class="flex">
+              <p class="basis-1/5">Topics:</p>
+              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+            </div>
+            <div v-if="productContent.poc_info" class="flex">
+              <p class="basis-1/5">POC Info:</p>
+              <p class="basis-4/5">{{ productContent.poc_info }}</p>
+            </div>
           </div>
         </MaxDialog>
         <MaxDialog
@@ -357,23 +357,23 @@
           <p class="italic text-sm pb-4">
             Preview only shows fields that are prepopulated by the template
           </p>
-          <div v-if="productContent" class="flex flex-col gap-y-2">
-            <p>
-              <span class="font-semibold">Title: </span
-              >{{ productContent.title }}
-            </p>
-            <p>
-              <span class="font-semibold">Summary: </span
-              >{{ productContent.summary }}
-            </p>
-            <p>
-              <span class="font-semibold">Topics: </span
-              >{{ productContent.topics.join(", ") }}
-            </p>
-            <p>
-              <span class="font-semibold">POC Info: </span
-              >{{ productContent.poc_info }}
-            </p>
+          <div v-if="productContent" class="flex flex-col gap-y-4">
+            <div v-if="productContent.title" class="flex">
+              <p class="basis-1/5">Title:</p>
+              <p class="basis-4/5">{{ productContent.title }}</p>
+            </div>
+            <div v-if="productContent.summary" class="flex">
+              <p class="basis-1/5">Summary:</p>
+              <p class="basis-4/5">{{ productContent.summary }}</p>
+            </div>
+            <div v-if="productContent.topics" class="flex">
+              <p class="basis-1/5">Topics:</p>
+              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+            </div>
+            <div v-if="productContent.poc_info" class="flex">
+              <p class="basis-1/5">POC Info:</p>
+              <p class="basis-4/5">{{ productContent.poc_info }}</p>
+            </div>
           </div>
           <div class="flex pt-8">
             <input
@@ -384,7 +384,7 @@
               @change="saveHideDialog"
             />
             <label for="hideDialog" class="ml-2 text-sm"
-              >Do not show again</label
+              >Do not show this again</label
             >
           </div>
           <template #actions>
@@ -518,6 +518,8 @@ export default {
     const saveHideDialog = () => {
       if (hideDialog.value) {
         localStorage.setItem("dialogPreference", "hide");
+      } else {
+        localStorage.setItem("dialogPreference", "show");
       }
     };
     const dialogPreference = ref(localStorage.getItem("dialogPreference"));
