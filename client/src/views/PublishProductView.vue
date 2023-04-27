@@ -104,8 +104,15 @@
             v-for="{ attributes: product } in filterArticles()"
             :key="product"
           >
-            <MaxCard class="flex flex-col py-4">
-              <div class="flex justify-between px-4 pb-3 text-sm">
+            <MaxCard class="flex flex-col pb-4">
+              <div
+                class="flex justify-between px-4 py-3 text-sm rounded-t-lg"
+                :class="
+                  restrictedProduct(product)
+                    ? 'bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700'
+                    : ''
+                "
+              >
                 <div
                   class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-8 lg:space-x-10 self-center"
                 >
@@ -146,42 +153,14 @@
                     >
                   </div>
                 </div>
-                <div class="hidden lg:flex space-x-4">
-                  <router-link
-                    :to="{
-                      name: 'edit',
-                      params: {
-                        date: routeDate,
-                        id: product.id,
-                        doc_num: product.doc_num,
-                      },
-                    }"
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                  >
-                    <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
-                      >Edit</span
-                    >
-                  </router-link>
-                  <button
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                    @click.prevent="openPreviewDialog(product)"
-                  >
-                    <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
-                      class="pl-3"
-                      >Preview</span
-                    >
-                  </button>
-                  <button
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                    @click.prevent="openDeleteDialog(product)"
-                  >
-                    <TrashIcon class="h-5 w-5" /><span class="pl-3"
-                      >Delete</span
-                    >
-                  </button>
-                </div>
-                <div class="flex h-fit lg:hidden space-x-4">
-                  <tippy content="Edit Product">
+                <template v-if="restrictedProduct(product)">
+                  <MaxProductIcon
+                    class="w-12 h-12 bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+                    icon="locked"
+                  />
+                </template>
+                <template v-else>
+                  <div class="hidden lg:flex space-x-4">
                     <router-link
                       :to="{
                         name: 'edit',
@@ -191,29 +170,65 @@
                           doc_num: product.doc_num,
                         },
                       }"
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                     >
-                      <PencilSquareIcon class="h-6 w-6" />
+                      <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
+                        >Edit</span
+                      >
                     </router-link>
-                  </tippy>
-                  <tippy content="Preview Product">
                     <button
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                      aria-label="Preview product"
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       @click.prevent="openPreviewDialog(product)"
                     >
-                      <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                      <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
+                        class="pl-3"
+                        >Preview</span
+                      >
                     </button>
-                  </tippy>
-                  <tippy content="Delete Product"
-                    ><button
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                      aria-label="Delete product"
+                    <button
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       @click.prevent="openDeleteDialog(product)"
                     >
-                      <TrashIcon class="h-6 w-6" /></button
-                  ></tippy>
-                </div>
+                      <TrashIcon class="h-5 w-5" /><span class="pl-3"
+                        >Delete</span
+                      >
+                    </button>
+                  </div>
+                  <div class="flex h-fit lg:hidden space-x-4">
+                    <tippy content="Edit Product">
+                      <router-link
+                        :to="{
+                          name: 'edit',
+                          params: {
+                            date: routeDate,
+                            id: product.id,
+                            doc_num: product.doc_num,
+                          },
+                        }"
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      >
+                        <PencilSquareIcon class="h-6 w-6" />
+                      </router-link>
+                    </tippy>
+                    <tippy content="Preview Product">
+                      <button
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        aria-label="Preview product"
+                        @click.prevent="openPreviewDialog(product)"
+                      >
+                        <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                      </button>
+                    </tippy>
+                    <tippy content="Delete Product"
+                      ><button
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        aria-label="Delete product"
+                        @click.prevent="openDeleteDialog(product)"
+                      >
+                        <TrashIcon class="h-6 w-6" /></button
+                    ></tippy>
+                  </div>
+                </template>
               </div>
               <div
                 class="flex flex-col md:flex-row px-4 pt-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
@@ -233,15 +248,7 @@
                   />
                 </div>
                 <div>
-                  <router-link
-                    :to="{
-                      name:
-                        product.state === 'draft'
-                          ? 'product-preview'
-                          : 'product',
-                      params: { doc_num: product.doc_num },
-                    }"
-                  >
+                  <ProductRestrictedLink :product="getProductDetails(product)">
                     <h4
                       class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
                       :title="product.title"
@@ -253,7 +260,7 @@
                       }}
                       {{ product.title }}
                     </h4>
-                  </router-link>
+                  </ProductRestrictedLink>
                   <p class="hidden text-sm md:line-clamp-4 wrap-anywhere">
                     {{
                       product.summary_classif && product.summary_classif !== "X"
@@ -334,6 +341,8 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
+import { isProductLocked } from "@/helpers";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
 
@@ -343,6 +352,7 @@ export default {
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
     TrashIcon,
+    ProductRestrictedLink,
     ProductContent,
     ProductImage,
   },
@@ -373,26 +383,39 @@ export default {
         return articles.value;
       }
     };
+    const getProductDetails = (product) => {
+      if (process.env.NODE_ENV === "offline") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        return documentMatch.data;
+      } else {
+        axios
+          .get(`/preload/documents/${product.doc_num}.json`)
+          .then((response) => {
+            return response.data;
+          });
+      }
+    };
+    const restrictedProduct = (product) => {
+      if (isProductLocked(getProductDetails(product))) {
+        return true;
+      }
+      return false;
+    };
+
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
       isPreviewDialogOpen.value = false;
     };
     const openPreviewDialog = (product) => {
-      console.log("product:", product);
       loadingPreview.value = true;
       if (process.env.NODE_ENV === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        previewProduct.value = documentMatch.data;
+        previewProduct.value = getProductDetails(product);
         setTimeout(() => (loadingPreview.value = false), 750);
       } else {
-        axios
-          .get(`/documents/${product.doc_num}/preview.json`)
-          .then((response) => {
-            loadingPreview.value = false;
-            previewProduct.value = response.data;
-          });
+        loadingPreview.value = false;
+        previewProduct.value = getProductDetails(product);
       }
       isPreviewDialogOpen.value = true;
     };
@@ -594,6 +617,9 @@ export default {
       showOnlyDrafts,
       drafts,
       filterArticles,
+      getProductDetails,
+      restrictedProduct,
+      isProductLocked,
       availableProductTypes,
       goToArticle,
       selectDate,

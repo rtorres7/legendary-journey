@@ -1,7 +1,10 @@
 <template>
   <router-link
     v-if="!isProductLocked(product)"
-    :to="{ name: 'product', params: { doc_num: product.doc_num } }"
+    :to="{
+      name: product.state === 'draft' ? 'product-preview' : 'product',
+      params: { doc_num: product.doc_num },
+    }"
   >
     <slot />
   </router-link>
