@@ -10,6 +10,7 @@ import SearchView from "../views/SearchView.vue";
 import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
+import MockProductsView from "../views/MockProductsView.vue";
 
 const routes = [
   {
@@ -126,6 +127,17 @@ const routes = [
     meta: { title: "Page Not Found" },
   },
 ];
+
+if (process.env.NODE_ENV === "offline") {
+  routes.push({
+    path: "/products",
+    name: "products",
+    component: MockProductsView,
+    meta: {
+      title: "Products",
+    },
+  });
+}
 
 const router = createRouter({
   history: createWebHistory(),
