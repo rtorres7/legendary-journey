@@ -619,7 +619,6 @@ export default {
       filterArticles,
       getProductDetails,
       restrictedProduct,
-      isProductLocked,
       availableProductTypes,
       goToArticle,
       selectDate,
