@@ -62,7 +62,6 @@
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="mb-6">
-      <!-- <h3 class="font-semibold text-lg">Create a Product</h3> -->
       <p>
         Alternatively, you can select from one of the existing
         <button
