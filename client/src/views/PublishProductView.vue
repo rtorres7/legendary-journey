@@ -518,6 +518,8 @@ export default {
     const saveHideDialog = () => {
       if (hideDialog.value) {
         localStorage.setItem("dialogPreference", "hide");
+        const expire = dayjs().add(90, "day");
+        localStorage.setItem("expiryDate", expire);
       } else {
         localStorage.setItem("dialogPreference", "show");
       }
@@ -728,6 +730,9 @@ export default {
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
+      if (dayjs().isAfter(localStorage.getItem("expiryDate"))) {
+        localStorage.setItem("dialogPreference", "show");
+      }
     });
 
     watch(
