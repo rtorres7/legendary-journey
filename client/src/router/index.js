@@ -88,11 +88,11 @@ const routes = [
     },
   },
   {
-    path: "/:date/publish",
-    name: "publish",
+    path: "/:date/products",
+    name: "products",
     component: PublishProductView,
     meta: {
-      title: "Publish a Product",
+      title: "Manage Products",
     },
   },
   {

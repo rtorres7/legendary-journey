@@ -36,7 +36,7 @@
               <EditProductFormSection
                 id="product-type"
                 title="Product Type"
-                description="Changing the product type will prepopulate existing fields so be careful when changing it."
+                description="Get started by selecting the product type."
               >
                 <MaxListbox
                   v-model="form.productType"
@@ -1237,7 +1237,7 @@ export default {
     const deleteDocument = () => {
       if (process.env.NODE_ENV === "offline") {
         router.push({
-          name: "publish",
+          name: "products",
           params: { date: route.params.date },
         });
         createNotification({
@@ -1263,7 +1263,7 @@ export default {
                 type: "success",
               });
               router.push({
-                name: "publish",
+                name: "products",
                 params: { date: route.params.date },
               });
             }
@@ -1404,7 +1404,7 @@ export default {
     };
 
     const cancel = () => {
-      router.push({ name: "publish", params: { date: route.params.date } });
+      router.push({ name: "products", params: { date: route.params.date } });
     };
 
     return {
