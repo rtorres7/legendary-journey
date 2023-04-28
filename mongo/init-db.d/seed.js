@@ -3170,3 +3170,13 @@ db.dissem_orgs.insertMany([
     visible: true,
   },
 ]);
+db.alerts.drop();
+db.alerts.insertOne({
+  id: 1,
+  title: "Major Announcement 1",
+  message:
+    "Maecenas eu diam ac diam mattis egestas id at lorem. Quisque pharetra quam in leo mollis, et hendrerit est lacinia. Sed condimentum, nunc vitae ullamcorper interdum, diam erat eleifend mi, lacinia vehicula ipsum ex nec nisl. Nulla nec dui porttitor turpis consequat sagittis.",
+  expiresIn: 50964.292772868,
+  start_at: "2023-03-10T06:00:00.000-05:00",
+  end_at: "2023-12-02T23:59:00.000-04:00",
+});

@@ -8,6 +8,7 @@ var indexRouter = require("./routes/index");
 var legacyRouter = require("./routes/legacy");
 var articlesRouter = require("./routes/articles");
 var usersRouter = require("./routes/users");
+var alertsRouter = require("./routes/alerts");
 
 const constant = require("./util/constant");
 
@@ -94,5 +95,6 @@ app.use("/my_wire", legacyRouter);
 app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
 app.use("/special_editions", legacyRouter);
+app.use("/alerts", alertsRouter);
 
 module.exports = app;
