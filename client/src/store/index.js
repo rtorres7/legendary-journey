@@ -1,12 +1,11 @@
 import { createStore } from "vuex";
 import alerts from "./modules/alerts";
 import articles from "./modules/articles";
-import daniel from "./modules/daniel";
+import features from "./modules/features";
 import search from "./modules/search";
 import specialEdition from "./modules/specialEdition";
 import specialEditions from "./modules/specialEditions";
 import user from "./modules/user";
-import feeds from "./modules/feeds";
 import savedSearches from "./modules/saved-searches";
 import product from "./modules/product";
 import testConsole from "./modules/test-console";
@@ -29,12 +28,11 @@ export default createStore({
   modules: {
     alerts,
     articles,
-    daniel,
+    features,
     search,
     specialEdition,
     specialEditions,
     user,
-    feeds,
     savedSearches,
     product,
     testConsole,

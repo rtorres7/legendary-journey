@@ -214,8 +214,8 @@ export default {
     const product = computed(() => store.state.product.document);
     const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
-    const featuredArticles = computed(() => store.state.daniel.articles);
-    const loadingFeaturedArticles = computed(() => store.state.daniel.loading);
+    const featuredArticles = computed(() => store.state.features.articles);
+    const loadingFeaturedArticles = computed(() => store.state.features.loading);
     const relatedProducts = computed(
       () => store.state.relatedProducts.relatedDocuments
     );
@@ -277,7 +277,7 @@ export default {
 
     watch([loadingProduct], () => {
       if (!loadingProduct.value && canAccessProduct.value) {
-        store.dispatch("daniel/getDanielArticles");
+        store.dispatch("features/loadFeatures");
         store.dispatch("relatedProducts/getRelatedDocuments");
         document.title = product.value.title;
         metricStartDate.value = dayjs(product.value.display_date).toDate();
