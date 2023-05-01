@@ -77,6 +77,14 @@
               @onImageRemoved="removeImageFile"
             />
           </div>
+          <div>
+            <span
+              class="ml-1 text-slate-900 dark:text-slate-400 energy:text-zinc-400 font-italic"
+              v-show="!imageFile"
+              >{{ !!imageFile }}, {{ fileValid }} Uploaded file aspect ratio
+              must be 1:1, and resolution must be at least 300 x 300 px.</span
+            >
+          </div>
         </div>
       </div>
     </form>
@@ -168,6 +176,7 @@ export default {
     // // })
 
     const imageFile = ref(null);
+    let fileValid = true;
 
     const closeDialog = () => {
       emit("closeDialog");
@@ -194,6 +203,20 @@ export default {
     const updateImageFile = (payload) => {
       editionEvent.value.icon = payload.binary;
       imageFile.value = payload.file;
+      console.log(payload);
+      const imageUrl = URL.createObjectURL(imageFile.value);
+      const image = new Image();
+      image.onload = function () {
+        const width = this.width;
+        const height = this.height;
+        console.log(`Dimensions: ${width} x ${height} px`);
+        if (width != height || width < 300 || height < 300) {
+          removeImageFile();
+          fileValid = false;
+        }
+        URL.revokeObjectURL(imageUrl);
+      };
+      image.src = imageUrl;
     };
 
     const removeImageFile = () => {
@@ -334,6 +357,7 @@ export default {
       stateOptions,
       editionEvent,
       imageFile,
+      fileValid,
       orderOptions,
       updateClassification,
       updateImageFile,
