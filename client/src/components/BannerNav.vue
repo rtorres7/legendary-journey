@@ -101,13 +101,13 @@
                   <router-link
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
                     :to="{
-                      name: 'publish',
+                      name: 'products',
                       params: {
                         date: dayjs().format('YYYY-MM-DD'),
                       },
                     }"
                   >
-                    Publish a Product
+                    Manage Products
                   </router-link>
                 </MenuItem>
                 <MenuItem v-show="canManageSpecialEditions">
@@ -537,13 +537,13 @@
                     <router-link
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
                       :to="{
-                        name: 'publish',
+                        name: 'products',
                         params: {
                           date: dayjs().format('YYYY-MM-DD'),
                         },
                       }"
                     >
-                      Publish a Product
+                      Manage Products
                     </router-link>
                   </li>
                   <li v-show="canManageSpecialEditions">
@@ -856,7 +856,7 @@ export default {
     const navigateToPublish = () => {
       const today = dayjs().format("YYYY-MM-DD");
       router.push({
-        name: "publish",
+        name: "products",
         params: {
           date: today,
         },
