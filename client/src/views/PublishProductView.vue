@@ -57,10 +57,6 @@
         </span>
       </MaxCard>
     </div>
-  </div>
-  <div
-    class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
-  >
     <div class="mb-6">
       <p>
         Alternatively, you can select from one of the existing
@@ -74,7 +70,7 @@
       </p>
     </div>
     <div
-      class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-fit mb-6"
+      class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 w-fit mb-6"
     >
       <template v-for="product in availableProductTypes" :key="product">
         <MaxCard
@@ -95,7 +91,7 @@
           "
         >
           <span
-            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-md md:text-lg font-bold"
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-center text-md md:text-lg font-bold"
           >
             {{ product.displayName }}
           </span>
@@ -312,15 +308,16 @@
           @close="closeTemplateDialog"
         >
           <div class="pb-8">
-            <p class="italic pb-4">What is a template?</p>
-            <p>
+            <p class="font-semibold pb-2">What is a template?</p>
+            <p class="text-sm">
               A template is a collection of prepopulated fields. When a template
               is selected, a draft of the product will be created and stored in
               our system with the template applied, so there is not a need to
               save the product immediately.
             </p>
           </div>
-          <p class="pb-4">
+          <p class="font-semibold pb-2">Template Preview:</p>
+          <p class="text-sm pb-4">
             Select a product type from the dropdown below to preview its
             template contents:
           </p>
@@ -328,26 +325,26 @@
             v-model="selectedProductType"
             :label="'Product Type'"
             :items="availableProductTypes"
-            class="lg:w-1/2 pb-8"
+            class="lg:w-1/2 pb-4"
           />
-          <p class="italic text-sm pb-4">
+          <p class="italic text-sm pb-8">
             Preview only shows fields that are prepopulated by the template
           </p>
           <div v-if="productContent" class="flex flex-col gap-y-4">
             <div v-if="productContent.title" class="flex">
-              <p class="basis-1/5">Title:</p>
+              <p class="basis-1/5 font-semibold">Title:</p>
               <p class="basis-4/5">{{ productContent.title }}</p>
             </div>
             <div v-if="productContent.summary" class="flex">
-              <p class="basis-1/5">Summary:</p>
+              <p class="basis-1/5 font-semibold">Summary:</p>
               <p class="basis-4/5">{{ productContent.summary }}</p>
             </div>
             <div v-if="productContent.topics" class="flex">
-              <p class="basis-1/5">Topics:</p>
+              <p class="basis-1/5 font-semibold">Topics:</p>
               <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
             </div>
             <div v-if="productContent.poc_info" class="flex">
-              <p class="basis-1/5">POC Info:</p>
+              <p class="basis-1/5 font-semibold">POC Info:</p>
               <p class="basis-4/5">{{ productContent.poc_info }}</p>
             </div>
           </div>
@@ -360,24 +357,25 @@
           class="max-w-[700px]"
           @close="closeProductTemplateDialog"
         >
-          <p class="italic text-sm pb-4">
+          <p class="font-semibold pb-2">Template Preview:</p>
+          <p class="italic text-sm pb-8">
             Preview only shows fields that are prepopulated by the template
           </p>
           <div v-if="productContent" class="flex flex-col gap-y-4">
             <div v-if="productContent.title" class="flex">
-              <p class="basis-1/5">Title:</p>
+              <p class="basis-1/5 font-semibold">Title:</p>
               <p class="basis-4/5">{{ productContent.title }}</p>
             </div>
             <div v-if="productContent.summary" class="flex">
-              <p class="basis-1/5">Summary:</p>
+              <p class="basis-1/5 font-semibold">Summary:</p>
               <p class="basis-4/5">{{ productContent.summary }}</p>
             </div>
             <div v-if="productContent.topics" class="flex">
-              <p class="basis-1/5">Topics:</p>
+              <p class="basis-1/5 font-semibold">Topics:</p>
               <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
             </div>
             <div v-if="productContent.poc_info" class="flex">
-              <p class="basis-1/5">POC Info:</p>
+              <p class="basis-1/5 font-semibold">POC Info:</p>
               <p class="basis-4/5">{{ productContent.poc_info }}</p>
             </div>
           </div>
