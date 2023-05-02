@@ -5,6 +5,7 @@ const cors = require("cors");
 var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
+var homeRouter = require("./routes/home");
 var legacyRouter = require("./routes/legacy");
 var articlesRouter = require("./routes/articles");
 var usersRouter = require("./routes/users");
@@ -87,7 +88,7 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/articles", articlesRouter);
-app.use("/home", legacyRouter);
+app.use("/home", homeRouter);
 app.use("/preload", legacyRouter);
 app.use("/wires", legacyRouter);
 app.use("/my_wire", legacyRouter);
