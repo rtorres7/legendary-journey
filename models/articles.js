@@ -14,9 +14,21 @@ var ArticleSchema = new Schema(
     classification_decl_fmt: String,
     classification_detail: {},
     classification_xml: String,
+    coauthors: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     coi_level: Number,
     congress: Boolean,
     control_to: [],
+    coordinators: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     countries: [
       {
         name: String,
@@ -55,7 +67,12 @@ var ArticleSchema = new Schema(
     print_count: Number,
     priority_alert: Boolean,
     producer: String,
-    producing_office: String,
+    producing_offices: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     product_image: Boolean,
     product_source: String,
     product_type: String,
@@ -161,7 +178,9 @@ ArticleSchema.virtual("data.document").get(function () {
     classification: this.classification,
     classification_decl_fmt: this.classification_decl_fmt,
     classification_xml: this.classification_xml,
+    coauthors: this.coauthors,
     control_to: this.control_to,
+    coordinators: this.coordinators,
     countries: this.countries,
     date_published: this.date_published,
     dissem_orgs: this.dissem_orgs,
@@ -169,6 +188,7 @@ ArticleSchema.virtual("data.document").get(function () {
     id: this.get("_id"),
     non_state_actors: this.non_state_actors,
     poc_info: this.poc_info,
+    producing_offices: this.producing_offices,
     product_type_id: this.product_type_id,
     publication_number: this.publication_number,
     summary_classif: this.summary_classif,
@@ -189,8 +209,9 @@ ArticleSchema.virtual("data.details").get(function () {
     classification_detail: this.classification_detail,
     coi_level: this.coi_level,
     congress: this.congress,
+    coordinators: this.coordinators,
     countries: this.countries,
-    countries_fn: this.contries_fn,
+    countries_fn: this.countries_fn,
     created_at: this.created_at,
     created_by_id: this.created_by_id,
     created_on: this.created_on,
@@ -220,7 +241,7 @@ ArticleSchema.virtual("data.details").get(function () {
     print_count: this.print_count,
     priority_alert: this.priority_alert,
     producer: this.producer,
-    producing_office: this.producing_office,
+    producing_offices: this.producing_offices,
     product_image: this.product_image,
     product_source: this.product_source,
     product_type_id: this.product_type_id,
