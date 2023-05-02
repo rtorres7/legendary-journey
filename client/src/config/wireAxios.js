@@ -2,6 +2,9 @@ import axios from "axios";
 //import Vue from "vue";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+if (process.env.NODE_ENV === "development") {
+  axios.defaults.baseURL = "http://localhost:3000";
+}
 
 axios.interceptors.response.use(function (response) {
   if (response.headers["x-wire-messages"]) {

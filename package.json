@@ -9,7 +9,8 @@
     "client-dependencies": "npm install --prefix client",
     "install-all-deps": "concurrently \"npm run server-dependencies\" \"npm run client-dependencies\"",
     "client": "cd ./client && npm run serve:low",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "sonar": "sonar-scanner -Dsonar.login=$SONAR_TOKEN"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.6.0",

@@ -3,7 +3,7 @@
     class="flex flex-col space-y-4 md:space-y-0 md:flex-row justify-between py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="flex flex-col space-y-4">
-      <h1 class="font-semibold text-2xl">Publish a Product</h1>
+      <h1 class="font-semibold text-2xl">Manage Products</h1>
       <h2>Get started by selecting from the following options.</h2>
     </div>
     <MaxDatepicker
@@ -33,13 +33,45 @@
     </MaxDatepicker>
   </div>
   <div
+    v-if="!isCommunityExclusive"
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <div class="mb-6">
       <h3 class="font-semibold text-lg">Create a Product</h3>
-      <p>Select the product you'd like to create</p>
+      <p>Start with a blank template</p>
     </div>
-    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-full mb-6">
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-fit mb-6">
+      <MaxCard
+        class="flex justify-center items-center font-medium cursor-pointer"
+        hoverable
+        tabindex="0"
+        role="button"
+        aria-label="Create a blank template"
+        @click="goToArticle()"
+        @keyup.enter="goToArticle()"
+      >
+        <span
+          class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+        >
+          New Product
+        </span>
+      </MaxCard>
+    </div>
+    <div class="mb-6">
+      <p>
+        Alternatively, you can select from one of the existing
+        <button
+          class="hover:cursor-pointer underline"
+          @click="openTemplateDialog"
+        >
+          templates
+        </button>
+        to get started
+      </p>
+    </div>
+    <div
+      class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 w-fit mb-6"
+    >
       <template v-for="product in availableProductTypes" :key="product">
         <MaxCard
           class="flex justify-center items-center font-medium cursor-pointer"
@@ -47,11 +79,19 @@
           tabindex="0"
           role="button"
           :aria-label="`Create a ${product.displayName}`"
-          @click="goToArticle(product.payload)"
-          @keyup.enter="goToArticle(product.payload)"
+          @click="
+            dialogPreference == 'hide' || hideDialog
+              ? goToArticle(product.payload)
+              : openProductTemplateDialog(product)
+          "
+          @keyup.enter="
+            dialogPreference == 'hide' || hideDialog
+              ? goToArticle(product.payload)
+              : openProductTemplateDialog(product)
+          "
         >
           <span
-            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-center text-md md:text-lg font-bold"
           >
             {{ product.displayName }}
           </span>
@@ -62,19 +102,6 @@
         </MaxCard>
       </template>
     </div>
-    <p v-if="!isCommunityExclusive">
-      Not sure which product to choose?
-      <span
-        class="font-semibold cursor-pointer"
-        tabindex="0"
-        role="button"
-        aria-label="Create a blank template"
-        @click="goToArticle()"
-        @keyup.enter="goToArticle()"
-        >Click here</span
-      >
-      to start with a blank template.
-    </p>
   </div>
   <template v-if="loadingArticles">
     <div class="max-w-fit m-auto mt-[20vh]">
@@ -104,8 +131,15 @@
             v-for="{ attributes: product } in filterArticles()"
             :key="product"
           >
-            <MaxCard class="flex flex-col py-4">
-              <div class="flex justify-between px-4 pb-3 text-sm">
+            <MaxCard class="flex flex-col pb-4">
+              <div
+                class="flex justify-between px-4 py-3 text-sm rounded-t-lg"
+                :class="
+                  restrictedProduct(product)
+                    ? 'bg-slate-200/50 dark:bg-slate-700 energy:bg-zinc-700'
+                    : ''
+                "
+              >
                 <div
                   class="grid grid-cols-2 gap-3 md:gap-0 md:flex md:space-x-8 lg:space-x-10 self-center"
                 >
@@ -146,42 +180,14 @@
                     >
                   </div>
                 </div>
-                <div class="hidden lg:flex space-x-4">
-                  <router-link
-                    :to="{
-                      name: 'edit',
-                      params: {
-                        date: routeDate,
-                        id: product.id,
-                        doc_num: product.doc_num,
-                      },
-                    }"
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                  >
-                    <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
-                      >Edit</span
-                    >
-                  </router-link>
-                  <button
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                    @click.prevent="openPreviewDialog(product)"
-                  >
-                    <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
-                      class="pl-3"
-                      >Preview</span
-                    >
-                  </button>
-                  <button
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                    @click.prevent="openDeleteDialog(product)"
-                  >
-                    <TrashIcon class="h-5 w-5" /><span class="pl-3"
-                      >Delete</span
-                    >
-                  </button>
-                </div>
-                <div class="flex h-fit lg:hidden space-x-4">
-                  <tippy content="Edit Product">
+                <template v-if="restrictedProduct(product)">
+                  <MaxProductIcon
+                    class="w-12 h-12 bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
+                    icon="locked"
+                  />
+                </template>
+                <template v-else>
+                  <div class="hidden lg:flex space-x-4">
                     <router-link
                       :to="{
                         name: 'edit',
@@ -191,29 +197,65 @@
                           doc_num: product.doc_num,
                         },
                       }"
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                     >
-                      <PencilSquareIcon class="h-6 w-6" />
+                      <PencilSquareIcon class="h-5 w-5" /><span class="pl-3"
+                        >Edit</span
+                      >
                     </router-link>
-                  </tippy>
-                  <tippy content="Preview Product">
                     <button
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                      aria-label="Preview product"
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       @click.prevent="openPreviewDialog(product)"
                     >
-                      <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                      <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
+                        class="pl-3"
+                        >Preview</span
+                      >
                     </button>
-                  </tippy>
-                  <tippy content="Delete Product"
-                    ><button
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                      aria-label="Delete product"
+                    <button
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       @click.prevent="openDeleteDialog(product)"
                     >
-                      <TrashIcon class="h-6 w-6" /></button
-                  ></tippy>
-                </div>
+                      <TrashIcon class="h-5 w-5" /><span class="pl-3"
+                        >Delete</span
+                      >
+                    </button>
+                  </div>
+                  <div class="flex h-fit lg:hidden space-x-4">
+                    <tippy content="Edit Product">
+                      <router-link
+                        :to="{
+                          name: 'edit',
+                          params: {
+                            date: routeDate,
+                            id: product.id,
+                            doc_num: product.doc_num,
+                          },
+                        }"
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      >
+                        <PencilSquareIcon class="h-6 w-6" />
+                      </router-link>
+                    </tippy>
+                    <tippy content="Preview Product">
+                      <button
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        aria-label="Preview product"
+                        @click.prevent="openPreviewDialog(product)"
+                      >
+                        <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                      </button>
+                    </tippy>
+                    <tippy content="Delete Product"
+                      ><button
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        aria-label="Delete product"
+                        @click.prevent="openDeleteDialog(product)"
+                      >
+                        <TrashIcon class="h-6 w-6" /></button
+                    ></tippy>
+                  </div>
+                </template>
               </div>
               <div
                 class="flex flex-col md:flex-row px-4 pt-4 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
@@ -233,15 +275,7 @@
                   />
                 </div>
                 <div>
-                  <router-link
-                    :to="{
-                      name:
-                        product.state === 'draft'
-                          ? 'product-preview'
-                          : 'product',
-                      params: { doc_num: product.doc_num },
-                    }"
-                  >
+                  <ProductRestrictedLink :product="getProductDetails(product)">
                     <h4
                       class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
                       :title="product.title"
@@ -253,7 +287,7 @@
                       }}
                       {{ product.title }}
                     </h4>
-                  </router-link>
+                  </ProductRestrictedLink>
                   <p class="hidden text-sm md:line-clamp-4 wrap-anywhere">
                     {{
                       product.summary_classif && product.summary_classif !== "X"
@@ -267,6 +301,107 @@
             </MaxCard>
           </template>
         </ul>
+        <MaxDialog
+          :isOpen="isTemplateDialogOpen"
+          :title="'Templates'"
+          class="max-w-[700px]"
+          @close="closeTemplateDialog"
+        >
+          <div class="pb-8">
+            <p class="font-semibold pb-2">What is a template?</p>
+            <p class="text-sm">
+              A template is a collection of prepopulated fields. When a template
+              is selected, a draft of the product will be created and stored in
+              our system with the template applied, so there is not a need to
+              save the product immediately.
+            </p>
+          </div>
+          <p class="font-semibold pb-2">Template Preview:</p>
+          <p class="text-sm pb-4">
+            Select a product type from the dropdown below to preview its
+            template contents:
+          </p>
+          <MaxListbox
+            v-model="selectedProductType"
+            :label="'Product Type'"
+            :items="availableProductTypes"
+            class="lg:w-1/2 pb-4"
+          />
+          <p class="italic text-sm pb-8">
+            Preview only shows fields that are prepopulated by the template
+          </p>
+          <div v-if="productContent" class="flex flex-col gap-y-4">
+            <div v-if="productContent.title" class="flex">
+              <p class="basis-1/5 font-semibold">Title:</p>
+              <p class="basis-4/5">{{ productContent.title }}</p>
+            </div>
+            <div v-if="productContent.summary" class="flex">
+              <p class="basis-1/5 font-semibold">Summary:</p>
+              <p class="basis-4/5">{{ productContent.summary }}</p>
+            </div>
+            <div v-if="productContent.topics" class="flex">
+              <p class="basis-1/5 font-semibold">Topics:</p>
+              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+            </div>
+            <div v-if="productContent.poc_info" class="flex">
+              <p class="basis-1/5 font-semibold">POC Info:</p>
+              <p class="basis-4/5">{{ productContent.poc_info }}</p>
+            </div>
+          </div>
+        </MaxDialog>
+        <MaxDialog
+          :isOpen="isProductTemplateDialogOpen"
+          :title="
+            productContent ? `${selectedProductType.displayName} Template` : ''
+          "
+          class="max-w-[700px]"
+          @close="closeProductTemplateDialog"
+        >
+          <p class="font-semibold pb-2">Template Preview:</p>
+          <p class="italic text-sm pb-8">
+            Preview only shows fields that are prepopulated by the template
+          </p>
+          <div v-if="productContent" class="flex flex-col gap-y-4">
+            <div v-if="productContent.title" class="flex">
+              <p class="basis-1/5 font-semibold">Title:</p>
+              <p class="basis-4/5">{{ productContent.title }}</p>
+            </div>
+            <div v-if="productContent.summary" class="flex">
+              <p class="basis-1/5 font-semibold">Summary:</p>
+              <p class="basis-4/5">{{ productContent.summary }}</p>
+            </div>
+            <div v-if="productContent.topics" class="flex">
+              <p class="basis-1/5 font-semibold">Topics:</p>
+              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+            </div>
+            <div v-if="productContent.poc_info" class="flex">
+              <p class="basis-1/5 font-semibold">POC Info:</p>
+              <p class="basis-4/5">{{ productContent.poc_info }}</p>
+            </div>
+          </div>
+          <div class="flex pt-8">
+            <input
+              id="hideDialog"
+              v-model="hideDialog"
+              type="checkbox"
+              name="hideDialog"
+              @change="saveHideDialog"
+            />
+            <label for="hideDialog" class="ml-2 text-sm"
+              >Do not show this again</label
+            >
+          </div>
+          <template #actions>
+            <MaxButton
+              color="secondary"
+              @click.prevent="closeProductTemplateDialog"
+              >Cancel</MaxButton
+            >
+            <MaxButton color="secondary" @click="goToArticle(productContent)">
+              Create
+            </MaxButton>
+          </template>
+        </MaxDialog>
         <MaxDialog
           :isOpen="isPreviewThumbnailDialogOpen"
           :title="'Thumbnail Preview'"
@@ -334,6 +469,8 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink";
+import { isProductLocked } from "@/helpers";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
 
@@ -343,6 +480,7 @@ export default {
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
     TrashIcon,
+    ProductRestrictedLink,
     ProductContent,
     ProductImage,
   },
@@ -373,26 +511,68 @@ export default {
         return articles.value;
       }
     };
+    const getProductDetails = (product) => {
+      if (process.env.NODE_ENV === "offline") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        return documentMatch.data;
+      } else {
+        axios
+          .get(`/preload/documents/${product.doc_num}.json`)
+          .then((response) => {
+            return response.data;
+          });
+      }
+    };
+    const restrictedProduct = (product) => {
+      if (isProductLocked(getProductDetails(product))) {
+        return true;
+      }
+      return false;
+    };
+
+    const selectedProductType = ref();
+    const productContent = computed(() => selectedProductType.value?.payload);
+    const isTemplateDialogOpen = ref(false);
+    const closeTemplateDialog = () => {
+      isTemplateDialogOpen.value = false;
+    };
+    const openTemplateDialog = () => {
+      selectedProductType.value = null;
+      isTemplateDialogOpen.value = true;
+    };
+    const hideDialog = ref();
+    const saveHideDialog = () => {
+      if (hideDialog.value) {
+        localStorage.setItem("dialogPreference", "hide");
+        const expire = dayjs().add(90, "day");
+        localStorage.setItem("expiryDate", expire);
+      } else {
+        localStorage.setItem("dialogPreference", "show");
+      }
+    };
+    const dialogPreference = ref(localStorage.getItem("dialogPreference"));
+    const isProductTemplateDialogOpen = ref(false);
+    const closeProductTemplateDialog = () => {
+      isProductTemplateDialogOpen.value = false;
+    };
+    const openProductTemplateDialog = (product) => {
+      selectedProductType.value = product;
+      isProductTemplateDialogOpen.value = true;
+    };
     const isPreviewDialogOpen = ref(false);
     const closePreviewDialog = () => {
       isPreviewDialogOpen.value = false;
     };
     const openPreviewDialog = (product) => {
-      console.log("product:", product);
       loadingPreview.value = true;
       if (process.env.NODE_ENV === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        previewProduct.value = documentMatch.data;
+        previewProduct.value = getProductDetails(product);
         setTimeout(() => (loadingPreview.value = false), 750);
       } else {
-        axios
-          .get(`/documents/${product.doc_num}/preview.json`)
-          .then((response) => {
-            loadingPreview.value = false;
-            previewProduct.value = response.data;
-          });
+        loadingPreview.value = false;
+        previewProduct.value = getProductDetails(product);
       }
       isPreviewDialogOpen.value = true;
     };
@@ -543,7 +723,7 @@ export default {
 
     const selectDate = () => {
       const date = dayjs(selectedDate.value).format("YYYY-MM-DD");
-      router.push({ name: "publish", params: { date } });
+      router.push({ name: "products", params: { date } });
     };
 
     const canEditProduct = (product) => {
@@ -570,6 +750,9 @@ export default {
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
+      if (dayjs().isAfter(localStorage.getItem("expiryDate"))) {
+        localStorage.setItem("dialogPreference", "show");
+      }
     });
 
     watch(
@@ -594,11 +777,24 @@ export default {
       showOnlyDrafts,
       drafts,
       filterArticles,
+      getProductDetails,
+      restrictedProduct,
       availableProductTypes,
       goToArticle,
       selectDate,
       canEditProduct,
       selectedArticle,
+      selectedProductType,
+      productContent,
+      isTemplateDialogOpen,
+      openTemplateDialog,
+      closeTemplateDialog,
+      hideDialog,
+      saveHideDialog,
+      dialogPreference,
+      isProductTemplateDialogOpen,
+      openProductTemplateDialog,
+      closeProductTemplateDialog,
       isPreviewDialogOpen,
       closePreviewDialog,
       openPreviewDialog,

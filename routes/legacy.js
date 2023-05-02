@@ -31,10 +31,6 @@ router.get("/get_dissem_orgs", function (req, res) {
   });
 });
 
-router.get("/daniel", function (req, res) {
-  res.redirect("/articles/");
-});
-
 router.get("/documents/:id.json", function (req, res) {
   Article.findById(req.params.id, function (error, article) {
     if (error) {

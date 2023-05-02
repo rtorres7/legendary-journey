@@ -10,12 +10,13 @@
         <div class="flex flex-col">
           <template v-for="(facet, facetIndex) in rows" :key="facet">
             <div :class="facetIndex > 4 && !expand ? 'hidden' : 'block'">
-              <button
+              <a
                 class="cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                tabindex="0"
                 @click="filter(facetType, facet.key)"
               >
                 {{ facet.name }}
-              </button>
+              </a>
               <span class="text-sm"> ({{ facet.count }}) </span>
             </div>
           </template>

@@ -408,7 +408,6 @@ export default {
     const loadingArticlesEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
     const loadingPublishedArticlesEnabled = ref(false);
-    const loadingSituationalAwarenessEnabled = ref(false);
     const sampleImageEnabled = ref(false);
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
@@ -424,15 +423,11 @@ export default {
     );
     const loadingResultsFromStore = computed(() => store.state.search.loading);
     const publishedArticleCountFromStore = computed(
-      () => store.state.daniel.articles.length
+      () => store.state.features.articles.length
     );
     const loadingPublishedArticlesFromStore = computed(
-      () => store.state.daniel.loading
+      () => store.state.features.loading
     );
-    const loadingSituationalAwarenessFromStore = computed(
-      () => store.state.feeds.loading
-    );
-    const feedCountFromStore = computed(() => store.state.feeds.results.length);
     const adminFromStore = computed(() => store.state.testConsole.admin);
     const sampleImageFromStore = computed(
       () => store.state.testConsole.sampleImage
@@ -490,19 +485,11 @@ export default {
     };
 
     const changePublishedArticleCount = (count) => {
-      store.dispatch("daniel/setDanielArticles", count);
-    };
-
-    const changeFeedCount = (count) => {
-      store.dispatch("feeds/setFeeds", count);
+      store.dispatch("features/setArticles", count);
     };
 
     watch(loadingPublishedArticlesEnabled, (enabled) => {
-      store.dispatch("daniel/setLoading", enabled);
-    });
-
-    watch(loadingSituationalAwarenessEnabled, (enabled) => {
-      store.dispatch("feeds/setLoading", enabled);
+      store.dispatch("features/setLoading", enabled);
     });
 
     watch(adminEnabled, (enabled) => {
@@ -530,10 +517,6 @@ export default {
       loadingPublishedArticlesEnabled.value = loading;
     });
 
-    watch(loadingSituationalAwarenessFromStore, (loading) => {
-      loadingSituationalAwarenessEnabled.value = loading;
-    });
-
     watch(adminFromStore, (status) => {
       adminEnabled.value = status;
     });
@@ -552,13 +535,10 @@ export default {
       loadingResultsEnabled,
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
-      loadingSituationalAwarenessEnabled,
       removeProductImage,
       changeProductImage,
       toggleNotificationToast,
       changePublishedArticleCount,
-      feedCountFromStore,
-      changeFeedCount,
       uploadFileName,
       adminEnabled,
       sampleImageEnabled,
