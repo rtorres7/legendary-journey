@@ -302,106 +302,6 @@
           </template>
         </ul>
         <MaxDialog
-          :isOpen="isTemplateDialogOpen"
-          :title="'Templates'"
-          class="max-w-[700px]"
-          @close="closeTemplateDialog"
-        >
-          <div class="pb-8">
-            <p class="font-semibold pb-2">What is a template?</p>
-            <p class="text-sm">
-              A template is a collection of prepopulated fields. When a template
-              is selected, a draft of the product will be created and stored in
-              our system with the template applied, so there is not a need to
-              save the product immediately.
-            </p>
-          </div>
-          <p class="font-semibold pb-2">Template Preview:</p>
-          <p class="text-sm pb-4">
-            Select a product type from the dropdown below to preview its
-            template contents:
-          </p>
-          <MaxListbox
-            v-model="selectedProductType"
-            :label="'Product Type'"
-            :items="availableProductTypes"
-            class="lg:w-1/2 pb-4"
-          />
-          <p class="italic text-sm pb-8">
-            Preview only shows fields that are prepopulated by the template
-          </p>
-          <div v-if="productContent" class="flex flex-col gap-y-4">
-            <div v-if="productContent.title" class="flex">
-              <p class="basis-1/5 font-semibold">Title:</p>
-              <p class="basis-4/5">{{ productContent.title }}</p>
-            </div>
-            <div v-if="productContent.summary" class="flex">
-              <p class="basis-1/5 font-semibold">Summary:</p>
-              <p class="basis-4/5">{{ productContent.summary }}</p>
-            </div>
-            <div v-if="productContent.topics" class="flex">
-              <p class="basis-1/5 font-semibold">Topics:</p>
-              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
-            </div>
-            <div v-if="productContent.poc_info" class="flex">
-              <p class="basis-1/5 font-semibold">POC Info:</p>
-              <p class="basis-4/5">{{ productContent.poc_info }}</p>
-            </div>
-          </div>
-        </MaxDialog>
-        <MaxDialog
-          :isOpen="isProductTemplateDialogOpen"
-          :title="
-            productContent ? `${selectedProductType.displayName} Template` : ''
-          "
-          class="max-w-[700px]"
-          @close="closeProductTemplateDialog"
-        >
-          <p class="font-semibold pb-2">Template Preview:</p>
-          <p class="italic text-sm pb-8">
-            Preview only shows fields that are prepopulated by the template
-          </p>
-          <div v-if="productContent" class="flex flex-col gap-y-4">
-            <div v-if="productContent.title" class="flex">
-              <p class="basis-1/5 font-semibold">Title:</p>
-              <p class="basis-4/5">{{ productContent.title }}</p>
-            </div>
-            <div v-if="productContent.summary" class="flex">
-              <p class="basis-1/5 font-semibold">Summary:</p>
-              <p class="basis-4/5">{{ productContent.summary }}</p>
-            </div>
-            <div v-if="productContent.topics" class="flex">
-              <p class="basis-1/5 font-semibold">Topics:</p>
-              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
-            </div>
-            <div v-if="productContent.poc_info" class="flex">
-              <p class="basis-1/5 font-semibold">POC Info:</p>
-              <p class="basis-4/5">{{ productContent.poc_info }}</p>
-            </div>
-          </div>
-          <div class="flex pt-8">
-            <input
-              id="hideDialog"
-              v-model="hideDialog"
-              type="checkbox"
-              name="hideDialog"
-            />
-            <label for="hideDialog" class="ml-2 text-sm"
-              >Do not show this again</label
-            >
-          </div>
-          <template #actions>
-            <MaxButton
-              color="secondary"
-              @click.prevent="closeProductTemplateDialog"
-              >Cancel</MaxButton
-            >
-            <MaxButton color="secondary" @click="goToArticle(productContent)">
-              Create
-            </MaxButton>
-          </template>
-        </MaxDialog>
-        <MaxDialog
           :isOpen="isPreviewThumbnailDialogOpen"
           :title="'Thumbnail Preview'"
           class="max-w-fit"
@@ -448,8 +348,108 @@
         </MaxDialog>
       </template>
       <template v-else>
-        <p class="pt-2 italic">No articles found.</p>
+        <p class="pt-2 italic">No products found.</p>
       </template>
+      <MaxDialog
+        :isOpen="isTemplateDialogOpen"
+        :title="'Templates'"
+        class="max-w-[700px]"
+        @close="closeTemplateDialog"
+      >
+        <div class="pb-8">
+          <p class="font-semibold pb-2">What is a template?</p>
+          <p class="text-sm">
+            A template is a collection of prepopulated fields. When a template
+            is selected, a draft of the product will be created and stored in
+            our system with the template applied, so there is not a need to save
+            the product immediately.
+          </p>
+        </div>
+        <p class="font-semibold pb-2">Template Preview:</p>
+        <p class="text-sm pb-4">
+          Select a product type from the dropdown below to preview its template
+          contents:
+        </p>
+        <MaxListbox
+          v-model="selectedProductType"
+          :label="'Product Type'"
+          :items="availableProductTypes"
+          class="lg:w-1/2 pb-4"
+        />
+        <p class="italic text-sm pb-8">
+          Preview only shows fields that are prepopulated by the template
+        </p>
+        <div v-if="productContent" class="flex flex-col gap-y-4">
+          <div v-if="productContent.title" class="flex">
+            <p class="basis-1/5 font-semibold">Title:</p>
+            <p class="basis-4/5">{{ productContent.title }}</p>
+          </div>
+          <div v-if="productContent.summary" class="flex">
+            <p class="basis-1/5 font-semibold">Summary:</p>
+            <p class="basis-4/5">{{ productContent.summary }}</p>
+          </div>
+          <div v-if="productContent.topics" class="flex">
+            <p class="basis-1/5 font-semibold">Topics:</p>
+            <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+          </div>
+          <div v-if="productContent.poc_info" class="flex">
+            <p class="basis-1/5 font-semibold">POC Info:</p>
+            <p class="basis-4/5">{{ productContent.poc_info }}</p>
+          </div>
+        </div>
+      </MaxDialog>
+      <MaxDialog
+        :isOpen="isProductTemplateDialogOpen"
+        :title="
+          productContent ? `${selectedProductType.displayName} Template` : ''
+        "
+        class="max-w-[700px]"
+        @close="closeProductTemplateDialog"
+      >
+        <p class="font-semibold pb-2">Template Preview:</p>
+        <p class="italic text-sm pb-8">
+          Preview only shows fields that are prepopulated by the template
+        </p>
+        <div v-if="productContent" class="flex flex-col gap-y-4">
+          <div v-if="productContent.title" class="flex">
+            <p class="basis-1/5 font-semibold">Title:</p>
+            <p class="basis-4/5">{{ productContent.title }}</p>
+          </div>
+          <div v-if="productContent.summary" class="flex">
+            <p class="basis-1/5 font-semibold">Summary:</p>
+            <p class="basis-4/5">{{ productContent.summary }}</p>
+          </div>
+          <div v-if="productContent.topics" class="flex">
+            <p class="basis-1/5 font-semibold">Topics:</p>
+            <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+          </div>
+          <div v-if="productContent.poc_info" class="flex">
+            <p class="basis-1/5 font-semibold">POC Info:</p>
+            <p class="basis-4/5">{{ productContent.poc_info }}</p>
+          </div>
+        </div>
+        <div class="flex pt-8">
+          <input
+            id="hideDialog"
+            v-model="hideDialog"
+            type="checkbox"
+            name="hideDialog"
+          />
+          <label for="hideDialog" class="ml-2 text-sm"
+            >Do not show this again</label
+          >
+        </div>
+        <template #actions>
+          <MaxButton
+            color="secondary"
+            @click.prevent="closeProductTemplateDialog"
+            >Cancel</MaxButton
+          >
+          <MaxButton color="secondary" @click="goToArticle(productContent)">
+            Create
+          </MaxButton>
+        </template>
+      </MaxDialog>
     </div>
   </template>
 </template>
