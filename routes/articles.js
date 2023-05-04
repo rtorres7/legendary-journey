@@ -221,21 +221,20 @@ async function updateArticle(id, req, res) {
   Article.findByIdAndUpdate(
     { _id: id },
     article,
-    function (error, article) {
+    function (error, updatedArticle) {
       if (error) {
         console.error(error);
       }
 
-      console.error("the article is ", article);
-
       (async () => {
-        await indexService.create(article.indexable);
+
+        await indexService.update(updatedArticle.indexable);
         res.send({
           success: true,
-          article: article,
-          date: article.date_published,
-          doc_num: article._id,
-          id: article._id,
+          article: updatedArticle,
+          date: updatedArticle.date_published,
+          doc_num: updatedArticle._id,
+          id: updatedArticle._id,
           state: "draft",
         });
       })();

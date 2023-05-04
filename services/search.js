@@ -1,5 +1,5 @@
 const { Client } = require("@elastic/elasticsearch");
-const constant = require("./util/constant");
+const constant = require("../util/constant.js");
 
 class SearchService {
   constructor() {
@@ -8,14 +8,12 @@ class SearchService {
   }
 
   async search(term) {
-    const result = await client.search({
+    return await this.client.search({
       index: this.index,
       query: {
         match: { html_body: term },
       },
     });
-    console.log(result.hits.hits);
-    return result;
   }
 }
 

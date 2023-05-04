@@ -9,6 +9,7 @@ var homeRouter = require("./routes/home");
 var legacyRouter = require("./routes/legacy");
 var articlesRouter = require("./routes/articles");
 var usersRouter = require("./routes/users");
+var searchRouter = require("./routes/search");
 
 const constant = require("./util/constant");
 
@@ -47,7 +48,7 @@ db.on("error", function (error) {
   }
 });
 
-db.once("open", function (callback) {
+db.once("open", function () {
   console.log("Connection Succeeded");
 });
 
@@ -56,7 +57,7 @@ var esClient = new elasticsearch.Client({
   node: "http://elasticsearch:9200",
 });
 
-esClient.cluster.health({}, function (err, resp, status) {
+esClient.cluster.health({}, function (err, resp) {
   if (err) {
     console.log("-- ES Client Health ERROR --", err);
   } else {
@@ -95,5 +96,6 @@ app.use("/my_wire", legacyRouter);
 app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
 app.use("/special_editions", legacyRouter);
+app.use("/search", searchRouter);
 
 module.exports = app;
