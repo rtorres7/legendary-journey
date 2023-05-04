@@ -80,12 +80,12 @@
           role="button"
           :aria-label="`Create a ${product.displayName}`"
           @click="
-            dialogPreference == 'hide' || hideDialog
+            dialogPreference == 'hide'
               ? goToArticle(product.payload)
               : openProductTemplateDialog(product)
           "
           @keyup.enter="
-            dialogPreference == 'hide' || hideDialog
+            dialogPreference == 'hide'
               ? goToArticle(product.payload)
               : openProductTemplateDialog(product)
           "
@@ -385,7 +385,6 @@
               v-model="hideDialog"
               type="checkbox"
               name="hideDialog"
-              @change="saveHideDialog"
             />
             <label for="hideDialog" class="ml-2 text-sm"
               >Do not show this again</label
@@ -697,6 +696,7 @@ export default {
         payload = { ...defaultPayload };
       }
       payload["wire_id"] = dayjs(selectedDate.value).format("YYYY-MM-DD");
+      saveHideDialog();
       if (process.env.NODE_ENV === "offline") {
         router.push({
           name: "edit",
