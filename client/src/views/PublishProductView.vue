@@ -497,6 +497,7 @@ export default {
     const articles = computed(() => store.state.wires.articles);
     const loadingArticles = computed(() => store.state.wires.loading);
     const createNotification = inject("create-notification");
+    const $cookies = inject("$cookies");
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
@@ -553,14 +554,10 @@ export default {
     const hideDialog = ref();
     const saveHideDialog = () => {
       if (hideDialog.value) {
-        localStorage.setItem("dialogPreference", "hide");
-        const expire = dayjs().add(90, "day");
-        localStorage.setItem("expiryDate", expire);
-      } else {
-        localStorage.setItem("dialogPreference", "show");
+        $cookies.set("templateDialogs", "hide", "90d");
       }
     };
-    const dialogPreference = ref(localStorage.getItem("dialogPreference"));
+    const dialogPreference = ref($cookies.get("templateDialogs"));
     const isProductTemplateDialogOpen = ref(false);
     const closeProductTemplateDialog = () => {
       isProductTemplateDialogOpen.value = false;
@@ -759,9 +756,6 @@ export default {
     onMounted(() => {
       store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
-      if (dayjs().isAfter(localStorage.getItem("expiryDate"))) {
-        localStorage.setItem("dialogPreference", "show");
-      }
     });
 
     watch(
