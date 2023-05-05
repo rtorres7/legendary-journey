@@ -8,12 +8,12 @@ class IndexService {
   }
 
   async create(product) {
-    const { document } = await this.client.index({
+    await this.client.index({
       index: this.index,
       id: product.id,
       document: product,
     });
-    return document;
+
   }
 
   async refresh() {
@@ -24,11 +24,10 @@ class IndexService {
   }
 
   async getById(id) {
-    const document = await this.client.get({
+    return await this.client.get({
       index: this.index,
       id: id,
     });
-    return document;
   }
 
   async update(product) {
@@ -37,7 +36,7 @@ class IndexService {
       id: product.id,
       body: {
         doc: {
-          product,
+          ...product,
         },
       },
     });
