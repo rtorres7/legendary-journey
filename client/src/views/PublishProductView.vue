@@ -535,16 +535,12 @@ export default {
     const selectedProductType = ref();
     const productContent = computed(() => selectedProductType.value?.payload);
     const getTopicNames = (product) => {
-      if (product.topics.length > 0) {
-        const topics = [];
-        product.topics.forEach((topic) => {
-          let topicValue = getValueForCode(criteria.value.topics, topic);
-          topics.push(topicValue.name);
-        });
-        return topics.join(", ");
-      } else {
-        return;
-      }
+      const topics = [];
+      product.topics.forEach((topic) => {
+        let topicValue = getValueForCode(criteria.value.topics, topic);
+        topics.push(topicValue.name);
+      });
+      return topics.join(", ");
     };
     const isTemplateDialogOpen = ref(false);
     const closeTemplateDialog = () => {
@@ -771,7 +767,7 @@ export default {
     watch(
       () => route.query,
       () => {
-        if (route.name === "publish") {
+        if (route.name === "products") {
           store.dispatch("wires/getWireByDate", route.params.date);
           selectedDate.value = dayjs(route.params.date).toDate();
         }
