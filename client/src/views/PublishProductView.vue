@@ -390,7 +390,7 @@
           </div>
           <div v-if="productContent.topics" class="flex">
             <p class="basis-1/5 font-semibold">Topics:</p>
-            <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+            <p class="basis-4/5">{{ getTopicNames(productContent) }}</p>
           </div>
           <div v-if="productContent.poc_info" class="flex">
             <p class="basis-1/5 font-semibold">POC Info:</p>
@@ -421,7 +421,7 @@
           </div>
           <div v-if="productContent.topics" class="flex">
             <p class="basis-1/5 font-semibold">Topics:</p>
-            <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
+            <p class="basis-4/5">{{ getTopicNames(productContent) }}</p>
           </div>
           <div v-if="productContent.poc_info" class="flex">
             <p class="basis-1/5 font-semibold">POC Info:</p>
@@ -472,6 +472,7 @@ import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import { isProductLocked } from "@/helpers";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
+import { getValueForCode } from "@/helpers";
 
 export default {
   components: {
@@ -533,6 +534,18 @@ export default {
 
     const selectedProductType = ref();
     const productContent = computed(() => selectedProductType.value?.payload);
+    const getTopicNames = (product) => {
+      if (product.topics.length > 0) {
+        const topics = [];
+        product.topics.forEach((topic) => {
+          let topicValue = getValueForCode(criteria.value.topics, topic);
+          topics.push(topicValue.name);
+        });
+        return topics.join(", ");
+      } else {
+        return;
+      }
+    };
     const isTemplateDialogOpen = ref(false);
     const closeTemplateDialog = () => {
       isTemplateDialogOpen.value = false;
@@ -786,6 +799,7 @@ export default {
       selectedArticle,
       selectedProductType,
       productContent,
+      getTopicNames,
       isTemplateDialogOpen,
       openTemplateDialog,
       closeTemplateDialog,
