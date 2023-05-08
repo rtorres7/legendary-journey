@@ -33,7 +33,7 @@
       />
     </transition-group>
     <button class="skipLink" @click="skipToMain">Skip to main content</button>
-    <TheBanner v-if="!['attachment'].includes($route.name)" />
+    <!-- <TheBanner v-if="!['attachment'].includes($route.name)" /> -->
     <main
       role="main"
       class="bg-white dark:bg-slate-900 energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
@@ -66,11 +66,7 @@
           </template>
         </ul>
       </template>
-      <div
-        ref="mainContent"
-        class="max-w-8xl min-h-[80vh] md:min-h-[88vh] lg:min-h-[65vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
-        tabindex="-1"
-      >
+      <div ref="mainContent" class="" tabindex="-1">
         <template v-if="loadingUser">
           <div class="max-w-fit m-auto mt-[30vh]">
             <MaxLoadingSpinner class="w-32 h-32" />
@@ -80,11 +76,10 @@
           <AuthorizatonWrapper>
             <router-view />
           </AuthorizatonWrapper>
-          <ScrollToTopButton />
         </template>
       </div>
     </main>
-    <TheFooter v-if="!['attachment'].includes($route.name)" />
+    <!-- <TheFooter v-if="!['attachment'].includes($route.name)" /> -->
   </div>
 </template>
 
@@ -96,18 +91,16 @@ import { useCookies } from "vue3-cookies";
 import { reject } from "lodash";
 import useNotifications from "@/composables/notifications";
 import AuthorizatonWrapper from "@/components/AuthorizationWrapper.vue";
-import ScrollToTopButton from "@/components/ScrollToTopButton.vue";
-import TheBanner from "@/components/TheBanner.vue";
-import TheFooter from "@/components/TheFooter.vue";
+//import TheBanner from "@/components/TheBanner.vue";
+//mport TheFooter from "@/components/TheFooter.vue";
 import ToastNotification from "@/components/ToastNotification.vue";
 import { MegaphoneIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
     AuthorizatonWrapper,
-    ScrollToTopButton,
-    TheBanner,
-    TheFooter,
+    //TheBanner,
+    //TheFooter,
     ToastNotification,
     MegaphoneIcon,
     XMarkIcon,
