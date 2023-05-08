@@ -55,12 +55,84 @@
       >
         <div>Search</div>
         <div>
+          <!-- Theme dropdown -->
+          <Menu as="div" class="hidden lg:block relative">
+            <div>
+              <tippy content="Themes">
+                <MenuButton
+                  class="max-w-xs flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  :class="
+                    selectedTheme === 'system'
+                      ? 'text-slate-400'
+                      : 'text-amber-300 dark:text-teal-400 energy:text-energy-yellow'
+                  "
+                >
+                  <span class="sr-only"
+                    >Open menu for toggling color palettes.</span
+                  >
+                  <template v-if="selectedTheme === 'dark'">
+                    <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else-if="selectedTheme === 'energy'">
+                    <BoltIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                  <template v-else-if="selectedTheme === 'system'">
+                    <template v-if="isDark">
+                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <SunIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </template>
+                  <template v-else>
+                    <SunIcon class="h-6 w-6" aria-hidden="true" />
+                  </template>
+                </MenuButton>
+              </tippy>
+            </div>
+            <transition
+              enterActiveClass="transition ease-out duration-100"
+              enterFromClass="transform opacity-0 scale-95"
+              enterToClass="transform opacity-100 scale-100"
+              leaveActiveClass="transition ease-in duration-75"
+              leaveFromClass="transform opacity-100 scale-100"
+              leaveToClass="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b border-slate-700/50 energy:border-zinc-700/50"
+              >
+                <MenuItem v-for="item in themeOptions" :key="item">
+                  <a
+                    :class="isActive(item)"
+                    class="py-1 px-2 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center space-x-2 cursor-pointer"
+                    @click="changeTheme(item)"
+                  >
+                    <template v-if="item === 'light'">
+                      <SunIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'dark'">
+                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'energy'">
+                      <BoltIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else-if="item === 'system'">
+                      <ComputerDesktopIcon
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      /> </template
+                    ><span class="capitalize">{{ item }}</span></a
+                  >
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
           <!-- Profile dropdown -->
-          <Menu as="div" class="hidden lg:block ml-3 relative text-gray-600">
+          <Menu as="div" class="hidden lg:block ml-3 relative">
             <div>
               <tippy content="User Menu">
                 <MenuButton
-                  class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-none focus:ring-gray-600"
+                  class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-none focus:ring-gray-600"
                 >
                   <span class="sr-only">Open user menu.</span>
                   <UserCircleIcon class="h-8 w-8" aria-hidden="true" />
@@ -76,32 +148,23 @@
               leaveToClass="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-52 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold border-x border-b border-slate-700/50"
+                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-black ring-opacity-5 focus:outline-none text-sm"
               >
                 <MenuItem>
                   <router-link
                     to="/"
-                    class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80"
+                    class="flex cursor-pointer py-1 px-3 hover:bg-gray-100"
                   >
                     Alvaro Ramirez
                   </router-link>
                 </MenuItem>
                 <MenuItem>
                   <a
-                    class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80"
+                    class="flex cursor-pointer py-1 px-3 hover:bg-gray-100"
                     target="_blank"
                     >User Support
                   </a>
                 </MenuItem>
-                <template v-if="environment === 'offline'">
-                  <MenuItem>
-                    <a
-                      class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80"
-                      @click="openTestConsoleModal"
-                      >Test Console</a
-                    >
-                  </MenuItem>
-                </template>
               </MenuItems>
             </transition>
           </Menu>
