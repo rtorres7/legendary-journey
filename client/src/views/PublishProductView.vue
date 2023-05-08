@@ -473,6 +473,7 @@ import { isProductLocked } from "@/helpers";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
 import { getValueForCode } from "@/helpers";
+import { useCookies } from "vue3-cookies";
 
 export default {
   components: {
@@ -497,7 +498,7 @@ export default {
     const articles = computed(() => store.state.wires.articles);
     const loadingArticles = computed(() => store.state.wires.loading);
     const createNotification = inject("create-notification");
-    const $cookies = inject("$cookies");
+    const { cookies } = useCookies();
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
@@ -554,10 +555,10 @@ export default {
     const hideDialog = ref();
     const saveHideDialog = () => {
       if (hideDialog.value) {
-        $cookies.set("templateDialogs", "hide", "90d");
+        cookies.set("templateDialogs", "hide", "90d");
       }
     };
-    const dialogPreference = ref($cookies.get("templateDialogs"));
+    const dialogPreference = ref(cookies.get("templateDialogs"));
     const isProductTemplateDialogOpen = ref(false);
     const closeProductTemplateDialog = () => {
       isProductTemplateDialogOpen.value = false;
