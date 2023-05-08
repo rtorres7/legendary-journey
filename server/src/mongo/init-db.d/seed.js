@@ -319,7 +319,6 @@ db.articles.insertMany([
     fisa_role: null,
     has_attachment: true,
     highlightAttachmentText: "",
-    html_body: "",
     html_body: [
       "(U) Kyiv, Ukraine – The speed of the Ukrainian military’s counteroffensive in the eastern Kharkiv region is nothing short of breakneck.",
       "(U) Three dozen towns and villages have been liberated from the Russian forces who fled eastwards and offered little or no resistance, analysts say.",
@@ -903,7 +902,6 @@ db.articles.insertMany([
     fisa_role: null,
     has_attachment: true,
     highlightAttachmentText: "",
-    html_body: "",
     html_body: [
       "(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.",
       "(U) Charles gave the speech from Westminster Hall in London in a traditional ceremony in which lawmakers expressed their condolences upon the death of Queen Elizabeth II. She died Thursday at age 96.",
