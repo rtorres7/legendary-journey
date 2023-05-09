@@ -275,7 +275,7 @@
                   />
                 </div>
                 <div>
-                  <ProductRestrictedLink :product="getProductDetails(product)">
+                  <ProductRestrictedLink :product="product">
                     <h4
                       class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
                       :title="product.title"
@@ -460,7 +460,7 @@ import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { computed, inject, ref, onMounted, watch } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import {
@@ -511,21 +511,8 @@ export default {
         return articles.value;
       }
     };
-    const getProductDetails = async (product) => {
-      if (process.env.NODE_ENV === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        return documentMatch.data;
-      } else {
-        let res = await axios
-          .get(`/preload/documents/${product.doc_num}.json`);
-        return res.data;
-      }
-    };
 
-    const restrictedProduct = async (product) => {
-      let productDetails = await getProductDetails(product);
+    const restrictedProduct = (productDetails) => {
       return isProductLocked(productDetails);
     };
 
@@ -565,11 +552,18 @@ export default {
     const openPreviewDialog = (product) => {
       loadingPreview.value = true;
       if (process.env.NODE_ENV === "offline") {
-        previewProduct.value = getProductDetails(product);
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        previewProduct.value = documentMatch.data;
         setTimeout(() => (loadingPreview.value = false), 750);
       } else {
-        loadingPreview.value = false;
-        previewProduct.value = getProductDetails(product);
+        axios
+          .get(`/preload/documents/${product.doc_num}.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
       }
       isPreviewDialogOpen.value = true;
     };
@@ -745,7 +739,7 @@ export default {
     };
 
     onMounted(() => {
-      store.dispatch("wires/getWireByDate", route.params.date);
+      store.dispatch("wires/getWireByDate", route.params.date)
       selectedDate.value = dayjs(route.params.date).toDate();
       if (dayjs().isAfter(localStorage.getItem("expiryDate"))) {
         localStorage.setItem("dialogPreference", "show");
@@ -774,7 +768,6 @@ export default {
       showOnlyDrafts,
       drafts,
       filterArticles,
-      getProductDetails,
       restrictedProduct,
       availableProductTypes,
       goToArticle,
