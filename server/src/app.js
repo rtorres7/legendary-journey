@@ -4,7 +4,7 @@ var cookieParser = require("cookie-parser");
 const cors = require("cors");
 var logger = require("morgan");
 
-var indexRouter = require("./routes/index");
+var indexRouter = require("./routes");
 var homeRouter = require("./routes/home");
 var legacyRouter = require("./routes/legacy");
 var articlesRouter = require("./routes/articles");

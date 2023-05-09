@@ -18,13 +18,13 @@ services:
 
   server:
     build:
-      context: ./
+      context: ./server
       dockerfile: Dockerfile
     ports:
       - 3000:3000
     restart: always
     volumes:
-      - ./:/data
+      - ./server:/data
       - /data/node_modules
     depends_on:
       elasticsearch:
@@ -34,7 +34,7 @@ services:
     container_name: server
 
   server-database:
-    build: ./mongo
+    build: server/src/mongo
     ports:
       - 27017:27017
     restart: always

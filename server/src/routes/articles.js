@@ -7,7 +7,7 @@ dayjs.extend(utc);
 var Article = require("../models/articles");
 var Metadata = require("../models/metadata");
 
-const IndexService = require("../services/index.js");
+const IndexService = require("../services");
 const indexService = new IndexService();
 
 // GET

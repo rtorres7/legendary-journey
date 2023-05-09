@@ -4,7 +4,7 @@ var router = express.Router();
 var Metadata = require("../models/metadata");
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
   res.render("index", { title: "Express" });
 });
 router.get("/metadata", function (req, res) {
