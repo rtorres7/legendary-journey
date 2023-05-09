@@ -266,9 +266,7 @@
         <div
           class="flex flex-col p-8 text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
         >
-          <div
-            class="max-w-[450px] sm:max-w-[685px] lg:max-w-[950px] xl:max-w-[1100px] 2xl:max-w-[1500px] 3xl:max-w-[1600px] w-full"
-          >
+          <div class="max-w-[475px] sm:max-w-[1600px] w-full">
             <div class="text-2xl text-gray-700">Alvaro's Workspace</div>
             <div class="text-gray-400 text-sm">
               <p class="hidden 3xl:block">3XL Mode 1800px</p>
@@ -288,7 +286,7 @@
                 <ChevronRightIcon class="h-4 w-4" />
               </div>
             </div>
-            <div
+            <!-- <div
               class="grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-6"
             >
               <div
@@ -318,6 +316,48 @@
                   </div>
                 </div>
               </div>
+            </div> -->
+            <div
+              class="grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <template v-for="n in 4" :key="n">
+                <div
+                  class="bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg cursor-pointer"
+                >
+                  <div class="max-h-[261px]">
+                    <img src="@/assets/mocks/16x9_001_astronaut.jpg" alt="" />
+                  </div>
+                  <div class="flex flex-col py-3">
+                    <div class="relative pb-6 pl-3 pr-5">
+                      <p
+                        class="font-semibold text-gray-700 line-clamp-2"
+                        title="(U) Astronaut Buzz Aldrin named honorary brigadier general,
+                        member of Space Force"
+                      >
+                        <span class="font-medium text-gray-500">(U)</span>
+                        Astronaut Buzz Aldrin named honorary brigadier general,
+                        member of Space Force
+                      </p>
+                      <div
+                        class="text-gray-500 hover:text-gray-900 absolute top-0 right-0"
+                      >
+                        <EllipsisVerticalIcon class="h-6 w-6" />
+                      </div>
+                    </div>
+                    <div
+                      class="flex justify-between px-3 text-sm text-gray-500"
+                    >
+                      <div class="flex space-x-4">
+                        <div>4 days ago</div>
+                        <div class="text-blue-700 font-medium">
+                          Space Travel
+                        </div>
+                      </div>
+                      <div>101k views</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </div>
