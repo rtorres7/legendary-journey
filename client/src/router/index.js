@@ -10,7 +10,7 @@ import SearchView from "../views/SearchView.vue";
 import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
-import MockProductsView from "../views/MockProductsView.vue";
+import MockWorkspaceView from "../views/MockWorkspaceView.vue";
 
 const routes = [
   {
@@ -130,11 +130,11 @@ const routes = [
 
 if (process.env.NODE_ENV === "offline") {
   routes.push({
-    path: "/products",
-    name: "products",
-    component: MockProductsView,
+    path: "/workspace",
+    name: "workspace",
+    component: MockWorkspaceView,
     meta: {
-      title: "Products",
+      title: "Workspace",
     },
   });
 }
