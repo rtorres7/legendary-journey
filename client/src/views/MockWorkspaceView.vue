@@ -299,7 +299,7 @@
                 >
                   <img src="@/assets/mocks/16x9_001_astronaut.jpg" alt="" />
                 </div>
-                <div class="flex flex-col p-4 justify-between">
+                <div class="flex flex-col pt-3 px-3 justify-between">
                   <div class="pb-8">
                     <p class="font-medium text-gray-700">
                       <span class="text-gray-400">(U)</span> Astronaut Buzz
