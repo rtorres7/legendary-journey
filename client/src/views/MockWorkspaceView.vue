@@ -292,22 +292,27 @@
               class="grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-6"
             >
               <div
-                class="bg-white rounded-md w-[432px] sm:w-[288px] md:w-[304px] lg:w-[288px] xl:w-[336px] 3xl:w-[368px] h-[432px] sm:h-[288px] md:h-[304px] lg:h-[288px] xl:h-[336px] 3xl:h-[368px] shadow-md"
+                class="bg-white rounded-md w-[432px] sm:w-[288px] md:w-[304px] lg:w-[288px] xl:w-[336px] 3xl:w-[368px] h-[432px] sm:h-[288px] md:h-[304px] lg:h-[288px] xl:h-[336px] 3xl:h-[368px] shadow-md hover:shadow-lg cursor-pointer"
               >
                 <div
                   class="h-[243px] sm:h-[162px] md:h-[171px] lg:h-[162px] xl:h-[189px] 3xl:h-[207px] bg-slate-600"
                 >
                   <img src="@/assets/mocks/16x9_001_astronaut.jpg" alt="" />
                 </div>
-                <div class="flex flex-col pt-3 px-3 justify-between">
-                  <div class="pb-8">
-                    <p class="font-medium text-gray-700">
-                      <span class="text-gray-400">(U)</span> Astronaut Buzz
-                      Aldrin named honorary brigadier general, member of Space
-                      Force
+                <div class="flex flex-col pt-3 justify-between">
+                  <div class="relative pb-8 pl-3 pr-5">
+                    <p class="font-semibold text-gray-700 line-clamp-3">
+                      <span class="font-medium text-gray-500">(U)</span>
+                      Astronaut Buzz Aldrin named honorary brigadier general,
+                      member of Space Force
                     </p>
+                    <div
+                      class="text-gray-500 hover:text-gray-900 absolute top-0 right-0"
+                    >
+                      <EllipsisVerticalIcon class="h-6 w-6" />
+                    </div>
                   </div>
-                  <div class="flex justify-between text-sm text-gray-500">
+                  <div class="flex justify-between px-3 text-sm text-gray-500">
                     <div>101k views</div>
                     <div>4 days ago</div>
                   </div>
@@ -328,6 +333,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   BookmarkIcon,
   ComputerDesktopIcon,
+  EllipsisVerticalIcon,
   FolderIcon,
   HomeIcon,
   MagnifyingGlassIcon,
@@ -348,6 +354,7 @@ export default {
     BookmarkIcon,
     ChevronRightIcon,
     ComputerDesktopIcon,
+    EllipsisVerticalIcon,
     FolderIcon,
     HomeIcon,
     MagnifyingGlassIcon,
