@@ -511,25 +511,22 @@ export default {
         return articles.value;
       }
     };
-    const getProductDetails = (product) => {
+    const getProductDetails = async (product) => {
       if (process.env.NODE_ENV === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );
         return documentMatch.data;
       } else {
-        axios
-          .get(`/preload/documents/${product.doc_num}.json`)
-          .then((response) => {
-            return response.data;
-          });
+        let res = await axios
+          .get(`/preload/documents/${product.doc_num}.json`);
+        return res.data;
       }
     };
-    const restrictedProduct = (product) => {
-      if (isProductLocked(getProductDetails(product))) {
-        return true;
-      }
-      return false;
+
+    const restrictedProduct = async (product) => {
+      let productDetails = await getProductDetails(product);
+      return isProductLocked(productDetails);
     };
 
     const selectedProductType = ref();
