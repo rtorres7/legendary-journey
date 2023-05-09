@@ -13,36 +13,55 @@
           <li>
             <tippy content="Workspace Home" placement="right">
               <div
-                class="text-gray-50 bg-slate-800/90 p-3 rounded cursor-pointer"
+                class="flex items-center justify-center my-auto text-gray-50 bg-slate-800/90 rounded cursor-pointer h-12 w-12"
               >
-                <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                <a>
+                  <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                </a>
+              </div>
+            </tippy>
+          </li>
+          <li>
+            <tippy content="My Products" placement="right">
+              <div
+                class="flex items-center justify-center my-auto hover:text-gray-50 hover:bg-slate-800/90 hover:rounded cursor-pointer h-12 w-12"
+              >
+                <a>
+                  <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                </a>
               </div>
             </tippy>
           </li>
           <li>
             <tippy content="Saved Products" placement="right">
               <div
-                class="hover:text-gray-50 hover:bg-slate-800/90 p-3 hover:rounded cursor-pointer"
+                class="flex items-center justify-center my-auto hover:text-gray-50 hover:bg-slate-800/90 hover:rounded cursor-pointer h-12 w-12"
               >
-                <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
+                <a>
+                  <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
+                </a>
               </div>
             </tippy>
           </li>
           <li>
             <tippy content="Favorites" placement="right">
               <div
-                class="hover:text-gray-50 hover:bg-slate-800/90 p-3 hover:rounded cursor-pointer"
+                class="flex items-center justify-center my-auto hover:text-gray-50 hover:bg-slate-800/90 hover:rounded cursor-pointer h-12 w-12"
               >
-                <StarIcon class="h-6 w-6" aria-hidden="true" />
+                <a>
+                  <StarIcon class="h-6 w-6" aria-hidden="true" />
+                </a>
               </div>
             </tippy>
           </li>
           <li>
             <tippy content="Collections" placement="right">
               <div
-                class="hover:text-gray-50 hover:bg-slate-800/90 p-3 hover:rounded cursor-pointer"
+                class="flex items-center justify-center my-auto hover:text-gray-50 hover:bg-slate-800/90 hover:rounded cursor-pointer h-12 w-12"
               >
-                <FolderIcon class="h-6 w-6" aria-hidden="true" />
+                <a>
+                  <FolderIcon class="h-6 w-6" aria-hidden="true" />
+                </a>
               </div>
             </tippy>
           </li>
@@ -278,45 +297,14 @@
               <p class="block sm:hidden">Less than SM mode</p>
             </div>
             <div class="py-6 flex justify-between items-center">
-              <div class="text-lg font-bold">Recent Products</div>
+              <div class="text-lg font-bold">My Recent Products</div>
               <div
                 class="flex items-center text-gray-500 text-sm font-semibold"
               >
-                <span>Saved Products</span>
+                <span>More Products</span>
                 <ChevronRightIcon class="h-4 w-4" />
               </div>
             </div>
-            <!-- <div
-              class="grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 xl:gap-6"
-            >
-              <div
-                class="bg-white rounded-md w-[432px] sm:w-[288px] md:w-[304px] lg:w-[288px] xl:w-[336px] 3xl:w-[368px] h-[432px] sm:h-[288px] md:h-[304px] lg:h-[288px] xl:h-[336px] 3xl:h-[368px] shadow-md hover:shadow-lg cursor-pointer"
-              >
-                <div
-                  class="h-[243px] sm:h-[162px] md:h-[171px] lg:h-[162px] xl:h-[189px] 3xl:h-[207px] bg-slate-600"
-                >
-                  <img src="@/assets/mocks/16x9_001_astronaut.jpg" alt="" />
-                </div>
-                <div class="flex flex-col pt-3 justify-between">
-                  <div class="relative pb-8 pl-3 pr-5">
-                    <p class="font-semibold text-gray-700 line-clamp-3">
-                      <span class="font-medium text-gray-500">(U)</span>
-                      Astronaut Buzz Aldrin named honorary brigadier general,
-                      member of Space Force
-                    </p>
-                    <div
-                      class="text-gray-500 hover:text-gray-900 absolute top-0 right-0"
-                    >
-                      <EllipsisVerticalIcon class="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div class="flex justify-between px-3 text-sm text-gray-500">
-                    <div>101k views</div>
-                    <div>4 days ago</div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
             <div
               class="grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
             >
@@ -429,6 +417,7 @@ import { useStore } from "vuex";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   BookmarkIcon,
+  BriefcaseIcon,
   ComputerDesktopIcon,
   EllipsisVerticalIcon,
   FolderIcon,
@@ -451,6 +440,7 @@ export default {
     MenuItem,
     MenuItems,
     BookmarkIcon,
+    BriefcaseIcon,
     ChevronRightIcon,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
