@@ -11,7 +11,7 @@
         </div>
         <ul class="py-2 mx-auto text-gray-400 space-y-1">
           <li>
-            <tippy content="Dashboard" placement="right">
+            <tippy content="Workspace Home" placement="right">
               <div
                 class="text-gray-50 bg-slate-800/90 p-3 rounded cursor-pointer"
               >
@@ -129,7 +129,7 @@
                   >
                     <MenuItem>
                       <router-link
-                        class="flex py-1 px-3 hover:bg-gray-100 cursor-pointer"
+                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         :to="{
                           name: 'publish',
                           params: {
@@ -143,7 +143,7 @@
                     <MenuItem>
                       <router-link
                         to="/special_editions"
-                        class="flex py-1 px-3 hover:bg-gray-100 cursor-pointer"
+                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                       >
                         Manage Special Editions
                       </router-link>
@@ -219,6 +219,7 @@
               </Menu>
             </div>
             <div class="pl-4 border-l border-slate-900/10">
+              <!-- Profile dropdown -->
               <Menu as="div" class="hidden md:block relative">
                 <div>
                   <tippy content="User Menu">
@@ -244,14 +245,14 @@
                     <MenuItem>
                       <router-link
                         to="/"
-                        class="flex cursor-pointer py-1 px-3 hover:bg-gray-100"
+                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
                       >
                         Alvaro Ramirez
                       </router-link>
                     </MenuItem>
                     <MenuItem>
                       <a
-                        class="flex cursor-pointer py-1 px-3 hover:bg-gray-100"
+                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
                         target="_blank"
                         >User Support
                       </a>
@@ -260,7 +261,6 @@
                 </transition>
               </Menu>
             </div>
-            <!-- Profile dropdown -->
           </div>
         </div>
         <div
@@ -341,7 +341,64 @@
                       <div
                         class="text-gray-500 hover:text-gray-900 absolute top-0 right-0"
                       >
-                        <EllipsisVerticalIcon class="h-6 w-6" />
+                        <Menu as="div" class="hidden md:block relative">
+                          <div>
+                            <tippy content="More" placement="bottom">
+                              <MenuButton
+                                class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                              >
+                                <span class="sr-only">More Options</span>
+                                <EllipsisVerticalIcon
+                                  class="h-6 w-6"
+                                  aria-hidden="true"
+                                />
+                              </MenuButton>
+                            </tippy>
+                          </div>
+                          <transition
+                            enterActiveClass="transition ease-out duration-100"
+                            enterFromClass="transform opacity-0 scale-95"
+                            enterToClass="transform opacity-100 scale-100"
+                            leaveActiveClass="transition ease-in duration-75"
+                            leaveFromClass="transform opacity-100 scale-100"
+                            leaveToClass="transform opacity-0 scale-95"
+                          >
+                            <MenuItems
+                              class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                            >
+                              <MenuItem>
+                                <div
+                                  class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                                >
+                                  <ShareIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                  /><span class="capitalize">Share</span>
+                                </div>
+                              </MenuItem>
+                              <MenuItem>
+                                <div
+                                  class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                                >
+                                  <BookmarkIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                  /><span class="capitalize">Save</span>
+                                </div>
+                              </MenuItem>
+                              <MenuItem>
+                                <div
+                                  class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                                >
+                                  <TrashIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                  /><span class="capitalize">Delete</span>
+                                </div>
+                              </MenuItem>
+                            </MenuItems>
+                          </transition>
+                        </Menu>
                       </div>
                     </div>
                     <div
@@ -378,8 +435,10 @@ import {
   HomeIcon,
   MagnifyingGlassIcon,
   MoonIcon,
+  ShareIcon,
   StarIcon,
   SunIcon,
+  TrashIcon,
   UserCircleIcon,
   WrenchIcon,
 } from "@heroicons/vue/24/outline";
@@ -399,8 +458,10 @@ export default {
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
+    ShareIcon,
     StarIcon,
     SunIcon,
+    TrashIcon,
     UserCircleIcon,
     WrenchIcon,
   },
