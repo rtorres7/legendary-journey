@@ -313,6 +313,7 @@
                       :label="'Produced By Organizations'"
                       :items="lists.producing_offices"
                       multiple
+                      required
                       @update:modelValue="
                         updateField($event, 'producing_offices', 'multiple')
                       "
@@ -1143,7 +1144,8 @@ export default {
         !form.value.summary ||
         !form.value.summaryClassificationXML ||
         !form.value.classificationXML ||
-        !form.value.publicationDate
+        !form.value.publicationDate ||
+        form.value.producing_offices.length === 0
       );
     });
 
