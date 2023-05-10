@@ -183,6 +183,13 @@ function getOfficesByCodes(codes, metadata) {
   return result;
 }
 
+function resolveProductType(productTypeId, metadata) {
+  const productTypes = metadata.criteria.product_types;
+  return productTypes.values.filter(productType => {
+    return productType.code === productTypeId;
+  })[0];
+}
+
 async function getMetadata() {
   return Metadata.findOne().lean();
 }
@@ -205,6 +212,7 @@ async function updateArticle(id, req, res) {
     topics: topics,
     countries: countries,
     date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
+    product_type: resolveProductType(req.body.product_type_id, metadata).name,
   };
 
   Article.findByIdAndUpdate(

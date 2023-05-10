@@ -8,7 +8,7 @@ const searchService = new SearchService();
 router.get("/", (req, res) => {
   const term = req.query.text;
   (async() => {
-    const results = await searchService.search(term);
+    const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir);
 
     const searchResult = {
       searchId: '',

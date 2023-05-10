@@ -7,9 +7,15 @@ class SearchService {
     this.index = "products";
   }
 
-  async search(term) {
+  async search(term, perPage=10, page=1, sortMethod='desc') {
+    const skipCount = (page - 1) * perPage;
+    const sortClause = this.buildSortClause(sortMethod);
+
     return await this.client.search({
       index: this.index,
+      from: skipCount,
+      size: perPage,
+      sort: [sortClause],
       query: {
         match: { html_body: term },
       },
@@ -19,6 +25,17 @@ class SearchService {
         }
       }
     });
+  }
+
+  buildSortClause(sortMethod) {
+    switch (sortMethod) {
+      case 'desc':
+        return { date_published: { order: 'desc' }};
+      case 'asc':
+        return { date_published: { order: 'asc' }};
+      default:
+        return { '_score': { order: 'desc' }};
+    }
   }
 }
 
