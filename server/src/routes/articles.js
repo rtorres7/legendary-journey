@@ -123,10 +123,7 @@ router.post("/", (req, res) => {
 
 // Fetch single post
 router.get("/:id/edit", (req, res) => {
-  Article.findById(
-    req.params.id,
-    "attributes coordinators coauthors producing_offices doc_num title title_classification summary summary_classification date_published countries topics product_type_id html_body dissem_orgs images poc_info",
-    function (error, article) {
+  Article.findById(req.params.id, function (error, article) {
       if (error) {
         console.error(error);
       }
@@ -204,23 +201,16 @@ async function updateArticle(id, req, res) {
   const topics = getTopicsByCodes(req.body.topics, metadata);
 
   const article = {
-    title: req.body.title,
-    summary: req.body.summary,
+    ...req.body,
     topics: topics,
     countries: countries,
-    dissem_orgs: req.body.dissem_orgs,
-    poc_info: req.body.poc_info,
-    html_body: req.body.html_body,
-    publication_number: req.body.publication_number,
-    wire_id: req.body.wire_id,
     date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
-    //state: "draft",
-    product_type_id: req.body.product_type_id,
   };
 
   Article.findByIdAndUpdate(
     { _id: id },
     article,
+    { new: true },
     function (error, updatedArticle) {
       if (error) {
         console.error(error);

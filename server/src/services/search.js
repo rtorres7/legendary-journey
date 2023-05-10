@@ -13,6 +13,11 @@ class SearchService {
       query: {
         match: { html_body: term },
       },
+      highlight: {
+        fields: {
+          html_body: {}
+        }
+      }
     });
   }
 }

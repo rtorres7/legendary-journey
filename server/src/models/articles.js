@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var ArticleSchema = new Schema(
+const ArticleSchema = new Schema(
   {
     _explanation: String,
     _score: Number,
@@ -56,7 +56,9 @@ var ArticleSchema = new Schema(
     issue_names: [],
     issues: [],
     "multimedia?": Boolean,
+    needed: {},
     non_state_actors: [],
+    org_restricted: Boolean,
     poa_product: Boolean,
     poc_attrib: String,
     poc_info: String,
@@ -138,10 +140,17 @@ ArticleSchema.virtual("attributes").get(function () {
   return {
     date_published: this.date_published,
     doc_num: this.get("_id"),
+    images: this.images,
+    needed: this.needed,
+    org_restricted: this.org_restricted,
+    product_type: this.product_type,
+    state: this.state,
     summary: this.summary,
     summary_classification: this.summary_classification,
+    summary_classif: this.summary_classif,
     title: this.title,
     title_classification: this.title_classification,
+    title_classif: this.title_classif,
   };
 });
 
@@ -166,9 +175,11 @@ ArticleSchema.virtual("indexable").get(function () {
     product_type: this.product_type,
     summary: this.summary,
     summary_classif: this.summary_classif,
+    summary_classification: this.summary_classif,
     summary_classif_xml: this.summary_classif_xml,
     title: this.title,
     title_classif: this.title_classif,
+    title_classification: this.title_classif,
     title_classif_xml: this.title_classif_xml,
     //topics: this.topics,
     worldwide: this.worldwide,
@@ -194,8 +205,10 @@ ArticleSchema.virtual("data.document").get(function () {
     producing_offices: this.producing_offices,
     product_type_id: this.product_type_id,
     publication_number: this.publication_number,
+    summary: this.summary,
     summary_classif: this.summary_classif,
     summary_classif_xml: this.summary_classif_xml,
+    title: this.title,
     title_classif: this.title_classif,
     title_classif_xml: this.title_classif_xml,
     topics: this.topics,
@@ -234,7 +247,9 @@ ArticleSchema.virtual("data.details").get(function () {
     id: this.get("_id"),
     image_caption: this.image_caption,
     multimedia: this.multimedia,
+    needed: this.needed,
     non_state_actors: this.non_state_actors,
+    org_restricted: this.org_restricted,
     pdb_conversion: this.pdb_conversion,
     poa_product: this.poa_product,
     poc_attrib: this.poc_attrib,
@@ -272,15 +287,6 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
-// ArticleSchema.set("toJSON", {
-//   virtuals: true,
-//   transform: (doc, ret, options) => {
-//     delete ret.__v;
-//     ret.id = ret._id.toString();
-//     delete ret._id;
-//   },
-// });
-
-var Article = mongoose.model("Article", ArticleSchema, "articles");
+const Article = mongoose.model("Article", ArticleSchema, "articles");
 
 module.exports = Article;
