@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 
     const searchResult = {
       searchId: '',
-      results: results.hits.hits.map((hit) => { return hit._source }),
+      results: results.hits.hits.map((hit) => { return { ...hit._source, highlighted_result: hit.highlight.html_body }}),
       aggregations: [],
       pages: Math.ceil(results.hits.total.value/req.query.per_page),
       totalCount: results.hits.total.value,

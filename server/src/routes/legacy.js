@@ -73,11 +73,10 @@ router.get("/:date_published/getWireByDate", function (req, res) {
             summary_classif: article.summary_classification,
             state: article.state,
           },
-          //data: { ...article.data },
         };
       });
 
-      res.send(articlesForWire);
+      res.send({ features: articlesForWire });
     }
   );
 });
