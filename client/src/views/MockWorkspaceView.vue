@@ -145,8 +145,8 @@
                   class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 px-2 py-1 flex justify-between"
                   :class="
                     slot.item.type === 'user'
-                      ? 'text-purple-800 dark:text-purple-300 energy:text-purple-300'
-                      : 'text-slate-800 dark:text-slate-300 energy:text-zinc-300'
+                      ? 'text-purple-800 '
+                      : 'text-slate-800'
                   "
                 >
                   <span
@@ -155,7 +155,7 @@
                   <template v-if="slot.item.type === 'user'">
                     <button @click="deleteSearch(slot.item)">
                       <XMarkIcon
-                        class="h-5 w-5 text-slate-800 dark:text-slate-300 energy:text-zinc-300"
+                        class="h-5 w-5 text-slate-800"
                         aria-hidden="true"
                       />
                     </button>
@@ -436,119 +436,8 @@
               <div
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
-                <template v-for="n in 4" :key="n">
-                  <div
-                    class="flex flex-col bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg cursor-pointer mb-2"
-                  >
-                    <div class="max-h-[261px]">
-                      <img src="@/assets/mocks/16x9_001_astronaut.jpg" alt="" />
-                    </div>
-                    <div class="h-full flex flex-col py-4 justify-between">
-                      <div class="relative pb-6 px-4">
-                        <div class="text-xs text-blue-700 font-medium pb-2">
-                          Space Travel
-                        </div>
-                        <p
-                          class="font-semibold text-gray-700 line-clamp-3"
-                          title="(U) Astronaut Buzz Aldrin named honorary brigadier general,
-                        member of Space Force"
-                        >
-                          <span class="font-medium text-gray-500">(U)</span>
-                          Astronaut Buzz Aldrin named honorary brigadier
-                          general, member of Space Force
-                        </p>
-                        <div
-                          class="text-gray-500 hover:text-gray-900 absolute top-0 right-0"
-                        >
-                          <Menu as="div" class="relative">
-                            <div>
-                              <tippy content="More" placement="bottom">
-                                <MenuButton
-                                  class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                                >
-                                  <span class="sr-only">More Options</span>
-                                  <EllipsisVerticalIcon
-                                    class="h-6 w-6"
-                                    aria-hidden="true"
-                                  />
-                                </MenuButton>
-                              </tippy>
-                            </div>
-                            <transition
-                              enterActiveClass="transition ease-out duration-100"
-                              enterFromClass="transform opacity-0 scale-95"
-                              enterToClass="transform opacity-100 scale-100"
-                              leaveActiveClass="transition ease-in duration-75"
-                              leaveFromClass="transform opacity-100 scale-100"
-                              leaveToClass="transform opacity-0 scale-95"
-                            >
-                              <MenuItems
-                                class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                              >
-                                <MenuItem>
-                                  <div
-                                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                                  >
-                                    <ShareIcon
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    /><span class="capitalize">Share</span>
-                                  </div>
-                                </MenuItem>
-                                <MenuItem>
-                                  <div
-                                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                                  >
-                                    <BookmarkIcon
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    /><span class="capitalize">Save</span>
-                                  </div>
-                                </MenuItem>
-                                <MenuItem>
-                                  <div
-                                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                                  >
-                                    <StarIcon
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    /><span class="capitalize">Favorite</span>
-                                  </div>
-                                </MenuItem>
-                                <MenuItem>
-                                  <div
-                                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                                  >
-                                    <PencilSquareIcon
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    /><span class="capitalize">Edit</span>
-                                  </div>
-                                </MenuItem>
-                                <MenuItem>
-                                  <div
-                                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                                  >
-                                    <TrashIcon
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    /><span class="capitalize">Delete</span>
-                                  </div>
-                                </MenuItem>
-                              </MenuItems>
-                            </transition>
-                          </Menu>
-                        </div>
-                      </div>
-                      <div class="px-4 text-sm text-gray-500">
-                        <div class="flex space-x-2">
-                          <div>4 days ago</div>
-                          <div>•</div>
-                          <div>101k views</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <template v-for="n in products.slice(0, 4)" :key="n">
+                  <MockProductCard :product="n" />
                 </template>
               </div>
               <div class="py-6 flex items-center">
@@ -564,7 +453,7 @@
                     <Square3Stack3DIcon class="h-5 w-5" />
                     <span class="text-sm font-normal"> Total Created</span>
                   </div>
-                  <div class="font-semibold text-xl text-slate-700">8</div>
+                  <div class="font-semibold text-xl text-slate-700">16</div>
                 </div>
                 <div
                   class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
@@ -573,8 +462,220 @@
                     <EyeIcon class="h-5 w-5" />
                     <span class="text-sm font-normal">Total Views</span>
                   </div>
-                  <div class="font-semibold text-xl text-slate-700">720</div>
+                  <div class="font-semibold text-xl text-slate-700">2.4m</div>
                 </div>
+              </div>
+            </div>
+            <!-- My Products View -->
+            <div :class="isActivePage('#products') ? 'block' : 'hidden'">
+              <div class="text-2xl text-gray-700">My Products</div>
+              <!-- <div class="text-gray-400 text-sm">
+                <p class="hidden 3xl:block">3XL Mode 1800px</p>
+                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+                <p class="block sm:hidden">Less than SM mode</p>
+              </div> -->
+              <div class="py-6 sm:flex justify-between items-center">
+                <div class="font-semibold mb-4 sm:mb-0">16 products</div>
+                <div class="flex space-x-4">
+                  <Listbox
+                    v-model="selectedSort"
+                    as="div"
+                    class="min-w-[215px] inline-flex items-center text-gray-700"
+                  >
+                    <div>
+                      <ListboxLabel
+                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                      >
+                        Sort By
+                      </ListboxLabel>
+                    </div>
+                    <div class="w-full relative items-center ml-3">
+                      <ListboxButton
+                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                      >
+                        <span class="text-sm block truncate capitalize">{{
+                          selectedSort.name
+                        }}</span>
+                        <span
+                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        >
+                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                        </span>
+                      </ListboxButton>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <ListboxOptions
+                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                        >
+                          <ListboxOption
+                            v-for="item in sortOptions"
+                            v-slot="{ active, selected }"
+                            :key="item.name"
+                            :value="item"
+                            as="template"
+                          >
+                            <li
+                              :class="[
+                                active ? 'bg-gray-100  ' : 'bg-none',
+                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                              ]"
+                            >
+                              <span
+                                :class="[
+                                  selected ? 'font-medium' : 'font-normal',
+                                  'block truncate text-sm',
+                                ]"
+                                >{{ item.name }}</span
+                              >
+                              <span
+                                v-if="selected"
+                                class="absolute inset-y-0 left-0 flex items-center pl-3"
+                              >
+                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            </li>
+                          </ListboxOption>
+                        </ListboxOptions>
+                      </transition>
+                    </div>
+                  </Listbox>
+                  <button
+                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                  >
+                    <span>Filters</span>
+                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+              >
+                <template v-for="n in products" :key="n">
+                  <MockProductCard :product="n" />
+                </template>
+              </div>
+            </div>
+            <div :class="isActivePage('#saved') ? 'block' : 'hidden'">
+              <div class="text-2xl text-gray-700">Saved Products</div>
+              <div class="py-6 sm:flex justify-between items-center">
+                <div class="font-semibold mb-4 sm:mb-0">16 products</div>
+                <div class="flex space-x-4">
+                  <Listbox
+                    v-model="selectedSort"
+                    as="div"
+                    class="min-w-[215px] inline-flex items-center text-gray-700"
+                  >
+                    <div>
+                      <ListboxLabel
+                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                      >
+                        Sort By
+                      </ListboxLabel>
+                    </div>
+                    <div class="w-full relative items-center ml-3">
+                      <ListboxButton
+                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                      >
+                        <span class="text-sm block truncate capitalize">{{
+                          selectedSort.name
+                        }}</span>
+                        <span
+                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        >
+                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                        </span>
+                      </ListboxButton>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <ListboxOptions
+                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                        >
+                          <ListboxOption
+                            v-for="item in sortOptions"
+                            v-slot="{ active, selected }"
+                            :key="item.name"
+                            :value="item"
+                            as="template"
+                          >
+                            <li
+                              :class="[
+                                active ? 'bg-gray-100  ' : 'bg-none',
+                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                              ]"
+                            >
+                              <span
+                                :class="[
+                                  selected ? 'font-medium' : 'font-normal',
+                                  'block truncate text-sm',
+                                ]"
+                                >{{ item.name }}</span
+                              >
+                              <span
+                                v-if="selected"
+                                class="absolute inset-y-0 left-0 flex items-center pl-3"
+                              >
+                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            </li>
+                          </ListboxOption>
+                        </ListboxOptions>
+                      </transition>
+                    </div>
+                  </Listbox>
+                  <button
+                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                  >
+                    <span>Filters</span>
+                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+              >
+                <template v-for="n in products" :key="n">
+                  <MockProductCard :product="n" />
+                </template>
+              </div>
+            </div>
+            <div :class="isActivePage('#favorites') ? 'block' : 'hidden'">
+              <div class="text-2xl text-gray-700">Favorites</div>
+              <div class="text-gray-400 text-sm">
+                <p class="hidden 3xl:block">3XL Mode 1800px</p>
+                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+                <p class="block sm:hidden">Less than SM mode</p>
+              </div>
+            </div>
+            <div :class="isActivePage('#collections') ? 'block' : 'hidden'">
+              <div class="text-2xl text-gray-700">Collections</div>
+              <div class="text-gray-400 text-sm">
+                <p class="hidden 3xl:block">3XL Mode 1800px</p>
+                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+                <p class="block sm:hidden">Less than SM mode</p>
               </div>
             </div>
           </div>
@@ -588,10 +689,23 @@ import * as dayjs from "dayjs";
 import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
+  Listbox,
+  ListboxLabel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/vue";
+import {
+  AdjustmentsHorizontalIcon,
   BookmarkIcon,
   BriefcaseIcon,
+  CheckIcon,
+  ChevronDownIcon,
   ComputerDesktopIcon,
   EllipsisVerticalIcon,
   FolderIcon,
@@ -612,15 +726,24 @@ import {
   EyeIcon,
   Square3Stack3DIcon,
 } from "@heroicons/vue/24/solid";
+import MockProductCard from "@/components/MockProductCard";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
+    Listbox,
+    ListboxLabel,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
     Menu,
     MenuButton,
     MenuItem,
     MenuItems,
+    AdjustmentsHorizontalIcon,
     BookmarkIcon,
     BriefcaseIcon,
+    CheckIcon,
+    ChevronDownIcon,
     ChevronRightIcon,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
@@ -638,6 +761,7 @@ export default {
     UserCircleIcon,
     WrenchIcon,
     XMarkIcon,
+    MockProductCard,
   },
   setup() {
     const store = useStore();
@@ -653,6 +777,162 @@ export default {
     }
     const selectedTheme = ref(localStorage.getItem("theme"));
     const currentHash = ref(window.location.hash || "#dashboard");
+    const sortOptions = [
+      { name: "Newest" },
+      { name: "Oldest" },
+      { name: "Most Views" },
+    ];
+    const products = [
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_001_astronaut.jpg",
+        type: "Current",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "6 days ago",
+        title: "Evacuations ordered as rock teeters over Swiss village",
+        src: "16x9_002_mountains.jpg",
+        type: "Foreign",
+        views: "3k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 week ago",
+        title: "U.S. Military Working to Rebuild Readiness and Modernize",
+        src: "16x9_003_soldier.jpg",
+        type: "CT Digest",
+        views: "7k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "2 weeks ago",
+        title:
+          "U.S State Department Issues New Travel Advisory Update For Peru",
+        src: "16x9_004_lima.jpg",
+        type: "Foreign",
+        views: "20k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "3 weeks ago",
+        title: "Ukraine Claims Gains Near Bakhmut as Deadly Fighting Continues",
+        src: "16x9_005_war.jpg",
+        type: "Threat Matrix",
+        views: "29k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 month ago",
+        title:
+          "ChatGPT and the new AI are wreaking havoc on cybersecurity in exciting and frightening ways",
+        src: "16x9_006_laptop.jpg",
+        type: "Current",
+        views: "48k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 month ago",
+        title:
+          "Wall Street tells Washington: Consequences of U.S. default or prolonged debt debate are 'unquantifiable'",
+        src: "16x9_007_wallstreet.jpg",
+        type: "Daily Brief",
+        views: "63k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "2 months ago",
+        title: "U.S. economy adds 253,000 jobs in April",
+        src: "16x9_008_usa.jpg",
+        type: "Current",
+        views: "101k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "2 months ago",
+        title: "Global super-rich head to Italy for tax breaks and dolce vita",
+        src: "16x9_009_village.jpg",
+        type: "Foreign",
+        views: "124k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "3 months ago",
+        title:
+          "Report finds ‘troubling’ trend of a lack of actionable information in data breaches",
+        src: "16x9_010_computer.jpg",
+        type: "Special Threat Matrix",
+        views: "158k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 months ago",
+        title:
+          "Photos: Bay Area shark expert captures rare scene in Point Reyes waters",
+        src: "16x9_011_shark.jpg",
+        type: "Current",
+        views: "186k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "6 months ago",
+        title: "Understanding the Economic Potential of the Metaverse",
+        src: "16x9_012_metaverse.jpg",
+        type: "Daily Brief",
+        views: "297k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "9 months ago",
+        title: "Confidence in housing market reaches highest level in a year",
+        src: "16x9_013_builder.jpg",
+        type: "Current",
+        views: "410k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 year ago",
+        title:
+          "WHO declares COVID-19 is no longer a global health emergency, warns of ongoing threat",
+        src: "16x9_014_covid.jpg",
+        type: "Special Threat Matrix",
+        views: "603k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 year ago",
+        title:
+          "Chinese spy balloon gathered intelligence from sensitive U.S. military sites, despite U.S. efforts to block it",
+        src: "16x9_015_china.jpg",
+        type: "CT Weekly",
+        views: "879k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "2 years ago",
+        title:
+          "Experts say AI could radically change ‘broken’ US education system for the better: ‘Ready to be disrupted’",
+        src: "16x9_016_education.jpg",
+        type: "Daily Brief",
+        views: "1.1m",
+      },
+    ];
+    const savedProducts = [
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_001_astronaut.jpg",
+        type: "Current",
+        views: "1k",
+      },
+    ];
+    const selectedSort = ref(sortOptions[0]);
 
     onMounted(() => {
       window.location.hash = window.location.hash || "#dashboard";
@@ -757,6 +1037,10 @@ export default {
       loading,
       isDark,
       selectedTheme,
+      sortOptions,
+      products,
+      savedProducts,
+      selectedSort,
       changeTheme,
       isActiveTheme,
       selectItemEventHandler,

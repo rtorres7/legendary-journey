@@ -34,10 +34,7 @@
     </transition-group>
     <button class="skipLink" @click="skipToMain">Skip to main content</button>
     <!-- <TheBanner v-if="!['attachment'].includes($route.name)" /> -->
-    <main
-      role="main"
-      class="bg-white dark:bg-slate-900 energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
-    >
+    <main role="main" class="bg-white text-gray-900">
       <template v-if="!loadingAlerts && undismissedAlerts.length > 0">
         <ul
           id="app-announcements"
