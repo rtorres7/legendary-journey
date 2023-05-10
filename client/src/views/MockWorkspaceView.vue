@@ -555,13 +555,27 @@
                 <div class="text-lg font-bold">Your Stats</div>
               </div>
               <div
-                class="border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[400px]"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
-                <span class="text-sm font-normal text-slate-600">
-                  Total Created</span
+                <div
+                  class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
                 >
+                  <div class="flex space-x-4 items-center text-slate-500">
+                    <Square3Stack3DIcon class="h-5 w-5" />
+                    <span class="text-sm font-normal"> Total Created</span>
+                  </div>
+                  <div class="font-semibold text-xl text-slate-700">8</div>
+                </div>
+                <div
+                  class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+                >
+                  <div class="flex space-x-4 items-center text-slate-500">
+                    <EyeIcon class="h-5 w-5" />
+                    <span class="text-sm font-normal">Total Views</span>
+                  </div>
+                  <div class="font-semibold text-xl text-slate-700">720</div>
+                </div>
               </div>
-              <!-- <div>Total Views</div> -->
             </div>
           </div>
         </div>
@@ -593,7 +607,11 @@ import {
   WrenchIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import { ChevronRightIcon } from "@heroicons/vue/24/solid";
+import {
+  ChevronRightIcon,
+  EyeIcon,
+  Square3Stack3DIcon,
+} from "@heroicons/vue/24/solid";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
@@ -606,12 +624,14 @@ export default {
     ChevronRightIcon,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
+    EyeIcon,
     FolderIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
     PencilSquareIcon,
     ShareIcon,
+    Square3Stack3DIcon,
     StarIcon,
     SunIcon,
     TrashIcon,
