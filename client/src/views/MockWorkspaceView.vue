@@ -341,6 +341,22 @@
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
               </div>
+              <div class="py-6 flex items-center">
+                <div class="text-lg font-bold">Continue where you left off</div>
+              </div>
+              <div
+                class="flex flex-col bg-white shadow-md rounded max-w-[450px] p-8"
+              >
+                <div class="flex items-center space-x-4">
+                  <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
+                  <div class="text-xs text-gray-500">Community</div>
+                </div>
+                <p class="font-semibold line-clamp-2 mt-4">
+                  (U) Canada 'will not be intimidated' after China expels
+                  diplomat: Trudeau
+                </p>
+                <div class="text-sm text-gray-500 mt-4">15 hours ago</div>
+              </div>
               <div class="py-6 flex justify-between items-center">
                 <div class="text-lg font-bold">My Recent Products</div>
                 <div
@@ -360,8 +376,8 @@
                     <div class="max-h-[261px]">
                       <img src="@/assets/mocks/16x9_001_astronaut.jpg" alt="" />
                     </div>
-                    <div class="flex flex-col py-3">
-                      <div class="relative pb-6 pl-3 pr-5">
+                    <div class="flex flex-col py-4">
+                      <div class="relative pb-6 pl-4 pr-6">
                         <p
                           class="font-semibold text-gray-700 line-clamp-2"
                           title="(U) Astronaut Buzz Aldrin named honorary brigadier general,
@@ -455,7 +471,7 @@
                         </div>
                       </div>
                       <div
-                        class="flex justify-between px-3 text-sm text-gray-500"
+                        class="flex justify-between px-4 text-sm text-gray-500"
                       >
                         <div class="flex space-x-4">
                           <div>4 days ago</div>
@@ -463,27 +479,11 @@
                             Space Travel
                           </div>
                         </div>
-                        <div>101k views</div>
+                        <div class="text-xs md:text-sm">101k views</div>
                       </div>
                     </div>
                   </div>
                 </template>
-              </div>
-              <div class="py-6 flex items-center">
-                <div class="text-lg font-bold">Continue where you left off</div>
-              </div>
-              <div
-                class="flex flex-col bg-white shadow-inner-sm rounded max-w-[464px]"
-              >
-                <div class="flex items-center space-x-4">
-                  <MaxProductIcon
-                    class="w-12 h-12 text-green-400"
-                    icon="globe"
-                  />
-                  <div class="font-medium text-sm text-gray-400">Community</div>
-                </div>
-                <p>(U) Sample Draft Title</p>
-                <div>15 hours ago</div>
               </div>
             </div>
           </div>
