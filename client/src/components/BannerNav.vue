@@ -73,6 +73,7 @@
           <!-- Admin Dropdown -->
           <Menu
             v-show="canManageSpecialEditions || canManageWire"
+            v-slot="{ close }"
             as="div"
             class="hidden lg:block ml-3 relative"
           >
@@ -96,6 +97,7 @@
             >
               <MenuItems
                 class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b border-slate-700/50 energy:border-zinc-700/50"
+                @click="close"
               >
                 <MenuItem v-show="canManageWire">
                   <router-link
@@ -210,7 +212,11 @@
             </transition>
           </Menu>
           <!-- Profile dropdown -->
-          <Menu as="div" class="hidden lg:block ml-3 relative">
+          <Menu
+            v-slot="{ close }"
+            as="div"
+            class="hidden lg:block ml-3 relative"
+          >
             <div>
               <tippy content="User Menu">
                 <MenuButton
@@ -231,6 +237,7 @@
             >
               <MenuItems
                 class="origin-top-right absolute right-0 mt-2 w-52 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b border-slate-700/50 energy:border-zinc-700/50"
+                @click="close"
               >
                 <MenuItem>
                   <router-link
@@ -542,6 +549,7 @@
                           date: dayjs().format('YYYY-MM-DD'),
                         },
                       }"
+                      @click="closeUserMenuModal"
                     >
                       Manage Products
                     </router-link>
@@ -550,6 +558,7 @@
                     <router-link
                       to="/special_editions"
                       class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      @click="closeUserMenuModal"
                     >
                       Manage Special Editions
                     </router-link>

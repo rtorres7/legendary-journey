@@ -69,7 +69,7 @@
       <DisclosurePanel>
         <div class="ml-4 space-y-2 text-sm">
           <!-- <p>
-                <span class="font-semibold">Produced By: </span
+                <span class="font-semibold">Authored By: </span
                 >{{ product.producing_office }}
               </p> -->
           <p>
@@ -110,7 +110,7 @@
               product.producing_offices.length !== 0
             "
           >
-            <span class="font-semibold">Produced By: </span>
+            <span class="font-semibold">Authored By: </span>
             {{ product.producing_offices.join(", ") }}
           </p>
           <p v-if="product.coordinators && product.coordinators.length !== 0">

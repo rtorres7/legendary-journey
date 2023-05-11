@@ -36,7 +36,7 @@
               <EditProductFormSection
                 id="product-type"
                 title="Product Type"
-                description="Get started by selecting the product type."
+                description="Changing the product type will prepopulate existing fields so be careful when changing it."
               >
                 <MaxListbox
                   v-model="form.productType"
@@ -310,9 +310,10 @@
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
                       v-model="form.producing_offices"
-                      :label="'Produced By Organizations'"
+                      :label="'Authored By Organizations'"
                       :items="lists.producing_offices"
                       multiple
+                      required
                       @update:modelValue="
                         updateField($event, 'producing_offices', 'multiple')
                       "
@@ -707,7 +708,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-// import { metadata } from "@/config";
+import { metadata } from "@/config";
 import { mockDocument } from "@/data";
 import {
   UploadableFile,
@@ -949,28 +950,28 @@ export default {
       }
     };
 
-    // const prepopulateFields = (model) => {
-    //   const { payload } = metadata.product_types.find(
-    //     ({ code }) => code === model.code
-    //   );
-    //   const product = { ...payload };
-    //   if (product.title) {
-    //     form.value.title = `${dayjs().format("DD MMMM YYYY")} ${product.title}`;
-    //   }
-    //   if (product.summary) {
-    //     form.value.summary = product.summary;
-    //   }
-    //   if (product.poc_info) {
-    //     form.value.pocInfo = product.poc_info;
-    //   }
-    //   const topics = product.topics ? product.topics : ["TERR"];
-    //   const topicsToSelect = [];
-    //   topics.forEach((topic) => {
-    //     const topicValue = getValueForCode(lists.topics, topic);
-    //     topicsToSelect.push(topicValue);
-    //   });
-    //   form.value.topics = topicsToSelect;
-    // };
+    const prepopulateFields = (model) => {
+      const { payload } = metadata.product_types.find(
+        ({ code }) => code === model.code
+      );
+      const product = { ...payload };
+      if (product.title) {
+        form.value.title = `${dayjs().format("DD MMMM YYYY")} ${product.title}`;
+      }
+      if (product.summary) {
+        form.value.summary = product.summary;
+      }
+      if (product.poc_info) {
+        form.value.pocInfo = product.poc_info;
+      }
+      const topics = product.topics ? product.topics : ["TERR"];
+      const topicsToSelect = [];
+      topics.forEach((topic) => {
+        const topicValue = getValueForCode(lists.topics, topic);
+        topicsToSelect.push(topicValue);
+      });
+      form.value.topics = topicsToSelect;
+    };
 
     const updateField = (model, property, type) => {
       const codes = [];
@@ -1004,9 +1005,9 @@ export default {
           }
           break;
         default:
-          // if (property === "product_type_id") {
-          //   prepopulateFields(model);
-          // }
+          if (property === "product_type_id") {
+            prepopulateFields(model);
+          }
           payload.value[property] =
             property === "product_type_id" ? model.code : model;
           if (property === "worldwide" && model) {
@@ -1143,7 +1144,8 @@ export default {
         !form.value.summary ||
         !form.value.summaryClassificationXML ||
         !form.value.classificationXML ||
-        !form.value.publicationDate
+        !form.value.publicationDate ||
+        form.value.producing_offices.length === 0
       );
     });
 

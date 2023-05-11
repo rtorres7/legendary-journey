@@ -13,7 +13,7 @@
     autocomplete="off"
     :value="modelValue"
     class="min-h-[2rem] flex w-full rounded-lg cursor-default py-1 px-2 mt-1 bg-transparent disabled:bg-slate-200/50 disabled:dark:bg-slate-700 disabled:energy:bg-zinc-700 border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 placeholder:italic"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="updateModels($event.target.value)"
   />
 </template>
 <script>
@@ -35,12 +35,23 @@ export default {
       default: false,
     },
   },
-  emits: ["update:modelValue"],
-  setup() {
+  emits: ["update:classObj", "update:modelValue"],
+  setup(props, { emit }) {
     const uuid = uniqueID().getID();
+
+    const updateModels = (val) => {
+      emit("update:modelValue", val);
+      emit("update:classObj", {
+        xml: val,
+        name: val,
+        marking: val,
+        block: '',
+      });
+    };
 
     return {
       uuid,
+      updateModels,
     };
   },
 };

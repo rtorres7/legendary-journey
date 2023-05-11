@@ -18,29 +18,26 @@
       </p>
       <EditProductForm :product="product" :documentNumber="documentNumber" />
     </template>
-    <template v-else>
-      <NotAuthorized />
-    </template>
   </template>
 </template>
 
 <script>
+import * as dayjs from "dayjs";
 import { computed, inject, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 import { mockDocument } from "@/data";
 import EditProductForm from "@/components/EditProductForm";
-import NotAuthorized from "@/components/NotAuthorized";
 
 export default {
   components: {
     EditProductForm,
-    NotAuthorized,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
+    const router = useRouter();
     const createNotification = inject("create-notification");
     const documentNumber = route.params.doc_num;
     const isCommunityExclusive = computed(
@@ -120,11 +117,22 @@ export default {
         if (product_type_id === 10378) {
           return true;
         }
-        return false;
+        navigateToManage();
       }
     };
 
+    const navigateToManage = () => {
+      const today = dayjs().format("YYYY-MM-DD");
+      router.push({
+        name: "products",
+        params: {
+          date: today,
+        },
+      });
+    };
+
     return {
+      dayjs,
       documentNumber,
       loadingMetadata,
       loadingProduct,

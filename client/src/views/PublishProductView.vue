@@ -80,12 +80,12 @@
           role="button"
           :aria-label="`Create a ${product.displayName}`"
           @click="
-            dialogPreference == 'hide' || hideDialog
+            dialogPreference == 'hide'
               ? goToArticle(product.payload)
               : openProductTemplateDialog(product)
           "
           @keyup.enter="
-            dialogPreference == 'hide' || hideDialog
+            dialogPreference == 'hide'
               ? goToArticle(product.payload)
               : openProductTemplateDialog(product)
           "
@@ -275,7 +275,7 @@
                   />
                 </div>
                 <div>
-                  <ProductRestrictedLink :product="getProductDetails(product)">
+                  <ProductRestrictedLink :product="product">
                     <h4
                       class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
                       :title="product.title"
@@ -301,107 +301,6 @@
             </MaxCard>
           </template>
         </ul>
-        <MaxDialog
-          :isOpen="isTemplateDialogOpen"
-          :title="'Templates'"
-          class="max-w-[700px]"
-          @close="closeTemplateDialog"
-        >
-          <div class="pb-8">
-            <p class="font-semibold pb-2">What is a template?</p>
-            <p class="text-sm">
-              A template is a collection of prepopulated fields. When a template
-              is selected, a draft of the product will be created and stored in
-              our system with the template applied, so there is not a need to
-              save the product immediately.
-            </p>
-          </div>
-          <p class="font-semibold pb-2">Template Preview:</p>
-          <p class="text-sm pb-4">
-            Select a product type from the dropdown below to preview its
-            template contents:
-          </p>
-          <MaxListbox
-            v-model="selectedProductType"
-            :label="'Product Type'"
-            :items="availableProductTypes"
-            class="lg:w-1/2 pb-4"
-          />
-          <p class="italic text-sm pb-8">
-            Preview only shows fields that are prepopulated by the template
-          </p>
-          <div v-if="productContent" class="flex flex-col gap-y-4">
-            <div v-if="productContent.title" class="flex">
-              <p class="basis-1/5 font-semibold">Title:</p>
-              <p class="basis-4/5">{{ productContent.title }}</p>
-            </div>
-            <div v-if="productContent.summary" class="flex">
-              <p class="basis-1/5 font-semibold">Summary:</p>
-              <p class="basis-4/5">{{ productContent.summary }}</p>
-            </div>
-            <div v-if="productContent.topics" class="flex">
-              <p class="basis-1/5 font-semibold">Topics:</p>
-              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
-            </div>
-            <div v-if="productContent.poc_info" class="flex">
-              <p class="basis-1/5 font-semibold">POC Info:</p>
-              <p class="basis-4/5">{{ productContent.poc_info }}</p>
-            </div>
-          </div>
-        </MaxDialog>
-        <MaxDialog
-          :isOpen="isProductTemplateDialogOpen"
-          :title="
-            productContent ? `${selectedProductType.displayName} Template` : ''
-          "
-          class="max-w-[700px]"
-          @close="closeProductTemplateDialog"
-        >
-          <p class="font-semibold pb-2">Template Preview:</p>
-          <p class="italic text-sm pb-8">
-            Preview only shows fields that are prepopulated by the template
-          </p>
-          <div v-if="productContent" class="flex flex-col gap-y-4">
-            <div v-if="productContent.title" class="flex">
-              <p class="basis-1/5 font-semibold">Title:</p>
-              <p class="basis-4/5">{{ productContent.title }}</p>
-            </div>
-            <div v-if="productContent.summary" class="flex">
-              <p class="basis-1/5 font-semibold">Summary:</p>
-              <p class="basis-4/5">{{ productContent.summary }}</p>
-            </div>
-            <div v-if="productContent.topics" class="flex">
-              <p class="basis-1/5 font-semibold">Topics:</p>
-              <p class="basis-4/5">{{ productContent.topics.join(", ") }}</p>
-            </div>
-            <div v-if="productContent.poc_info" class="flex">
-              <p class="basis-1/5 font-semibold">POC Info:</p>
-              <p class="basis-4/5">{{ productContent.poc_info }}</p>
-            </div>
-          </div>
-          <div class="flex pt-8">
-            <input
-              id="hideDialog"
-              v-model="hideDialog"
-              type="checkbox"
-              name="hideDialog"
-              @change="saveHideDialog"
-            />
-            <label for="hideDialog" class="ml-2 text-sm"
-              >Do not show this again</label
-            >
-          </div>
-          <template #actions>
-            <MaxButton
-              color="secondary"
-              @click.prevent="closeProductTemplateDialog"
-              >Cancel</MaxButton
-            >
-            <MaxButton color="secondary" @click="goToArticle(productContent)">
-              Create
-            </MaxButton>
-          </template>
-        </MaxDialog>
         <MaxDialog
           :isOpen="isPreviewThumbnailDialogOpen"
           :title="'Thumbnail Preview'"
@@ -449,8 +348,108 @@
         </MaxDialog>
       </template>
       <template v-else>
-        <p class="pt-2 italic">No articles found.</p>
+        <p class="pt-2 italic">No products found.</p>
       </template>
+      <MaxDialog
+        :isOpen="isTemplateDialogOpen"
+        :title="'Templates'"
+        class="max-w-[700px]"
+        @close="closeTemplateDialog"
+      >
+        <div class="pb-8">
+          <p class="font-semibold pb-2">What is a template?</p>
+          <p class="text-sm">
+            A template is a collection of prepopulated fields. When a template
+            is selected, a draft of the product will be created and stored in
+            our system with the template applied, so there is not a need to save
+            the product immediately.
+          </p>
+        </div>
+        <p class="font-semibold pb-2">Template Preview:</p>
+        <p class="text-sm pb-4">
+          Select a product type from the dropdown below to preview its template
+          contents:
+        </p>
+        <MaxListbox
+          v-model="selectedProductType"
+          :label="'Product Type'"
+          :items="availableProductTypes"
+          class="lg:w-1/2 pb-4"
+        />
+        <p class="italic text-sm pb-8">
+          Preview only shows fields that are prepopulated by the template
+        </p>
+        <div v-if="productContent" class="flex flex-col gap-y-4">
+          <div v-if="productContent.title" class="flex">
+            <p class="basis-1/5 font-semibold">Title:</p>
+            <p class="basis-4/5">{{ productContent.title }}</p>
+          </div>
+          <div v-if="productContent.summary" class="flex">
+            <p class="basis-1/5 font-semibold">Summary:</p>
+            <p class="basis-4/5">{{ productContent.summary }}</p>
+          </div>
+          <div v-if="productContent.topics" class="flex">
+            <p class="basis-1/5 font-semibold">Topics:</p>
+            <p class="basis-4/5">{{ getTopicNames(productContent) }}</p>
+          </div>
+          <div v-if="productContent.poc_info" class="flex">
+            <p class="basis-1/5 font-semibold">POC Info:</p>
+            <p class="basis-4/5">{{ productContent.poc_info }}</p>
+          </div>
+        </div>
+      </MaxDialog>
+      <MaxDialog
+        :isOpen="isProductTemplateDialogOpen"
+        :title="
+          productContent ? `${selectedProductType.displayName} Template` : ''
+        "
+        class="max-w-[700px]"
+        @close="closeProductTemplateDialog"
+      >
+        <p class="font-semibold pb-2">Template Preview:</p>
+        <p class="italic text-sm pb-8">
+          Preview only shows fields that are prepopulated by the template
+        </p>
+        <div v-if="productContent" class="flex flex-col gap-y-4">
+          <div v-if="productContent.title" class="flex">
+            <p class="basis-1/5 font-semibold">Title:</p>
+            <p class="basis-4/5">{{ productContent.title }}</p>
+          </div>
+          <div v-if="productContent.summary" class="flex">
+            <p class="basis-1/5 font-semibold">Summary:</p>
+            <p class="basis-4/5">{{ productContent.summary }}</p>
+          </div>
+          <div v-if="productContent.topics" class="flex">
+            <p class="basis-1/5 font-semibold">Topics:</p>
+            <p class="basis-4/5">{{ getTopicNames(productContent) }}</p>
+          </div>
+          <div v-if="productContent.poc_info" class="flex">
+            <p class="basis-1/5 font-semibold">POC Info:</p>
+            <p class="basis-4/5">{{ productContent.poc_info }}</p>
+          </div>
+        </div>
+        <div class="flex pt-8">
+          <input
+            id="hideDialog"
+            v-model="hideDialog"
+            type="checkbox"
+            name="hideDialog"
+          />
+          <label for="hideDialog" class="ml-2 text-sm"
+            >Do not show this again</label
+          >
+        </div>
+        <template #actions>
+          <MaxButton
+            color="secondary"
+            @click.prevent="closeProductTemplateDialog"
+            >Cancel</MaxButton
+          >
+          <MaxButton color="secondary" @click="goToArticle(productContent)">
+            Create
+          </MaxButton>
+        </template>
+      </MaxDialog>
     </div>
   </template>
 </template>
@@ -460,7 +459,7 @@ import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
-import { computed, inject, ref, onMounted, watch } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import {
@@ -473,6 +472,8 @@ import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import { isProductLocked } from "@/helpers";
 import ProductContent from "@/components/ProductContent";
 import ProductImage from "@/components/ProductImage";
+import { getValueForCode } from "@/helpers";
+import { useCookies } from "vue3-cookies";
 
 export default {
   components: {
@@ -497,6 +498,7 @@ export default {
     const articles = computed(() => store.state.wires.articles);
     const loadingArticles = computed(() => store.state.wires.loading);
     const createNotification = inject("create-notification");
+    const { cookies } = useCookies();
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
@@ -511,29 +513,21 @@ export default {
         return articles.value;
       }
     };
-    const getProductDetails = (product) => {
-      if (process.env.NODE_ENV === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        return documentMatch.data;
-      } else {
-        axios
-          .get(`/preload/documents/${product.doc_num}.json`)
-          .then((response) => {
-            return response.data;
-          });
-      }
-    };
-    const restrictedProduct = (product) => {
-      if (isProductLocked(getProductDetails(product))) {
-        return true;
-      }
-      return false;
+
+    const restrictedProduct = (productDetails) => {
+      return isProductLocked(productDetails);
     };
 
     const selectedProductType = ref();
     const productContent = computed(() => selectedProductType.value?.payload);
+    const getTopicNames = (product) => {
+      const topics = [];
+      product.topics.forEach((topic) => {
+        let topicValue = getValueForCode(criteria.value.topics, topic);
+        topics.push(topicValue.name);
+      });
+      return topics.join(", ");
+    };
     const isTemplateDialogOpen = ref(false);
     const closeTemplateDialog = () => {
       isTemplateDialogOpen.value = false;
@@ -545,14 +539,10 @@ export default {
     const hideDialog = ref();
     const saveHideDialog = () => {
       if (hideDialog.value) {
-        localStorage.setItem("dialogPreference", "hide");
-        const expire = dayjs().add(90, "day");
-        localStorage.setItem("expiryDate", expire);
-      } else {
-        localStorage.setItem("dialogPreference", "show");
+        cookies.set("templateDialogs", "hide", "90d");
       }
     };
-    const dialogPreference = ref(localStorage.getItem("dialogPreference"));
+    const dialogPreference = ref(cookies.get("templateDialogs"));
     const isProductTemplateDialogOpen = ref(false);
     const closeProductTemplateDialog = () => {
       isProductTemplateDialogOpen.value = false;
@@ -568,11 +558,18 @@ export default {
     const openPreviewDialog = (product) => {
       loadingPreview.value = true;
       if (process.env.NODE_ENV === "offline") {
-        previewProduct.value = getProductDetails(product);
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        previewProduct.value = documentMatch.data;
         setTimeout(() => (loadingPreview.value = false), 750);
       } else {
-        loadingPreview.value = false;
-        previewProduct.value = getProductDetails(product);
+        axios
+          .get(`/preload/documents/${product.doc_num}.json`)
+          .then((response) => {
+            loadingPreview.value = false;
+            previewProduct.value = response.data;
+          });
       }
       isPreviewDialogOpen.value = true;
     };
@@ -697,6 +694,7 @@ export default {
         payload = { ...defaultPayload };
       }
       payload["wire_id"] = dayjs(selectedDate.value).format("YYYY-MM-DD");
+      saveHideDialog();
       if (process.env.NODE_ENV === "offline") {
         router.push({
           name: "edit",
@@ -748,17 +746,14 @@ export default {
     };
 
     onMounted(() => {
-      store.dispatch("wires/getWireByDate", route.params.date);
+      store.dispatch("wires/getWireByDate", route.params.date)
       selectedDate.value = dayjs(route.params.date).toDate();
-      if (dayjs().isAfter(localStorage.getItem("expiryDate"))) {
-        localStorage.setItem("dialogPreference", "show");
-      }
     });
 
     watch(
       () => route.query,
       () => {
-        if (route.name === "publish") {
+        if (route.name === "products") {
           store.dispatch("wires/getWireByDate", route.params.date);
           selectedDate.value = dayjs(route.params.date).toDate();
         }
@@ -777,7 +772,6 @@ export default {
       showOnlyDrafts,
       drafts,
       filterArticles,
-      getProductDetails,
       restrictedProduct,
       availableProductTypes,
       goToArticle,
@@ -786,6 +780,7 @@ export default {
       selectedArticle,
       selectedProductType,
       productContent,
+      getTopicNames,
       isTemplateDialogOpen,
       openTemplateDialog,
       closeTemplateDialog,

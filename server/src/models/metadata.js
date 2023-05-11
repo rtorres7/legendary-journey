@@ -72,13 +72,13 @@ var MetadataSchema = new Schema(
           },
         ],
       },
-      // producing_offices: {
-      //   displayName: String,
-      //   values: [
-      //     String,
-      //     [],
-      //   ]
-      // },
+      producing_offices: {
+        displayName: String,
+        values: [
+          String,
+          [],
+        ]
+      },
       product_types: {
         displayName: String,
         values: [
