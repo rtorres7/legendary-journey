@@ -52,46 +52,64 @@
                     >
                   </div>
                 </MenuItem>
-                <MenuItem>
-                  <div
-                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                  >
-                    <BookmarkIcon class="h-5 w-5" aria-hidden="true" /><span
-                      class="capitalize"
-                      >Save</span
+                <template v-if="type === 'product' || type === 'favorites'">
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                     >
-                  </div>
-                </MenuItem>
-                <MenuItem>
-                  <div
-                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                  >
-                    <StarIcon class="h-5 w-5" aria-hidden="true" /><span
-                      class="capitalize"
-                      >Favorite</span
+                      <BookmarkIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Save</span
+                      >
+                    </div>
+                  </MenuItem>
+                </template>
+                <template v-if="type !== 'favorites'">
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                     >
-                  </div>
-                </MenuItem>
-                <MenuItem>
-                  <div
-                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                  >
-                    <PencilSquareIcon class="h-5 w-5" aria-hidden="true" /><span
-                      class="capitalize"
-                      >Edit</span
+                      <StarIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Favorite</span
+                      >
+                    </div>
+                  </MenuItem>
+                </template>
+                <template v-if="type === 'saved' || type === 'favorites'">
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                     >
-                  </div>
-                </MenuItem>
-                <MenuItem>
-                  <div
-                    class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                  >
-                    <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
-                      class="capitalize"
-                      >Delete</span
+                      <XMarkIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Remove</span
+                      >
+                    </div>
+                  </MenuItem>
+                </template>
+                <template v-if="type === 'product'">
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                     >
-                  </div>
-                </MenuItem>
+                      <PencilSquareIcon
+                        class="h-5 w-5"
+                        aria-hidden="true"
+                      /><span class="capitalize">Edit</span>
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                    >
+                      <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Delete</span
+                      >
+                    </div>
+                  </MenuItem>
+                </template>
               </MenuItems>
             </transition>
           </Menu>
@@ -116,6 +134,7 @@ import {
   ShareIcon,
   StarIcon,
   TrashIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 export default {
   components: {
@@ -129,11 +148,16 @@ export default {
     ShareIcon,
     StarIcon,
     TrashIcon,
+    XMarkIcon,
   },
   props: {
     product: {
       type: Object,
       default: () => {},
+    },
+    type: {
+      type: String,
+      default: "product",
     },
   },
   setup() {

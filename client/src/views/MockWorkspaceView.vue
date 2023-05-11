@@ -437,7 +437,7 @@
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
                 <template v-for="n in products.slice(0, 4)" :key="n">
-                  <MockProductCard :product="n" />
+                  <MockProductCard :product="n" type="product" />
                 </template>
               </div>
               <div class="py-6 flex items-center">
@@ -561,14 +561,14 @@
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
                 <template v-for="n in products" :key="n">
-                  <MockProductCard :product="n" />
+                  <MockProductCard :product="n" type="product" />
                 </template>
               </div>
             </div>
             <div :class="isActivePage('#saved') ? 'block' : 'hidden'">
               <div class="text-2xl text-gray-700">Saved Products</div>
               <div class="py-6 sm:flex justify-between items-center">
-                <div class="font-semibold mb-4 sm:mb-0">16 products</div>
+                <div class="font-semibold mb-4 sm:mb-0">6 products</div>
                 <div class="flex space-x-4">
                   <Listbox
                     v-model="selectedSort"
@@ -649,21 +649,98 @@
               <div
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
-                <template v-for="n in products" :key="n">
-                  <MockProductCard :product="n" />
+                <template v-for="n in savedProducts" :key="n">
+                  <MockProductCard :product="n" type="saved" />
                 </template>
               </div>
             </div>
             <div :class="isActivePage('#favorites') ? 'block' : 'hidden'">
               <div class="text-2xl text-gray-700">Favorites</div>
-              <div class="text-gray-400 text-sm">
-                <p class="hidden 3xl:block">3XL Mode 1800px</p>
-                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
-                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
-                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
-                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
-                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
-                <p class="block sm:hidden">Less than SM mode</p>
+              <div class="py-6 sm:flex justify-between items-center">
+                <div class="font-semibold mb-4 sm:mb-0">4 products</div>
+                <div class="flex space-x-4">
+                  <Listbox
+                    v-model="selectedSort"
+                    as="div"
+                    class="min-w-[215px] inline-flex items-center text-gray-700"
+                  >
+                    <div>
+                      <ListboxLabel
+                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                      >
+                        Sort By
+                      </ListboxLabel>
+                    </div>
+                    <div class="w-full relative items-center ml-3">
+                      <ListboxButton
+                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                      >
+                        <span class="text-sm block truncate capitalize">{{
+                          selectedSort.name
+                        }}</span>
+                        <span
+                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        >
+                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                        </span>
+                      </ListboxButton>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <ListboxOptions
+                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                        >
+                          <ListboxOption
+                            v-for="item in sortOptions"
+                            v-slot="{ active, selected }"
+                            :key="item.name"
+                            :value="item"
+                            as="template"
+                          >
+                            <li
+                              :class="[
+                                active ? 'bg-gray-100  ' : 'bg-none',
+                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                              ]"
+                            >
+                              <span
+                                :class="[
+                                  selected ? 'font-medium' : 'font-normal',
+                                  'block truncate text-sm',
+                                ]"
+                                >{{ item.name }}</span
+                              >
+                              <span
+                                v-if="selected"
+                                class="absolute inset-y-0 left-0 flex items-center pl-3"
+                              >
+                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            </li>
+                          </ListboxOption>
+                        </ListboxOptions>
+                      </transition>
+                    </div>
+                  </Listbox>
+                  <button
+                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                  >
+                    <span>Filters</span>
+                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+              >
+                <template v-for="n in favoriteProducts" :key="n">
+                  <MockProductCard :product="n" type="favorites" />
+                </template>
               </div>
             </div>
             <div :class="isActivePage('#collections') ? 'block' : 'hidden'">
@@ -924,10 +1001,109 @@ export default {
     const savedProducts = [
       {
         classification: "(U)",
+        date_posted: "3 weeks ago",
+        title: "US imposes sanctions on son of drug kingpin El Chapo",
+        src: "16x9_S001_chapo.jpg",
+        type: "Terrorism Summary",
+        views: "14k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 weeks ago",
+        title: "100% of World Cup waste sorted and recycled: Qatar's minister",
+        src: "16x9_S002_qatar.jpg",
+        type: "Foreign",
+        views: "19k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 month ago",
+        title:
+          "Scientists discover secret 'symmetries' that protect Earth from the chaos of space",
+        src: "16x9_S003_earth.jpg",
+        type: "Community",
+        views: "25k",
+      },
+      {
+        classification: "(U)",
         date_posted: "4 days ago",
         title:
           "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
-        src: "16x9_001_astronaut.jpg",
+        src: "16x9_S004_military.jpg",
+        type: "Current",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_S005_china.jpg",
+        type: "CT Weekly",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_S006_terror.jpg",
+        type: "Terrorism Digest",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_S007_whitehouse.jpg",
+        type: "Daily Brief",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_S008_turkey.jpg",
+        type: "Foreign",
+        views: "1k",
+      },
+    ];
+    const favoriteProducts = [
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_F001_china.jpg",
+        type: "Current",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_F002_americans.jpg",
+        type: "Current",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_F003_king.jpg",
+        type: "Current",
+        views: "1k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 days ago",
+        title:
+          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        src: "16x9_F004_argentina.jpg",
         type: "Current",
         views: "1k",
       },
@@ -1040,6 +1216,7 @@ export default {
       sortOptions,
       products,
       savedProducts,
+      favoriteProducts,
       selectedSort,
       changeTheme,
       isActiveTheme,
