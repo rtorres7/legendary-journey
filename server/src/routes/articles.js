@@ -90,12 +90,11 @@ router.post("/processDocument", (req, res) => {
 router.post("/", (req, res) => {
   (async () => {
     const metadata = await getMetadata();
-    const topics = getTopicsByCodes(req.body.topics, metadata);
-    const coordinators = req.body.coordinators && getOfficesByCodes(req.body.coordinators, metadata);
-    const producingOffices = req.body.producing_office && getOfficesByCodes([req.body.producing_office], metadata);
+    const topics = getLookupObjectsByCodes(req.body.topics, metadata.criteria.topics.values);
+    const producingOffices = req.body.producing_office && getLookupObjectsByCodes([req.body.producing_office], metadata.criteria.producing_offices);
 
     const article = new Article({
-      coordinators: coordinators,
+
       date_published: req.body.date_published || dayjs.utc().format(),
       document_action: req.body.document_action,
       html_body: req.body.html_body,
@@ -141,46 +140,13 @@ router.get("/:id/view", function (req, res) {
     res.send(article.data.details);
   });
 });
-function getCountriesByCodes(codes, metadata) {
-  const countries = metadata.criteria.countries.values;
-  const result = [];
 
-  for (const code of codes) {
-    const country = countries.find((c) => c.code === code);
-    if (country) {
-      result.push(country);
-    }
+function getLookupObjectsByCodes(codes, metadata) {
+  if (codes === undefined || metadata === undefined) {
+    return [];
   }
 
-  return result;
-}
-
-function getTopicsByCodes(codes, metadata) {
-  const topics = metadata.criteria.topics.values;
-  const result = [];
-
-  for (const code of codes) {
-    const topic = topics.find((c) => c.code === code);
-    if (topic) {
-      result.push(topic);
-    }
-  }
-
-  return result;
-}
-
-function getOfficesByCodes(codes, metadata) {
-  const offices = metadata.criteria.producing_offices;
-  const result = [];
-
-  for (const code of codes) {
-    const office = offices.find((c) => c.code === code);
-    if (office) {
-      result.push(office);
-    }
-  }
-
-  return result;
+  return metadata.filter(lookupData => codes.indexOf(lookupData.code) >= 0);
 }
 
 function resolveProductType(productTypeId, metadata) {
@@ -204,13 +170,21 @@ router.put("/:id", (req, res) => {
 // contents of this method back in the update endpoint.
 async function updateArticle(id, req, res) {
   const metadata = await getMetadata();
-  const countries = getCountriesByCodes(req.body.countries, metadata);
-  const topics = getTopicsByCodes(req.body.topics, metadata);
+  const countries = getLookupObjectsByCodes(req.body.countries, metadata.criteria.countries.values);
+  const topics = getLookupObjectsByCodes(req.body.topics, metadata.criteria.topics.values);
+  const producing_offices = getLookupObjectsByCodes(req.body.producing_offices, metadata.criteria.producing_offices);
+  const coauthors = getLookupObjectsByCodes(req.body.coauthors, metadata.criteria.coauthors);
+  const coordinators = getLookupObjectsByCodes(req.body.coordinators, metadata.criteria.coordinators);
+  const dissem_orgs = getLookupObjectsByCodes(req.body.dissem_orgs, metadata.criteria.dissem_orgs);
 
   const article = {
     ...req.body,
     topics: topics,
     countries: countries,
+    producing_offices: producing_offices,
+    coauthors: coauthors,
+    coordinators: coordinators,
+    dissem_orgs: dissem_orgs,
     date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
     product_type: resolveProductType(req.body.product_type_id, metadata).name,
   };
