@@ -27,6 +27,9 @@
         />
       </label>
     </div>
+    <span class="text-gray-800 dark:text-slate-400 energy:text-zinc-400 italic">
+      * Image must be square, minimum 300x300px</span
+    >
     <div v-if="binary" class="flex flex-col">
       <img
         :src="getImgUrl(binary)"
