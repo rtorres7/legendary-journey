@@ -565,7 +565,7 @@ export default {
         setTimeout(() => (loadingPreview.value = false), 750);
       } else {
         axios
-          .get(`/preload/documents/${product.doc_num}.json`)
+          .get(`/documents/${product.doc_num}/preview.json`)
           .then((response) => {
             loadingPreview.value = false;
             previewProduct.value = response.data;
@@ -746,7 +746,7 @@ export default {
     };
 
     onMounted(() => {
-      store.dispatch("wires/getWireByDate", route.params.date)
+      store.dispatch("wires/getWireByDate", route.params.date);
       selectedDate.value = dayjs(route.params.date).toDate();
     });
 

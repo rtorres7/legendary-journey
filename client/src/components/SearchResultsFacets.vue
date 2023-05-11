@@ -11,6 +11,7 @@
           <template v-for="(facet, facetIndex) in rows" :key="facet">
             <div :class="facetIndex > 4 && !expand ? 'hidden' : 'block'">
               <a
+                :id="facet.key"
                 class="cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                 tabindex="0"
                 @click="filter(facetType, facet.key)"
@@ -54,6 +55,10 @@ export default {
 
     const toggleExpand = (key) => {
       facetsList.value[key].expand = !facetsList.value[key].expand;
+      if (facetsList.value[key].expand) {
+        const id = facetsList.value[key].rows[4].key;
+        document.getElementById(id).focus();
+      }
     };
 
     //TODO: This is copied from SearchView. Figure out a clean way to refactor this to avoid repeating code.
