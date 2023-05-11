@@ -112,9 +112,9 @@
     <!-- Right Panel -->
     <div class="flex flex-col min-h-screen w-full h-full">
       <div class="relative grow">
-        <!-- Nav Bar -->
+        <!-- Desktop Nav Bar -->
         <div
-          class="h-16 px-8 border-b border-slate-900/10 shadow-sm flex justify-between items-center"
+          class="hidden h-16 px-8 border-b border-slate-900/10 shadow-sm md:flex justify-between items-center"
         >
           <div class="w-full flex">
             <div class="self-center">
@@ -325,6 +325,19 @@
             </div>
           </div>
         </div>
+        <!-- Mobile Nav Bar -->
+        <div
+          class="flex md:hidden justify-between items-center h-16 px-8 border-b bg-slate-900 text-gray-400 pl-4 pr-1"
+        >
+          <button
+            type="button"
+            class="block lg:hidden p-1 m-auto rounded-full hover:text-gray-50 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-offset-gray-800 focus:ring-white"
+            @click="openMainMenuModal"
+          >
+            <span class="sr-only">Open main menu</span>
+            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+          </button>
+        </div>
         <!-- Content Area -->
         <div
           class="flex flex-col p-8 text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
@@ -333,7 +346,7 @@
             <!-- Dashboard View -->
             <div :class="isActivePage('#dashboard') ? 'block' : 'hidden'">
               <div class="text-2xl text-gray-700">Alvaro's Workspace</div>
-              <div class="text-gray-400 text-sm">
+              <!-- <div class="text-gray-400 text-sm">
                 <p class="hidden 3xl:block">3XL Mode 1800px</p>
                 <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
                 <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
@@ -341,7 +354,7 @@
                 <p class="hidden md:block lg:hidden">MD Mode 768px</p>
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
-              </div>
+              </div> -->
               <div class="py-6 flex items-center">
                 <div class="text-lg font-bold">Continue where you left off</div>
               </div>
@@ -426,19 +439,32 @@
               </div>
               <div class="py-6 flex justify-between items-center">
                 <div class="text-lg font-bold">My Recent Products</div>
-                <div
+                <a
                   class="flex items-center text-gray-500 text-sm font-semibold"
+                  href="/workspace#products"
                 >
                   <span>More Products</span>
                   <ChevronRightIcon class="h-4 w-4" />
-                </div>
+                </a>
               </div>
               <div
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
-                <template v-for="n in products.slice(0, 4)" :key="n">
+                <!-- <template v-for="n in products.slice(0, 4)" :key="n">
                   <MockProductCard :product="n" type="product" />
-                </template>
+                </template> -->
+                <MockProductCard :product="products[0]" type="product" />
+                <MockProductCard :product="products[1]" type="product" />
+                <MockProductCard
+                  :product="products[2]"
+                  type="product"
+                  class="hidden lg:flex"
+                />
+                <MockProductCard
+                  :product="products[3]"
+                  type="product"
+                  class="hidden 2xl:flex"
+                />
               </div>
               <div class="py-6 flex items-center">
                 <div class="text-lg font-bold">Your Stats</div>
@@ -568,7 +594,7 @@
             <div :class="isActivePage('#saved') ? 'block' : 'hidden'">
               <div class="text-2xl text-gray-700">Saved Products</div>
               <div class="py-6 sm:flex justify-between items-center">
-                <div class="font-semibold mb-4 sm:mb-0">6 products</div>
+                <div class="font-semibold mb-4 sm:mb-0">8 products</div>
                 <div class="flex space-x-4">
                   <Listbox
                     v-model="selectedSort"
@@ -779,6 +805,7 @@ import {
 } from "@headlessui/vue";
 import {
   AdjustmentsHorizontalIcon,
+  Bars3Icon,
   BookmarkIcon,
   BriefcaseIcon,
   CheckIcon,
@@ -817,6 +844,7 @@ export default {
     MenuItem,
     MenuItems,
     AdjustmentsHorizontalIcon,
+    Bars3Icon,
     BookmarkIcon,
     BriefcaseIcon,
     CheckIcon,
@@ -1026,86 +1054,84 @@ export default {
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
-        title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        date_posted: "1 month ago",
+        title: "US fighter jet crashes near major military base in South Korea",
         src: "16x9_S004_military.jpg",
         type: "Current",
-        views: "1k",
+        views: "28k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "2 months ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "Cluster of Chinese vessels spotted near Russian rig off Vietnam - ship monitors",
         src: "16x9_S005_china.jpg",
         type: "CT Weekly",
-        views: "1k",
+        views: "39k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "2 months ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "ISIS using Afghanistan as staging ground for terror plots after US withdrawal: report",
         src: "16x9_S006_terror.jpg",
         type: "Terrorism Digest",
-        views: "1k",
+        views: "44k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "6 months ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "White House takes signature law off negotiating table in early spending, debt ceiling talks",
         src: "16x9_S007_whitehouse.jpg",
         type: "Daily Brief",
-        views: "1k",
+        views: "258k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
-        title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+        date_posted: "1 year ago",
+        title: "Turkey’s Erdoğan risks alienating conservative women voters",
         src: "16x9_S008_turkey.jpg",
         type: "Foreign",
-        views: "1k",
+        views: "670k",
       },
     ];
     const favoriteProducts = [
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "4 months ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "Suspected Chinese Spy Ship Is Just a Research Vessel, South Africa Says",
         src: "16x9_F001_china.jpg",
-        type: "Current",
-        views: "1k",
+        type: "CT Weekly",
+        views: "79k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "6 months ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "Under pressure, Homeland Security surging resources to border as Title 42 ends",
         src: "16x9_F002_americans.jpg",
-        type: "Current",
-        views: "1k",
+        type: "Daily Brief",
+        views: "188k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "1 year ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "King Charles' coronation draws tens of thousands braving rain to cheer monarch",
         src: "16x9_F003_king.jpg",
-        type: "Current",
-        views: "1k",
+        type: "Foreign",
+        views: "461k",
       },
       {
         classification: "(U)",
-        date_posted: "4 days ago",
+        date_posted: "2 years ago",
         title:
-          "Astronaut Buzz Aldrin named honorary brigadier general, member of Space Force",
+          "'Zero capacity to save': Argentines buckle as inflation tops 104%",
         src: "16x9_F004_argentina.jpg",
-        type: "Current",
-        views: "1k",
+        type: "Foreign",
+        views: "1.6m",
       },
     ];
     const selectedSort = ref(sortOptions[0]);
