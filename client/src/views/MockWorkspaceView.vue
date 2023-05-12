@@ -656,7 +656,7 @@
                 class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
               >
                 <div class="flex space-x-4 items-center text-slate-500">
-                  <EyeIcon class="h-5 w-5" />div
+                  <EyeIcon class="h-5 w-5" />
                   <span class="text-sm font-normal">Total Views</span>
                 </div>
                 <div class="font-semibold text-xl text-slate-700">2.4m</div>
