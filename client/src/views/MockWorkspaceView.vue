@@ -506,13 +506,18 @@
         </div>
         <!-- Content Area -->
         <div
-          class="flex flex-col p-8 text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
+          class="flex flex-col text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
         >
-          <div class="max-w-[475px] sm:max-w-[1600px] w-full">
-            <!-- Dashboard View -->
-            <div :class="isActivePage('#dashboard') ? 'block' : 'hidden'">
-              <div class="text-2xl text-gray-700">Alvaro's Workspace</div>
-              <!-- <div class="text-gray-400 text-sm">
+          <!-- Dashboard View -->
+          <div
+            :class="
+              isActivePage('#dashboard')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">Alvaro's Workspace</div>
+            <!-- <div class="text-gray-400 text-sm">
                 <p class="hidden 3xl:block">3XL Mode 1800px</p>
                 <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
                 <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
@@ -521,147 +526,153 @@
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
               </div> -->
-              <div class="py-6 flex items-center">
-                <div class="text-lg font-bold">Continue where you left off</div>
-              </div>
+            <div class="py-6 flex items-center">
+              <div class="text-lg font-bold">Continue where you left off</div>
+            </div>
+            <div
+              class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8 cursor-pointer"
+            >
               <div
-                class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8 cursor-pointer"
+                class="text-gray-500 hover:text-gray-900 absolute top-3 right-3"
               >
-                <div
-                  class="text-gray-500 hover:text-gray-900 absolute top-3 right-3"
-                >
-                  <Menu as="div" class="relative">
-                    <div>
-                      <tippy content="More" placement="bottom">
-                        <MenuButton
-                          class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                        >
-                          <span class="sr-only">More Options</span>
-                          <EllipsisVerticalIcon
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </MenuButton>
-                      </tippy>
-                    </div>
-                    <transition
-                      enterActiveClass="transition ease-out duration-100"
-                      enterFromClass="transform opacity-0 scale-95"
-                      enterToClass="transform opacity-100 scale-100"
-                      leaveActiveClass="transition ease-in duration-75"
-                      leaveFromClass="transform opacity-100 scale-100"
-                      leaveToClass="transform opacity-0 scale-95"
-                    >
-                      <MenuItems
-                        class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                <Menu as="div" class="relative">
+                  <div>
+                    <tippy content="More" placement="bottom">
+                      <MenuButton
+                        class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
                       >
-                        <MenuItem>
-                          <div
-                            class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        <span class="sr-only">More Options</span>
+                        <EllipsisVerticalIcon
+                          class="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                      </MenuButton>
+                    </tippy>
+                  </div>
+                  <transition
+                    enterActiveClass="transition ease-out duration-100"
+                    enterFromClass="transform opacity-0 scale-95"
+                    enterToClass="transform opacity-100 scale-100"
+                    leaveActiveClass="transition ease-in duration-75"
+                    leaveFromClass="transform opacity-100 scale-100"
+                    leaveToClass="transform opacity-0 scale-95"
+                  >
+                    <MenuItems
+                      class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                    >
+                      <MenuItem>
+                        <div
+                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        >
+                          <ShareIcon class="h-5 w-5" aria-hidden="true" /><span
+                            class="capitalize"
+                            >Share</span
                           >
-                            <ShareIcon
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            /><span class="capitalize">Share</span>
-                          </div>
-                        </MenuItem>
-                        <MenuItem>
-                          <div
-                            class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        </div>
+                      </MenuItem>
+                      <MenuItem>
+                        <div
+                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        >
+                          <PencilSquareIcon
+                            class="h-5 w-5"
+                            aria-hidden="true"
+                          /><span class="capitalize">Edit</span>
+                        </div>
+                      </MenuItem>
+                      <MenuItem>
+                        <div
+                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        >
+                          <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
+                            class="capitalize"
+                            >Delete</span
                           >
-                            <PencilSquareIcon
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            /><span class="capitalize">Edit</span>
-                          </div>
-                        </MenuItem>
-                        <MenuItem>
-                          <div
-                            class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                          >
-                            <TrashIcon
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            /><span class="capitalize">Delete</span>
-                          </div>
-                        </MenuItem>
-                      </MenuItems>
-                    </transition>
-                  </Menu>
-                </div>
-                <div class="flex items-center space-x-4">
-                  <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
-                  <div class="text-xs text-gray-500">Community</div>
-                </div>
-                <p
-                  class="font-semibold text-gray-700 line-clamp-2 mt-4"
-                  title="(U) Canada 'will not be intimidated' after China expels
+                        </div>
+                      </MenuItem>
+                    </MenuItems>
+                  </transition>
+                </Menu>
+              </div>
+              <div class="flex items-center space-x-4">
+                <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
+                <div class="text-xs text-gray-500">Community</div>
+              </div>
+              <p
+                class="font-semibold text-gray-700 line-clamp-2 mt-4"
+                title="(U) Canada 'will not be intimidated' after China expels
                   diplomat: Trudeau"
-                >
-                  <span class="font-medium text-gray-500">(U)</span> Canada
-                  'will not be intimidated' after China expels diplomat: Trudeau
-                </p>
-                <div class="text-sm text-gray-500 mt-4">15 hours ago</div>
-              </div>
-              <div class="py-6 flex justify-between items-center">
-                <div class="text-lg font-bold">My Recent Products</div>
-                <a
-                  class="flex items-center text-gray-500 text-sm font-semibold"
-                  href="/workspace#products"
-                >
-                  <span>More Products</span>
-                  <ChevronRightIcon class="h-4 w-4" />
-                </a>
-              </div>
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
-                <!-- <template v-for="n in products.slice(0, 4)" :key="n">
+                <span class="font-medium text-gray-500">(U)</span> Canada 'will
+                not be intimidated' after China expels diplomat: Trudeau
+              </p>
+              <div class="text-sm text-gray-500 mt-4">15 hours ago</div>
+            </div>
+            <div class="py-6 flex justify-between items-center">
+              <div class="text-lg font-bold">My Recent Products</div>
+              <a
+                class="flex items-center text-gray-500 text-sm font-semibold"
+                href="/workspace#products"
+              >
+                <span>More Products</span>
+                <ChevronRightIcon class="h-4 w-4" />
+              </a>
+            </div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <!-- <template v-for="n in products.slice(0, 4)" :key="n">
                   <MockProductCard :product="n" type="product" />
                 </template> -->
-                <MockProductCard :product="products[0]" type="product" />
-                <MockProductCard :product="products[1]" type="product" />
-                <MockProductCard
-                  :product="products[2]"
-                  type="product"
-                  class="hidden lg:flex"
-                />
-                <MockProductCard
-                  :product="products[3]"
-                  type="product"
-                  class="hidden 2xl:flex"
-                />
-              </div>
-              <div class="py-6 flex items-center">
-                <div class="text-lg font-bold">Your Stats</div>
+              <MockProductCard :product="products[0]" type="product" />
+              <MockProductCard :product="products[1]" type="product" />
+              <MockProductCard
+                :product="products[2]"
+                type="product"
+                class="hidden lg:flex"
+              />
+              <MockProductCard
+                :product="products[3]"
+                type="product"
+                class="hidden 2xl:flex"
+              />
+            </div>
+            <div class="py-6 flex items-center">
+              <div class="text-lg font-bold">Your Stats</div>
+            </div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <div
+                class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+              >
+                <div class="flex space-x-4 items-center text-slate-500">
+                  <Square3Stack3DIcon class="h-5 w-5" />
+                  <span class="text-sm font-normal"> Total Created</span>
+                </div>
+                <div class="font-semibold text-xl text-slate-700">16</div>
               </div>
               <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+                class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
               >
-                <div
-                  class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-                >
-                  <div class="flex space-x-4 items-center text-slate-500">
-                    <Square3Stack3DIcon class="h-5 w-5" />
-                    <span class="text-sm font-normal"> Total Created</span>
-                  </div>
-                  <div class="font-semibold text-xl text-slate-700">16</div>
+                <div class="flex space-x-4 items-center text-slate-500">
+                  <EyeIcon class="h-5 w-5" />div
+                  <span class="text-sm font-normal">Total Views</span>
                 </div>
-                <div
-                  class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-                >
-                  <div class="flex space-x-4 items-center text-slate-500">
-                    <EyeIcon class="h-5 w-5" />
-                    <span class="text-sm font-normal">Total Views</span>
-                  </div>
-                  <div class="font-semibold text-xl text-slate-700">2.4m</div>
-                </div>
+                <div class="font-semibold text-xl text-slate-700">2.4m</div>
               </div>
             </div>
-            <!-- My Products View -->
-            <div :class="isActivePage('#products') ? 'block' : 'hidden'">
-              <div class="text-2xl text-gray-700">My Products</div>
-              <!-- <div class="text-gray-400 text-sm">
+          </div>
+          <!-- My Products View -->
+          <div
+            :class="
+              isActivePage('#products')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">My Products</div>
+            <!-- <div class="text-gray-400 text-sm">
                 <p class="hidden 3xl:block">3XL Mode 1800px</p>
                 <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
                 <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
@@ -670,273 +681,429 @@
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
               </div> -->
-              <div class="py-6 sm:flex justify-between items-center">
-                <div class="font-semibold mb-4 sm:mb-0">16 products</div>
-                <div class="flex space-x-4">
-                  <Listbox
-                    v-model="selectedSort"
-                    as="div"
-                    class="min-w-[215px] inline-flex items-center text-gray-700"
-                  >
-                    <div>
-                      <ListboxLabel
-                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+            <div class="py-6 sm:flex justify-between items-center">
+              <div class="font-semibold mb-4 sm:mb-0">16 products</div>
+              <div class="flex space-x-4">
+                <Listbox
+                  v-model="selectedSort"
+                  as="div"
+                  class="min-w-[215px] inline-flex items-center text-gray-700"
+                >
+                  <div>
+                    <ListboxLabel
+                      class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                    >
+                      Sort By
+                    </ListboxLabel>
+                  </div>
+                  <div class="w-full relative items-center ml-3">
+                    <ListboxButton
+                      class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                    >
+                      <span class="text-sm block truncate capitalize">{{
+                        selectedSort.name
+                      }}</span>
+                      <span
+                        class="absolute inset-y-0 right-0 flex items-center pr-2"
                       >
-                        Sort By
-                      </ListboxLabel>
-                    </div>
-                    <div class="w-full relative items-center ml-3">
-                      <ListboxButton
-                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                        <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                      </span>
+                    </ListboxButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <ListboxOptions
+                        class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
                       >
-                        <span class="text-sm block truncate capitalize">{{
-                          selectedSort.name
-                        }}</span>
-                        <span
-                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        <ListboxOption
+                          v-for="item in sortOptions"
+                          v-slot="{ active, selected }"
+                          :key="item.name"
+                          :value="item"
+                          as="template"
                         >
-                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
-                        </span>
-                      </ListboxButton>
-                      <transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
-                      >
-                        <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
-                        >
-                          <ListboxOption
-                            v-for="item in sortOptions"
-                            v-slot="{ active, selected }"
-                            :key="item.name"
-                            :value="item"
-                            as="template"
+                          <li
+                            :class="[
+                              active ? 'bg-gray-100  ' : 'bg-none',
+                              'relative cursor-default select-none py-2 pl-10 pr-4',
+                            ]"
                           >
-                            <li
+                            <span
                               :class="[
-                                active ? 'bg-gray-100  ' : 'bg-none',
-                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                                selected ? 'font-medium' : 'font-normal',
+                                'block truncate text-sm',
                               ]"
+                              >{{ item.name }}</span
                             >
-                              <span
-                                :class="[
-                                  selected ? 'font-medium' : 'font-normal',
-                                  'block truncate text-sm',
-                                ]"
-                                >{{ item.name }}</span
-                              >
-                              <span
-                                v-if="selected"
-                                class="absolute inset-y-0 left-0 flex items-center pl-3"
-                              >
-                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                              </span>
-                            </li>
-                          </ListboxOption>
-                        </ListboxOptions>
-                      </transition>
-                    </div>
-                  </Listbox>
-                  <button
-                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
-                  >
-                    <span>Filters</span>
-                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-              >
-                <template v-for="n in products" :key="n">
-                  <MockProductCard :product="n" type="product" />
-                </template>
+                            <span
+                              v-if="selected"
+                              class="absolute inset-y-0 left-0 flex items-center pl-3"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+                <button
+                  class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                >
+                  <span>Filters</span>
+                  <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                </button>
               </div>
             </div>
-            <div :class="isActivePage('#saved') ? 'block' : 'hidden'">
-              <div class="text-2xl text-gray-700">Saved Products</div>
-              <div class="py-6 sm:flex justify-between items-center">
-                <div class="font-semibold mb-4 sm:mb-0">8 products</div>
-                <div class="flex space-x-4">
-                  <Listbox
-                    v-model="selectedSort"
-                    as="div"
-                    class="min-w-[215px] inline-flex items-center text-gray-700"
-                  >
-                    <div>
-                      <ListboxLabel
-                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <template v-for="n in products" :key="n">
+                <MockProductCard :product="n" type="product" />
+              </template>
+            </div>
+          </div>
+          <div
+            :class="
+              isActivePage('#saved')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">Saved Products</div>
+            <div class="py-6 sm:flex justify-between items-center">
+              <div class="font-semibold mb-4 sm:mb-0">8 products</div>
+              <div class="flex space-x-4">
+                <Listbox
+                  v-model="selectedSort"
+                  as="div"
+                  class="min-w-[215px] inline-flex items-center text-gray-700"
+                >
+                  <div>
+                    <ListboxLabel
+                      class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                    >
+                      Sort By
+                    </ListboxLabel>
+                  </div>
+                  <div class="w-full relative items-center ml-3">
+                    <ListboxButton
+                      class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                    >
+                      <span class="text-sm block truncate capitalize">{{
+                        selectedSort.name
+                      }}</span>
+                      <span
+                        class="absolute inset-y-0 right-0 flex items-center pr-2"
                       >
-                        Sort By
-                      </ListboxLabel>
-                    </div>
-                    <div class="w-full relative items-center ml-3">
-                      <ListboxButton
-                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                        <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                      </span>
+                    </ListboxButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <ListboxOptions
+                        class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
                       >
-                        <span class="text-sm block truncate capitalize">{{
-                          selectedSort.name
-                        }}</span>
-                        <span
-                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        <ListboxOption
+                          v-for="item in sortOptions"
+                          v-slot="{ active, selected }"
+                          :key="item.name"
+                          :value="item"
+                          as="template"
                         >
-                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
-                        </span>
-                      </ListboxButton>
-                      <transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
-                      >
-                        <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
-                        >
-                          <ListboxOption
-                            v-for="item in sortOptions"
-                            v-slot="{ active, selected }"
-                            :key="item.name"
-                            :value="item"
-                            as="template"
+                          <li
+                            :class="[
+                              active ? 'bg-gray-100  ' : 'bg-none',
+                              'relative cursor-default select-none py-2 pl-10 pr-4',
+                            ]"
                           >
-                            <li
+                            <span
                               :class="[
-                                active ? 'bg-gray-100  ' : 'bg-none',
-                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                                selected ? 'font-medium' : 'font-normal',
+                                'block truncate text-sm',
                               ]"
+                              >{{ item.name }}</span
                             >
-                              <span
-                                :class="[
-                                  selected ? 'font-medium' : 'font-normal',
-                                  'block truncate text-sm',
-                                ]"
-                                >{{ item.name }}</span
-                              >
-                              <span
-                                v-if="selected"
-                                class="absolute inset-y-0 left-0 flex items-center pl-3"
-                              >
-                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                              </span>
-                            </li>
-                          </ListboxOption>
-                        </ListboxOptions>
-                      </transition>
-                    </div>
-                  </Listbox>
-                  <button
-                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
-                  >
-                    <span>Filters</span>
-                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-              >
-                <template v-for="n in savedProducts" :key="n">
-                  <MockProductCard :product="n" type="saved" />
-                </template>
+                            <span
+                              v-if="selected"
+                              class="absolute inset-y-0 left-0 flex items-center pl-3"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+                <button
+                  class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                >
+                  <span>Filters</span>
+                  <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                </button>
               </div>
             </div>
-            <div :class="isActivePage('#favorites') ? 'block' : 'hidden'">
-              <div class="text-2xl text-gray-700">Favorites</div>
-              <div class="py-6 sm:flex justify-between items-center">
-                <div class="font-semibold mb-4 sm:mb-0">4 products</div>
-                <div class="flex space-x-4">
-                  <Listbox
-                    v-model="selectedSort"
-                    as="div"
-                    class="min-w-[215px] inline-flex items-center text-gray-700"
-                  >
-                    <div>
-                      <ListboxLabel
-                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <template v-for="n in savedProducts" :key="n">
+                <MockProductCard :product="n" type="saved" />
+              </template>
+            </div>
+          </div>
+          <div
+            :class="
+              isActivePage('#favorites')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">Favorites</div>
+            <div class="py-6 sm:flex justify-between items-center">
+              <div class="font-semibold mb-4 sm:mb-0">4 products</div>
+              <div class="flex space-x-4">
+                <Listbox
+                  v-model="selectedSort"
+                  as="div"
+                  class="min-w-[215px] inline-flex items-center text-gray-700"
+                >
+                  <div>
+                    <ListboxLabel
+                      class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                    >
+                      Sort By
+                    </ListboxLabel>
+                  </div>
+                  <div class="w-full relative items-center ml-3">
+                    <ListboxButton
+                      class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                    >
+                      <span class="text-sm block truncate capitalize">{{
+                        selectedSort.name
+                      }}</span>
+                      <span
+                        class="absolute inset-y-0 right-0 flex items-center pr-2"
                       >
-                        Sort By
-                      </ListboxLabel>
-                    </div>
-                    <div class="w-full relative items-center ml-3">
-                      <ListboxButton
-                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                        <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                      </span>
+                    </ListboxButton>
+                    <transition
+                      enter-active-class="transition ease-out duration-100"
+                      enter-from-class="transform opacity-0 scale-95"
+                      enter-to-class="transform opacity-100 scale-100"
+                      leave-active-class="transition ease-in duration-75"
+                      leave-from-class="transform opacity-100 scale-100"
+                      leave-to-class="transform opacity-0 scale-95"
+                    >
+                      <ListboxOptions
+                        class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
                       >
-                        <span class="text-sm block truncate capitalize">{{
-                          selectedSort.name
-                        }}</span>
-                        <span
-                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        <ListboxOption
+                          v-for="item in sortOptions"
+                          v-slot="{ active, selected }"
+                          :key="item.name"
+                          :value="item"
+                          as="template"
                         >
-                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
-                        </span>
-                      </ListboxButton>
-                      <transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
-                      >
-                        <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
-                        >
-                          <ListboxOption
-                            v-for="item in sortOptions"
-                            v-slot="{ active, selected }"
-                            :key="item.name"
-                            :value="item"
-                            as="template"
+                          <li
+                            :class="[
+                              active ? 'bg-gray-100  ' : 'bg-none',
+                              'relative cursor-default select-none py-2 pl-10 pr-4',
+                            ]"
                           >
-                            <li
+                            <span
                               :class="[
-                                active ? 'bg-gray-100  ' : 'bg-none',
-                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                                selected ? 'font-medium' : 'font-normal',
+                                'block truncate text-sm',
                               ]"
+                              >{{ item.name }}</span
                             >
-                              <span
-                                :class="[
-                                  selected ? 'font-medium' : 'font-normal',
-                                  'block truncate text-sm',
-                                ]"
-                                >{{ item.name }}</span
-                              >
-                              <span
-                                v-if="selected"
-                                class="absolute inset-y-0 left-0 flex items-center pl-3"
-                              >
-                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                              </span>
-                            </li>
-                          </ListboxOption>
-                        </ListboxOptions>
-                      </transition>
-                    </div>
-                  </Listbox>
-                  <button
-                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
-                  >
-                    <span>Filters</span>
-                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-              >
-                <template v-for="n in favoriteProducts" :key="n">
-                  <MockProductCard :product="n" type="favorites" />
-                </template>
+                            <span
+                              v-if="selected"
+                              class="absolute inset-y-0 left-0 flex items-center pl-3"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+                <button
+                  class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                >
+                  <span>Filters</span>
+                  <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                </button>
               </div>
             </div>
-            <div :class="isActivePage('#collections') ? 'block' : 'hidden'">
-              <div class="text-2xl text-gray-700">Collections</div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <template v-for="n in favoriteProducts" :key="n">
+                <MockProductCard :product="n" type="favorites" />
+              </template>
+            </div>
+          </div>
+          <div
+            :class="
+              isActivePage('#collections')
+                ? 'w-full flex grow bg-slate-100'
+                : 'hidden'
+            "
+          >
+            <div class="hidden w-[300px] md:flex flex-col">
+              <div class="font-semibold p-6 text-lg">Collections</div>
+              <ul class="px-6 space-y-3 text-slate-600">
+                <li
+                  class="flex items-center cursor-pointer hover:text-slate-900"
+                >
+                  <div class="w-[60px] h-[60px]">
+                    <img
+                      src="@/assets/mocks/1x1_001_plane.jpg"
+                      alt=""
+                      class="rounded-full"
+                    />
+                  </div>
+                  <span class="ml-4">Travel</span>
+                </li>
+                <li
+                  class="flex items-center cursor-pointer hover:text-slate-900"
+                >
+                  <div class="w-[60px] h-[60px]">
+                    <img
+                      src="@/assets/mocks/1x1_002_military.jpg"
+                      alt=""
+                      class="rounded-full"
+                    />
+                  </div>
+                  <span class="ml-4">Military</span>
+                </li>
+                <li
+                  class="flex items-center cursor-pointer font-semibold text-slate-900"
+                >
+                  <div class="w-[60px] h-[60px]">
+                    <img
+                      src="@/assets/mocks/1x1_003_china.jpg"
+                      alt=""
+                      class="rounded-full"
+                    />
+                  </div>
+                  <span class="ml-4 line-clamp-1">China Tensions</span>
+                </li>
+                <li class="flex items-center cursor-pointer h-[60px] text-sm">
+                  <PlusIcon class="h-5 w-5" />
+                  <span class="ml-4">New Collection</span>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="w-full md:w-[calc(100%-300px)] bg-slate-50 border-l border-slate-200 p-8 flex md:block justify-center"
+            >
+              <div class="max-w-[475px] sm:max-w-[1450px]">
+                <div class="text-2xl text-gray-700">China Tensions</div>
+                <div class="py-6 sm:flex justify-between items-center">
+                  <div class="font-semibold mb-4 sm:mb-0">4 products</div>
+                  <div class="flex space-x-4">
+                    <Listbox
+                      v-model="selectedSort"
+                      as="div"
+                      class="min-w-[215px] inline-flex items-center text-gray-700"
+                    >
+                      <div>
+                        <ListboxLabel
+                          class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                        >
+                          Sort By
+                        </ListboxLabel>
+                      </div>
+                      <div class="w-full relative items-center ml-3">
+                        <ListboxButton
+                          class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                        >
+                          <span class="text-sm block truncate capitalize">{{
+                            selectedSort.name
+                          }}</span>
+                          <span
+                            class="absolute inset-y-0 right-0 flex items-center pr-2"
+                          >
+                            <ChevronDownIcon
+                              class="h-4 w-4"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </ListboxButton>
+                        <transition
+                          enter-active-class="transition ease-out duration-100"
+                          enter-from-class="transform opacity-0 scale-95"
+                          enter-to-class="transform opacity-100 scale-100"
+                          leave-active-class="transition ease-in duration-75"
+                          leave-from-class="transform opacity-100 scale-100"
+                          leave-to-class="transform opacity-0 scale-95"
+                        >
+                          <ListboxOptions
+                            class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                          >
+                            <ListboxOption
+                              v-for="item in sortOptions"
+                              v-slot="{ active, selected }"
+                              :key="item.name"
+                              :value="item"
+                              as="template"
+                            >
+                              <li
+                                :class="[
+                                  active ? 'bg-gray-100  ' : 'bg-none',
+                                  'relative cursor-default select-none py-2 pl-10 pr-4',
+                                ]"
+                              >
+                                <span
+                                  :class="[
+                                    selected ? 'font-medium' : 'font-normal',
+                                    'block truncate text-sm',
+                                  ]"
+                                  >{{ item.name }}</span
+                                >
+                                <span
+                                  v-if="selected"
+                                  class="absolute inset-y-0 left-0 flex items-center pl-3"
+                                >
+                                  <CheckIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </li>
+                            </ListboxOption>
+                          </ListboxOptions>
+                        </transition>
+                      </div>
+                    </Listbox>
+                  </div>
+                </div>
+                <div
+                  class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6"
+                >
+                  <template v-for="n in collectionProducts" :key="n">
+                    <MockProductCard :product="n" type="product" />
+                  </template>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="text-2xl text-gray-700">Collections</div>
               <div class="text-gray-400 text-sm">
                 <p class="hidden 3xl:block">3XL Mode 1800px</p>
                 <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -945,8 +1112,7 @@
                 <p class="hidden md:block lg:hidden">MD Mode 768px</p>
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
-              </div>
-            </div>
+              </div> -->
           </div>
         </div>
       </div>
@@ -988,6 +1154,7 @@ import {
   MagnifyingGlassIcon,
   MoonIcon,
   PencilSquareIcon,
+  PlusIcon,
   ShareIcon,
   StarIcon,
   SunIcon,
@@ -1030,6 +1197,7 @@ export default {
     MagnifyingGlassIcon,
     MoonIcon,
     PencilSquareIcon,
+    PlusIcon,
     ShareIcon,
     Square3Stack3DIcon,
     StarIcon,
@@ -1308,6 +1476,45 @@ export default {
         views: "1.6m",
       },
     ];
+    const collectionProducts = [
+      {
+        classification: "(U)",
+        date_posted: "2 months ago",
+        title:
+          "Cluster of Chinese vessels spotted near Russian rig off Vietnam - ship monitors",
+        src: "16x9_S005_china.jpg",
+        type: "CT Weekly",
+        views: "39k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "4 months ago",
+        title:
+          "Suspected Chinese Spy Ship Is Just a Research Vessel, South Africa Says",
+        src: "16x9_F001_china.jpg",
+        type: "CT Weekly",
+        views: "79k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 year ago",
+        title:
+          "WHO declares COVID-19 is no longer a global health emergency, warns of ongoing threat",
+        src: "16x9_014_covid.jpg",
+        type: "Special Threat Matrix",
+        views: "603k",
+      },
+      {
+        classification: "(U)",
+        date_posted: "1 year ago",
+        title:
+          "Chinese spy balloon gathered intelligence from sensitive U.S. military sites, despite U.S. efforts to block it",
+        src: "16x9_015_china.jpg",
+        type: "CT Weekly",
+        views: "879k",
+      },
+    ];
+
     const selectedSort = ref(sortOptions[0]);
 
     onMounted(() => {
@@ -1425,6 +1632,7 @@ export default {
       products,
       savedProducts,
       favoriteProducts,
+      collectionProducts,
       selectedSort,
       isMobileMenuOpen,
       openMobileMenuModal,
