@@ -35,7 +35,7 @@
     <button class="skipLink" @click="skipToMain">Skip to main content</button>
     <!-- <TheBanner v-if="!['attachment'].includes($route.name)" /> -->
     <main role="main" class="bg-white text-gray-900">
-      <template v-if="!loadingAlerts && undismissedAlerts.length > 0">
+      <!-- <template v-if="!loadingAlerts && undismissedAlerts.length > 0">
         <ul
           id="app-announcements"
           class="print:hidden bg-orange-200 text-slate-900"
@@ -62,7 +62,7 @@
             </li>
           </template>
         </ul>
-      </template>
+      </template> -->
       <div ref="mainContent" class="" tabindex="-1">
         <template v-if="loadingUser">
           <div class="max-w-fit m-auto mt-[30vh]">
@@ -91,7 +91,7 @@ import AuthorizatonWrapper from "@/components/AuthorizationWrapper.vue";
 //import TheBanner from "@/components/TheBanner.vue";
 //mport TheFooter from "@/components/TheFooter.vue";
 import ToastNotification from "@/components/ToastNotification.vue";
-import { MegaphoneIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+//import { MegaphoneIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   components: {
@@ -99,8 +99,8 @@ export default {
     //TheBanner,
     //TheFooter,
     ToastNotification,
-    MegaphoneIcon,
-    XMarkIcon,
+    // MegaphoneIcon,
+    // XMarkIcon,
   },
   setup() {
     const route = useRoute();

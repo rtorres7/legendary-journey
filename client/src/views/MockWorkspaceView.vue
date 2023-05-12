@@ -327,16 +327,182 @@
         </div>
         <!-- Mobile Nav Bar -->
         <div
-          class="flex md:hidden justify-between items-center h-16 px-8 border-b bg-slate-900 text-gray-400 pl-4 pr-1"
+          class="flex md:hidden justify-between items-center h-16 px-8 border-b bg-slate-900 text-gray-400"
         >
           <button
             type="button"
-            class="block lg:hidden p-1 m-auto rounded-full hover:text-gray-50 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-offset-gray-800 focus:ring-white"
-            @click="openMainMenuModal"
+            class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            @click="openMobileMenuModal"
           >
             <span class="sr-only">Open main menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
+          <div class="flex">
+            <div class="flex space-x-4 px-4">
+              <button
+                class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              >
+                <span class="sr-only">Search</span>
+                <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
+              </button>
+              <!-- Admin Dropdown -->
+              <Menu as="div" class="block md:hidden relative">
+                <div>
+                  <tippy content="Admin">
+                    <MenuButton
+                      class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    >
+                      <span class="sr-only">Admin Menu</span>
+                      <WrenchIcon class="h-6 w-6" aria-hidden="true" />
+                    </MenuButton>
+                  </tippy>
+                </div>
+                <transition
+                  enterActiveClass="transition ease-out duration-100"
+                  enterFromClass="transform opacity-0 scale-95"
+                  enterToClass="transform opacity-100 scale-100"
+                  leaveActiveClass="transition ease-in duration-75"
+                  leaveFromClass="transform opacity-100 scale-100"
+                  leaveToClass="transform opacity-0 scale-95"
+                >
+                  <MenuItems
+                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                  >
+                    <MenuItem>
+                      <router-link
+                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
+                        :to="{
+                          name: 'publish',
+                          params: {
+                            date: dayjs().format('YYYY-MM-DD'),
+                          },
+                        }"
+                      >
+                        Manage Products
+                      </router-link>
+                    </MenuItem>
+                    <MenuItem>
+                      <router-link
+                        to="/special_editions"
+                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
+                      >
+                        Manage Special Editions
+                      </router-link>
+                    </MenuItem>
+                  </MenuItems>
+                </transition>
+              </Menu>
+              <!-- Theme dropdown -->
+              <Menu as="div" class="block md:hidden relative">
+                <div>
+                  <tippy content="Themes">
+                    <MenuButton
+                      class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
+                      :class="
+                        selectedTheme === 'system'
+                          ? 'text-gray-400 hover:text-gray-50'
+                          : 'text-amber-400 hover:text-amber-300'
+                      "
+                    >
+                      <span class="sr-only"
+                        >Open menu for toggling color palettes.</span
+                      >
+                      <template v-if="selectedTheme === 'dark'">
+                        <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <template v-else-if="selectedTheme === 'system'">
+                        <template v-if="isDark">
+                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <template v-else>
+                          <SunIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                      </template>
+                      <template v-else>
+                        <SunIcon class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                    </MenuButton>
+                  </tippy>
+                </div>
+                <transition
+                  enterActiveClass="transition ease-out duration-100"
+                  enterFromClass="transform opacity-0 scale-95"
+                  enterToClass="transform opacity-100 scale-100"
+                  leaveActiveClass="transition ease-in duration-75"
+                  leaveFromClass="transform opacity-100 scale-100"
+                  leaveToClass="transform opacity-0 scale-95"
+                >
+                  <MenuItems
+                    class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                  >
+                    <MenuItem v-for="item in themeOptions" :key="item">
+                      <a
+                        :class="isActiveTheme(item)"
+                        class="py-1 px-3 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer"
+                        @click="changeTheme(item)"
+                      >
+                        <template v-if="item === 'light'">
+                          <SunIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <template v-else-if="item === 'dark'">
+                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <template v-else-if="item === 'system'">
+                          <ComputerDesktopIcon
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          /> </template
+                        ><span class="capitalize">{{ item }}</span></a
+                      >
+                    </MenuItem>
+                  </MenuItems>
+                </transition>
+              </Menu>
+            </div>
+            <div class="pl-4 border-l border-slate-50/10">
+              <!-- Profile dropdown -->
+              <Menu as="div" class="block md:hidden relative">
+                <div>
+                  <tippy content="User Menu">
+                    <MenuButton
+                      class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    >
+                      <span class="sr-only">Open user menu.</span>
+                      <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
+                    </MenuButton>
+                  </tippy>
+                </div>
+                <transition
+                  enterActiveClass="transition ease-out duration-100"
+                  enterFromClass="transform opacity-0 scale-95"
+                  enterToClass="transform opacity-100 scale-100"
+                  leaveActiveClass="transition ease-in duration-75"
+                  leaveFromClass="transform opacity-100 scale-100"
+                  leaveToClass="transform opacity-0 scale-95"
+                >
+                  <MenuItems
+                    class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                  >
+                    <MenuItem>
+                      <router-link
+                        to="/"
+                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                      >
+                        Alvaro Ramirez
+                      </router-link>
+                    </MenuItem>
+                    <MenuItem>
+                      <a
+                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                        target="_blank"
+                        >User Support
+                      </a>
+                    </MenuItem>
+                  </MenuItems>
+                </transition>
+              </Menu>
+            </div>
+          </div>
         </div>
         <!-- Content Area -->
         <div
@@ -786,6 +952,11 @@
       </div>
     </div>
   </div>
+  <!-- Mobile side menu -->
+  <MockMobileSideMenu
+    :isOpen="isMobileMenuOpen"
+    @close="closeMobileMenuModal"
+  />
 </template>
 <script>
 import * as dayjs from "dayjs";
@@ -831,6 +1002,7 @@ import {
   Square3Stack3DIcon,
 } from "@heroicons/vue/24/solid";
 import MockProductCard from "@/components/MockProductCard";
+import MockMobileSideMenu from "@/components/MockMobileSideMenu";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
@@ -867,10 +1039,12 @@ export default {
     WrenchIcon,
     XMarkIcon,
     MockProductCard,
+    MockMobileSideMenu,
   },
   setup() {
     const store = useStore();
     const router = useRouter();
+    const isMobileMenuOpen = ref(false);
     const removeSearch = ref(false);
     const searches = computed(() => store.state.savedSearches.searches);
     const loading = computed(() => store.state.savedSearches.loading);
@@ -1140,6 +1314,14 @@ export default {
       window.location.hash = window.location.hash || "#dashboard";
     });
 
+    const closeMobileMenuModal = () => {
+      isMobileMenuOpen.value = false;
+    };
+
+    const openMobileMenuModal = () => {
+      isMobileMenuOpen.value = true;
+    };
+
     const changeTheme = (newTheme) => {
       selectedTheme.value = newTheme;
       localStorage.setItem("theme", newTheme);
@@ -1244,6 +1426,9 @@ export default {
       savedProducts,
       favoriteProducts,
       selectedSort,
+      isMobileMenuOpen,
+      openMobileMenuModal,
+      closeMobileMenuModal,
       changeTheme,
       isActiveTheme,
       selectItemEventHandler,
