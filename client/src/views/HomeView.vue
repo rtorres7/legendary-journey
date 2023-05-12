@@ -36,7 +36,7 @@
               class="hidden h-full lg:flex flex-col space-y-2 justify-between"
             >
               <div class="lg:flex flex-col space-y-4 justify-between">
-                <template v-if="loadingSitreps">
+                <template v-if="loadingFeatures">
                   <template v-for="n in 3" :key="n">
                     <div class="w-full h-40">
                       <SituationalAwarenessCard loading />
@@ -44,8 +44,8 @@
                   </template>
                 </template>
                 <template v-else>
-                  <template v-if="sitreps.length > 0">
-                    <template v-for="item in sitreps" :key="item">
+                  <template v-if="briefs.length > 0">
+                    <template v-for="item in briefs" :key="item">
                       <div class="w-full h-40">
                         <ProductRestrictedLink :product="item">
                           <SituationalAwarenessCard :sitrep="item" />
@@ -75,7 +75,7 @@
               :breakpoints="carouselBreakpoints"
               class="lg:hidden w-full"
             >
-              <template v-if="loadingSitreps">
+              <template v-if="loadingFeatures">
                 <Slide v-for="n in 3" :key="n">
                   <div class="w-[280px] h-36 mr-4">
                     <SituationalAwarenessCard loading />
@@ -83,7 +83,7 @@
                 </Slide>
               </template>
               <template v-else>
-                <Slide v-for="item in sitreps" :key="item">
+                <Slide v-for="item in briefs" :key="item">
                   <div class="w-full h-36 text-left mr-4">
                     <ProductRestrictedLink :product="item">
                       <SituationalAwarenessCard :sitrep="item" />
@@ -93,12 +93,12 @@
               </template>
               <template #addons>
                 <Navigation
-                  v-if="!loadingSitreps && sitreps.length > 0"
+                  v-if="!loadingFeatures && briefs.length > 0"
                   class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-slate-900 dark:hover:text-slate-900 energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
                 />
               </template>
             </Carousel>
-            <template v-if="!loadingSitreps && sitreps.length === 0">
+            <template v-if="!loadingFeatures && briefs.length === 0">
               <p class="lg:hidden text-sm italic">
                 No Daily Briefs were found.
               </p>
@@ -108,14 +108,14 @@
         <div
           class="py-4 lg:py-0 h-[475px] md:h-[600px] lg:h-full lg:w-2/3 xl:w-2/3 lg:pl-4 xl:pr-4"
         >
-          <template v-if="loadingDanielArticles">
+          <template v-if="loadingFeatures">
             <PublishedProductCard loading headline />
           </template>
           <template v-else>
-            <template v-if="danielArticles.length > 0">
-              <ProductRestrictedLink :product="danielArticles[0].attributes">
+            <template v-if="features.length > 0">
+              <ProductRestrictedLink :product="features[0].attributes">
                 <PublishedProductCard
-                  :product="danielArticles[0].attributes"
+                  :product="features[0].attributes"
                   headline
                 />
               </ProductRestrictedLink>
@@ -140,7 +140,7 @@
         <div
           class="flex flex-col md:flex-row xl:flex-col justify-between h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
         >
-          <template v-if="loadingDanielArticles">
+          <template v-if="loadingFeatures">
             <template v-for="n in 2" :key="n">
               <div class="w-full h-[288px] md:max-w-[575px]">
                 <PublishedProductCard :loading="true" />
@@ -149,7 +149,7 @@
           </template>
           <template v-else>
             <template
-              v-for="article in danielArticles.slice(1, 3)"
+              v-for="article in features.slice(1, 3)"
               :key="article"
             >
               <div class="w-full h-[288px] md:max-w-[575px]">
@@ -170,7 +170,7 @@
     </div>
     <!-- TODO: There's a small gap here when going from XL to LG media screen that needs to be addressed. -->
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
-      <template v-if="loadingDanielArticles">
+      <template v-if="loadingFeatures">
         <template v-for="n in 12" :key="n">
           <div class="w-full h-[288px] md:max-w-[575px]">
             <PublishedProductCard loading />
@@ -178,9 +178,9 @@
         </template>
       </template>
       <template v-else>
-        <template v-if="danielArticles.length > 3">
+        <template v-if="features.length > 3">
           <template
-            v-for="article in danielArticles.slice(3, 15)"
+            v-for="article in features.slice(3, 15)"
             :key="article"
           >
             <div class="w-full h-[288px] md:max-w-[575px]">
@@ -232,24 +232,21 @@ export default {
   },
   setup() {
     const store = useStore();
-    const danielArticles = computed(() => store.state.daniel.articles);
-    const loadingDanielArticles = computed(() => store.state.daniel.loading);
-    const sitreps = computed(() => store.state.feeds.sitreps);
-    const loadingSitreps = computed(() => store.state.feeds.loading);
+    const features = computed(() => store.state.features.articles);
+    const loadingFeatures = computed(() => store.state.features.loading);
+    const briefs = computed(() => store.state.features.briefs);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
-      store.dispatch("daniel/getDanielArticles");
-      store.dispatch("feeds/getSitrepFeeds");
+      store.dispatch("features/loadFeatures");
     });
 
     return {
       carouselSettings,
       carouselBreakpoints,
-      danielArticles,
-      loadingDanielArticles,
-      loadingSitreps,
-      sitreps,
+      features,
+      loadingFeatures,
+      briefs,
       today,
     };
   },

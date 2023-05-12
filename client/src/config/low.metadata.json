@@ -99,7 +99,7 @@
       "icon": "analytics",
       "payload": {
         "title": "Threat Matrix",
-        "topics": ["TERR", "HSEC"],
+        "topics": ["TERR", "ENC"],
         "summary": "The Threat Matrix summary description goes here.",
         "poc_info": "National Counterterrorism Center (NCTC) Operations Center, 931-6010 (secure)"
       }
@@ -248,8 +248,8 @@
   ],
   "footer_faq": [
     {
-      "header": "Coming Soon!",
-      "content": ""
+      "header": "What is a template?",
+      "content": "A template is a collection of prepopulated fields. When a template is selected, a draft of the product will be created and stored in our system with the template applied, so there is not a need to save the product immediately."
     }
   ],
   "footer_note": "Built in partnership with WIRe",

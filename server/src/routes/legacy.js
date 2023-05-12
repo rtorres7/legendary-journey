@@ -8,17 +8,8 @@ var Article = require("../models/articles");
 var SpecialEditions = require("../models/special_editions");
 var DissemOrgs = require("../models/dissem_orgs");
 
-router.get(
-  "/:date_published/articles/:id/getDocumentData",
-  function (req, res) {
-    var date_published = req.params.date_published;
-    var id = req.params.id;
-    Article.findById(id, function (error, article) {
-      if (error) {
-        console.error(error);
-      }
-      res.send(article.data.document);
-    });
+router.get("/:date_published/articles/:id/getDocumentData",(req, res) => {
+  res.redirect(`/articles/${req.params.id}/edit`);
   }
 );
 
@@ -29,10 +20,6 @@ router.get("/get_dissem_orgs", function (req, res) {
     }
     res.send({ dissem_orgs });
   });
-});
-
-router.get("/daniel", function (req, res) {
-  res.redirect("/articles/");
 });
 
 router.get("/documents/:id.json", function (req, res) {
@@ -48,7 +35,7 @@ router.get("/user_data", function (req, res) {
   res.redirect("/users/");
 });
 
-router.get("/links", function (req, res, next) {
+router.get("/links", function (req, res) {
   SpecialEditions.findOne({}, function (error, special_editions) {
     if (error) {
       console.error(error);
@@ -76,7 +63,7 @@ router.get("/:date_published/getWireByDate", function (req, res) {
         console.error(error);
       }
 
-      var articlesForWire = article.map((article, index) => {
+      var articlesForWire = article.map((article) => {
         return {
           attributes: {
             ...article.attributes,
@@ -86,20 +73,15 @@ router.get("/:date_published/getWireByDate", function (req, res) {
             summary_classif: article.summary_classification,
             state: article.state,
           },
-          //data: { ...article.data },
         };
       });
 
-      console.log(articlesForWire);
-
-      res.send(articlesForWire);
+      res.send({ features: articlesForWire });
     }
   );
 });
 
 router.put("/:date_published/articles/:id/visitorCount", function (req, res) {
-  var product_type_id = req.query.product_type_id;
-  var id = req.query.id;
   res.status(200).json({
     success: true,
   });

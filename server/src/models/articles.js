@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var ArticleSchema = new Schema(
+const ArticleSchema = new Schema(
   {
     _explanation: String,
     _score: Number,
@@ -14,9 +14,21 @@ var ArticleSchema = new Schema(
     classification_decl_fmt: String,
     classification_detail: {},
     classification_xml: String,
+    coauthors: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     coi_level: Number,
     congress: Boolean,
     control_to: [],
+    coordinators: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     countries: [
       {
         name: String,
@@ -28,7 +40,12 @@ var ArticleSchema = new Schema(
     created_by_id: String,
     created_on: Date,
     date_published: Date,
-    dissem_orgs: [],
+    dissem_orgs: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     document_type: String,
     email_count: Number,
     feature_date: Date,
@@ -44,7 +61,9 @@ var ArticleSchema = new Schema(
     issue_names: [],
     issues: [],
     "multimedia?": Boolean,
+    needed: {},
     non_state_actors: [],
+    org_restricted: Boolean,
     poa_product: Boolean,
     poc_attrib: String,
     poc_info: String,
@@ -55,7 +74,12 @@ var ArticleSchema = new Schema(
     print_count: Number,
     priority_alert: Boolean,
     producer: String,
-    producing_office: String,
+    producing_offices: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     product_image: Boolean,
     product_source: String,
     product_type: String,
@@ -121,10 +145,17 @@ ArticleSchema.virtual("attributes").get(function () {
   return {
     date_published: this.date_published,
     doc_num: this.get("_id"),
+    images: this.images,
+    needed: this.needed,
+    org_restricted: this.org_restricted,
+    product_type: this.product_type,
+    state: this.state,
     summary: this.summary,
     summary_classification: this.summary_classification,
+    summary_classif: this.summary_classif,
     title: this.title,
     title_classification: this.title_classification,
+    title_classif: this.title_classif,
   };
 });
 
@@ -137,20 +168,26 @@ ArticleSchema.virtual("indexable").get(function () {
     classification: this.classification,
     classification_xml: this.classification_xml,
     control_to: this.control_to,
-    //countries: this.countries,
+    countries: this.countries && this.countries.map(country => country.code),
     date_published: this.date_published,
-    //dissem_orgs: this.dissem_orgs,
+    organizations: { restricted: this.dissem_orgs && this.dissem_orgs.map(org => org.code) },
+    doc_num: this.get("_id"),
     html_body: this.html_body,
     id: this.get("_id"),
     non_state_actors: this.non_state_actors,
     poc_info: this.poc_info,
+    producing_offices: this.producing_offices && this.producing_offices.map(office => office.code),
     product_type_id: this.product_type_id,
     product_type: this.product_type,
+    summary: this.summary,
     summary_classif: this.summary_classif,
+    summary_classification: this.summary_classif,
     summary_classif_xml: this.summary_classif_xml,
+    title: this.title,
     title_classif: this.title_classif,
+    title_classification: this.title_classif,
     title_classif_xml: this.title_classif_xml,
-    //topics: this.topics,
+    topics: this.topics && this.topics.map(topic => topic.code),
     worldwide: this.worldwide,
   };
 });
@@ -161,7 +198,9 @@ ArticleSchema.virtual("data.document").get(function () {
     classification: this.classification,
     classification_decl_fmt: this.classification_decl_fmt,
     classification_xml: this.classification_xml,
+    coauthors: this.coauthors,
     control_to: this.control_to,
+    coordinators: this.coordinators,
     countries: this.countries,
     date_published: this.date_published,
     dissem_orgs: this.dissem_orgs,
@@ -169,10 +208,13 @@ ArticleSchema.virtual("data.document").get(function () {
     id: this.get("_id"),
     non_state_actors: this.non_state_actors,
     poc_info: this.poc_info,
+    producing_offices: this.producing_offices,
     product_type_id: this.product_type_id,
     publication_number: this.publication_number,
+    summary: this.summary,
     summary_classif: this.summary_classif,
     summary_classif_xml: this.summary_classif_xml,
+    title: this.title,
     title_classif: this.title_classif,
     title_classif_xml: this.title_classif_xml,
     topics: this.topics,
@@ -189,8 +231,9 @@ ArticleSchema.virtual("data.details").get(function () {
     classification_detail: this.classification_detail,
     coi_level: this.coi_level,
     congress: this.congress,
+    coordinators: this.coordinators,
     countries: this.countries,
-    countries_fn: this.contries_fn,
+    countries_fn: this.countries_fn,
     created_at: this.created_at,
     created_by_id: this.created_by_id,
     created_on: this.created_on,
@@ -210,7 +253,9 @@ ArticleSchema.virtual("data.details").get(function () {
     id: this.get("_id"),
     image_caption: this.image_caption,
     multimedia: this.multimedia,
+    needed: this.needed,
     non_state_actors: this.non_state_actors,
+    org_restricted: this.org_restricted,
     pdb_conversion: this.pdb_conversion,
     poa_product: this.poa_product,
     poc_attrib: this.poc_attrib,
@@ -220,7 +265,7 @@ ArticleSchema.virtual("data.details").get(function () {
     print_count: this.print_count,
     priority_alert: this.priority_alert,
     producer: this.producer,
-    producing_office: this.producing_office,
+    producing_offices: this.producing_offices,
     product_image: this.product_image,
     product_source: this.product_source,
     product_type_id: this.product_type_id,
@@ -248,15 +293,6 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
-// ArticleSchema.set("toJSON", {
-//   virtuals: true,
-//   transform: (doc, ret, options) => {
-//     delete ret.__v;
-//     ret.id = ret._id.toString();
-//     delete ret._id;
-//   },
-// });
-
-var Article = mongoose.model("Article", ArticleSchema, "articles");
+const Article = mongoose.model("Article", ArticleSchema, "articles");
 
 module.exports = Article;

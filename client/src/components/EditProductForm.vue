@@ -310,9 +310,10 @@
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
                       v-model="form.producing_offices"
-                      :label="'Produced By Organizations'"
+                      :label="'Authored By Organizations'"
                       :items="lists.producing_offices"
                       multiple
+                      required
                       @update:modelValue="
                         updateField($event, 'producing_offices', 'multiple')
                       "
@@ -1143,7 +1144,8 @@ export default {
         !form.value.summary ||
         !form.value.summaryClassificationXML ||
         !form.value.classificationXML ||
-        !form.value.publicationDate
+        !form.value.publicationDate ||
+        form.value.producing_offices.length === 0
       );
     });
 
@@ -1237,7 +1239,7 @@ export default {
     const deleteDocument = () => {
       if (process.env.NODE_ENV === "offline") {
         router.push({
-          name: "publish",
+          name: "products",
           params: { date: route.params.date },
         });
         createNotification({
@@ -1263,7 +1265,7 @@ export default {
                 type: "success",
               });
               router.push({
-                name: "publish",
+                name: "products",
                 params: { date: route.params.date },
               });
             }
@@ -1404,7 +1406,7 @@ export default {
     };
 
     const cancel = () => {
-      router.push({ name: "publish", params: { date: route.params.date } });
+      router.push({ name: "products", params: { date: route.params.date } });
     };
 
     return {

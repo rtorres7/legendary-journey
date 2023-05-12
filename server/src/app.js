@@ -1,27 +1,29 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
-var logger = require("morgan");
+const logger = require("morgan");
 
-var indexRouter = require("./routes/index");
-var legacyRouter = require("./routes/legacy");
-var articlesRouter = require("./routes/articles");
-var usersRouter = require("./routes/users");
+const indexRouter = require("./routes");
+const homeRouter = require("./routes/home");
+const legacyRouter = require("./routes/legacy");
+const articlesRouter = require("./routes/articles");
+const usersRouter = require("./routes/users");
+const searchRouter = require("./routes/search");
 
 const constant = require("./util/constant");
 
-var app = express();
+const app = express();
 
 // DB Setup
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var DATABASE_URL = process.env.DATABASE_URL || "http://localhost";
+const DATABASE_URL = process.env.DATABASE_URL || "http://localhost";
 mongoose.connect(`mongodb://${DATABASE_URL}/articles`, {
   useNewUrlParser: true,
 });
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on("error", function (error) {
   // If first connect fails because server-database isn't up yet, try again.
@@ -46,16 +48,16 @@ db.on("error", function (error) {
   }
 });
 
-db.once("open", function (callback) {
+db.once("open", function () {
   console.log("Connection Succeeded");
 });
 
-var elasticsearch = require("@elastic/elasticsearch");
-var esClient = new elasticsearch.Client({
+const elasticsearch = require("@elastic/elasticsearch");
+const esClient = new elasticsearch.Client({
   node: "http://elasticsearch:9200",
 });
 
-esClient.cluster.health({}, function (err, resp, status) {
+esClient.cluster.health({}, function (err, resp) {
   if (err) {
     console.log("-- ES Client Health ERROR --", err);
   } else {
@@ -64,14 +66,34 @@ esClient.cluster.health({}, function (err, resp, status) {
 });
 
 (async () => {
-  await constant.indices?.every((v) => {
-    if (esClient.indices.exists({ index: v.index })) {
+  await constant.indices?.every(async (v) => {
+    if (await esClient.indices.exists({ index: v.index })) {
       return false;
     }
-    return esClient.indices.create({
+
+    const index = esClient.indices.create({
       index: v.index,
       mappings: v.mappings,
     });
+
+    const Article = require("./models/articles");
+    const IndexService = require("./services/index");
+    const indexService = new IndexService();
+
+    Article.find(
+      {},
+      function (error, articles) {
+        if (error) {
+          console.error(error);
+        }
+
+        articles.forEach(article => {
+          indexService.create(article.indexable);
+        });
+      }
+    );
+
+    return index;
   });
 })();
 
@@ -87,12 +109,13 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/articles", articlesRouter);
-app.use("/home", legacyRouter);
+app.use("/home", homeRouter);
 app.use("/preload", legacyRouter);
 app.use("/wires", legacyRouter);
 app.use("/my_wire", legacyRouter);
 app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
 app.use("/special_editions", legacyRouter);
+app.use("/search", searchRouter);
 
 module.exports = app;
