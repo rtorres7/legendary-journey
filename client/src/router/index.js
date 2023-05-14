@@ -128,13 +128,14 @@ const routes = [
   },
 ];
 
-if (process.env.NODE_ENV === "offline") {
+if (process.env.NODE_ENV !== "production") {
   routes.push({
     path: "/workspace",
     name: "workspace",
     component: MockWorkspaceView,
     meta: {
       title: "Workspace",
+      demo: true,
     },
   });
 }
