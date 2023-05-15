@@ -220,7 +220,6 @@ export default {
         const height = this.height;
         console.log(`Dimensions: ${width} x ${height} px`);
         if (width != height || width < 300 || height < 300) {
-          // removeImageFile();
           editionEvent.value.error_msg =
             "The icon must be square (height and width must be equal), and the resolution must be at least 300 x 300 px.";
           removeImageFile();
