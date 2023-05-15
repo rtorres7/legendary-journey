@@ -79,8 +79,8 @@
           </div>
           <div>
             <span
-              class="ml-1 text-slate-900 italic text-red-900"
               v-show="!editionEvent.valid"
+              class="ml-1 text-red-600 dark:text-red-500 energy:text-red-500"
               >{{ editionEvent.error_msg }}</span
             >
           </div>
