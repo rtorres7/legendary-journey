@@ -960,7 +960,7 @@ export default {
         //   types: nonStateActors.types,
         // },
         producing_offices: {
-          label: "Producing Offices",
+          label: "Authored By Organizations",
           model: currentModel(producingOffices),
           list: producingOffices.items,
           types: producingOffices.types,

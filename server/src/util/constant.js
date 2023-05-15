@@ -16,18 +16,23 @@ const indices = [
           type: "keyword",
           index: true,
         },
-        // countries: {
-        //   type: "keyword",
-        //   index: true,
-        // },
+        countries: {
+          type: "keyword",
+          index: true,
+        },
         date_published: {
           type: "date",
           index: true,
         },
-        // dissem_orgs: {
-        //   type: "keyword",
-        //   index: true,
-        // },
+        organizations: {
+          type: "object",
+          properties: {
+            restricted: {
+              type: "keyword",
+              index: true,
+            }
+          }
+        },
         html_body: {
           type: "text",
           index: true,
@@ -42,6 +47,10 @@ const indices = [
         },
         poc_info: {
           type: "text",
+          index: true,
+        },
+        producing_offices: {
+          type: "keyword",
           index: true,
         },
         product_type_id: {
@@ -68,10 +77,10 @@ const indices = [
           type: "keyword",
           index: false,
         },
-        // topics: {
-        //   type: "object",
-        //   index: true,
-        // },
+        topics: {
+          type: "keyword",
+          index: true,
+        },
         worldwide: {
           type: "boolean",
           index: true,
