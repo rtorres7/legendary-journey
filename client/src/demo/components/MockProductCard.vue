@@ -22,7 +22,7 @@
         <div class="text-gray-500 hover:text-gray-900 absolute top-0 right-0">
           <Menu as="div" class="relative">
             <div>
-              <tippy content="More" placement="bottom">
+              <tippy content="More" placement="bottom" theme="demo">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
                 >
