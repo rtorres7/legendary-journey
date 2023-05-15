@@ -12,7 +12,7 @@
         </div>
         <ul class="py-2 mx-auto text-gray-400 space-y-1">
           <li>
-            <tippy content="Dashboard" placement="right">
+            <tippy content="Dashboard" placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#dashboard')
@@ -31,7 +31,7 @@
             </tippy>
           </li>
           <li>
-            <tippy content="My Products" placement="right">
+            <tippy content="My Products" placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#products')
@@ -50,7 +50,7 @@
             </tippy>
           </li>
           <li>
-            <tippy content="Saved Products" placement="right">
+            <tippy content="Saved Products" placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#saved')
@@ -69,7 +69,7 @@
             </tippy>
           </li>
           <li>
-            <tippy content="Favorites" placement="right">
+            <tippy content="Favorites" placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#favorites')
@@ -88,7 +88,7 @@
             </tippy>
           </li>
           <li>
-            <tippy content="Collections" placement="right">
+            <tippy content="Collections" placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#collections')
@@ -169,7 +169,7 @@
               <!-- Admin Dropdown -->
               <Menu as="div" class="hidden md:block relative">
                 <div>
-                  <tippy content="Admin">
+                  <tippy content="Admin" theme="demo">
                     <MenuButton
                       class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
                     >
@@ -216,7 +216,7 @@
               <!-- Theme dropdown -->
               <Menu as="div" class="hidden md:block relative">
                 <div>
-                  <tippy content="Themes">
+                  <tippy content="Themes" theme="demo">
                     <MenuButton
                       class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
                       :class="
@@ -284,7 +284,7 @@
               <!-- Profile dropdown -->
               <Menu as="div" class="hidden md:block relative">
                 <div>
-                  <tippy content="User Menu">
+                  <tippy content="User Menu" theme="demo">
                     <MenuButton
                       class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
                     >
@@ -348,7 +348,7 @@
               <!-- Admin Dropdown -->
               <Menu as="div" class="block md:hidden relative">
                 <div>
-                  <tippy content="Admin">
+                  <tippy content="Admin" theme="demo">
                     <MenuButton
                       class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
@@ -395,7 +395,7 @@
               <!-- Theme dropdown -->
               <Menu as="div" class="block md:hidden relative">
                 <div>
-                  <tippy content="Themes">
+                  <tippy content="Themes" theme="demo">
                     <MenuButton
                       class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
                       :class="
@@ -463,7 +463,7 @@
               <!-- Profile dropdown -->
               <Menu as="div" class="block md:hidden relative">
                 <div>
-                  <tippy content="User Menu">
+                  <tippy content="User Menu" theme="demo">
                     <MenuButton
                       class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
@@ -537,7 +537,7 @@
               >
                 <Menu as="div" class="relative">
                   <div>
-                    <tippy content="More" placement="bottom">
+                    <tippy content="More" placement="bottom" theme="demo">
                       <MenuButton
                         class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
                       >
