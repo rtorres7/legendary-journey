@@ -626,7 +626,7 @@
                       >User Support</a
                     >
                   </li>
-                  <template v-if="environment === 'low'">
+                  <template v-if="environment === 'offline'">
                     <li>
                       <a
                         class="cursor-pointer"
