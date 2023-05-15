@@ -79,10 +79,9 @@
           </div>
           <div>
             <span
-              class="ml-1 text-slate-900 dark:text-slate-400 energy:text-zinc-400 font-italic"
-              v-show="!imageFile"
-              >{{ !!imageFile }}, {{ fileValid }} Uploaded file aspect ratio
-              must be 1:1, and resolution must be at least 300 x 300 px.</span
+              v-show="!editionEvent.valid"
+              class="ml-1 text-red-600 dark:text-red-500 energy:text-red-500"
+              >{{ editionEvent.error_msg }}</span
             >
           </div>
         </div>
@@ -133,6 +132,8 @@ export default {
           state: [],
           position: 1,
           key_readings: null,
+          valid: true,
+          error_msg: null,
         };
       },
     },
@@ -176,7 +177,6 @@ export default {
     // // })
 
     const imageFile = ref(null);
-    let fileValid = true;
 
     const closeDialog = () => {
       emit("closeDialog");
@@ -203,25 +203,34 @@ export default {
     const updateImageFile = (payload) => {
       editionEvent.value.icon = payload.binary;
       imageFile.value = payload.file;
-      console.log(payload);
-      const imageUrl = URL.createObjectURL(imageFile.value);
+      validateIcon(imageFile.value);
+    };
+
+    const removeImageFile = () => {
+      editionEvent.value.icon = null;
+      imageFile.value = null;
+      editionEvent.value.valid = true;
+    };
+
+    const validateIcon = (img) => {
+      const imageUrl = URL.createObjectURL(img);
       const image = new Image();
       image.onload = function () {
         const width = this.width;
         const height = this.height;
         console.log(`Dimensions: ${width} x ${height} px`);
         if (width != height || width < 300 || height < 300) {
+          editionEvent.value.error_msg =
+            "The icon must be square (height and width must be equal), and the resolution must be at least 300 x 300 px.";
           removeImageFile();
-          fileValid = false;
+          editionEvent.value.valid = false;
+        } else {
+          editionEvent.value.error_msg = "";
+          editionEvent.value.valid = true;
         }
         URL.revokeObjectURL(imageUrl);
       };
       image.src = imageUrl;
-    };
-
-    const removeImageFile = () => {
-      editionEvent.value.icon = null;
-      imageFile.value = null;
     };
 
     const buildFormData = () => {
@@ -247,6 +256,8 @@ export default {
         state: null,
         position: 1,
         key_readings: null,
+        valid: true,
+        error_msg: null,
       };
       imageFile.value = null;
     };
@@ -260,13 +271,23 @@ export default {
       }
     });
 
+    watch([imageFile], () => {
+      if (imageFile.value) {
+        validateIcon(imageFile.value);
+      }
+    });
+
     const isDisabled = () => {
+      if (editionEvent.value.valid === undefined) {
+        editionEvent.value.valid = true;
+      }
       return (
         !editionEvent.value.name ||
         !editionEvent.value.search_params ||
         !editionEvent.value.state ||
         !editionEvent.value.name_classification ||
-        !editionEvent.value.icon
+        !editionEvent.value.icon ||
+        !editionEvent.value.valid
       );
     };
 
@@ -357,7 +378,6 @@ export default {
       stateOptions,
       editionEvent,
       imageFile,
-      fileValid,
       orderOptions,
       updateClassification,
       updateImageFile,
