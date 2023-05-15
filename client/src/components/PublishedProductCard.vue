@@ -85,17 +85,6 @@
         >
           {{ formatDate(product.date_published) }}
         </p>
-        <template v-if="offlineMode">
-          <button class="m-auto place-content-center">
-            <HeartIcon
-              :class="[
-                isFavoriteProduct(product) ? 'text-red-500 fill-red-500' : '',
-                'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300',
-              ]"
-              @click="updateFavoriteStatus(product, $event)"
-            />
-          </button>
-        </template>
         <template v-if="isProductLocked(product)">
           <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
@@ -109,13 +98,11 @@
 <script>
 import { isProductLocked, formatDate, isFavoriteProduct } from "@/helpers";
 import ProductImage from "@/components/ProductImage";
-import { HeartIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { productDetails } from "@/data";
 
 export default {
   components: {
-    HeartIcon,
     ProductImage,
   },
   props: {
