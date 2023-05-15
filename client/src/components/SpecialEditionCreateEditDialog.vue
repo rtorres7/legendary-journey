@@ -80,7 +80,7 @@
           <div>
             <span
               class="ml-1 text-slate-900 italic text-red-900"
-              v-show="editionEvent.icon && !editionEvent.valid"
+              v-show="!editionEvent.valid"
               >{{ editionEvent.error_msg }}</span
             >
           </div>
@@ -213,7 +213,6 @@ export default {
     };
 
     const validateIcon = (img) => {
-      console.log("validateIcon() called");
       const imageUrl = URL.createObjectURL(img);
       const image = new Image();
       image.onload = function () {
@@ -222,17 +221,17 @@ export default {
         console.log(`Dimensions: ${width} x ${height} px`);
         if (width != height || width < 300 || height < 300) {
           // removeImageFile();
-          console.log("I should get in here if it fails");
           editionEvent.value.error_msg =
             "The icon must be square (height and width must be equal), and the resolution must be at least 300 x 300 px.";
+          removeImageFile();
           editionEvent.value.valid = false;
         } else {
           editionEvent.value.error_msg = "";
           editionEvent.value.valid = true;
         }
+        URL.revokeObjectURL(imageUrl);
       };
       image.src = imageUrl;
-      URL.revokeObjectURL(imageUrl);
     };
 
     const buildFormData = () => {
