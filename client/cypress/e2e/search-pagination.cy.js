@@ -25,7 +25,7 @@ describe("Search Pagination", () => {
           const newPage = lastPage + 20;
           cy.visit(url + "&page=" + newPage);
           cy.url().should("include", "page=" + newPage);
-          // cy.contains("Sorry, we didn't find any results.");
+          cy.contains("Sorry, we didn't find any results.");
         });
       });
   });
