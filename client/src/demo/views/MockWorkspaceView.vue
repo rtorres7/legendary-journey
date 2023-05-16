@@ -4,11 +4,13 @@
     <div class="hidden md:block bg-slate-900 min-h-screen w-20">
       <div class="flex flex-col">
         <div class="h-16">
-          <img
-            class="mx-auto w-16 h-16"
-            src="@/assets/nctc_logo.svg"
-            alt="NCTC. Seal. Link to homepage."
-          />
+          <router-link to="/">
+            <img
+              class="mx-auto w-16 h-16"
+              src="@/assets/nctc_logo.svg"
+              alt="NCTC. Seal. Link to homepage."
+            />
+          </router-link>
         </div>
         <ul class="py-2 mx-auto text-gray-400 space-y-1">
           <li>
