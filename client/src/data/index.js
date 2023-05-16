@@ -40,7 +40,6 @@ export const alerts = {
   ],
 };
 
-export { articles } from "./articles";
 export { features, articlesForWire } from "./features";
 export { countries, regions } from "./regions";
 export { getSitreps, getSearchDataFromUrl } from "./search";

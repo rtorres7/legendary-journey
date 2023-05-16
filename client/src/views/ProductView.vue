@@ -88,20 +88,6 @@
               </tippy>
             </router-link>
           </div>
-          <div v-if="offlineMode">
-            <tippy
-              :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'"
-            >
-              <HeartIcon
-                :class="[
-                  productIsFavorite ? 'text-red-500 fill-red-500' : '',
-                  'h-6 w-6 cursor-pointer',
-                ]"
-                aria-hidden="true"
-                @click="productIsFavorite = !productIsFavorite"
-              />
-            </tippy>
-          </div>
         </div>
         <div class="w-full pb-6 lg:pb-0">
           <ProductContent :product="product" />
@@ -181,7 +167,6 @@ import {
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
-  HeartIcon,
 } from "@heroicons/vue/24/outline";
 import NotAuthorized from "@/components/NotAuthorized";
 import ProductNavigation from "@/components/ProductNavigation";
@@ -198,7 +183,6 @@ export default {
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
-    HeartIcon,
     NotAuthorized,
     ProductNavigation,
     ProductContent,
@@ -215,7 +199,9 @@ export default {
     const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
     const featuredArticles = computed(() => store.state.features.articles);
-    const loadingFeaturedArticles = computed(() => store.state.features.loading);
+    const loadingFeaturedArticles = computed(
+      () => store.state.features.loading
+    );
     const relatedProducts = computed(
       () => store.state.relatedProducts.relatedDocuments
     );

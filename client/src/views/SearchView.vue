@@ -484,19 +484,6 @@
                     <span class="line-clamp-5">{{ item.summary }}</span>
                   </template>
                 </div>
-                <template v-if="offlineMode">
-                  <button class="absolute -bottom-2 right-0">
-                    <HeartIcon
-                      :class="[
-                        isFavoriteProduct(item)
-                          ? 'text-red-500 fill-red-500'
-                          : '',
-                        'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300',
-                      ]"
-                      @click="updateFavoriteStatus(item)"
-                    />
-                  </button>
-                </template>
               </div>
             </div>
           </template>
@@ -630,7 +617,6 @@ import {
   ChevronUpIcon,
   ChevronUpDownIcon,
   XMarkIcon,
-  HeartIcon,
 } from "@heroicons/vue/24/outline";
 import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox";
 import PublishedProductCard from "@/components/PublishedProductCard";
@@ -657,7 +643,6 @@ const resultOptions = [
 
 export default {
   components: {
-    HeartIcon,
     Dialog,
     DialogPanel,
     Disclosure,
@@ -960,7 +945,7 @@ export default {
         //   types: nonStateActors.types,
         // },
         producing_offices: {
-          label: "Producing Offices",
+          label: "Authored By Organizations",
           model: currentModel(producingOffices),
           list: producingOffices.items,
           types: producingOffices.types,

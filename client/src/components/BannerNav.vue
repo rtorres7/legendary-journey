@@ -2,7 +2,7 @@
   <nav
     class="no-print text-slate-200 bg-mission-blue/95 dark:text-slate-300 dark:bg-dark-space-blue/95 energy:text-zinc-300 energy:bg-zinc-800/95 sticky top-0 z-10 lg:h-full backdrop-filter backdrop-blur lg:border-b lg:border-b-zinc-700/75"
   >
-    <div
+    <!-- <div
       v-show="isLiveDemo"
       class="flex justify-center items-center bg-emerald-600/80 p-2"
     >
@@ -10,7 +10,7 @@
         Note: This page is a live preview. The contents of this page are meant
         to showcase future capabilities and gather user feedback.
       </p>
-    </div>
+    </div> -->
     <div
       v-if="alertEnabled"
       id="alert-message"
@@ -626,7 +626,7 @@
                       >User Support</a
                     >
                   </li>
-                  <template v-if="environment === 'low'">
+                  <template v-if="environment === 'offline'">
                     <li>
                       <a
                         class="cursor-pointer"

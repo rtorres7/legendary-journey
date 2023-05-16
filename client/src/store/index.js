@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
 import alerts from "./modules/alerts";
-import articles from "./modules/articles";
 import features from "./modules/features";
 import search from "./modules/search";
 import specialEdition from "./modules/specialEdition";
@@ -27,7 +26,6 @@ export default createStore({
   mutations: {},
   modules: {
     alerts,
-    articles,
     features,
     search,
     specialEdition,

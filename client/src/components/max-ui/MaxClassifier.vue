@@ -13,7 +13,7 @@ export default {
   },
   setup() {
     const computedComponent = computed(() =>
-      process.env.NODE_ENV === "offline" || process.env.NODE_ENV === 'development' ? "LowClassifier" : "HighClassifier"
+      process.env.NODE_ENV !== "production" ? "LowClassifier" : "HighClassifier"
     );
     return {
       computedComponent,

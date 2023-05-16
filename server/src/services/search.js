@@ -19,6 +19,43 @@ class SearchService {
       query: {
         match: { html_body: term },
       },
+      aggs: {
+        reporting_types: {
+          terms: {
+            field: 'reporting_types'
+          }
+        },
+        topics: {
+          terms: {
+            field: 'topics'
+          }
+        },
+        countries: {
+          terms: {
+            field: 'countries'
+          }
+        },
+        product_types: {
+          terms: {
+            field: 'product_types'
+          }
+        },
+        classification: {
+          terms: {
+            field: 'classification'
+          }
+        },
+        producing_offices: {
+          terms: {
+            field: 'producing_offices'
+          }
+        },
+        media_tags: {
+          terms: {
+            field: 'media_tags'
+          }
+        },
+      },
       highlight: {
         fields: {
           html_body: {}

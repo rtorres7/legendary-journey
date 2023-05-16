@@ -405,7 +405,7 @@ export default {
     });
 
     const loadingMetadataEnabled = ref(false);
-    const loadingArticlesEnabled = ref(false);
+    const loadingHomeProductsEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
     const loadingPublishedArticlesEnabled = ref(false);
     const sampleImageEnabled = ref(false);
@@ -418,8 +418,8 @@ export default {
     const loadingMetadataFromStore = computed(
       () => store.state.metadata.loading
     );
-    const loadingArticlesFromStore = computed(
-      () => store.state.articles.loading
+    const loadingHomeProductsFromStore = computed(
+      () => store.state.features.loading
     );
     const loadingResultsFromStore = computed(() => store.state.search.loading);
     const publishedArticleCountFromStore = computed(
@@ -448,12 +448,12 @@ export default {
       }
     });
 
-    watch(loadingArticlesEnabled, (enabled) => {
-      console.log("loadingArticlesEnabled: ", enabled);
+    watch(loadingHomeProductsEnabled, (enabled) => {
+      console.log("loadingHomeProductsEnabled: ", enabled);
       if (enabled) {
-        store.dispatch("articles/removeHomeArticles");
+        store.dispatch("features/toggleLoading", true);
       } else {
-        store.dispatch("articles/getHomeArticles");
+        store.dispatch("features/toggleLoading", false);
       }
     });
 
@@ -504,8 +504,8 @@ export default {
       loadingMetadataEnabled.value = loading;
     });
 
-    watch(loadingArticlesFromStore, (loading) => {
-      loadingArticlesEnabled.value = loading;
+    watch(loadingHomeProductsFromStore, (loading) => {
+      loadingHomeProductsEnabled.value = loading;
     });
 
     watch(loadingResultsFromStore, (loading) => {
@@ -531,7 +531,7 @@ export default {
       alertEnabled,
       userAuthorizations,
       loadingMetadataEnabled,
-      loadingArticlesEnabled,
+      loadingHomeProductsEnabled,
       loadingResultsEnabled,
       publishedArticleCountFromStore,
       loadingPublishedArticlesEnabled,
