@@ -2,12 +2,10 @@
   "name": "max-ui",
   "private": true,
   "scripts": {
-    "serve": "cross-env NODE_ENV=high vue-cli-service serve --mode high",
-    "build": "cross-env NODE_ENV=high vue-cli-service build --mode high",
     "serve:offline": "cross-env NODE_ENV=offline vue-cli-service serve --mode offline",
     "build:offline": "cross-env NODE_ENV=offline vue-cli-service build --mode offline",
-    "serve:container": "cross-env NODE_ENV=development vue-cli-service serve",
-    "build:container": "cross-env NODE_ENV=development vue-cli-service build",
+    "serve:container": "cross-env NODE_ENV=container vue-cli-service serve",
+    "build:container": "cross-env NODE_ENV=container vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lint:ci": "vue-cli-service lint --format json --output-file eslint_report.json"
   },
