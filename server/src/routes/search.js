@@ -11,12 +11,14 @@ const DISPLAY_NAMES = { producing_offices: 'Produced By Organizations' };
 router.get("/", (req, res) => {
   const term = req.query.text;
   (async() => {
-    const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir);
+    const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir, req.query);
     const aggregations = await resolveAggregations(results.aggregations);
+
+    const highlightedResults = augmentResults(results);
 
     const searchResult = {
       searchId: '',
-      results: results.hits.hits.map((hit) => { return { ...hit._source, highlighted_result: hit.highlight.html_body }}),
+      results: highlightedResults,
       aggregations: aggregations,
       pages: Math.ceil(results.hits.total.value/req.query.per_page),
       totalCount: results.hits.total.value,
@@ -26,6 +28,15 @@ router.get("/", (req, res) => {
     res.send(searchResult);
   })();
 });
+
+function augmentResults(results) {
+  return results.hits.hits.map(hit => {
+    if (hit.highlight === undefined) {
+      return hit._source;
+    }
+    return { ...hit._source, highlighted_result: hit.highlight.html_body };
+  });
+}
 
 async function resolveAggregations(aggregations) {
   const metadata = await Metadata.findOne().lean();

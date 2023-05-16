@@ -41,6 +41,10 @@ const indices = [
           type: "keyword",
           index: true,
         },
+        issues: {
+          type: "keyword",
+          index: true,
+        },
         non_state_actors: {
           type: "keyword",
           index: true,
@@ -58,6 +62,18 @@ const indices = [
           index: true,
         },
         product_type: {
+          type: "keyword",
+          index: true,
+        },
+        regions: {
+          type: "keyword",
+          index: true,
+        },
+        reporting_type: {
+          type: "keyword",
+          index: true,
+        },
+        subregions: {
           type: "keyword",
           index: true,
         },
