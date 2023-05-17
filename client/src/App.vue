@@ -103,6 +103,7 @@ import { useCookies } from "vue3-cookies";
 import { reject } from "lodash";
 import useNotifications from "@/composables/notifications";
 import AuthorizatonWrapper from "@/components/AuthorizationWrapper.vue";
+import ScrollToTopButton from "@/components/ScrollToTopButton.vue";
 import TheBanner from "@/components/TheBanner.vue";
 import TheFooter from "@/components/TheFooter.vue";
 import ToastNotification from "@/components/ToastNotification.vue";
@@ -112,6 +113,7 @@ export default {
   components: {
     AuthorizatonWrapper,
     TheBanner,
+    ScrollToTopButton,
     TheFooter,
     ToastNotification,
     MegaphoneIcon,
