@@ -45,9 +45,15 @@ const indices = [
           type: "keyword",
           index: true,
         },
+        needed: {
+          type: "object",
+        },
         non_state_actors: {
           type: "keyword",
           index: true,
+        },
+        org_restricted: {
+          type: "text",
         },
         poc_info: {
           type: "text",
@@ -64,6 +70,9 @@ const indices = [
         product_type: {
           type: "keyword",
           index: true,
+        },
+        product_type_name: {
+          type: "text",
         },
         regions: {
           type: "keyword",

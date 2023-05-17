@@ -94,6 +94,7 @@ router.post("/", (req, res) => {
     const issues = getIssuesForTopics(req.body.topics, metadata.criteria.issues.values);
     const producingOffices = req.body.producing_office && getLookupObjectsByCodes([req.body.producing_office], metadata.criteria.producing_offices);
     const reportingType = getReportingTypeForProductType(req.body.product_type_id, metadata.criteria.reporting_types.values);
+    const productTypeName = resolveProductType(req.body.product_type_id, metadata).name;
 
     const article = new Article({
 
@@ -101,9 +102,13 @@ router.post("/", (req, res) => {
       document_action: req.body.document_action,
       html_body: req.body.html_body,
       issues: issues,
+      needed: {},
+      org_restricted: false,
       poc_info: req.body.poc_info,
       producing_offices: producingOffices,
       product_type_id: req.body.product_type_id,
+      product_type: productTypeName,
+      product_type_name: productTypeName,
       publication_number: req.body.publication_number,
       reporting_type: reportingType.code,
       reporting_type_display_name: reportingType.name,
@@ -185,6 +190,7 @@ async function updateArticle(id, req, res) {
   const coordinators = getLookupObjectsByCodes(req.body.coordinators, metadata.criteria.coordinators);
   const dissem_orgs = getLookupObjectsByCodes(req.body.dissem_orgs, metadata.criteria.dissem_orgs);
   const reportingType = getReportingTypeForProductType(req.body.product_type_id, metadata.criteria.reporting_types.values);
+  const productTypeName = resolveProductType(req.body.product_type_id, metadata).name;
 
   const article = {
     ...req.body,
@@ -199,7 +205,8 @@ async function updateArticle(id, req, res) {
     coordinators: coordinators,
     dissem_orgs: dissem_orgs,
     date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
-    product_type: resolveProductType(req.body.product_type_id, metadata).name,
+    product_type: productTypeName,
+    product_type_name: productTypeName,
     reporting_type: reportingType.code,
     reporting_type_display_name: reportingType.name,
   };
