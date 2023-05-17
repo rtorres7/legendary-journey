@@ -195,7 +195,7 @@
                       <router-link
                         class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         :to="{
-                          name: 'publish',
+                          name: 'products',
                           params: {
                             date: dayjs().format('YYYY-MM-DD'),
                           },
