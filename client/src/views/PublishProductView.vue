@@ -33,40 +33,53 @@
     </MaxDatepicker>
   </div>
   <div
-    v-if="!isCommunityExclusive"
     class="py-6 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
-    <div class="mb-6">
-      <h3 class="font-semibold text-lg">Create a Product</h3>
-      <p>Start with a blank template</p>
-    </div>
-    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-fit mb-6">
-      <MaxCard
-        class="flex justify-center items-center font-medium cursor-pointer"
-        hoverable
-        tabindex="0"
-        role="button"
-        aria-label="Create a blank template"
-        @click="goToArticle()"
-        @keyup.enter="goToArticle()"
-      >
-        <span
-          class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+    <template v-if="!isCommunityExclusive">
+      <div class="mb-6">
+        <h3 class="font-semibold text-lg">Create a Product</h3>
+        <p>Start with a blank template</p>
+      </div>
+      <div class="grid grid-cols-3 lg:grid-cols-4 gap-4 w-fit mb-6">
+        <MaxCard
+          class="flex justify-center items-center font-medium cursor-pointer"
+          hoverable
+          tabindex="0"
+          role="button"
+          aria-label="Create a blank template"
+          @click="goToArticle()"
+          @keyup.enter="goToArticle()"
         >
-          New Product
-        </span>
-      </MaxCard>
-    </div>
+          <span
+            class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
+          >
+            New Product
+          </span>
+        </MaxCard>
+      </div>
+    </template>
     <div class="mb-6">
       <p>
-        Alternatively, you can select from one of the existing
-        <button
-          class="hover:cursor-pointer underline"
-          @click="openTemplateDialog"
-        >
-          templates
-        </button>
-        to get started
+        <template v-if="!isCommunityExclusive">
+          Alternatively, you can select from one of the existing
+          <button
+            class="hover:cursor-pointer underline"
+            @click="openTemplateDialog"
+          >
+            templates
+          </button>
+          to get started
+        </template>
+        <template v-else>
+          As a community poster, select the following
+          <button
+            class="hover:cursor-pointer underline"
+            @click="openTemplateDialog"
+          >
+            template
+          </button>
+          to create a product
+        </template>
       </p>
     </div>
     <div
