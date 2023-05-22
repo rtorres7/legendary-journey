@@ -11,7 +11,7 @@ export default {
   actions: {
     loadAlerts({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         console.log("[store] loadAlerts: ", alerts);
         setTimeout(() => commit("importAlerts", alerts), 750);
       } else {

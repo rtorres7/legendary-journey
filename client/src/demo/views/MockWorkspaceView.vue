@@ -1176,8 +1176,8 @@ import {
   EyeIcon,
   Square3Stack3DIcon,
 } from "@heroicons/vue/24/solid";
-import MockProductCard from "@/demo/components/MockProductCard";
-import MockMobileSideMenu from "@/demo/components/MockMobileSideMenu";
+import MockProductCard from "@/demo/components/MockProductCard.vue";
+import MockMobileSideMenu from "@/demo/components/MockMobileSideMenu.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {

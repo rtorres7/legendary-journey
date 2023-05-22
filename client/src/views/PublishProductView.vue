@@ -457,6 +457,7 @@
 <script>
 import { productDetails } from "@/data";
 import * as dayjs from "dayjs";
+import { useCookies } from "vue3-cookies";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
 import { computed, inject, onMounted, ref, watch } from "vue";
@@ -468,12 +469,11 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
-import ProductRestrictedLink from "@/components/ProductRestrictedLink";
 import { isProductLocked } from "@/helpers";
-import ProductContent from "@/components/ProductContent";
-import ProductImage from "@/components/ProductImage";
 import { getValueForCode } from "@/helpers";
-import { useCookies } from "vue3-cookies";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
+import ProductContent from "@/components/ProductContent.vue";
+import ProductImage from "@/components/ProductImage.vue";
 
 export default {
   components: {
@@ -557,7 +557,7 @@ export default {
     };
     const openPreviewDialog = (product) => {
       loadingPreview.value = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );
@@ -585,7 +585,7 @@ export default {
     };
 
     const deleteProduct = () => {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         createNotification({
           title: "Product Deleted",
           message: `Product ${selectedProduct.value.doc_num} has been deleted.`,
@@ -695,7 +695,7 @@ export default {
       }
       payload["wire_id"] = dayjs(selectedDate.value).format("YYYY-MM-DD");
       saveHideDialog();
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         router.push({
           name: "edit",
           params: {

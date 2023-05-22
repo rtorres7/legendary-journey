@@ -13,7 +13,7 @@ export default {
     getRelatedDocuments({ state, commit }) {
       state.loading = true;
       let route = router.currentRoute.value;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         let relatedDocuments = relatedProducts.filter(
           (relatedProduct) =>
             relatedProduct.document.doc_num === route.params.doc_num
