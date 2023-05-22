@@ -91,17 +91,27 @@ router.post("/", (req, res) => {
   (async () => {
     const metadata = await getMetadata();
     const topics = getLookupObjectsByCodes(req.body.topics, metadata.criteria.topics.values);
+    const issues = getIssuesForTopics(req.body.topics, metadata.criteria.issues.values);
     const producingOffices = req.body.producing_office && getLookupObjectsByCodes([req.body.producing_office], metadata.criteria.producing_offices);
+    const reportingType = getReportingTypeForProductType(req.body.product_type_id, metadata.criteria.reporting_types.values);
+    const productTypeName = resolveProductType(req.body.product_type_id, metadata).name;
 
     const article = new Article({
 
       date_published: req.body.date_published || dayjs.utc().format(),
       document_action: req.body.document_action,
       html_body: req.body.html_body,
+      issues: issues,
+      needed: {},
+      org_restricted: false,
       poc_info: req.body.poc_info,
       producing_offices: producingOffices,
       product_type_id: req.body.product_type_id,
+      product_type: productTypeName,
+      product_type_name: productTypeName,
       publication_number: req.body.publication_number,
+      reporting_type: reportingType.code,
+      reporting_type_display_name: reportingType.name,
       summary: req.body.summary,
       title: req.body.title,
       topics: topics,
@@ -171,22 +181,34 @@ router.put("/:id", (req, res) => {
 async function updateArticle(id, req, res) {
   const metadata = await getMetadata();
   const countries = getLookupObjectsByCodes(req.body.countries, metadata.criteria.countries.values);
+  const subRegions = getSubRegionsForCountries(req.body.countries, metadata.criteria.subregions.values);
+  const regions = getRegionsForSubRegions(subRegions.map(subRegion => subRegion.code), metadata.criteria.regions.values);
   const topics = getLookupObjectsByCodes(req.body.topics, metadata.criteria.topics.values);
+  const issues = getIssuesForTopics(req.body.topics, metadata.criteria.issues.values);
   const producing_offices = getLookupObjectsByCodes(req.body.producing_offices, metadata.criteria.producing_offices);
   const coauthors = getLookupObjectsByCodes(req.body.coauthors, metadata.criteria.coauthors);
   const coordinators = getLookupObjectsByCodes(req.body.coordinators, metadata.criteria.coordinators);
   const dissem_orgs = getLookupObjectsByCodes(req.body.dissem_orgs, metadata.criteria.dissem_orgs);
+  const reportingType = getReportingTypeForProductType(req.body.product_type_id, metadata.criteria.reporting_types.values);
+  const productTypeName = resolveProductType(req.body.product_type_id, metadata).name;
 
   const article = {
     ...req.body,
     topics: topics,
+    issues: issues,
     countries: countries,
+    regions: regions,
+    region_names: regions.map(region => region.name),
+    subregions: subRegions,
     producing_offices: producing_offices,
     coauthors: coauthors,
     coordinators: coordinators,
     dissem_orgs: dissem_orgs,
     date_published: dayjs.utc(req.body.date_published, "YYYY-MM-DD"),
-    product_type: resolveProductType(req.body.product_type_id, metadata).name,
+    product_type: productTypeName,
+    product_type_name: productTypeName,
+    reporting_type: reportingType.code,
+    reporting_type_display_name: reportingType.name,
   };
 
   Article.findByIdAndUpdate(
@@ -212,6 +234,44 @@ async function updateArticle(id, req, res) {
       })();
     }
   );
+}
+
+function getSubRegionsForCountries(countryCodes, subRegions) {
+  if (countryCodes === undefined || countryCodes.length === 0 || subRegions === undefined) {
+    return [];
+  }
+
+  return subRegions.filter(subRegion => subRegion.country_codes.filter(code => countryCodes.includes(code)).length > 0);
+}
+
+function getRegionsForSubRegions(subRegionCodes, regions) {
+  if (subRegionCodes === undefined || subRegionCodes.length === 0 || regions === undefined) {
+    return [];
+  }
+
+  return regions.filter(region => region.subregions.filter(code => subRegionCodes.includes(code)).length > 0);
+}
+
+function getReportingTypeForProductType(productTypeId, reportingTypes) {
+  if (productTypeId === undefined || reportingTypes === undefined) {
+    return { name: '', code: ''};
+  }
+
+  const foundTypes = reportingTypes.filter(reportingType => reportingType.productTypes.includes(productTypeId));
+
+  if (foundTypes.length === 0) {
+    return { name: '', code: ''};
+  }
+
+  return foundTypes[0];
+}
+
+function getIssuesForTopics(topics, issues) {
+  if (topics === undefined || topics.length === 0 || issues === undefined) {
+    return [];
+  }
+
+  return issues.filter(issue => issue.topics.map(issue => issue.codes).flat().filter(code => topics.includes(code)).length > 0);
 }
 
 // Delete an article

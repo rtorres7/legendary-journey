@@ -3,7 +3,7 @@
     class="flex flex-col bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg cursor-pointer mb-2"
   >
     <div class="max-h-[261px]">
-      <img :src="require(`@/assets/mocks/${product.src}`)" alt="" />
+      <img :src="getImg(product.src)" alt="" />
     </div>
     <div class="h-full flex flex-col py-4 justify-between">
       <div class="relative pb-6 px-4">
@@ -161,7 +161,13 @@ export default {
     },
   },
   setup() {
-    return {};
+    const getImg = (src) => {
+      return new URL("/src/assets/mocks/" + src, import.meta.url).href;
+    };
+
+    return {
+      getImg,
+    };
   },
 };
 </script>

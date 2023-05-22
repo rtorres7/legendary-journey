@@ -11,7 +11,7 @@ export default {
   actions: {
     loadConceptsLinks({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         console.log("[store] loadConceptsLinks: ", specialEditionLinks);
         setTimeout(() => commit("importLinks", specialEditionLinks), 750);
       } else {

@@ -97,7 +97,7 @@
 </template>
 <script>
 import { isProductLocked, formatDate, isFavoriteProduct } from "@/helpers";
-import ProductImage from "@/components/ProductImage";
+import ProductImage from "@/components/ProductImage.vue";
 import axios from "@/config/wireAxios";
 import { productDetails } from "@/data";
 
@@ -120,13 +120,13 @@ export default {
     },
   },
   setup() {
-    const offlineMode = process.env.NODE_ENV === "offline";
+    const offlineMode = import.meta.env.MODE === "offline";
     const updateFavoriteStatus = (product, event) => {
       if (event) {
         event.preventDefault();
       }
 
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );

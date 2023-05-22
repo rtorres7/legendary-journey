@@ -22,7 +22,7 @@ export default {
   actions: {
     getMetrics({ state, commit }, { start, end }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         const metrics = getMetricsForArticle(articleMetrics);
         // console.log("basic_metrics.json?readership_start_date="+state.readershipStartDate+"&readership_end_date="+state.readershipEndDate);
         console.log(

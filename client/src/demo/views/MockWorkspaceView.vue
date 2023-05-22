@@ -195,7 +195,7 @@
                       <router-link
                         class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         :to="{
-                          name: 'publish',
+                          name: 'products',
                           params: {
                             date: dayjs().format('YYYY-MM-DD'),
                           },
@@ -1176,8 +1176,8 @@ import {
   EyeIcon,
   Square3Stack3DIcon,
 } from "@heroicons/vue/24/solid";
-import MockProductCard from "@/demo/components/MockProductCard";
-import MockMobileSideMenu from "@/demo/components/MockMobileSideMenu";
+import MockProductCard from "@/demo/components/MockProductCard.vue";
+import MockMobileSideMenu from "@/demo/components/MockMobileSideMenu.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {

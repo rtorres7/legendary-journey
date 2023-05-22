@@ -2,7 +2,7 @@ import axios from "axios";
 //import Vue from "vue";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-if (process.env.NODE_ENV === "container") {
+if (import.meta.env.MODE === "container") {
   axios.defaults.baseURL = "http://localhost:3000";
 }
 
