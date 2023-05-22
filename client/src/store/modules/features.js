@@ -11,7 +11,7 @@ export default {
   actions: {
     loadFeatures({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         console.log("[store] loadFeatures: ", features, getSitreps);
         setTimeout(() => {
           commit("saveArticles", features);

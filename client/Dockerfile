@@ -1,4 +1,4 @@
-FROM node:16.19
+FROM node:18.15
 
 # Copy or mount node app here
 WORKDIR /data/
@@ -11,4 +11,4 @@ RUN mkdir /data/node_modules/.cache && chmod -R 777 /data/node_modules/.cache &&
 
 EXPOSE 8080
 
-CMD ["npm", "run", "serve:container"]
+CMD ["npm", "run", "dev:container"]

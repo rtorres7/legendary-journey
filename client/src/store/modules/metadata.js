@@ -39,7 +39,7 @@ export default {
   },
   actions: {
     loadMetadata({ commit }) {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         console.log("[store] loadMetadata: ", metadata);
         setTimeout(() => commit("importMetadata", metadata), 750);
       } else {

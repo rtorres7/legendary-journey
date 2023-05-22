@@ -148,10 +148,7 @@
             </template>
           </template>
           <template v-else>
-            <template
-              v-for="article in features.slice(1, 3)"
-              :key="article"
-            >
+            <template v-for="article in features.slice(1, 3)" :key="article">
               <div class="w-full h-[288px] md:max-w-[575px]">
                 <ProductRestrictedLink :product="article.attributes">
                   <PublishedProductCard :product="article.attributes" />
@@ -179,10 +176,7 @@
       </template>
       <template v-else>
         <template v-if="features.length > 3">
-          <template
-            v-for="article in features.slice(3, 15)"
-            :key="article"
-          >
+          <template v-for="article in features.slice(3, 15)" :key="article">
             <div class="w-full h-[288px] md:max-w-[575px]">
               <ProductRestrictedLink :product="article.attributes">
                 <PublishedProductCard :product="article.attributes" />
@@ -205,9 +199,9 @@ import * as dayjs from "dayjs";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import ProductRestrictedLink from "@/components/ProductRestrictedLink";
-import PublishedProductCard from "@/components/PublishedProductCard";
-import SituationalAwarenessCard from "@/components/SituationalAwarenessCard";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
+import PublishedProductCard from "@/components/PublishedProductCard.vue";
+import SituationalAwarenessCard from "@/components/SituationalAwarenessCard.vue";
 
 const carouselSettings = {
   itemsToShow: 1.75,

@@ -28,7 +28,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 import { mockDocument } from "@/data";
-import EditProductForm from "@/components/EditProductForm";
+import EditProductForm from "@/components/EditProductForm.vue";
 
 export default {
   components: {
@@ -75,7 +75,7 @@ export default {
     });
 
     onMounted(() => {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
           product.value = mockDocument;
