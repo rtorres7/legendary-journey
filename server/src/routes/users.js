@@ -1,14 +1,13 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-var User = require("../models/user");
+const User = require("../models/user");
+const { handleMongooseError } = require("../util/errors");
 
 // GET
 router.get("/", (req, res) => {
   User.findOne({}, function (error, user) {
-    if (error) {
-      console.error(error);
-    }
+    handleMongooseError("Error finding User", error);
     res.send(user);
   });
 });

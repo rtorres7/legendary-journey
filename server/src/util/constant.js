@@ -4,15 +4,8 @@ const indices = [
     index: "products",
     mappings: {
       properties: {
+        // Indexed fields
         classification: {
-          type: "keyword",
-          index: true,
-        },
-        classification_xml: {
-          type: "keyword",
-          index: false,
-        },
-        control_to: {
           type: "keyword",
           index: true,
         },
@@ -20,65 +13,31 @@ const indices = [
           type: "keyword",
           index: true,
         },
-        date_published: {
+        datePublished: {
           type: "date",
           index: true,
         },
-        organizations: {
-          type: "object",
-          properties: {
-            restricted: {
-              type: "keyword",
-              index: true,
-            }
-          }
-        },
-        html_body: {
+        htmlBody: {
           type: "text",
-          index: true,
-        },
-        id: {
-          type: "keyword",
           index: true,
         },
         issues: {
           type: "keyword",
           index: true,
         },
-        needed: {
-          type: "object",
-        },
-        non_state_actors: {
+        producingOffices: {
           type: "keyword",
           index: true,
         },
-        org_restricted: {
-          type: "text",
-        },
-        poc_info: {
-          type: "text",
-          index: true,
-        },
-        producing_offices: {
+        productType: {
           type: "keyword",
           index: true,
-        },
-        product_type_id: {
-          type: "keyword",
-          index: true,
-        },
-        product_type: {
-          type: "keyword",
-          index: true,
-        },
-        product_type_name: {
-          type: "text",
         },
         regions: {
           type: "keyword",
           index: true,
         },
-        reporting_type: {
+        reportingType: {
           type: "keyword",
           index: true,
         },
@@ -86,29 +45,38 @@ const indices = [
           type: "keyword",
           index: true,
         },
-        summary_classif: {
-          type: "keyword",
-          index: true,
-        },
-        summary_classif_xml: {
-          type: "keyword",
-          index: false,
-        },
-        title_classif: {
-          type: "keyword",
-          index: true,
-        },
-        title_classif_xml: {
-          type: "keyword",
-          index: false,
-        },
         topics: {
           type: "keyword",
           index: true,
         },
+
+        // Stored fields
+        classificationXml: {
+          type: "keyword"
+        },
+        needed: {
+          type: "object",
+        },
+        orgRestricted: {
+          type: "text",
+        },
+        productNumber: {
+          type: "text",
+        },
+        summary: {
+          type: "text"
+        },
+        summaryClassification: {
+          type: "text"
+        },
+        title: {
+          type: "text"
+        },
+        titleClassification: {
+          type: "text"
+        },
         worldwide: {
           type: "boolean",
-          index: true,
         },
       },
     },

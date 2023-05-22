@@ -1,5 +1,6 @@
 const { Client } = require("@elastic/elasticsearch");
 const constant = require("../util/constant.js");
+const dayjs = require("dayjs");
 
 class SearchService {
   constructor() {
@@ -19,14 +20,9 @@ class SearchService {
       size: perPage,
       sort: [sortClause],
       aggs: {
-        reporting_types: {
+        classification: {
           terms: {
-            field: 'reporting_type'
-          }
-        },
-        topics: {
-          terms: {
-            field: 'topics'
+            field: 'classification'
           }
         },
         countries: {
@@ -34,19 +30,39 @@ class SearchService {
             field: 'countries'
           }
         },
-        product_types: {
+        issues: {
           terms: {
-            field: 'product_type'
-          }
-        },
-        classification: {
-          terms: {
-            field: 'classification'
+            field: 'issues'
           }
         },
         producing_offices: {
           terms: {
-            field: 'producing_offices'
+            field: 'producingOffices'
+          }
+        },
+        product_types: {
+          terms: {
+            field: 'productType'
+          }
+        },
+        regions: {
+          terms: {
+            field: 'regions'
+          }
+        },
+        reporting_types: {
+          terms: {
+            field: 'reportingType'
+          }
+        },
+        subregions: {
+          terms: {
+            field: 'subregions'
+          }
+        },
+        topics: {
+          terms: {
+            field: 'topics'
           }
         },
       },
@@ -67,9 +83,9 @@ class SearchService {
   buildSortClause(sortMethod) {
     switch (sortMethod) {
       case 'desc':
-        return { date_published: { order: 'desc' }};
+        return { datePublished: { order: 'desc' }};
       case 'asc':
-        return { date_published: { order: 'asc' }};
+        return { datePublished: { order: 'asc' }};
       default:
         return { '_score': { order: 'desc' }};
     }
@@ -79,7 +95,19 @@ class SearchService {
     const query = {};
 
     if (term !== undefined && term !== '') {
-      query.match = { html_body: term };
+      query.match = { htmlBody: term };
+    }
+
+    if (filters.start_date !== undefined && filters.end_date !== undefined) {
+      const start = dayjs(filters.start_date).startOf('day');
+      const end = dayjs(filters.end_date).endOf('day');
+
+      query.range = {
+        datePublished: {
+          gte: start,
+          lte: end,
+        }
+      }
     }
 
     this.addAndClause(query, 'countries', filters.countries);
@@ -88,9 +116,9 @@ class SearchService {
     this.addAndClause(query, 'topics', filters.topics);
     this.addAndClause(query, 'issues', filters.issues);
     this.addAndClause(query, 'classification', filters.classification);
-    this.addOrClause(query, 'product_type_id', filters.product_types);
-    this.addOrClause(query, 'reporting_type', filters.reporting_types);
-    this.addOrClause(query, 'producing_offices', filters.producing_offices);
+    this.addOrClause(query, 'productType', filters.product_types);
+    this.addOrClause(query, 'reportingType', filters.reporting_types);
+    this.addOrClause(query, 'producingOffices', filters.producing_offices);
 
     if (Object.keys(query).length === 0) {
       return null;
