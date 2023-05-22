@@ -219,7 +219,6 @@ export default {
     const isMissionDialogOpen = ref(false);
     const isSecurityDialogOpen = ref(false);
     const isFAQDialogOpen = ref(false);
-    console.log("import: ", import.meta);
     const version = `v${import.meta.env.VITE_APP_VERSION}`;
 
     const closeMissionDialog = () => {
