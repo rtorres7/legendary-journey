@@ -1066,7 +1066,10 @@ export default {
       form.value.topics = topicsToSelect;
       const dissemsToSelect = [];
       updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
-        let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
+        let dissemValue = getValueForCode(
+          lists.dissemOrgs,
+          dissemFromBackend.code
+        );
         dissemsToSelect.push(dissemValue);
       });
       const allIntelOrgs = lists.dissemOrgs.filter(
