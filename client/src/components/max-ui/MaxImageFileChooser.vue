@@ -27,6 +27,11 @@
         />
       </label>
     </div>
+    <span
+      class="text-sm text-gray-600 dark:text-slate-400 energy:text-zinc-400 italic"
+    >
+      * Image must be square, minimum 300x300px</span
+    >
     <div v-if="binary" class="flex flex-col">
       <img
         :src="getImgUrl(binary)"
@@ -104,8 +109,8 @@ export default {
     };
 
     const getImgUrl = (link) => {
-      if (process.env.NODE_ENV === "offline") {
-        return require("@/assets/ukraine_flag_70x70.png");
+      if (import.meta.env.MODE === "offline") {
+        return new URL("@/assets/ukraine_flag_70x70.png", import.meta.url).href;
       }
       return link;
     };

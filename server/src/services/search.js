@@ -1,5 +1,6 @@
 const { Client } = require("@elastic/elasticsearch");
 const constant = require("../util/constant.js");
+const dayjs = require("dayjs");
 
 class SearchService {
   constructor() {
@@ -7,27 +8,21 @@ class SearchService {
     this.index = "products";
   }
 
-  async search(term, perPage=10, page=1, sortMethod='desc') {
+  async search(term, perPage=10, page=1, sortMethod='desc', filters = {}) {
     const skipCount = (page - 1) * perPage;
     const sortClause = this.buildSortClause(sortMethod);
 
-    return await this.client.search({
+    const query = this.buildQueryFromFilters(term, filters);
+
+    const searchParams = {
       index: this.index,
       from: skipCount,
       size: perPage,
       sort: [sortClause],
-      query: {
-        match: { html_body: term },
-      },
       aggs: {
-        reporting_types: {
+        classification: {
           terms: {
-            field: 'reporting_types'
-          }
-        },
-        topics: {
-          terms: {
-            field: 'topics'
+            field: 'classification'
           }
         },
         countries: {
@@ -35,24 +30,39 @@ class SearchService {
             field: 'countries'
           }
         },
-        product_types: {
+        issues: {
           terms: {
-            field: 'product_types'
-          }
-        },
-        classification: {
-          terms: {
-            field: 'classification'
+            field: 'issues'
           }
         },
         producing_offices: {
           terms: {
-            field: 'producing_offices'
+            field: 'producingOffices'
           }
         },
-        media_tags: {
+        product_types: {
           terms: {
-            field: 'media_tags'
+            field: 'productType'
+          }
+        },
+        regions: {
+          terms: {
+            field: 'regions'
+          }
+        },
+        reporting_types: {
+          terms: {
+            field: 'reportingType'
+          }
+        },
+        subregions: {
+          terms: {
+            field: 'subregions'
+          }
+        },
+        topics: {
+          terms: {
+            field: 'topics'
           }
         },
       },
@@ -61,18 +71,98 @@ class SearchService {
           html_body: {}
         }
       }
-    });
+    };
+
+    if (query !== null) {
+      searchParams.query = query;
+    }
+
+    return await this.client.search(searchParams);
   }
 
   buildSortClause(sortMethod) {
     switch (sortMethod) {
       case 'desc':
-        return { date_published: { order: 'desc' }};
+        return { datePublished: { order: 'desc' }};
       case 'asc':
-        return { date_published: { order: 'asc' }};
+        return { datePublished: { order: 'asc' }};
       default:
         return { '_score': { order: 'desc' }};
     }
+  }
+
+  buildQueryFromFilters(term, filters) {
+    const query = {};
+
+    if (term !== undefined && term !== '') {
+      query.match = { htmlBody: term };
+    }
+
+    if (filters.start_date !== undefined && filters.end_date !== undefined) {
+      const start = dayjs(filters.start_date).startOf('day');
+      const end = dayjs(filters.end_date).endOf('day');
+
+      query.range = {
+        datePublished: {
+          gte: start,
+          lte: end,
+        }
+      }
+    }
+
+    this.addAndClause(query, 'countries', filters.countries);
+    this.addAndClause(query, 'regions', filters.regions);
+    this.addAndClause(query, 'subregions', filters.subregions);
+    this.addAndClause(query, 'topics', filters.topics);
+    this.addAndClause(query, 'issues', filters.issues);
+    this.addAndClause(query, 'classification', filters.classification);
+    this.addOrClause(query, 'productType', filters.product_types);
+    this.addOrClause(query, 'reportingType', filters.reporting_types);
+    this.addOrClause(query, 'producingOffices', filters.producing_offices);
+
+    if (Object.keys(query).length === 0) {
+      return null;
+    }
+
+    return query;
+  }
+
+  addAndClause(query, term, filters) {
+    if (filters === undefined || filters.length === 0) {
+      return;
+    }
+
+    query.bool = query.bool || {};
+    query.bool.filter = query.bool.filter || [];
+
+    filters.forEach(filter => {
+      const filterQuery = { term: {}};
+      filterQuery.term[term] = filter;
+      query.bool.filter.push(filterQuery);
+    });
+  }
+
+  addOrClause(query, term, filters) {
+    if (filters === undefined || filters.length === 0) {
+      return;
+    }
+
+    query.bool = query.bool || {};
+    query.bool.filter = query.bool.filter || [];
+
+    const orClause = {
+      bool: {
+        should: []
+      }
+    };
+
+    filters.forEach(filter => {
+      const filterQuery = { term: {}};
+      filterQuery.term[term] = filter;
+      orClause.bool.should.push(filterQuery);
+    });
+
+    query.bool.filter.push(orClause);
   }
 }
 

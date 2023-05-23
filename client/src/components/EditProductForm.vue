@@ -716,13 +716,13 @@ import {
   hasProductImage,
   getProductImageUrl,
 } from "@/helpers";
+import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 import useFileList from "@/composables/file-list";
 import createUploader from "@/composables/file-uploader";
-import DropZone from "@/components/DropZone";
-import FilePreview from "@/components/FilePreview";
-import EditProductFormSection from "@/components/EditProductFormSection";
-import ProductContent from "@/components/ProductContent";
-import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
+import DropZone from "@/components/DropZone.vue";
+import FilePreview from "@/components/FilePreview.vue";
+import EditProductFormSection from "@/components/EditProductFormSection.vue";
+import ProductContent from "@/components/ProductContent.vue";
 
 const categories = [
   {
@@ -1170,7 +1170,7 @@ export default {
     };
     const openPreviewDialog = () => {
       loadingPreview.value = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === route.params.doc_num
         );
@@ -1237,7 +1237,7 @@ export default {
     };
 
     const deleteDocument = () => {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         router.push({
           name: "products",
           params: { date: route.params.date },
@@ -1280,7 +1280,7 @@ export default {
         );
       } else {
         publishingProduct.value = true;
-        if (process.env.NODE_ENV === "offline") {
+        if (import.meta.env.MODE === "offline") {
           setTimeout(() => {
             publishingProduct.value = false;
             router.push({
@@ -1332,7 +1332,7 @@ export default {
 
     const saveProduct = () => {
       savingProduct.value = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
           console.log("document/getDocument: ", mockDocument);
           product.value = mockDocument;

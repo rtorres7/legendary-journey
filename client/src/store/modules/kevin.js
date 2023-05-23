@@ -58,7 +58,7 @@ export default {
       let route = router.currentRoute.value;
       let date = route.params.date;
       let id = route.params.id;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         //put stuff here
         console.log("lowside");
       } else {
@@ -104,7 +104,7 @@ export default {
       let date = route.params.date;
       let id = route.params.id;
       // let date = route.params.wire_id;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         console.log("lowside");
       } else {
         axios
@@ -159,7 +159,7 @@ export default {
     },
     getDocumentData({ state, commit }, article) {
       state.loadingDocument = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         console.log("Article: ");
       } else {
         let url =
@@ -205,7 +205,7 @@ export default {
     },
     getDissemOrgs({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         //low side metadata
       } else {
         axios.get("wires/get_dissem_orgs").then((response) => {
@@ -217,7 +217,7 @@ export default {
     },
     getProductTypes({ state, commit }) {
       state.loading = true;
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         //low side metadata
       } else {
         axios.get("/wires/get_product_types").then((response) => {

@@ -484,19 +484,6 @@
                     <span class="line-clamp-5">{{ item.summary }}</span>
                   </template>
                 </div>
-                <template v-if="offlineMode">
-                  <button class="absolute -bottom-2 right-0">
-                    <HeartIcon
-                      :class="[
-                        isFavoriteProduct(item)
-                          ? 'text-red-500 fill-red-500'
-                          : '',
-                        'w-7 h-7 text-black dark:text-slate-300 energy:text-zinc-300',
-                      ]"
-                      @click="updateFavoriteStatus(item)"
-                    />
-                  </button>
-                </template>
               </div>
             </div>
           </template>
@@ -602,6 +589,8 @@
 
 <script>
 import * as dayjs from "dayjs";
+import { productDetails } from "@/data";
+import axios from "@/config/wireAxios";
 import {
   isProductLocked,
   getValueForCode,
@@ -630,14 +619,12 @@ import {
   ChevronUpIcon,
   ChevronUpDownIcon,
   XMarkIcon,
-  HeartIcon,
 } from "@heroicons/vue/24/outline";
-import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox";
-import PublishedProductCard from "@/components/PublishedProductCard";
-import ProductRestrictedLink from "@/components/ProductRestrictedLink";
-import SearchResultsFacets from "@/components/SearchResultsFacets";
-import { productDetails } from "@/data";
-import axios from "@/config/wireAxios";
+import MaxAppListbox from "@/components/max-ui/lab/MaxAppListbox.vue";
+import PublishedProductCard from "@/components/PublishedProductCard.vue";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
+import SearchResultsFacets from "@/components/SearchResultsFacets.vue";
+
 const sortOptions = [
   { name: "Newest", key: "desc", type: "sort_dir" },
   { name: "Oldest", key: "asc", type: "sort_dir" },
@@ -657,7 +644,6 @@ const resultOptions = [
 
 export default {
   components: {
-    HeartIcon,
     Dialog,
     DialogPanel,
     Disclosure,
@@ -689,7 +675,7 @@ export default {
     const results = computed(() => store.state.search.results);
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
-    const offlineMode = process.env.NODE_ENV === "offline";
+    const offlineMode = import.meta.env.MODE === "offline";
 
     const getSubregionNameForCountryCode = (code) => {
       return criteria.value.subregions.find((subregion) => {
@@ -1276,9 +1262,6 @@ export default {
 
     const currentPage = ref(parseInt(route.query.page) || 1);
 
-    const getImgUrl = (url) => {
-      return require("@/assets/" + url);
-    };
     const isMobileFacetsDialogOpen = ref(false);
 
     onMounted(() => {
@@ -1440,13 +1423,8 @@ export default {
     const openMobileFacetsDialog = () =>
       (isMobileFacetsDialogOpen.value = true);
 
-    const openMedia = (url) => {
-      let route = getImgUrl(url);
-      window.open(route);
-    };
-
     const updateFavoriteStatus = (product) => {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.doc_num
         );
@@ -1500,11 +1478,9 @@ export default {
       selectedResultCount,
       getResultCount,
       currentPage,
-      getImgUrl,
       isMobileFacetsDialogOpen,
       closeMobileFacetsDialog,
       openMobileFacetsDialog,
-      openMedia,
       offlineMode,
       updateFavoriteStatus,
     };

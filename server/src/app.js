@@ -10,6 +10,7 @@ const legacyRouter = require("./routes/legacy");
 const articlesRouter = require("./routes/articles");
 const usersRouter = require("./routes/users");
 const searchRouter = require("./routes/search");
+const alertRouter = require("./routes/alerts");
 
 const constant = require("./util/constant");
 
@@ -108,6 +109,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/", indexRouter);
+app.use("/alerts", alertRouter);
 app.use("/articles", articlesRouter);
 app.use("/home", homeRouter);
 app.use("/preload", legacyRouter);

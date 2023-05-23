@@ -65,8 +65,8 @@
 </template>
 
 <script>
-import BaseInputWIP from "@/components/base/BaseInputWIP";
-import BaseInputWIP2 from "@/components/base/BaseInputWIP2";
+import BaseInputWIP from "@/components/base/BaseInputWIP.vue";
+import BaseInputWIP2 from "@/components/base/BaseInputWIP2.vue";
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 //import axios from "@/config/wireAxios";
@@ -237,7 +237,7 @@ export default {
     //     }
     //     console.log("Sending form...(Payload below)");
     //     console.log(payload);
-    //     if (process.env.NODE_ENV === "offline") {
+    //     if (import.meta.env.MODE === "offline") {
     //       if (props.editMode) {
     //         emit("specialEditionUpdated");
     //         closeDialog();

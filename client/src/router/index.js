@@ -10,7 +10,7 @@ import SearchView from "../views/SearchView.vue";
 import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
-import MockWorkspaceView from "../views/MockWorkspaceView.vue";
+import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
 
 const routes = [
   {
@@ -128,7 +128,7 @@ const routes = [
   },
 ];
 
-if (process.env.NODE_ENV !== "production") {
+if (import.meta.env.MODE !== "production") {
   routes.push({
     path: "/workspace",
     name: "workspace",

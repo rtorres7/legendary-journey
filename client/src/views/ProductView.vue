@@ -88,20 +88,6 @@
               </tippy>
             </router-link>
           </div>
-          <div v-if="offlineMode">
-            <tippy
-              :content="productIsFavorite ? 'Undo Favorite' : 'Make Favorite'"
-            >
-              <HeartIcon
-                :class="[
-                  productIsFavorite ? 'text-red-500 fill-red-500' : '',
-                  'h-6 w-6 cursor-pointer',
-                ]"
-                aria-hidden="true"
-                @click="productIsFavorite = !productIsFavorite"
-              />
-            </tippy>
-          </div>
         </div>
         <div class="w-full pb-6 lg:pb-0">
           <ProductContent :product="product" />
@@ -181,14 +167,13 @@ import {
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
-  HeartIcon,
 } from "@heroicons/vue/24/outline";
-import NotAuthorized from "@/components/NotAuthorized";
-import ProductNavigation from "@/components/ProductNavigation";
-import ProductContent from "@/components/ProductContent";
-import ProductAttachments from "@/components/ProductAttachments";
-import ProductRelated from "@/components/ProductRelated";
-import ProductMetrics from "@/components/ProductMetrics";
+import NotAuthorized from "@/components/NotAuthorized.vue";
+import ProductNavigation from "@/components/ProductNavigation.vue";
+import ProductContent from "@/components/ProductContent.vue";
+import ProductAttachments from "@/components/ProductAttachments.vue";
+import ProductRelated from "@/components/ProductRelated.vue";
+import ProductMetrics from "@/components/ProductMetrics.vue";
 import { productDetails } from "@/data";
 import axios from "@/config/wireAxios";
 
@@ -198,7 +183,6 @@ export default {
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
-    HeartIcon,
     NotAuthorized,
     ProductNavigation,
     ProductContent,
@@ -215,7 +199,9 @@ export default {
     const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
     const featuredArticles = computed(() => store.state.features.articles);
-    const loadingFeaturedArticles = computed(() => store.state.features.loading);
+    const loadingFeaturedArticles = computed(
+      () => store.state.features.loading
+    );
     const relatedProducts = computed(
       () => store.state.relatedProducts.relatedDocuments
     );
@@ -233,7 +219,7 @@ export default {
       () => store.getters["user/isCommunityExclusive"]
     );
     const productIsFavorite = ref(store.state.product.document.favorite);
-    const offlineMode = process.env.NODE_ENV === "offline";
+    const offlineMode = import.meta.env.MODE === "offline";
 
     const printDocument = () => {
       const pdfs = product.value.attachments_metadata.filter(
@@ -373,7 +359,7 @@ export default {
     });
 
     const updateFavoriteStatus = () => {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         let documentMatch = productDetails.find(
           ({ data }) => data.doc_num === product.value.doc_num
         );

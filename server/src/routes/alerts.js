@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+
+// GET alert list
+router.get("/list", (req, res) => {
+  // TODO: Need to implement alert models. This is here to stub out the call.
+  res.send([]);
+});
+
+module.exports = router;

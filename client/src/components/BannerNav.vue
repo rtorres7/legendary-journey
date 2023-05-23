@@ -626,7 +626,7 @@
                       >User Support</a
                     >
                   </li>
-                  <template v-if="environment === 'low'">
+                  <template v-if="environment === 'offline'">
                     <li>
                       <a
                         class="cursor-pointer"
@@ -657,12 +657,12 @@ import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { metadata } from "@/config";
-import BannerSearchBar from "@/components/BannerSearchBar";
-import BannerNavPopover from "@/components/BannerNavPopover";
-import BannerNavMap from "@/components/BannerNavMap";
-import SpecialEditionLink from "@/components/SpecialEditionLink";
-import MobileSideMenu from "@/components/MobileSideMenu";
-import TestConsoleDialog from "@/components/TestConsoleDialog";
+import BannerSearchBar from "@/components/BannerSearchBar.vue";
+import BannerNavPopover from "@/components/BannerNavPopover.vue";
+import BannerNavMap from "@/components/BannerNavMap.vue";
+import SpecialEditionLink from "@/components/SpecialEditionLink.vue";
+import MobileSideMenu from "@/components/MobileSideMenu.vue";
+import TestConsoleDialog from "@/components/TestConsoleDialog.vue";
 import {
   Dialog,
   DialogPanel,
@@ -735,7 +735,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const environment = ref(process.env.NODE_ENV);
+    const environment = ref(import.meta.env.MODE);
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;
     });
