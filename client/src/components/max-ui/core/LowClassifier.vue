@@ -27,9 +27,9 @@
           <input
             :id="classif.name"
             :v-model="selectedClassif"
-            type="checkbox"
+            type="radio"
             :value="classif.name"
-            class="classifCheckbox"
+            class="classifButton"
             :checked="isChecked(classif)"
             @change="updateChecked(classif)"
           />
@@ -88,8 +88,7 @@ export default {
 
     const updateChecked = (val) => {
       checkedVal.value = val;
-      //only select one checkbox for now. maybe we'll make it more complex/multiselect in the future to be more like cmt?
-      Array.from(document.getElementsByClassName("classifCheckbox")).forEach(
+      Array.from(document.getElementsByClassName("classifButton")).forEach(
         (checkbox) => {
           if (checkbox.value == val.name || checkbox.value == val.marking) {
             checkbox.checked = true;
