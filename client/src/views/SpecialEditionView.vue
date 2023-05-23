@@ -240,9 +240,9 @@ import { useRoute, useRouter } from "vue-router";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import ProductRestrictedLink from "@/components/ProductRestrictedLink";
-import PublishedProductCard from "@/components/PublishedProductCard";
-import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
+import PublishedProductCard from "@/components/PublishedProductCard.vue";
+import SpecialEditionCreateEditDialog from "@/components/SpecialEditionCreateEditDialog.vue";
 
 export default {
   components: {
@@ -290,7 +290,7 @@ export default {
     };
 
     const deleteSpecialEdition = () => {
-      if (process.env.NODE_ENV === "offline") {
+      if (import.meta.env.MODE === "offline") {
         router.push({ name: "specialEditions" });
       } else {
         axios

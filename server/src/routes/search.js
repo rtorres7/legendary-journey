@@ -5,7 +5,7 @@ const SearchService = require("../services/search.js");
 const searchService = new SearchService();
 const Metadata = require("../models/metadata");
 
-const DISPLAY_NAMES = { producing_offices: 'Produced By Organizations' };
+const DISPLAY_NAMES = { producing_offices: 'Authored By Organizations' };
 
 // GET home page features
 router.get("/", (req, res) => {
@@ -32,10 +32,25 @@ router.get("/", (req, res) => {
 function augmentResults(results) {
   return results.hits.hits.map(hit => {
     if (hit.highlight === undefined) {
-      return hit._source;
+      return adjustResultsForUI(hit._source);
     }
-    return { ...hit._source, highlighted_result: hit.highlight.html_body };
+    return { ...(adjustResultsForUI(hit._source)), highlighted_result: hit.highlight.htmlBody };
   });
+}
+
+// TODO: This can go away once the UI is updated with the new model/fields
+function adjustResultsForUI(result) {
+  result.title_classification = result.titleClassification;
+  result.title_classif = result.titleClassification;
+  result.summary_classification = result.summaryClassification;
+  result.summary_classif = result.summaryClassification;
+  result.date_published = result.datePublished;
+  result.html_body = result.htmlBody;
+  result.needed = result.needed && result.needed.orgs && result.needed.orgs.length > 0 ? result.needed : {};
+  result.org_restricted = result.orgRestricted;
+  result.doc_num = result.productNumber;
+
+  return result;
 }
 
 async function resolveAggregations(aggregations) {
@@ -48,7 +63,7 @@ async function resolveAggregations(aggregations) {
     const rows = value.buckets.map(bucket => {
       const values = typeof metadata.criteria[key].values === 'function' ? metadata.criteria[key] : metadata.criteria[key].values;
 
-      const value = values.filter(item => item.code === bucket.key)[0];
+      const value = values.filter(item => item.code.toString() === bucket.key)[0];
       return {
         name: value === undefined ? 'Unknown' : value.name,
         key: bucket.key,

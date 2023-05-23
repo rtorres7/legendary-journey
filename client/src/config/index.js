@@ -1,7 +1,11 @@
 let file;
-if (process.env.NODE_ENV === "production") {
-  file = require("../../../production.metadata.json");
+if (
+  import.meta.env.MODE === "production" ||
+  import.meta.env.MODE === "development"
+) {
+  file = "../../../production.metadata.json";
 } else {
-  file = require(`./low.metadata.json`);
+  file = "./low.metadata.json";
 }
-export const metadata = file;
+const data = await import(file);
+export const metadata = data;
