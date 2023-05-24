@@ -1066,8 +1066,23 @@ export default {
       form.value.topics = topicsToSelect;
       const dissemsToSelect = [];
       updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
-        let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
-        dissemsToSelect.push(dissemValue);
+        //if statement is temporary until high side backend starts returning dissem orgs as an object
+        if (
+          import.meta.env.MODE !== "production" &&
+          import.meta.env.MODE !== "development"
+        ) {
+          let dissemValue = getValueForCode(
+            lists.dissemOrgs,
+            dissemFromBackend.code
+          );
+          dissemsToSelect.push(dissemValue);
+        } else {
+          let dissemValue = getValueForCode(
+            lists.dissemOrgs,
+            dissemFromBackend
+          );
+          dissemsToSelect.push(dissemValue);
+        }
       });
       const allIntelOrgs = lists.dissemOrgs.filter(
         (org) => org.category == "IC"
