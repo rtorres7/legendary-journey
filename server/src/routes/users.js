@@ -8,7 +8,7 @@ const { handleMongooseError } = require("../util/errors");
 router.get("/", (req, res) => {
   User.findOne({}, function (error, user) {
     handleMongooseError("Error finding User", error);
-    res.send(user);
+    res.json(user);
   });
 });
 

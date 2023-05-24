@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 db.articles.drop();
 db.articles.insertMany([
   {
