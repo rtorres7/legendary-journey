@@ -8,6 +8,14 @@ export const metadata = {
         {
           name: "UNCLASSIFIED",
           code: "UNC",
+          marking: "U",
+          xml: "<?xml version='1.0'?>UNCLASSIFIED<class:Classification>",
+        },
+        {
+          name: "ABCDEFG",
+          code: "ABC",
+          marking: "A",
+          xml: "<?xml version='1.0'?>ABCDEFG<class:Classification>",
         },
       ],
     },
