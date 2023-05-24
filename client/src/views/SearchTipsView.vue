@@ -3,19 +3,29 @@
 </template>
 <script>
 import Markdown from "vue3-markdown-it";
+import { ref, onMounted } from "vue";
 
 export default {
   components: {
     Markdown,
   },
   setup() {
-    const search_tips =
-      import.meta.env.MODE === "production" ||
-      import.meta.env.MODE === "development"
-        ? require("@/assets/advanced_search_tips.md")
-        : require("@/assets/advanced_search_tips.md").default;
+    const search_tips = ref();
+    const markdown = () => {
+      import("@/assets/advanced_search_tips.md").then((res) => {
+        fetch(res.default)
+          .then((response) => response.text())
+          .then((text) => (search_tips.value = text));
+      });
+    };
+
+    onMounted(() => {
+      markdown();
+    });
+
     return {
       search_tips,
+      markdown,
     };
   },
 };
