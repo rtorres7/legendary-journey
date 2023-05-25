@@ -14,6 +14,7 @@ export default defineConfig({
     vue(),
     ckeditor5({ theme: require.resolve("@ckeditor/ckeditor5-theme-lark") }),
   ],
+  assetsInclude: ["**/*.md"],
   resolve: {
     alias: [
       {
@@ -30,5 +31,8 @@ export default defineConfig({
   server: {
     host: true,
     port: 8080,
+    watch: {
+      usePolling: true,
+    },
   },
 });
