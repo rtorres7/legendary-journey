@@ -14,7 +14,7 @@ router.get("/features", (req, res) => {
       handleMongooseError("Unable to find articles", error);
 
       (async() => {
-        const results = await searchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385] });
+        const results = await searchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385, 10386] });
         const briefs = results.hits.hits.map(hit => hit._source);
 
         addAttributesToBriefs(briefs);
