@@ -10,7 +10,7 @@ const Metadata = require("../models/metadata");
 
 const IndexService = require("../services");
 const { handleMongooseError } = require("../util/errors");
-const indexService = new IndexService();
+const indexService = new IndexService(process.env.ES_URL);
 
 // TODO: Not sure this endpoint is being used and if it is, the response data format needs to change
 // GET
@@ -44,7 +44,7 @@ router.get("/date/:date", (req, res) => {
       handleMongooseError("Unable to find articles", error);
 
       const articlesForWire = article.map((article) => article.forWire);
-      res.send({ features: articlesForWire });
+      res.json({ features: articlesForWire });
     }
   );
 });
@@ -52,7 +52,7 @@ router.get("/date/:date", (req, res) => {
 //GET articles by id
 router.get("/:id", async (req, res) => {
   const article = await Article.findOne({ productNumber: req.params.id });
-  res.send(article.data.details);
+  res.json(article.data.details);
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
@@ -103,7 +103,7 @@ router.post("/", (req, res) => {
       (async () => {
         await indexService.create(article.indexable);
       })();
-      res.send({ article: { id: article.id }, doc_num: article.productNumber });
+      res.json({ article: { id: article.id }, doc_num: article.productNumber });
     });
   })();
 });
@@ -113,17 +113,15 @@ router.get("/:id/edit", (req, res) => {
   Article.findById(req.params.id, function (error, article) {
       handleMongooseError("Unable to load article for edit", error);
 
-      res.send(article.data.document);
+      res.json(article.data.document);
     }
   );
 });
 
 router.get("/:id/view", function (req, res) {
   Article.findById(req.params.id, function (error, article) {
-    if (error) {
-      console.error(error);
-    }
-    res.send(article.data.details);
+    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
+    res.json(article.data.details);
   });
 });
 
@@ -210,7 +208,7 @@ async function updateArticle(id, req, res) {
       (async () => {
 
         await indexService.update(updatedArticle.indexable);
-        res.send({
+        res.json({
           success: true,
           article: updatedArticle,
           date: updatedArticle.datePublished,
@@ -268,8 +266,9 @@ router.delete("/:id", (req, res) => {
       _id: req.params.id,
     },
     function (err) {
-      if (err) res.send(err);
-      res.send({
+      handleMongooseError('Unable to delete article', err);
+
+      res.json({
         success: true,
       });
     }

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const SearchService = require("../services/search.js");
-const searchService = new SearchService();
+const searchService = new SearchService(process.env.ES_URL);
 const Article = require("../models/articles");
 const { handleMongooseError } = require("../util/errors");
 
@@ -19,7 +19,7 @@ router.get("/features", (req, res) => {
 
         addAttributesToBriefs(briefs);
 
-        res.send({
+        res.json({
           featured: articles.map(article => article.features),
           briefs: briefs || [],
         });

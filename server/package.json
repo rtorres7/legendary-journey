@@ -5,7 +5,10 @@
   "scripts": {
     "start": "node --watch src/bin/www",
     "server-dependencies": "npm install",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --collectCoverageFrom=src/**/*.js"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --collectCoverageFrom=src/**/*.js"
+  },
+  "jest": {
+    "testPathIgnorePatterns": ["<rootDir>/__tests__/__utils__", "<rootDir>/node_modules/"]
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.6.0",

@@ -1,4 +1,4 @@
-const es_node = "http://elasticsearch:9200";
+const esNode = "http://elasticsearch:9200";
 const indices = [
   {
     index: "products",
@@ -84,6 +84,6 @@ const indices = [
 ];
 
 module.exports = {
-  es_node,
+  esNode,
   indices,
 };

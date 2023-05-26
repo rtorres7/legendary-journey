@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const SearchService = require("../services/search.js");
-const searchService = new SearchService();
+const searchService = new SearchService(process.env.ES_URL);
 const Metadata = require("../models/metadata");
 
 const DISPLAY_NAMES = { producing_offices: 'Authored By Organizations' };
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
       siteEnhancement: '',
       daClassifError: ''
     }
-    res.send(searchResult);
+    res.json(searchResult);
   })();
 });
 
