@@ -2,8 +2,8 @@ const { Client } = require("@elastic/elasticsearch");
 const constant = require("../util/constant.js");
 
 class IndexService {
-  constructor() {
-    this.client = new Client({ node: constant.es_node });
+  constructor(esUrl=constant.esNode) {
+    this.client = new Client({ node: esUrl });
     this.index = "products";
   }
 
@@ -14,20 +14,6 @@ class IndexService {
       document: product,
     });
 
-  }
-
-  async refresh() {
-    const { response } = await client.indices.refresh({
-      index: this.index,
-    });
-    return response;
-  }
-
-  async getById(id) {
-    return await this.client.get({
-      index: this.index,
-      id: id,
-    });
   }
 
   async update(product) {

@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var SpecialEditionsSchema = new Schema(
+const SpecialEditionsSchema = new Schema(
   {
     concepts: {
       posted: [
@@ -33,7 +33,7 @@ var SpecialEditionsSchema = new Schema(
   }
 );
 
-var SpecialEditions = mongoose.model(
+const SpecialEditions = mongoose.model(
   "SpecialEditions",
   SpecialEditionsSchema,
   "special_editions"

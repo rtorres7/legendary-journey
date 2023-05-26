@@ -3,8 +3,8 @@ const constant = require("../util/constant.js");
 const dayjs = require("dayjs");
 
 class SearchService {
-  constructor() {
-    this.client = new Client({ node: constant.es_node });
+  constructor(esUrl=constant.esNode) {
+    this.client = new Client({ node: esUrl });
     this.index = "products";
   }
 
@@ -68,7 +68,7 @@ class SearchService {
       },
       highlight: {
         fields: {
-          html_body: {}
+          htmlBody: {}
         }
       }
     };
@@ -115,7 +115,7 @@ class SearchService {
     this.addAndClause(query, 'subregions', filters.subregions);
     this.addAndClause(query, 'topics', filters.topics);
     this.addAndClause(query, 'issues', filters.issues);
-    this.addAndClause(query, 'classification', filters.classification);
+    this.addOrClause(query, 'classification', filters.classification);
     this.addOrClause(query, 'productType', filters.product_types);
     this.addOrClause(query, 'reportingType', filters.reporting_types);
     this.addOrClause(query, 'producingOffices', filters.producing_offices);

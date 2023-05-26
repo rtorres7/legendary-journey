@@ -174,7 +174,7 @@ ArticleSchema.virtual("forWire").get(function() {
 ArticleSchema.virtual("indexable").get(function () {
   return {
     classification: this.classification,
-    classification_xml: this.classification_xml,
+    classificationXml: this.classificationXml,
     countries: this.countries && this.countries.map(country => country.code),
     datePublished: this.datePublished,
     htmlBody: this.htmlBody,
