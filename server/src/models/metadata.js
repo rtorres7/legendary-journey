@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var MetadataSchema = new Schema(
+const MetadataSchema = new Schema(
   {
     agency: String,
     contactEmail: String,
@@ -186,5 +186,5 @@ var MetadataSchema = new Schema(
   }
 );
 
-var Metadata = mongoose.model("Metadata", MetadataSchema, "metadata");
+const Metadata = mongoose.model("Metadata", MetadataSchema, "metadata");
 module.exports = Metadata;

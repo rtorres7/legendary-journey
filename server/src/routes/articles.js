@@ -51,7 +51,7 @@ router.get("/date/:date", (req, res) => {
 
 //GET articles by id
 router.get("/:id", async (req, res) => {
-  const article = await Article.findOne({ productNumber: req.params.id });
+  const article = Article.findOne({ productNumber: req.params.id });
   res.json(article.data.details);
 });
 

@@ -1,7 +1,7 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var DissemOrgsSchema = new Schema(
+const DissemOrgsSchema = new Schema(
   {
     ancestry: String,
     ancestry_depth: Number,
@@ -25,5 +25,5 @@ var DissemOrgsSchema = new Schema(
   }
 );
 
-var DissemOrgs = mongoose.model("DissemOrgs", DissemOrgsSchema, "dissem_orgs");
+const DissemOrgs = mongoose.model("DissemOrgs", DissemOrgsSchema, "dissem_orgs");
 module.exports = DissemOrgs;
