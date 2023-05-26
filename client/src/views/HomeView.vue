@@ -26,7 +26,7 @@
                 class="text-sm hover:text-black dark:hover:text-white energy:hover:text-white"
               >
                 <router-link
-                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10386&product_types[]=10383"
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10383"
                 >
                   View More
                 </router-link>
@@ -64,7 +64,7 @@
                 class="text-sm text-right hover:text-black dark:hover:text-white energy:hover:text-white"
               >
                 <router-link
-                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10386&product_types[]=10383"
+                  to="search?text=&product_types[]=10377&product_types[]=10379&product_types[]=10380&product_types[]=10384&product_types[]=10385&product_types[]=10382&product_types[]=10383"
                 >
                   View More
                 </router-link>
