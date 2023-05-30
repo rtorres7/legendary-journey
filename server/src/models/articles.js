@@ -42,7 +42,7 @@ const ArticleSchema = new Schema(
     ],
     legacyCurrentId: String,
     needed: {
-      orgs: []
+      orgs: [],
     },
     orgRestricted: Boolean,
     pocInfo: String,
@@ -85,6 +85,7 @@ const ArticleSchema = new Schema(
     title: String,
     titleClassification: String,
     titleClassificationXml: String,
+    thumbnailCaption: String,
     topics: [
       {
         name: String,
@@ -100,7 +101,7 @@ const ArticleSchema = new Schema(
   }
 );
 
-ArticleSchema.virtual("features").get(function() {
+ArticleSchema.virtual("features").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
@@ -121,7 +122,10 @@ ArticleSchema.virtual("features").get(function() {
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: this.images,
-      needed: this.needed && this.needed.orgs && this.needed.orgs.length > 0 ? this.needed : {},
+      needed:
+        this.needed && this.needed.orgs && this.needed.orgs.length > 0
+          ? this.needed
+          : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.code,
       product_type_name: this.productType.name,
@@ -132,11 +136,11 @@ ArticleSchema.virtual("features").get(function() {
       title: this.title,
       title_classification: this.titleClassification,
       title_classif: this.titleClassification,
-    }
+    },
   };
 });
 
-ArticleSchema.virtual("forWire").get(function() {
+ArticleSchema.virtual("forWire").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
@@ -157,7 +161,10 @@ ArticleSchema.virtual("forWire").get(function() {
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: this.images,
-      needed: this.needed && this.needed.orgs && this.needed.orgs.length > 0 ? this.needed : {},
+      needed:
+        this.needed && this.needed.orgs && this.needed.orgs.length > 0
+          ? this.needed
+          : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
       state: this.state,
@@ -167,7 +174,7 @@ ArticleSchema.virtual("forWire").get(function() {
       title: this.title,
       title_classification: this.titleClassification,
       title_classif: this.titleClassification,
-    }
+    },
   };
 });
 
@@ -175,24 +182,27 @@ ArticleSchema.virtual("indexable").get(function () {
   return {
     classification: this.classification,
     classification_xml: this.classification_xml,
-    countries: this.countries && this.countries.map(country => country.code),
+    countries: this.countries && this.countries.map((country) => country.code),
     datePublished: this.datePublished,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
-    issues: this.issues && this.issues.map(issue => issue.code),
+    issues: this.issues && this.issues.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
-    producingOffices: this.producingOffices && this.producingOffices.map(office => office.code),
+    producingOffices:
+      this.producingOffices &&
+      this.producingOffices.map((office) => office.code),
     productNumber: this.productNumber,
     productType: this.productType && this.productType.code,
-    regions: this.regions && this.regions.map(region => region.code),
+    regions: this.regions && this.regions.map((region) => region.code),
     reportingType: this.reportingType && this.reportingType.code,
-    subregions: this.subregions && this.subregions.map(subregion => subregion.code),
+    subregions:
+      this.subregions && this.subregions.map((subregion) => subregion.code),
     summary: this.summary,
     summaryClassification: this.summaryClassification,
     title: this.title,
     titleClassification: this.titleClassification,
-    topics: this.topics && this.topics.map(topic => topic.code),
+    topics: this.topics && this.topics.map((topic) => topic.code),
     worldwide: this.worldwide,
   };
 });
@@ -222,6 +232,7 @@ ArticleSchema.virtual("data.document").get(function () {
     titleClassification: this.titleClassification,
     titleClassificationXml: this.titleClassificationXml,
     topics: this.topics,
+    thumbnailCaption: this.thumbnailCaption,
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields
@@ -238,6 +249,7 @@ ArticleSchema.virtual("data.document").get(function () {
     summary_classif_xml: this.summaryClassificationXml,
     title_classif: this.titleClassification,
     title_classif_xml: this.titleClassificationXml,
+    thumbnailCaption: this.thumbnailCaption,
   };
 });
 
@@ -245,8 +257,9 @@ ArticleSchema.virtual("data.details").get(function () {
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
-    coauthors: this.coauthors && this.coauthors.map(author => author.name), // UI needs a list not the objects right now
-    coordinators: this.coordinators && this.coordinators.map(coord =>  coord.name), // UI needs a list not the objects right now
+    coauthors: this.coauthors && this.coauthors.map((author) => author.name), // UI needs a list not the objects right now
+    coordinators:
+      this.coordinators && this.coordinators.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
@@ -269,6 +282,7 @@ ArticleSchema.virtual("data.details").get(function () {
     title: this.title,
     titleClassification: this.titleClassification,
     titleClassificationXml: this.titleClassificationXml,
+    thumbnailCaption: this.thumbnailCaption,
     topics: this.topics,
     worldwide: this.worldwide,
 
@@ -284,10 +298,12 @@ ArticleSchema.virtual("data.details").get(function () {
     },
     feature_date: this.datePublished,
     html_body: this.htmlBody,
-    legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== '',
+    legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,
     posted_at: this.datePublished,
-    producing_offices: this.producingOffices && this.producingOffices.map(office => office.name),
+    producing_offices:
+      this.producingOffices &&
+      this.producingOffices.map((office) => office.name),
     product_type_id: this.productType.code,
     product_type_name: this.productType.name,
     published_by: this.publishedBy && this.publishedBy.name,

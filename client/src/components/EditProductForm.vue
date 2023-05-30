@@ -289,6 +289,16 @@
                         class="absolute hover:bg-black/25 h-full w-full top-0 z-[3]"
                       />
                     </div>
+                    <div class="lg:w-3/4">
+                      <MaxInput
+                        v-model="form.thumbnailCaption"
+                        label="Thumbnail Caption"
+                        type="text"
+                        @update:modelValue="
+                          updateField($event, 'thumbnailCaption')
+                        "
+                      />
+                    </div>
                   </div>
                   <div>
                     <MaxCkEditor
@@ -868,6 +878,7 @@ export default {
       titleClassificationXML: "",
       topics: [],
       thumbnailImage: false,
+      thumbnailCaption: "",
       worldwide: null,
     });
     const payload = ref({});
@@ -1143,6 +1154,7 @@ export default {
       form.value.summaryClassificationXML = updatedProduct.summary_classif_xml;
       form.value.titleClassificationXML = updatedProduct.title_classif_xml;
       form.value.editorData = updatedProduct.html_body;
+      form.value.thumbnailCaption = updatedProduct.thumbnailCaption;
     };
 
     onMounted(() => {
