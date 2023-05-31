@@ -3,7 +3,7 @@ const router = express.Router();
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
 const Metadata = require("../models/metadata");
@@ -58,10 +58,10 @@ router.get("/:id", async (req, res) => {
 // POST (adapter to support /processDocument while working towards splitting it up)
 router.post("/processDocument", (req, res) => {
   switch (req.body.document_action) {
-    case 'create':
+    case "create":
       res.redirect(307, "/articles/");
       break;
-    case 'save':
+    case "save":
       updateArticle(req.body.id, req, res);
       break;
     default:
@@ -73,10 +73,24 @@ router.post("/processDocument", (req, res) => {
 router.post("/", (req, res) => {
   (async () => {
     const metadata = await getMetadata();
-    const topics = getLookupObjectsByCodes(req.body.topics, metadata.criteria.topics.values);
-    const issues = getIssuesForTopics(req.body.topics, metadata.criteria.issues.values);
-    const producingOffices = req.body.producing_office && getLookupObjectsByCodes([req.body.producing_office], metadata.criteria.producing_offices);
-    const reportingType = getReportingTypeForProductType(req.body.product_type_id, metadata.criteria.reporting_types.values);
+    const topics = getLookupObjectsByCodes(
+      req.body.topics,
+      metadata.criteria.topics.values
+    );
+    const issues = getIssuesForTopics(
+      req.body.topics,
+      metadata.criteria.issues.values
+    );
+    const producingOffices =
+      req.body.producing_office &&
+      getLookupObjectsByCodes(
+        [req.body.producing_office],
+        metadata.criteria.producing_offices
+      );
+    const reportingType = getReportingTypeForProductType(
+      req.body.product_type_id,
+      metadata.criteria.reporting_types.values
+    );
     const productType = resolveProductType(req.body.product_type_id, metadata);
 
     const article = new Article({
@@ -111,16 +125,18 @@ router.post("/", (req, res) => {
 // Fetch single post
 router.get("/:id/edit", (req, res) => {
   Article.findById(req.params.id, function (error, article) {
-      handleMongooseError("Unable to load article for edit", error);
+    handleMongooseError("Unable to load article for edit", error);
 
-      res.json(article.data.document);
-    }
-  );
+    res.json(article.data.document);
+  });
 });
 
 router.get("/:id/view", function (req, res) {
   Article.findById(req.params.id, function (error, article) {
-    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
+    handleMongooseError(
+      `Unable to find article with id ${req.params.id}`,
+      error
+    );
     res.json(article.data.details);
   });
 });
@@ -130,12 +146,12 @@ function getLookupObjectsByCodes(codes, metadata) {
     return [];
   }
 
-  return metadata.filter(lookupData => codes.indexOf(lookupData.code) >= 0);
+  return metadata.filter((lookupData) => codes.indexOf(lookupData.code) >= 0);
 }
 
 function resolveProductType(productTypeId, metadata) {
   const productTypes = metadata.criteria.product_types;
-  return productTypes.values.filter(productType => {
+  return productTypes.values.filter((productType) => {
     return productType.code === productTypeId;
   })[0];
 }
@@ -155,18 +171,48 @@ router.put("/:id", (req, res) => {
 async function updateArticle(id, req, res) {
   const metadata = await getMetadata();
 
-  const countries = getLookupObjectsByCodes(req.body.countries, metadata.criteria.countries.values);
-  const subregions = getSubRegionsForCountries(req.body.countries, metadata.criteria.subregions.values);
-  const regions = getRegionsForSubRegions(subregions.map(subRegion => subRegion.code), metadata.criteria.regions.values);
+  const countries = getLookupObjectsByCodes(
+    req.body.countries,
+    metadata.criteria.countries.values
+  );
+  const subregions = getSubRegionsForCountries(
+    req.body.countries,
+    metadata.criteria.subregions.values
+  );
+  const regions = getRegionsForSubRegions(
+    subregions.map((subRegion) => subRegion.code),
+    metadata.criteria.regions.values
+  );
 
-  const topics = getLookupObjectsByCodes(req.body.topics, metadata.criteria.topics.values);
-  const issues = getIssuesForTopics(req.body.topics, metadata.criteria.issues.values);
+  const topics = getLookupObjectsByCodes(
+    req.body.topics,
+    metadata.criteria.topics.values
+  );
+  const issues = getIssuesForTopics(
+    req.body.topics,
+    metadata.criteria.issues.values
+  );
 
-  const producingOffices = getLookupObjectsByCodes(req.body.producing_offices, metadata.criteria.producing_offices);
-  const coauthors = getLookupObjectsByCodes(req.body.coauthors, metadata.criteria.coauthors);
-  const coordinators = getLookupObjectsByCodes(req.body.coordinators, metadata.criteria.coordinators);
-  const dissemOrgs = getLookupObjectsByCodes(req.body.dissem_orgs, metadata.criteria.dissem_orgs);
-  const reportingType = getReportingTypeForProductType(req.body.product_type_id, metadata.criteria.reporting_types.values);
+  const producingOffices = getLookupObjectsByCodes(
+    req.body.producing_offices,
+    metadata.criteria.producing_offices
+  );
+  const coauthors = getLookupObjectsByCodes(
+    req.body.coauthors,
+    metadata.criteria.coauthors
+  );
+  const coordinators = getLookupObjectsByCodes(
+    req.body.coordinators,
+    metadata.criteria.coordinators
+  );
+  const dissemOrgs = getLookupObjectsByCodes(
+    req.body.dissem_orgs,
+    metadata.criteria.dissem_orgs
+  );
+  const reportingType = getReportingTypeForProductType(
+    req.body.product_type_id,
+    metadata.criteria.reporting_types.values
+  );
   const productType = resolveProductType(req.body.product_type_id, metadata);
 
   const article = {
@@ -194,6 +240,7 @@ async function updateArticle(id, req, res) {
     titleClassification: req.body.title_classif,
     titleClassificationXml: req.body.title_classif, // This will need to be changed when we have real xml
     topics: topics,
+    thumbnailCaption: req.body.thumbnailCaption,
     updatedAt: dayjs().toDate(),
     worldwide: req.body.worldwide,
   };
@@ -206,7 +253,6 @@ async function updateArticle(id, req, res) {
       handleMongooseError(`Unable to update article with id ${id}`, error);
 
       (async () => {
-
         await indexService.update(updatedArticle.indexable);
         res.json({
           success: true,
@@ -222,30 +268,48 @@ async function updateArticle(id, req, res) {
 }
 
 function getSubRegionsForCountries(countryCodes, subRegions) {
-  if (countryCodes === undefined || countryCodes.length === 0 || subRegions === undefined) {
+  if (
+    countryCodes === undefined ||
+    countryCodes.length === 0 ||
+    subRegions === undefined
+  ) {
     return [];
   }
 
-  return subRegions.filter(subRegion => subRegion.country_codes.filter(code => countryCodes.includes(code)).length > 0);
+  return subRegions.filter(
+    (subRegion) =>
+      subRegion.country_codes.filter((code) => countryCodes.includes(code))
+        .length > 0
+  );
 }
 
 function getRegionsForSubRegions(subRegionCodes, regions) {
-  if (subRegionCodes === undefined || subRegionCodes.length === 0 || regions === undefined) {
+  if (
+    subRegionCodes === undefined ||
+    subRegionCodes.length === 0 ||
+    regions === undefined
+  ) {
     return [];
   }
 
-  return regions.filter(region => region.subregions.filter(code => subRegionCodes.includes(code)).length > 0);
+  return regions.filter(
+    (region) =>
+      region.subregions.filter((code) => subRegionCodes.includes(code)).length >
+      0
+  );
 }
 
 function getReportingTypeForProductType(productTypeId, reportingTypes) {
   if (productTypeId === undefined || reportingTypes === undefined) {
-    return { name: '', code: ''};
+    return { name: "", code: "" };
   }
 
-  const foundTypes = reportingTypes.filter(reportingType => reportingType.productTypes.includes(productTypeId));
+  const foundTypes = reportingTypes.filter((reportingType) =>
+    reportingType.productTypes.includes(productTypeId)
+  );
 
   if (foundTypes.length === 0) {
-    return { name: '', code: ''};
+    return { name: "", code: "" };
   }
 
   return foundTypes[0];
@@ -256,7 +320,13 @@ function getIssuesForTopics(topics, issues) {
     return [];
   }
 
-  return issues.filter(issue => issue.topics.map(issue => issue.codes).flat().filter(code => topics.includes(code)).length > 0);
+  return issues.filter(
+    (issue) =>
+      issue.topics
+        .map((issue) => issue.codes)
+        .flat()
+        .filter((code) => topics.includes(code)).length > 0
+  );
 }
 
 // Delete an article
@@ -266,7 +336,7 @@ router.delete("/:id", (req, res) => {
       _id: req.params.id,
     },
     function (err) {
-      handleMongooseError('Unable to delete article', err);
+      handleMongooseError("Unable to delete article", err);
 
       res.json({
         success: true,
