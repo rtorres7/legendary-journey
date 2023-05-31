@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const SearchService = require("../services/search.js");
-const searchService = new SearchService();
+const searchService = new SearchService(process.env.ES_URL);
 const Article = require("../models/articles");
 const { handleMongooseError } = require("../util/errors");
 
@@ -14,12 +14,12 @@ router.get("/features", (req, res) => {
       handleMongooseError("Unable to find articles", error);
 
       (async() => {
-        const results = await searchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385] });
+        const results = await searchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385, 10386] });
         const briefs = results.hits.hits.map(hit => hit._source);
 
         addAttributesToBriefs(briefs);
 
-        res.send({
+        res.json({
           featured: articles.map(article => article.features),
           briefs: briefs || [],
         });

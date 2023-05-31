@@ -35,4 +35,7 @@ export default defineConfig({
       usePolling: true,
     },
   },
+  test: {
+    environment: "happy-dom",
+  },
 });

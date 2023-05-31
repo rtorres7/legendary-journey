@@ -1,18 +1,13 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-var Metadata = require("../models/metadata");
+const Metadata = require("../models/metadata");
+const { handleMongooseError } = require("../util/errors");
 
-/* GET home page. */
-router.get("/", function (req, res) {
-  res.render("index", { title: "Express" });
-});
 router.get("/metadata", function (req, res) {
   Metadata.findOne({}, function (error, metadata) {
-    if (error) {
-      console.error(error);
-    }
-    res.send({ metadata });
+    handleMongooseError('Unable to load metadata', error);
+    res.json({ metadata });
   });
 });
 module.exports = router;

@@ -1,0 +1,262 @@
+const { ElasticsearchContainer } = require("testcontainers");
+const { Client } = require("@elastic/elasticsearch");
+const SearchService = require("../../src/services/search");
+const constant = require("../../src/util/constant");
+const { loadElasticSearch } = require("../__utils__/dataLoader");
+
+describe('SearchService', () => {
+  let service;
+  let container;
+
+  beforeAll(async () => {
+    container = await new ElasticsearchContainer().start();
+    const client = new Client({ node: container.getHttpUrl() });
+
+    // Setup index
+    await client.indices.create({
+      index: 'products',
+      mappings: constant.indices[0].mappings,
+    });
+
+    // Load data
+    await loadElasticSearch(container.getHttpUrl());
+  }, 70_000);
+
+  afterAll(async () => {
+    await container.stop();
+  });
+
+  beforeEach(() => {
+    service = new SearchService(container.getHttpUrl());
+  });
+
+  describe('search', () => {
+    it('should have default paging values', async ()=> {
+      const result = await service.search('');
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+    });
+
+    it('should have respect provided paging values', async ()=> {
+      const result = await service.search('', 1);
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(5);
+    });
+
+    it('should allow sorting by datePublished ascending', async ()=> {
+      const result = await service.search('', 10, 1, 'asc');
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4", "WIReWIRe_sample_5"]);
+    });
+
+    it('should allow sorting by datePublished desc', async ()=> {
+      const result = await service.search('', 10, 1, 'desc');
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow sorting by _score desc', async ()=> {
+      const result = await service.search('', 10, 1, 'score');
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4", "WIReWIRe_sample_5"]);
+    });
+
+    it('should default sorting to desc', async ()=> {
+      const result = await service.search('');
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow a term query on htmlBody', async ()=> {
+      const result = await service.search('flu');
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on datePublished', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { start_date: '2022-09-02', end_date: '2022-09-03'});
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3"]);
+    });
+
+    it('should allow filtering on countries with single country', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { countries: ['AFG'] });
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on countries with multiple countries using AND', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { countries: ['AFG', 'CHE'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on regions with single region', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { regions: ['AS'] });
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on regions with multiple regions using AND', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { regions: ['AS', 'EU'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on subregions with single subregion', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { subregions: ['ASso'] });
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on subregions with multiple subregions using AND', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { subregions: ['ASso', 'EUce'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on topics with single topic', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { topics: ['TERR'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on topics with multiple topics using AND', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { topics: ['BRL', 'TERR'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on issues with single issue', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { issues: ['THS'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on issues with multiple issues using AND', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { issues: ['EEG', 'THS'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on classification with single classification', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { classification: ['S'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on classification with multiple classifications using OR', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { classification: ['UNC', 'S'] });
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on productType with single productType', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { product_types: [10378] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on productType with multiple productType using OR', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { product_types: [10376, 10378] });
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on reportingType with single reportingType', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { reporting_types: ['analysis.all_source'] });
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on reportingType with multiple reportingType using OR', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { reporting_types: ['reporting.enterprise', 'analysis.all_source'] });
+      expect(result.hits.hits.length).toEqual(5);
+      expect(result.hits.total.value).toEqual(5);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on producingOffices with single producingOffices', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { producing_offices: ['ANCESTRY'] });
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_3", "WIReWIRe_sample_2"]);
+    });
+
+    it('should allow filtering on producingOffices with multiple producingOffices using OR', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { producing_offices: ['ANCESTRY', 'EDUCATION'] });
+      expect(result.hits.hits.length).toEqual(3);
+      expect(result.hits.total.value).toEqual(3);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+  });
+});

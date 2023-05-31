@@ -4,24 +4,27 @@ const mongoose = require("mongoose");
 const request = require('supertest');
 const express = require("express");
 
-const router = require('../../src/routes/users');
-const User = require('../../src/models/user');
+const router = require('../../src/routes/index');
+const { loadMetadata } = require("../__utils__/dataLoader");
 
 const app = express();
 app.use(express.json());
-app.use('/users', router);
+app.use('/', router);
 
-describe('User Routes', () => {
+describe('Index Routes', () => {
   let container;
 
   beforeAll(async () => {
     container = await new GenericContainer('mongo')
       .withExposedPorts(27017)
       .start();
+
+    // Load metadata
+    await loadMetadata(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}/metadata`);
   }, 70_000);
 
   beforeEach(async () => {
-    await mongoose.connect(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}/users`, {
+    await mongoose.connect(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}/metadata`, {
       useNewUrlParser: true,
     });
   })
@@ -34,24 +37,14 @@ describe('User Routes', () => {
     mongoose.connection.close();
   })
 
-  describe('GET /users', () => {
-    const user = new User({
-      name: 'John Doe',
-      email: 'jdoe@app.co'
-    });
-
-    beforeEach(async () => {
-      await user.save();
-    });
-
-    it("should return a single user", () => {
+  describe('GET /metadata', () => {
+    it("should return the metadata", () => {
       return request(app)
-        .get('/users')
+        .get('/metadata')
         .expect('Content-Type', /json/)
         .expect(200)
         .then((res) => {
-          expect(res.body.name).toBe(user.name);
-          expect(res.body.email).toBe(user.email);
+          expect(res.body.metadata.criteria).toBeDefined();
         });
     });
   })
