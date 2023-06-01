@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.22.xsd">
+
+    <changeSet id="1" author="chriroh">
+        <createTable tableName="workspace_collections">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique Identifier for collection">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date collection was created">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date collection was updated">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text" remarks="Name of the collection">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text" remarks="Any extra information about the collection"/>
+            <column name="image" type="text" remarks="Url or location of the uploaded image for the collection"/>
+            <column name="created_by" type="bigint" remarks="ID of the user creating the collection">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="workspace_collections" indexName="workspace_collections_name_idx">
+            <column name="name"/>
+        </createIndex>
+        <createIndex tableName="workspace_collections" indexName="workspace_collections_description_idx">
+            <column name="description"/>
+        </createIndex>
+        <createIndex tableName="workspace_collections" indexName="workspace_collections_created_by_idx">
+            <column name="created_by"/>
+        </createIndex>
+
+        <createTable tableName="workspace_saved_products">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique identifier for saved products">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date product was saved">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="text" remarks="Unique id of the product being saved">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="bigint" remarks="ID of the user saving the product">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="workspace_saved_products" indexName="workspace_saved_products_created_by_idx">
+            <column name="created_by"/>
+        </createIndex>
+
+        <createTable tableName="workspace_collection_products">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique id of the association between collection and product">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date product was added to the collection">
+                <constraints nullable="false"/>
+            </column>
+            <column name="collection_id" type="bigint" remarks="Unique id of the collection being associated">
+                <constraints nullable="false" foreignKeyName="fk_workspace_collection_product_workspace_collection" references="workspace_collections(id)" deleteCascade="true"/>
+            </column>
+            <column name="saved_product_id" type="bigint" remarks="Unique id of the saved product being associated">
+                <constraints nullable="false" foreignKeyName="fk_workspace_collection_product_workspace_saved_product" references="workspace_saved_products(id)" deleteCascade="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="unique_views">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique id of the unique view tracking record">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_viewed_at" type="timestamp without time zone" remarks="Date product was first viewed by the user">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_viewed_at" type="timestamp without time zone" remarks="Date product was most recently viewed by the user">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="text" remarks="Unique id of the product being viewed">
+                <constraints nullable="false"/>
+            </column>
+            <column name="viewed_by" type="bigint" remarks="Unique id of the user viewing the product">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="unique_views" indexName="unique_views_product_id_idx">
+            <column name="product_id"/>
+        </createIndex>
+        <createIndex tableName="unique_views" indexName="unique_views_viewed_by_idx">
+            <column name="viewed_by"/>
+        </createIndex>
+
+        <createTable tableName="total_views">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique id of the total view tracking record">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_viewed_at" type="timestamp without time zone" remarks="Date product was first viewed by anyone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_viewed_at" type="timestamp without time zone" remarks="Date product was most recently viewed by anyone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="text" remarks="Unique id of the product being viewed">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_view_count" type="bigint" remarks="Total number of times the product has been viewed by anyone">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="total_views" indexName="total_views_product_id_idx">
+            <column name="product_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
