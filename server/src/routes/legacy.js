@@ -25,6 +25,10 @@ router.get("/documents/:id.json", function (req, res) {
   res.redirect(`/articles/${req.params.id}`);
 });
 
+router.get("/:id/preview.json", function (req, res) {
+  res.redirect(`/articles/${req.params.id}`);
+});
+
 router.get("/user_data", function (req, res) {
   res.redirect("/users/");
 });
