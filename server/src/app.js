@@ -19,8 +19,8 @@ const app = express();
 // DB Setup
 const mongoose = require("mongoose");
 
-const DATABASE_URL = process.env.DATABASE_URL || "http://localhost";
-mongoose.connect(`mongodb://${DATABASE_URL}/articles`, {
+const MONGO_DATABASE_URL = process.env.MONGO_DATABASE_URL || "http://localhost";
+mongoose.connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
   useNewUrlParser: true,
 });
 
@@ -36,7 +36,7 @@ db.on("error", function (error) {
   ) {
     setTimeout(function () {
       mongoose
-        .connect(`mongodb://${DATABASE_URL}/articles`, {
+        .connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
           useNewUrlParser: true,
         })
         .catch(() => {

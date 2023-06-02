@@ -30,17 +30,30 @@ services:
       elasticsearch:
         condition: service_healthy
     environment:
-      - DATABASE_URL=server-database:27017
+      - MONGO_DATABASE_URL=mongodb:27017
+      - POSTGRES_DATABASE_URL=postgres:15432
     container_name: server
 
-  server-database:
+  postgres:
+    image: postgres:15
+    ports:
+      - 15432:5432
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    container_name: postgres
+    environment:
+      POSTGRES_USER: maximus
+      POSTGRES_PASSWORD: magic
+
+  mongodb:
     build: server/src/mongo
     ports:
       - 27017:27017
     restart: always
     volumes:
       - /data/db
-    container_name: database
+    container_name: mongodb
     environment:
       #MONGO_INITDB_ROOT_USERNAME: {{USERNAME}}
       #MONGO_INITDB_ROOT_PASSWORD: {{PWD}}
@@ -86,6 +99,19 @@ services:
     depends_on:
       - elasticsearch
 
+  liquibase:
+    image: liquibase/liquibase
+    container_name: liquibase
+    environment:
+      LIQUIBASE_SECURE_PARSING: false
+    volumes:
+      - ./server/src/migrations:/liquibase/changelog/
+    command: --url=jdbc:postgresql://postgres:5432/maximus --changelog-file=changelog-root.xml --username=maximus --password=magic update
+    depends_on:
+      - postgres
+
 volumes:
   elasticsearch-data:
+    driver: local
+  pg-data:
     driver: local
