@@ -50,9 +50,11 @@ router.get("/date/:date", (req, res) => {
 });
 
 //GET articles by id
-router.get("/:id", async (req, res) => {
-  const article = Article.findOne({ productNumber: req.params.id });
-  res.json(article.data.details);
+router.get("/:id", (req, res) => {
+  Article.findOne({ productNumber: req.params.id }, (errors, article) => {
+    handleMongooseError("Unable to find article", errors);
+    res.json(article.data.details);
+  });
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
