@@ -54,7 +54,7 @@ function adjustResultsForUI(result) {
 }
 
 async function resolveAggregations(aggregations) {
-  const metadata = Metadata.findOne().lean();
+  const metadata = await Metadata.findOne().lean();
 
   const resolvedAggs = {};
   Object.entries(aggregations).forEach((entry) => {

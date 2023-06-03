@@ -4,6 +4,8 @@ const Metadata = require("../../src/models/metadata");
 const { Client } = require("@elastic/elasticsearch");
 const mongoose = require("mongoose");
 
+const { Sequelize } = require('sequelize');
+
 const articles = [
   new Article({
     classification: "UNC",
@@ -419,7 +421,7 @@ const articles = [
       name: "Analysis: All Source",
       code: "analysis.all_source",
     },
-    state: "posted",
+    state: "draft",
     subregions: [],
     summary:
       "Events to commemorate Queen Elizabeth II are continuing across the U.K. this week, after King Charles III was proclaimed monarch at a ceremony in London over the weekend. King Charles III visited Parliament on Monday, where he made his first address there as monarch and lawmakers expressed their condolences for the death of his mother, before flying with the queen consort to Edinburgh. That the King has chosen to begin his reign with visits to Edinburgh, Belfast and Cardiff is telling. It suggests that the future of the Union is at the heart of his concerns. The early decades of his late mother's reign were characterised by the long, slow contraction of British Imperial power around the world. He will be alert to the possibility that his own reign could come to be defined by the continuation of that process here - and the eventual dissolution of the United Kingdom itself.",
@@ -2810,8 +2812,65 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
   mongoose.connection.close();
 };
 
+const loadSavedProducts = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const savedProductModel = require('../../src/models/saved_product');
+  savedProductModel(sequelize);
+
+  await sequelize.models.SavedProduct.sync();
+
+  await sequelize.models.SavedProduct.create({
+    productId: 'WIReWIRe_sample_1',
+    createdBy: 1
+  });
+}
+
+const loadCollections = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const collectionModel = require('../../src/models/collection');
+  collectionModel(sequelize);
+
+  await sequelize.models.Collection.sync();
+
+  await sequelize.models.Collection.create({
+    name: 'Sample Collection',
+    description: 'Sample Collection description',
+    createdBy: 1
+  });
+}
+
+const loadCollectionProducts = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const collectionModel = require('../../src/models/collection');
+  collectionModel(sequelize);
+
+  const savedProductModel = require('../../src/models/saved_product');
+  savedProductModel(sequelize);
+
+  const collectionProductsModel = require('../../src/models/collection_products');
+  collectionProductsModel(sequelize);
+
+  await sequelize.models.Collection.sync();
+  await sequelize.models.SavedProduct.sync();
+  await sequelize.models.CollectionProducts.sync();
+
+  sequelize.models.Collection.belongsToMany(sequelize.models.SavedProduct, { through: sequelize.models.CollectionProducts });
+  sequelize.models.SavedProduct.belongsToMany(sequelize.models.Collection, { through: sequelize.models.CollectionProducts });
+
+  const savedProducts = await sequelize.models.SavedProduct.findAll();
+  const collection = await sequelize.models.Collection.findOne({ include: sequelize.models.SavedProduct });
+
+  collection.addSavedProducts(savedProducts);
+}
+
 module.exports = {
   loadElasticSearch,
   loadMetadata,
   loadArticlesIntoMongo,
+  loadSavedProducts,
+  loadCollections,
+  loadCollectionProducts,
 }

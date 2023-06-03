@@ -11,6 +11,7 @@ const articlesRouter = require("./routes/articles");
 const usersRouter = require("./routes/users");
 const searchRouter = require("./routes/search");
 const alertRouter = require("./routes/alerts");
+const workspaceRouter = require('./routes/workspace');
 
 const constant = require("./util/constant");
 
@@ -119,5 +120,6 @@ app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
 app.use("/special_editions", legacyRouter);
 app.use("/search", searchRouter);
+app.use('/workspace', workspaceRouter);
 
 module.exports = app;

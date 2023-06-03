@@ -6,7 +6,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - '8080:8080'
     restart: always
     volumes:
       - ./client:/data
@@ -21,7 +21,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - '3000:3000'
     restart: always
     volumes:
       - ./server:/data
@@ -31,13 +31,15 @@ services:
         condition: service_healthy
     environment:
       - MONGO_DATABASE_URL=mongodb:27017
-      - POSTGRES_DATABASE_URL=postgres:15432
+      - POSTGRES_CONNECTION_URL=postgres://maximus:magic@postgres:5432/maximus
     container_name: server
 
   postgres:
     image: postgres:15
+    expose:
+      - '5432'
     ports:
-      - 15432:5432
+      - '15432:5432'
     restart: always
     volumes:
       - pg-data:/var/lib/postgresql/data
@@ -49,7 +51,7 @@ services:
   mongodb:
     build: server/src/mongo
     ports:
-      - 27017:27017
+      - '27017:27017'
     restart: always
     volumes:
       - /data/db
@@ -80,8 +82,8 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-      - 9300:9300
+      - '9200:9200'
+      - '9300:9300'
     healthcheck:
       test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
       interval: 30s
@@ -95,7 +97,7 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
-      - 5601:5601
+      - '5601:5601'
     depends_on:
       - elasticsearch
 
