@@ -290,16 +290,23 @@
                       />
                     </div>
                   </div>
-                  <div class="lg:w-3/4">
-                    <MaxInput
-                      v-model="form.thumbnailCaption"
-                      label="Thumbnail Caption"
-                      type="text"
-                      @update:modelValue="
-                        updateField($event, 'thumbnailCaption')
-                      "
-                    />
-                  </div>
+                  <template
+                    v-if="
+                      environment != 'production' &&
+                      environment != 'development'
+                    "
+                  >
+                    <div class="lg:w-3/4">
+                      <MaxInput
+                        v-model="form.thumbnailCaption"
+                        label="Thumbnail Caption"
+                        type="text"
+                        @update:modelValue="
+                          updateField($event, 'thumbnailCaption')
+                        "
+                      />
+                    </div>
+                  </template>
                   <div>
                     <MaxCkEditor
                       v-model="form.editorData"
@@ -792,6 +799,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const environment = ref(import.meta.env.MODE);
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
       toolbar: {
@@ -1439,6 +1447,7 @@ export default {
     return {
       document,
       categories,
+      environment,
       extraConfig,
       thumbnailFile,
       files,
