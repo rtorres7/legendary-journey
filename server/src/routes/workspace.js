@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { models } = require('../db/sequelize');
+const { models } = require('../data/sequelize');
 const Article = require("../models/articles");
 const { handleMongooseError } = require("../util/errors");
 
