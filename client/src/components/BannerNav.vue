@@ -651,7 +651,7 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import { getValueForCode } from "@/helpers";
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";

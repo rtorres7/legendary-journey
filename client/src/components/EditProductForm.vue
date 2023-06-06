@@ -710,7 +710,7 @@ import { productDetails } from "@/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import {
   DocumentArrowDownIcon,
   DocumentMinusIcon,

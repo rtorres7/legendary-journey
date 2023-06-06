@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import { computed, inject, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";

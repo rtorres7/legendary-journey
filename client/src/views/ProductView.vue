@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import { formatDate, hasProductAccess } from "@/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
