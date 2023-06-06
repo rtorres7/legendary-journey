@@ -497,10 +497,12 @@
                 title="Attachments"
                 description="Attachments will be immediately saved upon upload."
               >
-                <div class="flex flex-col space-y-4">
+                <div
+                  class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6"
+                >
                   <DropZone
                     v-slot="{ dropZoneActive }"
-                    class="lg:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
+                    class="lg:basis-1/3 min-h-[8rem] lg:h-[14rem] flex justify-center items-center lg:self-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
                     @files-dropped="onDrop"
                   >
                     <label for="file-input" class="cursor-pointer">
@@ -523,7 +525,10 @@
                       />
                     </label>
                   </DropZone>
-                  <div v-if="form.attachments?.length || files?.length">
+                  <div
+                    v-if="form.attachments?.length || files?.length"
+                    class="lg:basis-2/3"
+                  >
                     <h2 class="font-medium">Uploaded Files</h2>
                     <ul>
                       <FilePreview
@@ -540,40 +545,64 @@
                         :id="'attachment' + attachment.id"
                         :key="attachment"
                       >
-                        <div class="flex space-x-2 pt-2 pb-2">
-                          {{ attachment.file_name }} &nbsp;
-                          <router-link
-                            :to="
-                              '/documents/' +
-                              documentNumber +
-                              '/attachments/' +
-                              attachment.id
-                            "
-                            target="_blank"
+                        <div class="flex space-x-4 ml-4 pt-4">
+                          <PhotoIcon
+                            v-if="attachment.mime_type.includes('image/')"
+                            class="h-8 w-8 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+                          />
+                          <DocumentIcon
+                            v-else
+                            class="h-8 w-8 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+                          />
+                          <div
+                            class="flex flex-col gap-y-4 pb-4 w-3/4 border-b border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
                           >
-                            <DocumentArrowDownIcon
-                              class="h-5 w-5"
-                              title="Download"
-                              display="inline;"
-                            />
-                          </router-link>
-                          <router-link
-                            to=""
-                            target="_blank"
-                            @click.prevent="
-                              removeDocument(
-                                attachment.id,
-                                documentNumber,
-                                index
-                              )
-                            "
-                          >
-                            <DocumentMinusIcon
-                              class="h-5 w-5"
-                              title="Delete"
-                              display="inline;"
-                            />
-                          </router-link>
+                            <div class="flex justify-between text-sm">
+                              <p class="font-medium">
+                                {{ attachment.file_name }}
+                              </p>
+                              <p>{{ attachment.file_size }}</p>
+                              <p>{{ fileSizeInKb }}</p>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                              <p>{{ attachment.created_at }}</p>
+                              <p>USER</p>
+                              <div class="flex space-x-2">
+                                <router-link
+                                  :to="
+                                    '/documents/' +
+                                    documentNumber +
+                                    '/attachments/' +
+                                    attachment.id
+                                  "
+                                  target="_blank"
+                                >
+                                  <ArrowDownTrayIcon
+                                    class="h-5 w-5"
+                                    title="Download"
+                                    display="inline;"
+                                  />
+                                </router-link>
+                                <router-link
+                                  to=""
+                                  target="_blank"
+                                  @click.prevent="
+                                    removeDocument(
+                                      attachment.id,
+                                      documentNumber,
+                                      index
+                                    )
+                                  "
+                                >
+                                  <TrashIcon
+                                    class="h-5 w-5"
+                                    title="Delete"
+                                    display="inline;"
+                                  />
+                                </router-link>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </li>
                     </ul>
@@ -712,10 +741,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as dayjs from "dayjs";
 import {
-  DocumentArrowDownIcon,
-  DocumentMinusIcon,
-} from "@heroicons/vue/24/solid";
-import {
   BriefcaseIcon,
   ExclamationCircleIcon,
   KeyIcon,
@@ -723,6 +748,10 @@ import {
   PaperClipIcon,
   LockClosedIcon,
   XMarkIcon,
+  ArrowDownTrayIcon,
+  TrashIcon,
+  PhotoIcon,
+  DocumentIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -778,8 +807,10 @@ export default {
     PaperClipIcon,
     LockClosedIcon,
     XMarkIcon,
-    DocumentArrowDownIcon,
-    DocumentMinusIcon,
+    ArrowDownTrayIcon,
+    TrashIcon,
+    PhotoIcon,
+    DocumentIcon,
     DropZone,
     FilePreview,
     EditProductFormSection,
@@ -1252,12 +1283,21 @@ export default {
     const onInputChange = (e) => {
       addFiles(e.target.files);
       e.target.value = null;
-      uploadFiles(files.value);
+      files.value.forEach((file) => {
+        if (file.dbId == null) {
+          console.log(file);
+          uploadFile(file);
+        }
+      });
     };
 
     const onDrop = (file) => {
       addFiles(file);
-      uploadFiles(files.value);
+      files.value.forEach((file) => {
+        if (file.dbId == null) {
+          uploadFile(file);
+        }
+      });
     };
 
     const removeDocument = (attachmentID, doc_num) => {
