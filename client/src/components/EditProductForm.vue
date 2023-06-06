@@ -535,6 +535,7 @@
                         v-for="file of files"
                         :key="file.id"
                         :file="file"
+                        :user="currentUsername"
                         tag="li"
                         @remove="removeFile"
                       />
@@ -561,8 +562,7 @@
                               <p class="font-medium">
                                 {{ attachment.file_name }}
                               </p>
-                              <p>{{ attachment.file_size }}</p>
-                              <p>{{ fileSizeInKb }}</p>
+                              <p>{{ fileSizeInKb(attachment.file_size) }}</p>
                             </div>
                             <div class="flex justify-between text-sm">
                               <p>{{ attachment.created_at }}</p>
@@ -881,6 +881,7 @@ export default {
     const publishingProduct = ref(false);
     const loadingPreview = ref(true);
     const previewProduct = ref(null);
+    const currentUsername = computed(() => store.state.user.user.name);
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
@@ -1300,6 +1301,11 @@ export default {
       });
     };
 
+    const fileSizeInKb = (fileSize) => {
+      const kb = parseFloat(fileSize) * 0.001;
+      return Math.round(kb);
+    };
+
     const removeDocument = (attachmentID, doc_num) => {
       fetch("/documents/" + doc_num + "/attachments/" + attachmentID, {
         method: "DELETE",
@@ -1523,11 +1529,13 @@ export default {
       uploadThumbnail,
       onInputChange,
       onDrop,
+      fileSizeInKb,
       removeDocument,
       deleteDocument,
       publishProduct,
       saveProduct,
       cancel,
+      currentUsername,
     };
   },
 };

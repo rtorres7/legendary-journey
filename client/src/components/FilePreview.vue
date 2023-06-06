@@ -43,8 +43,8 @@
           </span>
         </div>
         <div class="flex justify-between text-sm">
-          <p>{{ dayjs().format("YYYY-MM-DD, H:mm") }}</p>
-          <p>USER</p>
+          <p>{{ dayjs().format("DD MMM YYYY") }}</p>
+          <p>{{ user }}</p>
           <div class="flex space-x-2">
             <span v-show="file.status == true">
               <router-link :to="'' + file.wire_url + file.dbId" target="_blank">
@@ -100,6 +100,7 @@
 defineProps({
   file: { type: Object, required: true },
   tag: { type: String, default: "li" },
+  user: { type: String, default: "" },
 });
 defineEmits(["remove"]);
 </script>
