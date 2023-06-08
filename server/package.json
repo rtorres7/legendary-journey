@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.6.0",
+    "@kiwiproject/kiwi-js": "^0.6.1",
     "body-parser": "^1.20.0",
     "concurrently": "^7.2.1",
     "cookie-parser": "~1.4.4",
