@@ -151,7 +151,7 @@
                   v-for="n in [
                     queryFilters.media_types,
                     queryFilters.producing_offices,
-                    // queryFilters.nonstate_actors,
+                    queryFilters.non_state_actors,
                     // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
@@ -896,13 +896,10 @@ export default {
         ),
         types: ["producing_offices[]"],
       };
-      // const nonStateActors = {
-      //   items: buildItems(
-      //     criteria.value.non_state_actors,
-      //     "non_state_actors[]"
-      //   ),
-      //   types: ["non_state_actors[]"],
-      // };
+      const nonStateActors = {
+        items: buildItems(criteria.value.non_state_actors, "nonStateActors[]"),
+        types: ["nonStateActors[]"],
+      };
       return {
         regions: {
           label: "Regions & Countries",
@@ -939,12 +936,13 @@ export default {
           types: mediaTypes.types,
           component: "MaxListbox",
         },
-        // nonstate_actors: {
-        //   label: "Non State Actors",
-        //   model: currentModel(nonStateActors),
-        //   list: nonStateActors.items,
-        //   types: nonStateActors.types,
-        // },
+        non_state_actors: {
+          label: "Non State Actors",
+          model: currentModel(nonStateActors),
+          list: nonStateActors.items,
+          types: nonStateActors.types,
+          component: "MaxListBox",
+        },
         producing_offices: {
           label: "Authored By Organizations",
           model: currentModel(producingOffices),

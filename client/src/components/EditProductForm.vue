@@ -490,6 +490,43 @@
                       >
                     </div>
                   </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.nonStateActors"
+                      :label="'Non State Actors'"
+                      :items="lists.nonStateActors"
+                      multiple
+                      required
+                      @update:modelValue="
+                        updateField($event, 'nonStateActors', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.nonStateActors" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'nonStateActors')"
+                          >
+                            <span class="sr-only">Remove Non State Actor</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </EditProductFormSection>
               <EditProductFormSection
@@ -857,6 +894,7 @@ export default {
       producing_offices: criteria.value.producing_offices,
       coordinators: criteria.value.coordinators,
       coauthors: criteria.value.coauthors,
+      nonStateActors: criteria.value.non_state_actors,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -876,6 +914,7 @@ export default {
       coauthors: [],
       producing_offices: [],
       editorData: "",
+      nonStateActors: [],
       pocInfo: "",
       productType: [],
       publicationDate: "",
@@ -941,6 +980,11 @@ export default {
       } else if (formItem === "topics") {
         form.value.topics = form.value.topics.filter((i) => i.name != name);
         updateField(form.value.topics, "topics", "multiple");
+      } else if (formItem === "nonStateActors") {
+        form.value.nonStateActors = form.value.nonStateActors.filter(
+          (i) => i.name != name
+        );
+        updateField(form.value.nonStateActors, "nonStateActors", "multiple");
       } else if (formItem === "dissemOrgs") {
         form.value.dissemOrgs = form.value.dissemOrgs.filter(
           (i) => i.name != name
@@ -1053,6 +1097,9 @@ export default {
       payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
+      payload.value.nonStateActors = updatedProduct.nonStateActors.map(
+        (nonStateActor) => nonStateActor.name
+      );
       payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
@@ -1083,6 +1130,15 @@ export default {
         topicsToSelect.push(topicValue);
       });
       form.value.topics = topicsToSelect;
+      const actorsToSelect = [];
+      updatedProduct.nonStateActors.forEach((actorFromBackend) => {
+        let actorValue = getValueForCode(
+          lists.nonStateActors,
+          actorFromBackend.code
+        );
+        actorsToSelect.push(actorValue);
+      });
+      form.value.nonStateActors = actorsToSelect;
       const dissemsToSelect = [];
       updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
         //if statement is temporary until high side backend starts returning dissem orgs as an object
