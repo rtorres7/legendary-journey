@@ -549,11 +549,11 @@
                         <div class="flex space-x-4 ml-4 pt-4">
                           <PhotoIcon
                             v-if="attachment.mime_type.includes('image/')"
-                            class="h-8 w-8 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+                            class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
                           />
                           <DocumentIcon
                             v-else
-                            class="h-8 w-8 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+                            class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
                           />
                           <div
                             class="flex flex-col gap-y-4 pb-4 w-3/4 border-b border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
@@ -565,7 +565,7 @@
                               <p>{{ fileSizeInKb(attachment.file_size) }}</p>
                             </div>
                             <div class="flex justify-between text-sm">
-                              <p>{{ attachment.created_at }}</p>
+                              <p>{{ formatDate(attachment.created_at) }}</p>
                               <p>USER</p>
                               <div class="flex space-x-2">
                                 <router-link
@@ -740,6 +740,7 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as dayjs from "dayjs";
+import { formatDate } from "@/helpers";
 import {
   BriefcaseIcon,
   ExclamationCircleIcon,
@@ -1285,8 +1286,7 @@ export default {
       addFiles(e.target.files);
       e.target.value = null;
       files.value.forEach((file) => {
-        if (file.dbId == null) {
-          console.log(file);
+        if (file.status != true) {
           uploadFile(file);
         }
       });
@@ -1295,7 +1295,7 @@ export default {
     const onDrop = (file) => {
       addFiles(file);
       files.value.forEach((file) => {
-        if (file.dbId == null) {
+        if (file.status != true) {
           uploadFile(file);
         }
       });
@@ -1491,6 +1491,7 @@ export default {
     };
 
     return {
+      formatDate,
       document,
       categories,
       environment,

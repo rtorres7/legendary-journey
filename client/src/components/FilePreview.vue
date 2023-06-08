@@ -4,11 +4,11 @@
       <template v-if="file.status == true">
         <PhotoIcon
           v-if="file.file.type.includes('image/')"
-          class="h-8 w-8 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+          class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
         />
         <DocumentIcon
           v-else
-          class="h-8 w-8 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+          class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
         />
       </template>
       <template v-else-if="file.status == false">
