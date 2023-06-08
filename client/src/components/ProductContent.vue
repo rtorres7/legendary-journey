@@ -96,9 +96,11 @@
           <p>
             <span class="font-semibold">Audience: </span>
             <template
-              v-if="product.dissem_orgs && product.dissem_orgs?.length > 0"
+              v-if="
+                product.dissem_orgs && product.dissem_orgs?.values?.length > 0
+              "
             >
-              {{ product.dissem_orgs.join(", ") }}
+              {{ product.dissem_orgs.values.map((a) => a.name).join(", ") }}
             </template>
             <template v-else>
               <span class="italic">Viewable to all.</span>
