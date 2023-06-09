@@ -11,6 +11,7 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
+import DniView from "../views/DniView.vue";
 
 const routes = [
   {
@@ -21,6 +22,7 @@ const routes = [
       title: metadata.application_name,
     },
   },
+  { path: "/dni/", name: "dni", component: DniView },
   {
     path: "/product/:doc_num/preview",
     name: "product-preview",
