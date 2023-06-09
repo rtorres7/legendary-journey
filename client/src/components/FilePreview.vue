@@ -1,6 +1,6 @@
 <template>
   <component :is="tag" class="file-preview">
-    <div class="flex space-x-4">
+    <div class="flex space-x-4 ml-4 pt-4">
       <template v-if="file.status == true">
         <PhotoIcon
           v-if="file.file.type.includes('image/')"
@@ -13,7 +13,10 @@
       </template>
       <template v-else-if="file.status == false">
         <div>
-          <button class="object-top">
+          <button
+            class="object-top"
+            :aria-label="`remove failed upload ${file.file.name} `"
+          >
             <XMarkIcon
               class="h-5 w-5 hover:cursor-pointer text-red-500"
               @click="$emit('remove', file)"
@@ -22,13 +25,14 @@
         </div>
       </template>
       <div
-        class="flex flex-col gap-y-2 pb-4 w-3/4 border-b border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
+        class="flex flex-col gap-y-2 pb-4 w-full xl:w-3/4 border-b border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
       >
         <div class="flex justify-between text-sm">
           <p class="font-medium">{{ file.file.name }}</p>
-          <p>{{ fileSizeInKb(file.file.size) }} KB</p>
+          <p v-show="file.status == true">
+            {{ fileSizeInKb(file.file.size) }} KB
+          </p>
         </div>
-        <!-- </div> -->
         <div>
           <span>
             <div class="meter">
@@ -43,16 +47,25 @@
           </span>
         </div>
         <div class="flex justify-between text-sm">
-          <p>{{ dayjs().format("DD MMM YYYY") }}</p>
-          <p>{{ user }}</p>
+          <p v-show="file.status == true">
+            {{ dayjs().format("DD MMM YYYY") }}
+          </p>
           <div class="flex space-x-2">
             <span v-show="file.status == true">
-              <router-link :to="'' + file.wire_url + file.dbId" target="_blank">
+              <router-link
+                :to="'' + file.wire_url + file.dbId"
+                target="_blank"
+                :aria-label="`download ${file.file.name}`"
+              >
                 <ArrowDownTrayIcon class="h-5 w-5" title="Download" />
               </router-link>
             </span>
             <span v-show="file.status == true">
-              <router-link to="" @click.prevent="deleteItem(file)">
+              <router-link
+                to=""
+                :aria-label="`delete ${file.file.name}`"
+                @click.prevent="deleteItem(file)"
+              >
                 <TrashIcon class="h-5 w-5" title="Delete" />
               </router-link>
             </span>
@@ -60,47 +73,12 @@
         </div>
       </div>
     </div>
-    <!-- <button
-        v-if="!file.status"
-        class="close-icon shrink-0"
-        @click="$emit('remove', file)"
-      >
-        &times;
-      </button>
-      <span>{{ file.file.name }}</span>
-      <span v-show="file.status == true">
-        <router-link :to="'' + file.wire_url + file.dbId" target="_blank">
-          <DocumentArrowDownIcon class="h5 w-5" title="Download" />
-        </router-link>
-      </span>
-      <span v-show="file.status == true">
-        <router-link to="" @click.prevent="deleteItem(file)">
-          <DocumentMinusIcon class="h-5 w-5" title="Download" />
-        </router-link>
-      </span>
-      <span
-        v-show="file.status == 'loading'"
-        class="status-indicator loading-indicator"
-        >In Progress</span
-      >
-      <span
-        v-show="file.status == true"
-        class="status-indicator success-indicator"
-        >Uploaded</span
-      >
-      <span
-        v-show="file.status == false"
-        class="status-indicator failure-indicator"
-        >Error</span
-      >
-    </div> -->
   </component>
 </template>
 <script setup>
 defineProps({
   file: { type: Object, required: true },
   tag: { type: String, default: "li" },
-  user: { type: String, default: "" },
 });
 defineEmits(["remove"]);
 </script>
@@ -145,77 +123,16 @@ export default {
 .file-preview {
   width: 100%;
   height: 20%;
-  margin: 1rem 2.5%;
   position: relative;
 
-  // aspect-ratio: 1/1;
-  // overflow: hidden
   img {
     width: 10%;
     height: 10%;
     display: block;
     object-fit: cover;
   }
-
-  .close-icon .status-indicator {
-    --size: 20px;
-    position: relative;
-    line-height: var(--size);
-    height: var(--size);
-    border-radius: var(--size);
-    box-shadow: 0 0 5px currentColor;
-    right: 0.25rem;
-    appearance: none;
-    border: 0;
-    padding: 0;
-  }
-
-  .close-icon {
-    width: var(--size);
-    font-size: var(--size);
-    background: #933;
-    color: #fff;
-    top: 0.25rem;
-    cursor: pointer;
-  }
-
-  .status-indicator {
-    font-size: calc(0.6 * var(--size));
-    bottom: 0.25rem;
-    padding: 0;
-  }
-
-  .loading-indicator {
-    animation: pulse 1.5s linear 0s infinite;
-    color: #000;
-  }
-
-  .success-indicator {
-    background: #6c6;
-    color: #040;
-  }
-
-  .failure-indicator {
-    background: #933;
-    color: #fff;
-  }
 }
 
-// @keyframes pulse {
-//   0% {
-//     background: #fff;
-//   }
-
-//   50% {
-//     background: #ddd;
-//   }
-
-//   100% {
-//     background: #fff;
-//   }
-// }
-
-//new stuff
 .meter {
   height: 5px;
   position: relative;

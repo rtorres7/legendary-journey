@@ -502,7 +502,7 @@
                 >
                   <DropZone
                     v-slot="{ dropZoneActive }"
-                    class="lg:basis-1/3 min-h-[8rem] lg:h-[14rem] flex justify-center items-center lg:self-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
+                    class="lg:basis-1/3 min-h-[8rem] lg:h-[18rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
                     @files-dropped="onDrop"
                   >
                     <label for="file-input" class="cursor-pointer">
@@ -535,7 +535,6 @@
                         v-for="file of files"
                         :key="file.id"
                         :file="file"
-                        :user="currentUsername"
                         tag="li"
                         @remove="removeFile"
                       />
@@ -882,7 +881,6 @@ export default {
     const publishingProduct = ref(false);
     const loadingPreview = ref(true);
     const previewProduct = ref(null);
-    const currentUsername = computed(() => store.state.user.user.name);
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
@@ -1536,7 +1534,6 @@ export default {
       publishProduct,
       saveProduct,
       cancel,
-      currentUsername,
     };
   },
 };
