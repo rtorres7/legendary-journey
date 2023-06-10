@@ -565,40 +565,49 @@
                             </div>
                             <div class="flex justify-between text-sm">
                               <p>{{ formatDate(attachment.created_at) }}</p>
-                              <p>USER</p>
                               <div class="flex space-x-2">
-                                <router-link
-                                  :to="
-                                    '/documents/' +
-                                    documentNumber +
-                                    '/attachments/' +
-                                    attachment.id
-                                  "
-                                  target="_blank"
+                                <tippy
+                                  content="Download file"
+                                  :delay="[500, null]"
                                 >
-                                  <ArrowDownTrayIcon
-                                    class="h-5 w-5"
-                                    title="Download"
-                                    display="inline;"
-                                  />
-                                </router-link>
-                                <router-link
-                                  to=""
-                                  target="_blank"
-                                  @click.prevent="
-                                    removeDocument(
-                                      attachment.id,
-                                      documentNumber,
-                                      index
-                                    )
-                                  "
+                                  <router-link
+                                    :to="
+                                      '/documents/' +
+                                      documentNumber +
+                                      '/attachments/' +
+                                      attachment.id
+                                    "
+                                    target="_blank"
+                                  >
+                                    <ArrowDownTrayIcon
+                                      class="h-5 w-5 hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                                      title="Download"
+                                      display="inline;"
+                                    />
+                                  </router-link>
+                                </tippy>
+                                <tippy
+                                  content="Delete file"
+                                  :delay="[500, null]"
                                 >
-                                  <TrashIcon
-                                    class="h-5 w-5"
-                                    title="Delete"
-                                    display="inline;"
-                                  />
-                                </router-link>
+                                  <router-link
+                                    to=""
+                                    target="_blank"
+                                    @click.prevent="
+                                      removeDocument(
+                                        attachment.id,
+                                        documentNumber,
+                                        index
+                                      )
+                                    "
+                                  >
+                                    <TrashIcon
+                                      class="h-5 w-5 hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                                      title="Delete"
+                                      display="inline;"
+                                    />
+                                  </router-link>
+                                </tippy>
                               </div>
                             </div>
                           </div>

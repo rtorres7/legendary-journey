@@ -13,15 +13,17 @@
       </template>
       <template v-else-if="file.status == false">
         <div>
-          <button
-            class="object-top"
-            :aria-label="`remove failed upload ${file.file.name} `"
-          >
-            <XMarkIcon
-              class="h-5 w-5 hover:cursor-pointer text-red-500"
-              @click="$emit('remove', file)"
-            />
-          </button>
+          <tippy content="Remove file from list" :delay="[500, null]">
+            <button
+              class="object-top"
+              :aria-label="`remove failed upload ${file.file.name} `"
+            >
+              <XMarkIcon
+                class="h-5 w-5 hover:cursor-pointer hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                @click="$emit('remove', file)"
+              />
+            </button>
+          </tippy>
         </div>
       </template>
       <div
@@ -52,22 +54,32 @@
           </p>
           <div class="flex space-x-2">
             <span v-show="file.status == true">
-              <router-link
-                :to="'' + file.wire_url + file.dbId"
-                target="_blank"
-                :aria-label="`download ${file.file.name}`"
-              >
-                <ArrowDownTrayIcon class="h-5 w-5" title="Download" />
-              </router-link>
+              <tippy content="Download file" :delay="[500, null]">
+                <router-link
+                  :to="'' + file.wire_url + file.dbId"
+                  target="_blank"
+                  :aria-label="`download ${file.file.name}`"
+                >
+                  <ArrowDownTrayIcon
+                    class="h-5 w-5 hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                    title="Download"
+                  />
+                </router-link>
+              </tippy>
             </span>
             <span v-show="file.status == true">
-              <router-link
-                to=""
-                :aria-label="`delete ${file.file.name}`"
-                @click.prevent="deleteItem(file)"
-              >
-                <TrashIcon class="h-5 w-5" title="Delete" />
-              </router-link>
+              <tippy content="Delete file" :delay="[500, null]">
+                <router-link
+                  to=""
+                  :aria-label="`delete ${file.file.name}`"
+                  @click.prevent="deleteItem(file)"
+                >
+                  <TrashIcon
+                    class="h-5 w-5 hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                    title="Delete"
+                  />
+                </router-link>
+              </tippy>
             </span>
           </div>
         </div>
@@ -75,13 +87,6 @@
     </div>
   </component>
 </template>
-<script setup>
-defineProps({
-  file: { type: Object, required: true },
-  tag: { type: String, default: "li" },
-});
-defineEmits(["remove"]);
-</script>
 <script>
 import {
   ArrowDownTrayIcon,
@@ -101,21 +106,37 @@ export default {
     DocumentIcon,
     dayjs,
   },
-  setup() {},
-  methods: {
-    deleteItem(file) {
+  props: {
+    file: {
+      type: Object,
+      required: true,
+    },
+    tag: {
+      type: String,
+      default: "li",
+    },
+  },
+  emits: ["remove"],
+  setup() {
+    const deleteItem = (file) => {
       fetch(file.wire_url + file.dbId, { method: "DELETE" })
         .then((response) => {
           console.log("deleteItem response: ", response);
           this.$emit("remove", file);
         })
         .catch(console.log("Failed"));
-    },
+    };
 
-    fileSizeInKb(fileSize) {
+    const fileSizeInKb = (fileSize) => {
       const kb = parseFloat(fileSize) * 0.001;
       return Math.round(kb);
-    },
+    };
+
+    return {
+      deleteItem,
+      fileSizeInKb,
+      dayjs,
+    };
   },
 };
 </script>
