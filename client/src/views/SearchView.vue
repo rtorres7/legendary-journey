@@ -9,6 +9,14 @@
     <p class="font-semibold text-2xl">
       {{ pageHeader }}
     </p>
+    <div class="text-end">
+      <router-link
+        class="hover:underline text-sm"
+        to="/search_tips/"
+        target="_blank"
+        >Advanced Search Tips</router-link
+      >
+    </div>
   </div>
   <!-- Search Form -->
   <div class="flex flex-row-reverse py-1 my-2">
