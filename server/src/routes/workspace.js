@@ -3,6 +3,7 @@ const router = express.Router();
 const { models } = require('../data/sequelize');
 const Article = require("../models/articles");
 const { handleMongooseError } = require("../util/errors");
+const {KiwiPage, KiwiSort} = require('@kiwiproject/kiwi-js');
 
 router.get("/drafts", (req, res) => {
   // TODO: Need to limit this based on current user
@@ -27,18 +28,49 @@ router.get("/stats", (req, res) => {
 });
 
 router.get("/products", (req, res) => {
-  // TODO: Need to limit this based on current user
-  Article.find((errors, articles) => {
-    handleMongooseError("Unable to find articles", errors);
+  const perPage = req.query.perPage || 10;
+  const page = req.query.page || 1;
+  const skip = (page - 1) * perPage;
+  const sortDir = req.query.sortDir || 'desc';
 
-    res.json(articles.map((article) => article.features));
-  });
+  // TODO: Need to limit this based on current user
+  Article.find()
+    .limit(perPage)
+    .skip(skip)
+    .sort({ datePublished: sortDir.toLowerCase() })
+    .exec((errors, articles) => {
+      handleMongooseError('Unable to find products', errors);
+      Article.count().exec((errors, count) => {
+        const resultPage = KiwiPage.of(page, perPage, count, articles.map((article) => article.features))
+          .usingOneAsFirstPage()
+          .addKiwiSort(KiwiSort.of('datePublished', sortDir));
+
+        res.json(resultPage);
+      });
+    });
 });
 
 router.get("/saved", async (req, res) => {
+  const perPage = req.query.perPage || 10;
+  const page = req.query.page || 1;
+  const skip = (page - 1) * perPage;
+  const sortDir = req.query.sortDir || 'desc';
+
   // TODO: We need user info so we can filter this by MY saved products
-  const savedProducts = await models.SavedProduct.findAll();
-  res.json(savedProducts);
+  // TODO: We need to figure out how to return the actual products
+  const {count, rows } = await models.SavedProduct.findAndCountAll({
+    offset: skip,
+    limit: perPage,
+    order: [
+      ['createdAt', sortDir.toUpperCase()]
+    ]
+  });
+
+  const resultPage = KiwiPage.of(page, perPage, count, rows)
+    .usingOneAsFirstPage()
+    .addKiwiSort(KiwiSort.of('createdAt', sortDir));
+
+  res.json(resultPage);
 });
 
 router.put("/saved/:productId", async (req, res) => {

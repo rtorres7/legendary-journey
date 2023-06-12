@@ -12,6 +12,7 @@ export default {
       countries: [],
       topics: [],
       non_state_actors: [],
+      nonStateActors: [],
       title: "",
       title_classif: "",
       title_classif_xml: "",
@@ -29,6 +30,8 @@ export default {
     },
     metadata: {
       countries: [],
+      non_state_actors: [],
+      nonStateActors: [],
       nsa: [],
       topics: [],
       producing_offices: [],
@@ -44,7 +47,8 @@ export default {
         // console.log(response);
         let metadata = {
           countries: response?.data?.metadata?.criteria?.countries.values,
-          nsa: response?.data?.metadata?.criteria?.non_state_actors.values,
+          non_state_actors:
+            response?.data?.metadata?.criteria?.non_state_actors.values,
           topics: response?.data?.metadata?.crtieria?.topics.values,
           //producing_offices: response?.data?.metadata?.criteria?.producing_offices.values,
           producing_offices: [{ name: "NCTC", fn: "DNI/NCTC" }],
@@ -260,6 +264,7 @@ export default {
       state.metadata.countries = metadata.countries;
       state.metadata.nsa = metadata.nsa;
       state.metadata.topics = metadata.topics;
+      state.metadata.non_state_actors = metadata.non_state_actors;
       state.metadata.producing_offices = metadata.producing_offices;
       state.loading = false;
     },

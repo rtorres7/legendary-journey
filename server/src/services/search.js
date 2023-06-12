@@ -3,12 +3,18 @@ const constant = require("../util/constant.js");
 const dayjs = require("dayjs");
 
 class SearchService {
-  constructor(esUrl=constant.esNode) {
+  constructor(esUrl = constant.esNode) {
     this.client = new Client({ node: esUrl });
     this.index = "products";
   }
 
-  async search(term, perPage=10, page=1, sortMethod='desc', filters = {}) {
+  async search(
+    term,
+    perPage = 10,
+    page = 1,
+    sortMethod = "desc",
+    filters = {}
+  ) {
     const skipCount = (page - 1) * perPage;
     const sortClause = this.buildSortClause(sortMethod);
 
@@ -22,55 +28,60 @@ class SearchService {
       aggs: {
         classification: {
           terms: {
-            field: 'classification'
-          }
+            field: "classification",
+          },
         },
         countries: {
           terms: {
-            field: 'countries'
-          }
+            field: "countries",
+          },
         },
         issues: {
           terms: {
-            field: 'issues'
-          }
+            field: "issues",
+          },
         },
         producing_offices: {
           terms: {
-            field: 'producingOffices'
-          }
+            field: "producingOffices",
+          },
         },
         product_types: {
           terms: {
-            field: 'productType'
-          }
+            field: "productType",
+          },
         },
         regions: {
           terms: {
-            field: 'regions'
-          }
+            field: "regions",
+          },
         },
         reporting_types: {
           terms: {
-            field: 'reportingType'
-          }
+            field: "reportingType",
+          },
         },
         subregions: {
           terms: {
-            field: 'subregions'
-          }
+            field: "subregions",
+          },
         },
         topics: {
           terms: {
-            field: 'topics'
-          }
+            field: "topics",
+          },
+        },
+        non_state_actors: {
+          terms: {
+            field: "nonStateActors",
+          },
         },
       },
       highlight: {
         fields: {
-          htmlBody: {}
-        }
-      }
+          htmlBody: {},
+        },
+      },
     };
 
     if (query !== null) {
@@ -82,43 +93,44 @@ class SearchService {
 
   buildSortClause(sortMethod) {
     switch (sortMethod) {
-      case 'desc':
-        return { datePublished: { order: 'desc' }};
-      case 'asc':
-        return { datePublished: { order: 'asc' }};
+      case "desc":
+        return { datePublished: { order: "desc" } };
+      case "asc":
+        return { datePublished: { order: "asc" } };
       default:
-        return { '_score': { order: 'desc' }};
+        return { _score: { order: "desc" } };
     }
   }
 
   buildQueryFromFilters(term, filters) {
     const query = {};
 
-    if (term !== undefined && term !== '') {
+    if (term !== undefined && term !== "") {
       query.match = { htmlBody: term };
     }
 
     if (filters.start_date !== undefined && filters.end_date !== undefined) {
-      const start = dayjs(filters.start_date).startOf('day');
-      const end = dayjs(filters.end_date).endOf('day');
+      const start = dayjs(filters.start_date).startOf("day");
+      const end = dayjs(filters.end_date).endOf("day");
 
       query.range = {
         datePublished: {
           gte: start,
           lte: end,
-        }
-      }
+        },
+      };
     }
 
-    this.addAndClause(query, 'countries', filters.countries);
-    this.addAndClause(query, 'regions', filters.regions);
-    this.addAndClause(query, 'subregions', filters.subregions);
-    this.addAndClause(query, 'topics', filters.topics);
-    this.addAndClause(query, 'issues', filters.issues);
-    this.addOrClause(query, 'classification', filters.classification);
-    this.addOrClause(query, 'productType', filters.product_types);
-    this.addOrClause(query, 'reportingType', filters.reporting_types);
-    this.addOrClause(query, 'producingOffices', filters.producing_offices);
+    this.addAndClause(query, "countries", filters.countries);
+    this.addAndClause(query, "regions", filters.regions);
+    this.addAndClause(query, "subregions", filters.subregions);
+    this.addAndClause(query, "topics", filters.topics);
+    this.addAndClause(query, "issues", filters.issues);
+    this.addOrClause(query, "classification", filters.classification);
+    this.addOrClause(query, "productType", filters.product_types);
+    this.addOrClause(query, "reportingType", filters.reporting_types);
+    this.addOrClause(query, "producingOffices", filters.producing_offices);
+    //this.addAndClause(query, "nonStateActors", filters.non_state_actors);
 
     if (Object.keys(query).length === 0) {
       return null;
@@ -135,8 +147,8 @@ class SearchService {
     query.bool = query.bool || {};
     query.bool.filter = query.bool.filter || [];
 
-    filters.forEach(filter => {
-      const filterQuery = { term: {}};
+    filters.forEach((filter) => {
+      const filterQuery = { term: {} };
       filterQuery.term[term] = filter;
       query.bool.filter.push(filterQuery);
     });
@@ -152,12 +164,12 @@ class SearchService {
 
     const orClause = {
       bool: {
-        should: []
-      }
+        should: [],
+      },
     };
 
-    filters.forEach(filter => {
-      const filterQuery = { term: {}};
+    filters.forEach((filter) => {
+      const filterQuery = { term: {} };
       filterQuery.term[term] = filter;
       orClause.bool.should.push(filterQuery);
     });

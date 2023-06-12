@@ -62,7 +62,7 @@ export default {
       state.criteria = {
         classification: metadata.criteria.classification.values,
         countries: metadata.criteria.countries.values,
-        dissem_orgs: metadata.criteria.dissem_orgs,
+        dissem_orgs: metadata.criteria.dissem_orgs.values,
         coordinators: metadata.criteria.coordinators,
         coauthors: metadata.criteria.coauthors,
         producing_offices: metadata.criteria.producing_offices,

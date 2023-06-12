@@ -39,7 +39,7 @@ db.articles.insertMany([
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -47,8 +47,8 @@ db.articles.insertMany([
     producingOffices: [
       {
         name: "EDUCATION",
-        code: "EDUCATION"
-      }
+        code: "EDUCATION",
+      },
     ],
     productNumber: "WIReWIRe_sample_1",
     productType: {
@@ -59,11 +59,11 @@ db.articles.insertMany([
       {
         name: "Asia",
         code: "AS",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
-      code: "analysis.all_source"
+      code: "analysis.all_source",
     },
     state: "posted",
     subregions: [
@@ -142,7 +142,7 @@ db.articles.insertMany([
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -150,8 +150,8 @@ db.articles.insertMany([
     producingOffices: [
       {
         name: "ANCESTRY",
-        code: "ANCESTRY"
-      }
+        code: "ANCESTRY",
+      },
     ],
     productNumber: "WIReWIRe_sample_2",
     productType: {
@@ -162,7 +162,7 @@ db.articles.insertMany([
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -173,7 +173,7 @@ db.articles.insertMany([
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "The Russians abandoned next to no artillery or armoured vehicles, and their retreat from the heavily-fortified area did not look like a panicked flight that followed heavy fighting, according to videos from the area and Ukrainian military reports.",
@@ -236,7 +236,7 @@ db.articles.insertMany([
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -245,7 +245,7 @@ db.articles.insertMany([
       {
         name: "ANCESTRY",
         code: "ANCESTRY",
-      }
+      },
     ],
     productNumber: "WIReWIRe_sample_3",
     productType: {
@@ -256,7 +256,7 @@ db.articles.insertMany([
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -267,7 +267,7 @@ db.articles.insertMany([
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.",
@@ -308,7 +308,7 @@ db.articles.insertMany([
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -317,7 +317,7 @@ db.articles.insertMany([
       {
         name: "AGRICULTURE",
         code: "AGRICULTURE",
-      }
+      },
     ],
     productNumber: "WIReWIRe_sample_4",
     productType: {
@@ -328,7 +328,7 @@ db.articles.insertMany([
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -339,7 +339,7 @@ db.articles.insertMany([
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "Summary: There isn't any major update regarding covid numbers in today's report.",
@@ -374,7 +374,7 @@ db.articles.insertMany([
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -1918,110 +1918,113 @@ db.metadata.insertOne({
         },
       ],
     },
-    dissem_orgs: [
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "ANCESTRY",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Ancestry",
-        id: 1,
-        label: "Ancestry",
-        legacy: false,
-        name: "ANCESTRY",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "AGRICULTURE",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Agriculture",
-        id: 2,
-        label: "Agriculture",
-        legacy: false,
-        name: "AGRICULTURE",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "BANKING",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Banking",
-        id: 3,
-        label: "Banking",
-        legacy: false,
-        name: "BANKING",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "COMMERCE",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Commerce",
-        id: 4,
-        label: "Commerce",
-        legacy: false,
-        name: "COMMERCE",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "EDUCATION",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Education",
-        id: 5,
-        label: "Education",
-        legacy: false,
-        name: "EDUCATION",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "TREASURY",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Treasury",
-        id: 6,
-        label: "Treasury",
-        legacy: false,
-        name: "TREASURY",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-    ],
+    dissem_orgs: {
+      displayName: "Audience",
+      values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "ANCESTRY",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Ancestry",
+          id: 1,
+          label: "Ancestry",
+          legacy: false,
+          name: "ANCESTRY",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "AGRICULTURE",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Agriculture",
+          id: 2,
+          label: "Agriculture",
+          legacy: false,
+          name: "AGRICULTURE",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "BANKING",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Banking",
+          id: 3,
+          label: "Banking",
+          legacy: false,
+          name: "BANKING",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "COMMERCE",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Commerce",
+          id: 4,
+          label: "Commerce",
+          legacy: false,
+          name: "COMMERCE",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "EDUCATION",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Education",
+          id: 5,
+          label: "Education",
+          legacy: false,
+          name: "EDUCATION",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "TREASURY",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Treasury",
+          id: 6,
+          label: "Treasury",
+          legacy: false,
+          name: "TREASURY",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+      ],
+    },
     domestic_regions: {
       displayName: "Domestic Regions",
       values: [],
@@ -2364,7 +2367,10 @@ db.metadata.insertOne({
         {
           name: "Analysis: All Source",
           code: "analysis.all_source",
-          productTypes: [1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382, 10383, 10384, 10385],
+          productTypes: [
+            1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382, 10383,
+            10384, 10385,
+          ],
         },
         {
           name: "Reporting: Enterprise",

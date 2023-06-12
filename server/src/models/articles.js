@@ -44,6 +44,12 @@ const ArticleSchema = new Schema(
     needed: {
       orgs: [],
     },
+    nonStateActors: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     orgRestricted: Boolean,
     pocInfo: String,
     producingOffices: [
@@ -108,6 +114,7 @@ ArticleSchema.virtual("features").get(function () {
     images: this.images,
     needed: this.needed,
     orgRestricted: this.orgRestricted,
+    nonStateActors: this.nonStateActors,
     productNumber: this.productNumber,
     productType: this.productType,
     state: this.state,
@@ -127,6 +134,7 @@ ArticleSchema.virtual("features").get(function () {
           ? this.needed
           : {},
       org_restricted: this.orgRestricted,
+      nonStateActors: this.nonStateActors,
       product_type: this.productType.code,
       product_type_name: this.productType.name,
       state: this.state,
@@ -203,6 +211,8 @@ ArticleSchema.virtual("indexable").get(function () {
     title: this.title,
     titleClassification: this.titleClassification,
     topics: this.topics && this.topics.map((topic) => topic.code),
+    nonStateActors:
+      this.nonStateActors && this.nonStateActors.map((actor) => actor.code),
     worldwide: this.worldwide,
   };
 });
@@ -240,6 +250,7 @@ ArticleSchema.virtual("data.document").get(function () {
     date_published: this.datePublished,
     doc_num: this.productNumber,
     dissem_orgs: this.dissemOrgs,
+    nonStateActors: this.nonStateActors,
     html_body: this.htmlBody,
     poc_info: this.pocInfo,
     producing_offices: this.producingOffices,
@@ -290,6 +301,7 @@ ArticleSchema.virtual("data.details").get(function () {
     date_published: this.datePublished,
     display_date: this.datePublished,
     dissem_orgs: this.dissemOrgs,
+    nonStateActors: this.nonStateActors,
     doc_num: this.productNumber,
     document: {
       needed: this.needed,

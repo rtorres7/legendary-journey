@@ -100,10 +100,10 @@ describe('Workspace Routes', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.length).toBe(5);
+          expect(res.body.content.length).toBe(5);
 
-          const ids = res.body.map((product) => product.productNumber);
-          expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4", "WIReWIRe_sample_5"]);
+          const ids = res.body.content.map((product) => product.productNumber);
+          expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
         });
     });
   });
@@ -115,9 +115,9 @@ describe('Workspace Routes', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.length).toBe(1);
+          expect(res.body.content.length).toBe(1);
 
-          const ids = res.body.map((savedProduct) => savedProduct.productId);
+          const ids = res.body.content.map((savedProduct) => savedProduct.productId);
           expect(ids).toStrictEqual(["WIReWIRe_sample_1"]);
         });
     });

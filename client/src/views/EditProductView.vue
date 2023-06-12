@@ -55,6 +55,7 @@ export default {
       images: [],
       topics: [],
       non_state_actors: [],
+      nonStateActors: [],
       title: "",
       title_classif: "",
       title_classif_xml: "",
