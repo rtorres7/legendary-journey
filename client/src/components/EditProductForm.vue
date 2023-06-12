@@ -566,10 +566,7 @@
                             <div class="flex justify-between text-sm">
                               <p>{{ formatDate(attachment.created_at) }}</p>
                               <div class="flex space-x-2">
-                                <tippy
-                                  content="Download file"
-                                  :delay="[500, null]"
-                                >
+                                <tippy content="Download" :delay="[500, null]">
                                   <router-link
                                     :to="
                                       '/documents/' +
@@ -586,10 +583,7 @@
                                     />
                                   </router-link>
                                 </tippy>
-                                <tippy
-                                  content="Delete file"
-                                  :delay="[500, null]"
-                                >
+                                <tippy content="Delete" :delay="[500, null]">
                                   <router-link
                                     to=""
                                     target="_blank"

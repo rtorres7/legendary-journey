@@ -13,7 +13,7 @@
       </template>
       <template v-else-if="file.status == false">
         <div>
-          <tippy content="Remove file from list" :delay="[500, null]">
+          <tippy content="Remove" :delay="[500, null]">
             <button
               class="object-top"
               :aria-label="`remove failed upload ${file.file.name} `"
@@ -54,7 +54,7 @@
           </p>
           <div class="flex space-x-2">
             <span v-show="file.status == true">
-              <tippy content="Download file" :delay="[500, null]">
+              <tippy content="Download" :delay="[500, null]">
                 <router-link
                   :to="'' + file.wire_url + file.dbId"
                   target="_blank"
@@ -68,7 +68,7 @@
               </tippy>
             </span>
             <span v-show="file.status == true">
-              <tippy content="Delete file" :delay="[500, null]">
+              <tippy content="Delete" :delay="[500, null]">
                 <router-link
                   to=""
                   :aria-label="`delete ${file.file.name}`"
