@@ -350,7 +350,7 @@
 <script></script>
 <style lang="scss">
 #tips {
-  @apply lg:w-3/4;
+  @apply lg:w-3/4 pt-6;
   h1 {
     @apply font-semibold text-2xl pt-4 pb-2 mb-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25;
   }
@@ -373,7 +373,7 @@
     @apply hover:underline text-mission-light-blue dark:text-teal-300 energy:text-energy-yellow;
   }
   ul {
-    @apply list-disc pl-8 pb-4;
+    @apply list-disc pl-8;
     ul {
       list-style-type: circle;
       @apply pl-8;
