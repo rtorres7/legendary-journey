@@ -596,7 +596,7 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import { productDetails } from "@/data";
 import axios from "@/config/wireAxios";
 import {

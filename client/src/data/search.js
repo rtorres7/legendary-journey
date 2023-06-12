@@ -1,4 +1,4 @@
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 
 const buildArray = (item, count, sort_dir) => {
   const array = [];
