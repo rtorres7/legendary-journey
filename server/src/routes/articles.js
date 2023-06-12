@@ -50,9 +50,11 @@ router.get("/date/:date", (req, res) => {
 });
 
 //GET articles by id
-router.get("/:id", async (req, res) => {
-  const article = Article.findOne({ productNumber: req.params.id });
-  res.json(article.data.details);
+router.get("/:id", (req, res) => {
+  Article.findOne({ productNumber: req.params.id }, (errors, article) => {
+    handleMongooseError("Unable to find article", errors);
+    res.json(article.data.details);
+  });
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
@@ -91,6 +93,10 @@ router.post("/", (req, res) => {
       req.body.product_type_id,
       metadata.criteria.reporting_types.values
     );
+    const nonStateActors = getLookupObjectsByCodes(
+      req.body.non_state_actors,
+      metadata.criteria.non_state_actors.values
+    );
     const productType = resolveProductType(req.body.product_type_id, metadata);
 
     const article = new Article({
@@ -108,6 +114,7 @@ router.post("/", (req, res) => {
       summary: req.body.summary,
       title: req.body.title,
       topics: topics,
+      nonStateActors: nonStateActors,
       updatedAt: dayjs().toDate(),
     });
 
@@ -126,7 +133,6 @@ router.post("/", (req, res) => {
 router.get("/:id/edit", (req, res) => {
   Article.findById(req.params.id, function (error, article) {
     handleMongooseError("Unable to load article for edit", error);
-
     res.json(article.data.document);
   });
 });
@@ -201,6 +207,10 @@ async function updateArticle(id, req, res) {
     req.body.coauthors,
     metadata.criteria.coauthors
   );
+  const nonStateActors = getLookupObjectsByCodes(
+    req.body.nonStateActors,
+    metadata.criteria.non_state_actors.values
+  );
   const coordinators = getLookupObjectsByCodes(
     req.body.coordinators,
     metadata.criteria.coordinators
@@ -221,6 +231,7 @@ async function updateArticle(id, req, res) {
     coauthors: coauthors,
     coordinators: coordinators,
     countries: countries,
+    nonStateActors: nonStateActors,
     datePublished: req.body.date_published,
     dissemOrgs: dissemOrgs,
     htmlBody: req.body.html_body,

@@ -1,12 +1,16 @@
-FROM node:16.19
+FROM node:18.15
 
+# Copy or mount node app here
 WORKDIR /data/
 
 COPY package*.json ./
 
-RUN npm install
+# Create node_modules directory and .cache as root, then give node user ownership
+RUN mkdir -p /data/node_modules/.cache && chown -R node:node /data/
 
-RUN mkdir /data/node_modules/.cache && chmod -R 777 /data/node_modules/.cache && chown -R node:node /data/node_modules
+# Switch to 'node' user and install dependencies
+USER node
+RUN npm install
 
 EXPOSE 3000
 

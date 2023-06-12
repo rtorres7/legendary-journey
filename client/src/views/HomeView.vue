@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";

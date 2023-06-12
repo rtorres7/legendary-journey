@@ -462,7 +462,7 @@
 
 <script>
 import { productDetails } from "@/data";
-import * as dayjs from "dayjs";
+import dayjs from 'dayjs/esm/index.js';
 import { useCookies } from "vue3-cookies";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";

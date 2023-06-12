@@ -25,6 +25,10 @@ const indices = [
           type: "keyword",
           index: true,
         },
+        nonStateActors: {
+          type: "keyword",
+          index: true,
+        },
         producingOffices: {
           type: "keyword",
           index: true,
@@ -52,7 +56,7 @@ const indices = [
 
         // Stored fields
         classificationXml: {
-          type: "keyword"
+          type: "keyword",
         },
         needed: {
           type: "object",
@@ -64,16 +68,16 @@ const indices = [
           type: "text",
         },
         summary: {
-          type: "text"
+          type: "text",
         },
         summaryClassification: {
-          type: "text"
+          type: "text",
         },
         title: {
-          type: "text"
+          type: "text",
         },
         titleClassification: {
-          type: "text"
+          type: "text",
         },
         worldwide: {
           type: "boolean",

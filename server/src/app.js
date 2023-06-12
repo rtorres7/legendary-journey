@@ -11,6 +11,7 @@ const articlesRouter = require("./routes/articles");
 const usersRouter = require("./routes/users");
 const searchRouter = require("./routes/search");
 const alertRouter = require("./routes/alerts");
+const workspaceRouter = require('./routes/workspace');
 
 const constant = require("./util/constant");
 
@@ -19,8 +20,8 @@ const app = express();
 // DB Setup
 const mongoose = require("mongoose");
 
-const DATABASE_URL = process.env.DATABASE_URL || "http://localhost";
-mongoose.connect(`mongodb://${DATABASE_URL}/articles`, {
+const MONGO_DATABASE_URL = process.env.MONGO_DATABASE_URL || "http://localhost";
+mongoose.connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
   useNewUrlParser: true,
 });
 
@@ -36,7 +37,7 @@ db.on("error", function (error) {
   ) {
     setTimeout(function () {
       mongoose
-        .connect(`mongodb://${DATABASE_URL}/articles`, {
+        .connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
           useNewUrlParser: true,
         })
         .catch(() => {
@@ -119,5 +120,6 @@ app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
 app.use("/special_editions", legacyRouter);
 app.use("/search", searchRouter);
+app.use('/workspace', workspaceRouter);
 
 module.exports = app;

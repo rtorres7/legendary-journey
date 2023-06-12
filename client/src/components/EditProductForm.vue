@@ -290,16 +290,23 @@
                       />
                     </div>
                   </div>
-                  <div class="lg:w-3/4">
-                    <MaxInput
-                      v-model="form.thumbnailCaption"
-                      label="Thumbnail Caption"
-                      type="text"
-                      @update:modelValue="
-                        updateField($event, 'thumbnailCaption')
-                      "
-                    />
-                  </div>
+                  <template
+                    v-if="
+                      environment != 'production' &&
+                      environment != 'development'
+                    "
+                  >
+                    <div class="lg:w-3/4">
+                      <MaxInput
+                        v-model="form.thumbnailCaption"
+                        label="Thumbnail Caption"
+                        type="text"
+                        @update:modelValue="
+                          updateField($event, 'thumbnailCaption')
+                        "
+                      />
+                    </div>
+                  </template>
                   <div>
                     <MaxCkEditor
                       v-model="form.editorData"
@@ -483,6 +490,43 @@
                       >
                     </div>
                   </div>
+                  <div class="lg:w-1/2 space-y-4">
+                    <MaxListbox
+                      v-model="form.nonStateActors"
+                      :label="'Non State Actors'"
+                      :items="lists.nonStateActors"
+                      multiple
+                      required
+                      @update:modelValue="
+                        updateField($event, 'nonStateActors', 'multiple')
+                      "
+                    />
+                    <div
+                      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
+                    >
+                      <div v-for="org in form.nonStateActors" :key="org">
+                        <div
+                          class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
+                        >
+                          <div class="line-clamp-1 text-sm">
+                            {{ org.name }}
+                          </div>
+                          <button
+                            type="button"
+                            class="w-5 h-5 flex items-center justify-center"
+                            tabindex="0"
+                            @click="removeItem(org.name, 'nonStateActors')"
+                          >
+                            <span class="sr-only">Remove Non State Actor</span>
+                            <XMarkIcon
+                              class="h-5 w-5 text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </EditProductFormSection>
               <EditProductFormSection
@@ -490,10 +534,12 @@
                 title="Attachments"
                 description="Attachments will be immediately saved upon upload."
               >
-                <div class="flex flex-col space-y-4">
+                <div
+                  class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6"
+                >
                   <DropZone
                     v-slot="{ dropZoneActive }"
-                    class="lg:w-3/4 min-h-[8rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
+                    class="lg:basis-1/3 min-h-[8rem] lg:h-[18rem] flex justify-center items-center p-4 text-center border-2 border-gray-300 border-dashed rounded-md"
                     @files-dropped="onDrop"
                   >
                     <label for="file-input" class="cursor-pointer">
@@ -516,7 +562,10 @@
                       />
                     </label>
                   </DropZone>
-                  <div v-if="form.attachments?.length || files?.length">
+                  <div
+                    v-if="form.attachments?.length || files?.length"
+                    class="lg:basis-2/3"
+                  >
                     <h2 class="font-medium">Uploaded Files</h2>
                     <ul>
                       <FilePreview
@@ -533,40 +582,66 @@
                         :id="'attachment' + attachment.id"
                         :key="attachment"
                       >
-                        <div class="flex space-x-2 pt-2 pb-2">
-                          {{ attachment.file_name }} &nbsp;
-                          <router-link
-                            :to="
-                              '/documents/' +
-                              documentNumber +
-                              '/attachments/' +
-                              attachment.id
-                            "
-                            target="_blank"
+                        <div class="flex space-x-4 ml-4 pt-4">
+                          <PhotoIcon
+                            v-if="attachment.mime_type.includes('image/')"
+                            class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+                          />
+                          <DocumentIcon
+                            v-else
+                            class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
+                          />
+                          <div
+                            class="flex flex-col gap-y-4 pb-4 w-3/4 border-b border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
                           >
-                            <DocumentArrowDownIcon
-                              class="h-5 w-5"
-                              title="Download"
-                              display="inline;"
-                            />
-                          </router-link>
-                          <router-link
-                            to=""
-                            target="_blank"
-                            @click.prevent="
-                              removeDocument(
-                                attachment.id,
-                                documentNumber,
-                                index
-                              )
-                            "
-                          >
-                            <DocumentMinusIcon
-                              class="h-5 w-5"
-                              title="Delete"
-                              display="inline;"
-                            />
-                          </router-link>
+                            <div class="flex justify-between text-sm">
+                              <p class="font-medium">
+                                {{ attachment.file_name }}
+                              </p>
+                              <p>{{ fileSizeInKb(attachment.file_size) }}</p>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                              <p>{{ formatDate(attachment.created_at) }}</p>
+                              <div class="flex space-x-2">
+                                <tippy content="Download" :delay="[500, null]">
+                                  <router-link
+                                    :to="
+                                      '/documents/' +
+                                      documentNumber +
+                                      '/attachments/' +
+                                      attachment.id
+                                    "
+                                    target="_blank"
+                                  >
+                                    <ArrowDownTrayIcon
+                                      class="h-5 w-5 hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                                      title="Download"
+                                      display="inline;"
+                                    />
+                                  </router-link>
+                                </tippy>
+                                <tippy content="Delete" :delay="[500, null]">
+                                  <router-link
+                                    to=""
+                                    target="_blank"
+                                    @click.prevent="
+                                      removeDocument(
+                                        attachment.id,
+                                        documentNumber,
+                                        index
+                                      )
+                                    "
+                                  >
+                                    <TrashIcon
+                                      class="h-5 w-5 hover:text-slate-700 dark:hover:text-slate-100 energy:hover:text-zinc-100"
+                                      title="Delete"
+                                      display="inline;"
+                                    />
+                                  </router-link>
+                                </tippy>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </li>
                     </ul>
@@ -703,11 +778,8 @@ import { productDetails } from "@/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import * as dayjs from "dayjs";
-import {
-  DocumentArrowDownIcon,
-  DocumentMinusIcon,
-} from "@heroicons/vue/24/solid";
+import dayjs from 'dayjs/esm/index.js';
+import { formatDate } from "@/helpers";
 import {
   BriefcaseIcon,
   ExclamationCircleIcon,
@@ -716,6 +788,10 @@ import {
   PaperClipIcon,
   LockClosedIcon,
   XMarkIcon,
+  ArrowDownTrayIcon,
+  TrashIcon,
+  PhotoIcon,
+  DocumentIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -771,8 +847,10 @@ export default {
     PaperClipIcon,
     LockClosedIcon,
     XMarkIcon,
-    DocumentArrowDownIcon,
-    DocumentMinusIcon,
+    ArrowDownTrayIcon,
+    TrashIcon,
+    PhotoIcon,
+    DocumentIcon,
     DropZone,
     FilePreview,
     EditProductFormSection,
@@ -792,6 +870,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const environment = ref(import.meta.env.MODE);
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
       toolbar: {
@@ -849,6 +928,7 @@ export default {
       producing_offices: criteria.value.producing_offices,
       coordinators: criteria.value.coordinators,
       coauthors: criteria.value.coauthors,
+      nonStateActors: criteria.value.non_state_actors,
       productTypes: isCommunityExclusive.value
         ? criteria.value.product_types
             .filter((product) => product.name === "Community Product")
@@ -868,6 +948,7 @@ export default {
       coauthors: [],
       producing_offices: [],
       editorData: "",
+      nonStateActors: [],
       pocInfo: "",
       productType: [],
       publicationDate: "",
@@ -933,6 +1014,11 @@ export default {
       } else if (formItem === "topics") {
         form.value.topics = form.value.topics.filter((i) => i.name != name);
         updateField(form.value.topics, "topics", "multiple");
+      } else if (formItem === "nonStateActors") {
+        form.value.nonStateActors = form.value.nonStateActors.filter(
+          (i) => i.name != name
+        );
+        updateField(form.value.nonStateActors, "nonStateActors", "multiple");
       } else if (formItem === "dissemOrgs") {
         form.value.dissemOrgs = form.value.dissemOrgs.filter(
           (i) => i.name != name
@@ -1045,6 +1131,9 @@ export default {
       payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
+      payload.value.nonStateActors = updatedProduct.nonStateActors.map(
+        (nonStateActor) => nonStateActor.name
+      );
       payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
@@ -1075,6 +1164,15 @@ export default {
         topicsToSelect.push(topicValue);
       });
       form.value.topics = topicsToSelect;
+      const actorsToSelect = [];
+      updatedProduct.nonStateActors.forEach((actorFromBackend) => {
+        let actorValue = getValueForCode(
+          lists.nonStateActors,
+          actorFromBackend.code
+        );
+        actorsToSelect.push(actorValue);
+      });
+      form.value.nonStateActors = actorsToSelect;
       const dissemsToSelect = [];
       updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
         //if statement is temporary until high side backend starts returning dissem orgs as an object
@@ -1244,12 +1342,25 @@ export default {
     const onInputChange = (e) => {
       addFiles(e.target.files);
       e.target.value = null;
-      uploadFiles(files.value);
+      files.value.forEach((file) => {
+        if (file.status != true) {
+          uploadFile(file);
+        }
+      });
     };
 
     const onDrop = (file) => {
       addFiles(file);
-      uploadFiles(files.value);
+      files.value.forEach((file) => {
+        if (file.status != true) {
+          uploadFile(file);
+        }
+      });
+    };
+
+    const fileSizeInKb = (fileSize) => {
+      const kb = parseFloat(fileSize) * 0.001;
+      return Math.round(kb);
     };
 
     const removeDocument = (attachmentID, doc_num) => {
@@ -1437,8 +1548,10 @@ export default {
     };
 
     return {
+      formatDate,
       document,
       categories,
+      environment,
       extraConfig,
       thumbnailFile,
       files,
@@ -1474,6 +1587,7 @@ export default {
       uploadThumbnail,
       onInputChange,
       onDrop,
+      fileSizeInKb,
       removeDocument,
       deleteDocument,
       publishProduct,
