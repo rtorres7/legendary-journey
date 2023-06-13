@@ -10,6 +10,8 @@ services:
     restart: always
     depends_on:
       - server
+    networks:
+      - your-network
     volumes:
       - ./client:/data
       - /data/node_modules
@@ -25,9 +27,12 @@ services:
     ports:
       - "3000:3000"
     restart: always
+    networks:
+      - your-network
     volumes:
       - ./server:/data
       - /data/node_modules
+      - ./certs/localhost.crt:/etc/ssl/certs/localhost.crt
     depends_on: #TODO: conditions deprecated in Compose File Version 3.x
       elasticsearch:
         condition: service_healthy
@@ -38,6 +43,7 @@ services:
     environment:
       - MONGO_DATABASE_URL=mongodb:27017
       - POSTGRES_CONNECTION_URL=postgres://maximus:magic@postgres:5432/maximus
+      - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/localhost.crt #TODO: trust self-signed cert to avoid "oauthError: Error: self-signed certificate"
     container_name: server
 
   postgres:
@@ -49,12 +55,36 @@ services:
     restart: always
     volumes:
       - pg-data:/var/lib/postgresql/data
+    networks:
+      - your-network
     container_name: postgres
     environment:
       POSTGRES_USER: maximus
       POSTGRES_PASSWORD: magic
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U maximus"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  postgres-keycloak:
+    image: postgres:15
+    expose:
+      - "5432"
+    # ports:
+    #   - "15432:5432"
+    restart: always
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    container_name: postgres-keycloak
+    networks:
+      - your-network
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: changeMe
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -66,6 +96,8 @@ services:
     restart: always
     volumes:
       - /data/db
+    networks:
+      - your-network
     container_name: mongodb
     environment:
       #MONGO_INITDB_ROOT_USERNAME: {{USERNAME}}
@@ -101,6 +133,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    networks:
+      - your-network
     healthcheck:
       test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
       interval: 30s
@@ -122,6 +156,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - your-network
 
   liquibase:
     image: liquibase/liquibase
@@ -130,12 +166,76 @@ services:
       LIQUIBASE_SECURE_PARSING: false
     volumes:
       - ./server/src/migrations:/liquibase/changelog/
+    networks:
+      - your-network
     command: --url=jdbc:postgresql://postgres:5432/maximus --changelog-file=changelog-root.xml --username=maximus --password=magic update
     depends_on:
       - postgres
+
+  keycloak:
+    container_name: keycloak-container
+    image: quay.io/keycloak/keycloak:latest
+    entrypoint:
+      [
+        "/opt/keycloak/bin/kc.sh",
+        "start-dev",
+        "--import-realm",
+        "--proxy=passthrough",
+        "--db=postgres",
+      ]
+    volumes:
+      - ./keycloak/myrealm.json:/opt/keycloak/data/import/myrealm.json
+    environment:
+      KC_DB: keycloak
+      KC_DB_URL: "jdbc:postgresql://postgres-keycloak/keycloak"
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: changeMe
+      KC_DB_SCHEMA: public
+      #KC_HOSTNAME: "localhost"
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      KC_TRANSACTION_XA_ENABLED: false
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: true
+      KC_PROXY_ADDRESS_FORWARDING: true
+      #KC_HOSTNAME_PORT: 9080
+      KC_PROXY: passthrough
+      #KC_HTTP_RELATIVE_PATH: /keycloak
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      HTTP_ADDRESS_FORWARDING: true
+    ports:
+      - 9080:8080
+    networks:
+      - your-network
+    depends_on:
+      postgres-keycloak:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/nginx/certs
+    ports:
+      - 8080:80
+      - 8443:443
+    networks:
+      - your-network
+    depends_on:
+      - keycloak
 
 volumes:
   elasticsearch-data:
     driver: local
   pg-data:
     driver: local
+  keycloak-db-data:
+    driver: local
+
+networks:
+  your-network:
+    driver: bridge
