@@ -1866,6 +1866,26 @@ export const metadata = {
           code: 10388,
           publishable: false,
         },
+        {
+          name: "Bulletin",
+          code: 10389,
+          publishable: false,
+        },
+        {
+          name: "Watch",
+          code: 10390,
+          publishable: false,
+        },
+        {
+          name: "Alert",
+          code: 10391,
+          publishable: false,
+        },
+        {
+          name: "Threat of Key Concern",
+          code: 10392,
+          publishable: false,
+        },
       ],
     },
     regions: {
