@@ -101,7 +101,7 @@ export default {
 
     feedItems() {
       return this.portlet.portlet_type === "search"
-        ? this.feed.articles
+        ? this.feed.products
         : this.feed.items;
     },
   },

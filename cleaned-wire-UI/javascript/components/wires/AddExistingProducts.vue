@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2 class="info-title d-flex separator mt-6 pb-2">Add Existing Articles</h2>
+    <h2 class="info-title d-flex separator mt-6 pb-2">Add Existing Products</h2>
     <p class="pt-3">
-      Separate each document ID by a new line to add more than one article at a
+      Separate each document ID by a new line to add more than one product at a
       time.
     </p>
     <label>Document Number(s)</label>
@@ -32,7 +32,7 @@ import Spinner from "@shared/Spinner";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "AddExistingArticles",
+  name: "AddExistingProducts",
   components: {
     Spinner,
   },

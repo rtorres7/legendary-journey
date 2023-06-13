@@ -1288,7 +1288,7 @@ export default {
       let extension = uploadedFile.type.split("/").pop();
       extension = extension === "jpeg" ? "jpg" : extension;
       thumbnailFile.value = new UploadableFile(
-        new File([uploadedFile], `article.${extension}`, {
+        new File([uploadedFile], `product.${extension}`, {
           type: uploadedFile.type,
         })
       );
@@ -1386,12 +1386,13 @@ export default {
           }, 3000);
         } else {
           axios
-            .post("/articles/processDocument", {
+            .post("/products/processDocument", {
               document_action: "publish",
               // analysis_type_id: form.selectedProductType.id,
               analysis_type_id: 5,
               id: route.params.id,
               wire_id: route.params.date,
+              state: "posted",
               // producing_office: "DNI/NCTC",
               publication_date: route.params.date,
               ...payload.value,
@@ -1437,7 +1438,7 @@ export default {
         }, 1000);
       } else {
         axios
-          .post("/articles/processDocument", {
+          .post("/products/processDocument", {
             document_action: "save",
             // analysis_type_id: form.selectedProductType.id,
             analysis_type_id: 5,
@@ -1462,7 +1463,7 @@ export default {
                 .get(
                   "/wires/" +
                     route.params.date +
-                    "/articles/" +
+                    "/products/" +
                     route.params.id +
                     "/getDocumentData",
                   {

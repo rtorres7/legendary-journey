@@ -153,7 +153,7 @@
                       </div>
                     </SwitchGroup>
                     <div class="flex items-center justify-between">
-                      <label id="article-input" class="mr-4"
+                      <label id="product-input" class="mr-4"
                         >Upload Your Own Product Image</label
                       >
                       <div
@@ -220,8 +220,8 @@
                   <p class="font-medium">Home Options</p>
                   <div class="py-2">
                     <div class="flex items-center justify-between mt-2">
-                      <label id="article-counter" class="mr-4"
-                        >Published Articles (max. 5)</label
+                      <label id="product-counter" class="mr-4"
+                        >Published Products (max. 5)</label
                       >
                       <div
                         class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
@@ -229,8 +229,8 @@
                         <button
                           class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-500 energy:hover:bg-zinc-500 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
-                            changePublishedArticleCount(
-                              publishedArticleCountFromStore - 1
+                            changePublishedProductCount(
+                              publishedProductCountFromStore - 1
                             )
                           "
                         >
@@ -239,13 +239,13 @@
                         <div
                           class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-slate-700 energy:bg-zinc-700"
                         >
-                          {{ publishedArticleCountFromStore }}
+                          {{ publishedProductCountFromStore }}
                         </div>
                         <button
                           class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-500 energy:hover:bg-zinc-500 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
-                            changePublishedArticleCount(
-                              publishedArticleCountFromStore + 1
+                            changePublishedProductCount(
+                              publishedProductCountFromStore + 1
                             )
                           "
                         >
@@ -256,12 +256,12 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
-                          Enable Loading Published Articles
+                          Enable Loading Published Products
                         </SwitchLabel>
                         <Switch
-                          v-model="loadingPublishedArticlesEnabled"
+                          v-model="loadingPublishedProductsEnabled"
                           :class="
-                            loadingPublishedArticlesEnabled
+                            loadingPublishedProductsEnabled
                               ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
                               : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
@@ -269,7 +269,7 @@
                         >
                           <span
                             :class="
-                              loadingPublishedArticlesEnabled
+                              loadingPublishedProductsEnabled
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
@@ -407,7 +407,7 @@ export default {
     const loadingMetadataEnabled = ref(false);
     const loadingHomeProductsEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
-    const loadingPublishedArticlesEnabled = ref(false);
+    const loadingPublishedProductsEnabled = ref(false);
     const sampleImageEnabled = ref(false);
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
@@ -422,10 +422,10 @@ export default {
       () => store.state.features.loading
     );
     const loadingResultsFromStore = computed(() => store.state.search.loading);
-    const publishedArticleCountFromStore = computed(
-      () => store.state.features.articles.length
+    const publishedProductCountFromStore = computed(
+      () => store.state.features.products.length
     );
-    const loadingPublishedArticlesFromStore = computed(
+    const loadingPublishedProductsFromStore = computed(
       () => store.state.features.loading
     );
     const adminFromStore = computed(() => store.state.testConsole.admin);
@@ -451,9 +451,9 @@ export default {
     watch(loadingHomeProductsEnabled, (enabled) => {
       console.log("loadingHomeProductsEnabled: ", enabled);
       if (enabled) {
-        store.dispatch("features/toggleLoading", true);
+        store.dispatch("features/setLoading", true);
       } else {
-        store.dispatch("features/toggleLoading", false);
+        store.dispatch("features/setLoading", false);
       }
     });
 
@@ -484,11 +484,11 @@ export default {
       });
     };
 
-    const changePublishedArticleCount = (count) => {
-      store.dispatch("features/setArticles", count);
+    const changePublishedProductCount = (count) => {
+      store.dispatch("features/setProducts", count);
     };
 
-    watch(loadingPublishedArticlesEnabled, (enabled) => {
+    watch(loadingPublishedProductsEnabled, (enabled) => {
       store.dispatch("features/setLoading", enabled);
     });
 
@@ -513,8 +513,8 @@ export default {
       loadingResultsEnabled.value = loading;
     });
 
-    watch(loadingPublishedArticlesFromStore, (loading) => {
-      loadingPublishedArticlesEnabled.value = loading;
+    watch(loadingPublishedProductsFromStore, (loading) => {
+      loadingPublishedProductsEnabled.value = loading;
     });
 
     watch(adminFromStore, (status) => {
@@ -533,12 +533,12 @@ export default {
       loadingMetadataEnabled,
       loadingHomeProductsEnabled,
       loadingResultsEnabled,
-      publishedArticleCountFromStore,
-      loadingPublishedArticlesEnabled,
+      publishedProductCountFromStore,
+      loadingPublishedProductsEnabled,
       removeProductImage,
       changeProductImage,
       toggleNotificationToast,
-      changePublishedArticleCount,
+      changePublishedProductCount,
       uploadFileName,
       adminEnabled,
       sampleImageEnabled,

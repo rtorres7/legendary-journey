@@ -20,7 +20,7 @@ export default {
     gotIt() {
       if (this.$route.name === "home") {
         this.$store.commit(
-          "articles/removeItemFromSiteEnhancements",
+          "products/removeItemFromSiteEnhancements",
           this.doc_num
         );
       } else {

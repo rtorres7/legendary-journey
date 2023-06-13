@@ -43,7 +43,7 @@
               class="d-flex p-5"
               :class="{
                 'secondary pt-6 position-relative locked': locked(
-                  revision.article
+                  revision.product
                 ),
               }"
             >
@@ -51,11 +51,11 @@
                 <Date fullDate :documentDate="revision.revision_date" />
                 <div>
                   <DocumentLink
-                    :document="revision.article"
+                    :document="revision.product"
                     :section="section"
                     :returnPath="returnPath"
                     :data-usage="dataUsage"
-                    :afterLinkText="formatDate(revision.article.date_published)"
+                    :afterLinkText="formatDate(revision.product.date_published)"
                     class="revision-title"
                   />
                 </div>
@@ -78,7 +78,7 @@
               the intended message—we will issue a substantive revision
               detailing the specific change made and, to the extent possible,
               the reason for the error. The revision notice will be placed at
-              the top of the online article. We pledge to correct minor,
+              the top of the online product. We pledge to correct minor,
               non-substantive errors—for example, typos and misspellings—online
               in a timely fashion without regard to how long ago the error
               occurred.
@@ -87,7 +87,9 @@
               We welcome your assistance in identifying errors in our featured
               content; if you spot a mistake please use the private comment
               feature or
-              <a class="contact-link" href="mailto:_temp_540-Mailbox@_temp_6._temp_0"
+              <a
+                class="contact-link"
+                href="mailto:_temp_540-Mailbox@_temp_6._temp_0"
                 >send us a note</a
               >.
             </p>

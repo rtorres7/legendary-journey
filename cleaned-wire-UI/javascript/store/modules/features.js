@@ -63,7 +63,7 @@ export default {
         });
     },
 
-    retrieveFeaturedFssArticles({ commit }, { caller }) {
+    retrieveFeaturedFssProducts({ commit }, { caller }) {
       commit("setLoading", true);
       return axios
         .get(`/fss/sensitive_features`)
@@ -79,19 +79,19 @@ export default {
           caller.$wireNotification({
             type: "error",
             title: "Error",
-            text: "Failed to load WIRe sensitive articles.",
+            text: "Failed to load WIRe sensitive products.",
           });
         });
     },
 
-    saveFeaturedArticlesSortOrder(
+    saveFeaturedProductsSortOrder(
       { commit },
       { featureDate, features, caller }
     ) {
       let formData = new FormData();
 
       features.forEach((feature) =>
-        formData.append("wire_article[]", feature.id)
+        formData.append("wire_product[]", feature.id)
       );
 
       return axios
@@ -103,7 +103,7 @@ export default {
           caller.$wireNotification({
             type: "error",
             title: "Error",
-            text: "Failed to update articles for this wire book.",
+            text: "Failed to update products for this wire book.",
           });
           // most likely session has timed out, reload to refresh tokens
           setTimeout(() => {

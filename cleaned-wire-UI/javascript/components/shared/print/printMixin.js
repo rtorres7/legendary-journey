@@ -19,7 +19,7 @@ export default {
   },
 
   computed: {
-    ...mapState("articles", ["daily_wire"]),
+    ...mapState("products", ["daily_wire"]),
     date() {
       return this.$route.params.date
         ? this.$route.params.date

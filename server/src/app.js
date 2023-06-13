@@ -7,11 +7,11 @@ const logger = require("morgan");
 const indexRouter = require("./routes");
 const homeRouter = require("./routes/home");
 const legacyRouter = require("./routes/legacy");
-const articlesRouter = require("./routes/articles");
+const productsRouter = require("./routes/products");
 const usersRouter = require("./routes/users");
 const searchRouter = require("./routes/search");
 const alertRouter = require("./routes/alerts");
-const workspaceRouter = require('./routes/workspace');
+const workspaceRouter = require("./routes/workspace");
 
 const constant = require("./util/constant");
 
@@ -21,7 +21,7 @@ const app = express();
 const mongoose = require("mongoose");
 
 const MONGO_DATABASE_URL = process.env.MONGO_DATABASE_URL || "http://localhost";
-mongoose.connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
+mongoose.connect(`mongodb://${MONGO_DATABASE_URL}/products`, {
   useNewUrlParser: true,
 });
 
@@ -37,7 +37,7 @@ db.on("error", function (error) {
   ) {
     setTimeout(function () {
       mongoose
-        .connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
+        .connect(`mongodb://${MONGO_DATABASE_URL}/products`, {
           useNewUrlParser: true,
         })
         .catch(() => {
@@ -78,22 +78,19 @@ esClient.cluster.health({}, function (err, resp) {
       mappings: v.mappings,
     });
 
-    const Article = require("./models/articles");
+    const Product = require("./models/products");
     const IndexService = require("./services/index");
     const indexService = new IndexService();
 
-    Article.find(
-      {},
-      function (error, articles) {
-        if (error) {
-          console.error(error);
-        }
-
-        articles.forEach(article => {
-          indexService.create(article.indexable);
-        });
+    Product.find({}, function (error, products) {
+      if (error) {
+        console.error(error);
       }
-    );
+
+      products.forEach((product) => {
+        indexService.create(product.indexable);
+      });
+    });
 
     return index;
   });
@@ -111,7 +108,7 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/alerts", alertRouter);
-app.use("/articles", articlesRouter);
+app.use("/products", productsRouter);
 app.use("/home", homeRouter);
 app.use("/preload", legacyRouter);
 app.use("/wires", legacyRouter);
@@ -120,6 +117,6 @@ app.use("/documents", legacyRouter);
 app.use("/users", usersRouter);
 app.use("/special_editions", legacyRouter);
 app.use("/search", searchRouter);
-app.use('/workspace', workspaceRouter);
+app.use("/workspace", workspaceRouter);
 
 module.exports = app;

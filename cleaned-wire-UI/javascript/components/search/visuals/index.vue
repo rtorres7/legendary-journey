@@ -10,7 +10,7 @@
       v-masonry-tile
       class="visuals-card"
       :key="result.id"
-      :article="result"
+      :product="result"
     />
   </div>
 </template>

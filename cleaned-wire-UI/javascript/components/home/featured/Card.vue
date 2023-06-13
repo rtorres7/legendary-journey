@@ -6,7 +6,7 @@
     no-body
   >
     <b-card-body class="p-0">
-      <div class="d-flex flex-column h-100" v-if="!article.fake">
+      <div class="d-flex flex-column h-100" v-if="!product.fake">
         <b-row class="card-contents flex-grow-1">
           <b-col
             class="col d-flex flex-column justify-content-between py-5"
@@ -15,7 +15,7 @@
             <b-card-title title-tag="h3" @click.prevent>
               <DocumentLink
                 ref="documentLink"
-                :document="article"
+                :document="product"
                 :section="section"
                 :returnPath="returnPath"
                 @focus="addFocus"
@@ -26,9 +26,9 @@
             <b-card-text>
               <div class="published-date font-size-2 alt-800">
                 {{
-                  (article.date_published
-                    ? article.date_published
-                    : article.posted_at) | moment("D MMMM YYYY")
+                  (product.date_published
+                    ? product.date_published
+                    : product.posted_at) | moment("D MMMM YYYY")
                 }}
               </div>
             </b-card-text>
@@ -61,20 +61,20 @@ export default {
 
   computed: {
     locked() {
-      return !isEmpty(this.article.needed) || this.article.org_restricted;
+      return !isEmpty(this.product.needed) || this.product.org_restricted;
     },
     hasImages() {
-      if (!isEmpty(this.article.needed)) {
+      if (!isEmpty(this.product.needed)) {
         return false;
       }
-      if (isEmpty(this.article.images)) {
+      if (isEmpty(this.product.images)) {
         // front page & special editions
         return false;
       } else {
         // search page grid view
         if (
-          this.article.images.table &&
-          isEmpty(this.article.images.table.article)
+          this.product.images.table &&
+          isEmpty(this.product.images.table.product)
         ) {
           return false;
         }
@@ -86,28 +86,28 @@ export default {
       // a JS object instead of an Array. This is handling the different types. Check the commit
       // message for more details
       let updatedAt;
-      if (Array.isArray(this.article.images)) {
-        updatedAt = this.article.images.filter(
-          (image) => image.usage == "article"
+      if (Array.isArray(this.product.images)) {
+        updatedAt = this.product.images.filter(
+          (image) => image.usage == "product"
         )[0].updated_at;
-      } else if (this.article.images && this.article.images.table.article) {
-        updatedAt = this.article.images.table.article.table.updated_at;
+      } else if (this.product.images && this.product.images.table.product) {
+        updatedAt = this.product.images.table.product.table.updated_at;
       } else {
         updatedAt = "";
       }
 
       return (
         "/documents/" +
-        this.article.doc_num +
-        "/images/article?updated_at=" +
+        this.product.doc_num +
+        "/images/product?updated_at=" +
         updatedAt
       );
     },
   },
 
   methods: {
-    ...mapActions("articles", ["preloadDocument"]),
-    ...mapMutations("articles", ["imagesLoaded"]),
+    ...mapActions("products", ["preloadDocument"]),
+    ...mapMutations("products", ["imagesLoaded"]),
     removeFocus() {
       this.focused = false;
     },

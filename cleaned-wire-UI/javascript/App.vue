@@ -96,7 +96,7 @@ export default {
     $route(route) {
       this.$refs.skipLink.focus();
       if (route.name === "home") {
-        this.$store.dispatch("articles/getHomeArticles");
+        this.$store.dispatch("products/getHomeProducts");
       }
     },
   },

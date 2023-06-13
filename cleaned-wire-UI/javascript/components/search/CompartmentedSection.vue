@@ -26,8 +26,8 @@
       <b-row>
         <b-col cols="20" lg="16">
           <div class="standard-page-margin">
-            <div v-for="article in results" :key="article.id">
-              <CompartmentedCard :document="article" />
+            <div v-for="product in results" :key="product.id">
+              <CompartmentedCard :document="product" />
             </div>
           </div>
         </b-col>

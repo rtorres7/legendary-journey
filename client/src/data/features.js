@@ -1,4 +1,4 @@
-const articles = {
+const products = {
   published: [
     {
       attributes: {
@@ -17,7 +17,7 @@ const articles = {
         position: 1,
         "posted?": false,
         posted_at: "2022-09-01T18:42:30Z",
-        product_type: "WIRe Article",
+        product_type: "WIRe Product",
         publication_date: "2022-09-01",
         region_names: ["Africa"],
         regions: ["AF"],
@@ -25,7 +25,7 @@ const articles = {
         "staged?": true,
         subregions: ["AFce"],
         summary:
-          "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
+          "Summary: This is a test summary description of this product. The contents of this product is coming from an product template that's published into our system. The key/value pairs of this product contain many properties that are used to determine the type of product and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
         summary_classification: "U",
         summary_sci: 0,
         title:
@@ -51,7 +51,7 @@ const articles = {
         cache_key: "0",
         images: [
           /*{
-            "usage": "article",
+            "usage": "product",
             "updated_at": "2022-09-01T00:00:00Z"
           }
           */
@@ -67,7 +67,7 @@ const articles = {
         position: 1,
         "posted?": false,
         posted_at: "2022-09-01T18:42:30Z",
-        product_type: "WIRe Article",
+        product_type: "WIRe Product",
         publication_date: "2022-08-31",
         region_names: ["Africa"],
         regions: ["AF"],
@@ -111,7 +111,7 @@ const articles = {
         position: 1,
         "posted?": false,
         posted_at: "2022-09-01T18:42:30Z",
-        product_type: "WIRe Article",
+        product_type: "WIRe Product",
         publication_date: "2022-08-30",
         region_names: ["Africa"],
         regions: ["AF"],
@@ -155,7 +155,7 @@ const articles = {
         position: 1,
         "posted?": false,
         posted_at: "2022-09-01T18:42:30Z",
-        product_type: "WIRe Article",
+        product_type: "WIRe Product",
         publication_date: "2022-08-29",
         region_names: ["Africa"],
         regions: ["AF"],
@@ -198,7 +198,7 @@ const articles = {
         position: 1,
         "posted?": false,
         posted_at: "2022-09-01T18:42:30Z",
-        product_type: "WIRe Article",
+        product_type: "WIRe Product",
         publication_date: "2022-08-28",
         region_names: ["Africa"],
         regions: ["AF"],
@@ -227,16 +227,16 @@ const articles = {
   ],
 };
 
-export const features = articles.published;
-export const articlesForWire = articles.published.map((article, index) => {
+export const features = products.published;
+export const productsForWire = products.published.map((product, index) => {
   return {
     attributes: {
-      ...article.attributes,
+      ...product.attributes,
       product_type: "Current",
-      title_classif: article.attributes.title_classification,
-      summary_classif: article.attributes.summary_classification,
+      title_classif: product.attributes.title_classification,
+      summary_classif: product.attributes.summary_classification,
       state: index === 0 ? "posted" : "draft",
     },
-    data: { ...article.data },
+    data: { ...product.data },
   };
 });

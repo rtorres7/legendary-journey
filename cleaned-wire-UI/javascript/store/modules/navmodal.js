@@ -3,7 +3,7 @@ import axios from "axios";
 export default {
   namespaced: true,
   state: {
-    articleList: [],
+    productList: [],
     preload: {},
     next: null,
     previous: null,
@@ -24,18 +24,18 @@ export default {
     },
 
     setNextPrevious: function ({ state, dispatch }, docNum) {
-      for (let ind in state.articleList) {
+      for (let ind in state.productList) {
         ind = parseInt(ind);
-        var articleNum = state.articleList[ind];
-        if (articleNum === docNum) {
+        var productNum = state.productList[ind];
+        if (productNum === docNum) {
           if (ind > 0) {
-            state.previous = state.articleList[ind - 1];
+            state.previous = state.productList[ind - 1];
           } else {
             state.previous = null;
           }
 
-          if (ind < state.articleList.length - 1) {
-            state.next = state.articleList[ind + 1];
+          if (ind < state.productList.length - 1) {
+            state.next = state.productList[ind + 1];
           } else {
             state.next = null;
           }
@@ -46,8 +46,8 @@ export default {
   },
 
   mutations: {
-    setArticleList(state, articles) {
-      state.articleList = articles;
+    setProductList(state, products) {
+      state.productList = products;
     },
 
     setListName(state, name) {

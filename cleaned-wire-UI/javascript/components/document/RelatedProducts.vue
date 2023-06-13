@@ -111,7 +111,7 @@ export default {
             duration: 5000,
             text:
               this.productDocNum +
-              " has been added as a related product to this article.",
+              " has been added as a related product to this product.",
             type: "success",
           });
 

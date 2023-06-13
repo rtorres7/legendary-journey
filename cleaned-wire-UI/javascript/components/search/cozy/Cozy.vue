@@ -9,7 +9,7 @@
       :key="ind"
     >
       <SiteEnhancementCard
-        :article="siteEnhancementCard"
+        :product="siteEnhancementCard"
         section="search"
         :return-path="$route.fullPath"
       />
@@ -18,7 +18,7 @@
       cols="24"
       md="''"
       lg="8"
-      v-for="(article, ind) in results"
+      v-for="(product, ind) in results"
       :key="ind"
       class="custom-gutter-col"
     >
@@ -27,7 +27,7 @@
         :hero="false"
         :ind="ind"
         :preload-doc="ind < 3"
-        :article="article"
+        :product="product"
         section="search"
         :return-path="$route.fullPath"
       />

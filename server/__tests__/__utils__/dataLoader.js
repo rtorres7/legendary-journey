@@ -1,13 +1,13 @@
-const Article = require("../../src/models/articles");
+const Product = require("../../src/models/products");
 const Metadata = require("../../src/models/metadata");
 
 const { Client } = require("@elastic/elasticsearch");
 const mongoose = require("mongoose");
 
-const { Sequelize } = require('sequelize');
+const { Sequelize } = require("sequelize");
 
-const articles = [
-  new Article({
+const products = [
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -40,13 +40,13 @@ const articles = [
     ],
     htmlBody:
       '<p><span class="portion_marked_field"> (U) </span><i><strong>Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths.</strong></i><a class="source-reference">[1]</a> As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two. </p><p><span class="portion_marked_field"> (U) </span>Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit. </p><p><span class="portion_marked_field">(U) </span>A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider. <section class="digression"><div class="digression-content"><p><span class="portion_marked_field"> (U) </span><i>For additional information, please see the wires: </i><p><a href=""><span class="portion_marked_field"> (U) </span><i>Covid: Why you should consider vaccination.</i></a><i> 31 October 2021</i></p><p><a href=""><span class="portion_marked_field"> (U) </span><i>Covid and the flu: is the flu as deadly as Covid19?</i></a> <i> 18 December 2021</i></p></p></div></section></p>',
-    _id: '64709619aa530082dd5cc40e',
+    _id: "64709619aa530082dd5cc40e",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -54,8 +54,8 @@ const articles = [
     producingOffices: [
       {
         name: "EDUCATION",
-        code: "EDUCATION"
-      }
+        code: "EDUCATION",
+      },
     ],
     productNumber: "WIReWIRe_sample_1",
     productType: {
@@ -66,11 +66,11 @@ const articles = [
       {
         name: "Asia",
         code: "AS",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
-      code: "analysis.all_source"
+      code: "analysis.all_source",
     },
     state: "posted",
     subregions: [
@@ -80,7 +80,7 @@ const articles = [
       },
     ],
     summary:
-      "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
+      "Summary: This is a test summary description of this product. The contents of this product is coming from an product template that's published into our system. The key/value pairs of this product contain many properties that are used to determine the type of product and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
     summaryClassification: "U",
     summaryClassificationXml: "",
     title:
@@ -96,7 +96,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: false,
   }),
-  new Article({
+  new Product({
     classification: "S",
     classificationXml: "",
     countries: [
@@ -142,8 +142,8 @@ const articles = [
       "(U) “The Russian Defence Ministry made a decision – that apparently came from the very top – to fully withdraw forces from Kharkiv and to use the available resources to hold on to the positions in Donetsk, and perhaps, the border of Luhansk,” Mitrokhin said.",
       "(U) “The aftertaste is that all of this is but a remake of Russia’s retreat from northern Ukraine in April,” he said.",
       "(U) Moscow called the April retreat from four regions, including Kyiv, a “goodwill gesture,” but Ukrainian officials and analysts said it was caused by grave miscalculations and heavy losses in manpower and military equipment.",
-    ].join(''),
-    _id: '64709619aa530082dd5cc416',
+    ].join(""),
+    _id: "64709619aa530082dd5cc416",
     images: [],
     issues: [
       {
@@ -161,8 +161,8 @@ const articles = [
     producingOffices: [
       {
         name: "ANCESTRY",
-        code: "ANCESTRY"
-      }
+        code: "ANCESTRY",
+      },
     ],
     productNumber: "WIReWIRe_sample_2",
     productType: {
@@ -177,7 +177,7 @@ const articles = [
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -192,7 +192,7 @@ const articles = [
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "The Russians abandoned next to no artillery or armoured vehicles, and their retreat from the heavily-fortified area did not look like a panicked flight that followed heavy fighting, according to videos from the area and Ukrainian military reports.",
@@ -214,7 +214,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: false,
   }),
-  new Article({
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -253,14 +253,14 @@ const articles = [
       "(U) The strikes hint at efforts to retaliate after a sudden breakthrough by Ukraine that sent Russian troops fleeing and put Moscow on the defensive. Ukraine’s top commander said that 3,000 square kilometers (1,158 square miles) of lost territory have been returned to Kyiv’s control since the beginning of September.",
       "(U) Peskov brushed off concerns over the hasty retreat in the northeast as Putin presided over a government meeting in Moscow at which he assured that the economy is returning to normal and has repelled the western sanctions imposed over the war. Chechen strongman Ramzan Kadyrov announced that he was sending a new detachment to fight in Ukraine.",
       "(U) But with a lack of manpower and rapidly depleting equipment likely to become a growing concern for Russia’s forces, the risk is that Ukraine could try to cut off the Kremlin’s overstretched forces in the south and threaten Crimea, the person close to the Defense Ministry said.",
-    ].join(''),
-    _id: '64709619aa530082dd5cc423',
+    ].join(""),
+    _id: "64709619aa530082dd5cc423",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -269,7 +269,7 @@ const articles = [
       {
         name: "ANCESTRY",
         code: "ANCESTRY",
-      }
+      },
     ],
     productNumber: "WIReWIRe_sample_3",
     productType: {
@@ -280,7 +280,7 @@ const articles = [
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -291,7 +291,7 @@ const articles = [
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.",
@@ -309,7 +309,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: true,
   }),
-  new Article({
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -326,14 +326,14 @@ const articles = [
       "(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.",
       "(U) Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit.",
       "(U) A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider.",
-    ].join(''),
-    _id: '64709619aa530082dd5cc42b',
+    ].join(""),
+    _id: "64709619aa530082dd5cc42b",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -342,7 +342,7 @@ const articles = [
       {
         name: "AGRICULTURE",
         code: "AGRICULTURE",
-      }
+      },
     ],
     productNumber: "WIReWIRe_sample_4",
     productType: {
@@ -353,7 +353,7 @@ const articles = [
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -364,7 +364,7 @@ const articles = [
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "Summary: There isn't any major update regarding covid numbers in today's report.",
@@ -382,7 +382,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: true,
   }),
-  new Article({
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [],
@@ -394,13 +394,13 @@ const articles = [
       "(U) Charles gave the speech from Westminster Hall in London in a traditional ceremony in which lawmakers expressed their condolences upon the death of Queen Elizabeth II. She died Thursday at age 96.",
       '(U) "As I stand before you today, I cannot help but feel the weight of history which surrounds us, and which reminds us of the vital parliamentary traditions to which members of both houses dedicate yourselves with such personal commitment to the betterment of us all," Charles III said.',
     ].join(),
-    _id: '64709619aa530082dd5cc432',
+    _id: "64709619aa530082dd5cc432",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
@@ -444,16 +444,16 @@ const articles = [
 const loadElasticSearch = async (esUrl) => {
   const client = new Client({ node: esUrl });
 
-  for (const article of articles) {
+  for (const product of products) {
     await client.index({
-      index: 'products',
-      body: article.indexable,
-      id: article.id
+      index: "products",
+      body: product.indexable,
+      id: product.id,
     });
   }
 
-  await client.indices.refresh({ index: 'products' });
-}
+  await client.indices.refresh({ index: "products" });
+};
 
 const loadMetadata = async (mongoUrl) => {
   const metadata = new Metadata({
@@ -2374,7 +2374,10 @@ const loadMetadata = async (mongoUrl) => {
           {
             name: "Analysis: All Source",
             code: "analysis.all_source",
-            productTypes: [1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382, 10383, 10384, 10385],
+            productTypes: [
+              1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382,
+              10383, 10384, 10385,
+            ],
           },
           {
             name: "Reporting: Enterprise",
@@ -2798,16 +2801,16 @@ const loadMetadata = async (mongoUrl) => {
   mongoose.connection.close();
 };
 
-const loadArticlesIntoMongo = async (mongoUrl) => {
+const loadProductsIntoMongo = async (mongoUrl) => {
   await mongoose.connect(mongoUrl, {
     useNewUrlParser: true,
   });
 
-  for (let article of articles) {
-    if (Array.isArray(article.htmlBody)) {
-      article.htmlBody = article.htmlBody.join('');
+  for (let product of products) {
+    if (Array.isArray(product.htmlBody)) {
+      product.htmlBody = product.htmlBody.join("");
     }
-    await article.save();
+    await product.save();
   }
   mongoose.connection.close();
 };
@@ -2815,62 +2818,68 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
 const loadSavedProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const savedProductModel = require('../../src/models/saved_product');
+  const savedProductModel = require("../../src/models/saved_product");
   savedProductModel(sequelize);
 
   await sequelize.models.SavedProduct.sync();
 
   await sequelize.models.SavedProduct.create({
-    productId: 'WIReWIRe_sample_1',
-    createdBy: 1
+    productId: "WIReWIRe_sample_1",
+    createdBy: 1,
   });
-}
+};
 
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const collectionModel = require('../../src/models/collection');
+  const collectionModel = require("../../src/models/collection");
   collectionModel(sequelize);
 
   await sequelize.models.Collection.sync();
 
   await sequelize.models.Collection.create({
-    name: 'Sample Collection',
-    description: 'Sample Collection description',
-    createdBy: 1
+    name: "Sample Collection",
+    description: "Sample Collection description",
+    createdBy: 1,
   });
-}
+};
 
 const loadCollectionProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const collectionModel = require('../../src/models/collection');
+  const collectionModel = require("../../src/models/collection");
   collectionModel(sequelize);
 
-  const savedProductModel = require('../../src/models/saved_product');
+  const savedProductModel = require("../../src/models/saved_product");
   savedProductModel(sequelize);
 
-  const collectionProductsModel = require('../../src/models/collection_products');
+  const collectionProductsModel = require("../../src/models/collection_products");
   collectionProductsModel(sequelize);
 
   await sequelize.models.Collection.sync();
   await sequelize.models.SavedProduct.sync();
   await sequelize.models.CollectionProducts.sync();
 
-  sequelize.models.Collection.belongsToMany(sequelize.models.SavedProduct, { through: sequelize.models.CollectionProducts });
-  sequelize.models.SavedProduct.belongsToMany(sequelize.models.Collection, { through: sequelize.models.CollectionProducts });
+  sequelize.models.Collection.belongsToMany(sequelize.models.SavedProduct, {
+    through: sequelize.models.CollectionProducts,
+  });
+  sequelize.models.SavedProduct.belongsToMany(sequelize.models.Collection, {
+    through: sequelize.models.CollectionProducts,
+  });
 
   const savedProducts = await sequelize.models.SavedProduct.findAll();
-  const collection = await sequelize.models.Collection.findOne({ include: sequelize.models.SavedProduct });
+  const collection = await sequelize.models.Collection.findOne({
+    include: sequelize.models.SavedProduct,
+  });
 
   collection.addSavedProducts(savedProducts);
-}
+};
 
 module.exports = {
   loadElasticSearch,
   loadMetadata,
-  loadArticlesIntoMongo,
+  loadProductsIntoMongo,
   loadSavedProducts,
   loadCollections,
   loadCollectionProducts,
-}
+};

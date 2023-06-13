@@ -2,10 +2,10 @@
   <div class="py-8 section-heading">
     <div class="standard-page-margin">
       <SectionHeader
-        title="WIRe Sensitive Articles"
+        title="WIRe Sensitive Products"
         href="/search?sensitive=true&_temp_39=WIRE"
-        description="Articles Available in Sensitive Dissemination Services (SDS)"
-        readMoreSRText="sensitive wire articles"
+        description="Products Available in Sensitive Dissemination Services (SDS)"
+        readMoreSRText="sensitive wire products"
         class="section-heading"
       />
       <Spinner v-if="featuresLoading" />
@@ -25,7 +25,7 @@
           <b-col v-if="fssDocs.length === 0">
             <div class="no-results px-5">
               <span class="fa fa-warning"></span> Unable to retrieve WIRe
-              Sensitive articles from SDS.
+              Sensitive products from SDS.
             </div>
           </b-col>
           <HuiModal />
@@ -55,7 +55,7 @@ export default {
   },
 
   mounted() {
-    this.retrieveFeaturedArticles();
+    this.retrieveFeaturedProducts();
   },
 
   computed: {
@@ -63,8 +63,8 @@ export default {
   },
 
   methods: {
-    retrieveFeaturedArticles() {
-      this.$store.dispatch("features/retrieveFeaturedFssArticles", {
+    retrieveFeaturedProducts() {
+      this.$store.dispatch("features/retrieveFeaturedFssProducts", {
         caller: this,
       });
     },

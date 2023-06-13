@@ -3,10 +3,10 @@
     <b-card class="w-100">
       <b-card-header>
         <h2>
-          Articles for this Book
+          Products for this Book
           <span class="sr-only"> ({{ totalFeatures }})</span>
         </h2>
-        (<span id="article_count">{{ totalFeatures }}</span
+        (<span id="product_count">{{ totalFeatures }}</span
         >)
         <span class="btn-group">
           <router-link
@@ -18,13 +18,13 @@
           >
         </span>
       </b-card-header>
-      <div id="article-organization">
+      <div id="product-organization">
         <b-card class="panel w-100">
           <b-card-body>
             <draggable
               id="columns"
               tag="ul"
-              group="wire-articles"
+              group="wire-products"
               class="list-unstyled"
               handle=".sort-handle"
               :list="features"
@@ -39,7 +39,7 @@
                       class="drag-icon pb-3"
                     />
                   </div>
-                  Drag/drop articles from sidebar
+                  Drag/drop products from sidebar
                 </div>
               </div>
               <template v-else>
@@ -47,7 +47,7 @@
                   class="list-group-item feature sort-handle"
                   :class="
                     idx === 0
-                      ? `headline-article ${feature.document.state}`
+                      ? `headline-product ${feature.document.state}`
                       : feature.document.state
                   "
                   v-for="(feature, idx) in features"
@@ -69,7 +69,7 @@ import WireFeature from "../wires/WireFeature";
 import draggable from "vuedraggable";
 
 export default {
-  name: "ArticlesForBook",
+  name: "ProductsForBook",
   components: {
     WireFeature,
     draggable,
@@ -86,7 +86,7 @@ export default {
     },
   },
   mounted() {
-    this.retrieveArticlesForBook();
+    this.retrieveProductsForBook();
   },
   computed: {
     featureDate() {
@@ -97,17 +97,17 @@ export default {
     },
   },
   methods: {
-    retrieveArticlesForBook() {
+    retrieveProductsForBook() {
       this.features = this.wire.features || [];
     },
     featuresChanged(evt) {
       if (evt.moved) {
-        this.saveFeaturedArticlesSortOrder();
+        this.saveFeaturedProductsSortOrder();
       } else if (evt.added) {
-        this.addFeaturedArticle(evt.added.element.document.doc_num);
+        this.addFeaturedProduct(evt.added.element.document.doc_num);
       }
     },
-    addFeaturedArticle(docNum) {
+    addFeaturedProduct(docNum) {
       this.$store
         .dispatch(`features/featureProduct`, {
           featureDate: this.featureDate,
@@ -118,8 +118,8 @@ export default {
           this.$bus.$emit("featureUpdated");
         });
     },
-    saveFeaturedArticlesSortOrder() {
-      this.$store.dispatch(`features/saveFeaturedArticlesSortOrder`, {
+    saveFeaturedProductsSortOrder() {
+      this.$store.dispatch(`features/saveFeaturedProductsSortOrder`, {
         featureDate: this.featureDate,
         features: this.features,
         caller: this,
@@ -128,7 +128,7 @@ export default {
   },
   watch: {
     wire() {
-      this.retrieveArticlesForBook();
+      this.retrieveProductsForBook();
     },
   },
 };

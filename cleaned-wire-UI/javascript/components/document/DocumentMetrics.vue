@@ -145,7 +145,7 @@ export default {
     },
     chartDescription() {
       return (
-        "unique users who accessed this article between the publication date (" +
+        "unique users who accessed this product between the publication date (" +
         this.formatDate(this.document.display_date) +
         ") and today"
       );

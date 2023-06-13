@@ -1,6 +1,6 @@
 <template>
   <div id="img-container" class="relative overflow-hidden">
-    <template v-if="hasArticleImage(product)">
+    <template v-if="hasProductImage(product)">
       <div
         v-show="!smartRender"
         id="image-blur"
@@ -52,7 +52,7 @@ export default {
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
     const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
 
-    const hasArticleImage = (product) => {
+    const hasProductImage = (product) => {
       if (sampleImage.value || uploadBinary.value) {
         return true;
       }
@@ -60,7 +60,7 @@ export default {
       if (isEmpty(product.images)) {
         hasImages = false;
       } else {
-        if (product.images.table && isEmpty(product.images.table.article)) {
+        if (product.images.table && isEmpty(product.images.table.product)) {
           hasImages = false;
         }
       }
@@ -80,10 +80,10 @@ export default {
       let updatedAt;
       if (Array.isArray(product.images)) {
         updatedAt = product.images.filter(
-          (image) => image.usage == "article"
+          (image) => image.usage == "product"
         )[0].updated_at;
-      } else if (product.images && product.images.table.article) {
-        updatedAt = product.images.table.article.table.updated_at;
+      } else if (product.images && product.images.table.product) {
+        updatedAt = product.images.table.product.table.updated_at;
       } else {
         updatedAt = "";
       }
@@ -91,21 +91,21 @@ export default {
         window.location.origin +
         "/documents/" +
         product.doc_num +
-        "/images/article?updated_at=" +
+        "/images/product?updated_at=" +
         updatedAt
       );
     };
 
     const onImgLoad = () => {
       if (props.smartRender) {
-        const articleImgWidth =
+        const productImgWidth =
           document.getElementById("product-img")?.clientWidth;
-        emit("imageLoaded", articleImgWidth);
+        emit("imageLoaded", productImgWidth);
       }
     };
 
     return {
-      hasArticleImage,
+      hasProductImage,
       onImgLoad,
       getImgUrl,
     };

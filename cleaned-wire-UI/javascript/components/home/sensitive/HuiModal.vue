@@ -8,7 +8,7 @@
     ok-only
   >
     <b-card>
-      WIRe Sensitive Articles open in the HUI client. If it is not installed, it
+      WIRe Sensitive Products open in the HUI client. If it is not installed, it
       can be found in the Software Center.
     </b-card>
   </b-modal>

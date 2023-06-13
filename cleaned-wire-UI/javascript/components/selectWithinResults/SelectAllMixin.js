@@ -5,9 +5,9 @@ export default {
   computed: {
     ...mapState("search", ["results"]),
 
-    articleIds() {
-      return this.results.flatMap((article) =>
-        isEmpty(article.needed) ? [article.id] : []
+    productIds() {
+      return this.results.flatMap((product) =>
+        isEmpty(product.needed) ? [product.id] : []
       );
     },
   },
@@ -23,10 +23,10 @@ export default {
 
   methods: {
     toggleAll(checked) {
-      this.form.checked = checked ? this.articleIds : [];
+      this.form.checked = checked ? this.productIds : [];
     },
-    numArticles() {
-      return this.articleIds.length;
+    numProducts() {
+      return this.productIds.length;
     },
   },
 
@@ -37,7 +37,7 @@ export default {
         if (newVal.checked.length === 0) {
           this.indeterminate = false;
           this.allSelected = false;
-        } else if (newVal.checked.length === this.articleIds.length) {
+        } else if (newVal.checked.length === this.productIds.length) {
           this.indeterminate = false;
           this.allSelected = true;
         } else {

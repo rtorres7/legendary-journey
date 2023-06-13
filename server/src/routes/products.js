@@ -5,7 +5,7 @@ const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 const { v4: uuidv4 } = require("uuid");
 
-const Article = require("../models/articles");
+const Product = require("../models/products");
 const Metadata = require("../models/metadata");
 
 const IndexService = require("../services");
@@ -15,45 +15,45 @@ const indexService = new IndexService(process.env.ES_URL);
 // TODO: Not sure this endpoint is being used and if it is, the response data format needs to change
 // GET
 router.get("/", (req, res) => {
-  Article.find(
+  Product.find(
     {},
     "attributes doc_num title title_classification summary summary_classification date_published state",
-    function (error, articles) {
-      handleMongooseError("Unable to load articles", error);
+    function (error, products) {
+      handleMongooseError("Unable to load products", error);
 
       res.send({
         woah: {
-          articles: articles,
-          featured: articles.slice(0, 3),
-          secondary: articles.slice(3, articles.length),
-          briefs: articles.slice(0, 3), //TODO: need to only return sit awareness
+          products: products,
+          featured: products.slice(0, 3),
+          secondary: products.slice(3, products.length),
+          briefs: products.slice(0, 3), //TODO: need to only return sit awareness
         },
       });
     }
   ).sort({ _id: -1 });
 });
 
-//GET articles by date
+//GET products by date
 router.get("/date/:date", (req, res) => {
   const start = dayjs(req.params.date).startOf("day").toDate();
   const end = dayjs(req.params.date).endOf("day").toDate();
 
-  Article.find(
+  Product.find(
     { datePublished: { $gte: start, $lte: end } },
-    function (error, article) {
-      handleMongooseError("Unable to find articles", error);
+    function (error, product) {
+      handleMongooseError("Unable to find products", error);
 
-      const articlesForWire = article.map((article) => article.forWire);
-      res.json({ features: articlesForWire });
+      const productsForWire = product.map((product) => product.forWire);
+      res.json({ features: productsForWire });
     }
   );
 });
 
-//GET articles by id
+//GET products by id
 router.get("/:id", (req, res) => {
-  Article.findOne({ productNumber: req.params.id }, (errors, article) => {
-    handleMongooseError("Unable to find article", errors);
-    res.json(article.data.details);
+  Product.findOne({ productNumber: req.params.id }, (errors, product) => {
+    handleMongooseError("Unable to find product", errors);
+    res.json(product.data.details);
   });
 });
 
@@ -61,10 +61,13 @@ router.get("/:id", (req, res) => {
 router.post("/processDocument", (req, res) => {
   switch (req.body.document_action) {
     case "create":
-      res.redirect(307, "/articles/");
+      res.redirect(307, "/products/");
       break;
     case "save":
-      updateArticle(req.body.id, req, res);
+      updateProduct(req.body.id, req, res);
+      break;
+    case "publish":
+      updateProduct(req.body.id, req, res);
       break;
     default:
       res.sendStatus(404);
@@ -99,7 +102,7 @@ router.post("/", (req, res) => {
     );
     const productType = resolveProductType(req.body.product_type_id, metadata);
 
-    const article = new Article({
+    const product = new Product({
       createdAt: dayjs().toDate(),
       datePublished: req.body.date_published || dayjs.utc().format(),
       htmlBody: req.body.html_body,
@@ -118,32 +121,32 @@ router.post("/", (req, res) => {
       updatedAt: dayjs().toDate(),
     });
 
-    article.save((error) => {
-      handleMongooseError("Unable to save article", error);
+    product.save((error) => {
+      handleMongooseError("Unable to save product", error);
 
       (async () => {
-        await indexService.create(article.indexable);
+        await indexService.create(product.indexable);
       })();
-      res.json({ article: { id: article.id }, doc_num: article.productNumber });
+      res.json({ product: { id: product.id }, doc_num: product.productNumber });
     });
   })();
 });
 
 // Fetch single post
 router.get("/:id/edit", (req, res) => {
-  Article.findById(req.params.id, function (error, article) {
-    handleMongooseError("Unable to load article for edit", error);
-    res.json(article.data.document);
+  Product.findById(req.params.id, function (error, product) {
+    handleMongooseError("Unable to load product for edit", error);
+    res.json(product.data.document);
   });
 });
 
 router.get("/:id/view", function (req, res) {
-  Article.findById(req.params.id, function (error, article) {
+  Product.findById(req.params.id, function (error, product) {
     handleMongooseError(
-      `Unable to find article with id ${req.params.id}`,
+      `Unable to find product with id ${req.params.id}`,
       error
     );
-    res.json(article.data.details);
+    res.json(product.data.details);
   });
 });
 
@@ -151,7 +154,6 @@ function getLookupObjectsByCodes(codes, metadata) {
   if (codes === undefined || metadata === undefined) {
     return [];
   }
-
   return metadata.filter((lookupData) => codes.indexOf(lookupData.code) >= 0);
 }
 
@@ -166,15 +168,15 @@ async function getMetadata() {
   return Metadata.findOne().lean();
 }
 
-// Update an article
+// Update an product
 router.put("/:id", (req, res) => {
-  updateArticle(req.params.id, req, res);
+  updateProduct(req.params.id, req, res);
 });
 
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
-async function updateArticle(id, req, res) {
+async function updateProduct(id, req, res) {
   const metadata = await getMetadata();
 
   const countries = getLookupObjectsByCodes(
@@ -217,7 +219,7 @@ async function updateArticle(id, req, res) {
   );
   const dissemOrgs = getLookupObjectsByCodes(
     req.body.dissem_orgs,
-    metadata.criteria.dissem_orgs
+    metadata.criteria.dissem_orgs.values
   );
   const reportingType = getReportingTypeForProductType(
     req.body.product_type_id,
@@ -225,7 +227,7 @@ async function updateArticle(id, req, res) {
   );
   const productType = resolveProductType(req.body.product_type_id, metadata);
 
-  const article = {
+  const product = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
     coauthors: coauthors,
@@ -256,22 +258,22 @@ async function updateArticle(id, req, res) {
     worldwide: req.body.worldwide,
   };
 
-  Article.findByIdAndUpdate(
+  Product.findByIdAndUpdate(
     { _id: id },
-    article,
+    product,
     { new: true },
-    function (error, updatedArticle) {
-      handleMongooseError(`Unable to update article with id ${id}`, error);
+    function (error, updatedProduct) {
+      handleMongooseError(`Unable to update product with id ${id}`, error);
 
       (async () => {
-        await indexService.update(updatedArticle.indexable);
+        await indexService.update(updatedProduct.indexable);
         res.json({
           success: true,
-          article: updatedArticle,
-          date: updatedArticle.datePublished,
-          doc_num: updatedArticle.productNumber,
-          id: updatedArticle._id,
-          state: updatedArticle.state,
+          product: updatedProduct,
+          date: updatedProduct.datePublished,
+          doc_num: updatedProduct.productNumber,
+          id: updatedProduct._id,
+          state: updatedProduct.state,
         });
       })();
     }
@@ -340,14 +342,14 @@ function getIssuesForTopics(topics, issues) {
   );
 }
 
-// Delete an article
+// Delete an product
 router.delete("/:id", (req, res) => {
-  Article.remove(
+  Product.remove(
     {
       _id: req.params.id,
     },
     function (err) {
-      handleMongooseError("Unable to delete article", err);
+      handleMongooseError("Unable to delete product", err);
 
       res.json({
         success: true,

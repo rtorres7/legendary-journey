@@ -2,7 +2,7 @@ import DocumentLink from "../../shared/DocumentLink/index";
 
 export default {
   props: {
-    article: {},
+    product: {},
     hero: {},
     preloadDoc: {
       default: false,
@@ -29,10 +29,10 @@ export default {
 
   computed: {
     truncatedSummary() {
-      if (this.article.summary.length >= this.truncateLength) {
-        return this.article.summary.substring(0, this.truncateLength) + "...";
+      if (this.product.summary.length >= this.truncateLength) {
+        return this.product.summary.substring(0, this.truncateLength) + "...";
       } else {
-        return this.article.summary;
+        return this.product.summary;
       }
     },
   },

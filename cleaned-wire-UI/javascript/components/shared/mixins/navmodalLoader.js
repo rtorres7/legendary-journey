@@ -2,19 +2,19 @@ import { mapMutations, mapActions, mapState } from "vuex";
 
 export default {
   methods: {
-    ...mapMutations("navmodal", ["setArticleList", "setListName", "setReturn"]),
+    ...mapMutations("navmodal", ["setProductList", "setListName", "setReturn"]),
     ...mapActions("navmodal", ["preload"]),
 
     setupNavModal(title, results, returnPath) {
-      var articles = [];
+      var products = [];
       results.forEach((result, i) => {
         result.doc_num = result.doc_num.replace("/", "!");
-        articles.push(result.doc_num);
+        products.push(result.doc_num);
         if (i < 3) {
           this.preload(result.doc_num);
         }
       });
-      this.setArticleList(articles);
+      this.setProductList(products);
       this.setListName(title);
       this.setReturn(returnPath);
     },

@@ -7,7 +7,7 @@
     />
 
     <div
-      id="article_body"
+      id="product_body"
       v-html="document.html_body"
       :class="document.reporting_type_value"
     ></div>
@@ -18,8 +18,8 @@
       v-if="displayLeadershipFooter"
     >
       (_temp_42) If you have met the person or persons identified in this piece,
-      _temp_6 leadership analysts would welcome the opportunity to meet with you for
-      a debriefing. Please contact DA/APD/PDG/LPT at
+      _temp_6 leadership analysts would welcome the opportunity to meet with you
+      for a debriefing. Please contact DA/APD/PDG/LPT at
       <a href="mailto:LP-Requests-Mailbox@_temp_6._temp_0"
         >LP-Requests-Mailbox@_temp_6._temp_0</a
       >
@@ -66,7 +66,7 @@ export default {
   components: { CablePrintHeader },
   mounted() {
     if (this.$cookies) {
-      $("#article_body").reading_metric({
+      $("#product_body").reading_metric({
         reporting_url: `/documents/${this.docNum}/document_read_metric`,
         position_url: $cookies.get("document_position_metric"),
       });

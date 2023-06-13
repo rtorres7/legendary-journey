@@ -55,12 +55,12 @@
                 <b-col
                   cols="24"
                   md="12"
-                  v-for="article in edition.articles"
-                  :key="article.id"
+                  v-for="product in edition.products"
+                  :key="product.id"
                   class="custom-gutter-col"
                 >
                   <Card
-                    :article="article"
+                    :product="product"
                     section="featured"
                     :return-path="$route.fullPath"
                   ></Card>
@@ -68,20 +68,20 @@
               </b-row>
               <b-row
                 v-if="
-                  edition.restrictedArticles &&
-                  edition.restrictedArticles.length > 0
+                  edition.restrictedProducts &&
+                  edition.restrictedProducts.length > 0
                 "
               >
                 <h2 class="pt-4 pb-6">Need More Access To View</h2>
                 <b-row>
                   <b-col
                     cols="12"
-                    v-for="article in edition.restrictedArticles"
-                    :key="article.id"
+                    v-for="product in edition.restrictedProducts"
+                    :key="product.id"
                     class="custom-gutter-col"
                   >
                     <Card
-                      :article="article"
+                      :product="product"
                       section="featured"
                       :return-path="$route.fullPath"
                     ></Card>

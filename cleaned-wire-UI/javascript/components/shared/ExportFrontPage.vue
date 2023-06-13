@@ -22,7 +22,7 @@ export default {
   },
 
   computed: {
-    ...mapState("articles", ["daily_wire"]),
+    ...mapState("products", ["daily_wire"]),
     ...mapState("metadata", ["name"]),
     exportText() {
       const edition = this.name == "WIRe" ? "WIRe" : "edition";

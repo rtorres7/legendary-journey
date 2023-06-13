@@ -1,5 +1,5 @@
 <template>
-  <div class="py-8" v-if="!secondaryLoading && highlights.articles.length > 0">
+  <div class="py-8" v-if="!secondaryLoading && highlights.products.length > 0">
     <div class="standard-page-margin">
       <SectionHeader
         v-bind:title="highlights_header"
@@ -8,7 +8,7 @@
         class="section-heading"
       />
       <CardViewRow
-        :articles="highlights.articles"
+        :products="highlights.products"
         section="highlights"
         :return-path="$route.fullPath"
         data-usage="front-page-da-highlights"
@@ -26,7 +26,7 @@ export default {
   name: "Highlights",
   components: { CardViewRow, SectionHeader },
   computed: {
-    ...mapState("articles", [
+    ...mapState("products", [
       "secondaryLoading",
       "highlights",
       "highlights_header",

@@ -40,12 +40,12 @@ export const alerts = {
   ],
 };
 
-export { features, articlesForWire } from "./features";
+export { features, productsForWire } from "./features";
 export { countries, regions } from "./regions";
 export { getSitreps, getSearchDataFromUrl } from "./search";
 export { productDetails } from "./productDetails";
 export { metadata } from "./metadata";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
 export { relatedProducts } from "./relatedProducts";
-export { articleMetrics } from "./articleMetrics";
+export { productMetrics } from "./productMetrics";
 export { mockDocument } from "./document";

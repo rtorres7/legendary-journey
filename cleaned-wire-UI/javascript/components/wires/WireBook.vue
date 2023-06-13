@@ -16,15 +16,15 @@
         </b-row>
         <Spinner v-if="working" />
         <div v-else>
-          <ArticlesForBook :wire="wire" />
+          <ProductsForBook :wire="wire" />
         </div>
       </b-col>
 
       <b-col cols="7" md="24" lg="7">
         <div class="ml-7" id="sideBar">
-          <WireArticleUploader />
-          <AddExistingArticles />
-          <PublishedArticles :wire="wire" />
+          <WireProductUploader />
+          <AddExistingProducts />
+          <PublishedProducts :wire="wire" />
         </div>
       </b-col>
     </div>
@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import AddExistingArticles from "./AddExistingArticles";
-import ArticlesForBook from "./ArticlesForBook";
-import PublishedArticles from "./PublishedArticles";
-import WireArticleUploader from "./WireArticleUploader";
+import AddExistingProducts from "./AddExistingProducts";
+import ProductsForBook from "./ProductsForBook";
+import PublishedProducts from "./PublishedProducts";
+import WireProductUploader from "./WireProductUploader";
 import WireDatePicker from "./WireDatePicker";
 import WireNotifications from "./WireNotifications";
 import WireStatus from "./WireStatus";
@@ -52,10 +52,10 @@ export default {
   name: "WireBook",
   components: {
     Spinner,
-    AddExistingArticles,
-    ArticlesForBook,
-    PublishedArticles,
-    WireArticleUploader,
+    AddExistingProducts,
+    ProductsForBook,
+    PublishedProducts,
+    WireProductUploader,
     WireDatePicker,
     WireNotifications,
     WireStatus,

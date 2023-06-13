@@ -6,7 +6,7 @@
     @mouseleave="focused = false"
   >
     <div id="overlay-box">
-      <img :src="imageUrl" class="image-style p-2" v-if="article.thumbnail" />
+      <img :src="imageUrl" class="image-style p-2" v-if="product.thumbnail" />
       <img
         v-else
         :src="require('@/assets/WIRe-BG-image-TOP.jpg')"
@@ -14,8 +14,8 @@
         height="64px"
       />
       <div class="d-flex flex-column image-box" :class="{ overlay: focused }">
-        <div :id="article.doc_num + '-title'" class="m-auto title">
-          {{ article.label }}
+        <div :id="product.doc_num + '-title'" class="m-auto title">
+          {{ product.label }}
         </div>
         <div class="mt-auto mx-0 py-3 d-flex links">
           <div class="ml-auto pr-3">
@@ -26,7 +26,7 @@
               class="upcase"
             >
               <span class="aria-hidden">View Media</span>
-              <span class="sr-only">Open Media for {{ article.label }}</span>
+              <span class="sr-only">Open Media for {{ product.label }}</span>
             </a>
           </div>
           <div>|</div>
@@ -34,23 +34,23 @@
             <router-link
               @focus.native="focused = true"
               @blur.native="focused = false"
-              :to="{ name: 'document', params: { docNum: article.doc_num } }"
-              :aria-labelledby="article.doc_num + '-title'"
+              :to="{ name: 'document', params: { docNum: product.doc_num } }"
+              :aria-labelledby="product.doc_num + '-title'"
               class="upcase"
             >
-              <span aria-hidden="true">View Article</span>
-              <span class="sr-only">View {{ article.label }}</span>
+              <span aria-hidden="true">View Product</span>
+              <span class="sr-only">View {{ product.label }}</span>
             </router-link>
           </div>
         </div>
       </div>
     </div>
     <div id="footer" class="mt-auto d-flex">
-      <span v-for="(region, ind) in article.regions" :key="ind">
-        {{ region }}<span v-if="ind < article.regions.length - 1">,&nbsp;</span>
+      <span v-for="(region, ind) in product.regions" :key="ind">
+        {{ region }}<span v-if="ind < product.regions.length - 1">,&nbsp;</span>
       </span>
       <div class="ml-auto">
-        {{ article.date_published | moment("DD MMM YYYY") }}
+        {{ product.date_published | moment("DD MMM YYYY") }}
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@
 <script>
 export default {
   name: "Card",
-  props: ["article"],
+  props: ["product"],
 
   data() {
     return {
@@ -70,18 +70,18 @@ export default {
   methods: {
     routerLink() {
       return this.$router.resolve(
-        this.attachmentsPath + this.article.file_name + "?popup=true"
+        this.attachmentsPath + this.product.file_name + "?popup=true"
       ).href;
     },
 
     openWindow() {
       let height =
-        (this.article.media_target_height &&
-          this.article.media_target_height.replace("px", "")) ||
+        (this.product.media_target_height &&
+          this.product.media_target_height.replace("px", "")) ||
         450;
       let width =
-        (this.article.media_target_width &&
-          this.article.media_target_width.replace("px", "")) ||
+        (this.product.media_target_width &&
+          this.product.media_target_width.replace("px", "")) ||
         800;
 
       window.open(
@@ -94,11 +94,11 @@ export default {
 
   computed: {
     attachmentsPath() {
-      return `/documents/${this.article.doc_num}/attachments/`;
+      return `/documents/${this.product.doc_num}/attachments/`;
     },
 
     imageUrl() {
-      return this.attachmentsPath + this.article.id + "/thumbnail";
+      return this.attachmentsPath + this.product.id + "/thumbnail";
     },
   },
 };

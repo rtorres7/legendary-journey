@@ -1,7 +1,7 @@
 <template>
   <div>
     <DocumentsActionBar
-      :articles="articles"
+      :products="products"
       :entityId="entityId"
       :removeable="removable"
       :showSpinner="showSpinner"
@@ -10,12 +10,12 @@
       @removeDocs="removeDocs"
     />
     <div
-      v-for="document in articles"
+      v-for="document in products"
       :key="`${document.id}=${tagName}`"
       :class="showSpinner ? 'd-none' : ''"
     >
       <b-form-checkbox
-        v-model="articles[documentIndex(document.id)].selected"
+        v-model="products[documentIndex(document.id)].selected"
         class="mb-3"
       >
         <DocumentLink :document="document" section="none" returnPath="/" />
@@ -67,12 +67,12 @@ export default {
   },
   computed: {
     ...mapGetters("tags", ["showSpinner"]),
-    articles() {
-      return this.tag.articles;
+    products() {
+      return this.tag.products;
     },
-    articleIdsSelected() {
-      let articles = this.articles.filter((doc) => doc.selected == true);
-      return articles.map((article) => article.id);
+    productIdsSelected() {
+      let products = this.products.filter((doc) => doc.selected == true);
+      return products.map((product) => product.id);
     },
     tagName() {
       return this.tag.name;
@@ -83,8 +83,8 @@ export default {
   },
   methods: {
     documentIndex(documentId) {
-      let doc = this.articles.find((document) => document.id === documentId);
-      return this.articles.indexOf(doc);
+      let doc = this.products.find((document) => document.id === documentId);
+      return this.products.indexOf(doc);
     },
     paginationLink(pageNum) {
       var query = Object.assign({}, this.$route.query);
@@ -98,21 +98,21 @@ export default {
       this.$store.dispatch("tags/exportTag", {
         exportType: exportType,
         tagId: this.tagName,
-        articleIds: this.articleIdsSelected,
+        productIds: this.productIdsSelected,
         userId: this.$route.params.id,
         caller: this,
       });
     },
     removeDocs() {
-      this.$store.dispatch("tags/removeArticlesFromTag", {
+      this.$store.dispatch("tags/removeProductsFromTag", {
         groupName: this.$route.query.tag_group,
         tagName: this.tagName,
-        articleIds: this.articleIdsSelected,
+        productIds: this.productIdsSelected,
         caller: this,
       });
     },
     selectDeselectAll(selectAll) {
-      this.articles.forEach((doc) => (doc.selected = selectAll));
+      this.products.forEach((doc) => (doc.selected = selectAll));
     },
     taggedBy(tagged_by_count) {
       let label = tagged_by_count > 1 ? "people" : "person";

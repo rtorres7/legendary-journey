@@ -1,6 +1,6 @@
 /* istanbul ignore file */
-db.articles.drop();
-db.articles.insertMany([
+db.products.drop();
+db.products.insertMany([
   {
     classification: "UNC",
     classificationXml: "",
@@ -73,7 +73,7 @@ db.articles.insertMany([
       },
     ],
     summary:
-      "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
+      "Summary: This is a test summary description of this product. The contents of this product is coming from an product template that's published into our system. The key/value pairs of this product contain many properties that are used to determine the type of product and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
     summaryClassification: "U",
     summaryClassificationXml: "",
     title:
@@ -133,7 +133,7 @@ db.articles.insertMany([
     ],
     images: [
       /*{
-          "usage": "article",
+          "usage": "product",
           "updated_at": "2022-09-01T00:00:00Z"
         }
         */

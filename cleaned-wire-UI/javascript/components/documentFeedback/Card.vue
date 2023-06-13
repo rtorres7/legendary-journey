@@ -8,13 +8,13 @@
         <div class="d-flex">
           <b-card-title class="flex-grow-1 d-flex" title-tag="div">
             <b-form-checkbox
-              v-model="article.selected"
+              v-model="product.selected"
               class="pl-3 pt-2"
               v-if="displayCheckBoxes"
             >
             </b-form-checkbox>
             <DocumentLink
-              :document="article"
+              :document="product"
               :section="section"
               :returnPath="returnPath"
               ref="link"
@@ -86,7 +86,7 @@ export default {
   name: "FeedbackCard",
   components: { Date, DocumentLink, Classify },
   props: {
-    article: { required: true },
+    product: { required: true },
     returnPath: { required: true },
     section: { required: false },
     index: { required: true },
@@ -100,13 +100,13 @@ export default {
       return this.project === "bluekey";
     },
     locked() {
-      return !isEmpty(this.article.needed);
+      return !isEmpty(this.product.needed);
     },
     subtitle() {
-      return `${this.article.doc_num} - ${this.article.producing_office}`;
+      return `${this.product.doc_num} - ${this.product.producing_office}`;
     },
     publishedDate() {
-      return this.formattedDate(this.article.pub_date);
+      return this.formattedDate(this.product.pub_date);
     },
     commentClassification() {
       return {
@@ -120,8 +120,8 @@ export default {
     },
     emailDocumentTitle() {
       return `${encodeURIComponent(
-        "(" + this.article.title_classification + ")"
-      )} ${this.article.title}`;
+        "(" + this.product.title_classification + ")"
+      )} ${this.product.title}`;
     },
     emailForwardSubject() {
       return `Fw: ${this.name} Feedback for ${this.emailDocumentTitle}`;

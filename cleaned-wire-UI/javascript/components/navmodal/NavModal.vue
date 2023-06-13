@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="article-group-nav-container">
+    <div class="product-group-nav-container">
       <b-button-toolbar
-        v-if="articleList.length > 0"
+        v-if="productList.length > 0"
         class="standard-page-margin row py-3 mb-5"
       >
         <span class="col-3">
@@ -26,13 +26,13 @@
             <span class="pr-3 fa fa-angle-left"></span> Previous<span
               class="sr-only"
             >
-              article</span
+              product</span
             >
           </b-button>
           <span class="align-self-center h2">{{ listName }}</span>
           <span class="align-self-center ml-3 h3"
-            >({{ articleList.indexOf(docNum) + 1 }} of
-            {{ articleList.length }})</span
+            >({{ productList.indexOf(docNum) + 1 }} of
+            {{ productList.length }})</span
           >
           <b-button
             class="align-self-center ml-8 mr-auto"
@@ -41,7 +41,7 @@
             :to="routeToNext"
             data-usage="nav-modal-next"
           >
-            Next<span class="sr-only"> article</span
+            Next<span class="sr-only"> product</span
             ><span class="pl-3 fa fa-angle-right"></span>
           </b-button>
         </span>
@@ -66,7 +66,7 @@ export default {
   props: ["docNum", "returnPath", "section"],
 
   computed: {
-    ...mapState("articles", [
+    ...mapState("products", [
       "additionalContent",
       "headlineStack",
       "headlineTitle",
@@ -79,7 +79,7 @@ export default {
     ...mapState("navmodal", [
       "next",
       "previous",
-      "articleList",
+      "productList",
       "listName",
       "returnUrl",
     ]),
@@ -108,35 +108,35 @@ export default {
   },
 
   methods: {
-    ...mapMutations("navmodal", ["setArticleList"]),
+    ...mapMutations("navmodal", ["setProductList"]),
     ...mapActions("navmodal", ["setNextPrevious"]),
     setView(docNum) {
-      this.setArticles(this.section);
-      if (this.articleList.indexOf(docNum) === -1) {
-        this.setArticleList([]);
+      this.setProducts(this.section);
+      if (this.productList.indexOf(docNum) === -1) {
+        this.setProductList([]);
       } else {
         this.setNextPrevious(docNum);
       }
     },
-    setArticles(section) {
-      let articles = [];
+    setProducts(section) {
+      let products = [];
       switch (section) {
         case "_temp_538":
-          articles = [];
+          products = [];
           this.additionalContent.content_cards.forEach((contentType) =>
-            articles.push(contentType.articles)
+            products.push(contentType.products)
           );
-          articles = flatten(articles);
+          products = flatten(products);
 
-          this.setupNavModal("Across the _temp_6", articles, this.returnPath);
+          this.setupNavModal("Across the _temp_6", products, this.returnPath);
           break;
         case "acrossTheFBI":
-          articles = [];
+          products = [];
           this.additionalContent.content_cards.forEach((contentType) =>
-            articles.push(contentType.articles)
+            products.push(contentType.products)
           );
-          articles = flatten(articles);
-          this.setupNavModal("Across the _temp_537", articles, this.returnPath);
+          products = flatten(products);
+          this.setupNavModal("Across the _temp_537", products, this.returnPath);
           break;
         case "headlineStack":
           this.setupNavModal(
@@ -148,14 +148,14 @@ export default {
         case "highlights":
           this.setupNavModal(
             this.highlightsNavHeader,
-            this.highlights.articles,
+            this.highlights.products,
             this.returnPath
           );
           break;
         case "featured":
         case "more":
           this.setupNavModal(
-            "Featured Articles",
+            "Featured Products",
             concat(this.featured, this.more),
             this.returnPath
           );
@@ -179,7 +179,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.article-group-nav-container {
+.product-group-nav-container {
   background: $alt-200;
   color: $pri-800;
 }

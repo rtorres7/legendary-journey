@@ -76,8 +76,8 @@ export default {
       console.log("search data: ", data);
       state.loading = false;
       state.searchId = data.searchId;
-      state.results = data.results.map((article) => {
-        return article;
+      state.results = data.results.map((product) => {
+        return product;
       });
       state.aggregations = data.aggregations;
       state.pages = Math.ceil(data.pages);

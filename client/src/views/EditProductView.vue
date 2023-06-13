@@ -87,7 +87,7 @@ export default {
           .get(
             "/wires/" +
               route.params.date +
-              "/articles/" +
+              "/products/" +
               route.params.id +
               "/getDocumentData",
             {

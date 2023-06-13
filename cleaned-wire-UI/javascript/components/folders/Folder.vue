@@ -30,7 +30,7 @@
       @shown="updateFocus(`#folder-contents-${folder.id}_btn`)"
     >
       <DocumentsActionBar
-        :articles="articles"
+        :products="products"
         :entityId="folder.id + '-' + layout"
         :showSpinner="showSpinner"
         noItems="This folder is empty."
@@ -40,12 +40,12 @@
         @removeDocs="removeDocs"
       />
       <div
-        v-for="document in articles"
+        v-for="document in products"
         :key="`${document.id}=${folder.name}`"
         :class="showSpinner ? 'd-none' : ''"
       >
         <b-form-checkbox
-          v-model="folder.articles[documentIndex(document.id)].selected"
+          v-model="folder.products[documentIndex(document.id)].selected"
           class="mb-3"
         >
           <DocumentLink :document="document" section="none" returnPath="/" />
@@ -89,12 +89,12 @@ export default {
   },
   computed: {
     ...mapGetters("folders", ["showSpinner"]),
-    articles() {
-      return this.folder.articles;
+    products() {
+      return this.folder.products;
     },
-    articleIdsSelected() {
-      let articles = this.folder.articles.filter((doc) => doc.selected == true);
-      return articles.map((article) => article.id);
+    productIdsSelected() {
+      let products = this.folder.products.filter((doc) => doc.selected == true);
+      return products.map((product) => product.id);
     },
   },
   methods: {
@@ -112,14 +112,14 @@ export default {
       this.$store.dispatch("folders/exportFolder", {
         exportType: exportType,
         folderId: this.folder.id,
-        articleIds: this.articleIdsSelected,
+        productIds: this.productIdsSelected,
         caller: this,
       });
     },
     removeDocs() {
-      this.$store.dispatch("folders/removeArticlesFromFolder", {
+      this.$store.dispatch("folders/removeProductsFromFolder", {
         folderId: this.folder.id,
-        articleIds: this.articleIdsSelected,
+        productIds: this.productIdsSelected,
         caller: this,
       });
     },
@@ -146,13 +146,13 @@ export default {
       this.loadFolders();
     },
     selectDeselectAll(selectAll) {
-      this.folder.articles.forEach((doc) => (doc.selected = selectAll));
+      this.folder.products.forEach((doc) => (doc.selected = selectAll));
     },
     documentIndex(documentId) {
-      let doc = this.folder.articles.find(
+      let doc = this.folder.products.find(
         (document) => document.id === documentId
       );
-      return this.folder.articles.indexOf(doc);
+      return this.folder.products.indexOf(doc);
     },
     documentLink(document) {
       return `/documents/${document.doc_link}/`;

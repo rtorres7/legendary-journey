@@ -58,7 +58,7 @@ export default {
           this.loading = false;
           this.$bvModal.show("wire-document-preview");
           this.$nextTick(() => {
-            WIRe.scopedPageSetup($("#article_body"));
+            WIRe.scopedPageSetup($("#product_body"));
             this.$bus.$emit("addSourceLinkEventHandlers");
           });
         })

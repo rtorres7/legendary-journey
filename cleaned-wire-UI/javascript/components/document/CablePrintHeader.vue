@@ -1,12 +1,12 @@
 <template>
   <div id="ncs_body_header" class="d-none d-print-block">
-    <p class="article_classification text-center">
+    <p class="product_classification text-center">
       {{ document.classification }}
     </p>
     <h1 id="ncs_print_title">
       {{ document.portion_marked_title }}
     </h1>
-    <p class="article_classification text-center">
+    <p class="product_classification text-center">
       {{ document.classification }}<br />
     </p>
     <p>{{ nonFintelWarning }}</p>

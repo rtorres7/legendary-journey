@@ -34,7 +34,7 @@ export default {
     showSpinner: false,
     tagGroups: [{ tag_data: { tag_groups: [] } }],
     topTags: [],
-    tag: { name: "unknown", document_count: 0, articles: [] },
+    tag: { name: "unknown", document_count: 0, products: [] },
     tagged_by: { first_name: "", last_name: "" },
   },
 
@@ -61,10 +61,10 @@ export default {
   actions: {
     exportTag(
       { state, commit },
-      { exportType, tagId, articleIds, userId, caller }
+      { exportType, tagId, productIds, userId, caller }
     ) {
       state.showSpinner = true;
-      let data = articleIds.length > 0 ? { docs: articleIds } : {};
+      let data = productIds.length > 0 ? { docs: productIds } : {};
 
       // export only user docs if userId is set
       let exportUrl = `/tags/${tagId}/export.${exportType}`;
@@ -93,15 +93,15 @@ export default {
           );
         });
     },
-    removeArticlesFromTag(
+    removeProductsFromTag(
       { state, dispatch },
-      { groupName, tagName, articleIds, caller }
+      { groupName, tagName, productIds, caller }
     ) {
       state.showSpinner = true;
 
       let tagsList = {};
       let currentUser = this.getters["user/user"];
-      articleIds.map((articleId) => (tagsList[articleId] = 1));
+      productIds.map((productId) => (tagsList[productId] = 1));
 
       axios({
         method: "delete",
@@ -195,9 +195,9 @@ export default {
           params: { tag_page: route.query.page },
         })
         .then((response) => {
-          // set articles for given tag
+          // set products for given tag
           commit("setDocsForTag", {
-            articles: response.data.articles,
+            products: response.data.products,
             tagName: tag,
           });
           state.loading = false;
@@ -237,9 +237,9 @@ export default {
     setTaggedBy(state, data) {
       state.tagged_by = data;
     },
-    setDocsForTag(state, { articles, tagName }) {
+    setDocsForTag(state, { products, tagName }) {
       let tag = fetchTag(state, tagName);
-      tag.articles = articles;
+      tag.products = products;
     },
   },
 };

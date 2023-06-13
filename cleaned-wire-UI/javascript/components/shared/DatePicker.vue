@@ -98,7 +98,7 @@ export default {
           },
         });
 
-        this.$store.dispatch("articles/getOtherWire", val).catch(
+        this.$store.dispatch("products/getOtherWire", val).catch(
           function (e) {
             this.handleMissingFrontPage(e, val);
           }.bind(this)
@@ -116,7 +116,7 @@ export default {
         },
       });
 
-      this.$store.dispatch("articles/getOtherWire", this.selectedDate).catch(
+      this.$store.dispatch("products/getOtherWire", this.selectedDate).catch(
         function (e) {
           this.handleMissingFrontPage(e, this.selectedDate);
         }.bind(this)

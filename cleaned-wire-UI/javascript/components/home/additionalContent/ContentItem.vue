@@ -1,5 +1,5 @@
 <template>
-  <b-col md="12" class="custom-gutter-col" v-if="item.articles.length > 0">
+  <b-col md="12" class="custom-gutter-col" v-if="item.products.length > 0">
     <div class="additional-content-card white-bg h-100 d-flex flex-column">
       <b-card-title class="ml-7 mb-4 mt-6 card-title" title-tag="h3">
         <router-link
@@ -17,16 +17,16 @@
       <div
         class="py-6 bottom-border flex-fill"
         :class="{
-          'top-border px-7 locked': locked(article),
-          'mx-7': !locked(article),
+          'top-border px-7 locked': locked(product),
+          'mx-7': !locked(product),
         }"
-        v-for="article in item.articles"
-        :key="article.id"
+        v-for="product in item.products"
+        :key="product.id"
       >
         <div class="d-flex">
-          <Date :documentDate="article.date_published" />
+          <Date :documentDate="product.date_published" />
           <DocumentLink
-            :document="article"
+            :document="product"
             :section="section"
             :returnPath="returnPath"
             :data-usage="dataUsage"
@@ -57,8 +57,8 @@ export default {
     },
   },
   methods: {
-    locked(article) {
-      return !isEmpty(article.needed) || article.org_restricted;
+    locked(product) {
+      return !isEmpty(product.needed) || product.org_restricted;
     },
     searchReportingType() {
       return this.item.path.replace(/.*=/, "");

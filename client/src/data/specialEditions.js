@@ -1,4 +1,4 @@
-const article = {
+const product = {
   date_published: "2022-11-01",
   doc_num: "WIRe001_sample_5",
   featured_timestamp: null,
@@ -13,7 +13,7 @@ const article = {
   title: "King Charles III Leads Commemorations for Queen Elizabeth II",
 };
 
-const restrictedArticle = {
+const restrictedProduct = {
   date_published: "2020-12-24",
   doc_num: "WIRe001_sample_403",
   featured_timestamp: null,
@@ -85,8 +85,8 @@ export const specialEdition = {
   key_readings: "WIRe001_sample_1\nWIRe001_sample_2\nWIRe001_sample_3",
   icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAIAAAD+THXTAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABqSURBVGhD7c8BDYAwEACxvU6komN2CDZ2S5Ma6JrnvYxSgVKBUoFSgVKBUoFSgVKBUoFSgVKBUoFSgVKBUoFSgVLB+vZcRqlAqUCpQKlAqUCpQKlAqUCpQKlAqUCpQKlAqUCpQKlA6Xx7fuEn7pxwTlEJAAAAAElFTkSuQmCC",
   canEdit: true,
-  articles: buildArray(article, 10),
-  restrictedArticles: buildArray(restrictedArticle, 4),
+  products: buildArray(product, 10),
+  restrictedProducts: buildArray(restrictedProduct, 4),
   readings: buildArray(reading, 3),
   people: [],
   reporting: [

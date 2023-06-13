@@ -3,8 +3,8 @@
     class="flex flex-col space-y-3 pb-4 border-b-2 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
   >
     <p class="font-semibold text-lg">Attachments</p>
-    <div v-if="article.highlightAttachmentText">
-      {{ article.highlightAttachmentText }}
+    <div v-if="product.highlightAttachmentText">
+      {{ product.highlightAttachmentText }}
     </div>
     <div v-if="pdfVersions.length === 0 && attachments.length === 0">
       There are no attachments
@@ -47,7 +47,7 @@ export default {
     DocumentIcon,
   },
   props: {
-    article: {
+    product: {
       type: Object,
       required: true,
     },
@@ -55,14 +55,14 @@ export default {
   setup(props) {
     const route = useRoute();
     const docNum = computed(
-      () => `${route.params.doc_num}` || props.article.doc_num
+      () => `${route.params.doc_num}` || props.product.doc_num
     );
     const attachmentLink = computed(
       () => `/documents/${docNum.value}/attachments`
     );
 
     const pdfVersions = computed(() => {
-      const pdfs = props.article.attachments_metadata.filter(
+      const pdfs = props.product.attachments_metadata.filter(
         (attachment) =>
           attachment.pdf_version === true && attachment.visible === true
       );
@@ -70,7 +70,7 @@ export default {
     });
 
     const attachments = computed(() => {
-      const attachments_metadata = props.article.attachments_metadata.filter(
+      const attachments_metadata = props.product.attachments_metadata.filter(
         (attachment) =>
           attachment.pdf_version !== true &&
           attachment.visible === true &&

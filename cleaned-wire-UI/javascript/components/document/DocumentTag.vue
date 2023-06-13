@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <b-modal
-      id="tag-article"
+      id="tag-product"
       size="sm"
       title="Tag This Document"
       title-class="modal-header-title"
