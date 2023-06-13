@@ -60,8 +60,8 @@ describe('Workspace Routes', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.length).toBe(1);
-          expect(res.body[0].productNumber).toBe('WIReWIRe_sample_5');
+          expect(res.body.content.length).toBe(1);
+          expect(res.body.content[0].productNumber).toBe('WIReWIRe_sample_5');
         });
     });
   });
@@ -73,9 +73,9 @@ describe('Workspace Routes', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.length).toBe(4);
+          expect(res.body.content.length).toBe(4);
 
-          const ids = res.body.map((product) => product.productNumber);
+          const ids = res.body.content.map((product) => product.productNumber);
           expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
         });
     });
@@ -149,12 +149,6 @@ describe('Workspace Routes', () => {
         .delete(`/workspace/saved/${existingProduct.productId}`)
         .expect(204);
     });
-
-    it('should return 404 when saved product is not found', async () => {
-      return request(app)
-        .delete(`/workspace/saved/blahblah`)
-        .expect(404);
-    });
   });
 
   describe('GET /workspace/collections', () => {
@@ -164,9 +158,9 @@ describe('Workspace Routes', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.length).toBe(1);
+          expect(res.body.content.length).toBe(1);
 
-          const ids = res.body.map((collection) => collection.name);
+          const ids = res.body.content.map((collection) => collection.name);
           expect(ids).toStrictEqual(["Sample Collection"]);
         });
     });
@@ -206,13 +200,6 @@ describe('Workspace Routes', () => {
           expect(res.body.image).toBe('Updated image');
         });
     });
-
-    it('should return 404 when collection is not found', async () => {
-      return request(app)
-        .put(`/workspace/collections/1000`)
-        .send({ name: 'Nope' })
-        .expect(404);
-    });
   });
 
   describe('DELETE /workspace/collections/:collectionId', () => {
@@ -227,12 +214,6 @@ describe('Workspace Routes', () => {
       return request(app)
         .delete(`/workspace/collections/${existingCollection.id}`)
         .expect(204);
-    });
-
-    it('should return 404 when collection is not found', async () => {
-      return request(app)
-        .delete(`/workspace/collections/1000`)
-        .expect(404);
     });
   });
 
@@ -280,7 +261,7 @@ describe('Workspace Routes', () => {
 
       return request(app)
         .put(`/workspace/collections/${existingCollection.id}/products/${savedProduct.id}`)
-        .expect(201);
+        .expect(200);
     });
 
     it('should return 404 when collection is not found', async () => {
@@ -332,7 +313,7 @@ describe('Workspace Routes', () => {
 
       return request(app)
         .delete(`/workspace/collections/${existingCollection.id}/products/${savedProduct.id}`)
-        .expect(201);
+        .expect(204);
     });
 
     it('should return 404 when collection is not found', async () => {

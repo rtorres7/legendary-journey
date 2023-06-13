@@ -34,7 +34,7 @@ export default {
       if (state.producingOffices.length > 0) {
         return flatten(
           blankValue.concat(
-            state.producingOffices.map((office) => {
+            state.producingOffices.values.map((office) => {
               return getDropdownValue(office);
             })
           )
@@ -49,7 +49,7 @@ export default {
       if (state.producingOffices.length > 0) {
         values = values
           .concat(
-            state.producingOffices.map((office) => {
+            state.producingOffices.values.map((office) => {
               return currentOffice.id === office.value.id
                 ? []
                 : getDropdownValue(office);

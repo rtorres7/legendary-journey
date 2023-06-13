@@ -1137,9 +1137,10 @@ export default {
       payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
-      payload.value.producing_offices = updatedProduct.producing_offices.map(
-        (producing_office) => producing_office.code
-      );
+      payload.value.producing_offices =
+        updatedProduct.producing_offices.map(
+          (producing_office) => producing_office.code
+        );
     };
 
     const updateForm = (updatedProduct) => {

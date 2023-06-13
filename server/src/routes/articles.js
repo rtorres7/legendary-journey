@@ -1,60 +1,43 @@
 const express = require("express");
 const router = express.Router();
+
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
+
 const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
-const Metadata = require("../models/metadata");
 
-const IndexService = require("../services");
 const { handleMongooseError } = require("../util/errors");
-const indexService = new IndexService(process.env.ES_URL);
 
-// TODO: Not sure this endpoint is being used and if it is, the response data format needs to change
-// GET
-router.get("/", (req, res) => {
-  Article.find(
-    {},
-    "attributes doc_num title title_classification summary summary_classification date_published state",
-    function (error, articles) {
-      handleMongooseError("Unable to load articles", error);
-
-      res.send({
-        woah: {
-          articles: articles,
-          featured: articles.slice(0, 3),
-          secondary: articles.slice(3, articles.length),
-          briefs: articles.slice(0, 3), //TODO: need to only return sit awareness
-        },
-      });
-    }
-  ).sort({ _id: -1 });
-});
+const ProductService = require('../services/product-service');
+const productService = new ProductService();
+const MetadataService = require('../services/metadata');
+const metadataService = new MetadataService();
 
 //GET articles by date
-router.get("/date/:date", (req, res) => {
-  const start = dayjs(req.params.date).startOf("day").toDate();
-  const end = dayjs(req.params.date).endOf("day").toDate();
-
-  Article.find(
-    { datePublished: { $gte: start, $lte: end } },
-    function (error, article) {
-      handleMongooseError("Unable to find articles", error);
-
-      const articlesForWire = article.map((article) => article.forWire);
-      res.json({ features: articlesForWire });
-    }
-  );
+router.get("/date/:date", async (req, res) => {
+  try {
+    const articles = await productService.findAllByDate(req.params.date);
+    res.json({ features: articles.map(article => article.forWire) });
+  } catch (error) {
+    // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+    handleMongooseError(`Unable to find articles for date ${req.params.date}`, error);
+    res.json({ error: `Unable to find articles for date ${req.params.date}: ${error}` });
+  }
 });
 
 //GET articles by id
-router.get("/:id", (req, res) => {
-  Article.findOne({ productNumber: req.params.id }, (errors, article) => {
-    handleMongooseError("Unable to find article", errors);
+router.get("/:id", async (req, res) => {
+  try {
+    const article = await productService.findByProductNumber(req.params.id);
     res.json(article.data.details);
-  });
+  } catch (error) {
+    // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+    handleMongooseError(`Unable to find article with product number ${req.params.id}`, error);
+    res.json({ error:  `Unable to find article with product number ${req.params.id}: ${error}`});
+  }
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
@@ -72,158 +55,83 @@ router.post("/processDocument", (req, res) => {
 });
 
 // POST
-router.post("/", (req, res) => {
-  (async () => {
-    const metadata = await getMetadata();
-    const topics = getLookupObjectsByCodes(
-      req.body.topics,
-      metadata.criteria.topics.values
-    );
-    const issues = getIssuesForTopics(
-      req.body.topics,
-      metadata.criteria.issues.values
-    );
-    const producingOffices =
-      req.body.producing_office &&
-      getLookupObjectsByCodes(
-        [req.body.producing_office],
-        metadata.criteria.producing_offices
-      );
-    const reportingType = getReportingTypeForProductType(
-      req.body.product_type_id,
-      metadata.criteria.reporting_types.values
-    );
-    const nonStateActors = getLookupObjectsByCodes(
-      req.body.non_state_actors,
-      metadata.criteria.non_state_actors.values
-    );
-    const productType = resolveProductType(req.body.product_type_id, metadata);
+router.post("/", async (req, res) => {
+  const topics = await metadataService.findTopicsFor(req.body.topics);
+  const issues = await metadataService.findIssuesForTopics(topics);
+  const producingOffices = req.body.producing_office && await metadataService.findProducingOfficesFor([req.body.producing_office]);
+  const productType = await metadataService.findProductType(req.body.product_type_id);
+  const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
+  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
 
-    const article = new Article({
-      createdAt: dayjs().toDate(),
-      datePublished: req.body.date_published || dayjs.utc().format(),
-      htmlBody: req.body.html_body,
-      issues: issues,
-      needed: {},
-      orgRestricted: false,
-      productNumber: uuidv4(),
-      producingOffices: producingOffices,
-      productType: productType,
-      publicationNumber: req.body.publication_number,
-      reportingType: reportingType,
-      summary: req.body.summary,
-      title: req.body.title,
-      topics: topics,
-      nonStateActors: nonStateActors,
-      updatedAt: dayjs().toDate(),
-    });
+  const article = new Article({
+    createdAt: dayjs().toDate(),
+    datePublished: req.body.date_published || dayjs.utc().format(),
+    htmlBody: req.body.html_body,
+    issues: issues,
+    needed: {},
+    orgRestricted: false,
+    productNumber: uuidv4(),
+    producingOffices: producingOffices,
+    productType: productType,
+    publicationNumber: req.body.publication_number,
+    reportingType: reportingType,
+    summary: req.body.summary,
+    title: req.body.title,
+    topics: topics,
+    nonStateActors: nonStateActors,
+    updatedAt: dayjs().toDate(),
+  });
 
-    article.save((error) => {
-      handleMongooseError("Unable to save article", error);
-
-      (async () => {
-        await indexService.create(article.indexable);
-      })();
-      res.json({ article: { id: article.id }, doc_num: article.productNumber });
-    });
-  })();
+  try {
+    const savedArticle = await productService.createProduct(article);
+    res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
+  } catch (error) {
+    res.json({ error: `There was a problem creating product: ${error}`});
+  }
 });
 
 // Fetch single post
-router.get("/:id/edit", (req, res) => {
-  Article.findById(req.params.id, function (error, article) {
-    handleMongooseError("Unable to load article for edit", error);
-    res.json(article.data.document);
-  });
-});
-
-router.get("/:id/view", function (req, res) {
-  Article.findById(req.params.id, function (error, article) {
-    handleMongooseError(
-      `Unable to find article with id ${req.params.id}`,
-      error
-    );
-    res.json(article.data.details);
-  });
-});
-
-function getLookupObjectsByCodes(codes, metadata) {
-  if (codes === undefined || metadata === undefined) {
-    return [];
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const product = await productService.findById(req.params.id);
+    res.json(product.data.document);
+  } catch (error) {
+    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
+    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error}`});
   }
+});
 
-  return metadata.filter((lookupData) => codes.indexOf(lookupData.code) >= 0);
-}
-
-function resolveProductType(productTypeId, metadata) {
-  const productTypes = metadata.criteria.product_types;
-  return productTypes.values.filter((productType) => {
-    return productType.code === productTypeId;
-  })[0];
-}
-
-async function getMetadata() {
-  return Metadata.findOne().lean();
-}
+router.get("/:id/view", async (req, res) => {
+  try {
+    const product = await productService.findById(req.params.id);
+    res.json(product.data.details);
+  } catch (error) {
+    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
+    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error}`});
+  }
+});
 
 // Update an article
-router.put("/:id", (req, res) => {
-  updateArticle(req.params.id, req, res);
+router.put("/:id", async (req, res) => {
+  await updateArticle(req.params.id, req, res);
 });
 
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
 async function updateArticle(id, req, res) {
-  const metadata = await getMetadata();
-
-  const countries = getLookupObjectsByCodes(
-    req.body.countries,
-    metadata.criteria.countries.values
-  );
-  const subregions = getSubRegionsForCountries(
-    req.body.countries,
-    metadata.criteria.subregions.values
-  );
-  const regions = getRegionsForSubRegions(
-    subregions.map((subRegion) => subRegion.code),
-    metadata.criteria.regions.values
-  );
-
-  const topics = getLookupObjectsByCodes(
-    req.body.topics,
-    metadata.criteria.topics.values
-  );
-  const issues = getIssuesForTopics(
-    req.body.topics,
-    metadata.criteria.issues.values
-  );
-
-  const producingOffices = getLookupObjectsByCodes(
-    req.body.producing_offices,
-    metadata.criteria.producing_offices
-  );
-  const coauthors = getLookupObjectsByCodes(
-    req.body.coauthors,
-    metadata.criteria.coauthors
-  );
-  const nonStateActors = getLookupObjectsByCodes(
-    req.body.nonStateActors,
-    metadata.criteria.non_state_actors.values
-  );
-  const coordinators = getLookupObjectsByCodes(
-    req.body.coordinators,
-    metadata.criteria.coordinators
-  );
-  const dissemOrgs = getLookupObjectsByCodes(
-    req.body.dissem_orgs,
-    metadata.criteria.dissem_orgs
-  );
-  const reportingType = getReportingTypeForProductType(
-    req.body.product_type_id,
-    metadata.criteria.reporting_types.values
-  );
-  const productType = resolveProductType(req.body.product_type_id, metadata);
+  const countries = await metadataService.findCountriesFor(req.body.countries);
+  const subregions = await metadataService.findSubRegionsForCountries(req.body.countries);
+  const regions = await metadataService.findRegionsForSubRegions(subregions.map(subregion => subregion.code));
+  const topics = await metadataService.findTopicsFor(req.body.topics);
+  const issues = await metadataService.findIssuesForTopics(req.body.topics);
+  const producingOffices = await metadataService.findProducingOfficesFor(req.body.producing_offices);
+  const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
+  const coordinators = await metadataService.findCoordinatorsFor(req.body.coordinators);
+  const dissemOrgs = await metadataService.findDissemOrgsFor(req.body.dissem_orgs);
+  const productType = await metadataService.findProductType(req.body.product_type_id);
+  const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
+  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.nonStateActors);
 
   const article = {
     classification: req.body.classification,
@@ -256,104 +164,28 @@ async function updateArticle(id, req, res) {
     worldwide: req.body.worldwide,
   };
 
-  Article.findByIdAndUpdate(
-    { _id: id },
-    article,
-    { new: true },
-    function (error, updatedArticle) {
-      handleMongooseError(`Unable to update article with id ${id}`, error);
-
-      (async () => {
-        await indexService.update(updatedArticle.indexable);
-        res.json({
-          success: true,
-          article: updatedArticle,
-          date: updatedArticle.datePublished,
-          doc_num: updatedArticle.productNumber,
-          id: updatedArticle._id,
-          state: updatedArticle.state,
-        });
-      })();
-    }
-  );
-}
-
-function getSubRegionsForCountries(countryCodes, subRegions) {
-  if (
-    countryCodes === undefined ||
-    countryCodes.length === 0 ||
-    subRegions === undefined
-  ) {
-    return [];
+  try {
+    const updatedArticle = await productService.updateProduct(id, article);
+    res.json({
+      success: true,
+      article: updatedArticle,
+      date: updatedArticle.datePublished,
+      doc_num: updatedArticle.productNumber,
+      id: updatedArticle._id,
+      state: updatedArticle.state,
+    });
+  } catch (error) {
+    res.json({ error: `There was a problem updating product: ${error}`});
   }
-
-  return subRegions.filter(
-    (subRegion) =>
-      subRegion.country_codes.filter((code) => countryCodes.includes(code))
-        .length > 0
-  );
 }
-
-function getRegionsForSubRegions(subRegionCodes, regions) {
-  if (
-    subRegionCodes === undefined ||
-    subRegionCodes.length === 0 ||
-    regions === undefined
-  ) {
-    return [];
-  }
-
-  return regions.filter(
-    (region) =>
-      region.subregions.filter((code) => subRegionCodes.includes(code)).length >
-      0
-  );
-}
-
-function getReportingTypeForProductType(productTypeId, reportingTypes) {
-  if (productTypeId === undefined || reportingTypes === undefined) {
-    return { name: "", code: "" };
-  }
-
-  const foundTypes = reportingTypes.filter((reportingType) =>
-    reportingType.productTypes.includes(productTypeId)
-  );
-
-  if (foundTypes.length === 0) {
-    return { name: "", code: "" };
-  }
-
-  return foundTypes[0];
-}
-
-function getIssuesForTopics(topics, issues) {
-  if (topics === undefined || topics.length === 0 || issues === undefined) {
-    return [];
-  }
-
-  return issues.filter(
-    (issue) =>
-      issue.topics
-        .map((issue) => issue.codes)
-        .flat()
-        .filter((code) => topics.includes(code)).length > 0
-  );
-}
-
 // Delete an article
-router.delete("/:id", (req, res) => {
-  Article.remove(
-    {
-      _id: req.params.id,
-    },
-    function (err) {
-      handleMongooseError("Unable to delete article", err);
-
-      res.json({
-        success: true,
-      });
-    }
-  );
+router.delete("/:id", async (req, res) => {
+  try {
+    await productService.deleteProduct(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    res.json({ error: 'Unable to delete article' });
+  }
 });
 
 module.exports = router;

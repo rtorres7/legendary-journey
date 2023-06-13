@@ -1,7 +1,7 @@
 export const mockDocument = {
   control_to: false,
   countries: [],
-  dissem_orgs: [],
+  dissem_orgs: { displayName: "Audience", values: [] },
   images: [],
   topics: [{ code: "TERR" }],
   non_state_actors: [],
@@ -21,9 +21,9 @@ export const mockDocument = {
   date_published: "",
   poc_info: "",
   publication_number: "",
-  coordinators: [],
-  coauthors: [],
-  producing_offices: [],
+  coordinators: { displayName: "Coordinators", values: [] },
+  coauthors: { displayName: "Coauthors", values: [] },
+  producing_offices: { displayName: "Producing Offices", values: [] },
   product_type_id: 10378,
   worldwide: null,
 };

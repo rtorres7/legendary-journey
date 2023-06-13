@@ -47,11 +47,11 @@ export default {
     const loadingProduct = ref(true);
     const product = ref({
       control_to: [],
-      coordinators: [],
-      coauthors: [],
-      producing_offices: [],
+      coordinators: { displayName: "Coordinators", values: [] },
+      coauthors: { displayName: "Coauthors", values: [] },
+      producing_offices: { displayName: "Producing Offices", values: [] },
       countries: [],
-      dissem_orgs: [],
+      dissem_orgs: { displayName: "Audience", values: [] },
       images: [],
       topics: [],
       non_state_actors: [],

@@ -1,25 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const { models } = require('../data/sequelize');
-const Article = require("../models/articles");
 const { handleMongooseError } = require("../util/errors");
-const {KiwiPage, KiwiSort} = require('@kiwiproject/kiwi-js');
+const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const ProductService = require('../services/product-service');
+const productService = new ProductService();
+const WorkspaceService = require('../services/workspace');
+const workspaceService = new WorkspaceService();
 
-router.get("/drafts", (req, res) => {
-  // TODO: Need to limit this based on current user
-  Article.find({ state: 'draft' }, (errors, articles) => {
-    handleMongooseError("Unable to find draft articles", errors);
+router.get("/drafts", async (req, res) => {
+  const perPage = req.query.perPage || 10;
+  const page = req.query.page || 1;
+  const skip = (page - 1) * perPage;
+  const sortDir = req.query.sortDir || 'desc';
 
-    res.json(articles.map((article) => article.features));
-  });
+  // TODO: Need to find user from request
+  try {
+    const pageOfDrafts = await productService.findPageOfDraftProductsForUser(1, page, perPage, skip, sortDir);
+    res.json(pageOfDrafts);
+  } catch (error) {
+    handleMongooseError("Unable to find draft products", error);
+    KiwiStandardResponsesExpress.standardErrorResponse(500, error, res);
+  }
 });
 
-router.get("/recent", (req, res) => {
-  Article.find({ state: 'posted' }, (errors, articles) => {
-    handleMongooseError("Unable to find posted articles", errors);
+router.get("/recent", async (req, res) => {
+  const perPage = req.query.perPage || 10;
+  const page = req.query.page || 1;
+  const skip = (page - 1) * perPage;
+  const sortDir = req.query.sortDir || 'desc';
 
-    res.json(articles.map((article) => article.features));
-  }).sort({ datePublished: -1 });
+  // TODO: Need to find user from request
+  try {
+    const pageOfRecentProducts = await productService.findPageOfRecentProductsForUser(1, page, perPage, skip, sortDir);
+    res.json(pageOfRecentProducts);
+  } catch (error) {
+    handleMongooseError("Unable to find posted products", error);
+    KiwiStandardResponsesExpress.standardErrorResponse(500, error, res);
+  }
 });
 
 router.get("/stats", (req, res) => {
@@ -27,27 +44,20 @@ router.get("/stats", (req, res) => {
   res.json([]);
 });
 
-router.get("/products", (req, res) => {
+router.get("/products", async (req, res) => {
   const perPage = req.query.perPage || 10;
   const page = req.query.page || 1;
   const skip = (page - 1) * perPage;
   const sortDir = req.query.sortDir || 'desc';
 
-  // TODO: Need to limit this based on current user
-  Article.find()
-    .limit(perPage)
-    .skip(skip)
-    .sort({ datePublished: sortDir.toLowerCase() })
-    .exec((errors, articles) => {
-      handleMongooseError('Unable to find products', errors);
-      Article.count().exec((errors, count) => {
-        const resultPage = KiwiPage.of(page, perPage, count, articles.map((article) => article.features))
-          .usingOneAsFirstPage()
-          .addKiwiSort(KiwiSort.of('datePublished', sortDir));
-
-        res.json(resultPage);
-      });
-    });
+  // TODO: Need to find user from request
+  try {
+    const pageOfProducts = await productService.findPageOfProductsForUser(1, page, perPage, skip, sortDir);
+    res.json(pageOfProducts);
+  } catch (error) {
+    handleMongooseError("Unable to find user's products", error);
+    KiwiStandardResponsesExpress.standardErrorResponse(500, error, res);
+  }
 });
 
 router.get("/saved", async (req, res) => {
@@ -58,113 +68,81 @@ router.get("/saved", async (req, res) => {
 
   // TODO: We need user info so we can filter this by MY saved products
   // TODO: We need to figure out how to return the actual products
-  const {count, rows } = await models.SavedProduct.findAndCountAll({
-    offset: skip,
-    limit: perPage,
-    order: [
-      ['createdAt', sortDir.toUpperCase()]
-    ]
-  });
-
-  const resultPage = KiwiPage.of(page, perPage, count, rows)
-    .usingOneAsFirstPage()
-    .addKiwiSort(KiwiSort.of('createdAt', sortDir));
-
-  res.json(resultPage);
+  const savedProducts = await workspaceService.findPageOfSavedProductsForUser(1, page, perPage, skip, sortDir);
+  res.json(savedProducts);
 });
 
 router.put("/saved/:productId", async (req, res) => {
-  const savedProduct = await models.SavedProduct.create({ productId: req.params.productId, createdBy: 1 }); // TODO: Need a real user
+  // TODO: Need a real user
+  const savedProduct = await workspaceService.createSavedProduct(req.params.productId, 1);
   res.json(savedProduct);
 });
 
 router.delete("/saved/:productId", async (req, res) => {
-  const savedProduct = await models.SavedProduct.findOne({ where: { productId: req.params.productId, createdBy: 1 } }); // TODO: Need a real user
-
-  if (savedProduct) {
-    await savedProduct.destroy();
-    res.status(204).send();
-  } else {
-    res.status(404).send();
-  }
+  // TODO: Need a real user
+  await workspaceService.deleteSavedProduct(req.params.productId, 1);
+  res.status(204).send();
 });
 
 router.get('/collections', async (req, res) => {
+  const perPage = req.query.perPage || 10;
+  const page = req.query.page || 1;
+  const skip = (page - 1) * perPage;
+  const sortDir = req.query.sortDir || 'desc';
+
   // TODO: We need real users so we can filter this by current user
-  const collections = await models.Collection.findAll();
+  const collections = await workspaceService.findPageOfCollectionsForUser(1, page, perPage, skip, sortDir);
   res.json(collections);
 });
 
 router.post('/collections', async (req, res) => {
-  const savedCollection = await models.Collection.create({
+  const savedCollection = await workspaceService.createCollection({
     name: req.body.name,
     description: req.body.description,
     image: req.body.image,
     createdBy: 1 // TODO: We need a real user
-  });
+  })
 
   res.json(savedCollection);
 });
 
 router.put('/collections/:collectionId', async (req, res) => {
-  const existingCollection = await models.Collection.findOne({ where: { id: req.params.collectionId } });
-
-  if (!existingCollection) {
-    res.status(404).send();
-    return;
-  }
-
-  existingCollection.set({
+  const updatedCollection = await workspaceService.updateCollection(req.params.collectionId, {
     name: req.body.name,
     description: req.body.description,
     image: req.body.image,
   });
 
-  const updatedCollection = await existingCollection.save();
   res.json(updatedCollection);
 });
 
 router.delete("/collections/:collectionId", async (req, res) => {
-  const savedCollection = await models.Collection.findOne({ where: { id: req.params.collectionId } });
-
-  if (savedCollection) {
-    await savedCollection.destroy();
-    res.status(204).send();
-  } else {
-    res.status(404).send();
-  }
+  await workspaceService.deleteCollection(req.params.collectionId);
+  res.status(204).send();
 });
 
 router.get('/collections/:collectionId/products', async (req, res) => {
-  const collection = await models.Collection.findOne({ where: { id: req.params.collectionId }, include: models.SavedProduct });
-  if (collection) {
-    res.json(collection.SavedProducts);
-  } else {
-    res.status(404).send();
-  }
+  const savedProducts = await workspaceService.findSavedProductsInCollection(req.params.collectionId);
+  KiwiStandardResponsesExpress.standardGetResponseWithMessage(savedProducts, `Unable to find collection with id ${req.params.collectionId}`, res);
 });
 
 router.put('/collections/:collectionId/products/:savedProductId', async (req, res) => {
-  const collection = await models.Collection.findOne({ where: { id: req.params.collectionId } });
-  const savedProduct = await models.SavedProduct.findOne({ where: { id: req.params.savedProductId } });
+  const collection = await workspaceService.addSavedProductToCollection(req.params.collectionId, req.params.savedProductId);
 
-  if (collection && savedProduct) {
-    collection.addSavedProduct(savedProduct);
-    res.status(201).send();
+  if (collection) {
+    KiwiStandardResponsesExpress.standardPutResponse(collection, res);
   } else {
-    res.status(404).send();
+    KiwiStandardResponsesExpress.standardNotFoundResponse('Unable to find collection or saved product. Unable to add saved product to collection.', res);
   }
 });
 
 router.delete('/collections/:collectionId/products/:savedProductId', async (req, res) => {
-  const collection = await models.Collection.findOne({ where: { id: req.params.collectionId } });
-  const savedProduct = await models.SavedProduct.findOne({ where: { id: req.params.savedProductId } });
+  const collection = await workspaceService.removeSavedProductFromCollection(req.params.collectionId, req.params.savedProductId);
 
-  if (collection && savedProduct) {
-    collection.removeSavedProduct(savedProduct);
-    res.status(201).send();
+  if (collection) {
+    KiwiStandardResponsesExpress.standardDeleteResponseWithEntity(collection, res);
   } else {
-    res.status(404).send();
+    KiwiStandardResponsesExpress.standardNotFoundResponse('Unable to find collection or saved product. Unable to remove saved product from collection.', res);
   }
 });
 
