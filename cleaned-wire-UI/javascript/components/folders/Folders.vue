@@ -5,9 +5,9 @@
       <b-row>
         <b-col cols="24" md="20">
           <p class="mt-6">
-            Folders are an easy way for you to organize articles for later
+            Folders are an easy way for you to organize products for later
             reading. Open a folder to manage and view its contents. Contents are
-            ordered by the article posted on date.
+            ordered by the product posted on date.
           </p>
           <div v-if="loading">
             <spinner />

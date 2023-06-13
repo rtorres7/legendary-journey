@@ -74,7 +74,7 @@ export default {
           if (previewPortlet) {
             this.feed = {
               items: previewPortlet.items,
-              articles: previewPortlet.articles,
+              products: previewPortlet.products,
               portlet: previewPortlet.portlet,
             };
             this.$nextTick(

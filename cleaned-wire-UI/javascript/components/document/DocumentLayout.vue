@@ -15,10 +15,10 @@
     <div v-if="!loading && !errored && authorized" :class="pdfCss">
       <PrintHeader :document="document" />
       <div class="print-body">
-        <b-row class="pt-4 card-primary article" :class="docClassName">
+        <b-row class="pt-4 card-primary product" :class="docClassName">
           <slot name="socialToolbarOrPreviewDisclaimer"></slot>
           <b-col class="mr-auto" cols="23" lg="16">
-            <div class="doc-classif article_classification">
+            <div class="doc-classif product_classification">
               {{ document.classification }}
             </div>
             <p
@@ -28,7 +28,7 @@
               {{ document.pub_date_disclaimer }}
             </p>
             <h1
-              id="article_title"
+              id="product_title"
               class="pri-800 separator mr-4 pb-2"
               :class="{ 'd-print-none': document.type !== 'WireDocument' }"
             >
@@ -45,13 +45,13 @@
             </div>
 
             <b-row>
-              <b-col class="pt-4 article-text article">
+              <b-col class="pt-4 product-text product">
                 <DocumentImage :document="document" />
                 <DocumentLeadershipDetails :document="document" />
                 <DocumentContents :document="document" />
                 <DocumentDetails :document="document" v-if="authorized" />
                 <Copyright class="d-none d-print-block text-x-sm" />
-                <div class="text-center article_classification">
+                <div class="text-center product_classification">
                   <div class="doc-classif pt-4">
                     <DeclassBlock :document="document" />
                     {{ document.classification }}
@@ -160,7 +160,7 @@ export default {
 .separator {
   border-bottom: 1px solid $alt-400;
 }
-.article-text {
+.product-text {
   font-size: $font-size-3;
 }
 .doc-classif {

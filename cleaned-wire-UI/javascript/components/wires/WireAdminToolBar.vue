@@ -2,21 +2,21 @@
   <div class="d-flex pull-right">
     <b-btn variant="link" @click="goToEditWirePage" class="py-0 mb-1">
       <img :src="require('@assets/edit.svg')" alt="" class="edit-icon" />
-      <span class="sr-only"> Edit {{ documentTitle }} Article </span>
+      <span class="sr-only"> Edit {{ documentTitle }} Product </span>
     </b-btn>
     <b-btn
-      v-b-modal="`wire-unfeature-article-${feature.id}`"
+      v-b-modal="`wire-unfeature-product-${feature.id}`"
       class="py-0 px-0"
       variant="link"
     >
       <img :src="require('@assets/reset.svg')" alt="" class="reset-icon" />
-      <span class="sr-only"> Unfeature {{ documentTitle }} Article </span>
+      <span class="sr-only"> Unfeature {{ documentTitle }} Product </span>
     </b-btn>
     <b-modal
-      :id="`wire-unfeature-article-${feature.id}`"
-      title="Confirm Unfeature Article"
+      :id="`wire-unfeature-product-${feature.id}`"
+      title="Confirm Unfeature Product"
       title-class="modal-header-title"
-      @ok="unfeatureArticle"
+      @ok="unfeatureProduct"
     >
       <div id="unfeature-modal-text">
         Are you sure you want to remove {{ documentTitle }} from being a feature
@@ -48,7 +48,7 @@ export default {
     },
   },
   methods: {
-    unfeatureArticle() {
+    unfeatureProduct() {
       this.$store
         .dispatch(`features/unfeatureProduct`, {
           featureDate: this.selectedDate,
@@ -61,7 +61,7 @@ export default {
     },
     goToEditWirePage() {
       this.$router.push({
-        path: `/wires/${this.selectedDate}/articles/${this.feature.id}/edit?cachebuster=true`,
+        path: `/wires/${this.selectedDate}/products/${this.feature.id}/edit?cachebuster=true`,
       });
     },
   },

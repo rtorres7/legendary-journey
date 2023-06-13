@@ -8,13 +8,13 @@
           alt=""
           v-if="mainView"
         />
-        <img :src="imgUrl('article')" class="article" alt="" v-if="mainView" />
+        <img :src="imgUrl('product')" class="product" alt="" v-if="mainView" />
         <img :src="imgUrl('secondary')" class="secondary" alt="" v-else />
       </template>
       <img
         v-else
         alt=""
-        :class="mainView ? 'article' : 'secondary'"
+        :class="mainView ? 'product' : 'secondary'"
         :src="require('@/assets/wire-thumb-placeholder.jpg')"
       />
     </div>

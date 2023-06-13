@@ -40,7 +40,7 @@ export default {
   name: "HeadlineStack",
   components: { Card },
   computed: {
-    ...mapState("articles", [
+    ...mapState("products", [
       "secondaryLoading",
       "headlineStack",
       "headlineTitle",

@@ -10,7 +10,7 @@
       will be required upon form submission.
     </div>
     <div class="sr-only" v-else>
-      Press spacebar to select first {{ numArticles() }} documents.
+      Press spacebar to select first {{ numProducts() }} documents.
     </div>
     Select All
   </b-form-checkbox>

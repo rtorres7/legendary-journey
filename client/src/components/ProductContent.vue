@@ -46,7 +46,7 @@
     <div class="w-full pr-2">
       <!-- <img
             v-if="product.product_image"
-            :src="`/documents/${product.doc_num}/images/article?updated_at=${product.updated_at}`"
+            :src="`/documents/${product.doc_num}/images/product?updated_at=${product.updated_at}`"
             class="h-[350px] w-[350px] float-right"
           /> -->
       <p v-if="product.html_body" class="whitespace-pre-line wrap-anywhere">

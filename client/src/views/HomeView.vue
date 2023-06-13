@@ -122,14 +122,14 @@
             </template>
             <template v-else>
               <div class="text-sm italic">
-                No featured article was found. This could be due to access
+                No featured product was found. This could be due to access
                 control or a network error.
               </div>
             </template>
           </template>
         </div>
       </div>
-      <!-- Main Section Published Articles -->
+      <!-- Main Section Published Products -->
       <div
         class="pt-4 xl:w-1/3 xl:pt-0 border-t xl:border-t-0 xl:pl-4 xl:border-l border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
       >
@@ -148,10 +148,10 @@
             </template>
           </template>
           <template v-else>
-            <template v-for="article in features.slice(1, 3)" :key="article">
+            <template v-for="product in features.slice(1, 3)" :key="product">
               <div class="w-full h-[288px] md:max-w-[575px]">
-                <ProductRestrictedLink :product="article.attributes">
-                  <PublishedProductCard :product="article.attributes" />
+                <ProductRestrictedLink :product="product.attributes">
+                  <PublishedProductCard :product="product.attributes" />
                 </ProductRestrictedLink>
               </div>
             </template>
@@ -176,17 +176,17 @@
       </template>
       <template v-else>
         <template v-if="features.length > 3">
-          <template v-for="article in features.slice(3, 15)" :key="article">
+          <template v-for="product in features.slice(3, 15)" :key="product">
             <div class="w-full h-[288px] md:max-w-[575px]">
-              <ProductRestrictedLink :product="article.attributes">
-                <PublishedProductCard :product="article.attributes" />
+              <ProductRestrictedLink :product="product.attributes">
+                <PublishedProductCard :product="product.attributes" />
               </ProductRestrictedLink>
             </div>
           </template>
         </template>
         <template v-else>
           <p class="hidden xl:block italic">
-            No additional published articles were found.
+            No additional published products were found.
           </p>
         </template>
       </template>
@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
@@ -226,7 +226,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const features = computed(() => store.state.features.articles);
+    const features = computed(() => store.state.features.products);
     const loadingFeatures = computed(() => store.state.features.loading);
     const briefs = computed(() => store.state.features.briefs);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));

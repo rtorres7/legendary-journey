@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { computed, inject, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -87,7 +87,7 @@ export default {
           .get(
             "/wires/" +
               route.params.date +
-              "/articles/" +
+              "/products/" +
               route.params.id +
               "/getDocumentData",
             {

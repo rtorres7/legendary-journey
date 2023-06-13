@@ -68,7 +68,7 @@ export default {
       } else {
         console.log("inside saveDraft: ", form);
         axios
-          .post("/articles/processDocument", {
+          .post("/products/processDocument", {
             document_action: "save",
             // we need analysis_type_id and other mandatory fields here too:
             // analysis_type_id: form.selectedProductType.id,
@@ -102,7 +102,7 @@ export default {
           });
       }
     },
-    publishArticle({ state, commit }, form) {
+    publishProduct({ state, commit }, form) {
       state.loading = true;
       let route = router.currentRoute.value;
       let date = route.params.date;
@@ -112,7 +112,7 @@ export default {
         console.log("lowside");
       } else {
         axios
-          .post("/articles/processDocument", {
+          .post("/products/processDocument", {
             document_action: "publish",
             wire_id: date,
             id: id,
@@ -152,7 +152,7 @@ export default {
             commit("saveDocument", response.data);
             // if(response.data.status.success????) {
             router.push({
-              name: "article",
+              name: "product",
               params: { doc_num: route.params.doc_num },
             });
             // } else {
@@ -161,21 +161,21 @@ export default {
           });
       }
     },
-    getDocumentData({ state, commit }, article) {
+    getDocumentData({ state, commit }, product) {
       state.loadingDocument = true;
       if (import.meta.env.MODE === "offline") {
-        console.log("Article: ");
+        console.log("Product: ");
       } else {
         let url =
           "/wires/" +
-          article.date +
-          "/articles/" +
-          article.id +
+          product.date +
+          "/products/" +
+          product.id +
           "/getDocumentData";
         axios
           .get(url, {
-            date: article.date,
-            id: article.id,
+            date: product.date,
+            id: product.id,
           })
           .then((response) => {
             console.log("Document Data (response): ", response);

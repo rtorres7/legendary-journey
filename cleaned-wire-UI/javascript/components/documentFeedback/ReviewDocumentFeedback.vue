@@ -92,7 +92,7 @@
             <Card
               v-for="(feedback, index) in this.feedbacks"
               :key="feedback.doc_num"
-              :article="feedback.document"
+              :product="feedback.document"
               :comment="feedback"
               :index="index"
               :return-path="$route.fullPath"

@@ -7,36 +7,46 @@ dayjs.extend(utc);
 
 const { v4: uuidv4 } = require("uuid");
 
-const Article = require("../models/articles");
+const Product = require("../models/products");
 
 const { handleMongooseError } = require("../util/errors");
 
-const ProductService = require('../services/product-service');
+const ProductService = require("../services/product-service");
 const productService = new ProductService();
-const MetadataService = require('../services/metadata');
+const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
-//GET articles by date
+//GET products by date
 router.get("/date/:date", async (req, res) => {
   try {
-    const articles = await productService.findAllByDate(req.params.date);
-    res.json({ features: articles.map(article => article.forWire) });
+    const products = await productService.findAllByDate(req.params.date);
+    res.json({ features: products.map((product) => product.forWire) });
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-    handleMongooseError(`Unable to find articles for date ${req.params.date}`, error);
-    res.json({ error: `Unable to find articles for date ${req.params.date}: ${error}` });
+    handleMongooseError(
+      `Unable to find products for date ${req.params.date}`,
+      error
+    );
+    res.json({
+      error: `Unable to find products for date ${req.params.date}: ${error}`,
+    });
   }
 });
 
-//GET articles by id
+//GET products by id
 router.get("/:id", async (req, res) => {
   try {
-    const article = await productService.findByProductNumber(req.params.id);
-    res.json(article.data.details);
+    const product = await productService.findByProductNumber(req.params.id);
+    res.json(product.data.details);
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-    handleMongooseError(`Unable to find article with product number ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with product number ${req.params.id}: ${error}`});
+    handleMongooseError(
+      `Unable to find product with product number ${req.params.id}`,
+      error
+    );
+    res.json({
+      error: `Unable to find product with product number ${req.params.id}: ${error}`,
+    });
   }
 });
 
@@ -44,10 +54,13 @@ router.get("/:id", async (req, res) => {
 router.post("/processDocument", (req, res) => {
   switch (req.body.document_action) {
     case "create":
-      res.redirect(307, "/articles/");
+      res.redirect(307, "/products/");
       break;
     case "save":
-      updateArticle(req.body.id, req, res);
+      updateProduct(req.body.id, req, res);
+      break;
+    case "publish":
+      updateProduct(req.body.id, req, res);
       break;
     default:
       res.sendStatus(404);
@@ -58,12 +71,22 @@ router.post("/processDocument", (req, res) => {
 router.post("/", async (req, res) => {
   const topics = await metadataService.findTopicsFor(req.body.topics);
   const issues = await metadataService.findIssuesForTopics(topics);
-  const producingOffices = req.body.producing_office && await metadataService.findProducingOfficesFor([req.body.producing_office]);
-  const productType = await metadataService.findProductType(req.body.product_type_id);
-  const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
-  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
+  const producingOffices =
+    req.body.producing_office &&
+    (await metadataService.findProducingOfficesFor([
+      req.body.producing_office,
+    ]));
+  const productType = await metadataService.findProductType(
+    req.body.product_type_id
+  );
+  const reportingType = await metadataService.findReportingTypeFor(
+    req.body.product_type_id
+  );
+  const nonStateActors = await metadataService.findNonStateActorsFor(
+    req.body.non_state_actors
+  );
 
-  const article = new Article({
+  const product = new Product({
     createdAt: dayjs().toDate(),
     datePublished: req.body.date_published || dayjs.utc().format(),
     htmlBody: req.body.html_body,
@@ -83,10 +106,13 @@ router.post("/", async (req, res) => {
   });
 
   try {
-    const savedArticle = await productService.createProduct(article);
-    res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
+    const savedProduct = await productService.createProduct(product);
+    res.json({
+      product: { id: savedProduct.id },
+      doc_num: savedProduct.productNumber,
+    });
   } catch (error) {
-    res.json({ error: `There was a problem creating product: ${error}`});
+    res.json({ error: `There was a problem creating product: ${error}` });
   }
 });
 
@@ -96,8 +122,13 @@ router.get("/:id/edit", async (req, res) => {
     const product = await productService.findById(req.params.id);
     res.json(product.data.document);
   } catch (error) {
-    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error}`});
+    handleMongooseError(
+      `Unable to find product with id ${req.params.id}`,
+      error
+    );
+    res.json({
+      error: `Unable to find product with id ${req.params.id}: ${error}`,
+    });
   }
 });
 
@@ -106,34 +137,55 @@ router.get("/:id/view", async (req, res) => {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
   } catch (error) {
-    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error}`});
+    handleMongooseError(
+      `Unable to find product with id ${req.params.id}`,
+      error
+    );
+    res.json({
+      error: `Unable to find product with id ${req.params.id}: ${error}`,
+    });
   }
 });
 
-// Update an article
+// Update an product
 router.put("/:id", async (req, res) => {
-  await updateArticle(req.params.id, req, res);
+  await updateProduct(req.params.id, req, res);
 });
 
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
-async function updateArticle(id, req, res) {
+async function updateProduct(id, req, res) {
   const countries = await metadataService.findCountriesFor(req.body.countries);
-  const subregions = await metadataService.findSubRegionsForCountries(req.body.countries);
-  const regions = await metadataService.findRegionsForSubRegions(subregions.map(subregion => subregion.code));
+  const subregions = await metadataService.findSubRegionsForCountries(
+    req.body.countries
+  );
+  const regions = await metadataService.findRegionsForSubRegions(
+    subregions.map((subregion) => subregion.code)
+  );
   const topics = await metadataService.findTopicsFor(req.body.topics);
   const issues = await metadataService.findIssuesForTopics(req.body.topics);
-  const producingOffices = await metadataService.findProducingOfficesFor(req.body.producing_offices);
+  const producingOffices = await metadataService.findProducingOfficesFor(
+    req.body.producing_offices
+  );
   const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
-  const coordinators = await metadataService.findCoordinatorsFor(req.body.coordinators);
-  const dissemOrgs = await metadataService.findDissemOrgsFor(req.body.dissem_orgs);
-  const productType = await metadataService.findProductType(req.body.product_type_id);
-  const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
-  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.nonStateActors);
+  const coordinators = await metadataService.findCoordinatorsFor(
+    req.body.coordinators
+  );
+  const dissemOrgs = await metadataService.findDissemOrgsFor(
+    req.body.dissem_orgs
+  );
+  const productType = await metadataService.findProductType(
+    req.body.product_type_id
+  );
+  const reportingType = await metadataService.findReportingTypeFor(
+    req.body.product_type_id
+  );
+  const nonStateActors = await metadataService.findNonStateActorsFor(
+    req.body.nonStateActors
+  );
 
-  const article = {
+  const product = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
     coauthors: coauthors,
@@ -165,26 +217,26 @@ async function updateArticle(id, req, res) {
   };
 
   try {
-    const updatedArticle = await productService.updateProduct(id, article);
+    const updatedProduct = await productService.updateProduct(id, product);
     res.json({
       success: true,
-      article: updatedArticle,
-      date: updatedArticle.datePublished,
-      doc_num: updatedArticle.productNumber,
-      id: updatedArticle._id,
-      state: updatedArticle.state,
+      product: updatedProduct,
+      date: updatedProduct.datePublished,
+      doc_num: updatedProduct.productNumber,
+      id: updatedProduct._id,
+      state: updatedProduct.state,
     });
   } catch (error) {
-    res.json({ error: `There was a problem updating product: ${error}`});
+    res.json({ error: `There was a problem updating product: ${error}` });
   }
 }
-// Delete an article
+// Delete an product
 router.delete("/:id", async (req, res) => {
   try {
     await productService.deleteProduct(req.params.id);
     res.json({ success: true });
   } catch (error) {
-    res.json({ error: 'Unable to delete article' });
+    res.json({ error: "Unable to delete product" });
   }
 });
 

@@ -1,9 +1,9 @@
 <template>
   <div v-if="canViewDocumentAdminTools">
     <b-modal
-      id="article-admin-tools"
+      id="product-admin-tools"
       size="lg"
-      title="Article Admin Tools"
+      title="Product Admin Tools"
       title-class="modal-header-title"
       ok-title="Close"
       ok-only
@@ -300,8 +300,7 @@ export default {
       this.$wireNotification({
         type: "success",
         title: `ZIP Export Requested for ${this.document.doc_num}`,
-        text:
-          "You will receive an _temp_37 notification when the export file has been completed.",
+        text: "You will receive an _temp_37 notification when the export file has been completed.",
       });
     },
   },

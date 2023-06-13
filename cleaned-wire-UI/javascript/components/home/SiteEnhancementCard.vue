@@ -28,14 +28,14 @@
               <b-card-title>
                 <document-link
                   ref="documentLink"
-                  :document="article"
+                  :document="product"
                   :section="section"
                   :return-path="returnPath"
                 />
               </b-card-title>
               <div class="summary">
                 <span class="portion_marked_field">
-                  ({{ article.summary_classification }})
+                  ({{ product.summary_classification }})
                 </span>
                 {{ truncatedSummary }} <strong>Explore >>></strong>
               </div>
@@ -43,7 +43,7 @@
           </div>
         </div>
       </WireBackgroundAsset>
-      <GotIt :doc_num="article.doc_num" />
+      <GotIt :doc_num="product.doc_num" />
     </b-card-body>
   </b-card>
 </template>
@@ -67,7 +67,7 @@ export default {
       return layout;
     },
     publishedDate() {
-      return this.article.posted_at;
+      return this.product.posted_at;
     },
   },
   mixins: [FeaturedCardMixin],

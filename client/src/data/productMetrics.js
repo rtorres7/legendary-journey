@@ -1,4 +1,4 @@
-export const articleMetrics = [
+export const productMetrics = [
   {
     doc_num: "WIRe001_sample_",
     readership: [

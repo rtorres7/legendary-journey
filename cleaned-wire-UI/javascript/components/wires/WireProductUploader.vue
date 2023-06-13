@@ -1,7 +1,7 @@
 <template>
   <b-card class="card-info pt-">
     <h2 class="info-title d-flex separator mt-5 pb-2">
-      Adding Articles to this Book
+      Adding Products to this Book
     </h2>
 
     <b-card-body align-v="center">
@@ -15,7 +15,7 @@
             data-_temp_1="/product_prepop"
           />
           <div align-v="center" class="drop-target uploader">
-            <div class="upload-button" aria-label="Upload Article to Book">
+            <div class="upload-button" aria-label="Upload Product to Book">
               Drop or Click
             </div>
             <ul class="upload-list"></ul>
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: "WireArticleUploader",
+  name: "WireProductUploader",
   mounted() {
     this.initFileUploader();
   },
@@ -41,7 +41,7 @@ export default {
     initFileUploader() {
       let self = this;
       $("#document_import_cont .uploader").fileUploader({
-        _temp_1: `/wires/${self.featureDate}/articles`,
+        _temp_1: `/wires/${self.featureDate}/products`,
         containerSelector: "#document_import_cont",
         beforeSubmit: function (e, data) {
           data.formData = $.extend({}, data.formData, {

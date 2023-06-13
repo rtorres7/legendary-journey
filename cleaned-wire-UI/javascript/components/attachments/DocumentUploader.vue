@@ -10,7 +10,7 @@
       />
       <div class="uploader">
         <b-btn class="upload-button btn btn-default">
-          Drop Article Files or Click Here
+          Drop Product Files or Click Here
         </b-btn>
         <ul class="upload-list"></ul>
       </div>

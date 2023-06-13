@@ -32,19 +32,19 @@ export default {
   },
 
   actions: {
-    getHomeArticles({ state, commit }) {
+    getHomeProducts({ state, commit }) {
       axios.get("/home").then((response) => {
-        commit("saveArticles", response.data);
+        commit("saveProducts", response.data);
       });
     },
 
     getOtherWire({ state, commit }, date) {
       return axios.get("/wires/" + date).then((response) => {
-        commit("saveArticles", response.data);
+        commit("saveProducts", response.data);
       });
     },
 
-    getSideArticles({ state, commit }) {
+    getSideProducts({ state, commit }) {
       axios.get("/home/side_data").then((response) => {
         commit("loadSideData", response.data);
       });
@@ -63,16 +63,16 @@ export default {
   },
 
   mutations: {
-    saveArticles(state, articles) {
-      state.featured = articles.featured;
+    saveProducts(state, products) {
+      state.featured = products.featured;
       var results = [];
-      if (articles.secondary) {
-        results = results.concat(articles.secondary);
+      if (products.secondary) {
+        results = results.concat(products.secondary);
       }
-      if (articles.more) {
-        results = results.concat(articles.more);
+      if (products.more) {
+        results = results.concat(products.more);
       }
-      state.siteEnhancement = articles.siteEnhancements;
+      state.siteEnhancement = products.siteEnhancements;
       state.more = results;
       state.loading = false;
     },

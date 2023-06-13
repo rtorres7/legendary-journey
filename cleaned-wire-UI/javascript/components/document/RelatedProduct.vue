@@ -116,7 +116,7 @@ export default {
           this.$wireNotification({
             title: "Related Product Removed",
             duration: 5000,
-            text: "Selected product has been removed from this article.",
+            text: "Selected product has been removed from this product.",
             type: "success",
           });
         })

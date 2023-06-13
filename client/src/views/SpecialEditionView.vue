@@ -63,12 +63,12 @@
         </template>
         <template v-else>
           <template
-            v-for="article in specialEdition.articles"
-            :key="article.id"
+            v-for="product in specialEdition.products"
+            :key="product.id"
           >
             <div class="w-full h-[288px]">
-              <ProductRestrictedLink :product="article">
-                <PublishedProductCard :product="article" />
+              <ProductRestrictedLink :product="product">
+                <PublishedProductCard :product="product" />
               </ProductRestrictedLink>
             </div>
           </template>
@@ -77,19 +77,19 @@
       <template v-if="!loadingSpecialEdition">
         <template
           v-if="
-            specialEdition.restrictedArticles &&
-            specialEdition.restrictedArticles.length > 0
+            specialEdition.restrictedProducts &&
+            specialEdition.restrictedProducts.length > 0
           "
         >
           <p class="font-medium text-lg py-4">Need More Access to View</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <template
-              v-for="article in specialEdition.restrictedArticles"
-              :key="article.id"
+              v-for="product in specialEdition.restrictedProducts"
+              :key="product.id"
             >
               <div class="w-full h-[288px]">
-                <ProductRestrictedLink :product="article">
-                  <PublishedProductCard :product="article" />
+                <ProductRestrictedLink :product="product">
+                  <PublishedProductCard :product="product" />
                 </ProductRestrictedLink>
               </div>
             </template>
@@ -179,18 +179,18 @@
                       <DisclosurePanel class="pb-4">
                         <div class="flex flex-col space-y-3">
                           <template
-                            v-for="article in report.docs"
-                            :key="article.id"
+                            v-for="product in report.docs"
+                            :key="product.id"
                           >
                             <router-link
                               :to="{
                                 name: 'product',
-                                params: { doc_num: article.doc_num },
+                                params: { doc_num: product.doc_num },
                               }"
                               class="hover:underline text-md lg:text-sm"
                             >
                               {{
-                                `(${article.title_classification}) ${article.title}`
+                                `(${product.title_classification}) ${product.title}`
                               }}
                             </router-link>
                           </template>

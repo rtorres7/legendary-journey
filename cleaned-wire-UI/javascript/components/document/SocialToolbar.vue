@@ -53,7 +53,7 @@
           id="add-to-folder"
           class="fa fa-folder-open social-toolbar"
           data-usage="doc-add-to-folder"
-          v-b-modal.folder-article
+          v-b-modal.folder-product
           alt="folders"
         />
       </div>
@@ -65,7 +65,7 @@
           id="social-doc-tags"
           class="fa fa-tags social-toolbar"
           data-usage="doc-add-tag"
-          v-b-modal.tag-article
+          v-b-modal.tag-product
           alt="tags"
         />
       </div>
@@ -76,19 +76,19 @@
           id="admin-tools"
           class="fa fa-cog social-toolbar"
           data-usage="doc-admin-cog"
-          v-b-modal.article-admin-tools
+          v-b-modal.product-admin-tools
           alt="admin tools"
         />
       </div>
 
       <div v-if="isFeaturedWire && canManageWire" class="px-3 pb-2">
         <a
-          :href="editWireArticlePath"
+          :href="editWireProductPath"
           data-usage="doc-edit"
           @keydown.space.prevent="$event.srcElement.click"
         >
           <i
-            id="edit-article"
+            id="edit-product"
             class="fa fa-pencil social-toolbar"
             alt="edit document"
         /></a>
@@ -137,9 +137,9 @@ export default {
     isFeaturedWire() {
       return this.isWire && this.document.feature_id;
     },
-    editWireArticlePath() {
+    editWireProductPath() {
       let wirePubDate = this.formatDate(this.document.feature_date);
-      return `/wires/${wirePubDate}/articles/${this.document.feature_id}/edit`;
+      return `/wires/${wirePubDate}/products/${this.document.feature_id}/edit`;
     },
     emailLink() {
       let emailSubject = `${this.name} product: ${this.portionMarkedTitle}`;

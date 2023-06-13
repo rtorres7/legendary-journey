@@ -16,7 +16,7 @@
     </p>
 
     <p class="disclaimer">
-      Comments must be at or below the classification of this article and
+      Comments must be at or below the classification of this product and
       appropriately portion marked.
     </p>
     <b-form-group>
@@ -138,8 +138,10 @@ export default {
       this.acknowledged = false;
     },
     submitComment() {
-      this.comment.classification = this.commentClassification.classification_string;
-      this.comment.classification_xml = this.commentClassification.classification_xml;
+      this.comment.classification =
+        this.commentClassification.classification_string;
+      this.comment.classification_xml =
+        this.commentClassification.classification_xml;
 
       if (this.valid) {
         axios
@@ -168,8 +170,7 @@ export default {
             this.$wireNotification({
               type: "error",
               title: "Error saving comment",
-              text:
-                "Something went wrong while saving your comment. Please try again later",
+              text: "Something went wrong while saving your comment. Please try again later",
             });
           });
       }

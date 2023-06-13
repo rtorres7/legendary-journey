@@ -1,4 +1,4 @@
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 
 const buildArray = (item, count, sort_dir) => {
   const array = [];
@@ -25,7 +25,7 @@ const chinaResult = {
   date_published: "2022-08-17",
   images: {
     table: {
-      article: null,
+      product: null,
       headline: null,
       secondary: "british-virgin-islands.png",
       carousel: null,
@@ -50,7 +50,7 @@ const russiaResult = {
   date_published: "2022-05-02",
   images: {
     table: {
-      article: null,
+      product: null,
       headline: null,
       secondary: "british-virgin-islands.png",
       carousel: null,
@@ -76,7 +76,7 @@ const zelenskyResult = {
   date_published: "2022-05-02",
   images: {
     table: {
-      article: null,
+      product: null,
       headline: null,
       secondary: "british-virgin-islands.png",
       carousel: null,
@@ -102,7 +102,7 @@ const UNResult = {
   date_published: "2022-05-02",
   images: {
     table: {
-      article: null,
+      product: null,
       headline: null,
       secondary: "british-virgin-islands.png",
       carousel: null,

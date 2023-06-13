@@ -18,7 +18,7 @@
         {{ document ? document.classification : siteClassification }}
       </span>
 
-      <div :class="`article by-line ${docClassName}`">
+      <div :class="`product by-line ${docClassName}`">
         <div class="">
           <div class="header-by-line" v-if="document">
             <template v-if="isWire">

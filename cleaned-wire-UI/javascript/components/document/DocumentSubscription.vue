@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <b-button v-b-modal.subscribe-article data-usage="daily-subscription">
+    <b-button v-b-modal.subscribe-product data-usage="daily-subscription">
       <template v-if="subscribed">
         <span class="fa fa-star mr-2"></span> Unsubscribe<span class="sr-only">
           from discussion</span
@@ -13,26 +13,26 @@
       </template>
     </b-button>
     <b-modal
-      id="subscribe-article"
+      id="subscribe-product"
       :ok-title="buttonText"
       size="md"
-      title="Article Comment Subscription"
+      title="Product Comment Subscription"
       title-class="modal-header-title"
       @ok="toggleSubscription"
     >
       <div id="subscribe-modal-text">
         <p v-if="!subscribed">
-          If you would like to receive all public comments to this article,
+          If you would like to receive all public comments to this product,
           click the "{{ this.buttonText }}" button below.
         </p>
         <p>
           <span v-if="subscribed"
             >You are currently subscribed to receive all public comments to this
-            article.</span
+            product.</span
           >
           <span v-else
-            >An _temp_37 will be sent to <b>{{ this.user._temp_37 }}</b> each time a
-            public comment is added to this article.</span
+            >An _temp_37 will be sent to <b>{{ this.user._temp_37 }}</b> each
+            time a public comment is added to this product.</span
           >
         </p>
       </div>

@@ -4,14 +4,14 @@
       <SiteEnhancementCard
         v-for="(siteEnhancementCard, ind) in siteEnhancement"
         :key="ind"
-        :article="siteEnhancementCard"
+        :product="siteEnhancementCard"
         section="search"
         :return-path="$route.fullPath"
       />
       <Card
-        v-for="(article, index) in results"
-        :key="`${index}_${article.doc_num}`"
-        :article="article"
+        v-for="(product, index) in results"
+        :key="`${index}_${product.doc_num}`"
+        :product="product"
         :index="index"
         section="search"
         :return-path="$route.fullPath"

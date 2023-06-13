@@ -4,15 +4,15 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const express = require("express");
 
-const Article = require("../../src/models/articles");
+const Product = require("../../src/models/products");
 const {
-  loadArticlesIntoMongo,
+  loadProductsIntoMongo,
   loadMetadata,
   loadElasticSearch,
 } = require("../__utils__/dataLoader");
 const { Client } = require("@elastic/elasticsearch");
 
-describe("Article Routes", () => {
+describe("Product Routes", () => {
   let mongoContainer;
   let esContainer;
   let app;
@@ -27,8 +27,8 @@ describe("Article Routes", () => {
       27017
     )}/mxms`;
 
-    // Load articles
-    await loadArticlesIntoMongo(mongoUrl);
+    // Load products
+    await loadProductsIntoMongo(mongoUrl);
 
     // Load metadata
     await loadMetadata(mongoUrl);
@@ -50,8 +50,8 @@ describe("Article Routes", () => {
     app = express();
     app.use(express.json());
 
-    const router = require("../../src/routes/articles");
-    app.use("/articles", router);
+    const router = require("../../src/routes/products");
+    app.use("/products", router);
   }, 70_000);
 
   beforeEach(async () => {
@@ -74,10 +74,10 @@ describe("Article Routes", () => {
     mongoose.connection.close();
   });
 
-  describe("GET /articles/date/:date", () => {
-    it("should return all articles for the given date", () => {
+  describe("GET /products/date/:date", () => {
+    it("should return all products for the given date", () => {
       return request(app)
-        .get("/articles/date/2022-09-01")
+        .get("/products/date/2022-09-01")
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -87,10 +87,10 @@ describe("Article Routes", () => {
     });
   });
 
-  describe("GET /articles/:id", () => {
-    it("should return an article for the given productNumber", () => {
+  describe("GET /products/:id", () => {
+    it("should return an product for the given productNumber", () => {
       return request(app)
-        .get("/articles/WIReWIRe_sample_1")
+        .get("/products/WIReWIRe_sample_1")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -99,17 +99,17 @@ describe("Article Routes", () => {
     });
   });
 
-  describe("POST /articles/processDocument", () => {
-    it("should send redirect to POST /articles when document_action is create", () => {
+  describe("POST /products/processDocument", () => {
+    it("should send redirect to POST /products when document_action is create", () => {
       return request(app)
-        .post("/articles/processDocument")
+        .post("/products/processDocument")
         .send({ document_action: "create" })
         .expect(307)
-        .expect("Location", "/articles/");
+        .expect("Location", "/products/");
     });
 
     it("should send update document when document_action is save", async () => {
-      const original = await Article.findOne({
+      const original = await Product.findOne({
         productNumber: "WIReWIRe_sample_1",
       });
       const postData = {
@@ -128,19 +128,19 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles/processDocument")
+        .post("/products/processDocument")
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.article.classification).toBe("S");
+          expect(res.body.product.classification).toBe("S");
           expect(res.body.date).toEqual(original.datePublished.toISOString());
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
 
-          const updated = await Article.findOne({
+          const updated = await Product.findOne({
             productNumber: "WIReWIRe_sample_1",
           });
           expect(updated.classificationXml).toBe("S");
@@ -154,14 +154,14 @@ describe("Article Routes", () => {
 
     it("should send a 404 if any other action is given", () => {
       return request(app)
-        .post("/articles/processDocument")
+        .post("/products/processDocument")
         .send({ document_action: "other" })
         .expect(404);
     });
   });
 
-  describe("POST /articles", () => {
-    it("should create the given article", () => {
+  describe("POST /products", () => {
+    it("should create the given product", () => {
       const postData = {
         document_action: "save",
         classification: "S",
@@ -169,61 +169,61 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles")
+        .post("/products")
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
-          expect(res.body.article).toBeDefined();
-          expect(res.body.article.id).toBeDefined();
+          expect(res.body.product).toBeDefined();
+          expect(res.body.product.id).toBeDefined();
           expect(res.body.doc_num).toBeDefined();
 
-          const updated = await Article.findById(res.body.article.id);
+          const updated = await Product.findById(res.body.product.id);
           expect(updated).toBeDefined();
 
           expect(
             await esClient.exists({
               index: "products",
-              id: res.body.article.id,
+              id: res.body.product.id,
             })
           ).toEqual(true);
         });
     });
   });
 
-  describe("GET /articles/:id/edit", () => {
-    it("should return the requested article for editing", async () => {
-      const articleToBeFound = await Article.findById(
+  describe("GET /products/:id/edit", () => {
+    it("should return the requested product for editing", async () => {
+      const productToBeFound = await Product.findById(
         "64709619aa530082dd5cc416"
       );
       return request(app)
-        .get("/articles/64709619aa530082dd5cc416/edit")
+        .get("/products/64709619aa530082dd5cc416/edit")
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
-          expect(res.body.id).toBe(articleToBeFound.id);
+          expect(res.body.id).toBe(productToBeFound.id);
         });
     });
   });
 
-  describe("GET /articles/:id/view", () => {
-    it("should return the requested article for viewing", async () => {
-      const articleToBeFound = await Article.findById(
+  describe("GET /products/:id/view", () => {
+    it("should return the requested product for viewing", async () => {
+      const productToBeFound = await Product.findById(
         "64709619aa530082dd5cc416"
       );
       return request(app)
-        .get("/articles/64709619aa530082dd5cc416/view")
+        .get("/products/64709619aa530082dd5cc416/view")
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
-          expect(res.body.id).toBe(articleToBeFound.id);
+          expect(res.body.id).toBe(productToBeFound.id);
         });
     });
   });
 
-  describe("PUT /articles/:id", () => {
+  describe("PUT /products/:id", () => {
     it("should update document", async () => {
-      const original = await Article.findOne({
+      const original = await Product.findOne({
         productNumber: "WIReWIRe_sample_1",
       });
       const postData = {
@@ -235,19 +235,19 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .put(`/articles/${original.id}`)
+        .put(`/products/${original.id}`)
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.article.classification).toBe("S");
+          expect(res.body.product.classification).toBe("S");
           expect(res.body.date).toEqual(original.datePublished.toISOString());
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
 
-          const updated = await Article.findOne({
+          const updated = await Product.findOne({
             productNumber: "WIReWIRe_sample_1",
           });
           expect(updated.classificationXml).toBe("S");
@@ -260,13 +260,13 @@ describe("Article Routes", () => {
     });
   });
 
-  describe("DELETE /articles/:id", () => {
-    it("should delete the article from the db", () => {
+  describe("DELETE /products/:id", () => {
+    it("should delete the product from the db", () => {
       return request(app)
-        .delete("/articles/64709619aa530082dd5cc416")
+        .delete("/products/64709619aa530082dd5cc416")
         .expect(200, { success: true })
         .then(async () => {
-          const result = await Article.findById("64709619aa530082dd5cc416");
+          const result = await Product.findById("64709619aa530082dd5cc416");
           expect(result).toBeNull();
         });
     });

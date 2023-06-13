@@ -4,7 +4,7 @@
       <b-row>
         <b-col class="col-15">
           <b-card-title title-tag="h3">
-            {{ article.title }}
+            {{ product.title }}
           </b-card-title>
         </b-col>
       </b-row>
@@ -15,7 +15,7 @@
 <script>
 export default {
   name: "Card",
-  props: ["article"],
+  props: ["product"],
 };
 </script>
 

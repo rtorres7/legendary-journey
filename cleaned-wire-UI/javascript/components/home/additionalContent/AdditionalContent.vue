@@ -30,7 +30,7 @@ export default {
   components: { ContentItems, SectionHeader },
 
   computed: {
-    ...mapState("articles", ["secondaryLoading", "additionalContent"]),
+    ...mapState("products", ["secondaryLoading", "additionalContent"]),
     ...mapState("metadata", ["agency"]),
   },
 };

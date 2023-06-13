@@ -778,7 +778,7 @@ import { productDetails } from "@/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { formatDate } from "@/helpers";
 import {
   BriefcaseIcon,
@@ -1137,10 +1137,9 @@ export default {
       payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
-      payload.value.producing_offices =
-        updatedProduct.producing_offices.map(
-          (producing_office) => producing_office.code
-        );
+      payload.value.producing_offices = updatedProduct.producing_offices.map(
+        (producing_office) => producing_office.code
+      );
     };
 
     const updateForm = (updatedProduct) => {
@@ -1323,7 +1322,7 @@ export default {
       let extension = uploadedFile.type.split("/").pop();
       extension = extension === "jpeg" ? "jpg" : extension;
       thumbnailFile.value = new UploadableFile(
-        new File([uploadedFile], `article.${extension}`, {
+        new File([uploadedFile], `product.${extension}`, {
           type: uploadedFile.type,
         })
       );
@@ -1419,8 +1418,12 @@ export default {
         );
       } else {
         publishingProduct.value = true;
+        console.log("ENV =================== ", import.meta.env.MODE);
         if (import.meta.env.MODE === "offline") {
           setTimeout(() => {
+            console.log(
+              "IM NOT WHERE IM SUPPOSED TO BE -----------------------------------"
+            );
             publishingProduct.value = false;
             router.push({
               name: "product",
@@ -1433,8 +1436,9 @@ export default {
             });
           }, 3000);
         } else {
+          console.log("I AM WHERE I SHOULD BE %%%%%%%%%%%%%%%%%%%%");
           axios
-            .post("/articles/processDocument", {
+            .post("/products/processDocument", {
               document_action: "publish",
               // analysis_type_id: form.selectedProductType.id,
               analysis_type_id: 5,
@@ -1485,7 +1489,7 @@ export default {
         }, 1000);
       } else {
         axios
-          .post("/articles/processDocument", {
+          .post("/products/processDocument", {
             document_action: "save",
             // analysis_type_id: form.selectedProductType.id,
             analysis_type_id: 5,
@@ -1510,7 +1514,7 @@ export default {
                 .get(
                   "/wires/" +
                     route.params.date +
-                    "/articles/" +
+                    "/products/" +
                     route.params.id +
                     "/getDocumentData",
                   {

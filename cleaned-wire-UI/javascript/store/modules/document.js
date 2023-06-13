@@ -30,9 +30,9 @@ export default {
         .then((response) => {
           commit("setSubscribed", !state.subscribed);
           caller.$wireNotification({
-            title: "Article Subscription Updated",
+            title: "Product Subscription Updated",
             duration: 5000,
-            text: "Your subscription to this article has been updated.",
+            text: "Your subscription to this product has been updated.",
             type: "success",
           });
         });

@@ -56,7 +56,7 @@ export const hasProductImage = (product) => {
   if (isEmpty(product.images)) {
     hasImage = false;
   } else {
-    if (product.images.table && isEmpty(product.images.table.article)) {
+    if (product.images.table && isEmpty(product.images.table.product)) {
       hasImage = false;
     }
   }
@@ -66,10 +66,10 @@ export const hasProductImage = (product) => {
 export const getProductImageUrl = (images, docNum) => {
   let updatedAt;
   if (Array.isArray(images)) {
-    updatedAt = images.filter((image) => image.usage == "article")[0]
+    updatedAt = images.filter((image) => image.usage == "product")[0]
       .updated_at;
-  } else if (images && images.table.article) {
-    updatedAt = images.table.article.table.updated_at;
+  } else if (images && images.table.product) {
+    updatedAt = images.table.product.table.updated_at;
   } else {
     updatedAt = "";
   }
@@ -77,7 +77,7 @@ export const getProductImageUrl = (images, docNum) => {
     window.location.origin +
     "/documents/" +
     docNum +
-    "/images/article?updated_at=" +
+    "/images/product?updated_at=" +
     updatedAt
   );
 };

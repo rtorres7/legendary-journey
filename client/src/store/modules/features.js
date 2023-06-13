@@ -4,7 +4,7 @@ import axios from "@/config/wireAxios";
 export default {
   namespaced: true,
   state: {
-    articles: [],
+    products: [],
     briefs: [],
     loading: true,
   },
@@ -14,7 +14,7 @@ export default {
       if (import.meta.env.MODE === "offline") {
         console.log("[store] loadFeatures: ", features, getSitreps);
         setTimeout(() => {
-          commit("saveArticles", features);
+          commit("saveProducts", features);
           commit("saveBriefs", getSitreps);
           commit("toggleLoading", false);
         }, 750);
@@ -22,27 +22,27 @@ export default {
         axios.get("/home/features").then((response) => {
           console.log("[store] loadFeatures: ", response);
           const data = response.data;
-          commit("saveArticles", data.featured);
+          commit("saveProducts", data.featured);
           commit("saveBriefs", data.briefs);
           commit("toggleLoading", false);
         });
       }
     },
     //Test Console Feature Only
-    setArticles({ commit }, count) {
-      commit("saveArticles", count <= 0 ? [] : features.slice(0, count));
+    setProducts({ commit }, count) {
+      commit("saveProducts", count <= 0 ? [] : features.slice(0, count));
     },
     setLoading({ commit }, value) {
       commit("toggleLoading", value);
     },
   },
   mutations: {
-    saveArticles(state, articles) {
-      state.articles = articles;
+    saveProducts(state, products) {
+      state.products = products;
     },
     saveBriefs(state, briefs) {
-      state.briefs = briefs.map((article) => {
-        return article.attributes;
+      state.briefs = briefs.map((product) => {
+        return product.attributes;
       });
     },
     toggleLoading(state, value) {

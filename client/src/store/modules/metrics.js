@@ -1,15 +1,15 @@
-import { articleMetrics } from "@/data";
+import { productMetrics } from "@/data";
 import axios from "@/config/wireAxios";
 import router from "@/router";
 
-const getMetricsForArticle = (metrics) => {
+const getMetricsForProduct = (metrics) => {
   const { doc_num } = router.currentRoute.value.params;
   const filteredMetrics = metrics.filter((data) => data.doc_num === doc_num);
-  const metricsForArticle = (({ readership, uniqueReadership }) => ({
+  const metricsForProduct = (({ readership, uniqueReadership }) => ({
     readership,
     uniqueReadership,
   }))(filteredMetrics[0]);
-  return metricsForArticle;
+  return metricsForProduct;
 };
 
 export default {
@@ -23,7 +23,7 @@ export default {
     getMetrics({ state, commit }, { start, end }) {
       state.loading = true;
       if (import.meta.env.MODE === "offline") {
-        const metrics = getMetricsForArticle(articleMetrics);
+        const metrics = getMetricsForProduct(productMetrics);
         // console.log("basic_metrics.json?readership_start_date="+state.readershipStartDate+"&readership_end_date="+state.readershipEndDate);
         console.log(
           "[store] getMetrics:",
@@ -36,7 +36,7 @@ export default {
         axios.get(`/documents/${route.params.doc_num}`).then((response) => {
           axios
             .put(
-              `/wires/${response.data.date_published}/articles/${response.data.id}/visitorCount`,
+              `/wires/${response.data.date_published}/products/${response.data.id}/visitorCount`,
               {
                 id: response.data.id,
                 product_type_id: response.data.product_type_id,

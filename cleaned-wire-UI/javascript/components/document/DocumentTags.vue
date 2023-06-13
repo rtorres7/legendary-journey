@@ -7,7 +7,7 @@
         {{ i !== tags.length - 1 ? `${tag}, ` : tag }}
       </router-link>
       <div class="text-right">
-        <b-btn variant="secondary" v-b-modal.tag-article>Add Tag</b-btn>
+        <b-btn variant="secondary" v-b-modal.tag-product>Add Tag</b-btn>
       </div>
     </b-form-group>
   </div>

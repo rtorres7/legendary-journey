@@ -47,8 +47,8 @@
           tabindex="0"
           role="button"
           aria-label="Create a blank template"
-          @click="goToArticle()"
-          @keyup.enter="goToArticle()"
+          @click="goToProduct()"
+          @keyup.enter="goToProduct()"
         >
           <span
             class="z-5 px-6 py-8 lg:px-9 lg:py-10 text-xl lg:text-2xl font-bold"
@@ -94,12 +94,12 @@
           :aria-label="`Create a ${product.displayName}`"
           @click="
             dialogPreference == 'hide'
-              ? goToArticle(product.payload)
+              ? goToProduct(product.payload)
               : openProductTemplateDialog(product)
           "
           @keyup.enter="
             dialogPreference == 'hide'
-              ? goToArticle(product.payload)
+              ? goToProduct(product.payload)
               : openProductTemplateDialog(product)
           "
         >
@@ -116,7 +116,7 @@
       </template>
     </div>
   </div>
-  <template v-if="loadingArticles">
+  <template v-if="loadingProducts">
     <div class="max-w-fit m-auto mt-[20vh]">
       <MaxLoadingSpinner class="h-24 w-24" />
     </div>
@@ -125,7 +125,7 @@
     <div class="py-6">
       <div class="flex justify-between mb-4">
         <h3 class="font-semibold text-lg">
-          Manage Existing Products ({{ filterArticles().length }})
+          Manage Existing Products ({{ filterProducts().length }})
         </h3>
         <div class="flex items-center">
           <input
@@ -138,10 +138,10 @@
           <label for="showDrafts" class="ml-2 text-sm">Show Drafts Only</label>
         </div>
       </div>
-      <template v-if="articles.length > 0">
+      <template v-if="products.length > 0">
         <ul class="space-y-3">
           <template
-            v-for="{ attributes: product } in filterArticles()"
+            v-for="{ attributes: product } in filterProducts()"
             :key="product"
           >
             <MaxCard class="flex flex-col py-4">
@@ -318,7 +318,7 @@
             class="m-2 relative overflow-hidden w-[375px] h-[125px] sm:w-[450px] sm:h-[150px] md:w-[600px] md:h-[200px] lg:w-[900px] lg:h-[300px]"
           >
             <ProductImage
-              :product="selectedArticle"
+              :product="selectedProduct"
               class="inset-x-0 absolute h-full mx-auto z-[3]"
             />
           </div>
@@ -451,7 +451,7 @@
             @click.prevent="closeProductTemplateDialog"
             >Cancel</MaxButton
           >
-          <MaxButton color="secondary" @click="goToArticle(productContent)">
+          <MaxButton color="secondary" @click="goToProduct(productContent)">
             Create
           </MaxButton>
         </template>
@@ -462,7 +462,7 @@
 
 <script>
 import { productDetails } from "@/data";
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { useCookies } from "vue3-cookies";
 import axios from "@/config/wireAxios";
 import { metadata } from "@/config";
@@ -498,8 +498,8 @@ export default {
     const previewProduct = ref(null);
     const loadingCriteria = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
-    const articles = computed(() => store.state.wires.articles);
-    const loadingArticles = computed(() => store.state.wires.loading);
+    const products = computed(() => store.state.wires.products);
+    const loadingProducts = computed(() => store.state.wires.loading);
     const createNotification = inject("create-notification");
     const { cookies } = useCookies();
     const isCommunityExclusive = computed(
@@ -507,9 +507,9 @@ export default {
     );
     const showOnlyDrafts = ref(false);
     const drafts = computed(() =>
-      articles.value.filter((a) => a.attributes.state === "draft")
+      products.value.filter((a) => a.attributes.state === "draft")
     );
-    const filterArticles = () => {
+    const filterProducts = () => {
       if (showOnlyDrafts.value) {
         return !isCommunityExclusive.value
           ? drafts.value
@@ -518,8 +518,8 @@ export default {
             );
       } else {
         return !isCommunityExclusive.value
-          ? articles.value
-          : articles.value.filter(
+          ? products.value
+          : products.value.filter(
               (a) => a.attributes.product_type === "Community Product"
             );
       }
@@ -581,13 +581,13 @@ export default {
       isPreviewDialogOpen.value = true;
     };
 
-    const selectedProduct = ref();
+    const selectedProduct2 = ref();
     const isDeleteDialogOpen = ref(false);
     const closeDeleteDialog = () => {
       isDeleteDialogOpen.value = false;
     };
     const openDeleteDialog = (product) => {
-      selectedProduct.value = product;
+      selectedProduct2.value = product;
       isDeleteDialogOpen.value = true;
     };
 
@@ -599,19 +599,19 @@ export default {
           type: "success",
         });
         closeDeleteDialog();
-        //need to delete product from both the drafts array and the articles array
+        //need to delete product from both the drafts array and the products array
         //drafts
         let draft = drafts.value.find(
           (d) => d.attributes.doc_num == selectedProduct.value.doc_num
         );
         let indexOfDraft = drafts.value.indexOf(draft);
         drafts.value.splice(indexOfDraft, 1);
-        //articles
-        let article = articles.value.find(
+        //products
+        let product = products.value.find(
           (a) => a.attributes.doc_num == selectedProduct.value.doc_num
         );
-        let indexOfArticle = articles.value.indexOf(article);
-        articles.value.splice(indexOfArticle, 1);
+        let indexOfProduct = products.value.indexOf(product);
+        products.value.splice(indexOfProduct, 1);
       } else {
         axios
           .post("/documents/" + selectedProduct.value.doc_num + "/deleteMe")
@@ -635,11 +635,11 @@ export default {
               );
               let indexOfDraft = drafts.value.indexOf(draft);
               drafts.value.splice(indexOfDraft, 1);
-              let article = articles.value.find(
+              let product = products.value.find(
                 (a) => a.attributes.doc_num == selectedProduct.value.doc_num
               );
-              let indexOfArticle = articles.value.indexOf(article);
-              articles.value.splice(indexOfArticle, 1);
+              let indexOfProduct = products.value.indexOf(product);
+              products.value.splice(indexOfProduct, 1);
             }
           });
       }
@@ -696,7 +696,7 @@ export default {
       }
     });
 
-    const goToArticle = (payload) => {
+    const goToProduct = (payload) => {
       if (!payload) {
         payload = { ...defaultPayload };
       }
@@ -712,13 +712,13 @@ export default {
           },
         });
       } else {
-        axios.post("/articles/processDocument", payload).then((response) => {
-          console.log("/articles/processDocument :", response);
+        axios.post("/products/processDocument", payload).then((response) => {
+          console.log("/products/processDocument :", response);
           router.push({
             name: "edit",
             params: {
               date: route.params.date,
-              id: response.data.article.id,
+              id: response.data.product.id,
               doc_num: response.data.doc_num,
             },
           });
@@ -742,10 +742,10 @@ export default {
       }
     };
 
-    const selectedArticle = ref({});
+    const selectedProduct = ref({});
     const isPreviewThumbnailDialogOpen = ref(false);
-    const openPreviewThumbnailDialog = (article) => {
-      selectedArticle.value = article;
+    const openPreviewThumbnailDialog = (product) => {
+      selectedProduct.value = product;
       isPreviewThumbnailDialogOpen.value = true;
     };
     const closePreviewThumbnailDialog = () => {
@@ -773,17 +773,17 @@ export default {
       selectedDate,
       loadingPreview,
       previewProduct,
-      articles,
-      loadingArticles,
+      products,
+      loadingProducts,
       isCommunityExclusive,
       showOnlyDrafts,
       drafts,
-      filterArticles,
+      filterProducts,
       availableProductTypes,
-      goToArticle,
+      goToProduct,
       selectDate,
       canEditProduct,
-      selectedArticle,
+      selectedProduct,
       selectedProductType,
       productContent,
       getTopicNames,

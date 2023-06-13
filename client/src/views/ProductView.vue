@@ -9,7 +9,7 @@
       <NotAuthorized :product="product" />
     </template>
     <template v-else>
-      <div v-if="!loadingFeaturedArticles && navigation">
+      <div v-if="!loadingFeaturedProducts && navigation">
         <ProductNavigation :navigation="navigation" />
       </div>
       <div
@@ -95,7 +95,7 @@
         <div
           class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
-          <ProductAttachments :article="product" />
+          <ProductAttachments :product="product" />
           <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
           <template v-if="product.state !== 'draft'">
             <template v-if="!loadingRelatedProducts">
@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { formatDate, hasProductAccess } from "@/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
@@ -198,8 +198,8 @@ export default {
     const product = computed(() => store.state.product.document);
     const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
-    const featuredArticles = computed(() => store.state.features.articles);
-    const loadingFeaturedArticles = computed(
+    const featuredProducts = computed(() => store.state.features.products);
+    const loadingFeaturedProducts = computed(
       () => store.state.features.loading
     );
     const relatedProducts = computed(
@@ -288,34 +288,34 @@ export default {
     });
 
     const buildNavigation = () => {
-      const matchIndex = featuredArticles.value.findIndex((featuredArticle) => {
-        if (route.params.doc_num === featuredArticle.attributes.doc_num) {
+      const matchIndex = featuredProducts.value.findIndex((featuredProduct) => {
+        if (route.params.doc_num === featuredProduct.attributes.doc_num) {
           return true;
         }
       });
       if (matchIndex !== -1) {
         navigation.value = {
-          currentArticle: {
+          currentProduct: {
             position: matchIndex + 1,
           },
-          totalArticles: featuredArticles.value.length,
+          totalProducts: featuredProducts.value.length,
         };
-        const prevArticleDocNum =
+        const prevProductDocNum =
           matchIndex === 0
             ? null
-            : featuredArticles.value[matchIndex - 1].attributes.doc_num;
-        const nextArticleDocNum =
-          matchIndex === featuredArticles.value.length - 1
+            : featuredProducts.value[matchIndex - 1].attributes.doc_num;
+        const nextProductDocNum =
+          matchIndex === featuredProducts.value.length - 1
             ? null
-            : featuredArticles.value[matchIndex + 1].attributes.doc_num;
-        if (prevArticleDocNum) {
-          navigation.value["previousArticle"] = {
-            doc_num: prevArticleDocNum,
+            : featuredProducts.value[matchIndex + 1].attributes.doc_num;
+        if (prevProductDocNum) {
+          navigation.value["previousProduct"] = {
+            doc_num: prevProductDocNum,
           };
         }
-        if (nextArticleDocNum) {
-          navigation.value["nextArticle"] = {
-            doc_num: nextArticleDocNum,
+        if (nextProductDocNum) {
+          navigation.value["nextProduct"] = {
+            doc_num: nextProductDocNum,
           };
         }
       }
@@ -339,8 +339,8 @@ export default {
       }
     };
 
-    watch([loadingFeaturedArticles], () => {
-      if (!loadingFeaturedArticles.value) {
+    watch([loadingFeaturedProducts], () => {
+      if (!loadingFeaturedProducts.value) {
         buildNavigation();
       }
     });
@@ -389,7 +389,7 @@ export default {
       product,
       organization,
       loadingProduct,
-      loadingFeaturedArticles,
+      loadingFeaturedProducts,
       relatedProducts,
       loadingRelatedProducts,
       metrics,

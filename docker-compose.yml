@@ -70,7 +70,7 @@ services:
     environment:
       #MONGO_INITDB_ROOT_USERNAME: {{USERNAME}}
       #MONGO_INITDB_ROOT_PASSWORD: {{PWD}}
-      MONGO_INITDB_DATABASE: articles
+      MONGO_INITDB_DATABASE: products
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 30s

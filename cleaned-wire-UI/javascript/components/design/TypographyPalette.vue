@@ -119,7 +119,7 @@
     <b-row>
       <b-col>
         <span class="font-size-4-swatch mt-5"></span>
-        <p class="dashed">Article Body</p>
+        <p class="dashed">Product Body</p>
       </b-col>
     </b-row>
     <b-row>

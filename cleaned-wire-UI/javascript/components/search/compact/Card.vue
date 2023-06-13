@@ -6,7 +6,7 @@
     >
       <transition name="bounce">
         <b-form-checkbox
-          :value="article.id"
+          :value="product.id"
           v-show="selecting && selecting !== 'saveSearch'"
           :disabled="locked"
           :class="{ locked }"
@@ -20,7 +20,7 @@
             title-tag="div"
           >
             <DocumentLink
-              :document="article"
+              :document="product"
               :section="section"
               :returnPath="returnPath"
               ref="link"
@@ -35,10 +35,10 @@
           >
         </div>
         <b-card-text class="mt-3">
-          <div v-if="article.summary && article.summary != 'None.'">
+          <div v-if="product.summary && product.summary != 'None.'">
             <PortionMarkedString
-              :portionMark="article.summary_classification"
-              :textString="article.highlighted_result || article.summary"
+              :portionMark="product.summary_classification"
+              :textString="product.highlighted_result || product.summary"
             />
           </div>
           <span v-else>No Summary Available</span>
@@ -59,22 +59,22 @@ import { isEmpty } from "lodash";
 export default {
   name: "Card",
   components: { Date, DocumentLink, PortionMarkedString },
-  props: ["article", "returnPath", "section", "index"],
+  props: ["product", "returnPath", "section", "index"],
 
   computed: {
     ...mapState("search", ["selecting"]),
 
     locked() {
-      return !isEmpty(this.article.needed);
+      return !isEmpty(this.product.needed);
     },
 
     subtitle() {
-      return this.article.doc_num;
+      return this.product.doc_num;
     },
 
     publishedDate() {
       // TODO would like to do a pass on this to get moment involved
-      return this.article.date_published;
+      return this.product.date_published;
     },
   },
 

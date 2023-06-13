@@ -1,10 +1,10 @@
 <template>
-  <b-card id="publishedArticles" class="card-info">
+  <b-card id="publishedProducts" class="card-info">
     <h2 class="info-title d-flex separator mt-6 pb-2">
-      Add Published Articles
+      Add Published Products
     </h2>
     <p class="pt-3">
-      Drag/drop articles from the list below into the table of contents to the
+      Drag/drop products from the list below into the table of contents to the
       left.
     </p>
     <span>
@@ -14,8 +14,8 @@
           variant="link"
           class="pt-0 px-2"
           @click="showDatePicker = !showDatePicker"
-          title="Select Articles That Were Previously Published"
-          aria-label="Published Articles Calendar"
+          title="Select Products That Were Previously Published"
+          aria-label="Published Products Calendar"
         >
           <img
             :src="require('@assets/calendar-icon.svg')"
@@ -38,28 +38,28 @@
     <div class="pt-4 mb-8" v-else>
       <draggable
         id="add_published"
-        :group="{ name: 'wire-articles', pull: 'clone', put: false }"
+        :group="{ name: 'wire-products', pull: 'clone', put: false }"
         sort="false"
         class="list-unstyled"
         tag="ul"
-        :list="publishedArticles"
+        :list="publishedProducts"
         handle=".sort-handle"
         @remove="handleRemove"
       >
         <li
-          v-for="article in publishedArticles"
-          :key="article.id"
+          v-for="product in publishedProducts"
+          :key="product.id"
           class="feature sort-handle"
         >
-          <WireDocument :document="article.document" :mainView="false" />
+          <WireDocument :document="product.document" :mainView="false" />
         </li>
-        <li class="notFound pt-4" v-if="publishedArticles.length === 0">
+        <li class="notFound pt-4" v-if="publishedProducts.length === 0">
           <label v-if="selectedDateHasWire">
-            All articles from {{ selectedDate }} are already included in this
+            All products from {{ selectedDate }} are already included in this
             book.</label
           >
           <label v-else>
-            No WIRe articles were published on
+            No WIRe products were published on
             <span class="text-nowrap">{{ selectedDate }}</span> .</label
           >
         </li>
@@ -77,7 +77,7 @@ import draggable from "vuedraggable";
 import { mapState } from "vuex";
 
 export default {
-  name: "PublishedArticles",
+  name: "PublishedProducts",
   components: {
     Spinner,
     UniversalDateTimePicker,
@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       selectedDate: "recent",
-      publishedArticles: [],
+      publishedProducts: [],
       selectedDateHasWire: false,
       showDatePicker: false,
       working: false,
@@ -100,9 +100,9 @@ export default {
     },
   },
   mounted() {
-    this.loadAllPublishedArticles();
+    this.loadAllPublishedProducts();
     this.$bus.$on("featureUpdated", () => {
-      this.loadAllPublishedArticles();
+      this.loadAllPublishedProducts();
     });
   },
   destroyed() {
@@ -122,18 +122,18 @@ export default {
   methods: {
     dateChanged(newVal) {
       this.selectedDate = newVal;
-      this.loadAllPublishedArticles();
+      this.loadAllPublishedProducts();
     },
     handleRemove(evt) {
-      this.publishedArticles.splice(evt.oldDraggableIndex, 1);
+      this.publishedProducts.splice(evt.oldDraggableIndex, 1);
     },
-    loadAllPublishedArticles() {
+    loadAllPublishedProducts() {
       this.showDatePicker = false;
       this.working = true;
 
-      this.publishedArticles = [];
+      this.publishedProducts = [];
       return axios
-        .get("/articles", {
+        .get("/products", {
           params: {
             publication_date: this.selectedDate,
             filter_by_date: this.featureDate,
@@ -143,7 +143,7 @@ export default {
           this.selectedDate = this.$moment(response.data.date).format(
             "YYYY-MM-DD"
           );
-          this.publishedArticles = response.data.wireArticles;
+          this.publishedProducts = response.data.wireProducts;
           this.selectedDateHasWire = response.data.status === "ok";
           this.working = false;
         })
@@ -156,7 +156,7 @@ export default {
   watch: {
     $route() {
       this.selectedDate = "recent";
-      this.loadAllPublishedArticles();
+      this.loadAllPublishedProducts();
     },
   },
 };

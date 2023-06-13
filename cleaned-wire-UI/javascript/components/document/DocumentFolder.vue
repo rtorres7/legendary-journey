@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <b-modal
-      id="folder-article"
+      id="folder-product"
       size="sm"
       title="Add Document to Folders"
       title-class="modal-header-title"
@@ -102,7 +102,7 @@ export default {
       this.$store.dispatch("folders/loadFolders", { caller: this });
     },
     includedInFolder(folder) {
-      let doc = find(folder.articles, ["id", this.document.id]);
+      let doc = find(folder.products, ["id", this.document.id]);
       return doc !== undefined;
     },
     setSelectedFolders() {

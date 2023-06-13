@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="hasInlineInteractives || document.product_image"
-    class="col-xs-24 col-sm-8 col-md-8 col-lg-7 col-xl-6 pull-right article-image"
+    class="col-xs-24 col-sm-8 col-md-8 col-lg-7 col-xl-6 pull-right product-image"
   >
     <div class="thumbnail">
       <div v-if="document.standalone">
@@ -52,7 +52,7 @@ export default {
   computed: {
     imageUrl() {
       let cacheBuster = this.$moment(this.document.updated_at).valueOf();
-      return `/documents/${this.document.doc_num}/images/article?updated_at=${cacheBuster}`;
+      return `/documents/${this.document.doc_num}/images/product?updated_at=${cacheBuster}`;
     },
     inlineInteractives() {
       if (this.document.attachments_metadata) {

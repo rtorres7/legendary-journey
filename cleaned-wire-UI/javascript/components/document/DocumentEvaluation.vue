@@ -3,10 +3,10 @@
     <h2 class="pri-800 separator pb-4">_temp_251 Evaluation</h2>
 
     <span class="portion_marked_field"> (_temp_52) </span>
-    The National _temp_251 Enterprise (NHE) relies on its consumers to evaluate how
-    effectively its reporting satisfies their priority _temp_536
+    The National _temp_251 Enterprise (NHE) relies on its consumers to evaluate
+    how effectively its reporting satisfies their priority _temp_536
     requirements. Please provide formal feedback through the
-    <a class="link-in-article" :href="document.eval_form_url"
+    <a class="link-in-product" :href="document.eval_form_url"
       >_temp_251 Evaluation Questions</a
     >.
   </div>

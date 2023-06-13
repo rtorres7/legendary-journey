@@ -1,7 +1,7 @@
 <template>
   <b-row class="custom-gutters">
     <b-col
-      v-for="(article, ind) in articles"
+      v-for="(product, ind) in products"
       :key="ind"
       cols="24"
       :md="featured ? '24' : '12'"
@@ -10,7 +10,7 @@
     >
       <Card
         :key="ind"
-        :article="article"
+        :product="product"
         :hero="featured ? true : false"
         :preload-doc="featured ? true : false"
         :section="section"
@@ -29,7 +29,7 @@ export default {
   name: "CardViewRow",
 
   props: {
-    articles: {},
+    products: {},
     featured: { default: false },
     returnPath: {},
     section: {},

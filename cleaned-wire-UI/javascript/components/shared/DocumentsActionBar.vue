@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="articles.length > 0" class="d-flex mb-5">
+    <div v-if="products.length > 0" class="d-flex mb-5">
       <span v-if="removeable" class="ml-auto">
         <span class="pl-0" v-if="confirm">
           <b-button
@@ -72,7 +72,7 @@ export default {
   name: "DocumentsActionBar",
   components: { Spinner },
   props: {
-    articles: {
+    products: {
       type: Array,
       default: [],
     },
@@ -98,10 +98,10 @@ export default {
       confirm: false,
       confirmClicked: false,
       optionTitle: {
-        csv: "Metadata for each article",
-        pdf_book: "A single PDF of these articles",
-        pdf_list: "A ZIP file of PDFs for each article",
-        zip: "Each article in iPad-compliant format",
+        csv: "Metadata for each product",
+        pdf_book: "A single PDF of these products",
+        pdf_list: "A ZIP file of PDFs for each product",
+        zip: "Each product in iPad-compliant format",
       },
       optionCssClass: {
         csv: "fa-file-excel-o",
@@ -115,7 +115,7 @@ export default {
   computed: {
     ...mapState("metadata", ["exportFormatOptions"]),
     noDocSelected() {
-      return this.articles.filter((doc) => doc.selected == true).length == 0;
+      return this.products.filter((doc) => doc.selected == true).length == 0;
     },
     removeLabel() {
       return this.noDocSelected ? "Remove All" : "Remove Selected";

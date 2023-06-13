@@ -160,8 +160,8 @@ export default {
     importData(state, data) {
       state.searchId = data.searchId;
       state.searchName = data.searchName;
-      state.results = data.results.map((article) => {
-        return article;
+      state.results = data.results.map((product) => {
+        return product;
       });
       state.aggregations = data.aggregations;
       state.pages = Math.ceil(data.pages);
@@ -171,7 +171,7 @@ export default {
     },
 
     importMultimedia(state, data) {
-      state.results = data.articles;
+      state.results = data.products;
       state.pages = Math.ceil(data.pages);
       state.totalCount = data.totalCount;
       state.daClassifError = data.daClassifError;

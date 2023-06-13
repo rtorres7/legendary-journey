@@ -2,16 +2,16 @@
   <div>
     <b-row class="custom-gutters">
       <b-col
-        v-for="(article, ind) in all_articles"
+        v-for="(product, ind) in all_products"
         :key="ind"
         cols="24"
-        :md="ind < 2 && inFeaturedOrEnhancement(article) ? '24' : '12'"
-        :lg="ind < 2 && inFeaturedOrEnhancement(article) ? '12' : '8'"
+        :md="ind < 2 && inFeaturedOrEnhancement(product) ? '24' : '12'"
+        :lg="ind < 2 && inFeaturedOrEnhancement(product) ? '12' : '8'"
         class="custom-gutter-col"
       >
         <SiteEnhancementCard
           v-if="ind === 0 && siteEnhancementAvailable"
-          :article="article"
+          :product="product"
           section="featured"
           :return-path="$route.fullPath"
         />
@@ -19,7 +19,7 @@
           v-else
           :key="ind"
           :ind="ind"
-          :article="article"
+          :product="product"
           :hero="ind < 2"
           :preload-doc="ind < 2"
           section="featured"
@@ -41,19 +41,19 @@ export default {
   name: "Featured",
   components: { SiteEnhancementCard, Card, CardViewRow },
   computed: {
-    ...mapState("articles", ["featured", "more", "siteEnhancement"]),
-    all_articles() {
-      var articles = [];
+    ...mapState("products", ["featured", "more", "siteEnhancement"]),
+    all_products() {
+      var products = [];
       if (!isEmpty(this.siteEnhancement)) {
-        articles = articles.concat(this.siteEnhancement);
+        products = products.concat(this.siteEnhancement);
       }
       if (!isEmpty(this.featured)) {
-        articles = articles.concat(this.featured);
+        products = products.concat(this.featured);
       }
       if (!isEmpty(this.more)) {
-        articles = articles.concat(this.more);
+        products = products.concat(this.more);
       }
-      return articles;
+      return products;
     },
 
     siteEnhancementAvailable() {
@@ -62,14 +62,14 @@ export default {
   },
 
   methods: {
-    inFeaturedOrEnhancement(article) {
+    inFeaturedOrEnhancement(product) {
       if (!isEmpty(this.featured)) {
-        if (this.featured.includes(article)) {
+        if (this.featured.includes(product)) {
           return true;
         }
       }
       if (!isEmpty(this.siteEnhancement)) {
-        if (this.siteEnhancement.includes(article)) {
+        if (this.siteEnhancement.includes(product)) {
           return true;
         }
       }

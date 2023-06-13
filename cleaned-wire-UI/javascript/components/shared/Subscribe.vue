@@ -50,7 +50,7 @@ export default {
     ...mapState("metadata", ["agency", "name"]),
     modal_title() {
       if (this.name) {
-        return this.name + " Article Subscriptions";
+        return this.name + " Product Subscriptions";
       }
     },
     subscribe_text() {
@@ -60,7 +60,7 @@ export default {
           : "receive ";
         return (
           "<p>_temp_37 subscribers receive a daily table of contents with links " +
-          "to featured articles published in the last 24 hours.</p><p>" +
+          "to featured products published in the last 24 hours.</p><p>" +
           'Choose the "' +
           this.button_text +
           '" button below to ' +

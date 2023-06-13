@@ -40,7 +40,7 @@ export default {
   mixins: [frontPages],
 
   computed: {
-    ...mapState("articles", ["loading"]),
+    ...mapState("products", ["loading"]),
     ...mapState("user", ["user", "loading"]),
     ...mapState("metadata", ["featuresAvailable", "project"]),
     restricted() {
@@ -49,24 +49,24 @@ export default {
   },
 
   methods: {
-    getArticles() {
+    getProducts() {
       if (this.$route.params.date) {
         this.$store
-          .dispatch("articles/getOtherWire", this.$route.params.date)
+          .dispatch("products/getOtherWire", this.$route.params.date)
           .catch(
             function (e) {
               this.handleMissingFrontPage(e, this.$route.params.date);
             }.bind(this)
           );
       } else {
-        this.$store.dispatch("articles/getHomeArticles");
+        this.$store.dispatch("products/getHomeProducts");
       }
-      this.$store.dispatch("articles/getSideArticles");
+      this.$store.dispatch("products/getSideProducts");
     },
   },
 
   mounted() {
-    this.getArticles();
+    this.getProducts();
   },
 };
 </script>

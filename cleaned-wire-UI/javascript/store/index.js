@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-import articles from "./modules/articles";
+import products from "./modules/products";
 import alerts from "./modules/alerts";
 import document from "./modules/document";
 import exports from "./modules/exports";
@@ -32,7 +32,7 @@ export default new Vuex.Store({
   },
 
   modules: {
-    articles,
+    products,
     alerts,
     concepts,
     document,

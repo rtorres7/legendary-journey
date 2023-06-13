@@ -11,36 +11,36 @@
       class="flex flex-wrap sm:absolute sm:space-x-4 sm:left-1/2 sm:-translate-x-1/2"
     >
       <div>
-        <template v-if="!navigation.previousArticle">
+        <template v-if="!navigation.previousProduct">
           <MaxButton disabled> Previous </MaxButton>
         </template>
         <template v-else>
           <MaxButton
             tabIndex="0"
-            @click="goToArticle(navigation.previousArticle)"
-            @keyup.enter="goToArticle(navigation.previousArticle)"
+            @click="goToProduct(navigation.previousProduct)"
+            @keyup.enter="goToProduct(navigation.previousProduct)"
           >
             Previous
           </MaxButton>
         </template>
       </div>
       <div class="hidden self-center truncate text-sm mr-2 md:block">
-        Featured Product {{ navigation.currentArticle.position }} of
-        {{ navigation.totalArticles }}
+        Featured Product {{ navigation.currentProduct.position }} of
+        {{ navigation.totalProducts }}
       </div>
       <div class="self-center truncate text-sm mx-2 md:hidden">
-        {{ navigation.currentArticle.position }} of
-        {{ navigation.totalArticles }}
+        {{ navigation.currentProduct.position }} of
+        {{ navigation.totalProducts }}
       </div>
       <div>
-        <template v-if="!navigation.nextArticle">
+        <template v-if="!navigation.nextProduct">
           <MaxButton disabled> Next </MaxButton>
         </template>
         <template v-else>
           <MaxButton
             tabIndex="0"
-            @click="goToArticle(navigation.nextArticle)"
-            @keyup.enter="goToArticle(navigation.nextArticle)"
+            @click="goToProduct(navigation.nextProduct)"
+            @keyup.enter="goToProduct(navigation.nextProduct)"
           >
             Next
           </MaxButton>
@@ -69,7 +69,7 @@ export default {
       router.push({ name: "home" });
     };
 
-    const goToArticle = ({ doc_num }) => {
+    const goToProduct = ({ doc_num }) => {
       router.push({
         name: "product",
         params: {
@@ -80,7 +80,7 @@ export default {
 
     return {
       returnHome,
-      goToArticle,
+      goToProduct,
     };
   },
 };

@@ -43,13 +43,13 @@ export default {
   actions: {
     exportFolder(
       { state, commit },
-      { exportType, folderId, articleIds, caller }
+      { exportType, folderId, productIds, caller }
     ) {
       state.showSpinner = true;
       axios({
         method: "post",
         _temp_1: `/my_wire/folders/${folderId}/export.${exportType}`,
-        data: { docs: articleIds },
+        data: { docs: productIds },
       })
         .then((response) => {
           state.showSpinner = false;
@@ -67,19 +67,19 @@ export default {
           );
         });
     },
-    removeArticlesFromFolder(
+    removeProductsFromFolder(
       { state, commit },
-      { folderId, articleIds, caller }
+      { folderId, productIds, caller }
     ) {
       state.showSpinner = true;
-      let articlesList = {};
-      articleIds.map((articleId) => (articlesList[articleId] = 1));
+      let productsList = {};
+      productIds.map((productId) => (productsList[productId] = 1));
       let pageNum = caller.$route.query.page || 1;
 
       axios({
         method: "put",
         _temp_1: `/my_wire/folders/${folderId}`,
-        data: { docs: articlesList, page: pageNum },
+        data: { docs: productsList, page: pageNum },
       })
         .then((response) => {
           state.showSpinner = false;
@@ -89,7 +89,7 @@ export default {
             "Documents removed",
             `Selected documents have been removed from the folder '${folder.name}'.`
           );
-          folder.articles = response.data.articles;
+          folder.products = response.data.products;
           folder.document_count = response.data.document_count;
           folder.pages = response.data.pages;
           if (pageNum > folder.pages) {
@@ -104,7 +104,7 @@ export default {
         })
         .catch((error) => {
           state.showSpinner = false;
-          notifyErrorToUser(caller, "removing articles", error.message);
+          notifyErrorToUser(caller, "removing products", error.message);
         });
     },
     loadFolders({ state, commit }, { caller }) {
@@ -126,7 +126,7 @@ export default {
         })
         .catch((error) => {
           state.loading = false;
-          notifyErrorToUser(caller, "loading articles", error.message);
+          notifyErrorToUser(caller, "loading products", error.message);
         });
     },
     createFolder({ state, dispatch }, { folderName, docNum, caller }) {
