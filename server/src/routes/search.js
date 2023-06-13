@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const SearchService = require("../services/search.js");
-const searchService = new SearchService(process.env.ES_URL);
+const ProductSearchService = require("../services/product-search-service");
+const searchService = new ProductSearchService(process.env.ES_URL);
 const Metadata = require("../models/metadata");
 
 const DISPLAY_NAMES = { producing_offices: 'Authored By Organizations' };

@@ -5,7 +5,6 @@ const request = require('supertest');
 const express = require("express");
 
 const { Client } = require("@elastic/elasticsearch");
-const constant = require("../../src/util/constant");
 const { loadElasticSearch, loadArticlesIntoMongo } = require("../__utils__/dataLoader");
 
 describe('Home Routes', () => {
@@ -23,8 +22,10 @@ describe('Home Routes', () => {
 
     esContainer = await new ElasticsearchContainer().start();
     const client = new Client({ node: esContainer.getHttpUrl() });
+    process.env.ES_URL=esContainer.getHttpUrl();
 
     // Setup index
+    const constant = require("../../src/util/constant");
     await client.indices.create({
       index: 'products',
       mappings: constant.indices[0].mappings,
@@ -36,7 +37,6 @@ describe('Home Routes', () => {
     app = express();
     app.use(express.json());
 
-    process.env.ES_URL=esContainer.getHttpUrl();
     const router = require('../../src/routes/home');
     app.use('/home', router);
   }, 70_000);

@@ -79,8 +79,8 @@ esClient.cluster.health({}, function (err, resp) {
     });
 
     const Article = require("./models/articles");
-    const IndexService = require("./services/index");
-    const indexService = new IndexService();
+    const ProductSearchService = require("./services/product-search-service");
+    const productSearchService = new ProductSearchService();
 
     Article.find(
       {},
@@ -90,7 +90,7 @@ esClient.cluster.health({}, function (err, resp) {
         }
 
         articles.forEach(article => {
-          indexService.create(article.indexable);
+          productSearchService.create(article.indexable);
         });
       }
     );

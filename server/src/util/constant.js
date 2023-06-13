@@ -1,4 +1,4 @@
-const esNode = "http://elasticsearch:9200";
+const esNode = process.env.ES_URL || "http://elasticsearch:9200";
 const indices = [
   {
     index: "products",
