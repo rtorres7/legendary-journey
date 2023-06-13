@@ -109,19 +109,25 @@
           <p
             v-if="
               product.producing_offices &&
-              product.producing_offices.length !== 0
+              product.producing_offices?.values?.length !== 0
             "
           >
             <span class="font-semibold">Authored By: </span>
-            {{ product.producing_offices.join(", ") }}
+            {{ product.producing_offices.values.map((a) => a.name).join(", ") }}
           </p>
-          <p v-if="product.coordinators && product.coordinators.length !== 0">
+          <p
+            v-if="
+              product.coordinators && product.coordinators?.values?.length !== 0
+            "
+          >
             <span class="font-semibold">Coordinated With: </span>
-            {{ product.coordinators.join(", ") }}
+            {{ product.coordinators.values.map((a) => a.name).join(", ") }}
           </p>
-          <p v-if="product.coauthors && product.coauthors.length !== 0">
+          <p
+            v-if="product.coauthors && product.coauthors?.values?.length !== 0"
+          >
             <span class="font-semibold">Co-Authored By: </span>
-            {{ product.coauthors.join(", ") }}
+            {{ product.coauthors.values.map((a) => a.name).join(", ") }}
           </p>
           <p v-if="product.published_by && canManageWire">
             <span class="font-semibold">Published By: </span>

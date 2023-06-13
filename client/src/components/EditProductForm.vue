@@ -943,10 +943,10 @@ export default {
       classification: "",
       classificationXML: "",
       countries: [],
-      dissemOrgs: [],
-      coordinators: [],
-      coauthors: [],
-      producing_offices: [],
+      dissemOrgs: { displayName: "Audience", values: [] },
+      coordinators: { displayName: "Coordinators", values: [] },
+      coauthors: { displayName: "Coauthors", values: [] },
+      producing_offices: { displayName: "Producing Offices", values: [] },
       editorData: "",
       nonStateActors: [],
       pocInfo: "",
@@ -1128,18 +1128,19 @@ export default {
         (country) => country.code
       );
       payload.value.topics = updatedProduct.topics.map((topic) => topic.code);
-      payload.value.coordinators = updatedProduct.coordinators.map(
+      payload.value.coordinators = updatedProduct.coordinators.values.map(
         (coordinator) => coordinator.code
       );
       payload.value.nonStateActors = updatedProduct.nonStateActors.map(
         (nonStateActor) => nonStateActor.name
       );
-      payload.value.coauthors = updatedProduct.coauthors.map(
+      payload.value.coauthors = updatedProduct.coauthors.values.map(
         (coauthors) => coauthors.code
       );
-      payload.value.producing_offices = updatedProduct.producing_offices.map(
-        (producing_office) => producing_office.code
-      );
+      payload.value.producing_offices =
+        updatedProduct.producing_offices.values.map(
+          (producing_office) => producing_office.code
+        );
     };
 
     const updateForm = (updatedProduct) => {

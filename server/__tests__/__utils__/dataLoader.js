@@ -4,7 +4,7 @@ const Metadata = require("../../src/models/metadata");
 const { Client } = require("@elastic/elasticsearch");
 const mongoose = require("mongoose");
 
-const { Sequelize } = require('sequelize');
+const { Sequelize } = require("sequelize");
 
 const articles = [
   new Article({
@@ -19,44 +19,50 @@ const articles = [
     ],
     createdAt: new Date("2022-09-01T13:16:43Z"),
     datePublished: new Date("2022-09-01"),
-    dissemOrgs: [
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "BANKING",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Banking",
-        id: 3,
-        label: "Banking",
-        legacy: false,
-        name: "BANKING",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-    ],
+    dissemOrgs: {
+      displayName: "Audience",
+      values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "BANKING",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Banking",
+          id: 3,
+          label: "Banking",
+          legacy: false,
+          name: "BANKING",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+      ],
+    },
     htmlBody:
       '<p><span class="portion_marked_field"> (U) </span><i><strong>Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths.</strong></i><a class="source-reference">[1]</a> As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two. </p><p><span class="portion_marked_field"> (U) </span>Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit. </p><p><span class="portion_marked_field">(U) </span>A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider. <section class="digression"><div class="digression-content"><p><span class="portion_marked_field"> (U) </span><i>For additional information, please see the wires: </i><p><a href=""><span class="portion_marked_field"> (U) </span><i>Covid: Why you should consider vaccination.</i></a><i> 31 October 2021</i></p><p><a href=""><span class="portion_marked_field"> (U) </span><i>Covid and the flu: is the flu as deadly as Covid19?</i></a> <i> 18 December 2021</i></p></p></div></section></p>',
-    _id: '64709619aa530082dd5cc40e',
+    _id: "64709619aa530082dd5cc40e",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by East Asia.",
-    producingOffices: [
-      {
-        name: "EDUCATION",
-        code: "EDUCATION"
-      }
-    ],
+    producingOffices: {
+      displayName: "Producing Offices",
+      values: [
+        {
+          name: "EDUCATION",
+          code: "EDUCATION",
+        },
+      ],
+    },
     productNumber: "WIReWIRe_sample_1",
     productType: {
       name: "Current",
@@ -66,11 +72,11 @@ const articles = [
       {
         name: "Asia",
         code: "AS",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
-      code: "analysis.all_source"
+      code: "analysis.all_source",
     },
     state: "posted",
     subregions: [
@@ -113,25 +119,28 @@ const articles = [
     ],
     createdAt: new Date("2022-08-31T13:00:00Z"),
     datePublished: new Date("2022-09-02"),
-    dissemOrgs: [
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "ANCESTRY",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Ancestry",
-        id: 1,
-        label: "Ancestry",
-        legacy: false,
-        name: "ANCESTRY",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-    ],
+    dissemOrgs: {
+      displayName: "Audience",
+      values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "ANCESTRY",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Ancestry",
+          id: 1,
+          label: "Ancestry",
+          legacy: false,
+          name: "ANCESTRY",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+      ],
+    },
     htmlBody: [
       "(U) Kyiv, Ukraine – The speed of the Ukrainian military’s counteroffensive in the eastern Kharkiv region is nothing short of breakneck.",
       "(U) Three dozen towns and villages have been liberated from the Russian forces who fled eastwards and offered little or no resistance, analysts say.",
@@ -142,8 +151,8 @@ const articles = [
       "(U) “The Russian Defence Ministry made a decision – that apparently came from the very top – to fully withdraw forces from Kharkiv and to use the available resources to hold on to the positions in Donetsk, and perhaps, the border of Luhansk,” Mitrokhin said.",
       "(U) “The aftertaste is that all of this is but a remake of Russia’s retreat from northern Ukraine in April,” he said.",
       "(U) Moscow called the April retreat from four regions, including Kyiv, a “goodwill gesture,” but Ukrainian officials and analysts said it was caused by grave miscalculations and heavy losses in manpower and military equipment.",
-    ].join(''),
-    _id: '64709619aa530082dd5cc416',
+    ].join(""),
+    _id: "64709619aa530082dd5cc416",
     images: [],
     issues: [
       {
@@ -158,12 +167,15 @@ const articles = [
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: [
-      {
-        name: "ANCESTRY",
-        code: "ANCESTRY"
-      }
-    ],
+    producingOffices: {
+      displayName: "Producing Offices",
+      values: [
+        {
+          name: "ANCESTRY",
+          code: "ANCESTRY",
+        },
+      ],
+    },
     productNumber: "WIReWIRe_sample_2",
     productType: {
       name: "Community Product",
@@ -177,7 +189,7 @@ const articles = [
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -192,7 +204,7 @@ const articles = [
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "The Russians abandoned next to no artillery or armoured vehicles, and their retreat from the heavily-fortified area did not look like a panicked flight that followed heavy fighting, according to videos from the area and Ukrainian military reports.",
@@ -226,25 +238,28 @@ const articles = [
     ],
     createdAt: new Date("2022-08-30T13:00:00Z"),
     datePublished: new Date("2022-09-03"),
-    dissemOrgs: [
-      {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
-        code: "COMMERCE",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Commerce",
-        id: 4,
-        label: "Commerce",
-        legacy: false,
-        name: "COMMERCE",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
-      },
-    ],
+    dissemOrgs: {
+      displayName: "Audience",
+      values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "POLICY",
+          code: "COMMERCE",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Dept of Commerce",
+          id: 4,
+          label: "Commerce",
+          legacy: false,
+          name: "COMMERCE",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+      ],
+    },
     htmlBody: [
       "(U) Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.",
       "(U) More than 30 settlements, including Kramatorsk and Dnipro, suffered Russian missile and air strikes over the past day, Ukraine’s General Staff said in its regular update on Facebook Monday. Kharkiv, one of at least two power plants struck by rockets, had power restored only to lose it again later on Monday after being repeatedly shelled, Interfax-Ukraine reported, citing the city’s mayor.",
@@ -253,24 +268,27 @@ const articles = [
       "(U) The strikes hint at efforts to retaliate after a sudden breakthrough by Ukraine that sent Russian troops fleeing and put Moscow on the defensive. Ukraine’s top commander said that 3,000 square kilometers (1,158 square miles) of lost territory have been returned to Kyiv’s control since the beginning of September.",
       "(U) Peskov brushed off concerns over the hasty retreat in the northeast as Putin presided over a government meeting in Moscow at which he assured that the economy is returning to normal and has repelled the western sanctions imposed over the war. Chechen strongman Ramzan Kadyrov announced that he was sending a new detachment to fight in Ukraine.",
       "(U) But with a lack of manpower and rapidly depleting equipment likely to become a growing concern for Russia’s forces, the risk is that Ukraine could try to cut off the Kremlin’s overstretched forces in the south and threaten Crimea, the person close to the Defense Ministry said.",
-    ].join(''),
-    _id: '64709619aa530082dd5cc423',
+    ].join(""),
+    _id: "64709619aa530082dd5cc423",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: [
-      {
-        name: "ANCESTRY",
-        code: "ANCESTRY",
-      }
-    ],
+    producingOffices: {
+      displayName: "Producing Offices",
+      values: [
+        {
+          name: "ANCESTRY",
+          code: "ANCESTRY",
+        },
+      ],
+    },
     productNumber: "WIReWIRe_sample_3",
     productType: {
       name: "Current",
@@ -280,7 +298,7 @@ const articles = [
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -291,7 +309,7 @@ const articles = [
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.",
@@ -321,29 +339,32 @@ const articles = [
     ],
     createdAt: new Date("2022-08-29T13:00:00Z"),
     datePublished: new Date("2022-09-04"),
-    dissemOrgs: [],
+    dissemOrgs: { displayName: "Audience", values: [] },
     htmlBody: [
       "(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.",
       "(U) Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit.",
       "(U) A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider.",
-    ].join(''),
-    _id: '64709619aa530082dd5cc42b',
+    ].join(""),
+    _id: "64709619aa530082dd5cc42b",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: [
-      {
-        name: "AGRICULTURE",
-        code: "AGRICULTURE",
-      }
-    ],
+    producingOffices: {
+      displayName: "Producing Offices",
+      values: [
+        {
+          name: "AGRICULTURE",
+          code: "AGRICULTURE",
+        },
+      ],
+    },
     productNumber: "WIReWIRe_sample_4",
     productType: {
       name: "Current",
@@ -353,7 +374,7 @@ const articles = [
       {
         name: "Europe",
         code: "EU",
-      }
+      },
     ],
     reportingType: {
       name: "Analysis: All Source",
@@ -364,7 +385,7 @@ const articles = [
       {
         name: "Europe, Central",
         code: "EUce",
-      }
+      },
     ],
     summary:
       "Summary: There isn't any major update regarding covid numbers in today's report.",
@@ -388,29 +409,32 @@ const articles = [
     countries: [],
     createdAt: new Date("2022-08-28T13:00:00Z"),
     datePublished: new Date("2022-09-05"),
-    dissemOrgs: [],
+    dissemOrgs: { displayName: "Audience", values: [] },
     htmlBody: [
       "(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.",
       "(U) Charles gave the speech from Westminster Hall in London in a traditional ceremony in which lawmakers expressed their condolences upon the death of Queen Elizabeth II. She died Thursday at age 96.",
       '(U) "As I stand before you today, I cannot help but feel the weight of history which surrounds us, and which reminds us of the vital parliamentary traditions to which members of both houses dedicate yourselves with such personal commitment to the betterment of us all," Charles III said.',
     ].join(),
-    _id: '64709619aa530082dd5cc432',
+    _id: "64709619aa530082dd5cc432",
     images: [],
     issues: [
       {
         name: "Eastern Europe Geopolitics",
         code: "EEG",
-      }
+      },
     ],
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: [
-      {
-        name: "COMMERCE",
-        code: "COMMERCE",
-      },
-    ],
+    producingOffices: {
+      displayName: "Producing Offices",
+      values: [
+        {
+          name: "COMMERCE",
+          code: "COMMERCE",
+        },
+      ],
+    },
     productNumber: "WIReWIRe_sample_5",
     productType: {
       name: "Current",
@@ -446,14 +470,14 @@ const loadElasticSearch = async (esUrl) => {
 
   for (const article of articles) {
     await client.index({
-      index: 'products',
+      index: "products",
       body: article.indexable,
-      id: article.id
+      id: article.id,
     });
   }
 
-  await client.indices.refresh({ index: 'products' });
-}
+  await client.indices.refresh({ index: "products" });
+};
 
 const loadMetadata = async (mongoUrl) => {
   const metadata = new Metadata({
@@ -469,214 +493,220 @@ const loadMetadata = async (mongoUrl) => {
           },
         ],
       },
-      coauthors: [
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "ANCESTRY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Ancestry",
-          id: 1,
-          label: "Ancestry",
-          legacy: false,
-          name: "ANCESTRY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "AGRICULTURE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Agriculture",
-          id: 2,
-          label: "Agriculture",
-          legacy: false,
-          name: "AGRICULTURE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "BANKING",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Banking",
-          id: 3,
-          label: "Banking",
-          legacy: false,
-          name: "BANKING",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "COMMERCE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Commerce",
-          id: 4,
-          label: "Commerce",
-          legacy: false,
-          name: "COMMERCE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "EDUCATION",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Education",
-          id: 5,
-          label: "Education",
-          legacy: false,
-          name: "EDUCATION",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "TREASURY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Treasury",
-          id: 6,
-          label: "Treasury",
-          legacy: false,
-          name: "TREASURY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-      ],
-      coordinators: [
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "ANCESTRY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Ancestry",
-          id: 1,
-          label: "Ancestry",
-          legacy: false,
-          name: "ANCESTRY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "AGRICULTURE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Agriculture",
-          id: 2,
-          label: "Agriculture",
-          legacy: false,
-          name: "AGRICULTURE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "BANKING",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Banking",
-          id: 3,
-          label: "Banking",
-          legacy: false,
-          name: "BANKING",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "COMMERCE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Commerce",
-          id: 4,
-          label: "Commerce",
-          legacy: false,
-          name: "COMMERCE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "EDUCATION",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Education",
-          id: 5,
-          label: "Education",
-          legacy: false,
-          name: "EDUCATION",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "TREASURY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Treasury",
-          id: 6,
-          label: "Treasury",
-          legacy: false,
-          name: "TREASURY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-      ],
+      coauthors: {
+        displayName: "Coauthors",
+        values: [
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "ANCESTRY",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Ancestry",
+            id: 1,
+            label: "Ancestry",
+            legacy: false,
+            name: "ANCESTRY",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "AGRICULTURE",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Agriculture",
+            id: 2,
+            label: "Agriculture",
+            legacy: false,
+            name: "AGRICULTURE",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "BANKING",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Banking",
+            id: 3,
+            label: "Banking",
+            legacy: false,
+            name: "BANKING",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "COMMERCE",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Commerce",
+            id: 4,
+            label: "Commerce",
+            legacy: false,
+            name: "COMMERCE",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "EDUCATION",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Education",
+            id: 5,
+            label: "Education",
+            legacy: false,
+            name: "EDUCATION",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "TREASURY",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Treasury",
+            id: 6,
+            label: "Treasury",
+            legacy: false,
+            name: "TREASURY",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+        ],
+      },
+      coordinators: {
+        displayName: "Coordinators",
+        values: [
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "ANCESTRY",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Ancestry",
+            id: 1,
+            label: "Ancestry",
+            legacy: false,
+            name: "ANCESTRY",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "AGRICULTURE",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Agriculture",
+            id: 2,
+            label: "Agriculture",
+            legacy: false,
+            name: "AGRICULTURE",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "BANKING",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Banking",
+            id: 3,
+            label: "Banking",
+            legacy: false,
+            name: "BANKING",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "COMMERCE",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Commerce",
+            id: 4,
+            label: "Commerce",
+            legacy: false,
+            name: "COMMERCE",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "EDUCATION",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Education",
+            id: 5,
+            label: "Education",
+            legacy: false,
+            name: "EDUCATION",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "TREASURY",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Treasury",
+            id: 6,
+            label: "Treasury",
+            legacy: false,
+            name: "TREASURY",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+        ],
+      },
       countries: {
         displayName: "Countries",
         values: [
@@ -2164,110 +2194,113 @@ const loadMetadata = async (mongoUrl) => {
           },
         ],
       },
-      producing_offices: [
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "ANCESTRY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Ancestry",
-          id: 1,
-          label: "Ancestry",
-          legacy: false,
-          name: "ANCESTRY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "AGRICULTURE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Agriculture",
-          id: 2,
-          label: "Agriculture",
-          legacy: false,
-          name: "AGRICULTURE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "BANKING",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Banking",
-          id: 3,
-          label: "Banking",
-          legacy: false,
-          name: "BANKING",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "COMMERCE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Commerce",
-          id: 4,
-          label: "Commerce",
-          legacy: false,
-          name: "COMMERCE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "EDUCATION",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Education",
-          id: 5,
-          label: "Education",
-          legacy: false,
-          name: "EDUCATION",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "TREASURY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Treasury",
-          id: 6,
-          label: "Treasury",
-          legacy: false,
-          name: "TREASURY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-      ],
+      producing_offices: {
+        displayName: "Producing Offices",
+        values: [
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "ANCESTRY",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Ancestry",
+            id: 1,
+            label: "Ancestry",
+            legacy: false,
+            name: "ANCESTRY",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "AGRICULTURE",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Agriculture",
+            id: 2,
+            label: "Agriculture",
+            legacy: false,
+            name: "AGRICULTURE",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "BANKING",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Banking",
+            id: 3,
+            label: "Banking",
+            legacy: false,
+            name: "BANKING",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "COMMERCE",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Commerce",
+            id: 4,
+            label: "Commerce",
+            legacy: false,
+            name: "COMMERCE",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "EDUCATION",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Education",
+            id: 5,
+            label: "Education",
+            legacy: false,
+            name: "EDUCATION",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+          {
+            ancestry: "1000",
+            ancestry_depth: 1,
+            category: "POLICY",
+            code: "TREASURY",
+            created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+            description: "Dept of Treasury",
+            id: 6,
+            label: "Treasury",
+            legacy: false,
+            name: "TREASURY",
+            ntk_org: true,
+            position: 2,
+            updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+            usgov_org: true,
+            visible: true,
+          },
+        ],
+      },
       product_types: {
         displayName: "Product Types",
         values: [
@@ -2374,7 +2407,10 @@ const loadMetadata = async (mongoUrl) => {
           {
             name: "Analysis: All Source",
             code: "analysis.all_source",
-            productTypes: [1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382, 10383, 10384, 10385],
+            productTypes: [
+              1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382,
+              10383, 10384, 10385,
+            ],
           },
           {
             name: "Reporting: Enterprise",
@@ -2805,7 +2841,7 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
 
   for (let article of articles) {
     if (Array.isArray(article.htmlBody)) {
-      article.htmlBody = article.htmlBody.join('');
+      article.htmlBody = article.htmlBody.join("");
     }
     await article.save();
   }
@@ -2815,56 +2851,62 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
 const loadSavedProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const savedProductModel = require('../../src/models/saved_product');
+  const savedProductModel = require("../../src/models/saved_product");
   savedProductModel(sequelize);
 
   await sequelize.models.SavedProduct.sync();
 
   await sequelize.models.SavedProduct.create({
-    productId: 'WIReWIRe_sample_1',
-    createdBy: 1
+    productId: "WIReWIRe_sample_1",
+    createdBy: 1,
   });
-}
+};
 
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const collectionModel = require('../../src/models/collection');
+  const collectionModel = require("../../src/models/collection");
   collectionModel(sequelize);
 
   await sequelize.models.Collection.sync();
 
   await sequelize.models.Collection.create({
-    name: 'Sample Collection',
-    description: 'Sample Collection description',
-    createdBy: 1
+    name: "Sample Collection",
+    description: "Sample Collection description",
+    createdBy: 1,
   });
-}
+};
 
 const loadCollectionProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const collectionModel = require('../../src/models/collection');
+  const collectionModel = require("../../src/models/collection");
   collectionModel(sequelize);
 
-  const savedProductModel = require('../../src/models/saved_product');
+  const savedProductModel = require("../../src/models/saved_product");
   savedProductModel(sequelize);
 
-  const collectionProductsModel = require('../../src/models/collection_products');
+  const collectionProductsModel = require("../../src/models/collection_products");
   collectionProductsModel(sequelize);
 
   await sequelize.models.Collection.sync();
   await sequelize.models.SavedProduct.sync();
   await sequelize.models.CollectionProducts.sync();
 
-  sequelize.models.Collection.belongsToMany(sequelize.models.SavedProduct, { through: sequelize.models.CollectionProducts });
-  sequelize.models.SavedProduct.belongsToMany(sequelize.models.Collection, { through: sequelize.models.CollectionProducts });
+  sequelize.models.Collection.belongsToMany(sequelize.models.SavedProduct, {
+    through: sequelize.models.CollectionProducts,
+  });
+  sequelize.models.SavedProduct.belongsToMany(sequelize.models.Collection, {
+    through: sequelize.models.CollectionProducts,
+  });
 
   const savedProducts = await sequelize.models.SavedProduct.findAll();
-  const collection = await sequelize.models.Collection.findOne({ include: sequelize.models.SavedProduct });
+  const collection = await sequelize.models.Collection.findOne({
+    include: sequelize.models.SavedProduct,
+  });
 
   collection.addSavedProducts(savedProducts);
-}
+};
 
 module.exports = {
   loadElasticSearch,
@@ -2873,4 +2915,4 @@ module.exports = {
   loadSavedProducts,
   loadCollections,
   loadCollectionProducts,
-}
+};
