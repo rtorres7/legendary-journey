@@ -1,31 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
-const SearchService = require("../services/search.js");
-const searchService = new SearchService(process.env.ES_URL);
-const Article = require("../models/articles");
+const ProductService = require('../services/product-service');
+const productService = new ProductService();
+
 const { handleMongooseError } = require("../util/errors");
 
 // GET home page features
-router.get("/features", (req, res) => {
-  Article.find(
-    {},
-    function (error, articles) {
-      handleMongooseError("Unable to find articles", error);
+router.get("/features", async (req, res) => {
+  try {
+    const featuresAndBriefs = await productService.findFeaturesAndBriefs();
+    addAttributesToBriefs(featuresAndBriefs.briefs);
 
-      (async() => {
-        const results = await searchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385, 10386] });
-        const briefs = results.hits.hits.map(hit => hit._source);
-
-        addAttributesToBriefs(briefs);
-
-        res.json({
-          featured: articles.map(article => article.features),
-          briefs: briefs || [],
-        });
-      })();
-    }
-  ).sort({ _id: -1 });
+    res.json(featuresAndBriefs);
+  } catch (error) {
+    // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+    handleMongooseError('Unable to find features and briefs', error);
+    res.json({ error: 'Unable to find features and briefs' });
+  }
 });
 
 // TODO: This is needed until the UI has been updated with the new model/fields

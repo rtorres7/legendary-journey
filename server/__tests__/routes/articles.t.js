@@ -11,7 +11,6 @@ const {
   loadElasticSearch,
 } = require("../__utils__/dataLoader");
 const { Client } = require("@elastic/elasticsearch");
-const constant = require("../../src/util/constant");
 
 describe("Article Routes", () => {
   let mongoContainer;
@@ -36,8 +35,10 @@ describe("Article Routes", () => {
 
     esContainer = await new ElasticsearchContainer().start();
     esClient = new Client({ node: esContainer.getHttpUrl() });
+    process.env.ES_URL=esContainer.getHttpUrl();
 
     // Setup index
+    const constant = require("../../src/util/constant");
     await esClient.indices.create({
       index: "products",
       mappings: constant.indices[0].mappings,
@@ -49,9 +50,8 @@ describe("Article Routes", () => {
     app = express();
     app.use(express.json());
 
-    process.env.ES_URL = esContainer.getHttpUrl();
-    const router = require("../../src/routes/articles");
-    app.use("/articles", router);
+    const router = require('../../src/routes/articles');
+    app.use('/articles', router);
   }, 70_000);
 
   beforeEach(async () => {

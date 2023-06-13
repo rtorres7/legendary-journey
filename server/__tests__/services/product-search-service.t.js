@@ -1,16 +1,17 @@
 const { ElasticsearchContainer } = require("testcontainers");
 const { Client } = require("@elastic/elasticsearch");
-const SearchService = require("../../src/services/search");
+const ProductSearchService = require("../../src/services/product-search-service");
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
 
-describe('SearchService', () => {
+describe('ProductSearchService', () => {
   let service;
   let container;
+  let client;
 
   beforeAll(async () => {
     container = await new ElasticsearchContainer().start();
-    const client = new Client({ node: container.getHttpUrl() });
+    client = new Client({ node: container.getHttpUrl() });
 
     // Setup index
     await client.indices.create({
@@ -27,7 +28,7 @@ describe('SearchService', () => {
   });
 
   beforeEach(() => {
-    service = new SearchService(container.getHttpUrl());
+    service = new ProductSearchService(container.getHttpUrl());
   });
 
   describe('search', () => {
@@ -257,6 +258,58 @@ describe('SearchService', () => {
 
       const ids = result.hits.hits.map((hit) => hit._source.productNumber);
       expect(ids).toStrictEqual(["WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+  });
+
+  describe('create', () => {
+    it('should index the given product', async () => {
+      const product = {
+        id: 'SampleInsert-1',
+        htmlBody: 'This is a test'
+      };
+
+      await service.create(product);
+
+      expect((await client.get({ index: "products", id: product.id }))._source).toStrictEqual(product);
+    });
+  });
+
+  describe('update', () => {
+    it('should update the given product in the index', async () => {
+      const product = {
+        id: 'SampleInsert-1',
+        htmlBody: 'This is a test'
+      };
+
+      await service.create(product);
+
+      expect((await client.get({ index: "products", id: product.id }))._source).toStrictEqual(product);
+
+      const updatedProduct = {
+        id: 'SampleInsert-1',
+        htmlBody: 'This should be updated'
+      };
+
+      await service.update(updatedProduct);
+
+      expect((await client.get({ index: "products", id: product.id }))._source).toStrictEqual(updatedProduct);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete the given product from the index', async () => {
+      const product = {
+        id: 'SampleInsert-1',
+        htmlBody: 'This is a test'
+      };
+
+      await service.create(product);
+
+      expect((await client.get({ index: "products", id: product.id }))._source).toStrictEqual(product);
+
+      await service.delete('SampleInsert-1');
+
+      expect((await client.exists({ index: "products", id: product.id }))).toBeFalsy();
     });
   });
 });
