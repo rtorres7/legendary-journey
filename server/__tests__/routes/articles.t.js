@@ -35,7 +35,7 @@ describe("Article Routes", () => {
 
     esContainer = await new ElasticsearchContainer().start();
     esClient = new Client({ node: esContainer.getHttpUrl() });
-    process.env.ES_URL=esContainer.getHttpUrl();
+    process.env.ES_URL = esContainer.getHttpUrl();
 
     // Setup index
     const constant = require("../../src/util/constant");
@@ -50,8 +50,8 @@ describe("Article Routes", () => {
     app = express();
     app.use(express.json());
 
-    const router = require('../../src/routes/articles');
-    app.use('/articles', router);
+    const router = require("../../src/routes/articles");
+    app.use("/articles", router);
   }, 70_000);
 
   beforeEach(async () => {
@@ -120,13 +120,10 @@ describe("Article Routes", () => {
         doc_num: original.productNumber,
         countries: ["AFG"],
         topics: ["TERR"],
-        producing_offices: {
-          displayName: "Producing Offices",
-          values: ["ANCESTRY", "OTHER"],
-        },
-        coauthors: { displayName: "Coauthors", values: ["ANCESTRY"] },
-        coordinators: { displayName: "Coordinators", values: ["ANCESTRY"] },
-        dissem_orgs: { displayName: "Audience", values: ["ANCESTRY"] },
+        producing_offices: ["ANCESTRY", "OTHER"],
+        coauthors: ["ANCESTRY"],
+        coordinators: ["ANCESTRY"],
+        dissem_orgs: ["ANCESTRY"],
         product_type_id: 10378,
       };
 

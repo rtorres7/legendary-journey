@@ -943,10 +943,10 @@ export default {
       classification: "",
       classificationXML: "",
       countries: [],
-      dissemOrgs: { displayName: "Audience", values: [] },
-      coordinators: { displayName: "Coordinators", values: [] },
-      coauthors: { displayName: "Coauthors", values: [] },
-      producing_offices: { displayName: "Producing Offices", values: [] },
+      dissemOrgs: [],
+      coordinators: [],
+      coauthors: [],
+      producing_offices: [],
       editorData: "",
       nonStateActors: [],
       pocInfo: "",
@@ -1128,17 +1128,17 @@ export default {
         (country) => country.code
       );
       payload.value.topics = updatedProduct.topics.map((topic) => topic.code);
-      payload.value.coordinators = updatedProduct.coordinators.values.map(
+      payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
       payload.value.nonStateActors = updatedProduct.nonStateActors.map(
         (nonStateActor) => nonStateActor.name
       );
-      payload.value.coauthors = updatedProduct.coauthors.values.map(
+      payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
       payload.value.producing_offices =
-        updatedProduct.producing_offices.values.map(
+        updatedProduct.producing_offices.map(
           (producing_office) => producing_office.code
         );
     };

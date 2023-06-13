@@ -131,7 +131,7 @@ async function updateArticle(id, req, res) {
   const dissemOrgs = await metadataService.findDissemOrgsFor(req.body.dissem_orgs);
   const productType = await metadataService.findProductType(req.body.product_type_id);
   const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
-  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
+  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.nonStateActors);
 
   const article = {
     classification: req.body.classification,

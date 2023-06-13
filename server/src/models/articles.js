@@ -12,15 +12,12 @@ const ArticleSchema = new Schema(
         code: String,
       },
     ],
-    coordinators: {
-      displayName: String,
-      values: [
-        {
-          name: String,
-          code: String,
-        },
-      ],
-    },
+    coordinators: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     countries: [
       {
         name: String,
@@ -29,15 +26,12 @@ const ArticleSchema = new Schema(
     ],
     createdAt: Date,
     datePublished: Date,
-    dissemOrgs: {
-      displayName: String,
-      values: [
-        {
-          name: String,
-          code: String,
-        },
-      ],
-    },
+    dissemOrgs: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     htmlBody: String,
     images: [],
     issues: [
@@ -58,15 +52,12 @@ const ArticleSchema = new Schema(
     ],
     orgRestricted: Boolean,
     pocInfo: String,
-    producingOffices: {
-      displayName: "Producing Offices",
-      values: [
-        {
-          name: String,
-          code: String,
-        },
-      ],
-    },
+    producingOffices: [
+      {
+        name: String,
+        code: String,
+      },
+    ],
     productNumber: String,
     productType: {
       name: String,
@@ -208,7 +199,7 @@ ArticleSchema.virtual("indexable").get(function () {
     orgRestricted: this.orgRestricted || false,
     producingOffices:
       this.producingOffices &&
-      this.producingOffices.values.map((office) => office.code),
+      this.producingOffices.map((office) => office.code),
     productNumber: this.productNumber,
     productType: this.productType && this.productType.code,
     regions: this.regions && this.regions.map((region) => region.code),
@@ -276,12 +267,9 @@ ArticleSchema.virtual("data.details").get(function () {
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
-    coauthors:
-      this.coauthors.values &&
-      this.coauthors.values.map((author) => author.name), // UI needs a list not the objects right now
+    coauthors: this.coauthors && this.coauthors.map((author) => author.name), // UI needs a list not the objects right now
     coordinators:
-      this.coordinators.values &&
-      this.coordinators.values.map((coord) => coord.name), // UI needs a list not the objects right now
+      this.coordinators && this.coordinators.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
