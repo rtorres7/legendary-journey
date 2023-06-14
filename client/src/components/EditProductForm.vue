@@ -598,7 +598,9 @@
                               <p class="font-medium">
                                 {{ attachment.file_name }}
                               </p>
-                              <p>{{ fileSizeInKb(attachment.file_size) }}</p>
+                              <p>
+                                {{ convertedFileSize(attachment.file_size) }}
+                              </p>
                             </div>
                             <div class="flex justify-between text-sm">
                               <p>{{ formatDate(attachment.created_at) }}</p>
@@ -778,7 +780,7 @@ import { productDetails } from "@/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { formatDate } from "@/helpers";
 import {
   BriefcaseIcon,
@@ -1137,10 +1139,9 @@ export default {
       payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
-      payload.value.producing_offices =
-        updatedProduct.producing_offices.map(
-          (producing_office) => producing_office.code
-        );
+      payload.value.producing_offices = updatedProduct.producing_offices.map(
+        (producing_office) => producing_office.code
+      );
     };
 
     const updateForm = (updatedProduct) => {
@@ -1359,9 +1360,14 @@ export default {
       });
     };
 
-    const fileSizeInKb = (fileSize) => {
-      const kb = parseFloat(fileSize) * 0.001;
-      return Math.round(kb);
+    const convertedFileSize = (fileSize) => {
+      let kb = parseFloat(fileSize) * 0.001;
+      if (kb > 1000) {
+        let mb = kb * 0.001;
+        return Math.round(mb * 10.0) / 10.0 + "MB";
+      } else {
+        return Math.round(kb * 10.0) / 10.0 + "KB";
+      }
     };
 
     const removeDocument = (attachmentID, doc_num) => {
@@ -1588,7 +1594,7 @@ export default {
       uploadThumbnail,
       onInputChange,
       onDrop,
-      fileSizeInKb,
+      convertedFileSize,
       removeDocument,
       deleteDocument,
       publishProduct,
