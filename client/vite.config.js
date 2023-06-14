@@ -14,7 +14,6 @@ export default defineConfig({
     vue(),
     ckeditor5({ theme: require.resolve("@ckeditor/ckeditor5-theme-lark") }),
   ],
-  assetsInclude: ["**/*.md"],
   resolve: {
     alias: [
       {
