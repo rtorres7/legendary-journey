@@ -1,15 +1,11 @@
-let file;
 let data;
 if (
   import.meta.env.MODE === "production" ||
   import.meta.env.MODE === "development"
 ) {
-  file = "/production.metadata.json";
-  const fetchedData = await fetch(file);
-  data = fetchedData.json();
+  //TODO: We have to create a production.metadata.json in the root of the project for this not to fail. We need to figure out a better way in order to avoid this.
+  data = await import("../../../production.metadata.json");
 } else {
-  file = "./low.metadata.json";
-  const importedData = await import(file);
-  data = importedData;
+  data = await import("./low.metadata.json");
 }
 export const metadata = data;
