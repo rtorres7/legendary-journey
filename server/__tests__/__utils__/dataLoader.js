@@ -49,6 +49,12 @@ const articles = [
       },
     ],
     needed: {},
+    nonStateActors: [
+      {
+        code: 'EU',
+        name: 'EU',
+      }
+    ],
     orgRestricted: false,
     pocInfo: "(U) Produced by East Asia.",
     producingOffices: [
@@ -156,6 +162,16 @@ const articles = [
       },
     ],
     needed: {},
+    nonStateActors: [
+      {
+        code: 'EU',
+        name: 'EU',
+      },
+      {
+        code: 'NATO',
+        name: 'NATO',
+      },
+    ],
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
     producingOffices: [

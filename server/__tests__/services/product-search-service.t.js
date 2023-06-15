@@ -259,6 +259,24 @@ describe('ProductSearchService', () => {
       const ids = result.hits.hits.map((hit) => hit._source.productNumber);
       expect(ids).toStrictEqual(["WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
+
+    it('should allow filtering on non state actors with single actor', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { non_state_actors: ['EU'] });
+      expect(result.hits.hits.length).toEqual(2);
+      expect(result.hits.total.value).toEqual(2);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+    });
+
+    it('should allow filtering on non state actor with multiple actors using AND', async ()=> {
+      const result = await service.search('', 10, 1, 'desc', { non_state_actors: ['EU', 'NATO'] });
+      expect(result.hits.hits.length).toEqual(1);
+      expect(result.hits.total.value).toEqual(1);
+
+      const ids = result.hits.hits.map((hit) => hit._source.productNumber);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
+    });
   });
 
   describe('create', () => {
