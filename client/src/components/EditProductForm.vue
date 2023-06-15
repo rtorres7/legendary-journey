@@ -1130,18 +1130,19 @@ export default {
         (country) => country.code
       );
       payload.value.topics = updatedProduct.topics.map((topic) => topic.code);
-      payload.value.coordinators = updatedProduct.coordinators.map(
+      payload.value.coordinators = updatedProduct.coordinators.values.map(
         (coordinator) => coordinator.code
       );
       payload.value.nonStateActors = updatedProduct.nonStateActors.map(
         (nonStateActor) => nonStateActor.name
       );
-      payload.value.coauthors = updatedProduct.coauthors.map(
+      payload.value.coauthors = updatedProduct.coauthors.values.map(
         (coauthors) => coauthors.code
       );
-      payload.value.producing_offices = updatedProduct.producing_offices.map(
-        (producing_office) => producing_office.code
-      );
+      payload.value.producing_offices =
+        updatedProduct.producing_offices.values.map(
+          (producing_office) => producing_office.code
+        );
     };
 
     const updateForm = (updatedProduct) => {
@@ -1208,7 +1209,7 @@ export default {
       }
       form.value.dissemOrgs = dissemsToSelect;
       const coordinatorsToSelect = [];
-      updatedProduct.coordinators.forEach((coordinatorsFromBackend) => {
+      updatedProduct.coordinators.values.forEach((coordinatorsFromBackend) => {
         let coordinatorsValue = getValueForCode(
           lists.coordinators,
           coordinatorsFromBackend.code
@@ -1217,7 +1218,7 @@ export default {
       });
       form.value.coordinators = coordinatorsToSelect;
       const coauthorsToSelect = [];
-      updatedProduct.coauthors.forEach((coauthorsFromBackend) => {
+      updatedProduct.coauthors.values.forEach((coauthorsFromBackend) => {
         let coauthorsValue = getValueForCode(
           lists.coauthors,
           coauthorsFromBackend.code
@@ -1226,7 +1227,7 @@ export default {
       });
       form.value.coauthors = coauthorsToSelect;
       const producing_officesToSelect = [];
-      updatedProduct.producing_offices.forEach(
+      updatedProduct.producing_offices.values.forEach(
         (producing_officesFromBackend) => {
           let producing_officesValue = getValueForCode(
             lists.producing_offices,
