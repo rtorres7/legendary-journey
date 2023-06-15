@@ -926,7 +926,7 @@ export default {
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
-      dissemOrgs: criteria.value.dissem_orgs,
+      dissemOrgs: criteria.value.dissem_orgs.values,
       producing_offices: criteria.value.producing_offices,
       coordinators: criteria.value.coordinators,
       coauthors: criteria.value.coauthors,
@@ -1176,7 +1176,7 @@ export default {
       });
       form.value.nonStateActors = actorsToSelect;
       const dissemsToSelect = [];
-      updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
+      updatedProduct.dissem_orgs.values.forEach((dissemFromBackend) => {
         //if statement is temporary until high side backend starts returning dissem orgs as an object
         if (
           import.meta.env.MODE !== "production" &&

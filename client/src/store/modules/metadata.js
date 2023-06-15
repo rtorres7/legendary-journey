@@ -62,10 +62,13 @@ export default {
       state.criteria = {
         classification: metadata.criteria.classification.values,
         countries: metadata.criteria.countries.values,
-        dissem_orgs: metadata.criteria.dissem_orgs.values,
-        coordinators: metadata.criteria.coordinators.values,
-        coauthors: metadata.criteria.coauthors.values,
-        producing_offices: metadata.criteria.producing_offices.values,
+        dissem_orgs: metadata.criteria.dissem_orgs,
+        coordinators: metadata.criteria.coordinators,
+        coauthors: metadata.criteria.coauthors,
+        producing_offices: {
+          displayName: "Producing Offices",
+          values: metadata.criteria.producing_offices,
+        },
         domestic_regions: metadata.criteria.domestic_regions.values,
         fisa_role: metadata.criteria.fisa_role.values,
         issues: metadata.criteria.issues.values,

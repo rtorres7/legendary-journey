@@ -159,7 +159,7 @@
                   v-for="n in [
                     queryFilters.media_types,
                     queryFilters.producing_offices,
-                    queryFilters.non_state_actors,
+                    // queryFilters.non_state_actors,
                     // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
@@ -596,7 +596,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { productDetails } from "@/data";
 import axios from "@/config/wireAxios";
 import {
@@ -899,15 +899,15 @@ export default {
       };
       const producingOffices = {
         items: buildItems(
-          criteria.value.producing_offices,
+          criteria.value.producing_offices.values,
           "producing_offices[]"
         ),
         types: ["producing_offices[]"],
       };
-      const nonStateActors = {
-        items: buildItems(criteria.value.non_state_actors, "nonStateActors[]"),
-        types: ["nonStateActors[]"],
-      };
+      // const nonStateActors = {
+      //   items: buildItems(criteria.value.non_state_actors, "nonStateActors[]"),
+      //   types: ["nonStateActors[]"],
+      // };
       return {
         regions: {
           label: "Regions & Countries",
@@ -944,13 +944,13 @@ export default {
           types: mediaTypes.types,
           component: "MaxListbox",
         },
-        non_state_actors: {
-          label: "Non State Actors",
-          model: currentModel(nonStateActors),
-          list: nonStateActors.items,
-          types: nonStateActors.types,
-          component: "MaxListBox",
-        },
+        // non_state_actors: {
+        //   label: "Non State Actors",
+        //   model: currentModel(nonStateActors),
+        //   list: nonStateActors.items,
+        //   types: nonStateActors.types,
+        //   component: "MaxListBox",
+        // },
         producing_offices: {
           label: "Authored By Organizations",
           model: currentModel(producingOffices),
@@ -1002,7 +1002,7 @@ export default {
         case "product_types[]":
           return criteria.value.product_types;
         case "producing_offices[]":
-          return criteria.value.producing_offices;
+          return criteria.value.producing_offices.values;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":
