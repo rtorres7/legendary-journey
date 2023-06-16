@@ -899,7 +899,7 @@ export default {
       };
       const producingOffices = {
         items: buildItems(
-          criteria.value.producing_offices.values,
+          criteria.value.producing_offices,
           "producing_offices[]"
         ),
         types: ["producing_offices[]"],

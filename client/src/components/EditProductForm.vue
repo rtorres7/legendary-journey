@@ -926,7 +926,7 @@ export default {
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
-      dissemOrgs: criteria.value.dissem_orgs.values,
+      dissemOrgs: criteria.value.dissem_orgs,
       producing_offices: criteria.value.producing_offices,
       coordinators: criteria.value.coordinators,
       coauthors: criteria.value.coauthors,
@@ -1125,24 +1125,24 @@ export default {
     };
 
     const updatePayload = (updatedProduct) => {
+      console.log("updatedProduct: ", updatedProduct);
       payload.value = Object.assign({}, updatedProduct);
       payload.value.countries = updatedProduct.countries.map(
         (country) => country.code
       );
       payload.value.topics = updatedProduct.topics.map((topic) => topic.code);
-      payload.value.coordinators = updatedProduct.coordinators.values.map(
+      payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
       payload.value.nonStateActors = updatedProduct.nonStateActors.map(
         (nonStateActor) => nonStateActor.name
       );
-      payload.value.coauthors = updatedProduct.coauthors.values.map(
+      payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
       );
-      payload.value.producing_offices =
-        updatedProduct.producing_offices.values.map(
-          (producing_office) => producing_office.code
-        );
+      payload.value.producing_offices = updatedProduct.producing_offices.map(
+        (producing_office) => producing_office.code
+      );
     };
 
     const updateForm = (updatedProduct) => {
@@ -1177,7 +1177,7 @@ export default {
       });
       form.value.nonStateActors = actorsToSelect;
       const dissemsToSelect = [];
-      updatedProduct.dissem_orgs.values.forEach((dissemFromBackend) => {
+      updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
         //if statement is temporary until high side backend starts returning dissem orgs as an object
         if (
           import.meta.env.MODE !== "production" &&
@@ -1209,7 +1209,7 @@ export default {
       }
       form.value.dissemOrgs = dissemsToSelect;
       const coordinatorsToSelect = [];
-      updatedProduct.coordinators.values.forEach((coordinatorsFromBackend) => {
+      updatedProduct.coordinators.forEach((coordinatorsFromBackend) => {
         let coordinatorsValue = getValueForCode(
           lists.coordinators,
           coordinatorsFromBackend.code
@@ -1218,7 +1218,7 @@ export default {
       });
       form.value.coordinators = coordinatorsToSelect;
       const coauthorsToSelect = [];
-      updatedProduct.coauthors.values.forEach((coauthorsFromBackend) => {
+      updatedProduct.coauthors.forEach((coauthorsFromBackend) => {
         let coauthorsValue = getValueForCode(
           lists.coauthors,
           coauthorsFromBackend.code
@@ -1227,7 +1227,7 @@ export default {
       });
       form.value.coauthors = coauthorsToSelect;
       const producing_officesToSelect = [];
-      updatedProduct.producing_offices.values.forEach(
+      updatedProduct.producing_offices.forEach(
         (producing_officesFromBackend) => {
           let producing_officesValue = getValueForCode(
             lists.producing_offices,
