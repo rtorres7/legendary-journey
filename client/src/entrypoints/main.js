@@ -31,12 +31,26 @@ Object.entries(componentFiles).forEach(([path, m]) => {
   app.component(componentName, m.default);
 });
 
-app
-  .use(SimpleTypeahead)
-  .use(store)
-  .use(router)
-  .use(CKEditor)
-  .use(VueTippy, {
-    defaultProps: { animation: "scale", arrow: false, theme: "pegasus" },
-  })
-  .mount("#app");
+const setup = async () => {
+  if (
+    import.meta.env.MODE === "production" ||
+    import.meta.env.MODE === "development"
+  ) {
+    const fetchedData = await fetch("/production.metadata.json");
+    app.provide("metadata", await fetchedData.json());
+  } else {
+    const metadata = await import("@/config/low.metadata.json");
+    app.provide("metadata", metadata);
+  }
+  app
+    .use(SimpleTypeahead)
+    .use(store)
+    .use(router)
+    .use(CKEditor)
+    .use(VueTippy, {
+      defaultProps: { animation: "scale", arrow: false, theme: "pegasus" },
+    })
+    .mount("#app");
+};
+
+setup();

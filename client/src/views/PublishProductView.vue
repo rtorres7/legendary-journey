@@ -462,10 +462,9 @@
 
 <script>
 import { productDetails } from "@/data";
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { useCookies } from "vue3-cookies";
 import axios from "@/config/wireAxios";
-import { metadata } from "@/config";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -492,6 +491,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+    const metadata = inject("metadata");
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
     const loadingPreview = ref(true);

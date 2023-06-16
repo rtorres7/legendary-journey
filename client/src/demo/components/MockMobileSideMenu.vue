@@ -132,8 +132,7 @@
 
 <script>
 import { getValueForCode } from "@/helpers";
-import { metadata } from "@/config";
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import {
@@ -168,6 +167,7 @@ export default {
   },
   emits: ["close"],
   setup(props, { emit }) {
+    const metadata = inject("metadata");
     const store = useStore();
     const router = useRouter();
     const loadingMetadata = computed(() => store.state.metadata.loading);
