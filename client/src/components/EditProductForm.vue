@@ -1125,6 +1125,7 @@ export default {
     };
 
     const updatePayload = (updatedProduct) => {
+      console.log("updatedProduct: ", updatedProduct);
       payload.value = Object.assign({}, updatedProduct);
       payload.value.countries = updatedProduct.countries.map(
         (country) => country.code

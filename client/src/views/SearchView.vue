@@ -159,7 +159,7 @@
                   v-for="n in [
                     // queryFilters.media_types,
                     queryFilters.producing_offices,
-                    queryFilters.non_state_actors,
+                    // queryFilters.non_state_actors,
                     // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
@@ -1005,7 +1005,7 @@ export default {
         case "product_types[]":
           return criteria.value.product_types;
         case "producing_offices[]":
-          return criteria.value.producing_offices;
+          return criteria.value.producing_offices.values;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":
