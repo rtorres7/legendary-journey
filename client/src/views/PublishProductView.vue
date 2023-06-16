@@ -202,23 +202,25 @@
                       >Edit</span
                     >
                   </router-link>
-                  <button
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                    @click.prevent="openPreviewDialog(product)"
-                  >
-                    <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
-                      class="pl-3"
-                      >Preview</span
+                  <template v-if="!restrictedProduct(product)">
+                    <button
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                      @click.prevent="openPreviewDialog(product)"
                     >
-                  </button>
-                  <button
-                    class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
-                    @click.prevent="openDeleteDialog(product)"
-                  >
-                    <TrashIcon class="h-5 w-5" /><span class="pl-3"
-                      >Delete</span
+                      <DocumentMagnifyingGlassIcon class="h-5 w-5" /><span
+                        class="pl-3"
+                        >Preview</span
+                      >
+                    </button>
+                    <button
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                      @click.prevent="openDeleteDialog(product)"
                     >
-                  </button>
+                      <TrashIcon class="h-5 w-5" /><span class="pl-3"
+                        >Delete</span
+                      >
+                    </button>
+                  </template>
                 </div>
                 <div class="flex h-fit lg:hidden space-x-4">
                   <tippy content="Edit Product">
@@ -474,7 +476,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
-import { getValueForCode } from "@/helpers";
+import { getValueForCode, hasProductAccess } from "@/helpers";
 import ProductContent from "@/components/ProductContent.vue";
 import ProductImage from "@/components/ProductImage.vue";
 
@@ -499,6 +501,7 @@ export default {
     const loadingCriteria = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
     const articles = computed(() => store.state.wires.articles);
+    const organization = computed(() => store.getters["user/organization"]);
     const loadingArticles = computed(() => store.state.wires.loading);
     const createNotification = inject("create-notification");
     const { cookies } = useCookies();
@@ -523,6 +526,20 @@ export default {
               (a) => a.attributes.product_type === "Community Product"
             );
       }
+    };
+
+    const restrictedProduct = (product) => {
+      let productToCheck = product;
+      if (import.meta.env.MODE === "offline") {
+        let documentMatch = productDetails.find(
+          ({ data }) => data.doc_num === product.doc_num
+        );
+        productToCheck = documentMatch.data;
+      }
+      if (hasProductAccess(productToCheck, organization.value)) {
+        return false;
+      }
+      return true;
     };
 
     const selectedProductType = ref();
@@ -779,6 +796,7 @@ export default {
       showOnlyDrafts,
       drafts,
       filterArticles,
+      restrictedProduct,
       availableProductTypes,
       goToArticle,
       selectDate,
