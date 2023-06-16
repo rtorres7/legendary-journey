@@ -157,7 +157,7 @@
               >
                 <template
                   v-for="n in [
-                    queryFilters.media_types,
+                    // queryFilters.media_types,
                     queryFilters.producing_offices,
                     // queryFilters.non_state_actors,
                     // queryFilters.frontpage_featured,
@@ -893,10 +893,10 @@ export default {
         items: buildItems(criteria.value.classification, "classification[]"),
         types: ["classification[]"],
       };
-      const mediaTypes = {
-        items: buildItems(criteria.value.media_tags, "media_tags[]"),
-        types: ["media_tags[]"],
-      };
+      // const mediaTypes = {
+      //   items: buildItems(criteria.value.media_tags, "media_tags[]"),
+      //   types: ["media_tags[]"],
+      // };
       const producingOffices = {
         items: buildItems(
           criteria.value.producing_offices,
@@ -904,10 +904,13 @@ export default {
         ),
         types: ["producing_offices[]"],
       };
-      // const nonStateActors = {
-      //   items: buildItems(criteria.value.non_state_actors, "nonStateActors[]"),
-      //   types: ["nonStateActors[]"],
-      // };
+      const nonStateActors = {
+        items: buildItems(
+          criteria.value.non_state_actors,
+          "non_state_actors[]"
+        ),
+        types: ["non_state_actors[]"],
+      };
       return {
         regions: {
           label: "Regions & Countries",
@@ -937,20 +940,20 @@ export default {
           types: classifications.types,
           component: "MaxListbox",
         },
-        media_types: {
-          label: "Media Types",
-          model: currentModel(mediaTypes),
-          list: mediaTypes.items,
-          types: mediaTypes.types,
+        // media_types: {
+        //   label: "Media Types",
+        //   model: currentModel(mediaTypes),
+        //   list: mediaTypes.items,
+        //   types: mediaTypes.types,
+        //   component: "MaxListbox",
+        // },
+        non_state_actors: {
+          label: "Actors",
+          model: currentModel(nonStateActors),
+          list: nonStateActors.items,
+          types: nonStateActors.types,
           component: "MaxListbox",
         },
-        // non_state_actors: {
-        //   label: "Non State Actors",
-        //   model: currentModel(nonStateActors),
-        //   list: nonStateActors.items,
-        //   types: nonStateActors.types,
-        //   component: "MaxListBox",
-        // },
         producing_offices: {
           label: "Authored By Organizations",
           model: currentModel(producingOffices),

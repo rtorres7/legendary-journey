@@ -796,7 +796,6 @@ import {
   DocumentIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import { metadata } from "@/config";
 import { mockDocument } from "@/data";
 import {
   UploadableFile,
@@ -872,6 +871,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
