@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { metadata } from "@/config";
 import AttachmentView from "../views/AttachmentView.vue";
 import EditProductView from "../views/EditProductView.vue";
 import HomeView from "../views/HomeView.vue";
@@ -18,7 +17,7 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: {
-      title: metadata.application_name,
+      title: "Current",
     },
   },
   {
@@ -163,7 +162,7 @@ router.beforeEach((to, from, next) => {
         break;
     }
   } else {
-    document.title = to.meta.title ? to.meta.title : metadata.application_name;
+    document.title = to.meta.title ? to.meta.title : "Current";
   }
   next();
 });

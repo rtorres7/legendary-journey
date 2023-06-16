@@ -314,8 +314,7 @@
 
 <script>
 import { getValueForCode } from "@/helpers";
-import { metadata } from "@/config";
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import MobileSideMenuDisclosure from "@/components/MobileSideMenuDisclosure.vue";
@@ -364,6 +363,7 @@ export default {
   setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
+    const metadata = inject("metadata");
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const criteria = computed(() => store.state.metadata.criteria);
 

@@ -60,11 +60,10 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/outline";
-import { metadata } from "@/config";
 
 let searchMatches = ["United Nations", "Zelensky"];
 
@@ -77,6 +76,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
+    const metadata = inject("metadata");
     const typeaheadRef = ref(null);
     const removeSearch = ref(false);
 

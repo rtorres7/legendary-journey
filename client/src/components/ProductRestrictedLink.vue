@@ -42,8 +42,7 @@
   </MaxDialog>
 </template>
 <script>
-import { metadata } from "@/config";
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { isProductLocked } from "@/helpers";
 
 export default {
@@ -54,6 +53,7 @@ export default {
     },
   },
   setup(props) {
+    const metadata = inject("metadata");
     const userAccess = () => {
       if (props.product?.org_restricted && props.product?.needed.orgs) {
         return props.product.needed.orgs.length > 1

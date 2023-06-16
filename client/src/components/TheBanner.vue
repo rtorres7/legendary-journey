@@ -10,15 +10,15 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import BannerNav from "@/components/BannerNav.vue";
-import { metadata } from "@/config";
 
 export default {
   components: {
     BannerNav,
   },
   setup() {
+    const metadata = inject("metadata");
     const hasAcknowledged = ref(sessionStorage.getItem("acknowledged"));
 
     const removeSystemMessage = () => {
