@@ -144,6 +144,12 @@ class MetadataService {
       return await Metadata.findOne().lean().exec();
     });
   }
+
+  async clearCache() {
+    if (this.cache) {
+      await this.cache.reset();
+    }
+  }
 }
 
 module.exports = MetadataService;

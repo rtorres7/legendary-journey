@@ -76,8 +76,8 @@ class WorkspaceService {
     const savedProduct = await models.SavedProduct.findOne({ where: { id: savedProductId } });
 
     if (collection && savedProduct) {
-      collection.addSavedProduct(savedProduct);
-      return collection;
+      await collection.addSavedProduct(savedProduct);
+      return await collection.reload({ include: models.SavedProduct });
     }
 
     return null;
@@ -88,8 +88,8 @@ class WorkspaceService {
     const savedProduct = await models.SavedProduct.findOne({ where: { id: savedProductId } });
 
     if (collection && savedProduct) {
-      collection.removeSavedProduct(savedProduct);
-      return collection;
+      await collection.removeSavedProduct(savedProduct);
+      return await collection.reload({ include: models.SavedProduct });
     }
 
     return null;
