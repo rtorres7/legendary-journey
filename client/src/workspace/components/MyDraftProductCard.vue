@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8 cursor-pointer"
+    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8"
   >
     <div class="text-gray-500 hover:text-gray-900 absolute top-3 right-3">
       <Menu as="div" class="relative">
@@ -36,14 +36,27 @@
               </div>
             </MenuItem>
             <MenuItem>
-              <div
-                class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+              <router-link
+                :to="{
+                  name: 'edit',
+                  params: {
+                    date: dayjs(product.attributes.date_published).format(
+                      'YYYY-MM-DD'
+                    ),
+                    id: product.attributes.id,
+                    doc_num: product.attributes.doc_num,
+                  },
+                }"
               >
-                <PencilSquareIcon class="h-5 w-5" aria-hidden="true" /><span
-                  class="capitalize"
-                  >Edit</span
+                <div
+                  class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                 >
-              </div>
+                  <PencilSquareIcon class="h-5 w-5" aria-hidden="true" /><span
+                    class="capitalize"
+                    >Edit</span
+                  >
+                </div>
+              </router-link>
             </MenuItem>
             <MenuItem>
               <div
@@ -59,24 +72,38 @@
         </transition>
       </Menu>
     </div>
-    <div class="flex items-center space-x-4">
-      <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
-      <div class="text-xs text-gray-500">
-        {{ product.attributes.product_type_name }}
-      </div>
-    </div>
-    <p
-      class="font-semibold text-gray-700 line-clamp-2 mt-4"
-      :title="`${product.attributes.title_classification} ${product.title}`"
-    >
-      <span
-        v-if="product.attributes.title_classification"
-        class="font-medium text-gray-500"
-        >({{ product.attributes.title_classification }})</span
+    <div class="cursor-pointer hover:underline">
+      <router-link
+        :to="{
+          name:
+            product.attributes.state === 'draft'
+              ? 'product-preview'
+              : 'product',
+          params: { doc_num: product.attributes.doc_num },
+        }"
       >
-      {{ product.title }}
-    </p>
-    <div class="text-sm text-gray-500 mt-4">15 hours ago</div>
+        <div class="flex items-center space-x-4">
+          <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
+          <div class="text-xs text-gray-500">
+            {{ product.attributes.product_type_name }}
+          </div>
+        </div>
+        <p
+          class="font-semibold text-gray-700 line-clamp-2 mt-4"
+          :title="`${product.attributes.title_classification} ${product.title}`"
+        >
+          <span
+            v-if="product.attributes.title_classification"
+            class="font-medium text-gray-500"
+            >({{ product.attributes.title_classification }})</span
+          >
+          {{ product.title }}
+        </p>
+        <div class="text-sm text-gray-500 mt-4">
+          {{ dayjs(product.attributes.date_published).format("YYYY-MM-DD") }}
+        </div>
+      </router-link>
+    </div>
   </div>
 </template>
 <script>
@@ -87,6 +114,7 @@ import {
   ShareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
+import dayjs from "dayjs/esm/index.js";
 export default {
   components: {
     Menu,
@@ -110,13 +138,14 @@ export default {
   },
   setup(props) {
     //dont need this stuff. will delete
-    const getImg = (src) => {
-      return new URL("/src/assets/mocks/" + src, import.meta.url).href;
-    };
+    // const getImg = (src) => {
+    //   return new URL("/src/assets/mocks/" + src, import.meta.url).href;
+    // };
     console.log("???????", props.product);
 
     return {
-      getImg,
+      // getImg,
+      dayjs,
     };
   },
 };

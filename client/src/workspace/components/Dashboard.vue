@@ -11,8 +11,12 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
-        <template v-for="product in myDrafts" :key="product">
-          <MyDraftProductCard :product="product" type="product" />
+        <template v-for="(product, index) in myDrafts" :key="product">
+          <MyDraftProductCard
+            v-show="index < 4"
+            :product="product"
+            type="product"
+          />
         </template>
       </div>
     </template>
@@ -29,9 +33,14 @@
     <div
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
     >
-      <MyPublishedProductCard :product="products[0]" type="product" />
-      <MyPublishedProductCard :product="products[1]" type="product" />
-      <MyPublishedProductCard
+      <template v-for="(product, index) in myPublished" :key="product">
+        <MyPublishedProductCard
+          v-show="index < 4"
+          :product="product"
+          type="product"
+        />
+        <!-- <MyPublishedProductCard :product="products[1]" type="product" /> -->
+        <!-- <MyPublishedProductCard
         :product="products[2]"
         type="product"
         class="hidden lg:flex"
@@ -40,7 +49,8 @@
         :product="products[3]"
         type="product"
         class="hidden 2xl:flex"
-      />
+      /> -->
+      </template>
     </div>
     <div class="py-6 flex items-center">
       <div class="text-lg font-bold">Your Stats</div>
@@ -100,9 +110,9 @@ export default {
     const store = useStore();
     const currentUsername = computed(() => store.state.user.user.name);
     const myDrafts = ref([]);
-    const myProducts = ref([]);
+    const myPublished = ref([]);
     const loadingDrafts = ref(true);
-    const loadingProducts = ref(true);
+    const loadingPublished = ref(true);
 
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
@@ -121,6 +131,15 @@ export default {
             console.log("Couldn't retrieve drafts");
           }
         });
+        axios.get("workspace/recent").then((response) => {
+          loadingPublished.value = false;
+          if (response.data) {
+            myPublished.value = response.data.content;
+            console.log("published:", myPublished.value);
+          } else {
+            console.log("Couldn't retrieve published products");
+          }
+        });
       }
     });
 
@@ -131,9 +150,9 @@ export default {
       collectionProducts,
       currentUsername,
       myDrafts,
-      myProducts,
+      myPublished,
       loadingDrafts,
-      loadingProducts,
+      loadingPublished,
     };
   },
 };

@@ -1,14 +1,15 @@
 <template>
   <div
-    class="flex flex-col bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg cursor-pointer mb-2"
+    class="flex flex-col bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg cursor-pointer hover:underline mb-2"
   >
     <div class="max-h-[261px]">
-      <img :src="getImg(product.src)" alt="" />
+      <!-- <img :src="getImg(product.src)" alt="" /> -->
+      <ProductImage :product="product" />
     </div>
     <div class="h-full flex flex-col py-4 justify-between">
       <div class="relative pb-6 px-4">
         <div class="text-xs text-blue-700 font-medium pb-2">
-          {{ product.type }}
+          {{ product.attributes.product_type_name }}
         </div>
         <p
           class="font-semibold text-gray-700 line-clamp-3"
@@ -136,6 +137,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
+import ProductImage from "@/components/ProductImage.vue";
 export default {
   components: {
     Menu,
@@ -149,6 +151,7 @@ export default {
     StarIcon,
     TrashIcon,
     XMarkIcon,
+    ProductImage,
   },
   props: {
     product: {
