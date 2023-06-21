@@ -24,7 +24,7 @@ router.get("/date/:date", async (req, res) => {
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
     handleMongooseError(`Unable to find articles for date ${req.params.date}`, error);
-    res.json({ error: `Unable to find articles for date ${req.params.date}: ${error}` });
+    res.json({ error: `Unable to find articles for date ${req.params.date}: ${error.message}` });
   }
 });
 
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
     handleMongooseError(`Unable to find article with product number ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with product number ${req.params.id}: ${error}`});
+    res.json({ error:  `Unable to find article with product number ${req.params.id}: ${error.message}`});
   }
 });
 
@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
 
   const article = new Article({
     createdAt: dayjs().toDate(),
-    datePublished: req.body.date_published || dayjs.utc().format(),
+    datePublished: req.body.date_published || dayjs().format(),
     htmlBody: req.body.html_body,
     issues: issues,
     needed: {},
@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
     const savedArticle = await productService.createProduct(article);
     res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
   } catch (error) {
-    res.json({ error: `There was a problem creating product: ${error}`});
+    res.json({ error: `There was a problem creating product: ${error.message}`});
   }
 });
 
@@ -97,7 +97,7 @@ router.get("/:id/edit", async (req, res) => {
     res.json(product.data.document);
   } catch (error) {
     handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error}`});
+    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error.message}`});
   }
 });
 
@@ -107,7 +107,7 @@ router.get("/:id/view", async (req, res) => {
     res.json(product.data.details);
   } catch (error) {
     handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error}`});
+    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error.message}`});
   }
 });
 
@@ -175,7 +175,7 @@ async function updateArticle(id, req, res) {
       state: updatedArticle.state,
     });
   } catch (error) {
-    res.json({ error: `There was a problem updating product: ${error}`});
+    res.json({ error: `There was a problem updating product: ${error.message}`});
   }
 }
 // Delete an article

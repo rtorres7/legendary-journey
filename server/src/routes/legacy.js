@@ -14,9 +14,6 @@ router.get("/:date_published/articles/:id/getDocumentData",(req, res) => {
 
 router.get("/get_dissem_orgs", function (req, res) {
   DissemOrgs.find({}, function (error, dissem_orgs) {
-    if (error) {
-      console.error(error);
-    }
     res.send({ dissem_orgs });
   });
 });
@@ -35,9 +32,6 @@ router.get("/user_data", function (req, res) {
 
 router.get("/links", function (req, res) {
   SpecialEditions.findOne({}, function (error, special_editions) {
-    if (error) {
-      console.error(error);
-    }
     res.send(special_editions);
   });
 });
