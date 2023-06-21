@@ -9,17 +9,15 @@
     <p class="font-semibold text-2xl">
       {{ pageHeader }}
     </p>
-    <div class="text-end">
-      <router-link
-        class="hover:underline text-sm"
-        to="/search_tips/"
-        target="_blank"
-        >Advanced Search Tips</router-link
-      >
-    </div>
   </div>
   <!-- Search Form -->
-  <div class="flex flex-row-reverse py-1 my-2">
+  <div class="flex justify-between items-center py-1 my-2">
+    <router-link
+      class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow text-sm"
+      to="/search_tips/"
+      target="_blank"
+      >Advanced Search Tips</router-link
+    >
     <template v-if="loadingMetadata">
       <div
         class="h-8 w-16 animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
@@ -362,18 +360,20 @@
     ></template>
   </template>
   <template v-if="!loadingResults && totalCount === 0">
-    <div class="mt-6">
-      <p class="text-xl text-center font-semibold">
+    <div class="mt-10">
+      <p class="text-xl text-center font-semibold mb-4">
         Sorry, we didn't find any results.
       </p>
       <p class="text text-center">
-        Here's some information about your keyword search that might help you
-        find what you're looking for:
-      </p>
-      <p class="text-center font-semibold">
-        <router-link class="hover:underline" to="/search_tips/" target="_blank"
+        See our
+        <router-link
+          class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+          to="/search_tips/"
+          target="_blank"
           >Advanced Search Tips</router-link
         >
+        page for some information about your keyword search that might help you
+        find what you're looking for.
       </p>
     </div>
   </template>
