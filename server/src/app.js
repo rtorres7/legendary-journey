@@ -17,6 +17,17 @@ const constant = require("./util/constant");
 
 const app = express();
 
+app.use((req, res, next) => {
+  if (process.env.IN_CONTAINER) {
+    const redirector = res.redirect;
+    res.redirect = function(url) {
+      url = '/api' + url;
+      redirector.call(this, url);
+    }
+  }
+  next();
+});
+
 const passportConfig = require("./passportConfig");
 
 // Apply Passport Configuration

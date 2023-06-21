@@ -43,6 +43,7 @@ services:
     environment:
       - MONGO_DATABASE_URL=mongodb:27017
       - POSTGRES_CONNECTION_URL=postgres://maximus:magic@postgres:5432/maximus
+      - IN_CONTAINER=true
       - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/localhost.crt #TODO: trust self-signed cert to avoid "oauthError: Error: self-signed certificate"
     container_name: server
 
