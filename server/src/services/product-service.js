@@ -74,12 +74,11 @@ class ProductService {
 
   async findFeaturesAndBriefs() {
     const featuredProducts = await Article.find().sort({ _id: -1 }).exec();
-    const briefSearchResults = await this.productSearchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385, 10386] });
-    const briefs = briefSearchResults.hits.hits.map(hit => hit._source);
+    const briefProducts = await Article.find({ productTypes: { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
 
     return {
       featured: featuredProducts.map(product => product.features),
-      briefs: briefs
+      briefs: briefProducts.map(product => product.features)
     };
   }
 
