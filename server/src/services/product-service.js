@@ -37,7 +37,7 @@ class ProductService {
       await this.productSearchService.create(savedProduct.indexable);
     } catch (error) {
       console.log('There was a problem indexing product, rolling back database save', error);
-      await savedProduct.remove().exec();
+      await savedProduct.remove();
       throw new Error('There was a problem indexing product, rolling back database save');
     }
 
@@ -62,39 +62,46 @@ class ProductService {
 
   async deleteProduct(id) {
     await Article.deleteOne({ _id: id }).exec();
+
+    try {
+      await this.productSearchService.delete(id);
+    } catch (error) {
+      console.log('There was a problem deleting product in index', error);
+      // TODO: Need to figure out how to add the record back into the database (e.g. rollback)
+      throw new Error('There was a problem deleting product in index')
+    }
   }
 
   async findFeaturesAndBriefs() {
     const featuredProducts = await Article.find().sort({ _id: -1 }).exec();
-    const briefSearchResults = await this.productSearchService.search('', 3, 1, 'desc', { productTypes: [10377, 10379, 10380, 10384, 10385, 10386] });
-    const briefs = briefSearchResults.hits.hits.map(hit => hit._source);
+    const briefProducts = await Article.find({ productTypes: { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
 
     return {
       featured: featuredProducts.map(product => product.features),
-      briefs: briefs || []
+      briefs: briefProducts.map(product => product.features)
     };
   }
 
   async findPageOfDraftProductsForUser(userId, page, limit, offset, sortDir) {
-    const drafts = await this.findDraftProductsForUser(userId, limit, offset, sortDir);
-    const draftCount = await this.countDraftProductsForUser(userId);
+    const drafts = await this.#findDraftProductsForUser(userId, limit, offset, sortDir);
+    const draftCount = await this.#countDraftProductsForUser(userId);
 
     return KiwiPage.of(page, limit, draftCount, drafts.map((draft) => draft.features))
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of('datePublished', sortDir));
+      .addKiwiSort(KiwiSort.of('createdAt', sortDir));
   }
 
-  async findDraftProductsForUser(userId, limit, offset, sortDir) {
+  async #findDraftProductsForUser(userId, limit, offset, sortDir) {
     // TODO: Need to add query for user
     return await Article
       .find({ state: 'draft' })
       .limit(limit)
       .skip(offset)
-      .sort({ datePublished: sortDir.toLowerCase() })
+      .sort({ createdAt: sortDir.toLowerCase() })
       .exec();
   }
 
-  async countDraftProductsForUser(userId) {
+  async #countDraftProductsForUser(userId) {
     // TODO: Need to add query for user
     return await Article
       .count({ state: 'draft' })
@@ -102,15 +109,15 @@ class ProductService {
   }
 
   async findPageOfRecentProductsForUser(userId, page, limit, offset, sortDir) {
-    const recentProducts = await this.findRecentProductsForUser(userId, limit, offset, sortDir);
-    const recentCount = await this.countRecentProductsForUser(userId);
+    const recentProducts = await this.#findRecentProductsForUser(userId, limit, offset, sortDir);
+    const recentCount = await this.#countRecentProductsForUser(userId);
 
     return KiwiPage.of(page, limit, recentCount, recentProducts.map((recent) => recent.features))
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of('datePublished', sortDir));
   }
 
-  async findRecentProductsForUser(userId, limit, offset, sortDir) {
+  async #findRecentProductsForUser(userId, limit, offset, sortDir) {
     // TODO: Need to add query for user
     return await Article
       .find({ state: 'posted' })
@@ -120,7 +127,7 @@ class ProductService {
       .exec();
   }
 
-  async countRecentProductsForUser(userId) {
+  async #countRecentProductsForUser(userId) {
     // TODO: Need to add query for user
     return await Article
       .count({ state: 'posted' })
@@ -128,25 +135,25 @@ class ProductService {
   }
 
   async findPageOfProductsForUser(userId, page, limit, offset, sortDir) {
-    const products = await this.findAllProductsForUser(userId, limit, offset, sortDir);
-    const count = await this.countAllProductsForUser(userId);
+    const products = await this.#findAllProductsForUser(userId, limit, offset, sortDir);
+    const count = await this.#countAllProductsForUser(userId);
 
     return KiwiPage.of(page, limit, count, products.map((product) => product.features))
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of('datePublished', sortDir));
+      .addKiwiSort(KiwiSort.of('createdAt', sortDir));
   }
 
-  async findAllProductsForUser(userId, limit, offset, sortDir) {
+  async #findAllProductsForUser(userId, limit, offset, sortDir) {
     // TODO: Need to add query for user
     return await Article
       .find()
       .limit(limit)
       .skip(offset)
-      .sort({ datePublished: sortDir.toLowerCase() })
+      .sort({ createdAt: sortDir.toLowerCase() })
       .exec();
   }
 
-  async countAllProductsForUser(userId) {
+  async #countAllProductsForUser(userId) {
     // TODO: Need to add query for user
     return await Article
       .count()

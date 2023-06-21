@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { metadata } from "@/config";
+import { inject } from "vue";
 import { EnvelopeIcon } from "@heroicons/vue/24/outline";
 
 export default {
@@ -53,6 +53,7 @@ export default {
     },
   },
   setup(props) {
+    const metadata = inject("metadata");
     const userAccess = () => {
       if (props.product?.status === 403) {
         let document = props.product.document;

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { computed, inject, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -47,11 +47,11 @@ export default {
     const loadingProduct = ref(true);
     const product = ref({
       control_to: [],
-      coordinators: { displayName: "Coordinators", values: [] },
-      coauthors: { displayName: "Coauthors", values: [] },
-      producing_offices: { displayName: "Producing Offices", values: [] },
+      coordinators: [],
+      coauthors: [],
+      producing_offices: [],
       countries: [],
-      dissem_orgs: { displayName: "Audience", values: [] },
+      dissem_orgs: [],
       images: [],
       topics: [],
       non_state_actors: [],

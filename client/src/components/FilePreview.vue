@@ -32,7 +32,7 @@
         <div class="flex justify-between text-sm">
           <p class="font-medium">{{ file.file.name }}</p>
           <p v-show="file.status == true">
-            {{ fileSizeInKb(file.file.size) }} KB
+            {{ convertedFileSize(file.file.size) }}
           </p>
         </div>
         <div>
@@ -127,14 +127,19 @@ export default {
         .catch(console.log("Failed"));
     };
 
-    const fileSizeInKb = (fileSize) => {
-      const kb = parseFloat(fileSize) * 0.001;
-      return Math.round(kb);
+    const convertedFileSize = (fileSize) => {
+      let kb = parseFloat(fileSize) * 0.001;
+      if (kb > 1000) {
+        let mb = kb * 0.001;
+        return Math.round(mb * 10.0) / 10.0 + "MB";
+      } else {
+        return Math.round(kb * 10.0) / 10.0 + "KB";
+      }
     };
 
     return {
       deleteItem,
-      fileSizeInKb,
+      convertedFileSize,
       dayjs,
     };
   },

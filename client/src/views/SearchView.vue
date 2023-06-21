@@ -9,17 +9,15 @@
     <p class="font-semibold text-2xl">
       {{ pageHeader }}
     </p>
-    <div class="text-end">
-      <router-link
-        class="hover:underline text-sm"
-        to="/search_tips/"
-        target="_blank"
-        >Advanced Search Tips</router-link
-      >
-    </div>
   </div>
   <!-- Search Form -->
-  <div class="flex flex-row-reverse py-1 my-2">
+  <div class="flex justify-between items-center py-1 my-2">
+    <router-link
+      class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow text-sm"
+      to="/search_tips/"
+      target="_blank"
+      >Advanced Search Tips</router-link
+    >
     <template v-if="loadingMetadata">
       <div
         class="h-8 w-16 animate-pulse bg-white dark:bg-slate-800/50 energy:bg-zinc-800 rounded"
@@ -157,7 +155,7 @@
               >
                 <template
                   v-for="n in [
-                    queryFilters.media_types,
+                    // queryFilters.media_types,
                     queryFilters.producing_offices,
                     queryFilters.non_state_actors,
                     // queryFilters.frontpage_featured,
@@ -362,18 +360,20 @@
     ></template>
   </template>
   <template v-if="!loadingResults && totalCount === 0">
-    <div class="mt-6">
-      <p class="text-xl text-center font-semibold">
+    <div class="mt-10">
+      <p class="text-xl text-center font-semibold mb-4">
         Sorry, we didn't find any results.
       </p>
       <p class="text text-center">
-        Here's some information about your keyword search that might help you
-        find what you're looking for:
-      </p>
-      <p class="text-center font-semibold">
-        <router-link class="hover:underline" to="/search_tips/" target="_blank"
+        See our
+        <router-link
+          class="text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+          to="/search_tips/"
+          target="_blank"
           >Advanced Search Tips</router-link
         >
+        page for some information about your keyword search that might help you
+        find what you're looking for.
       </p>
     </div>
   </template>
@@ -596,7 +596,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { productDetails } from "@/data";
 import axios from "@/config/wireAxios";
 import {
@@ -893,10 +893,10 @@ export default {
         items: buildItems(criteria.value.classification, "classification[]"),
         types: ["classification[]"],
       };
-      const mediaTypes = {
-        items: buildItems(criteria.value.media_tags, "media_tags[]"),
-        types: ["media_tags[]"],
-      };
+      // const mediaTypes = {
+      //   items: buildItems(criteria.value.media_tags, "media_tags[]"),
+      //   types: ["media_tags[]"],
+      // };
       const producingOffices = {
         items: buildItems(
           criteria.value.producing_offices,
@@ -905,8 +905,11 @@ export default {
         types: ["producing_offices[]"],
       };
       const nonStateActors = {
-        items: buildItems(criteria.value.non_state_actors, "nonStateActors[]"),
-        types: ["nonStateActors[]"],
+        items: buildItems(
+          criteria.value.non_state_actors,
+          "non_state_actors[]"
+        ),
+        types: ["non_state_actors[]"],
       };
       return {
         regions: {
@@ -937,19 +940,19 @@ export default {
           types: classifications.types,
           component: "MaxListbox",
         },
-        media_types: {
-          label: "Media Types",
-          model: currentModel(mediaTypes),
-          list: mediaTypes.items,
-          types: mediaTypes.types,
-          component: "MaxListbox",
-        },
+        // media_types: {
+        //   label: "Media Types",
+        //   model: currentModel(mediaTypes),
+        //   list: mediaTypes.items,
+        //   types: mediaTypes.types,
+        //   component: "MaxListbox",
+        // },
         non_state_actors: {
-          label: "Non State Actors",
+          label: "Actors",
           model: currentModel(nonStateActors),
           list: nonStateActors.items,
           types: nonStateActors.types,
-          component: "MaxListBox",
+          component: "MaxListbox",
         },
         producing_offices: {
           label: "Authored By Organizations",
@@ -1002,7 +1005,7 @@ export default {
         case "product_types[]":
           return criteria.value.product_types;
         case "producing_offices[]":
-          return criteria.value.producing_offices;
+          return criteria.value.producing_offices.values;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":

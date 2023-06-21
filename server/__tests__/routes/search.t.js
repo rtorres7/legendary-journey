@@ -1,63 +1,30 @@
-const { GenericContainer, ElasticsearchContainer } = require('testcontainers');
-const mongoose = require("mongoose");
-
 const request = require('supertest');
-const express = require("express");
+const { setupApp } = require("../__utils__/expressUtils");
 
-const { Client } = require("@elastic/elasticsearch");
-const constant = require("../../src/util/constant");
-const { loadElasticSearch, loadMetadata } = require("../__utils__/dataLoader");
+jest.mock('../../src/services/product-search-service.js', () => {
+  return jest.fn().mockImplementation(() => {
+    const { articles } = require("../__utils__/dataLoader");
+    const filteredArticles = articles.filter(article => article.htmlBody.includes('flu'))
+      .map(article => {
+        const product = article.indexable;
+        product.highlighted_result = ["(U) Both COVID-19 and <em>flu</em> vaccines have been shown to reduce illness, hospitalizations, and deaths."]
+        return product;
+      });
+    const allArticles = articles.map(article => article.indexable);
+    return {
+      search: jest.fn()
+        .mockResolvedValueOnce({ searchId: '', results: filteredArticles, aggregations: [], pages: 1, totalCount: 2, siteEnhancement: '', deClassifError: '' })
+        .mockResolvedValueOnce({ searchId: '', results: allArticles, aggregations: [], pages: 1, totalCount: 5, siteEnhancement: '', deClassifError: '' })
+    };
+  });
+});
 
 describe('Search Routes', () => {
-  let mongoContainer;
-  let esContainer;
-  let app;
-
-  beforeAll(async () => {
-    mongoContainer = await new GenericContainer('mongo')
-      .withExposedPorts(27017)
-      .start();
-
-    // Load metadata
-    await loadMetadata(`mongodb://${mongoContainer.getHost()}:${mongoContainer.getMappedPort(27017)}/metadata`);
-
-    esContainer = await new ElasticsearchContainer().start();
-    const client = new Client({ node: esContainer.getHttpUrl() });
-
-    // Setup index
-    await client.indices.create({
-      index: 'products',
-      mappings: constant.indices[0].mappings,
-    });
-
-    // Load data
-    await loadElasticSearch(esContainer.getHttpUrl());
-
-    app = express();
-    app.use(express.json());
-
-    process.env.ES_URL=esContainer.getHttpUrl();
-    const router = require('../../src/routes/search');
-    app.use('/search', router);
-  }, 70_000);
-
-  beforeEach(async () => {
-    await mongoose.connect(`mongodb://${mongoContainer.getHost()}:${mongoContainer.getMappedPort(27017)}/metadata`, {
-      useNewUrlParser: true,
-    });
-  })
-
-  afterAll(async () => {
-    mongoContainer.stop();
-    esContainer.stop();
-  });
-
-  afterEach(async () => {
-    mongoose.connection.close();
-  })
-
   describe('GET /search', () => {
     it("should return a search results with highlighting when text provided", () => {
+      const router = require('../../src/routes/search');
+      const app = setupApp('/search', router);
+
       return request(app)
         .get('/search?text=flu')
         .expect('Content-Type', /json/)
@@ -69,6 +36,9 @@ describe('Search Routes', () => {
     });
 
     it("should return a search results without highlighting when text not provided", () => {
+      const router = require('../../src/routes/search');
+      const app = setupApp('/search', router);
+
       return request(app)
         .get('/search')
         .expect('Content-Type', /json/)

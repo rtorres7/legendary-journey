@@ -39,10 +39,11 @@
 </template>
 
 <script>
-import { metadata } from "@/config";
+import { inject } from "vue";
 export default {
   name: "NotFound",
   setup() {
+    const metadata = inject("metadata");
     return {
       metadata,
     };
