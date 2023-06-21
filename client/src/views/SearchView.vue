@@ -159,7 +159,7 @@
                   v-for="n in [
                     // queryFilters.media_types,
                     queryFilters.producing_offices,
-                    // queryFilters.non_state_actors,
+                    queryFilters.non_state_actors,
                     // queryFilters.frontpage_featured,
                   ]"
                   :key="n"
