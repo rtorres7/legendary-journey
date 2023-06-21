@@ -1395,7 +1395,7 @@ export default {
         });
       } else {
         axios
-          .post("/documents/" + route.params.doc_num + "/deleteMe")
+          .delete("/documents/" + route.params.doc_num + "/deleteMe")
           .then((response) => {
             if (response.data.error) {
               createNotification({

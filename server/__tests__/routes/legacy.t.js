@@ -95,4 +95,16 @@ describe('Legacy Routes', () => {
         .expect(200, { metrics: { readership: {}, uniqueReadership: {}}});
     });
   });
+
+  describe('DELETE /:id/deleteMe', () => {
+    it("should redirect to /articles/:id/", () => {
+      const router = require('../../src/routes/legacy');
+      const app = setupApp('/', router);
+
+      return request(app)
+        .delete('/1/deleteMe')
+        .expect(307)
+        .expect("Location", "/articles/1");
+    });
+  });
 });

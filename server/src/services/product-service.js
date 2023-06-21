@@ -62,6 +62,14 @@ class ProductService {
 
   async deleteProduct(id) {
     await Article.deleteOne({ _id: id }).exec();
+
+    try {
+      await this.productSearchService.delete(id);
+    } catch (error) {
+      console.log('There was a problem deleting product in index', error);
+      // TODO: Need to figure out how to add the record back into the database (e.g. rollback)
+      throw new Error('There was a problem deleting product in index')
+    }
   }
 
   async findFeaturesAndBriefs() {
