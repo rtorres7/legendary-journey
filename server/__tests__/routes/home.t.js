@@ -4,15 +4,17 @@ const { setupApp } = require("../__utils__/expressUtils");
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
-    if (process.env.THROW_TEST_ERROR) {
-      throw new Error('whoops');
-    }
-
     const { articles } = require("../__utils__/dataLoader");
     return {
-      findFeaturesAndBriefs: jest.fn().mockResolvedValueOnce({
-        featured: articles,
-        briefs: articles.slice(0,3),
+      findFeaturesAndBriefs: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error('whoops');
+        }
+
+        return {
+          featured: articles,
+          briefs: articles.slice(0, 3),
+        }
       })
     };
   });
