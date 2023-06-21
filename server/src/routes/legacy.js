@@ -59,4 +59,9 @@ router.get("/:doc_num/metrics/basic_metrics.json", function (req, res) {
   });
 });
 
+// TODO: This will go away once the UI changes to use DELETE /articles/:id
+router.delete("/:id/deleteMe", async (req, res) => {
+  res.redirect(307, `/articles/${req.params.id}`);
+});
+
 module.exports = router;

@@ -26,6 +26,7 @@ jest.mock('../../src/services/product-search-service.js', () => {
       }),
       search: jest.fn()
         .mockResolvedValueOnce({ hits: { hits: [{ _source: { id: 1 }}] }}),
+      delete: jest.fn(),
     };
   });
 });
@@ -221,7 +222,7 @@ describe('ProductService', () => {
   });
 
   describe('deleteProduct', () => {
-    it('should remove the product from the database', async () => {
+    it('should remove the product from the database and the index', async () => {
       const original = await Article.create({ productNumber: "product-to-delete" });
 
       const countWithRecordToDelete = await Article.count();
@@ -233,6 +234,8 @@ describe('ProductService', () => {
       const result = await Article.find({ productNumber: 'product-to-delete' });
       expect(result).toHaveLength(0);
     });
+
+    // TODO: Once we figure out the rollback strategy, we need to write a test to validate the rollback
   });
 
   describe('findFeaturesAndBriefs', () => {
