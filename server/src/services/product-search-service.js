@@ -1,4 +1,3 @@
-const { Client } = require("@elastic/elasticsearch");
 const MetadataService = require('./metadata');
 const constant = require("../util/constant.js");
 const dayjs = require("dayjs");
@@ -15,10 +14,9 @@ const PRODUCT_FIELDS = [
   { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
   { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
 ]
-
 class ProductSearchService {
-  constructor(esUrl=constant.esNode) {
-    this.client = new Client({ node: esUrl });
+  constructor() {
+    this.client = require('../data/elasticsearch');
     this.index = "products";
     this.metadataService = new MetadataService();
   }
@@ -232,6 +230,25 @@ class ProductSearchService {
       index: this.index,
       id,
     });
+  }
+  async createIndexesIfNecessary() {
+    const indexesCreated = [];
+
+    for (const indexConfig of constant.indices) {
+      if (await this.client.indices.exists({ index: indexConfig.index})) {
+        continue;
+      }
+
+      console.log(`Elastic search index ${indexConfig.index} does not exist. Creating now.`);
+      const index = await this.client.indices.create({
+        index: indexConfig.index,
+        mappings: indexConfig.mappings,
+      });
+
+      indexesCreated.push(indexConfig.index);
+    }
+
+    return indexesCreated;
   }
 }
 

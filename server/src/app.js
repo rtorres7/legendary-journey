@@ -1,24 +1,26 @@
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const express = require("express");
 const logger = require("morgan");
-
-const indexRouter = require("./routes");
-const homeRouter = require("./routes/home");
-const legacyRouter = require("./routes/legacy");
-const articlesRouter = require("./routes/articles");
-const usersRouter = require("./routes/users");
-const searchRouter = require("./routes/search");
-const alertRouter = require("./routes/alerts");
-const workspaceRouter = require("./routes/workspace");
-
-const constant = require("./util/constant");
+const MongoStore = require('connect-mongo');
+const auth = require('./services/auth');
+const path = require("path");
+const session = require("express-session");
 
 const app = express();
 
+/***********************************
+ * Middleware setup
+ **********************************/
+
+/**
+ * Container Redirector
+ *
+ * Adds a redirector if we are running inside of docker. This is done because the docker-compose setup for nginx prefixes
+ * the calls with /api/ so that it knows how to route to the app. Whenever we respond with a redirect our server doesn't
+ * know that we are behind that reverse proxy.
+ */
 app.use((req, res, next) => {
-  if (process.env.IN_CONTAINER) {
+  if (process.env.MXS_ENV === 'container' ) {
     const redirector = res.redirect;
     res.redirect = function(url) {
       url = '/api' + url;
@@ -28,114 +30,130 @@ app.use((req, res, next) => {
   next();
 });
 
-const passportConfig = require("./passportConfig");
+/**
+ * Session
+ *
+ * Manages HTTP session information
+ */
+app.set('trust proxy', 1);
+app.use(
+  session({
+    secret: "keyboard cat",
+    saveUninitialized: false,
+    resave: false,
+    cookie: { secure: true, sameSite: true },
+    store: MongoStore.create({ mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles` }) // Default TTL is 14 days
+  })
+);
 
-// Apply Passport Configuration
-passportConfig(app);
+/**
+ * Logging
+ *
+ * Sets up the HTTP request logging.
+ */
+if (process.env.MXS_ENV === 'container') {
+  app.use(logger("dev"));
+} else {
+  app.use(logger('combined'));
+}
 
-// DB Setup
-const mongoose = require("mongoose");
-
-const MONGO_DATABASE_URL = process.env.MONGO_DATABASE_URL || "http://localhost";
-mongoose.connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
-  useNewUrlParser: true,
-});
-
-const db = mongoose.connection;
-
-db.on("error", function (error) {
-  // If first connect fails because server-database isn't up yet, try again.
-  // This is only needed for first connect, not for runtime reconnects.
-  // See: https://github.com/Automattic/mongoose/issues/5169
-  if (
-    error.message &&
-    error.message.match(/failed to connect to server .* on first connect/)
-  ) {
-    setTimeout(function () {
-      mongoose
-        .connect(`mongodb://${MONGO_DATABASE_URL}/articles`, {
-          useNewUrlParser: true,
-        })
-        .catch(() => {
-          // empty catch avoids unhandled rejections
-        });
-    }, 20 * 1000);
-  } else {
-    // Some other error occurred.  Log it.
-    console.error(new Date(), String(error));
-  }
-});
-
-db.once("open", function () {
-  console.log("Connection Succeeded");
-});
-
-const elasticsearch = require("@elastic/elasticsearch");
-const esClient = new elasticsearch.Client({
-  node: "http://elasticsearch:9200",
-});
-
-esClient.cluster.health({}, function (err, resp) {
-  if (err) {
-    console.log("-- ES Client Health ERROR --", err);
-  } else {
-    console.log("-- ES Health --", resp);
-  }
-});
-
-(async () => {
-  await constant.indices?.every(async (v) => {
-    if (await esClient.indices.exists({ index: v.index })) {
-      return false;
-    }
-
-    const index = esClient.indices.create({
-      index: v.index,
-      mappings: v.mappings,
-    });
-
-    const Article = require("./models/articles");
-    const ProductSearchService = require("./services/product-search-service");
-    const productSearchService = new ProductSearchService();
-
-    Article.find(
-      {},
-      function (error, articles) {
-        if (error) {
-          console.error(error);
-        }
-
-        articles.forEach(article => {
-          productSearchService.create(article.indexable);
-        });
-      }
-    );
-
-    return index;
-  });
-})();
-
-app.use(logger("dev"));
+/**
+ * JSON processing
+ * Sets up JSON request body processing
+ */
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+/**
+ * URL encoding support
+ * Sets up support for URL encoding support and query param processing
+ * TODO: Default max request body size is 100Kb, we may need to a larger limit to support attachments
+ */
+app.use(express.urlencoded({ extended: true }));
+
+/**
+ * Static Asset support
+ * Add support for static assets
+ * TODO: I'm not sure we need this since we are basically building an API only mode app
+ */
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+/**
+ * CORS support
+ * Add CORS support so that the UI is approved to talk to the server side.
+ * TODO: If UI and server are going to be routed through a reverse proxy, then I don't think this is needed.
+ */
 app.use(cors());
+
+/**
+ * Passport OAuth support
+ * Adds OAuth support using the passport library
+ */
+app.use(auth.passport.initialize());
+app.use(auth.passport.session());
+
+/**
+ * Authentication
+ * Adds a global check to make sure endpoint is authenticated
+ */
+app.use(auth.ensureAuthenticated)
+
+/***********************************
+ * Middleware setup
+ **********************************/
+
+// Setup mongoose
+const setupMongoose = require('./data/mongoose');
+setupMongoose();
+
+// Setup elastic search client
+require('./data/elasticsearch');
+
+// Load seed data
+if (process.env.MXS_ENV === 'container') {
+  const ProductService = require('./services/product-service');
+  const productService = new ProductService();
+  productService.initializeProductData();
+}
+
+/***********************************
+ * Route setup
+ **********************************/
+const alertRouter = require("./routes/alerts");
+const articlesRouter = require("./routes/articles");
+const authRouter = require('./routes/auth');
+const homeRouter = require("./routes/home");
+const indexRouter = require("./routes");
+const legacyRouter = require("./routes/legacy");
+const searchRouter = require("./routes/search");
+const usersRouter = require("./routes/users");
+const workspaceRouter = require("./routes/workspace");
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use("/", indexRouter);
 app.use("/alerts", alertRouter);
 app.use("/articles", articlesRouter);
+app.use("/auth", authRouter);
 app.use("/home", homeRouter);
-app.use("/preload", legacyRouter);
-app.use("/wires", legacyRouter);
-app.use("/my_wire", legacyRouter);
-app.use("/documents", legacyRouter);
-app.use("/users", usersRouter);
-app.use("/special_editions", legacyRouter);
 app.use("/search", searchRouter);
+app.use("/users", usersRouter);
 app.use("/workspace", workspaceRouter);
+
+// Legacy routes
+app.use("/documents", legacyRouter);
+app.use("/my_wire", legacyRouter);
+app.use("/preload", legacyRouter);
+app.use("/special_editions", legacyRouter);
+app.use("/wires", legacyRouter);
+
+// catch 404 and forward to error handler
+app.use((req, res) => {
+  KiwiStandardResponsesExpress.standardNotFoundResponse('Page not found', res);
+});
+
+// error handler
+// define as the last app.use callback
+app.use((err, req, res, next) => {
+  KiwiStandardResponsesExpress.standardErrorResponse(err.status || 500, err.message, res);
+});
 
 module.exports = app;
