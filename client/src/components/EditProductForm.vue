@@ -800,6 +800,7 @@ import { mockDocument } from "@/data";
 import {
   UploadableFile,
   getValueForCode,
+  getValueForName,
   hasProductImage,
   getProductImageUrl,
 } from "@/helpers";
@@ -1173,9 +1174,9 @@ export default {
       form.value.topics = topicsToSelect;
       const nonStateActorsToSelect = [];
       updatedProduct.non_state_actors.forEach((nonStateActorFromBackend) => {
-        let nonStateActorValue = getValueForCode(
+        let nonStateActorValue = getValueForName(
           lists.nonStateActors,
-          nonStateActorFromBackend.code
+          nonStateActorFromBackend.name
         );
         nonStateActorsToSelect.push(nonStateActorValue);
       });
