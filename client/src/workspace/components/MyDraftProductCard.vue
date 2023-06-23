@@ -61,6 +61,7 @@
             <MenuItem>
               <div
                 class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                @click="deleteProduct"
               >
                 <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
                   class="capitalize"
@@ -136,15 +137,13 @@ export default {
       default: "product",
     },
   },
-  setup(props) {
-    //dont need this stuff. will delete
-    // const getImg = (src) => {
-    //   return new URL("/src/assets/mocks/" + src, import.meta.url).href;
-    // };
-    console.log("???????", props.product);
-
+  emits: ["delete"],
+  setup(props, { emit }) {
+    const deleteProduct = () => {
+      emit("delete", props.product);
+    };
     return {
-      // getImg,
+      deleteProduct,
       dayjs,
     };
   },

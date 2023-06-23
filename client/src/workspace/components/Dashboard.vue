@@ -8,14 +8,28 @@
       <MaxLoadingSpinner class="h-16 w-16"
     /></template>
     <template v-else>
+      <template v-if="myDrafts.length == 0">
+        <p class="italic">No drafts to show</p>
+      </template>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
         <template v-for="(product, index) in myDrafts" :key="product">
           <MyDraftProductCard
-            v-show="index < 4"
             :product="product"
             type="product"
+            :class="
+              index == 1
+                ? 'hidden sm:block'
+                : index == 2
+                ? 'hidden lg:block'
+                : index == 3
+                ? 'hidden 2xl:block'
+                : index > 3
+                ? 'hidden'
+                : ''
+            "
+            @delete="deleteProduct(product)"
           />
         </template>
       </div>
@@ -30,28 +44,36 @@
         <ChevronRightIcon class="h-4 w-4" />
       </a>
     </div>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-    >
-      <template v-for="(product, index) in myPublished" :key="product">
-        <MyPublishedProductCard
-          v-show="index < 4"
-          :product="product"
-          type="product"
-        />
-        <!-- <MyPublishedProductCard :product="products[1]" type="product" /> -->
-        <!-- <MyPublishedProductCard
-        :product="products[2]"
-        type="product"
-        class="hidden lg:flex"
-      />
-      <MyPublishedProductCard
-        :product="products[3]"
-        type="product"
-        class="hidden 2xl:flex"
-      /> -->
+    <template v-if="loadingPublished == true">
+      <MaxLoadingSpinner class="h-16 w-16"
+    /></template>
+    <template v-else>
+      <template v-if="myPublished.length == 0">
+        <p class="italic">No published products to show</p>
       </template>
-    </div>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+      >
+        <template v-for="(product, index) in myPublished" :key="product">
+          <MyPublishedProductCard
+            :product="product"
+            type="product"
+            :class="
+              index == 1
+                ? 'hidden sm:block'
+                : index == 2
+                ? 'hidden lg:block'
+                : index == 3
+                ? 'hidden 2xl:block'
+                : index > 3
+                ? 'hidden'
+                : ''
+            "
+            @delete="deleteProduct(product)"
+          />
+        </template>
+      </div>
+    </template>
     <div class="py-6 flex items-center">
       <div class="text-lg font-bold">Your Stats</div>
     </div>
@@ -114,6 +136,10 @@ export default {
     const loadingDrafts = ref(true);
     const loadingPublished = ref(true);
 
+    const deleteProduct = (product) => {
+      axios.post("/documents/" + product.attributes.doc_num + "/deleteMe");
+    };
+
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
@@ -153,6 +179,7 @@ export default {
       myPublished,
       loadingDrafts,
       loadingPublished,
+      deleteProduct,
     };
   },
 };

@@ -3,21 +3,20 @@
     class="flex flex-col bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg cursor-pointer hover:underline mb-2"
   >
     <div class="max-h-[261px]">
-      <!-- <img :src="getImg(product.src)" alt="" /> -->
       <ProductImage :product="product" />
     </div>
-    <div class="h-full flex flex-col py-4 justify-between">
+    <div class="flex flex-col py-4 justify-between">
       <div class="relative pb-6 px-4">
         <div class="text-xs text-blue-700 font-medium pb-2">
           {{ product.attributes.product_type_name }}
         </div>
         <p
           class="font-semibold text-gray-700 line-clamp-3"
-          :title="`${product.classification} ${product.title}`"
+          :title="`${product.attributes.title_classif} ${product.title}`"
         >
-          <span class="font-medium text-gray-500">{{
-            product.classification
-          }}</span>
+          <span class="font-medium text-gray-500"
+            >({{ product.attributes.title_classif }})</span
+          >
           {{ product.title }}
         </p>
         <div class="text-gray-500 hover:text-gray-900 absolute top-0 right-0">
@@ -91,18 +90,32 @@
                 </template>
                 <template v-if="type === 'product'">
                   <MenuItem>
-                    <div
-                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                    <router-link
+                      :to="{
+                        name: 'edit',
+                        params: {
+                          date: dayjs(product.attributes.date_published).format(
+                            'YYYY-MM-DD'
+                          ),
+                          id: product.attributes.id,
+                          doc_num: product.attributes.doc_num,
+                        },
+                      }"
                     >
-                      <PencilSquareIcon
-                        class="h-5 w-5"
-                        aria-hidden="true"
-                      /><span class="capitalize">Edit</span>
-                    </div>
+                      <div
+                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                      >
+                        <PencilSquareIcon
+                          class="h-5 w-5"
+                          aria-hidden="true"
+                        /><span class="capitalize">Edit</span>
+                      </div>
+                    </router-link>
                   </MenuItem>
                   <MenuItem>
                     <div
                       class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                      @click="deleteProduct"
                     >
                       <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
                         class="capitalize"
@@ -118,7 +131,9 @@
       </div>
       <div class="px-4 text-sm text-gray-500">
         <div class="flex space-x-2">
-          <div>{{ product.date_posted }}</div>
+          <div>
+            {{ dayjs(product.attributes.date_published).format("YYYY-MM-DD") }}
+          </div>
           <div>•</div>
           <div>{{ product.views }} views</div>
         </div>
@@ -138,6 +153,8 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import ProductImage from "@/components/ProductImage.vue";
+import dayjs from "dayjs/esm/index.js";
+
 export default {
   components: {
     Menu,
@@ -163,13 +180,19 @@ export default {
       default: "product",
     },
   },
-  setup() {
+  emits: ["delete"],
+  setup(props, { emit }) {
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
+    };
+    const deleteProduct = () => {
+      emit("delete", props.product);
     };
 
     return {
       getImg,
+      deleteProduct,
+      dayjs,
     };
   },
 };
