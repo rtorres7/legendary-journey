@@ -107,12 +107,7 @@ import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 import MyDraftProductCard from "./MyDraftProductCard.vue";
 import MyPublishedProductCard from "./MyPublishedProductCard.vue";
-import {
-  products,
-  savedProducts,
-  favoriteProducts,
-  collectionProducts,
-} from "@/demo/data";
+import { products } from "@/demo/data";
 
 import {
   ChevronRightIcon,
@@ -133,8 +128,10 @@ export default {
     const currentUsername = computed(() => store.state.user.user.name);
     const myDrafts = ref([]);
     const myPublished = ref([]);
+    const myStats = ref();
     const loadingDrafts = ref(true);
     const loadingPublished = ref(true);
+    const loadingStats = ref(true);
 
     const deleteProduct = (product) => {
       axios.post("/documents/" + product.attributes.doc_num + "/deleteMe");
@@ -161,9 +158,15 @@ export default {
           loadingPublished.value = false;
           if (response.data) {
             myPublished.value = response.data.content;
-            console.log("published:", myPublished.value);
           } else {
             console.log("Couldn't retrieve published products");
+          }
+        });
+        axios.get("workspace/stats").then((response) => {
+          if (response.data) {
+            myStats.value = response.data.content;
+          } else {
+            console.log("Couldn't retrieve stats");
           }
         });
       }
@@ -171,14 +174,13 @@ export default {
 
     return {
       products,
-      savedProducts,
-      favoriteProducts,
-      collectionProducts,
       currentUsername,
       myDrafts,
       myPublished,
+      myStats,
       loadingDrafts,
       loadingPublished,
+      loadingStats,
       deleteProduct,
     };
   },
