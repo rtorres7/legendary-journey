@@ -3,26 +3,14 @@ const router = express.Router();
 const auth = require('../services/auth');
 const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 
-router.get('/login', auth.passport.authenticate('oauth2'));
-router.get('/callback', (req, res, next) => {
-  auth.passport.authenticate('oauth2', (error, user) => {
-    if (error || !user) {
-      console.warn('User is not authorized', user, error);
-      KiwiStandardResponsesExpress.standardUnauthorizedResponse('Unauthorized', res);
-      return;
-    }
+router.get('/login', auth.passport.authenticate('oauth2', {
+  scope: ['openid', 'profile', 'roles', 'email']
+}));
 
-    req.logIn(user, (error) => {
-      if (error) {
-        console.warn('User is not authorized', user, error);
-        KiwiStandardResponsesExpress.standardUnauthorizedResponse('Unauthorized', res);
-        return;
-      }
-
-      res.redirect('/');
-    })(req, res, next);
-  });
-});
+router.get('/callback', auth.passport.authenticate('oauth2', {
+  failureRedirect: '/auth/login',
+  successRedirect: '/'
+}));
 
 router.get('/profile', (req, res) => {
   res.send(`Hello, user profile: ${JSON.stringify(req.user, null, 2)}`);

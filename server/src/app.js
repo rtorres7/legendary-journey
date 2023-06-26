@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   if (process.env.MXS_ENV === 'container' ) {
     const redirector = res.redirect;
     res.redirect = function(url) {
-      url = '/api' + url;
+      url = url === '/' ? url : '/api' + url;
       redirector.call(this, url);
     }
   }
@@ -41,7 +41,7 @@ app.use(
     secret: "keyboard cat",
     saveUninitialized: false,
     resave: false,
-    cookie: { secure: true, sameSite: true },
+    cookie: { secure: false, sameSite: true },
     store: MongoStore.create({ mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles` }) // Default TTL is 14 days
   })
 );
@@ -68,7 +68,7 @@ app.use(express.json());
  * Sets up support for URL encoding support and query param processing
  * TODO: Default max request body size is 100Kb, we may need to a larger limit to support attachments
  */
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded());
 
 /**
  * Static Asset support
@@ -152,7 +152,7 @@ app.use((req, res) => {
 
 // error handler
 // define as the last app.use callback
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   KiwiStandardResponsesExpress.standardErrorResponse(err.status || 500, err.message, res);
 });
 

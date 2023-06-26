@@ -226,12 +226,14 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
     ports:
-      - 8080:80
+#      - 8080:80
       - 8443:443
     networks:
       - your-network
     depends_on:
       - keycloak
+      - server
+      - client
 
 volumes:
   elasticsearch-data:

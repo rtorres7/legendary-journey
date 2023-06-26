@@ -53,7 +53,7 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "jJjVjNLQJ9r3dTc64rt2cFwenmEeusaY",
-      "redirectUris": ["https://localhost:8443/callback"],
+      "redirectUris": ["https://localhost:8443/api/auth/callback"],
       "webOrigins": ["+"],
       "notBefore": 0,
       "bearerOnly": false,

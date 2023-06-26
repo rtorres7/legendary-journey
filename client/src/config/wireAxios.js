@@ -1,5 +1,4 @@
 import axios from "axios";
-//import Vue from "vue";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 if (import.meta.env.MODE === "container") {
@@ -18,7 +17,11 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
-      window.location.reload();
+      if (import.meta.env.MODE === 'container') {
+        return window.location.href = '/api/auth/login';
+      } else {
+        return window.location.reload();
+      }
     }
     throw error;
   }
