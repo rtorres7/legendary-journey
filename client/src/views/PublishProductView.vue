@@ -275,15 +275,7 @@
                   />
                 </div>
                 <div>
-                  <router-link
-                    :to="{
-                      name:
-                        product.state === 'draft'
-                          ? 'product-preview'
-                          : 'product',
-                      params: { doc_num: product.doc_num },
-                    }"
-                  >
+                  <ProductRestrictedLink :product="product">
                     <h4
                       class="mb-1 font-medium line-clamp-4 lg:line-clamp-3 xl:line-clamp-2 hover:underline wrap-anywhere"
                       :title="product.title"
@@ -295,7 +287,7 @@
                       }}
                       {{ product.title }}
                     </h4>
-                  </router-link>
+                  </ProductRestrictedLink>
                   <p class="hidden text-sm md:line-clamp-4 wrap-anywhere">
                     {{
                       product.summary_classif && product.summary_classif !== "X"
@@ -476,6 +468,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
+import ProductRestrictedLink from "@/components/ProductRestrictedLink.vue";
 import { getValueForCode, hasProductAccess } from "@/helpers";
 import ProductContent from "@/components/ProductContent.vue";
 import ProductImage from "@/components/ProductImage.vue";
@@ -488,6 +481,7 @@ export default {
     TrashIcon,
     ProductContent,
     ProductImage,
+    ProductRestrictedLink,
   },
   setup() {
     const route = useRoute();
