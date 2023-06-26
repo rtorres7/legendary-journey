@@ -498,7 +498,7 @@
                       multiple
                       required
                       @update:modelValue="
-                        updateField($event, 'nonStateActors', 'multiple')
+                        updateField($event, 'non_state_actors', 'multiple')
                       "
                     />
                     <div
