@@ -11,6 +11,7 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
+import { isProduction } from "@/helpers";
 import WorkspaceView from "../workspace/views/WorkspaceView.vue";
 
 const routes = [
@@ -129,7 +130,7 @@ const routes = [
   },
 ];
 
-if (import.meta.env.MODE !== "production") {
+if (!isProduction()) {
   routes.push({
     path: "/workspace-demo",
     name: "workspace-demo",
@@ -141,7 +142,7 @@ if (import.meta.env.MODE !== "production") {
   });
 }
 
-if (import.meta.env.MODE !== "production") {
+if (!isProduction()) {
   routes.push({
     path: "/workspace",
     name: "workspace",
