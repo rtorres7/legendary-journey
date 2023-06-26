@@ -948,7 +948,7 @@ export default {
         //   component: "MaxListbox",
         // },
         non_state_actors: {
-          label: "Actors",
+          label: "Non State Actors",
           model: currentModel(nonStateActors),
           list: nonStateActors.items,
           types: nonStateActors.types,
