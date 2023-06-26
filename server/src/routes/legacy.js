@@ -13,9 +13,6 @@ router.get("/:date_published/products/:id/getDocumentData", (req, res) => {
 
 router.get("/get_dissem_orgs", function (req, res) {
   DissemOrgs.find({}, function (error, dissem_orgs) {
-    if (error) {
-      console.error(error);
-    }
     res.send({ dissem_orgs });
   });
 });
@@ -34,9 +31,6 @@ router.get("/user_data", function (req, res) {
 
 router.get("/links", function (req, res) {
   SpecialEditions.findOne({}, function (error, special_editions) {
-    if (error) {
-      console.error(error);
-    }
     res.send(special_editions);
   });
 });
@@ -62,6 +56,11 @@ router.get("/:doc_num/metrics/basic_metrics.json", function (req, res) {
       uniqueReadership: {},
     },
   });
+});
+
+// TODO: This will go away once the UI changes to use DELETE /products/:id
+router.delete("/:id/deleteMe", async (req, res) => {
+  res.redirect(307, `/products/${req.params.id}`);
 });
 
 module.exports = router;

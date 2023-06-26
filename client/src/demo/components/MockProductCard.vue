@@ -162,7 +162,7 @@ export default {
   },
   setup() {
     const getImg = (src) => {
-      return new URL("/src/assets/mocks/" + src, import.meta.url).href;
+      return new URL("../../assets/mocks/" + src, import.meta.url).href;
     };
 
     return {

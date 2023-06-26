@@ -203,8 +203,7 @@
   </MaxDialog>
 </template>
 <script>
-import { metadata } from "@/config";
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 
@@ -219,6 +218,7 @@ export default {
     const isMissionDialogOpen = ref(false);
     const isSecurityDialogOpen = ref(false);
     const isFAQDialogOpen = ref(false);
+    const metadata = inject("metadata");
     const version = `v${import.meta.env.VITE_APP_VERSION}`;
 
     const closeMissionDialog = () => {

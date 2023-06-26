@@ -28,7 +28,7 @@ router.get("/date/:date", async (req, res) => {
       error
     );
     res.json({
-      error: `Unable to find products for date ${req.params.date}: ${error}`,
+      error: `Unable to find products for date ${req.params.date}: ${error.message}`,
     });
   }
 });
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
       error
     );
     res.json({
-      error: `Unable to find product with product number ${req.params.id}: ${error}`,
+      error: `Unable to find product with product number ${req.params.id}: ${error.message}`,
     });
   }
 });
@@ -88,7 +88,7 @@ router.post("/", async (req, res) => {
 
   const product = new Product({
     createdAt: dayjs().toDate(),
-    datePublished: req.body.date_published || dayjs.utc().format(),
+    datePublished: req.body.date_published || dayjs().format(),
     htmlBody: req.body.html_body,
     issues: issues,
     needed: {},
@@ -112,7 +112,9 @@ router.post("/", async (req, res) => {
       doc_num: savedProduct.productNumber,
     });
   } catch (error) {
-    res.json({ error: `There was a problem creating product: ${error}` });
+    res.json({
+      error: `There was a problem creating product: ${error.message}`,
+    });
   }
 });
 
@@ -127,7 +129,7 @@ router.get("/:id/edit", async (req, res) => {
       error
     );
     res.json({
-      error: `Unable to find product with id ${req.params.id}: ${error}`,
+      error: `Unable to find product with id ${req.params.id}: ${error.message}`,
     });
   }
 });
@@ -142,7 +144,7 @@ router.get("/:id/view", async (req, res) => {
       error
     );
     res.json({
-      error: `Unable to find product with id ${req.params.id}: ${error}`,
+      error: `Unable to find product with id ${req.params.id}: ${error.message}`,
     });
   }
 });
@@ -227,7 +229,9 @@ async function updateProduct(id, req, res) {
       state: updatedProduct.state,
     });
   } catch (error) {
-    res.json({ error: `There was a problem updating product: ${error}` });
+    res.json({
+      error: `There was a problem updating product: ${error.message}`,
+    });
   }
 }
 // Delete an product

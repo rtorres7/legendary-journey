@@ -1,50 +1,50 @@
-const { GenericContainer } = require('testcontainers');
-const mongoose = require("mongoose");
-
 const request = require('supertest');
-const express = require("express");
+const { setupApp } = require('../__utils__/expressUtils');
 
-const router = require('../../src/routes/index');
-const { loadMetadata } = require("../__utils__/dataLoader");
+jest.mock('../../src/services/metadata.js', () => {
+  return jest.fn().mockImplementation(() => {
+    const { metadata } = require("../__utils__/dataLoader");
+    return {
+      getAllMetadata: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error('whoops');
+        }
 
-const app = express();
-app.use(express.json());
-app.use('/', router);
+        return metadata;
+      }),
+    };
+  });
+});
 
 describe('Index Routes', () => {
-  let container;
-
-  beforeAll(async () => {
-    container = await new GenericContainer('mongo')
-      .withExposedPorts(27017)
-      .start();
-
-    // Load metadata
-    await loadMetadata(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}/metadata`);
-  }, 70_000);
-
-  beforeEach(async () => {
-    await mongoose.connect(`mongodb://${container.getHost()}:${container.getMappedPort(27017)}/metadata`, {
-      useNewUrlParser: true,
-    });
-  })
-
-  afterAll(async () => {
-    container.stop();
+  afterEach(() => {
+    delete process.env.THROW_TEST_ERROR;
   });
-
-  afterEach(async () => {
-    mongoose.connection.close();
-  })
 
   describe('GET /metadata', () => {
     it("should return the metadata", () => {
+      const router = require('../../src/routes/index');
+      const app = setupApp('/', router);
+
       return request(app)
         .get('/metadata')
         .expect('Content-Type', /json/)
         .expect(200)
         .then((res) => {
           expect(res.body.metadata.criteria).toBeDefined();
+        });
+    });
+
+    it('should return error response when lookup fails', () => {
+      process.env.THROW_TEST_ERROR = true;
+
+      const router = require('../../src/routes/index');
+      const app = setupApp('/', router);
+
+      return request(app)
+        .get('/metadata')
+        .expect(200, {
+          error: 'Unable to find metadata'
         });
     });
   })

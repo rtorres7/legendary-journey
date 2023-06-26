@@ -19,7 +19,7 @@ router.get("/drafts", async (req, res) => {
     res.json(pageOfDrafts);
   } catch (error) {
     handleMongooseError("Unable to find draft products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error, res);
+    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
   }
 });
 
@@ -35,7 +35,7 @@ router.get("/recent", async (req, res) => {
     res.json(pageOfRecentProducts);
   } catch (error) {
     handleMongooseError("Unable to find posted products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error, res);
+    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
   }
 });
 
@@ -56,7 +56,7 @@ router.get("/products", async (req, res) => {
     res.json(pageOfProducts);
   } catch (error) {
     handleMongooseError("Unable to find user's products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error, res);
+    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
   }
 });
 

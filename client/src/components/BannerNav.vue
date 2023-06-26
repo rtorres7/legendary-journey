@@ -651,12 +651,11 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { getValueForCode } from "@/helpers";
-import { ref, watch, computed } from "vue";
+import { inject, ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { metadata } from "@/config";
 import BannerSearchBar from "@/components/BannerSearchBar.vue";
 import BannerNavPopover from "@/components/BannerNavPopover.vue";
 import BannerNavMap from "@/components/BannerNavMap.vue";
@@ -735,6 +734,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
     const isLiveDemo = computed(() => {
       return route.meta.demo ? true : false;

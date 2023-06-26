@@ -81,3 +81,8 @@ export const getProductImageUrl = (images, docNum) => {
     updatedAt
   );
 };
+
+//Damion's Idea
+export const isProduction = () => {
+  return window.location.hostname.charAt(0).toLowerCase() === "c";
+};

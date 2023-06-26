@@ -492,7 +492,7 @@
                   </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
-                      v-model="form.nonStateActors"
+                      v-model="form.non_state_actors"
                       :label="'Non State Actors'"
                       :items="lists.nonStateActors"
                       multiple
@@ -504,7 +504,7 @@
                     <div
                       class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2"
                     >
-                      <div v-for="org in form.nonStateActors" :key="org">
+                      <div v-for="org in form.non_state_actors" :key="org">
                         <div
                           class="flex justify-between rounded-xl bg-slate-100 dark:bg-slate-700 energy:bg-zinc-600 p-2"
                         >
@@ -515,7 +515,7 @@
                             type="button"
                             class="w-5 h-5 flex items-center justify-center"
                             tabindex="0"
-                            @click="removeItem(org.name, 'nonStateActors')"
+                            @click="removeItem(org.name, 'non_state_actors')"
                           >
                             <span class="sr-only">Remove Non State Actor</span>
                             <XMarkIcon
@@ -598,7 +598,9 @@
                               <p class="font-medium">
                                 {{ attachment.file_name }}
                               </p>
-                              <p>{{ fileSizeInKb(attachment.file_size) }}</p>
+                              <p>
+                                {{ convertedFileSize(attachment.file_size) }}
+                              </p>
                             </div>
                             <div class="flex justify-between text-sm">
                               <p>{{ formatDate(attachment.created_at) }}</p>
@@ -794,11 +796,11 @@ import {
   DocumentIcon,
 } from "@heroicons/vue/24/outline";
 import axios from "@/config/wireAxios";
-import { metadata } from "@/config";
 import { mockDocument } from "@/data";
 import {
   UploadableFile,
   getValueForCode,
+  getValueForName,
   hasProductImage,
   getProductImageUrl,
 } from "@/helpers";
@@ -870,6 +872,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
@@ -948,7 +951,7 @@ export default {
       coauthors: [],
       producing_offices: [],
       editorData: "",
-      nonStateActors: [],
+      non_state_actors: [],
       pocInfo: "",
       productType: [],
       publicationDate: "",
@@ -1014,11 +1017,15 @@ export default {
       } else if (formItem === "topics") {
         form.value.topics = form.value.topics.filter((i) => i.name != name);
         updateField(form.value.topics, "topics", "multiple");
-      } else if (formItem === "nonStateActors") {
-        form.value.nonStateActors = form.value.nonStateActors.filter(
+      } else if (formItem === "non_state_actors") {
+        form.value.non_state_actors = form.value.non_state_actors.filter(
           (i) => i.name != name
         );
-        updateField(form.value.nonStateActors, "nonStateActors", "multiple");
+        updateField(
+          form.value.non_state_actors,
+          "non_state_actors",
+          "multiple"
+        );
       } else if (formItem === "dissemOrgs") {
         form.value.dissemOrgs = form.value.dissemOrgs.filter(
           (i) => i.name != name
@@ -1123,6 +1130,7 @@ export default {
     };
 
     const updatePayload = (updatedProduct) => {
+      console.log("updatedProduct: ", updatedProduct);
       payload.value = Object.assign({}, updatedProduct);
       payload.value.countries = updatedProduct.countries.map(
         (country) => country.code
@@ -1131,8 +1139,8 @@ export default {
       payload.value.coordinators = updatedProduct.coordinators.map(
         (coordinator) => coordinator.code
       );
-      payload.value.nonStateActors = updatedProduct.nonStateActors.map(
-        (nonStateActor) => nonStateActor.name
+      payload.value.non_state_actors = updatedProduct.non_state_actors.map(
+        (non_state_actor) => non_state_actor.name
       );
       payload.value.coauthors = updatedProduct.coauthors.map(
         (coauthors) => coauthors.code
@@ -1164,15 +1172,15 @@ export default {
         topicsToSelect.push(topicValue);
       });
       form.value.topics = topicsToSelect;
-      const actorsToSelect = [];
-      updatedProduct.nonStateActors.forEach((actorFromBackend) => {
-        let actorValue = getValueForCode(
+      const nonStateActorsToSelect = [];
+      updatedProduct.non_state_actors.forEach((nonStateActorFromBackend) => {
+        let nonStateActorValue = getValueForName(
           lists.nonStateActors,
-          actorFromBackend.code
+          nonStateActorFromBackend.name
         );
-        actorsToSelect.push(actorValue);
+        nonStateActorsToSelect.push(nonStateActorValue);
       });
-      form.value.nonStateActors = actorsToSelect;
+      form.value.non_state_actors = nonStateActorsToSelect;
       const dissemsToSelect = [];
       updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
         //if statement is temporary until high side backend starts returning dissem orgs as an object
@@ -1358,9 +1366,14 @@ export default {
       });
     };
 
-    const fileSizeInKb = (fileSize) => {
-      const kb = parseFloat(fileSize) * 0.001;
-      return Math.round(kb);
+    const convertedFileSize = (fileSize) => {
+      let kb = parseFloat(fileSize) * 0.001;
+      if (kb > 1000) {
+        let mb = kb * 0.001;
+        return Math.round(mb * 10.0) / 10.0 + "MB";
+      } else {
+        return Math.round(kb * 10.0) / 10.0 + "KB";
+      }
     };
 
     const removeDocument = (attachmentID, doc_num) => {
@@ -1387,7 +1400,7 @@ export default {
         });
       } else {
         axios
-          .post("/documents/" + route.params.doc_num + "/deleteMe")
+          .delete("/documents/" + route.params.doc_num + "/deleteMe")
           .then((response) => {
             if (response.data.error) {
               createNotification({
@@ -1592,7 +1605,7 @@ export default {
       uploadThumbnail,
       onInputChange,
       onDrop,
-      fileSizeInKb,
+      convertedFileSize,
       removeDocument,
       deleteDocument,
       publishProduct,

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { metadata } from "@/config";
 import AttachmentView from "../views/AttachmentView.vue";
 import EditProductView from "../views/EditProductView.vue";
 import HomeView from "../views/HomeView.vue";
@@ -11,6 +10,7 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
+import { isProduction } from "@/helpers";
 
 const routes = [
   {
@@ -18,7 +18,7 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: {
-      title: metadata.application_name,
+      title: "Current",
     },
   },
   {
@@ -128,7 +128,7 @@ const routes = [
   },
 ];
 
-if (import.meta.env.MODE !== "production") {
+if (!isProduction()) {
   routes.push({
     path: "/workspace",
     name: "workspace",
@@ -163,7 +163,7 @@ router.beforeEach((to, from, next) => {
         break;
     }
   } else {
-    document.title = to.meta.title ? to.meta.title : metadata.application_name;
+    document.title = to.meta.title ? to.meta.title : "Current";
   }
   next();
 });

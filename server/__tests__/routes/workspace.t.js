@@ -1,67 +1,119 @@
-const { GenericContainer, PostgreSqlContainer } = require("testcontainers");
-const {
-  loadProductsIntoMongo,
-  loadSavedProducts,
-  loadCollections,
-  loadCollectionProducts,
-} = require("../__utils__/dataLoader");
-
-const express = require("express");
 const request = require("supertest");
+const { setupApp } = require("../__utils__/expressUtils");
 
-const mongoose = require("mongoose");
-const { Sequelize } = require("sequelize");
+jest.mock("../../src/services/product-service.js", () => {
+  return jest.fn().mockImplementation(() => {
+    const { products } = require("../__utils__/dataLoader");
+    return {
+      findPageOfDraftProductsForUser: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error("whoops");
+        }
+
+        return {
+          content: products.filter((product) => product.state === "draft"),
+        };
+      }),
+      findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error("whoops");
+        }
+
+        return {
+          content: products.filter((product) => product.state === "posted"),
+        };
+      }),
+      findPageOfProductsForUser: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error("whoops");
+        }
+
+        return {
+          content: products,
+        };
+      }),
+    };
+  });
+});
+
+jest.mock("../../src/services/workspace.js", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      findPageOfSavedProductsForUser: jest.fn().mockImplementation(() => {
+        return {
+          content: [{ productId: "WIReWIRe_sample_1" }],
+        };
+      }),
+      createSavedProduct: jest.fn().mockImplementation((productId) => {
+        return { id: 1, productId: productId };
+      }),
+      deleteSavedProduct: jest.fn(),
+      findPageOfCollectionsForUser: jest.fn().mockImplementation(() => {
+        return {
+          content: [{ name: "Sample Collection" }],
+        };
+      }),
+      createCollection: jest.fn().mockImplementation((data) => {
+        return {
+          id: 1,
+          name: data.name,
+          description: data.description,
+          image: data.image,
+          createdBy: data.createdBy,
+        };
+      }),
+      updateCollection: jest.fn().mockImplementation((id, data) => {
+        return {
+          id: id,
+          name: data.name,
+          description: data.description,
+          image: data.image,
+          createdBy: data.createdBy,
+        };
+      }),
+      deleteCollection: jest.fn(),
+      findSavedProductsInCollection: jest
+        .fn()
+        .mockImplementation((collectionId) => {
+          if (collectionId === "1") {
+            return [{ productId: "WIReWIRe_sample_1" }];
+          }
+
+          return [];
+        }),
+      addSavedProductToCollection: jest
+        .fn()
+        .mockImplementation((collectionId, productId) => {
+          if (collectionId === "1" && productId === "1") {
+            return {};
+          }
+
+          return null;
+        }),
+      removeSavedProductFromCollection: jest
+        .fn()
+        .mockImplementation((collectionId, productId) => {
+          if (collectionId === "1" && productId === "1") {
+            return {};
+          }
+
+          return null;
+        }),
+    };
+  });
+});
 
 describe("Workspace Routes", () => {
-  let mongoContainer;
-  let mongoUrl;
-  let postgresContainer;
-  let app;
-
-  beforeAll(async () => {
-    mongoContainer = await new GenericContainer("mongo")
-      .withExposedPorts(27017)
-      .start();
-
-    mongoUrl = `mongodb://${mongoContainer.getHost()}:${mongoContainer.getMappedPort(
-      27017
-    )}/mxms`;
-
-    // Load products
-    await loadProductsIntoMongo(mongoUrl);
-
-    postgresContainer = await new PostgreSqlContainer().start();
-    process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
-
-    // Load Saved Products
-    await loadSavedProducts(postgresContainer.getConnectionUri());
-    await loadCollections(postgresContainer.getConnectionUri());
-    await loadCollectionProducts(postgresContainer.getConnectionUri());
-
-    app = express();
-    app.use(express.json());
-
-    const router = require("../../src/routes/workspace");
-    app.use("/workspace", router);
-  }, 70_000);
-
-  beforeEach(async () => {
-    await mongoose.connect(mongoUrl, {
-      useNewUrlParser: true,
-    });
-  });
-
   afterEach(() => {
-    mongoose.connection.close();
-  });
-
-  afterAll(() => {
-    mongoContainer.stop();
-    postgresContainer.stop();
+    jest.clearAllMocks();
+    delete process.env.THROW_TEST_ERROR;
   });
 
   describe("GET /workspace/drafts", () => {
     it("should return draft products", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .get("/workspace/drafts")
         .expect(200)
@@ -71,10 +123,27 @@ describe("Workspace Routes", () => {
           expect(res.body.content[0].productNumber).toBe("WIReWIRe_sample_5");
         });
     });
+
+    it("should return standard error response when lookup fails", () => {
+      process.env.THROW_TEST_ERROR = true;
+
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
+      return request(app).get("/workspace/drafts").expect(500, {
+        message: "whoops",
+        code: 500,
+        fieldName: "",
+        itemId: "",
+      });
+    });
   });
 
   describe("GET /workspace/recent", () => {
     it("should return recent posted products", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .get("/workspace/recent")
         .expect(200)
@@ -84,17 +153,34 @@ describe("Workspace Routes", () => {
 
           const ids = res.body.content.map((product) => product.productNumber);
           expect(ids).toStrictEqual([
-            "WIReWIRe_sample_4",
-            "WIReWIRe_sample_3",
-            "WIReWIRe_sample_2",
             "WIReWIRe_sample_1",
+            "WIReWIRe_sample_2",
+            "WIReWIRe_sample_3",
+            "WIReWIRe_sample_4",
           ]);
         });
+    });
+
+    it("should return standard error response when lookup fails", () => {
+      process.env.THROW_TEST_ERROR = true;
+
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
+      return request(app).get("/workspace/recent").expect(500, {
+        message: "whoops",
+        code: 500,
+        fieldName: "",
+        itemId: "",
+      });
     });
   });
 
   describe("GET /workspace/stats", () => {
     it("should return stats", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .get("/workspace/stats")
         .expect(200)
@@ -107,6 +193,9 @@ describe("Workspace Routes", () => {
 
   describe("GET /workspace/products", () => {
     it("should return all my products", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .get("/workspace/products")
         .expect(200)
@@ -116,18 +205,35 @@ describe("Workspace Routes", () => {
 
           const ids = res.body.content.map((product) => product.productNumber);
           expect(ids).toStrictEqual([
-            "WIReWIRe_sample_5",
-            "WIReWIRe_sample_4",
-            "WIReWIRe_sample_3",
-            "WIReWIRe_sample_2",
             "WIReWIRe_sample_1",
+            "WIReWIRe_sample_2",
+            "WIReWIRe_sample_3",
+            "WIReWIRe_sample_4",
+            "WIReWIRe_sample_5",
           ]);
         });
+    });
+
+    it("should return standard error response when lookup fails", () => {
+      process.env.THROW_TEST_ERROR = true;
+
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
+      return request(app).get("/workspace/products").expect(500, {
+        message: "whoops",
+        code: 500,
+        fieldName: "",
+        itemId: "",
+      });
     });
   });
 
   describe("GET /workspace/saved", () => {
     it("should return all saved products", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .get("/workspace/saved")
         .expect(200)
@@ -145,6 +251,9 @@ describe("Workspace Routes", () => {
 
   describe("PUT /workspace/saved/:productId", () => {
     it("should mark a product saved", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .put("/workspace/saved/fooProduct")
         .expect(200)
@@ -158,24 +267,18 @@ describe("Workspace Routes", () => {
 
   describe("DELETE /workspace/saved/:productId", () => {
     it("should unmark a product saved", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
-      const savedProductModel = require("../../src/models/saved_product");
-      savedProductModel(sequelize);
-
-      const existingProduct = await sequelize.models.SavedProduct.create({
-        productId: "foobar",
-        createdBy: 1,
-      });
-
-      return request(app)
-        .delete(`/workspace/saved/${existingProduct.productId}`)
-        .expect(204);
+      return request(app).delete(`/workspace/saved/to-be-deleted`).expect(204);
     });
   });
 
   describe("GET /workspace/collections", () => {
     it("should return all collections", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .get("/workspace/collections")
         .expect(200)
@@ -191,6 +294,9 @@ describe("Workspace Routes", () => {
 
   describe("POST /workspace/collections", () => {
     it("should create a collection", () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .post("/workspace/collections")
         .send({ name: "Should save" })
@@ -205,15 +311,11 @@ describe("Workspace Routes", () => {
 
   describe("PUT /workspace/collections/:collectionId", () => {
     it("should update a collection", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .put(`/workspace/collections/${existingCollection.id}`)
+        .put(`/workspace/collections/1`)
         .send({
           name: "Updated name",
           description: "Updated description",
@@ -231,30 +333,20 @@ describe("Workspace Routes", () => {
 
   describe("DELETE /workspace/collections/:collectionId", () => {
     it("should delete a collection", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
-
-      return request(app)
-        .delete(`/workspace/collections/${existingCollection.id}`)
-        .expect(204);
+      return request(app).delete(`/workspace/collections/1`).expect(204);
     });
   });
 
   describe("GET /workspace/collections/:collectionId/products", () => {
     it("should return all products for a collection", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .get(`/workspace/collections/${existingCollection.id}/products`)
+        .get(`/workspace/collections/1/products`)
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -266,6 +358,9 @@ describe("Workspace Routes", () => {
     });
 
     it("should return 404 when collection is not found", async () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .delete(`/workspace/collections/1000/products`)
         .expect(404);
@@ -274,55 +369,36 @@ describe("Workspace Routes", () => {
 
   describe("PUT /workspace/collections/:collectionId/products/:savedProductId", () => {
     it("should add a saved product to a collection", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
-
-      const savedProductModel = require("../../src/models/saved_product");
-      savedProductModel(sequelize);
-
-      const savedProduct = await sequelize.models.SavedProduct.create({
-        productId: "fooBar",
-      });
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .put(
-          `/workspace/collections/${existingCollection.id}/products/${savedProduct.id}`
-        )
+        .put(`/workspace/collections/1/products/1`)
         .expect(200);
     });
 
     it("should return 404 when collection is not found", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const savedProductModel = require("../../src/models/saved_product");
-      savedProductModel(sequelize);
-
-      const existingSavedProduct =
-        await sequelize.models.SavedProduct.findOne();
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .put(`/workspace/collections/1000/products/${existingSavedProduct.id}`)
+        .put(`/workspace/collections/1000/products/1`)
         .expect(404);
     });
 
     it("should return 404 when saved product is not found", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .put(`/workspace/collections/${existingCollection.id}/products/1000`)
+        .put(`/workspace/collections/1/products/1000`)
         .expect(404);
     });
 
     it("should return 404 when collection and saved product is not found", async () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .put("/workspace/collections/1000/products/1000")
         .expect(404);
@@ -331,57 +407,36 @@ describe("Workspace Routes", () => {
 
   describe("DELETE /workspace/collections/:collectionId/products/:savedProductId", () => {
     it("should remove a saved product from a collection", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
-
-      const savedProductModel = require("../../src/models/saved_product");
-      savedProductModel(sequelize);
-
-      const savedProduct = await sequelize.models.SavedProduct.create({
-        productId: "fooBar",
-      });
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .delete(
-          `/workspace/collections/${existingCollection.id}/products/${savedProduct.id}`
-        )
+        .delete(`/workspace/collections/1/products/1`)
         .expect(204);
     });
 
     it("should return 404 when collection is not found", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const savedProductModel = require("../../src/models/saved_product");
-      savedProductModel(sequelize);
-
-      const existingSavedProduct =
-        await sequelize.models.SavedProduct.findOne();
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .delete(
-          `/workspace/collections/1000/products/${existingSavedProduct.id}`
-        )
+        .delete(`/workspace/collections/1000/products/1`)
         .expect(404);
     });
 
     it("should return 404 when saved product is not found", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const collectionModel = require("../../src/models/collection");
-      collectionModel(sequelize);
-
-      const existingCollection = await sequelize.models.Collection.findOne();
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
 
       return request(app)
-        .delete(`/workspace/collections/${existingCollection.id}/products/1000`)
+        .delete(`/workspace/collections/1/products/1000`)
         .expect(404);
     });
 
     it("should return 404 when collection and saved product is not found", async () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupApp("/workspace", router);
+
       return request(app)
         .delete("/workspace/collections/1000/products/1000")
         .expect(404);

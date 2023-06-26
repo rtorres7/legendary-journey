@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node --watch src/bin/www",
     "server-dependencies": "npm install",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --collectCoverageFrom=src/**/*.js"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --collectCoverageFrom=\"src/**/{!(app),}.js\""
   },
   "jest": {
     "testPathIgnorePatterns": [
