@@ -41,7 +41,7 @@ app.use(
     secret: "keyboard cat",
     saveUninitialized: false,
     resave: false,
-    cookie: { secure: false, sameSite: true },
+    cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({ mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles` }) // Default TTL is 14 days
   })
 );
