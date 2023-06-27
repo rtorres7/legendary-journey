@@ -10,6 +10,7 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
+import WorkspaceView from "../workspace/views/WorkspaceView.vue";
 import { isProduction } from "@/helpers";
 
 const routes = [
@@ -130,9 +131,21 @@ const routes = [
 
 if (!isProduction()) {
   routes.push({
+    path: "/workspace-demo",
+    name: "workspace-demo",
+    component: MockWorkspaceView,
+    meta: {
+      title: "Workspace",
+      demo: true,
+    },
+  });
+}
+
+if (!isProduction()) {
+  routes.push({
     path: "/workspace",
     name: "workspace",
-    component: MockWorkspaceView,
+    component: WorkspaceView,
     meta: {
       title: "Workspace",
       demo: true,
