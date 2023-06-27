@@ -498,7 +498,7 @@
                       multiple
                       required
                       @update:modelValue="
-                        updateField($event, 'nonStateActors', 'multiple')
+                        updateField($event, 'non_state_actors', 'multiple')
                       "
                     />
                     <div
@@ -582,7 +582,10 @@
                         :id="'attachment' + attachment.id"
                         :key="attachment"
                       >
-                        <div class="flex space-x-4 ml-4 pt-4">
+                        <div
+                          v-if="notInFilePreview(attachment)"
+                          class="flex space-x-4 ml-4 pt-4"
+                        >
                           <PhotoIcon
                             v-if="attachment.mime_type.includes('image/')"
                             class="h-6 w-6 self-top text-slate-500 dark:text-slate-400 energy:text-zinc-400"
@@ -977,6 +980,14 @@ export default {
     const attachmentSelectedFile = () => {
       attachmentDropzoneFile.value =
         document.querySelector(".fileUpload").files[0];
+    };
+
+    const notInFilePreview = (attachment) => {
+      if (!files.value.find((file) => file.dbId == attachment.id)) {
+        return true;
+      } else {
+        return false;
+      }
     };
 
     const toggleAllIntelOrgs = () => {
@@ -1582,6 +1593,7 @@ export default {
       attachmentDropzoneFile,
       attachmentDrop,
       attachmentSelectedFile,
+      notInFilePreview,
       toggleAllIntelOrgs,
       updateToggleAllIntelOrgs,
       removeItem,

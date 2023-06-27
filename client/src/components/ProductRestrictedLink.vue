@@ -25,6 +25,22 @@
           {{ userAccess() }}.
         </p>
       </div>
+      <template v-if="nipfsNotEmpty()">
+        <p>
+          In order to view this document, you need to update your accesses by
+          submitting an access request in JEMS for:
+        </p>
+        <template v-for="(values, item) in nipfsNeeded()" :key="item">
+          <p class="capitalize">
+            {{ item }}
+          </p>
+          <ul class="list-disc list-inside">
+            <li v-for="value in values" :key="value">
+              {{ value }}
+            </li>
+          </ul>
+        </template>
+      </template>
       <div class="flex flex-col space-y-6">
         <template
           v-for="paragraph in metadata.restricted_access"
@@ -66,6 +82,21 @@ export default {
       }
       return "who have the required accesses";
     };
+    const nipfsNotEmpty = () => {
+      const nipfs = nipfsNeeded();
+      if (typeof nipfs != "undefined" && Object.keys(nipfs).length > 0) {
+        return true;
+      }
+      return false;
+    };
+    const nipfsNeeded = () => {
+      const nipfs = Object.fromEntries(
+        Object.entries(props.product.needed).filter(
+          ([key]) => !key.includes("orgs")
+        )
+      );
+      return nipfs;
+    };
     const isDialogOpen = ref(false);
 
     const closeDialog = () => {
@@ -79,6 +110,8 @@ export default {
     return {
       metadata,
       userAccess,
+      nipfsNotEmpty,
+      nipfsNeeded,
       isProductLocked,
       isDialogOpen,
       closeDialog,
