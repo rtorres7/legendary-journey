@@ -18,8 +18,13 @@ router.get('/profile', (req, res) => {
 
 router.delete('/logout', (req, res) => {
   req.logout((error) => {
-    console.warn('There was a problem logging out', error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
+    if (error) {
+      console.warn('There was a problem logging out', error);
+      KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
+      return;
+    }
+
+    res.send(204);
   });
 });
 

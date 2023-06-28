@@ -10,6 +10,7 @@ describe('MetadataService', () => {
   let mongoUrl;
 
   beforeAll(async() => {
+    mongoose.set('strictQuery', false); // TODO: When we go to mongoose 7.x this line can go away.
     container = await new GenericContainer("mongo")
       .withExposedPorts(27017)
       .start();

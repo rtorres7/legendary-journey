@@ -16,7 +16,7 @@ function setupMongoose() {
     console.log('Mongo connection successful');
   });
   mongoose.connection.on('error', error => handleMongooseErrors(error));
-  mongoose.connection.on('disconnected', error => handleMongooseDisconnect(error));
+  mongoose.connection.on('disconnected', () => handleMongooseDisconnect());
 }
 
 function handleInitialError(error) {
@@ -34,8 +34,8 @@ function handleMongooseErrors(error) {
   console.warn('There was an error while accessing Mongo. Mongoose should retry automatically', error.message);
 }
 
-function handleMongooseDisconnect(error) {
-  console.warn('The app has been disconnected from Mongo. Mongoose should reconnect automatically', error.message);
+function handleMongooseDisconnect() {
+  console.warn('The app has been disconnected from Mongo. Mongoose should reconnect automatically');
 }
 
 module.exports = setupMongoose;
