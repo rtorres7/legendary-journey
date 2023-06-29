@@ -10,6 +10,7 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
+import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
 import { isProduction } from "@/helpers";
 
 const routes = [
@@ -135,6 +136,15 @@ if (!isProduction()) {
     component: MockWorkspaceView,
     meta: {
       title: "Workspace",
+      demo: true,
+    },
+  });
+  routes.push({
+    path: "/studio",
+    name: "studio",
+    component: MockStudioView,
+    meta: {
+      title: "Current Studio",
       demo: true,
     },
   });
