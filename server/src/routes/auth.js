@@ -13,7 +13,7 @@ router.get('/callback', auth.passport.authenticate('oauth2', {
 }));
 
 router.get('/profile', (req, res) => {
-  res.send(`Hello, user profile: ${JSON.stringify(req.user, null, 2)}`);
+  res.json(req.user);
 });
 
 router.delete('/logout', (req, res) => {

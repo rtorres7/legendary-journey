@@ -34,7 +34,7 @@ describe('Auth Routes', () => {
 
       return request(app)
         .get('/auth/profile')
-        .expect(200, 'Hello, user profile: {\n  "id": 1\n}');
+        .expect(200, {"id": 1});
     });
   });
 

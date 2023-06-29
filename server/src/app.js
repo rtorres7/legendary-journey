@@ -113,6 +113,9 @@ if (process.env.MXS_ENV === 'container') {
   const ProductService = require('./services/product-service');
   const productService = new ProductService();
   productService.initializeProductData();
+
+  const loadUserData = require('./postgres/seed');
+  loadUserData();
 }
 
 /***********************************
@@ -125,7 +128,6 @@ const homeRouter = require("./routes/home");
 const indexRouter = require("./routes");
 const legacyRouter = require("./routes/legacy");
 const searchRouter = require("./routes/search");
-const usersRouter = require("./routes/users");
 const workspaceRouter = require("./routes/workspace");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
@@ -135,7 +137,6 @@ app.use("/articles", articlesRouter);
 app.use("/auth", authRouter);
 app.use("/home", homeRouter);
 app.use("/search", searchRouter);
-app.use("/users", usersRouter);
 app.use("/workspace", workspaceRouter);
 
 // Legacy routes

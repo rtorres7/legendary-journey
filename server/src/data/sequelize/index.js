@@ -13,7 +13,7 @@ if (sequelize === undefined) {
     require('../../models/unique_view'),
     require('../../models/total_view'),
     require('../../models/collection_products'),
-    require("../../models/users"),
+    require("../../models/user"),
   ];
 
   for (const modelDefiner of modelDefiners) {

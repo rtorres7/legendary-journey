@@ -27,7 +27,7 @@ router.get("/:id/preview.json", function (req, res) {
 });
 
 router.get("/user_data", function (req, res) {
-  res.redirect("/users/");
+  res.redirect("/auth/profile");
 });
 
 router.get("/links", function (req, res) {

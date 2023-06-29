@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node --watch src/bin/www",
     "server-dependencies": "npm install",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --collectCoverageFrom=\"src/**/{!(app),}.js\""
+    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage"
   },
   "jest": {
     "setupFilesAfterEnv": [
@@ -14,6 +14,13 @@
     "testPathIgnorePatterns": [
       "<rootDir>/__tests__/__utils__",
       "<rootDir>/node_modules/"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "src/app.js",
+      "src/postgres/seed.js"
     ]
   },
   "dependencies": {

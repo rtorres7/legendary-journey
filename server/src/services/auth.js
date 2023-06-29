@@ -1,7 +1,8 @@
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2');
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const UserService = require('../services/user-service');
+const userService = new UserService();
 const crypto = require('crypto');
 
 passport.serializeUser((user, done) => {
@@ -9,7 +10,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findOne({ id, }).exec();
+  const user = await userService.findById(id);
   done(null, user);
 });
 
@@ -33,7 +34,7 @@ passport.use(new OAuth2Strategy({
   const user = await findUser(dn);
   if (user === undefined || user === null) {
     // TODO: Deny access or create user?
-    return cb(null, false, 'Unable to find user');
+    return cb('Unable to find user', null);
   }
 
   console.log('User', user);
@@ -48,7 +49,7 @@ function findDN(req, accessToken, profile) {
     const cert = new crypto.X509Certificate(decodeURIComponent(certHeader));
     console.log('CERT info', cert);
 
-    return cert.subject;
+    return cert.subject.replace(/\n/g,',');
   }
 
   try {
@@ -64,8 +65,7 @@ function findDN(req, accessToken, profile) {
 }
 
 async function findUser(dn) {
-  // TODO: This needs to change to lookup the user by the dn
-  return await User.findOne({}).exec();
+  return await userService.findByDN(dn);
 }
 
 const OPEN_PATHS = [

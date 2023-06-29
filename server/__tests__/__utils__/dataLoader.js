@@ -2903,6 +2903,20 @@ const loadCollectionProducts = async (postgresUrl) => {
   collection.addSavedProducts(savedProducts);
 };
 
+const loadUsers = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const userModel = require('../../src/models/user');
+  userModel(sequelize);
+
+  await sequelize.models.User.sync();
+
+  await sequelize.models.User.create({
+    email: 'foo@example.com',
+    dn: 'O=US,OU=OFFICE,CN=foo'
+  });
+}
+
 module.exports = {
   loadElasticSearch,
   loadMetadata,
@@ -2910,6 +2924,7 @@ module.exports = {
   loadSavedProducts,
   loadCollections,
   loadCollectionProducts,
+  loadUsers,
   articles,
   metadata,
 };
