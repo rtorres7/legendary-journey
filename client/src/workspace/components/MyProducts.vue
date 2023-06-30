@@ -1,92 +1,115 @@
 <template>
   <div>
-    <div class="text-2xl text-gray-700">My Products</div>
-    <div class="py-6 sm:flex justify-between items-center">
-      <div class="font-semibold mb-4 sm:mb-0">{{ numProducts }} products</div>
-      <div class="flex space-x-4">
-        <Listbox
-          v-model="selectedSort"
-          as="div"
-          class="min-w-[215px] inline-flex items-center text-gray-700"
-        >
-          <div>
-            <ListboxLabel class="text-sm line-clamp-1 xl:line-clamp-none w-max">
-              Sort By
-            </ListboxLabel>
-          </div>
-          <div class="w-full relative items-center ml-3">
-            <ListboxButton
-              class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-            >
-              <span class="text-sm block truncate capitalize">{{
-                selectedSort.name
-              }}</span>
-              <span class="absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
-              </span>
-            </ListboxButton>
-            <transition
-              enter-active-class="transition ease-out duration-100"
-              enter-from-class="transform opacity-0 scale-95"
-              enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
-              leave-from-class="transform opacity-100 scale-100"
-              leave-to-class="transform opacity-0 scale-95"
-            >
-              <ListboxOptions
-                class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
-              >
-                <ListboxOption
-                  v-for="item in sortOptions"
-                  v-slot="{ active, selected }"
-                  :key="item.name"
-                  :value="item"
-                  as="template"
-                >
-                  <li
-                    :class="[
-                      active ? 'bg-gray-100  ' : 'bg-none',
-                      'relative cursor-default select-none py-2 pl-10 pr-4',
-                    ]"
-                  >
-                    <span
-                      :class="[
-                        selected ? 'font-medium' : 'font-normal',
-                        'block truncate text-sm',
-                      ]"
-                      >{{ item.name }}</span
-                    >
-                    <span
-                      v-if="selected"
-                      class="absolute inset-y-0 left-0 flex items-center pl-3"
-                    >
-                      <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </li>
-                </ListboxOption>
-              </ListboxOptions>
-            </transition>
-          </div>
-        </Listbox>
-        <button
-          class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
-        >
-          <span>Filters</span>
-          <AdjustmentsHorizontalIcon class="h-5 w-5" />
-        </button>
+    <template v-if="loadingPublished">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 pt-20"
+      ></div>
+      <div
+        class="pt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+      >
+        <template v-for="card in 6" :key="card">
+          <MyPublishedProductCard :loading="true" />
+        </template>
       </div>
-    </div>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-    >
-      <template v-for="product in myPublished" :key="product">
-        <MyPublishedProductCard
-          :product="product"
-          type="product"
-          @delete="deleteProduct(product)"
-        />
+    </template>
+    <template v-else>
+      <div class="text-2xl text-gray-700">My Products</div>
+      <div class="py-6 sm:flex justify-between items-center">
+        <div v-if="numProducts > 0" class="font-semibold mb-4 sm:mb-0">
+          {{ numProducts }} products
+        </div>
+        <div class="flex space-x-4">
+          <Listbox
+            v-model="selectedSort"
+            as="div"
+            class="min-w-[215px] inline-flex items-center text-gray-700"
+          >
+            <div>
+              <ListboxLabel
+                class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+              >
+                Sort By
+              </ListboxLabel>
+            </div>
+            <div class="w-full relative items-center ml-3">
+              <ListboxButton
+                class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+              >
+                <span class="text-sm block truncate capitalize">{{
+                  selectedSort.name
+                }}</span>
+                <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                </span>
+              </ListboxButton>
+              <transition
+                enter-active-class="transition ease-out duration-100"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-75"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <ListboxOptions
+                  class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                >
+                  <ListboxOption
+                    v-for="item in sortOptions"
+                    v-slot="{ active, selected }"
+                    :key="item.name"
+                    :value="item"
+                    as="template"
+                  >
+                    <li
+                      :class="[
+                        active ? 'bg-gray-100  ' : 'bg-none',
+                        'relative cursor-default select-none py-2 pl-10 pr-4',
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          selected ? 'font-medium' : 'font-normal',
+                          'block truncate text-sm',
+                        ]"
+                        >{{ item.name }}</span
+                      >
+                      <span
+                        v-if="selected"
+                        class="absolute inset-y-0 left-0 flex items-center pl-3"
+                      >
+                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    </li>
+                  </ListboxOption>
+                </ListboxOptions>
+              </transition>
+            </div>
+          </Listbox>
+          <button
+            class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+          >
+            <span>Filters</span>
+            <AdjustmentsHorizontalIcon class="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+      <template v-if="myPublished.length == 0">
+        <p class="italic">No published products to show</p>
       </template>
-    </div>
+      <template v-else>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+        >
+          <template v-for="product in myPublished" :key="product">
+            <MyPublishedProductCard
+              :product="product"
+              type="product"
+              @delete="deleteProduct(product)"
+            />
+          </template>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 <script>

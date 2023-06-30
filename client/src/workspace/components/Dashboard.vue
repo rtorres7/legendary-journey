@@ -1,108 +1,107 @@
 <template>
   <div>
-    <div class="text-2xl text-gray-700">{{ currentUsername }}'s Workspace</div>
-    <div class="py-6 flex items-center">
-      <div class="text-lg font-bold">Continue where you left off</div>
-    </div>
-    <template v-if="loadingDrafts == true">
-      <MaxLoadingSpinner class="h-16 w-16"
-    /></template>
-    <template v-else>
-      <template v-if="myDrafts.length == 0">
-        <p class="italic">No drafts to show</p>
-      </template>
+    <template v-if="loadingDrafts || loadingPublished">
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 pt-20"
       >
-        <template v-for="(product, index) in myDrafts" :key="product">
+        <template v-for="(card, index) in 4" :key="card">
           <MyDraftProductCard
-            :product="product"
-            type="product"
-            :class="
-              index == 1
-                ? 'hidden sm:block'
-                : index == 2
-                ? 'hidden lg:block'
-                : index == 3
-                ? 'hidden 2xl:block'
-                : index > 3
-                ? 'hidden'
-                : ''
-            "
-            @delete="deleteProduct(product)"
+            :loading="true"
+            :class="index < numCards ? 'block' : 'hidden'"
+          />
+        </template>
+      </div>
+      <div
+        class="pt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+      >
+        <template v-for="(card, index) in 4" :key="card">
+          <MyPublishedProductCard
+            :loading="true"
+            :class="index < numCards ? 'block' : 'hidden'"
           />
         </template>
       </div>
     </template>
-    <div class="py-6 flex justify-between items-center">
-      <div class="text-lg font-bold">My Recent Products</div>
-      <a
-        class="flex items-center text-gray-500 text-sm font-semibold"
-        href="/workspace#products"
-      >
-        <span>More Products</span>
-        <ChevronRightIcon class="h-4 w-4" />
-      </a>
-    </div>
-    <template v-if="loadingPublished == true">
-      <MaxLoadingSpinner class="h-16 w-16"
-    /></template>
     <template v-else>
+      <div class="text-2xl text-gray-700">
+        {{ currentUsername }}'s Workspace
+      </div>
+      <template v-if="myDrafts.length > 0">
+        <div class="py-6 flex items-center">
+          <div class="text-lg font-bold">Continue where you left off</div>
+        </div>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+        >
+          <template v-for="(product, index) in myDrafts" :key="product">
+            <MyDraftProductCard
+              :product="product"
+              :productIcon="getProductIcon(product)"
+              type="product"
+              :class="index < numCards ? 'block' : 'hidden'"
+              @delete="deleteProduct(product)"
+            />
+          </template>
+        </div>
+      </template>
+      <div class="py-6 flex justify-between items-center">
+        <div class="text-lg font-bold">My Recent Products</div>
+        <a
+          v-if="myPublished.length > 4"
+          class="flex items-center text-gray-500 text-sm font-semibold"
+          href="/workspace#products"
+        >
+          <span>More Products</span>
+          <ChevronRightIcon class="h-4 w-4" />
+        </a>
+      </div>
       <template v-if="myPublished.length == 0">
         <p class="italic">No published products to show</p>
       </template>
+      <template v-else>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+        >
+          <template v-for="(product, index) in myPublished" :key="product">
+            <MyPublishedProductCard
+              :product="product"
+              type="product"
+              :class="index < numCards ? 'block' : 'hidden'"
+              @delete="deleteProduct(product)"
+            />
+          </template>
+        </div>
+      </template>
+      <div class="py-6 flex items-center">
+        <div class="text-lg font-bold">Your Stats</div>
+      </div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
-        <template v-for="(product, index) in myPublished" :key="product">
-          <MyPublishedProductCard
-            :product="product"
-            type="product"
-            :class="
-              index == 1
-                ? 'hidden sm:block'
-                : index == 2
-                ? 'hidden lg:block'
-                : index == 3
-                ? 'hidden 2xl:block'
-                : index > 3
-                ? 'hidden'
-                : ''
-            "
-            @delete="deleteProduct(product)"
-          />
-        </template>
+        <div
+          class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+        >
+          <div class="flex space-x-4 items-center text-slate-500">
+            <Square3Stack3DIcon class="h-5 w-5" />
+            <span class="text-sm font-normal"> Total Created</span>
+          </div>
+          <div class="font-semibold text-xl text-slate-700">16</div>
+        </div>
+        <div
+          class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+        >
+          <div class="flex space-x-4 items-center text-slate-500">
+            <EyeIcon class="h-5 w-5" />
+            <span class="text-sm font-normal">Total Views</span>
+          </div>
+          <div class="font-semibold text-xl text-slate-700">2.4m</div>
+        </div>
       </div>
     </template>
-    <div class="py-6 flex items-center">
-      <div class="text-lg font-bold">Your Stats</div>
-    </div>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-    >
-      <div
-        class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-      >
-        <div class="flex space-x-4 items-center text-slate-500">
-          <Square3Stack3DIcon class="h-5 w-5" />
-          <span class="text-sm font-normal"> Total Created</span>
-        </div>
-        <div class="font-semibold text-xl text-slate-700">16</div>
-      </div>
-      <div
-        class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-      >
-        <div class="flex space-x-4 items-center text-slate-500">
-          <EyeIcon class="h-5 w-5" />
-          <span class="text-sm font-normal">Total Views</span>
-        </div>
-        <div class="font-semibold text-xl text-slate-700">2.4m</div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 import MyDraftProductCard from "./MyDraftProductCard.vue";
@@ -123,6 +122,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const metadata = inject("metadata");
     const currentUsername = computed(() => store.state.user.user.name);
     const myDrafts = ref([]);
     const myPublished = ref([]);
@@ -133,6 +133,36 @@ export default {
     const deleteProduct = (product) => {
       axios.post("/documents/" + product.attributes.doc_num + "/deleteMe");
     };
+    const getProductIcon = (product) => {
+      const p = metadata.product_types.find(
+        (p) => p.code == product.attributes.product_type
+      );
+      if (p.icon != null) {
+        return p.icon;
+      } else {
+        return "";
+      }
+    };
+    const numCards = ref();
+    const screenWidth = ref();
+    const onScreenResize = () => {
+      window.addEventListener("resize", () => {
+        updateScreenWidth();
+      });
+    };
+    const updateScreenWidth = () => {
+      screenWidth.value = window.innerWidth;
+      if (screenWidth.value < 640) {
+        numCards.value = 1;
+      } else if (screenWidth.value >= 640 && screenWidth.value < 1024) {
+        numCards.value = 2;
+      } else if (screenWidth.value >= 1024 && screenWidth.value < 1536) {
+        numCards.value = 3;
+      } else {
+        numCards.value = 4;
+      }
+    };
+
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
@@ -163,6 +193,8 @@ export default {
             console.log("Couldn't retrieve stats");
           }
         });
+        updateScreenWidth();
+        onScreenResize();
       }
     });
     return {
@@ -175,6 +207,11 @@ export default {
       loadingPublished,
       loadingStats,
       deleteProduct,
+      getProductIcon,
+      screenWidth,
+      numCards,
+      updateScreenWidth,
+      onScreenResize,
     };
   },
 };
