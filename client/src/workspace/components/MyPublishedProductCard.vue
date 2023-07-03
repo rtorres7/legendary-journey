@@ -1,23 +1,18 @@
 <template>
   <div
-    class="flex flex-col bg-white rounded-md max-w-[464px] shadow-md hover:shadow-lg mb-2"
+    class="flex flex-col bg-white rounded-md relative max-w-[464px] shadow-md hover:shadow-lg mb-2"
   >
     <template v-if="loading">
-      <MaxCard class="h-[300px] loading animate-pulse">
-        <div
-          class="h-2/3 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700"
-        ></div>
-        <div class="h-1/3 pt-4 xl:pt-2 px-4 flex flex-col justify-between">
+      <div class="animate-pulse min-h-[370px] max-h-[555px]">
+        <div class="h-3/5 min-h-[177px] max-h-[261px] bg-slate-200"></div>
+        <div class="h-2/5 pt-4 px-4 flex flex-col justify-between">
           <div>
-            <h1
-              class="h-6 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded ]"
-            ></h1>
+            <h1 class="h-6 bg-slate-200 rounded mb-2"></h1>
+            <h2 class="h-6 bg-slate-200 rounded"></h2>
           </div>
-          <p
-            class="mb-2 xl:mt-1 h-5 w-1/2 bg-slate-200 dark:bg-slate-700 energy:bg-zinc-700 rounded"
-          ></p>
+          <p class="mb-2 xl:mt-1 h-5 w-1/2 bg-slate-200 rounded"></p>
         </div>
-      </MaxCard>
+      </div>
     </template>
     <template v-else>
       <div>
@@ -34,7 +29,7 @@
             <ProductImage :product="product" />
           </div>
         </router-link>
-        <div class="flex flex-col py-6 justify-between relative h-44">
+        <div class="flex flex-col py-6 justify-between">
           <div class="relative pb-6 px-4">
             <div
               class="text-gray-500 hover:text-gray-900 absolute top-0 right-0 cursor-pointer"
@@ -163,7 +158,7 @@
             </router-link>
           </div>
           <router-link
-            class="hover:underline cursor-pointer"
+            class="hover:underline cursor-pointer absolute bottom-0"
             :to="{
               name:
                 product.attributes.state === 'draft'
@@ -172,7 +167,7 @@
               params: { doc_num: product.attributes.doc_num },
             }"
           >
-            <div class="px-4 text-sm text-gray-500 absolute bottom-0 pb-4">
+            <div class="px-4 text-sm text-gray-500 pb-4">
               <div class="flex space-x-2">
                 <div>
                   {{
@@ -198,7 +193,6 @@ import {
   EllipsisVerticalIcon,
   PencilSquareIcon,
   ShareIcon,
-  StarIcon,
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
@@ -214,7 +208,6 @@ export default {
     EllipsisVerticalIcon,
     PencilSquareIcon,
     ShareIcon,
-    StarIcon,
     TrashIcon,
     XMarkIcon,
     ProductImage,
