@@ -439,23 +439,6 @@ db.articles.insertMany([
   },
 ]);
 db.users.drop();
-db.users.insertOne({
-  id: 50,
-  notifications: {
-    ntk: {},
-  },
-  authorizations: {
-    canManageWire: true,
-    canManageSpecialEditions: true,
-  },
-  name: "Jonathan Oszczakiewicz",
-  email: "jonathan@gmail.com",
-  roles: ["wire_editor", "ntk", "role_manager"],
-  has_org: true,
-  organization: "DNI",
-  phone_number: "999-9999",
-  dn: "Sample DN",
-});
 db.metadata.drop();
 db.metadata.insertOne({
   agency: "",

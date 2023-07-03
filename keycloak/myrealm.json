@@ -1,0 +1,344 @@
+{
+  "realm": "mxms",
+  "loginTheme": "keycloak",
+  "accountTheme": "keycloak",
+  "adminTheme": "keycloak",
+  "emailTheme": "keycloak",
+  "enabled": true,
+  "displayName": "maximus",
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "registrationEmailAsUsername": false,
+  "passwordPolicy": "",
+  "users": [
+    {
+      "username": "alvaram",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Alvaro",
+      "lastName": "Ramirez",
+      "email": "alvaram@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "juliluc",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Julie",
+      "lastName": "Luckanavage",
+      "email": "juliluc@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "rodotor",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Rodolfo",
+      "lastName": "Torres",
+      "email": "rodotor@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "kevibeh",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Kevin",
+      "lastName": "Behr",
+      "email": "kevibeh@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "danikol",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Daniel",
+      "lastName": "Kolb",
+      "email": "danikol@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "chriroh",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Christopher",
+      "lastName": "Rohr",
+      "email": "chriroh@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "timocor",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Timothy",
+      "lastName": "Corbitt",
+      "email": "timocor@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "kylemue",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "M Kyle",
+      "lastName": "Mueller",
+      "email": "kylemue@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "brentay",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Brent",
+      "lastName": "Taylor",
+      "email": "brentay@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "amangil",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Amanda",
+      "lastName": "Gilbreath",
+      "email": "amangil@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "damimil",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Damion",
+      "lastName": "Miles",
+      "email": "damimil@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "jonaosz",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Jonathan",
+      "lastName": "Oszczakiewicz",
+      "email": "jonaosz@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "kevihad",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Kevin",
+      "lastName": "Nguyen",
+      "email": "kevihad@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "jerekim",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Jeremiah",
+      "lastName": "Kim",
+      "email": "jerekim@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "joonkim",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Joon",
+      "lastName": "Kim",
+      "email": "joonkim@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "scotbea",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Scott",
+      "lastName": "Bearden",
+      "email": "scotbea@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "user1",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "First",
+      "lastName": "User",
+      "email": "user1@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "user2",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Second",
+      "lastName": "User",
+      "email": "user2@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password2",
+          "temporary": false
+        }
+      ]
+    }
+  ],
+  "defaultRoles": ["offline_access", "uma_authorization"],
+  "clients": [
+    {
+      "clientId": "maximus",
+      "rootUrl": "https://localhost:8443/auth/",
+      "adminUrl": "https://localhost:8443/auth/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "jJjVjNLQJ9r3dTc64rt2cFwenmEeusaY",
+      "redirectUris": ["https://localhost:8443/api/auth/callback"],
+      "webOrigins": ["+"],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "client.secret.creation.time": "1686424774",
+        "saml.force.post.binding": "false",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "post.logout.redirect.uris": "+",
+        "saml.server.signature": "false",
+        "clientAuthenticatorType": "client-secret",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    }
+  ]
+}

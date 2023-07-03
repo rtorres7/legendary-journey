@@ -56,7 +56,7 @@
 
 cd client
 npm install
-npm run serve:offline
+npm run dev:offline
 
 ```
 

@@ -2,6 +2,8 @@ const dayjs = require("dayjs");
 const Article = require("../models/articles");
 const ProductSearchService = require('../services/product-search-service');
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
+const constant = require("../util/constant");
+const { handleMongooseError } = require("../util/errors");
 
 class ProductService {
   constructor() {
@@ -158,6 +160,21 @@ class ProductService {
     return await Article
       .count()
       .exec();
+  }
+
+  async initializeProductData() {
+    const indexesCreated = await this.productSearchService.createIndexesIfNecessary();
+
+    if (indexesCreated.includes('products')) {
+      try {
+        const products = await Article.find().exec();
+        products.forEach(product => {
+          this.productSearchService.create(product.indexable);
+        });
+      } catch (error) {
+        handleMongooseError('There was a problem initializing product seed data');
+      }
+    }
   }
 }
 
