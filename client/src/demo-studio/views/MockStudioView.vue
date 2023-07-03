@@ -558,7 +558,136 @@
         <div
           class="flex flex-col text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
         >
-          Test
+          <div
+            :class="
+              isActivePage('#home')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">Content Dashboard</div>
+            <div class="text-gray-400 text-sm">
+              <p class="hidden 3xl:block">3XL Mode 1800px</p>
+              <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+              <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+              <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+              <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+              <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+              <p class="block sm:hidden">Less than SM mode</p>
+            </div>
+            <div class="py-3">
+              <div class="flex items-center space-x-2 py-3">
+                <!-- <div
+                  class="bg-red-500 text-white py-1 px-2 text-sm uppercase font-semibold rounded-md"
+                >
+                  Live
+                </div> -->
+                <span class="text-lg"></span>
+              </div>
+              <div
+                class="flex max-h-[337px] max-w-[1200px] bg-white shadow-md hover:shadow-lg"
+              >
+                <div class="max-w-[600px]">
+                  <img src="@/assets/mocks/16x9_005_war.jpg" alt="" />
+                </div>
+                <div class="px-4 py-2">
+                  <div class="h-full flex flex-col justify-between">
+                    <div>
+                      <span class="text-gray-400 text-xs uppercase"
+                        >Issue STU-0075</span
+                      >
+                      <div
+                        class="flex items-center text-2xl font-semibold py-4"
+                      >
+                        <div
+                          class="bg-red-500 text-white py-1 px-2 text-sm uppercase rounded-md"
+                        >
+                          Live
+                        </div>
+                        <div class="py-1 ml-2">Russo-Ukrainian War</div>
+                      </div>
+                      <!-- <div class="text-gray-500 font-medium text-sm">
+                        Last Updated by Jonathan Oszczakiewicz
+                      </div> -->
+                      <div class="text-xs text-gray-500 uppercase py-1">
+                        Top Products
+                      </div>
+                      <ul
+                        class="border-b border-dotted border-gray-300 text-xs text-gray-700"
+                      >
+                        <li
+                          class="border-b border-dotted border-gray-300 text-base font-medium py-2"
+                        >
+                          <div class="line-clamp-2">
+                            <span class="text-gray-500">(U)</span> Ukraine
+                            Claims Gains Near Bakhmut as Deadly Fighting
+                            Continues
+                          </div>
+                        </li>
+                        <li class="border-b border-dotted border-gray-300 py-2">
+                          <div class="line-clamp-1">
+                            <span class="text-gray-500">(U)</span> Deciphering
+                            Vladimir Putin's many appearances since mutiny
+                          </div>
+                        </li>
+                        <li class="py-2">
+                          <div class="line-clamp-1">
+                            <span class="text-gray-500">(U)</span> Analysis:
+                            Putin expected to meet Xi Jinping and other world
+                            leaders for first time since Wagner insurrection
+                            Analysis: Putin expected to meet Xi Jinping and
+                            other world leaders for first time since Wagner
+                            insurrection
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      class="bg-red-600/10 text-red-600 text-sm px-2 py-1 rounded-md w-fit"
+                    >
+                      Expires in 4 Days
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            :class="
+              isActivePage('#live')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">Live Content</div>
+            <!-- <div class="text-gray-400 text-sm">
+                <p class="hidden 3xl:block">3XL Mode 1800px</p>
+                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+                <p class="block sm:hidden">Less than SM mode</p>
+              </div> -->
+          </div>
+          <div
+            :class="
+              isActivePage('#issues')
+                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                : 'hidden'
+            "
+          >
+            <div class="text-2xl text-gray-700">Upcoming Issues</div>
+            <!-- <div class="text-gray-400 text-sm">
+                <p class="hidden 3xl:block">3XL Mode 1800px</p>
+                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+                <p class="block sm:hidden">Less than SM mode</p>
+              </div> -->
+          </div>
         </div>
       </div>
     </div>
