@@ -125,6 +125,7 @@ export default {
     const loadingDrafts = ref(true);
     const loadingPublished = ref(true);
     const loadingStats = ref(true);
+    const createNotification = inject("create-notification");
     const deleteProduct = (product) => {
       axios.post("/documents/" + product.attributes.doc_num + "/deleteMe");
     };
@@ -178,7 +179,12 @@ export default {
           if (response.data) {
             myPublished.value = response.data.content;
           } else {
-            console.log("Couldn't retrieve published products");
+            createNotification({
+              title: "Error",
+              message: "There was an error retrieving Recent Products.",
+              type: "error",
+              autoClose: false,
+            });
           }
         });
         axios.get("workspace/stats").then((response) => {
