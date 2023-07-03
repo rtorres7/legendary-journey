@@ -1881,22 +1881,22 @@ export const metadata = {
         {
           name: "Bulletin",
           code: 10389,
-          publishable: false,
+          publishable: true,
         },
         {
           name: "Watch",
           code: 10390,
-          publishable: false,
+          publishable: true,
         },
         {
           name: "Alert",
           code: 10391,
-          publishable: false,
+          publishable: true,
         },
         {
           name: "Threat of Key Concern",
           code: 10392,
-          publishable: false,
+          publishable: true,
         },
       ],
     },
@@ -2347,6 +2347,27 @@ export const metadata = {
         {
           name: "Terrorism",
           code: "TERR",
+        },
+      ],
+    },
+    alerts: {
+      displayName: "Alerts",
+      values: [
+        {
+          name: "Bulletin",
+          code: "10389",
+        },
+        {
+          name: "Watch",
+          code: "10390",
+        },
+        {
+          name: "Alert",
+          code: "10391",
+        },
+        {
+          name: "Threat of Key Concern",
+          code: "10392",
         },
       ],
     },

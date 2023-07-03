@@ -492,6 +492,46 @@
             </template>
           </BannerNavPopover>
         </li>
+        <li>
+          <BannerNavPopover :wideShrunk="loadingMetadata ? false : true">
+            <template #heading>
+              Alerts
+              <ChevronDownIcon class="h-3 w-3 ml-1" aria-hidden="true" />
+            </template>
+            <template #content>
+              <div class="hidden lg:block">
+                <p class="text-lg font-medium mb-4">Alerts</p>
+                <template v-if="loadingMetadata">
+                  <div class="flex justify-center">
+                    <MaxLoadingSpinner class="text-slate-100 h-14 w-14" />
+                  </div>
+                </template>
+                <template v-else>
+                  <div
+                    class="grid lg:grid-cols-4 xl:grid-cols-7 gap-x-4 gap-y-2 pb-4"
+                    aria-label="select an alert"
+                  >
+                    <template v-for="alert in metadata.alerts" :key="alert">
+                      <router-link
+                        :to="{
+                          name: 'search',
+                          query: {
+                            'product_types[]': alert.code,
+                            view: 'grid',
+                            landing: true,
+                          },
+                        }"
+                        class="hover:underline cursor-pointer"
+                      >
+                        {{ alert.name }}
+                      </router-link>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </BannerNavPopover>
+        </li>
       </ul>
     </div>
     <!-- Mobile side menu -->
