@@ -582,43 +582,104 @@
                 >
                   Live
                 </div> -->
-                <span class="text-lg"></span>
+                <span class="relative flex h-3 w-3">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+                  ></span>
+                  <span
+                    class="relative inline-flex rounded-full h-3 w-3 bg-red-500"
+                  ></span>
+                </span>
+                <span class="text-base font-bold tracking-wide uppercase"
+                  >Live Now</span
+                >
               </div>
               <div
-                class="flex max-h-[337px] max-w-[1200px] bg-white shadow-md hover:shadow-lg"
+                class="flex max-h-[360px] max-w-[1280px] bg-white shadow-md hover:shadow-lg"
               >
-                <div class="max-w-[600px]">
+                <div class="max-w-[640px]">
                   <img src="@/assets/mocks/16x9_005_war.jpg" alt="" />
                 </div>
-                <div class="px-4 py-2">
-                  <div class="h-full flex flex-col justify-between">
+                <div class="relative p-6">
+                  <div
+                    class="text-gray-500 hover:text-gray-900 absolute top-3 right-3"
+                  >
+                    <Menu as="div" class="relative">
+                      <div>
+                        <tippy content="More" placement="bottom" theme="demo">
+                          <MenuButton
+                            class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                          >
+                            <span class="sr-only">More Options</span>
+                            <EllipsisHorizontalIcon
+                              class="h-6 w-6"
+                              aria-hidden="true"
+                            />
+                          </MenuButton>
+                        </tippy>
+                      </div>
+                      <transition
+                        enterActiveClass="transition ease-out duration-100"
+                        enterFromClass="transform opacity-0 scale-95"
+                        enterToClass="transform opacity-100 scale-100"
+                        leaveActiveClass="transition ease-in duration-75"
+                        leaveFromClass="transform opacity-100 scale-100"
+                        leaveToClass="transform opacity-0 scale-95"
+                      >
+                        <MenuItems
+                          class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                        >
+                          <MenuItem>
+                            <div
+                              class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                            >
+                              <PencilSquareIcon
+                                class="h-5 w-5"
+                                aria-hidden="true"
+                              /><span class="capitalize">Edit</span>
+                            </div>
+                          </MenuItem>
+                          <MenuItem>
+                            <div
+                              class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                            >
+                              <ShareIcon
+                                class="h-5 w-5"
+                                aria-hidden="true"
+                              /><span class="capitalize">Share</span>
+                            </div>
+                          </MenuItem>
+                        </MenuItems>
+                      </transition>
+                    </Menu>
+                  </div>
+                  <div class="flex flex-col justify-between h-full">
                     <div>
                       <span class="text-gray-400 text-xs uppercase"
                         >Issue STU-0075</span
                       >
+                      <div class="text-3xl font-semibold py-2">
+                        Russo-Ukrainian War Russo-Ukrainian
+                      </div>
                       <div
-                        class="flex items-center text-2xl font-semibold py-4"
+                        class="flex flex-col py-1 space-y-1 font-medium text-gray-500 text-sm"
                       >
-                        <div
-                          class="bg-red-500 text-white py-1 px-2 text-sm uppercase rounded-md"
-                        >
-                          Live
-                        </div>
-                        <div class="py-1 ml-2">Russo-Ukrainian War</div>
+                        <p>By Jonathan Oszczakiewicz</p>
+                        <p>Updated 7:40 a.m. ET, July 4, 2023</p>
                       </div>
-                      <!-- <div class="text-gray-500 font-medium text-sm">
-                        Last Updated by Jonathan Oszczakiewicz
-                      </div> -->
-                      <div class="text-xs text-gray-500 uppercase py-1">
-                        Top Products
-                      </div>
-                      <ul
-                        class="border-b border-dotted border-gray-300 text-xs text-gray-700"
+                    </div>
+                    <div class="py-2">
+                      <div
+                        class="text-xs text-red-800 uppercase py-1 tracking-wider"
                       >
+                        Featured
+                        <span class="text-gray-700">Content</span>
+                      </div>
+                      <ul class="text-xs text-gray-700">
                         <li
                           class="border-b border-dotted border-gray-300 text-base font-medium py-2"
                         >
-                          <div class="line-clamp-2">
+                          <div class="line-clamp-1">
                             <span class="text-gray-500">(U)</span> Ukraine
                             Claims Gains Near Bakhmut as Deadly Fighting
                             Continues
@@ -626,26 +687,20 @@
                         </li>
                         <li class="border-b border-dotted border-gray-300 py-2">
                           <div class="line-clamp-1">
-                            <span class="text-gray-500">(U)</span> Deciphering
-                            Vladimir Putin's many appearances since mutiny
+                            (U) Deciphering Vladimir Putin's many appearances
+                            since mutiny
                           </div>
                         </li>
                         <li class="py-2">
                           <div class="line-clamp-1">
-                            <span class="text-gray-500">(U)</span> Analysis:
-                            Putin expected to meet Xi Jinping and other world
-                            leaders for first time since Wagner insurrection
-                            Analysis: Putin expected to meet Xi Jinping and
+                            (U) Analysis: Putin expected to meet Xi Jinping and
                             other world leaders for first time since Wagner
-                            insurrection
+                            insurrection Analysis: Putin expected to meet Xi
+                            Jinping and other world leaders for first time since
+                            Wagner insurrection
                           </div>
                         </li>
                       </ul>
-                    </div>
-                    <div
-                      class="bg-red-600/10 text-red-600 text-sm px-2 py-1 rounded-md w-fit"
-                    >
-                      Expires in 4 Days
                     </div>
                   </div>
                 </div>
@@ -723,10 +778,13 @@ import {
 import {
   Bars3Icon,
   ComputerDesktopIcon,
+  EllipsisHorizontalIcon,
   HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
+  PencilSquareIcon,
+  ShareIcon,
   SunIcon,
   UserCircleIcon,
   VideoCameraIcon,
@@ -759,16 +817,16 @@ export default {
     // ChevronDownIcon,
     // ChevronRightIcon,
     ComputerDesktopIcon,
-    // EllipsisVerticalIcon,
+    EllipsisHorizontalIcon,
     // EyeIcon,
     // FolderIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
     NewspaperIcon,
-    // PencilSquareIcon,
+    PencilSquareIcon,
     // PlusIcon,
-    // ShareIcon,
+    ShareIcon,
     // Square3Stack3DIcon,
     //StarIcon,
     SunIcon,
