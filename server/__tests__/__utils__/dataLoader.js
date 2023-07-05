@@ -18,6 +18,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-09-01T13:16:43Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-01"),
     dissemOrgs: [
       {
@@ -118,6 +124,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-08-31T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-02"),
     dissemOrgs: [
       {
@@ -241,6 +253,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-08-30T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-03"),
     dissemOrgs: [
       {
@@ -336,6 +354,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-08-29T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-04"),
     dissemOrgs: [],
     htmlBody: [
@@ -403,6 +427,12 @@ const articles = [
     classificationXml: "",
     countries: [],
     createdAt: new Date("2022-08-28T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-05"),
     dissemOrgs: [],
     htmlBody: [

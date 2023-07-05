@@ -22,9 +22,14 @@ const app = express();
 app.use((req, res, next) => {
   if (process.env.MXS_ENV === 'container' ) {
     const redirector = res.redirect;
-    res.redirect = function(url) {
-      url = url === '/' ? url : '/api' + url;
-      redirector.call(this, url);
+    res.redirect = function(urlOrStatus, url) {
+      if (isNaN(urlOrStatus)) {
+        const redirectUrl = urlOrStatus === '/' ? urlOrStatus : '/api' + urlOrStatus;
+        redirector.call(this, redirectUrl);
+      } else {
+        const redirectUrl = url === '/' ? url : '/api' + url;
+        redirector.call(this, urlOrStatus, redirectUrl);
+      }
     }
   }
   next();

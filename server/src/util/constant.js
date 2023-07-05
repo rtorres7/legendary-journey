@@ -12,6 +12,10 @@ const indices = [
           type: "keyword",
           index: true,
         },
+        createdById: {
+          type: "keyword",
+          index: true,
+        },
         datePublished: {
           type: "date",
           index: true,
