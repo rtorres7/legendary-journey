@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="loadingUser"
-      class="h-8 bg-slate-200 rounded mb-2 w-1/2 animate-pulse"
+      class="h-8 bg-slate-200 rounded mb-8 w-1/2 animate-pulse"
     ></div>
     <div v-if="!loadingUser" class="text-2xl text-gray-700">
       {{ currentUsername }}'s Workspace
@@ -26,22 +26,23 @@
           </template>
         </div>
       </template>
+      <div class="py-6 flex justify-between items-center">
+        <div class="text-lg font-bold">My Recent Products</div>
+        <a
+          v-if="myPublished.length > 4"
+          class="flex items-center text-gray-500 text-sm font-semibold"
+          href="/workspace#products"
+        >
+          <span>More Products</span>
+          <ChevronRightIcon class="h-4 w-4" />
+        </a>
+      </div>
     </template>
-    <div class="py-6 flex justify-between items-center">
-      <div class="text-lg font-bold">My Recent Products</div>
-      <a
-        v-if="myPublished.length > 4"
-        class="flex items-center text-gray-500 text-sm font-semibold"
-        href="/workspace#products"
-      >
-        <span>More Products</span>
-        <ChevronRightIcon class="h-4 w-4" />
-      </a>
-    </div>
     <template v-if="myPublished.length == 0 && !loadingPublished">
       <p class="italic">No published products to show</p>
     </template>
     <template v-if="loadingPublished">
+      <div class="h-6 bg-slate-200 rounded mb-6 w-1/3 animate-pulse"></div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
