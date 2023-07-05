@@ -203,6 +203,7 @@ ArticleSchema.virtual("indexable").get(function () {
     productType: this.productType?.code,
     regions: this.regions?.map((region) => region.code),
     reportingType: this.reportingType?.code,
+    state: this.state,
     subregions: this.subregions?.map((subregion) => subregion.code),
     summary: this.summary,
     summaryClassification: this.summaryClassification,
@@ -258,6 +259,7 @@ ArticleSchema.virtual("data.document").get(function () {
     summary_classif_xml: this.summaryClassificationXml,
     title_classif: this.titleClassification,
     title_classif_xml: this.titleClassificationXml,
+    state: this.state,
   };
 });
 
