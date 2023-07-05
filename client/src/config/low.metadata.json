@@ -5,6 +5,26 @@
   "countries_link": "https://www.google.com/",
   "product_types": [
     {
+      "code": 10391,
+      "displayName": "Alert",
+      "icon": "alert",
+      "payload": {
+        "title": "Alert",
+        "summary": "",
+        "poc_info": "NCTC/DI Managing Editor, 931-4533 (secure), (571) 280-3627 (open)"
+      }
+    },
+    {
+      "code": 10389,
+      "displayName": "Bulletin",
+      "icon": "bulletin",
+      "payload": {
+        "title": "Bulletin",
+        "summary": "",
+        "poc_info": "NCTC/DI Managing Editor, 931-4533 (secure), (571) 280-3627 (open)"
+      }
+    },
+    {
       "code": 10376,
       "displayName": "Current",
       "payload": {
@@ -105,11 +125,11 @@
       }
     },
     {
-      "code": 10389,
-      "displayName": "Bulletin",
-      "icon": "bulletin",
+      "code": 10392,
+      "displayName": "Threat of Key Concern",
+      "icon": "analytics-magnifying-glass",
       "payload": {
-        "title": "Bulletin",
+        "title": "Threat of Key Concern",
         "summary": "",
         "poc_info": "NCTC/DI Managing Editor, 931-4533 (secure), (571) 280-3627 (open)"
       }
@@ -120,26 +140,6 @@
       "icon": "watch",
       "payload": {
         "title": "Watch",
-        "summary": "",
-        "poc_info": "NCTC/DI Managing Editor, 931-4533 (secure), (571) 280-3627 (open)"
-      }
-    },
-    {
-      "code": 10391,
-      "displayName": "Alert",
-      "icon": "alert",
-      "payload": {
-        "title": "Alert",
-        "summary": "",
-        "poc_info": "NCTC/DI Managing Editor, 931-4533 (secure), (571) 280-3627 (open)"
-      }
-    },
-    {
-      "code": 10392,
-      "displayName": "Threat of Key Concern",
-      "icon": "analytics-magnifying-glass",
-      "payload": {
-        "title": "Threat of Key Concern",
         "summary": "",
         "poc_info": "NCTC/DI Managing Editor, 931-4533 (secure), (571) 280-3627 (open)"
       }
@@ -204,20 +204,20 @@
   ],
   "alerts": [
     {
-      "name": "Bulletin",
-      "code": "10389"
-    },
-    {
-      "name": "Watch",
-      "code": "10390"
-    },
-    {
       "name": "Alert",
       "code": "10391"
     },
     {
+      "name": "Bulletin",
+      "code": "10389"
+    },
+    {
       "name": "Threat of Key Concern",
       "code": "10392"
+    },
+    {
+      "name": "Watch",
+      "code": "10390"
     }
   ],
   "footer_links": [

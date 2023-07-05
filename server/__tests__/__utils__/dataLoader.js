@@ -2285,6 +2285,16 @@ const metadata = new Metadata({
       displayName: "Product Types",
       values: [
         {
+          name: "Alert",
+          code: 10391,
+          publishable: true,
+        },
+        {
+          name: "Bulletin",
+          code: 10389,
+          publishable: true,
+        },
+        {
           name: "Current",
           code: 10376,
           publishable: true,
@@ -2335,23 +2345,18 @@ const metadata = new Metadata({
           publishable: true,
         },
         {
-          name: "Bulletin",
-          code: 10389,
-          publishable: true,
-        },
-        {
-          name: "Watch",
-          code: 10390,
-          publishable: true,
-        },
-        {
-          name: "Alert",
-          code: 10391,
+          name: "Threat Matrix",
+          code: 10386,
           publishable: true,
         },
         {
           name: "Threat of Key Concern",
           code: 10392,
+          publishable: true,
+        },
+        {
+          name: "Watch",
+          code: 10390,
           publishable: true,
         },
       ],

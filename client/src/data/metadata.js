@@ -1814,6 +1814,16 @@ export const metadata = {
       displayName: "Product Types",
       values: [
         {
+          name: "Alert",
+          code: 10391,
+          publishable: true,
+        },
+        {
+          name: "Bulletin",
+          code: 10389,
+          publishable: true,
+        },
+        {
           name: "Current",
           code: 10376,
           publishable: true,
@@ -1869,18 +1879,8 @@ export const metadata = {
           publishable: true,
         },
         {
-          name: "Miscellaneous",
-          code: 10387,
-          publishable: false,
-        },
-        {
-          name: "Legacy",
-          code: 10388,
-          publishable: false,
-        },
-        {
-          name: "Bulletin",
-          code: 10389,
+          name: "Threat of Key Concern",
+          code: 10392,
           publishable: true,
         },
         {
@@ -1889,14 +1889,14 @@ export const metadata = {
           publishable: true,
         },
         {
-          name: "Alert",
-          code: 10391,
-          publishable: true,
+          name: "Miscellaneous",
+          code: 10387,
+          publishable: false,
         },
         {
-          name: "Threat of Key Concern",
-          code: 10392,
-          publishable: true,
+          name: "Legacy",
+          code: 10388,
+          publishable: false,
         },
       ],
     },
@@ -2354,20 +2354,20 @@ export const metadata = {
       displayName: "Alerts",
       values: [
         {
-          name: "Bulletin",
-          code: "10389",
-        },
-        {
-          name: "Watch",
-          code: "10390",
-        },
-        {
           name: "Alert",
           code: "10391",
         },
         {
+          name: "Bulletin",
+          code: "10389",
+        },
+        {
           name: "Threat of Key Concern",
           code: "10392",
+        },
+        {
+          name: "Watch",
+          code: "10390",
         },
       ],
     },
