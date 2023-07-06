@@ -38,7 +38,7 @@ class ProductService {
       await this.productSearchService.create(savedProduct.indexable);
     } catch (error) {
       console.log('There was a problem indexing product, rolling back database save', error);
-      await savedProduct.remove();
+      await Article.deleteOne({ _id: savedProduct.id });
       throw new Error('There was a problem indexing product, rolling back database save');
     }
 
@@ -75,7 +75,7 @@ class ProductService {
 
   async findFeaturesAndBriefs() {
     const featuredProducts = await Article.find().sort({ _id: -1 }).exec();
-    const briefProducts = await Article.find({ productTypes: { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
+    const briefProducts = await Article.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
 
     return {
       featured: featuredProducts.map(product => product.features),

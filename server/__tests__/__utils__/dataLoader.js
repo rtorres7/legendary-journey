@@ -459,8 +459,8 @@ const articles = [
     ],
     productNumber: "WIReWIRe_sample_5",
     productType: {
-      name: "Current",
-      code: 10376,
+      name: "CT Digest",
+      code: 10379,
     },
     regions: [],
     reportingType: {
