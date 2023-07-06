@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col max-w-[600px] bg-white shadow-md hover:shadow-lg">
-    <div class="max-h-[337px] cursor-pointer">
+  <div class="flex flex-col max-w-[675px] bg-white shadow-md hover:shadow-lg">
+    <div class="max-h-[380px] cursor-pointer">
       <img :src="getImg(issue.src)" alt="" />
     </div>
     <div class="relative py-4 px-6 h-full">
@@ -53,12 +53,29 @@
       </div>
       <div class="flex flex-col">
         <div>
-          <div
-            class="flex items-center space-x-2 text-gray-500 uppercase text-xs font-medium"
+          <template v-if="issue.live"
+            ><div class="flex items-center space-x-2">
+              <span class="relative flex h-[.4em] w-[.4rem]">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-[.4rem] w-[.4rem] bg-red-500"
+                ></span>
+              </span>
+              <span class="text-xs font-semibold tracking-wider uppercase"
+                >Live Now</span
+              >
+            </div></template
           >
-            <ClockIcon class="h-5 w-5" aria-hidden="true" />
-            <span>Posts in {{ issue.posting_date }}</span>
-          </div>
+          <template v-else>
+            <div
+              class="flex items-center space-x-2 text-gray-500 uppercase text-xs font-medium"
+            >
+              <ClockIcon class="h-5 w-5" aria-hidden="true" />
+              <span>Posts in {{ issue.posting_date }}</span>
+            </div>
+          </template>
           <p
             class="text-xl py-2 hover:underline underline-offset-2 decoration-1 decoration-gray-500 font-semibold cursor-pointer"
           >

@@ -566,7 +566,7 @@
                 : 'hidden'
             "
           >
-            <div class="text-2xl text-gray-700">Responsive Check</div>
+            <!-- <div class="text-2xl text-gray-700">Responsive Check</div>
             <div class="text-gray-400 text-sm">
               <p class="hidden 3xl:block">3XL Mode 1800px</p>
               <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -575,14 +575,14 @@
               <p class="hidden md:block lg:hidden">MD Mode 768px</p>
               <p class="hidden sm:block md:hidden">SM Mode 640px</p>
               <p class="block sm:hidden">Less than SM mode</p>
-            </div>
+            </div> -->
             <div
-              class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 py-4"
+              class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 pb-8"
             >
               <div class="font-bold uppercase tracking-wider">Current</div>
               <div class="text-gray-500">Issue</div>
             </div>
-            <div class="py-3">
+            <div class="">
               <MockLiveIssueCard :issue="issues[0]" />
               <div
                 class="py-8 flex justify-center xl:justify-between items-center"
@@ -671,7 +671,7 @@
                 : 'hidden'
             "
           >
-            <div class="text-2xl text-gray-700">Issues</div>
+            <!-- <div class="text-2xl text-gray-700">Responsive Check</div>
             <div class="text-gray-400 text-sm">
               <p class="hidden 3xl:block">3XL Mode 1800px</p>
               <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -680,14 +680,107 @@
               <p class="hidden md:block lg:hidden">MD Mode 768px</p>
               <p class="hidden sm:block md:hidden">SM Mode 640px</p>
               <p class="block sm:hidden">Less than SM mode</p>
+            </div> -->
+            <div class="pt-8 pb-6">
+              <div
+                class="text-2xl font-bold text-gray-700 uppercase tracking-widest pb-6 lg:max-w-none"
+              >
+                Issues
+              </div>
+              <!-- <div class="text-gray-500 text-sm">6 issues</div> -->
+              <div class="flex justify-between items-center">
+                <a
+                  class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-slate-600 hover:border-slate-500 active:bg-slate-800 active:text-gray-200/80 cursor-pointer"
+                >
+                  <PlusIcon class="h-4 w-4" />
+                  <span class="ml-2.5">New Issue</span></a
+                >
+                <div class="flex space-x-4">
+                  <Listbox
+                    v-model="selectedSort"
+                    as="div"
+                    class="min-w-[260px] hidden md:inline-flex items-center text-gray-700"
+                  >
+                    <div>
+                      <ListboxLabel
+                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
+                      >
+                        Sort By
+                      </ListboxLabel>
+                    </div>
+                    <div class="w-full relative items-center ml-3">
+                      <ListboxButton
+                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                      >
+                        <span class="text-sm block truncate capitalize">{{
+                          selectedSort.name
+                        }}</span>
+                        <span
+                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                        >
+                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
+                        </span>
+                      </ListboxButton>
+                      <transition
+                        enter-active-class="transition ease-out duration-100"
+                        enter-from-class="transform opacity-0 scale-95"
+                        enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-75"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95"
+                      >
+                        <ListboxOptions
+                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                        >
+                          <ListboxOption
+                            v-for="item in sortOptions"
+                            v-slot="{ active, selected }"
+                            :key="item.name"
+                            :value="item"
+                            as="template"
+                          >
+                            <li
+                              :class="[
+                                active ? 'bg-gray-100  ' : 'bg-none',
+                                'relative cursor-default select-none py-2 pl-10 pr-4',
+                              ]"
+                            >
+                              <span
+                                :class="[
+                                  selected ? 'font-medium' : 'font-normal',
+                                  'block truncate text-sm',
+                                ]"
+                                >{{ item.name }}</span
+                              >
+                              <span
+                                v-if="selected"
+                                class="absolute inset-y-0 left-0 flex items-center pl-3"
+                              >
+                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            </li>
+                          </ListboxOption>
+                        </ListboxOptions>
+                      </transition>
+                    </div>
+                  </Listbox>
+                  <button
+                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                  >
+                    <span class="hidden md:block">Filters</span>
+                    <span class="block md:hidden">Filters / Sort</span>
+                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
             </div>
-            <div>Posts in one day</div>
-            <div>Issue #2</div>
-            <div>More Issues</div>
-            <div>Issue #3</div>
-            <div>Issue #4</div>
-            <div>Issue #5</div>
-            <div>Issue #6</div>
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
+            >
+              <template v-for="n in issues" :key="n">
+                <MockIssueCard :issue="n" />
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -706,24 +799,28 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import {
-  // Listbox,
-  // ListboxLabel,
-  // ListboxButton,
-  // ListboxOptions,
-  // ListboxOption,
+  Listbox,
+  ListboxLabel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
 import {
+  AdjustmentsHorizontalIcon,
   Bars3Icon,
+  CheckIcon,
+  ChevronDownIcon,
   ComputerDesktopIcon,
   HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
   PencilSquareIcon,
+  PlusIcon,
   SunIcon,
   UserCircleIcon,
   VideoCameraIcon,
@@ -741,11 +838,19 @@ import MockMobileSideMenu from "@/demo-studio/components/MockMobileSideMenu.vue"
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
+    Listbox,
+    ListboxLabel,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
     Menu,
     MenuButton,
     MenuItem,
     MenuItems,
+    AdjustmentsHorizontalIcon,
     Bars3Icon,
+    CheckIcon,
+    ChevronDownIcon,
     ChevronRightIcon,
     ComputerDesktopIcon,
     HomeIcon,
@@ -753,6 +858,7 @@ export default {
     MoonIcon,
     NewspaperIcon,
     PencilSquareIcon,
+    PlusIcon,
     SunIcon,
     UserCircleIcon,
     VideoCameraIcon,
@@ -777,6 +883,12 @@ export default {
     }
     const selectedTheme = ref(localStorage.getItem("theme"));
     const currentHash = ref(window.location.hash || "#dashboard");
+    const sortOptions = [
+      { name: "Posting Date: Recent" },
+      { name: "Posting Date: Last" },
+    ];
+
+    const selectedSort = ref(sortOptions[0]);
 
     onMounted(() => {
       window.location.hash = window.location.hash || "#home";
@@ -889,6 +1001,8 @@ export default {
       loading,
       isDark,
       selectedTheme,
+      sortOptions,
+      selectedSort,
       issues,
       isMobileMenuOpen,
       openMobileMenuModal,
