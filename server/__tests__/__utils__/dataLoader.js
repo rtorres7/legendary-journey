@@ -2912,6 +2912,22 @@ const loadSavedProducts = async (postgresUrl) => {
   });
 };
 
+const loadSavedProductsForSearch = async (esUrl) => {
+  const client = new Client({ node: esUrl });
+
+  await client.index({
+    index: "savedproducts",
+    body: {
+      ...articles[0].indexable,
+      savedProductUserId: 1,
+      productId: "WIReWIRe_sample_1"
+    },
+    id: "blah"
+  });
+
+  await client.indices.refresh({ index: "savedproducts" });
+}
+
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -2977,6 +2993,7 @@ module.exports = {
   loadMetadata,
   loadArticlesIntoMongo,
   loadSavedProducts,
+  loadSavedProductsForSearch,
   loadCollections,
   loadCollectionProducts,
   loadUsers,

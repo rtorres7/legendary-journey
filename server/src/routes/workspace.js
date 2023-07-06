@@ -53,10 +53,11 @@ router.get("/products", async (req, res) => {
 
 router.get("/saved", async (req, res) => {
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const { perPage, page, skip, sortDir } = pagingParams(req);
+    const { perPage, page, sortDir } = pagingParams(req);
+    const term = req.query.text;
+    const filters = req.query;
 
-    // TODO: We need to figure out how to return the actual products
-    const savedProducts = await workspaceService.findPageOfSavedProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+    const savedProducts = await workspaceService.findPageOfSavedProductsForUser(currentUser.id, term, perPage, page, sortDir, filters);
     res.json(savedProducts);
   });
 });

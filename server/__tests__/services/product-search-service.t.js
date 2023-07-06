@@ -39,7 +39,7 @@ describe('ProductSearchService', () => {
   });
 
   beforeEach(() => {
-    service = new ProductSearchService(container.getHttpUrl());
+    service = new ProductSearchService();
   });
 
   describe('search', () => {
