@@ -2,7 +2,6 @@ const dayjs = require("dayjs");
 const Article = require("../models/articles");
 const ProductSearchService = require('../services/product-search-service');
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
-const constant = require("../util/constant");
 const { handleMongooseError } = require("../util/errors");
 
 class ProductService {
@@ -94,9 +93,8 @@ class ProductService {
   }
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
-    // TODO: Need to add query for user
     return await Article
-      .find({ state: 'draft' })
+      .find({ state: 'draft', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -104,9 +102,8 @@ class ProductService {
   }
 
   async #countDraftProductsForUser(userId) {
-    // TODO: Need to add query for user
     return await Article
-      .count({ state: 'draft' })
+      .count({ state: 'draft', 'createdBy.id': userId })
       .exec();
   }
 
@@ -120,9 +117,8 @@ class ProductService {
   }
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
-    // TODO: Need to add query for user
     return await Article
-      .find({ state: 'posted' })
+      .find({ state: 'posted', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -130,9 +126,8 @@ class ProductService {
   }
 
   async #countRecentProductsForUser(userId) {
-    // TODO: Need to add query for user
     return await Article
-      .count({ state: 'posted' })
+      .count({ state: 'posted', 'createdBy.id': userId })
       .exec();
   }
 
@@ -146,9 +141,8 @@ class ProductService {
   }
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
-    // TODO: Need to add query for user
     return await Article
-      .find()
+      .find({ 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -156,9 +150,8 @@ class ProductService {
   }
 
   async #countAllProductsForUser(userId) {
-    // TODO: Need to add query for user
     return await Article
-      .count()
+      .count({ 'createdBy.id': userId })
       .exec();
   }
 
