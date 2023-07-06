@@ -70,10 +70,13 @@
               >Live Now</span
             >
           </div>
-          <div
-            class="text-3xl py-2 font-semibold hover:underline underline-offset-2 decoration-2 cursor-pointer"
-          >
-            {{ issue.title }}
+          <div class="text-3xl py-2 font-semibold">
+            <a
+              class="hover:underline underline-offset-2 decoration-2"
+              href="/studio#live"
+            >
+              {{ issue.title }}
+            </a>
           </div>
           <div
             class="flex flex-col py-1 space-y-1 font-medium text-gray-500 text-sm"

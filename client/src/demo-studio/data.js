@@ -1,6 +1,6 @@
 export const issues = [
   {
-    id: "Issue STU-0075",
+    id: "STU-0075",
     author: "Jonathan Oszczakiewicz",
     title: "Russo-Ukrainian War",
     live: true,
@@ -24,7 +24,7 @@ export const issues = [
     src: "16x9_L001_ukraine.jpg",
   },
   {
-    id: "Issue STU-0076",
+    id: "STU-0076",
     author: "Kevin Behr",
     title: "China-U.S. Relations",
     posting_date: "4 days",
@@ -46,7 +46,7 @@ export const issues = [
     src: "16x9_L002_china_xi.jpg",
   },
   {
-    id: "Issue STU-0077",
+    id: "STU-0077",
     author: "Brent Taylor",
     title: "Economic Uncertainty",
     posting_date: "6 days",
@@ -70,7 +70,7 @@ export const issues = [
     src: "16x9_L003_inflation.jpg",
   },
   {
-    id: "Issue STU-0078",
+    id: "STU-0078",
     author: "Kyle Mueller",
     title: "Sudan Conflict",
     posting_date: "1 week",
@@ -92,7 +92,7 @@ export const issues = [
     src: "16x9_L004_sudan.jpg",
   },
   {
-    id: "Issue STU-0079",
+    id: "STU-0079",
     author: "Rodolfo Torres",
     title: "Travel Advisory",
     posting_date: "1 week",
@@ -114,5 +114,32 @@ export const issues = [
       },
     ],
     src: "16x9_L005_travel_alert.jpg",
+  },
+];
+
+export const detailedIssue = [
+  {
+    id: "STU-0075",
+    author: "Jonathan Oszczakiewicz",
+    title: "Russo-Ukrainian War",
+    live: true,
+    posting_date: null,
+    last_updated: "7:40 a.m. ET, July 4, 2023",
+    featured: [
+      {
+        classification: "(U)",
+        title: "Ukraine Claims Gains Near Bakhmut as Deadly Fighting Continues",
+      },
+      {
+        classification: "(U)",
+        title: "Deciphering Vladimir Putin's many appearances since mutiny",
+      },
+      {
+        classification: "(U)",
+        title:
+          "Analysis: Putin expected to meet Xi Jinping and other world leaders for first time since Wagner insurrection Analysis: Putin expected to meet Xi Jinping and other world leaders for first time since Wagner insurrection",
+      },
+    ],
+    src: "16x9_L001_ukraine.jpg",
   },
 ];

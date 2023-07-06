@@ -632,7 +632,7 @@
                 : 'hidden'
             "
           >
-            <div class="text-2xl text-gray-700">Live Content</div>
+            <div class="text-2xl text-gray-700">Responsive Check</div>
             <div class="text-gray-400 text-sm">
               <p class="hidden 3xl:block">3XL Mode 1800px</p>
               <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -642,9 +642,23 @@
               <p class="hidden sm:block md:hidden">SM Mode 640px</p>
               <p class="block sm:hidden">Less than SM mode</p>
             </div>
-            <div>Changes in 4 days</div>
-            <div>Edit</div>
-            <div>Top Products</div>
+            <div class="flex justify-between py-4">
+              <div>
+                <div class="text-2xl text-gray-700">Live Content</div>
+                <div class="text-gray-400">Changes in 4 days</div>
+              </div>
+              <button
+                class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+              >
+                <span>Edit</span>
+                <PencilSquareIcon class="h-5 w-5" />
+              </button>
+            </div>
+            <div
+              class="text-lg font-medium text-gray-900 uppercase tracking-wide"
+            >
+              Top Products
+            </div>
             <div>Breaking On/Off</div>
             <div>Secondary Products</div>
             <div>More Products</div>
@@ -709,6 +723,7 @@ import {
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
+  PencilSquareIcon,
   SunIcon,
   UserCircleIcon,
   VideoCameraIcon,
@@ -737,6 +752,7 @@ export default {
     MagnifyingGlassIcon,
     MoonIcon,
     NewspaperIcon,
+    PencilSquareIcon,
     SunIcon,
     UserCircleIcon,
     VideoCameraIcon,
