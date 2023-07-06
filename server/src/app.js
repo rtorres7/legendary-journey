@@ -1,8 +1,9 @@
 const cors = require("cors");
 const express = require("express");
-const logger = require("morgan");
-const MongoStore = require('connect-mongo');
-const auth = require('./services/auth');
+const config = require("./config/config");
+const morgan = require("./config/morgan");
+const MongoStore = require("connect-mongo");
+const auth = require("./services/auth");
 const path = require("path");
 const session = require("express-session");
 
@@ -20,17 +21,17 @@ const app = express();
  * know that we are behind that reverse proxy.
  */
 app.use((req, res, next) => {
-  if (process.env.MXS_ENV === 'container' ) {
+  if (config.mxs.env === "container") {
     const redirector = res.redirect;
-    res.redirect = function(urlOrStatus, url) {
+    res.redirect = function (urlOrStatus, url) {
       if (isNaN(urlOrStatus)) {
-        const redirectUrl = urlOrStatus === '/' ? urlOrStatus : '/api' + urlOrStatus;
+        const redirectUrl = urlOrStatus === "/" ? urlOrStatus : "/api" + urlOrStatus;
         redirector.call(this, redirectUrl);
       } else {
-        const redirectUrl = url === '/' ? url : '/api' + url;
+        const redirectUrl = url === "/" ? url : "/api" + url;
         redirector.call(this, urlOrStatus, redirectUrl);
       }
-    }
+    };
   }
   next();
 });
@@ -40,14 +41,14 @@ app.use((req, res, next) => {
  *
  * Manages HTTP session information
  */
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 app.use(
   session({
     secret: "keyboard cat",
     saveUninitialized: false,
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
-    store: MongoStore.create({ mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles` }) // Default TTL is 14 days
+    store: MongoStore.create({ mongoUrl: `mongodb://${config.mongoose.url}/articles` }), // Default TTL is 14 days
   })
 );
 
@@ -56,10 +57,9 @@ app.use(
  *
  * Sets up the HTTP request logging.
  */
-if (process.env.MXS_ENV === 'container') {
-  app.use(logger("dev"));
-} else {
-  app.use(logger('combined'));
+if (config.env !== "test") {
+  app.use(morgan.successHandler);
+  app.use(morgan.errorHandler);
 }
 
 /**
@@ -100,26 +100,26 @@ app.use(auth.passport.session());
  * Authentication
  * Adds a global check to make sure endpoint is authenticated
  */
-app.use(auth.ensureAuthenticated)
+app.use(auth.ensureAuthenticated);
 
 /***********************************
  * Middleware setup
  **********************************/
 
 // Setup mongoose
-const setupMongoose = require('./data/mongoose');
+const setupMongoose = require("./data/mongoose");
 setupMongoose();
 
 // Setup elastic search client
-require('./data/elasticsearch');
+require("./data/elasticsearch");
 
 // Load seed data
-if (process.env.MXS_ENV === 'container') {
-  const ProductService = require('./services/product-service');
+if (config.mxs.env === "container") {
+  const ProductService = require("./services/product-service");
   const productService = new ProductService();
   productService.initializeProductData();
 
-  const loadUserData = require('./postgres/seed');
+  const loadUserData = require("./postgres/seed");
   loadUserData();
 }
 
@@ -128,7 +128,7 @@ if (process.env.MXS_ENV === 'container') {
  **********************************/
 const alertRouter = require("./routes/alerts");
 const articlesRouter = require("./routes/articles");
-const authRouter = require('./routes/auth');
+const authRouter = require("./routes/auth");
 const homeRouter = require("./routes/home");
 const indexRouter = require("./routes");
 const legacyRouter = require("./routes/legacy");
@@ -153,7 +153,7 @@ app.use("/wires", legacyRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {
-  KiwiStandardResponsesExpress.standardNotFoundResponse('Page not found', res);
+  KiwiStandardResponsesExpress.standardNotFoundResponse("Page not found", res);
 });
 
 // error handler

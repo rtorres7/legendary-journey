@@ -43,13 +43,16 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
-router.post("/processDocument", (req, res) => {
+router.post("/processDocument", async (req, res) => {
   switch (req.body.document_action) {
     case "create":
       res.redirect(307, "/articles/");
       break;
     case "save":
       updateArticle(req.body.id, req, res);
+      break;
+    case "publish":
+      res.sendStatus(501);
       break;
     default:
       res.sendStatus(404);
