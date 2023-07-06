@@ -1,9 +1,13 @@
 <template>
-  <div class="flex flex-col max-w-[600px] bg-white shadow-md hover:shadow-lg">
-    <div class="max-h-[337px] cursor-pointer">
+  <div
+    class="flex flex-col max-w-[720px] xl:max-w-none xl:flex-row xl:max-h-[360px] bg-white shadow-md hover:shadow-lg"
+  >
+    <div
+      class="max-h-[405px] xl:max-h-none max-w-none xl:max-w-[640px] cursor-pointer"
+    >
       <img :src="getImg(issue.src)" alt="" />
     </div>
-    <div class="relative py-4 px-6 h-full">
+    <div class="relative p-6">
       <div class="text-gray-500 hover:text-gray-900 absolute top-3 right-3">
         <Menu as="div" class="relative">
           <div>
@@ -51,31 +55,62 @@
           </transition>
         </Menu>
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col justify-between h-full">
         <div>
-          <div
-            class="flex items-center space-x-2 text-gray-500 uppercase text-xs font-medium"
-          >
-            <ClockIcon class="h-5 w-5" aria-hidden="true" />
-            <span>Posts in {{ issue.posting_date }}</span>
+          <div class="flex items-center space-x-2">
+            <span class="relative flex h-2 w-2">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+              ></span>
+              <span
+                class="relative inline-flex rounded-full h-2 w-2 bg-red-500"
+              ></span>
+            </span>
+            <span class="text-sm font-semibold tracking-wider uppercase"
+              >Live Now</span
+            >
           </div>
-          <p
-            class="text-xl py-2 hover:underline underline-offset-2 decoration-1 decoration-gray-500 font-semibold cursor-pointer"
+          <div
+            class="text-3xl py-2 font-semibold hover:underline underline-offset-2 decoration-2 cursor-pointer"
           >
             {{ issue.title }}
-          </p>
-          <p class="font-medium text-gray-500 text-sm">By {{ issue.author }}</p>
+          </div>
+          <div
+            class="flex flex-col py-1 space-y-1 font-medium text-gray-500 text-sm"
+          >
+            <p>By {{ issue.author }}</p>
+            <p>Updated {{ issue.last_updated }}</p>
+          </div>
         </div>
-        <div class="pt-4">
-          <div class="text-xs text-red-800 uppercase py-2 tracking-wider">
-            Top <span class="text-gray-700">Product</span>
+        <div class="py-2">
+          <div class="text-xs text-red-800 uppercase py-1 tracking-wider">
+            Featured
+            <span class="text-gray-700">Content</span>
           </div>
-          <div class="text-sm line-clamp-2 hover:underline cursor-pointer">
-            <span class="text-gray-500">{{
-              issue.featured[0].classification
-            }}</span>
-            {{ issue.featured[0].title }}
-          </div>
+          <ul class="text-xs text-gray-700">
+            <li
+              class="border-b border-dotted border-gray-300 text-base font-medium py-2"
+            >
+              <div class="line-clamp-2 hover:underline cursor-pointer">
+                <span class="text-gray-500">{{
+                  issue.featured[0].classification
+                }}</span>
+                {{ issue.featured[0].title }}
+              </div>
+            </li>
+            <li class="border-b border-dotted border-gray-300 py-2">
+              <div class="line-clamp-1 hover:underline cursor-pointer">
+                {{ issue.featured[1].classification }}
+                {{ issue.featured[1].title }}
+              </div>
+            </li>
+            <li class="py-2">
+              <div class="line-clamp-1 hover:underline cursor-pointer">
+                {{ issue.featured[2].classification }}
+                {{ issue.featured[2].title }}
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -84,7 +119,6 @@
 <script>
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
-  ClockIcon,
   EllipsisHorizontalIcon,
   PencilSquareIcon,
   ShareIcon,
@@ -95,7 +129,6 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
-    ClockIcon,
     EllipsisHorizontalIcon,
     PencilSquareIcon,
     ShareIcon,

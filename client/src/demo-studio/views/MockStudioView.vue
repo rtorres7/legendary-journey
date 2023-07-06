@@ -17,7 +17,7 @@
         </div>
         <ul class="py-4 mx-auto text-gray-400 space-y-1">
           <li>
-            <tippy content="Dashboard" placement="right" theme="demo">
+            <tippy content="Home   " placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#home')
@@ -112,7 +112,7 @@
                   class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                 >
                   <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4">Dashboard</span>
+                  <span class="ml-4">Home</span>
                 </div>
               </a>
             </div>
@@ -558,6 +558,7 @@
         <div
           class="flex flex-col text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
         >
+          <!-- Home -->
           <div
             :class="
               isActivePage('#home')
@@ -565,7 +566,7 @@
                 : 'hidden'
             "
           >
-            <div class="text-2xl text-gray-700">Content Dashboard</div>
+            <div class="text-2xl text-gray-700">Responsive Check</div>
             <div class="text-gray-400 text-sm">
               <p class="hidden 3xl:block">3XL Mode 1800px</p>
               <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -575,296 +576,104 @@
               <p class="hidden sm:block md:hidden">SM Mode 640px</p>
               <p class="block sm:hidden">Less than SM mode</p>
             </div>
+            <div
+              class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 py-4"
+            >
+              <div class="font-bold uppercase tracking-wider">Current</div>
+              <div class="text-gray-500">Issue</div>
+            </div>
             <div class="py-3">
-              <div class="flex items-center space-x-2 py-3">
-                <span class="relative flex h-3 w-3">
-                  <span
-                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
-                  ></span>
-                  <span
-                    class="relative inline-flex rounded-full h-3 w-3 bg-red-500"
-                  ></span>
-                </span>
-                <span class="text-base font-bold tracking-wide uppercase"
-                  >Live Now</span
+              <MockLiveIssueCard :issue="issues[0]" />
+              <div
+                class="py-8 flex justify-center xl:justify-between items-center"
+              >
+                <div
+                  class="text-xl font-bold text-gray-700 uppercase tracking-widest"
                 >
-              </div>
-              <!-- TODO: MERGE THE TWO DIVS BELOW -->
-              <div
-                class="hidden xl:flex max-h-[360px] max-w-[1280px] bg-white shadow-md hover:shadow-lg"
-              >
-                <div class="max-w-[640px]">
-                  <img src="@/assets/mocks/16x9_005_war.jpg" alt="" />
+                  Coming Soon
                 </div>
-                <div class="relative p-6">
-                  <div
-                    class="text-gray-500 hover:text-gray-900 absolute top-3 right-3"
-                  >
-                    <Menu as="div" class="relative">
-                      <div>
-                        <tippy content="More" placement="bottom" theme="demo">
-                          <MenuButton
-                            class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                          >
-                            <span class="sr-only">More Options</span>
-                            <EllipsisHorizontalIcon
-                              class="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </MenuButton>
-                        </tippy>
-                      </div>
-                      <transition
-                        enterActiveClass="transition ease-out duration-100"
-                        enterFromClass="transform opacity-0 scale-95"
-                        enterToClass="transform opacity-100 scale-100"
-                        leaveActiveClass="transition ease-in duration-75"
-                        leaveFromClass="transform opacity-100 scale-100"
-                        leaveToClass="transform opacity-0 scale-95"
-                      >
-                        <MenuItems
-                          class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                        >
-                          <MenuItem>
-                            <div
-                              class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                            >
-                              <PencilSquareIcon
-                                class="h-5 w-5"
-                                aria-hidden="true"
-                              /><span class="capitalize">Edit</span>
-                            </div>
-                          </MenuItem>
-                          <MenuItem>
-                            <div
-                              class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                            >
-                              <ShareIcon
-                                class="h-5 w-5"
-                                aria-hidden="true"
-                              /><span class="capitalize">Share</span>
-                            </div>
-                          </MenuItem>
-                        </MenuItems>
-                      </transition>
-                    </Menu>
-                  </div>
-                  <div class="flex flex-col justify-between h-full">
-                    <div>
-                      <span class="text-gray-400 text-xs uppercase"
-                        >Issue STU-0075</span
-                      >
-                      <div class="text-3xl font-semibold py-2">
-                        Russo-Ukrainian War Russo-Ukrainian
-                      </div>
-                      <div
-                        class="flex flex-col py-1 space-y-1 font-medium text-gray-500 text-sm"
-                      >
-                        <p>By Jonathan Oszczakiewicz</p>
-                        <p>Updated 7:40 a.m. ET, July 4, 2023</p>
-                      </div>
-                    </div>
-                    <div class="py-2">
-                      <div
-                        class="text-xs text-red-800 uppercase py-1 tracking-wider"
-                      >
-                        Featured
-                        <span class="text-gray-700">Content</span>
-                      </div>
-                      <ul class="text-xs text-gray-700">
-                        <li
-                          class="border-b border-dotted border-gray-300 text-base font-medium py-2"
-                        >
-                          <div class="line-clamp-2">
-                            <span class="text-gray-500">(U)</span> Ukraine
-                            Claims Gains Near Bakhmut as Deadly Fighting
-                            Continues
-                          </div>
-                        </li>
-                        <li class="border-b border-dotted border-gray-300 py-2">
-                          <div class="line-clamp-1">
-                            (U) Deciphering Vladimir Putin's many appearances
-                            since mutiny
-                          </div>
-                        </li>
-                        <li class="py-2">
-                          <div class="line-clamp-1">
-                            (U) Analysis: Putin expected to meet Xi Jinping and
-                            other world leaders for first time since Wagner
-                            insurrection Analysis: Putin expected to meet Xi
-                            Jinping and other world leaders for first time since
-                            Wagner insurrection
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="flex flex-col xl:hidden max-w-[720px] bg-white shadow-md hover:shadow-lg"
-              >
-                <div class="max-h-[405px]">
-                  <img src="@/assets/mocks/16x9_005_war.jpg" alt="" />
-                </div>
-                <div class="relative py-4 px-6">
-                  <div
-                    class="text-gray-500 hover:text-gray-900 absolute top-3 right-3"
-                  >
-                    <Menu as="div" class="relative">
-                      <div>
-                        <tippy content="More" placement="bottom" theme="demo">
-                          <MenuButton
-                            class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                          >
-                            <span class="sr-only">More Options</span>
-                            <EllipsisHorizontalIcon
-                              class="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </MenuButton>
-                        </tippy>
-                      </div>
-                      <transition
-                        enterActiveClass="transition ease-out duration-100"
-                        enterFromClass="transform opacity-0 scale-95"
-                        enterToClass="transform opacity-100 scale-100"
-                        leaveActiveClass="transition ease-in duration-75"
-                        leaveFromClass="transform opacity-100 scale-100"
-                        leaveToClass="transform opacity-0 scale-95"
-                      >
-                        <MenuItems
-                          class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                        >
-                          <MenuItem>
-                            <div
-                              class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                            >
-                              <PencilSquareIcon
-                                class="h-5 w-5"
-                                aria-hidden="true"
-                              /><span class="capitalize">Edit</span>
-                            </div>
-                          </MenuItem>
-                          <MenuItem>
-                            <div
-                              class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                            >
-                              <ShareIcon
-                                class="h-5 w-5"
-                                aria-hidden="true"
-                              /><span class="capitalize">Share</span>
-                            </div>
-                          </MenuItem>
-                        </MenuItems>
-                      </transition>
-                    </Menu>
-                  </div>
-                  <div class="flex flex-col justify-between h-full">
-                    <div>
-                      <span class="text-gray-400 text-xs uppercase"
-                        >Issue STU-0075</span
-                      >
-                      <div class="text-3xl font-semibold py-2">
-                        Russo-Ukrainian War Russo-Ukrainian
-                      </div>
-                      <div
-                        class="flex flex-col py-1 space-y-1 font-medium text-gray-500 text-sm"
-                      >
-                        <p>By Jonathan Oszczakiewicz</p>
-                        <p>Updated 7:40 a.m. ET, July 4, 2023</p>
-                      </div>
-                    </div>
-                    <div class="py-2">
-                      <div
-                        class="text-xs text-red-800 uppercase py-1 tracking-wider"
-                      >
-                        Featured
-                        <span class="text-gray-700">Content</span>
-                      </div>
-                      <ul class="text-xs text-gray-700">
-                        <li
-                          class="border-b border-dotted border-gray-300 text-base font-medium py-2"
-                        >
-                          <div class="line-clamp-2">
-                            <span class="text-gray-500">(U)</span> Ukraine
-                            Claims Gains Near Bakhmut as Deadly Fighting
-                            Continues
-                          </div>
-                        </li>
-                        <li class="border-b border-dotted border-gray-300 py-2">
-                          <div class="line-clamp-2">
-                            (U) Deciphering Vladimir Putin's many appearances
-                            since mutiny
-                          </div>
-                        </li>
-                        <li class="py-2">
-                          <div class="line-clamp-2">
-                            (U) Analysis: Putin expected to meet Xi Jinping and
-                            other world leaders for first time since Wagner
-                            insurrection Analysis: Putin expected to meet Xi
-                            Jinping and other world leaders for first time since
-                            Wagner insurrection
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- More Issues -->
-              <div class="py-8 flex justify-between items-center">
-                <div class="text-xl font-medium">Coming Soon</div>
                 <a
-                  class="flex items-center text-gray-500 text-sm font-semibold"
-                  href="/workspace#products"
+                  class="hidden xl:flex space-x-1 items-center text-gray-700 hover:text-gray-900 text-sm"
+                  href="/studio#issues"
                 >
                   <span>More Issues</span>
                   <ChevronRightIcon class="h-4 w-4" />
                 </a>
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <template v-for="n in issues" :key="n">
-                  <MockIssueCard :issue="n" />
-                </template>
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
+              >
+                <MockIssueCard :issue="issues[1]" />
+                <MockIssueCard :issue="issues[2]" />
+                <MockIssueCard :issue="issues[3]" class="hidden xl:flex" />
               </div>
+              <a
+                class="flex xl:hidden space-x-1 items-center justify-end py-8 text-gray-500 hover:text-gray-700 font-semibold"
+                href="/studio#issues"
+              >
+                <span>More Issues</span>
+                <ChevronRightIcon class="h-5 w-5" />
+              </a>
+              <!-- <div
+                class="text-xl font-bold text-gray-700 uppercase tracking-wider py-8"
+              >
+                Analytics
+                top authors
+                total issues created
+                longest running issue
+              </div> -->
             </div>
           </div>
+          <!-- Live Content-->
           <div
             :class="
               isActivePage('#live')
-                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                ? 'block max-w-[475px] sm:max-w-[768px] xl:max-w-[1280px] w-full p-8'
                 : 'hidden'
             "
           >
             <div class="text-2xl text-gray-700">Live Content</div>
-            <!-- <div class="text-gray-400 text-sm">
-                <p class="hidden 3xl:block">3XL Mode 1800px</p>
-                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
-                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
-                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
-                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
-                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
-                <p class="block sm:hidden">Less than SM mode</p>
-              </div> -->
+            <div class="text-gray-400 text-sm">
+              <p class="hidden 3xl:block">3XL Mode 1800px</p>
+              <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+              <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+              <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+              <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+              <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+              <p class="block sm:hidden">Less than SM mode</p>
+            </div>
+            <div>Changes in 4 days</div>
+            <div>Edit</div>
+            <div>Top Products</div>
+            <div>Breaking On/Off</div>
+            <div>Secondary Products</div>
+            <div>More Products</div>
           </div>
+          <!-- Issues -->
           <div
             :class="
               isActivePage('#issues')
-                ? 'block max-w-[475px] sm:max-w-[1600px] w-full p-8'
+                ? 'block max-w-[475px] sm:max-w-[768px] xl:max-w-[1280px] w-full p-8'
                 : 'hidden'
             "
           >
-            <div class="text-2xl text-gray-700">Upcoming Issues</div>
-            <!-- <div class="text-gray-400 text-sm">
-                <p class="hidden 3xl:block">3XL Mode 1800px</p>
-                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
-                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
-                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
-                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
-                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
-                <p class="block sm:hidden">Less than SM mode</p>
-              </div> -->
+            <div class="text-2xl text-gray-700">Issues</div>
+            <div class="text-gray-400 text-sm">
+              <p class="hidden 3xl:block">3XL Mode 1800px</p>
+              <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+              <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+              <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+              <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+              <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+              <p class="block sm:hidden">Less than SM mode</p>
+            </div>
+            <div>Posts in one day</div>
+            <div>Issue #2</div>
+            <div>More Issues</div>
+            <div>Issue #3</div>
+            <div>Issue #4</div>
+            <div>Issue #5</div>
+            <div>Issue #6</div>
           </div>
         </div>
       </div>
@@ -896,13 +705,10 @@ import {
 import {
   Bars3Icon,
   ComputerDesktopIcon,
-  EllipsisHorizontalIcon,
   HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
-  PencilSquareIcon,
-  ShareIcon,
   SunIcon,
   UserCircleIcon,
   VideoCameraIcon,
@@ -915,46 +721,29 @@ import {
   //Square3Stack3DIcon,
 } from "@heroicons/vue/24/solid";
 import MockIssueCard from "@/demo-studio/components/MockIssueCard.vue";
+import MockLiveIssueCard from "@/demo-studio/components/MockLiveIssueCard.vue";
 import MockMobileSideMenu from "@/demo-studio/components/MockMobileSideMenu.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
-    // Listbox,
-    // ListboxLabel,
-    // ListboxButton,
-    // ListboxOptions,
-    // ListboxOption,
     Menu,
     MenuButton,
     MenuItem,
     MenuItems,
-    // AdjustmentsHorizontalIcon,
     Bars3Icon,
-    // BookmarkIcon,
-    // BriefcaseIcon,
-    // CheckIcon,
-    // ChevronDownIcon,
     ChevronRightIcon,
     ComputerDesktopIcon,
-    EllipsisHorizontalIcon,
-    // EyeIcon,
-    // FolderIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
     NewspaperIcon,
-    PencilSquareIcon,
-    // PlusIcon,
-    ShareIcon,
-    // Square3Stack3DIcon,
-    //StarIcon,
     SunIcon,
-    // TrashIcon,
     UserCircleIcon,
     VideoCameraIcon,
     WrenchIcon,
     XMarkIcon,
     MockIssueCard,
+    MockLiveIssueCard,
     MockMobileSideMenu,
   },
   setup() {
@@ -972,13 +761,6 @@ export default {
     }
     const selectedTheme = ref(localStorage.getItem("theme"));
     const currentHash = ref(window.location.hash || "#dashboard");
-    // const sortOptions = [
-    //   { name: "Newest" },
-    //   { name: "Oldest" },
-    //   { name: "Most Views" },
-    // ];
-
-    // const selectedSort = ref(sortOptions[0]);
 
     onMounted(() => {
       window.location.hash = window.location.hash || "#home";
