@@ -57,9 +57,9 @@ const articles = [
     needed: {},
     nonStateActors: [
       {
-        code: 'EU',
-        name: 'EU',
-      }
+        code: "EU",
+        name: "EU",
+      },
     ],
     orgRestricted: false,
     pocInfo: "(U) Produced by East Asia.",
@@ -176,12 +176,12 @@ const articles = [
     needed: {},
     nonStateActors: [
       {
-        code: 'EU',
-        name: 'EU',
+        code: "EU",
+        name: "EU",
       },
       {
-        code: 'NATO',
-        name: 'NATO',
+        code: "NATO",
+        name: "NATO",
       },
     ],
     orgRestricted: false,
@@ -1971,7 +1971,7 @@ const metadata = new Metadata({
       ],
     },
     dissem_orgs: {
-      displayName: 'Audience',
+      displayName: "Audience",
       values: [
         {
           ancestry: "1000",
@@ -2315,6 +2315,16 @@ const metadata = new Metadata({
       displayName: "Product Types",
       values: [
         {
+          name: "Alert",
+          code: 10391,
+          publishable: true,
+        },
+        {
+          name: "Bulletin",
+          code: 10389,
+          publishable: true,
+        },
+        {
           name: "Current",
           code: 10376,
           publishable: true,
@@ -2362,6 +2372,21 @@ const metadata = new Metadata({
         {
           name: "Terrorism Summary",
           code: 10385,
+          publishable: true,
+        },
+        {
+          name: "Threat Matrix",
+          code: 10386,
+          publishable: true,
+        },
+        {
+          name: "Threat of Key Concern",
+          code: 10392,
+          publishable: true,
+        },
+        {
+          name: "Watch",
+          code: 10390,
           publishable: true,
         },
       ],
@@ -2418,8 +2443,8 @@ const metadata = new Metadata({
           name: "Analysis: All Source",
           code: "analysis.all_source",
           productTypes: [
-            1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382,
-            10383, 10384, 10385,
+            1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382, 10383,
+            10384, 10385, 10389, 10390, 10391, 10392,
           ],
         },
         {
@@ -2936,16 +2961,16 @@ const loadCollectionProducts = async (postgresUrl) => {
 const loadUsers = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const userModel = require('../../src/models/user');
+  const userModel = require("../../src/models/user");
   userModel(sequelize);
 
   await sequelize.models.User.sync();
 
   await sequelize.models.User.create({
-    email: 'foo@example.com',
-    dn: 'O=US,OU=OFFICE,CN=foo'
+    email: "foo@example.com",
+    dn: "O=US,OU=OFFICE,CN=foo",
   });
-}
+};
 
 module.exports = {
   loadElasticSearch,
