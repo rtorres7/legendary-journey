@@ -1,8 +1,8 @@
-// const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 const path = require("path");
 const Joi = require("joi");
 
-// dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().default("development"), // .valid("production", "development", "test").required(),
@@ -18,6 +18,12 @@ const envVarsSchema = Joi.object()
     MXS_OAUTH_ID: Joi.string().required(),
     MXS_OAUTH_SECRET: Joi.string().required(),
     NODE_EXTRA_CA_CERTS: Joi.string().required(),
+
+    MINIO_ENDPOINT: Joi.string().required(),
+    MINIO_PORT: Joi.number().required(),
+    MINIO_USE_SSL: Joi.boolean().default(true),
+    MINIO_ACCESS_KEY: Joi.string().required(),
+    MINIO_SECRET_KEY: Joi.string().required(),
   })
   .unknown();
 
@@ -41,5 +47,12 @@ module.exports = {
     id: envVars.MXS_OAUTH_ID,
     secret: envVars.MXS_OAUTH_SECRET,
     caCerts: envVars.NODE_EXTRA_CA_CERTS,
+  },
+  minio: {
+    endpoint: envVars.MINIO_ENDPOINT,
+    port: envVars.MINIO_PORT,
+    useSsl: envVars.MINIO_USE_SSL,
+    accessKey: envVars.MINIO_ACCESS_KEY,
+    secretKey: envVars.MINIO_SECRET_KEY,
   },
 };
