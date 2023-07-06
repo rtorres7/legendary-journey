@@ -577,7 +577,7 @@
               <p class="block sm:hidden">Less than SM mode</p>
             </div> -->
             <div
-              class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 pb-8"
+              class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 py-8"
             >
               <div class="font-bold uppercase tracking-wider">Current</div>
               <div class="text-gray-500">Issue</div>
@@ -683,7 +683,7 @@
             </div> -->
             <div class="pt-8 pb-6">
               <div
-                class="text-2xl font-bold text-gray-700 uppercase tracking-widest pb-6 lg:max-w-none"
+                class="text-2xl font-bold text-gray-700 uppercase tracking-wider pb-6 lg:max-w-none"
               >
                 Issues
               </div>
