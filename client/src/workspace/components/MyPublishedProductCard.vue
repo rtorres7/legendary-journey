@@ -18,11 +18,8 @@
       <div>
         <router-link
           :to="{
-            name:
-              product.attributes.state === 'draft'
-                ? 'product-preview'
-                : 'product',
-            params: { doc_num: product.attributes.doc_num },
+            name: product.state === 'draft' ? 'product-preview' : 'product',
+            params: { doc_num: product.doc_num },
           }"
         >
           <div class="max-h-[261px] cursor-pointer">
@@ -99,11 +96,11 @@
                           :to="{
                             name: 'edit',
                             params: {
-                              date: dayjs(
-                                product.attributes.date_published
-                              ).format('YYYY-MM-DD'),
-                              id: product.attributes.id,
-                              doc_num: product.attributes.doc_num,
+                              date: dayjs(product.date_published).format(
+                                'YYYY-MM-DD'
+                              ),
+                              id: product.id,
+                              doc_num: product.doc_num,
                             },
                           }"
                         >
@@ -136,22 +133,19 @@
             <router-link
               class="hover:underline cursor-pointer"
               :to="{
-                name:
-                  product.attributes.state === 'draft'
-                    ? 'product-preview'
-                    : 'product',
-                params: { doc_num: product.attributes.doc_num },
+                name: product.state === 'draft' ? 'product-preview' : 'product',
+                params: { doc_num: product.doc_num },
               }"
             >
               <div class="text-xs text-blue-700 font-medium pb-2">
-                {{ product.attributes.product_type_name }}
+                {{ product.product_type_name }}
               </div>
               <p
                 class="font-semibold text-gray-700 line-clamp-3"
-                :title="`${product.attributes.title_classif} ${product.title}`"
+                :title="`${product.title_classif} ${product.title}`"
               >
                 <span class="font-medium text-gray-500"
-                  >({{ product.attributes.title_classif }})</span
+                  >({{ product.title_classif }})</span
                 >
                 {{ product.title }}
               </p>
@@ -160,21 +154,14 @@
           <router-link
             class="hover:underline cursor-pointer absolute bottom-0"
             :to="{
-              name:
-                product.attributes.state === 'draft'
-                  ? 'product-preview'
-                  : 'product',
-              params: { doc_num: product.attributes.doc_num },
+              name: product.state === 'draft' ? 'product-preview' : 'product',
+              params: { doc_num: product.doc_num },
             }"
           >
             <div class="px-4 text-sm text-gray-500 pb-4">
               <div class="flex space-x-2">
                 <div>
-                  {{
-                    dayjs(product.attributes.date_published).format(
-                      "YYYY-MM-DD"
-                    )
-                  }}
+                  {{ dayjs(product.date_published).format("YYYY-MM-DD") }}
                 </div>
                 <div>•</div>
                 <div>{{ product.views }} views</div>

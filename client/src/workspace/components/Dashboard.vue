@@ -17,7 +17,9 @@
         >
           <template v-for="(product, index) in myDrafts" :key="product">
             <MyDraftProductCard
-              :product="product"
+              :product="
+                environment === 'offline' ? product : product.attributes
+              "
               :productIcon="getProductIcon(product)"
               type="product"
               :class="index < numCards ? 'block' : 'hidden'"
@@ -60,7 +62,7 @@
       >
         <template v-for="(product, index) in myPublished" :key="product">
           <MyPublishedProductCard
-            :product="product"
+            :product="environment === 'offline' ? product : product.attributes"
             type="product"
             :class="index < numCards ? 'block' : 'hidden'"
             @delete="deleteProduct(product)"
@@ -101,7 +103,7 @@ import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
 import MyDraftProductCard from "./MyDraftProductCard.vue";
 import MyPublishedProductCard from "./MyPublishedProductCard.vue";
-import { products } from "@/demo/data";
+import { productDetails } from "@/data";
 import {
   ChevronRightIcon,
   EyeIcon,
@@ -117,6 +119,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const environment = ref(import.meta.env.MODE);
     const metadata = inject("metadata");
     const currentUsername = computed(() => store.state.user.user.name);
     const loadingUser = computed(() => store.state.user.loading);
@@ -163,8 +166,22 @@ export default {
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
-          myDrafts.value = products;
+          let drafts = [];
+          let products = [];
+          productDetails.forEach((product) => {
+            if (product.data.state == "draft") {
+              drafts.push(product.data);
+            }
+          });
+          productDetails.forEach((product) => {
+            if (product.data.state == "posted") {
+              products.push(product.data);
+            }
+          });
+          myDrafts.value = drafts;
+          myPublished.value = products;
           loadingDrafts.value = false;
+          loadingPublished.value = false;
         }, 1000);
       } else {
         axios.get("workspace/drafts").then((response) => {
@@ -195,12 +212,12 @@ export default {
             console.log("Couldn't retrieve stats");
           }
         });
-        updateScreenWidth();
-        onScreenResize();
       }
+      updateScreenWidth();
+      onScreenResize();
     });
     return {
-      products,
+      environment,
       currentUsername,
       loadingUser,
       myDrafts,

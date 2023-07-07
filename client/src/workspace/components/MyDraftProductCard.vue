@@ -48,11 +48,9 @@
                   :to="{
                     name: 'edit',
                     params: {
-                      date: dayjs(product.attributes.date_published).format(
-                        'YYYY-MM-DD'
-                      ),
-                      id: product.attributes.id,
-                      doc_num: product.attributes.doc_num,
+                      date: dayjs(product.date_published).format('YYYY-MM-DD'),
+                      id: product.id,
+                      doc_num: product.doc_num,
                     },
                   }"
                 >
@@ -84,11 +82,8 @@
       <div class="cursor-pointer hover:underline">
         <router-link
           :to="{
-            name:
-              product.attributes.state === 'draft'
-                ? 'product-preview'
-                : 'product',
-            params: { doc_num: product.attributes.doc_num },
+            name: product.state === 'draft' ? 'product-preview' : 'product',
+            params: { doc_num: product.doc_num },
           }"
         >
           <div class="flex items-center space-x-4">
@@ -98,22 +93,22 @@
               :icon="productIcon"
             />
             <div class="text-xs text-gray-500">
-              {{ product.attributes.product_type_name }}
+              {{ product.product_type_name }}
             </div>
           </div>
           <p
             class="font-semibold text-gray-700 line-clamp-2 mt-4"
-            :title="`${product.attributes.title_classification} ${product.title}`"
+            :title="`${product.title_classification} ${product.title}`"
           >
             <span
-              v-if="product.attributes.title_classification"
+              v-if="product.title_classification"
               class="font-medium text-gray-500"
-              >({{ product.attributes.title_classification }})</span
+              >({{ product.title_classification }})</span
             >
             {{ product.title }}
           </p>
           <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            {{ dayjs(product.attributes.date_published).format("YYYY-MM-DD") }}
+            {{ dayjs(product.date_published).format("YYYY-MM-DD") }}
           </div>
         </router-link>
       </div>

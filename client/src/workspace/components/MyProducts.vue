@@ -107,7 +107,9 @@
         >
           <template v-for="product in myPublished" :key="product">
             <MyPublishedProductCard
-              :product="product"
+              :product="
+                environment === 'offline' ? product : product.attributes
+              "
               type="product"
               @delete="deleteProduct(product)"
             />
@@ -121,7 +123,7 @@
 import { computed, onMounted, inject, ref } from "vue";
 import axios from "@/config/wireAxios";
 import MyPublishedProductCard from "./MyPublishedProductCard.vue";
-import { products } from "@/demo/data";
+import { productDetails } from "@/data";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
@@ -147,6 +149,7 @@ export default {
     ListboxOption,
   },
   setup() {
+    const environment = ref(import.meta.env.MODE);
     const myPublished = ref([]);
     const loadingPublished = ref(true);
     const numProducts = computed(() => myPublished.value.length);
@@ -163,7 +166,12 @@ export default {
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
-          console.log("/recent: ", products);
+          let products = [];
+          productDetails.forEach((product) => {
+            if (product.data.state == "posted") {
+              products.push(product.data);
+            }
+          });
           myPublished.value = products;
           loadingPublished.value = false;
         }, 1000);
@@ -184,6 +192,7 @@ export default {
       }
     });
     return {
+      environment,
       myPublished,
       loadingPublished,
       numProducts,
