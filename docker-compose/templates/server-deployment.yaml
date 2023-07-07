@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/mxms-devsandbox-default: "true"
+        io.kompose.service: server
+    spec:
+      containers:
+        - env:
+            - name: MONGO_DATABASE_URL
+              value: mongodb:27017
+            - name: POSTGRES_CONNECTION_URL
+              value: postgres://maximus:magic@postgres:5432/maximus
+          image: server
+          name: server
+          ports:
+            - containerPort: 3000
+          resources: {}
+          volumeMounts:
+            - mountPath: /data
+              name: server-claim0
+            - mountPath: /data/node_modules
+              name: server-claim1
+      restartPolicy: Always
+      volumes:
+        - name: server-claim0
+          persistentVolumeClaim:
+            claimName: server-claim0
+        - name: server-claim1
+          persistentVolumeClaim:
+            claimName: server-claim1
+status: {}
