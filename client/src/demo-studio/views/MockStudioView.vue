@@ -2,27 +2,26 @@
   <div class="h-full flex">
     <!-- Left Panel -->
     <!--- Below 2XL but not Mobile --->
-    <div class="hidden md:block 2xl:hidden bg-slate-900 min-h-screen w-20">
+    <div
+      class="hidden md:block 2xl:hidden bg-white border-r border-slate-900/10 min-h-screen min-w-[80px]"
+    >
       <div class="flex flex-col">
-        <div
-          class="h-16 border-b border-slate-700/50 shadow-slate-700/50 shadow-sm"
-        >
-          <router-link to="/">
-            <img
-              class="mx-auto w-16 h-16"
-              src="@/assets/nctc_logo.svg"
-              alt="NCTC. Seal. Link to homepage."
+        <div class="h-16 flex items-center">
+          <router-link to="/" class="mx-auto px-4">
+            <VideoCameraIconSolid
+              class="h-7 w-7 text-blue-700"
+              aria-hidden="true"
             />
           </router-link>
         </div>
-        <ul class="py-4 mx-auto text-gray-400 space-y-1">
+        <ul class="py-4 mx-auto text-gray-500 space-y-1">
           <li>
             <tippy content="Home   " placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#home')
-                    ? 'text-gray-50 bg-slate-800/90'
-                    : 'hover:text-gray-50 hover:bg-slate-800/90'
+                    ? 'text-blue-700 bg-gray-200/25'
+                    : 'hover:text-blue-700 hover:bg-gray-200/25'
                 "
                 class="my-auto rounded cursor-pointer"
               >
@@ -40,8 +39,8 @@
               <div
                 :class="
                   isActivePage('#live')
-                    ? 'text-gray-50 bg-slate-800/90'
-                    : 'hover:text-gray-50 hover:bg-slate-800/90'
+                    ? 'text-blue-700 bg-gray-200/25'
+                    : 'hover:text-blue-700 hover:bg-gray-200/25'
                 "
                 class="my-auto rounded cursor-pointer"
               >
@@ -59,8 +58,8 @@
               <div
                 :class="
                   isActivePage('#issues')
-                    ? 'text-gray-50 bg-slate-800/90'
-                    : 'hover:text-gray-50 hover:bg-slate-800/90'
+                    ? 'text-blue-700 bg-gray-200/25'
+                    : 'hover:text-blue-700 hover:bg-gray-200/25'
                 "
                 class="my-auto rounded cursor-pointer"
               >
@@ -77,42 +76,33 @@
       </div>
     </div>
     <!--- 2XL or Above --->
-    <div class="hidden 2xl:block bg-slate-900 min-h-screen w-[260px]">
+    <div
+      class="hidden 2xl:block bg-white border-r border-slate-900/10 min-h-screen min-w-[250px]"
+    >
       <div class="flex flex-col">
-        <div
-          class="h-16 border-b border-slate-700/50 shadow-slate-700/50 shadow-sm"
-        >
-          <div class="flex">
-            <router-link
-              to="/"
-              class="flex mx-auto items-center px-4 w-[200px]"
-            >
-              <img
-                class="w-16 h-16"
-                src="@/assets/nctc_logo.svg"
-                alt="NCTC. Seal. Link to homepage."
-              />
-              <span
-                class="ml-2 text-gray-200 font-medium text-xl tracking-tight"
-                >Studio</span
-              >
-            </router-link>
-          </div>
+        <div class="h-16 flex items-center">
+          <router-link to="/" class="flex mx-auto items-center px-4">
+            <VideoCameraIconSolid
+              class="h-7 w-7 text-blue-700"
+              aria-hidden="true"
+            />
+            <span class="ml-3 font-bold text-3xl tracking-tight">Studio</span>
+          </router-link>
         </div>
-        <ul class="py-4 mx-auto text-gray-400 space-y-1">
+        <ul class="py-4 mx-auto text-gray-500 space-y-1">
           <li>
             <div>
-              <a href="/studio#home" class="">
+              <a href="/studio#home">
                 <div
                   :class="
                     isActivePage('#home')
-                      ? 'text-gray-50 bg-slate-800/90'
-                      : 'hover:text-gray-50 hover:bg-slate-800/90'
+                      ? 'text-blue-700 bg-gray-200/25'
+                      : 'hover:text-blue-700 hover:bg-gray-200/25'
                   "
                   class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                 >
                   <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4">Home</span>
+                  <span class="ml-4 font-medium">Home</span>
                 </div>
               </a>
             </div>
@@ -123,13 +113,13 @@
                 <div
                   :class="
                     isActivePage('#live')
-                      ? 'text-gray-50 bg-slate-800/90'
-                      : 'hover:text-gray-50 hover:bg-slate-800/90'
+                      ? 'text-blue-700 bg-gray-200/25 '
+                      : 'hover:text-blue-700 hover:bg-gray-200/25'
                   "
                   class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                 >
                   <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4">Live Content</span>
+                  <span class="ml-4 font-medium">Live Content</span>
                 </div>
               </a>
             </div>
@@ -140,13 +130,13 @@
                 <div
                   :class="
                     isActivePage('#issues')
-                      ? 'text-gray-50 bg-slate-800/90'
-                      : 'hover:text-gray-50 hover:bg-slate-800/90'
+                      ? 'text-blue-700 bg-gray-200/25'
+                      : 'hover:text-blue-700 hover:bg-gray-200/25'
                   "
                   class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                 >
                   <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4">Issues</span>
+                  <span class="ml-4 font-medium">Issues</span>
                 </div>
               </a>
             </div>
@@ -372,25 +362,29 @@
         </div>
         <!-- Mobile Nav Bar -->
         <div
-          class="flex md:hidden justify-between items-center h-16 px-8 border-b bg-slate-900 text-gray-400"
+          class="flex md:hidden justify-between items-center h-16 px-8 border-b bg-white text-gray-900"
         >
           <div class="flex">
             <button
               type="button"
-              class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
               @click="openMobileMenuModal"
             >
               <span class="sr-only">Open main menu</span>
               <Bars3Icon class="h-6 w-6" aria-hidden="true" />
             </button>
-            <span class="ml-3 text-gray-200 font-medium text-xl tracking-tight"
-              >Studio</span
-            >
+            <router-link to="/" class="ml-4 flex mx-auto items-center">
+              <VideoCameraIconSolid
+                class="h-7 w-7 text-blue-700"
+                aria-hidden="true"
+              />
+              <span class="ml-3 font-bold text-3xl tracking-tight">Studio</span>
+            </router-link>
           </div>
           <div class="flex">
             <div class="flex space-x-4 px-4">
               <button
-                class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
               >
                 <span class="sr-only">Search</span>
                 <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
@@ -400,7 +394,7 @@
                 <div>
                   <tippy content="Admin" theme="demo">
                     <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
                       <span class="sr-only">Admin Menu</span>
                       <WrenchIcon class="h-6 w-6" aria-hidden="true" />
@@ -450,8 +444,8 @@
                       class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
                       :class="
                         selectedTheme === 'system'
-                          ? 'text-gray-400 hover:text-gray-50'
-                          : 'text-amber-400 hover:text-amber-300'
+                          ? 'text-gray-500 hover:text-gray-700'
+                          : 'text-amber-600 hover:text-amber-700'
                       "
                     >
                       <span class="sr-only"
@@ -509,13 +503,13 @@
                 </transition>
               </Menu>
             </div>
-            <div class="pl-4 border-l border-slate-50/10">
+            <div class="pl-4 border-l border-slate-900/10">
               <!-- Profile dropdown -->
               <Menu as="div" class="block md:hidden relative">
                 <div>
                   <tippy content="User Menu" theme="demo">
                     <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
                       <span class="sr-only">Open user menu.</span>
                       <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
@@ -556,65 +550,52 @@
         </div>
         <!-- Content Area -->
         <div
-          class="flex flex-col text-gray-900 bg-slate-50 w-full min-h-[calc(100vh-4rem)] h-full items-center"
+          class="flex flex-col text-gray-900 w-full min-h-[calc(100vh-4rem)] h-full items-center bg-slate-50"
         >
-          <!-- Home -->
           <div
-            :class="
-              isActivePage('#home')
-                ? 'block max-w-[475px] sm:max-w-[768px] xl:max-w-[1280px] w-full p-8'
-                : 'hidden'
-            "
+            class="max-w-[475px] sm:max-w-[768px] xl:max-w-[1600px] w-full p-6 md:p-8"
           >
-            <!-- <div class="text-2xl text-gray-700">Responsive Check</div>
-            <div class="text-gray-400 text-sm">
-              <p class="hidden 3xl:block">3XL Mode 1800px</p>
-              <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
-              <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
-              <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
-              <p class="hidden md:block lg:hidden">MD Mode 768px</p>
-              <p class="hidden sm:block md:hidden">SM Mode 640px</p>
-              <p class="block sm:hidden">Less than SM mode</p>
-            </div> -->
-            <div
-              class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 py-8"
-            >
-              <div class="font-bold uppercase tracking-wider">Current</div>
-              <div class="text-gray-500">Issue</div>
-            </div>
-            <div class="">
-              <MockLiveIssueCard :issue="issues[0]" />
+            <!-- Home -->
+            <div :class="isActivePage('#home') ? 'block' : 'hidden'">
               <div
-                class="py-8 flex justify-center xl:justify-between items-center"
+                class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 py-8"
               >
+                <div class="font-bold uppercase tracking-wider">Current</div>
+                <div class="text-gray-500">Issue</div>
+              </div>
+              <div class="">
+                <MockLiveIssueCard :issue="issues[0]" />
                 <div
-                  class="text-xl font-bold text-gray-700 uppercase tracking-widest"
+                  class="py-8 flex justify-center xl:justify-between items-center"
                 >
-                  Coming Soon
+                  <div
+                    class="text-xl font-bold text-gray-700 uppercase tracking-widest"
+                  >
+                    Coming Soon
+                  </div>
+                  <a
+                    class="hidden xl:flex space-x-1 items-center text-gray-700 hover:text-gray-900 text-sm"
+                    href="/studio#issues"
+                  >
+                    <span>More Issues</span>
+                    <ChevronRightIcon class="h-4 w-4" />
+                  </a>
+                </div>
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
+                >
+                  <MockIssueCard :issue="issues[1]" />
+                  <MockIssueCard :issue="issues[2]" />
+                  <MockIssueCard :issue="issues[3]" class="hidden xl:flex" />
                 </div>
                 <a
-                  class="hidden xl:flex space-x-1 items-center text-gray-700 hover:text-gray-900 text-sm"
+                  class="flex xl:hidden space-x-1 items-center justify-end py-8 text-gray-500 hover:text-gray-700 font-semibold"
                   href="/studio#issues"
                 >
                   <span>More Issues</span>
-                  <ChevronRightIcon class="h-4 w-4" />
+                  <ChevronRightIcon class="h-5 w-5" />
                 </a>
-              </div>
-              <div
-                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
-              >
-                <MockIssueCard :issue="issues[1]" />
-                <MockIssueCard :issue="issues[2]" />
-                <MockIssueCard :issue="issues[3]" class="hidden xl:flex" />
-              </div>
-              <a
-                class="flex xl:hidden space-x-1 items-center justify-end py-8 text-gray-500 hover:text-gray-700 font-semibold"
-                href="/studio#issues"
-              >
-                <span>More Issues</span>
-                <ChevronRightIcon class="h-5 w-5" />
-              </a>
-              <!-- <div
+                <!-- <div
                 class="text-xl font-bold text-gray-700 uppercase tracking-wider py-8"
               >
                 Analytics
@@ -622,164 +603,244 @@
                 total issues created
                 longest running issue
               </div> -->
-            </div>
-          </div>
-          <!-- Live Content-->
-          <div
-            :class="
-              isActivePage('#live')
-                ? 'block max-w-[475px] sm:max-w-[768px] xl:max-w-[1280px] w-full p-8'
-                : 'hidden'
-            "
-          >
-            <div class="text-2xl text-gray-700">Responsive Check</div>
-            <div class="text-gray-400 text-sm">
-              <p class="hidden 3xl:block">3XL Mode 1800px</p>
-              <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
-              <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
-              <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
-              <p class="hidden md:block lg:hidden">MD Mode 768px</p>
-              <p class="hidden sm:block md:hidden">SM Mode 640px</p>
-              <p class="block sm:hidden">Less than SM mode</p>
-            </div>
-            <div class="flex justify-between py-4">
-              <div>
-                <div class="text-2xl text-gray-700">Live Content</div>
-                <div class="text-gray-400">Changes in 4 days</div>
               </div>
+            </div>
+            <!-- Live Content-->
+            <div :class="isActivePage('#live') ? 'block' : 'hidden'">
+              <div class="text-2xl text-gray-700">Responsive Check</div>
+              <div class="text-gray-400 text-sm">
+                <p class="hidden 3xl:block">3XL Mode 1800px</p>
+                <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
+                <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
+                <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
+                <p class="hidden md:block lg:hidden">MD Mode 768px</p>
+                <p class="hidden sm:block md:hidden">SM Mode 640px</p>
+                <p class="block sm:hidden">Less than SM mode</p>
+              </div>
+              <!-- <div class="flex items-center space-x-2">
+                <span class="relative flex h-2 w-2">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+                  ></span>
+                  <span
+                    class="relative inline-flex rounded-full h-2 w-2 bg-red-500"
+                  ></span>
+                </span>
+                <span class="text-sm font-semibold tracking-wider uppercase"
+                  >Live Now</span
+                >
+              </div> -->
+              <div class="py-10">
+                <div class="text-gray-500 uppercase text-sm">
+                  Changes in 4 days
+                </div>
+                <div class="text-5xl py-2 font-bold">
+                  {{ issues[0].title }}
+                </div>
+                <div
+                  class="flex flex-col py-2 space-y-2 font-medium text-gray-500 text-sm"
+                >
+                  <p>By {{ issues[0].author }}</p>
+                  <p>Updated {{ issues[0].last_updated }}</p>
+                </div>
+              </div>
+              <div class="py-6 border-b border-gray-200">
+                <div
+                  class="uppercase tracking-wide font-medium text-gray-500 text-sm"
+                >
+                  Featured
+                </div>
+                <div class="flex flex-col max-w-[720px]">
+                  <div class="py-4">
+                    <p class="font-semibold text-2xl">
+                      <span class="text-gray-500">{{
+                        issues[0].featured[0].classification
+                      }}</span>
+                      {{ issues[0].featured[0].title }}
+                    </p>
+                  </div>
+                  <div class="max-h-[405px] cursor-pointer">
+                    <img src="@/assets/mocks/16x9_005_war.jpg" alt="" />
+                  </div>
+                  <p class="text-gray-700 text-xs py-2">
+                    {{ issues[0].featured[0].caption }}
+                  </p>
+                </div>
+              </div>
+              <div class="py-6 border-b border-gray-200">
+                <div
+                  class="uppercase tracking-wide font-medium text-gray-500 text-sm pb-4"
+                >
+                  Important
+                </div>
+                <div class="flex space-x-10">
+                  <div class="flex flex-col max-w-[500px]">
+                    <div class="max-h-[281px] cursor-pointer">
+                      <img src="@/assets/mocks/16x9_017_putin.jpg" alt="" />
+                    </div>
+                    <div class="py-4">
+                      <p class="font-semibold text-lg line-clamp-2">
+                        <span class="text-gray-500">{{
+                          issues[0].featured[1].classification
+                        }}</span>
+                        {{ issues[0].featured[1].title }}
+                      </p>
+                    </div>
+                    <!-- <p class="text-gray-700 text-xs py-2">
+                      {{ issues[0].featured[1].caption }}
+                    </p> -->
+                  </div>
+                  <div class="flex flex-col max-w-[500px]">
+                    <div class="max-h-[281px] cursor-pointer">
+                      <img src="@/assets/mocks/16x9_018_xi_putin.jpg" alt="" />
+                    </div>
+                    <div class="py-4">
+                      <p class="font-semibold text-lg line-clamp-3">
+                        <span class="text-gray-500">{{
+                          issues[0].featured[2].classification
+                        }}</span>
+                        {{ issues[0].featured[2].title }}
+                      </p>
+                    </div>
+                    <!-- <p class="text-gray-700 text-xs py-2">
+                      {{ issues[0].featured[2].caption }}
+                    </p> -->
+                  </div>
+                </div>
+              </div>
+              <div class="py-6">
+                <div
+                  class="uppercase tracking-wide font-medium text-gray-500 text-sm"
+                >
+                  More Products
+                </div>
+              </div>
+
               <button
                 class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
               >
                 <span>Edit</span>
                 <PencilSquareIcon class="h-5 w-5" />
               </button>
+              <ul>
+                <template v-for="n in issues[0].featured.slice(3)" :key="n">
+                  <li class="py-4 border-b border-gray-200">
+                    <p class="font-semibold text-xl">
+                      <span class="text-gray-500">{{ n.classification }}</span>
+                      {{ n.title }}
+                    </p>
+                  </li>
+                </template>
+              </ul>
             </div>
-            <div
-              class="text-lg font-medium text-gray-900 uppercase tracking-wide"
-            >
-              Top Products
-            </div>
-            <div>Breaking On/Off</div>
-            <div>Secondary Products</div>
-            <div>More Products</div>
-          </div>
-          <!-- Issues -->
-          <div
-            :class="
-              isActivePage('#issues')
-                ? 'block max-w-[475px] sm:max-w-[768px] xl:max-w-[1280px] w-full p-8'
-                : 'hidden'
-            "
-          >
-            <!-- <div class="text-2xl text-gray-700">Responsive Check</div>
-            <div class="text-gray-400 text-sm">
-              <p class="hidden 3xl:block">3XL Mode 1800px</p>
-              <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
-              <p class="hidden xl:block 2xl:hidden">XL Mode 1280px</p>
-              <p class="hidden lg:block xl:hidden">L Mode 1024px</p>
-              <p class="hidden md:block lg:hidden">MD Mode 768px</p>
-              <p class="hidden sm:block md:hidden">SM Mode 640px</p>
-              <p class="block sm:hidden">Less than SM mode</p>
-            </div> -->
-            <div class="pt-8 pb-6">
-              <div
-                class="text-2xl font-bold text-gray-700 uppercase tracking-wider pb-6 lg:max-w-none"
-              >
-                Issues
-              </div>
-              <!-- <div class="text-gray-500 text-sm">6 issues</div> -->
-              <div class="flex justify-between items-center">
-                <a
-                  class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-slate-600 hover:border-slate-500 active:bg-slate-800 active:text-gray-200/80 cursor-pointer"
+            <!-- Issues -->
+            <div :class="isActivePage('#issues') ? 'block' : 'hidden'">
+              <div class="pt-8 pb-6">
+                <div
+                  class="text-2xl font-bold text-gray-700 uppercase tracking-wider pb-6 lg:max-w-none"
                 >
-                  <PlusIcon class="h-4 w-4" />
-                  <span class="ml-2.5">New Issue</span></a
-                >
-                <div class="flex space-x-4">
-                  <Listbox
-                    v-model="selectedSort"
-                    as="div"
-                    class="min-w-[260px] hidden md:inline-flex items-center text-gray-700"
+                  Issues
+                </div>
+                <!-- <div class="text-gray-500 text-sm">6 issues</div> -->
+                <div class="flex justify-between items-center">
+                  <a
+                    class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80 cursor-pointer"
                   >
-                    <div>
-                      <ListboxLabel
-                        class="text-sm line-clamp-1 xl:line-clamp-none w-max"
-                      >
-                        Sort By
-                      </ListboxLabel>
-                    </div>
-                    <div class="w-full relative items-center ml-3">
-                      <ListboxButton
-                        class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
-                      >
-                        <span class="text-sm block truncate capitalize">{{
-                          selectedSort.name
-                        }}</span>
-                        <span
-                          class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    <PlusIcon class="h-4 w-4" />
+                    <span class="ml-2.5">New Issue</span></a
+                  >
+                  <div class="flex space-x-4">
+                    <Listbox
+                      v-model="selectedSort"
+                      as="div"
+                      class="min-w-[260px] hidden md:inline-flex items-center text-gray-700"
+                    >
+                      <div>
+                        <ListboxLabel
+                          class="text-sm line-clamp-1 xl:line-clamp-none w-max"
                         >
-                          <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
-                        </span>
-                      </ListboxButton>
-                      <transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 scale-95"
-                        enter-to-class="transform opacity-100 scale-100"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 scale-100"
-                        leave-to-class="transform opacity-0 scale-95"
-                      >
-                        <ListboxOptions
-                          class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                          Sort By
+                        </ListboxLabel>
+                      </div>
+                      <div class="w-full relative items-center ml-3">
+                        <ListboxButton
+                          class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
                         >
-                          <ListboxOption
-                            v-for="item in sortOptions"
-                            v-slot="{ active, selected }"
-                            :key="item.name"
-                            :value="item"
-                            as="template"
+                          <span class="text-sm block truncate capitalize">{{
+                            selectedSort.name
+                          }}</span>
+                          <span
+                            class="absolute inset-y-0 right-0 flex items-center pr-2"
                           >
-                            <li
-                              :class="[
-                                active ? 'bg-gray-100  ' : 'bg-none',
-                                'relative cursor-default select-none py-2 pl-10 pr-4',
-                              ]"
+                            <ChevronDownIcon
+                              class="h-4 w-4"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </ListboxButton>
+                        <transition
+                          enter-active-class="transition ease-out duration-100"
+                          enter-from-class="transform opacity-0 scale-95"
+                          enter-to-class="transform opacity-100 scale-100"
+                          leave-active-class="transition ease-in duration-75"
+                          leave-from-class="transform opacity-100 scale-100"
+                          leave-to-class="transform opacity-0 scale-95"
+                        >
+                          <ListboxOptions
+                            class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
+                          >
+                            <ListboxOption
+                              v-for="item in sortOptions"
+                              v-slot="{ active, selected }"
+                              :key="item.name"
+                              :value="item"
+                              as="template"
                             >
-                              <span
+                              <li
                                 :class="[
-                                  selected ? 'font-medium' : 'font-normal',
-                                  'block truncate text-sm',
+                                  active ? 'bg-gray-100  ' : 'bg-none',
+                                  'relative cursor-default select-none py-2 pl-10 pr-4',
                                 ]"
-                                >{{ item.name }}</span
                               >
-                              <span
-                                v-if="selected"
-                                class="absolute inset-y-0 left-0 flex items-center pl-3"
-                              >
-                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                              </span>
-                            </li>
-                          </ListboxOption>
-                        </ListboxOptions>
-                      </transition>
-                    </div>
-                  </Listbox>
-                  <button
-                    class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
-                  >
-                    <span class="hidden md:block">Filters</span>
-                    <span class="block md:hidden">Filters / Sort</span>
-                    <AdjustmentsHorizontalIcon class="h-5 w-5" />
-                  </button>
+                                <span
+                                  :class="[
+                                    selected ? 'font-medium' : 'font-normal',
+                                    'block truncate text-sm',
+                                  ]"
+                                  >{{ item.name }}</span
+                                >
+                                <span
+                                  v-if="selected"
+                                  class="absolute inset-y-0 left-0 flex items-center pl-3"
+                                >
+                                  <CheckIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </li>
+                            </ListboxOption>
+                          </ListboxOptions>
+                        </transition>
+                      </div>
+                    </Listbox>
+                    <button
+                      class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+                    >
+                      <span class="hidden md:block">Filters</span>
+                      <span class="block md:hidden">Filters / Sort</span>
+                      <AdjustmentsHorizontalIcon class="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
-            >
-              <template v-for="n in issues" :key="n">
-                <MockIssueCard :issue="n" />
-              </template>
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
+              >
+                <template v-for="n in issues" :key="n">
+                  <MockIssueCard :issue="n" />
+                </template>
+              </div>
             </div>
           </div>
         </div>
@@ -829,6 +890,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import {
   ChevronRightIcon,
+  VideoCameraIcon as VideoCameraIconSolid,
   //EyeIcon,
   //Square3Stack3DIcon,
 } from "@heroicons/vue/24/solid";
@@ -862,6 +924,7 @@ export default {
     SunIcon,
     UserCircleIcon,
     VideoCameraIcon,
+    VideoCameraIconSolid,
     WrenchIcon,
     XMarkIcon,
     MockIssueCard,

@@ -24,11 +24,11 @@
             leave-to="-translate-x-full"
           >
             <DialogPanel
-              class="relative min-h-screen w-72 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-gray-400 bg-slate-900 shadow-lg"
+              class="relative min-h-screen w-72 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-gray-500 bg-white shadow-lg"
             >
               <button
                 type="button"
-                class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center hover:text-gray-50"
+                class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center hover:text-gray-700"
                 tabindex="0"
                 @click="close"
               >
@@ -37,28 +37,27 @@
               </button>
               <div class="flex flex-col">
                 <div class="flex">
-                  <div to="/" class="flex mx-auto items-center w-[200px]">
-                    <img
-                      class="w-16 h-16"
-                      src="@/assets/nctc_logo.svg"
-                      alt="NCTC. Seal. Link to homepage."
+                  <router-link to="/" class="ml-4 flex mx-auto items-center">
+                    <VideoCameraIconSolid
+                      class="h-7 w-7 text-blue-700"
+                      aria-hidden="true"
                     />
                     <span
-                      class="ml-2 text-gray-200 font-medium text-xl tracking-tight"
+                      class="ml-3 font-bold text-3xl tracking-tight text-gray-900"
                       >Studio</span
                     >
-                  </div>
+                  </router-link>
                 </div>
               </div>
-              <ul class="py-2 space-y-2">
+              <ul class="py-4 space-y-1">
                 <li>
                   <div>
                     <a href="/studio#home" class="">
                       <div
                         :class="
                           isActivePage('#home')
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
+                            ? 'text-blue-700 bg-gray-200/25'
+                            : 'hover:text-blue-700 hover:bg-gray-200/25'
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -74,8 +73,8 @@
                       <div
                         :class="
                           isActivePage('#live')
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
+                            ? 'text-blue-700 bg-gray-200/25'
+                            : 'hover:text-blue-700 hover:bg-gray-200/25'
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -91,8 +90,8 @@
                       <div
                         :class="
                           isActivePage('#issues')
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
+                            ? 'text-blue-700 bg-gray-200/25'
+                            : 'hover:text-blue-700 hover:bg-gray-200/25'
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -128,6 +127,7 @@ import {
   VideoCameraIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
+import { VideoCameraIcon as VideoCameraIconSolid } from "@heroicons/vue/24/solid";
 export default {
   components: {
     Dialog,
@@ -137,6 +137,7 @@ export default {
     HomeIcon,
     NewspaperIcon,
     VideoCameraIcon,
+    VideoCameraIconSolid,
     XMarkIcon,
   },
   props: {

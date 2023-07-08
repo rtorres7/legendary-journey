@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col max-w-[720px] xl:max-w-none xl:flex-row xl:max-h-[360px] bg-white shadow-md hover:shadow-lg"
+    class="flex flex-col max-w-[720px] xl:max-w-[1280px] xl:flex-row xl:max-h-[360px] bg-white shadow-md hover:shadow-lg"
   >
     <div
       class="max-h-[405px] xl:max-h-none max-w-none xl:max-w-[640px] cursor-pointer"
