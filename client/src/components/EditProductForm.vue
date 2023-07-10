@@ -761,6 +761,27 @@
       Only shown when the product is featured on the front page.
     </p>
   </MaxDialog>
+  <MaxDialog
+    :isOpen="isDissemOrgWarningDialogOpen"
+    :title="'Dissemination Warning'"
+    class="max-w-[600px]"
+    @close="closeDissemOrgWarningDialog"
+  >
+    <div class="flex flex-col space-y-6">
+      <template v-if="allDissemOrgsSelected()">
+        <p>
+          This product will be disseminated to all Organizations including NT-50
+          Organizations.
+        </p>
+      </template>
+      <template v-if="!isUserOrgIncluded()">
+        <p>
+          Selecting an organization you are not a member of will prevent you
+          from viewing and performing certain functions on this product.
+        </p>
+      </template>
+    </div>
+  </MaxDialog>
   <MaxOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
@@ -915,6 +936,7 @@ export default {
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
+    const userOrg = computed(() => store.getters["user/organization"]);
     const { files, addFiles, removeFile } = useFileList();
     const thumbnailFile = ref(null);
     const thumbnailBinary = ref(null);
@@ -1018,6 +1040,29 @@ export default {
       }
     };
 
+    const isUserOrgIncluded = () => {
+      const selectedDissemOrgs = [];
+      if (form.value.dissemOrgs.length != 0) {
+        for (const dissemOrg of form.value.dissemOrgs) {
+          selectedDissemOrgs.push(dissemOrg.code);
+        }
+        if (selectedDissemOrgs.includes(userOrg.value)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    const allDissemOrgsSelected = () => {
+      if (lists.dissemOrgs.length === form.value.dissemOrgs.length) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     const removeItem = (name, formItem) => {
       console.log(formItem, "selection removed");
       if (formItem === "countries") {
@@ -1117,6 +1162,9 @@ export default {
           payload.value[property] = codes;
           if (property === "dissem_orgs") {
             updateToggleAllIntelOrgs();
+            if (!isUserOrgIncluded() || allDissemOrgsSelected()) {
+              openDissemOrgWarningDialog();
+            }
           }
           break;
         default:
@@ -1329,6 +1377,13 @@ export default {
           });
       }
       isPreviewDialogOpen.value = true;
+    };
+    const isDissemOrgWarningDialogOpen = ref(false);
+    const openDissemOrgWarningDialog = () => {
+      isDissemOrgWarningDialogOpen.value = true;
+    };
+    const closeDissemOrgWarningDialog = () => {
+      isDissemOrgWarningDialogOpen.value = false;
     };
 
     const uploadThumbnail = (event) => {
@@ -1596,6 +1651,8 @@ export default {
       notInFilePreview,
       toggleAllIntelOrgs,
       updateToggleAllIntelOrgs,
+      isUserOrgIncluded,
+      allDissemOrgsSelected,
       removeItem,
       updateField,
       updateSelectedDate,
@@ -1609,6 +1666,9 @@ export default {
       isPreviewDialogOpen,
       closePreviewDialog,
       openPreviewDialog,
+      isDissemOrgWarningDialogOpen,
+      openDissemOrgWarningDialog,
+      closeDissemOrgWarningDialog,
       uploadThumbnail,
       onInputChange,
       onDrop,
