@@ -11,55 +11,64 @@ export const issues = [
         classification: "(U)",
         title: "Ukraine Claims Gains Near Bakhmut as Deadly Fighting Continues",
         src: "16x9_005_war.jpg",
-        caption:
-          "Ukrainian soldiers take positions outside a military facility as two cars burn in a street in Kyiv, Ukraine, on Saturday.",
         type: "Current",
+        date_posted: "8 hours ago",
       },
       {
         classification: "(U)",
         title: "Deciphering Vladimir Putin's many appearances since mutiny",
         src: "16x9_017_putin.jpg",
-        caption:
-          "Russian President Vladimir Putin speaks during an awarding ceremony of the Presidential Prize for Young Cultural Workers and the Presidential Prize in Literature and Art for Children and Youth in the Kremlin in Moscow, Russia.",
         type: "Foreign",
+        date_posted: "10 hours ago",
       },
       {
         classification: "(U)",
         title:
           "Analysis: Putin expected to meet Xi Jinping and other world leaders for first time since Wagner insurrection",
         src: "16x9_018_xi_putin.jpg",
-        caption:
-          "Moscow and Beijing have declared their opposition to further enlargement of NATO and to the formation of other regional security alliances.",
-        type: "Current",
+        type: "CT Digest",
+        date_posted: "11 hours ago",
       },
       {
         classification: "(U)",
         title:
           "Russia says it repelled a drone attack near Moscow. Here's what else you need to know",
+        type: "Daily Brief",
+        date_posted: "1 day ago",
       },
       {
         classification: "(U)",
         title:
           "Ukraine-Russia war raises US Army concern for vulnerable command posts",
+        type: "Current",
+        date_posted: "1 day ago",
       },
       {
         classification: "(U)",
         title: "US expected to provide cluster bombs to Ukraine",
+        type: "Special Threat Matrix",
+        date_posted: "2 days ago",
       },
       {
         classification: "(U)",
         title:
           "Russian missile strike kills five in Lviv in western Ukraine, officials say",
+        type: "Current",
+        date_posted: "2 days ago",
       },
       {
         classification: "(U)",
         title:
           "Deadly Russia missile strike hits civilian infrastructure in western Ukraine",
+        type: "Current",
+        date_posted: "3 days ago",
       },
       {
         classification: "(U)",
         title:
           "Both Ukraine and Russia claim successes as fighting in Zaporizhzhia continues",
+        type: "Foreign",
+        date_posted: "3 days ago",
       },
     ],
     src: "16x9_L001_ukraine.jpg",

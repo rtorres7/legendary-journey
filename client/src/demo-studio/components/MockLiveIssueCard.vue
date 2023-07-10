@@ -78,17 +78,17 @@
               {{ issue.title }}
             </a>
           </div>
-          <div
-            class="flex flex-col py-1 space-y-1 font-medium text-gray-500 text-sm"
-          >
+          <div class="flex flex-col py-1 space-y-2 font-medium text-sm">
             <p>By {{ issue.author }}</p>
-            <p>Updated {{ issue.last_updated }}</p>
+            <p class="text-gray-400">Updated {{ issue.last_updated }}</p>
           </div>
         </div>
         <div class="py-2">
-          <div class="text-xs text-red-800 uppercase py-1 tracking-wider">
+          <div
+            class="text-xs uppercase text-blue-700 py-1 tracking-wider font-medium"
+          >
             Featured
-            <span class="text-gray-700">Content</span>
+            <span class="text-gray-500">Products</span>
           </div>
           <ul class="text-xs text-gray-700">
             <li

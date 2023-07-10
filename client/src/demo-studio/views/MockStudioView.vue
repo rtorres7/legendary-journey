@@ -558,7 +558,7 @@
             <!-- Home -->
             <div :class="isActivePage('#home') ? 'block' : 'hidden'">
               <div
-                class="flex space-x-1 justify-center xl:justify-start text-2xl text-gray-700 py-8"
+                class="flex space-x-1 justify-center xl:justify-start text-3xl text-gray-700 py-8"
               >
                 <div class="font-bold uppercase tracking-wider">Current</div>
                 <div class="text-gray-500">Issue</div>
@@ -607,7 +607,7 @@
             </div>
             <!-- Live Content-->
             <div :class="isActivePage('#live') ? 'block' : 'hidden'">
-              <div class="text-2xl text-gray-700">Responsive Check</div>
+              <!-- <div class="text-2xl text-gray-700">Responsive Check</div>
               <div class="text-gray-400 text-sm">
                 <p class="hidden 3xl:block">3XL Mode 1800px</p>
                 <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -616,7 +616,7 @@
                 <p class="hidden md:block lg:hidden">MD Mode 768px</p>
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
-              </div>
+              </div> -->
               <!-- <div class="flex items-center space-x-2">
                 <span class="relative flex h-2 w-2">
                   <span
@@ -630,125 +630,122 @@
                   >Live Now</span
                 >
               </div> -->
-              <div class="py-10">
-                <div class="text-gray-500 uppercase text-sm">
+              <div class="max-w-[1480px] flex space-x-4 justify-end">
+                <button
+                  class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+                >
+                  <span>Edit</span>
+                  <PencilSquareIcon class="h-5 w-5" />
+                </button>
+                <button
+                  class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 border border-gray-300"
+                >
+                  <span>Preview</span>
+                  <DocumentMagnifyingGlassIcon class="h-5 w-5" />
+                </button>
+              </div>
+              <div class="py-8">
+                <div class="text-blue-600 font-medium text-sm">
                   Changes in 4 days
                 </div>
                 <div class="text-5xl py-2 font-bold">
                   {{ issues[0].title }}
                 </div>
-                <div
-                  class="flex flex-col py-2 space-y-2 font-medium text-gray-500 text-sm"
-                >
+                <div class="flex flex-col py-2 space-y-2 font-medium text-sm">
                   <p>By {{ issues[0].author }}</p>
-                  <p>Updated {{ issues[0].last_updated }}</p>
-                </div>
-              </div>
-              <div class="py-6 border-b border-gray-200">
-                <div
-                  class="uppercase tracking-wide font-medium text-gray-500 text-sm"
-                >
-                  Featured
-                </div>
-                <div class="flex flex-col max-w-[720px]">
-                  <div class="py-4">
-                    <p class="font-semibold text-2xl">
-                      <span class="text-gray-500">{{
-                        issues[0].featured[0].classification
-                      }}</span>
-                      {{ issues[0].featured[0].title }}
-                    </p>
-                  </div>
-                  <div class="max-h-[405px] cursor-pointer">
-                    <img src="@/assets/mocks/16x9_005_war.jpg" alt="" />
-                  </div>
-                  <p class="text-gray-700 text-xs py-2">
-                    {{ issues[0].featured[0].caption }}
+                  <p class="text-gray-400">
+                    Updated {{ issues[0].last_updated }}
                   </p>
                 </div>
               </div>
-              <div class="py-6 border-b border-gray-200">
-                <div
-                  class="uppercase tracking-wide font-medium text-gray-500 text-sm pb-4"
-                >
-                  Important
-                </div>
-                <div class="flex space-x-10">
-                  <div class="flex flex-col max-w-[500px]">
-                    <div class="max-h-[281px] cursor-pointer">
-                      <img src="@/assets/mocks/16x9_017_putin.jpg" alt="" />
-                    </div>
-                    <div class="py-4">
-                      <p class="font-semibold text-lg line-clamp-2">
-                        <span class="text-gray-500">{{
-                          issues[0].featured[1].classification
-                        }}</span>
-                        {{ issues[0].featured[1].title }}
-                      </p>
-                    </div>
-                    <!-- <p class="text-gray-700 text-xs py-2">
-                      {{ issues[0].featured[1].caption }}
-                    </p> -->
-                  </div>
-                  <div class="flex flex-col max-w-[500px]">
-                    <div class="max-h-[281px] cursor-pointer">
-                      <img src="@/assets/mocks/16x9_018_xi_putin.jpg" alt="" />
-                    </div>
-                    <div class="py-4">
-                      <p class="font-semibold text-lg line-clamp-3">
-                        <span class="text-gray-500">{{
-                          issues[0].featured[2].classification
-                        }}</span>
-                        {{ issues[0].featured[2].title }}
-                      </p>
-                    </div>
-                    <!-- <p class="text-gray-700 text-xs py-2">
-                      {{ issues[0].featured[2].caption }}
-                    </p> -->
-                  </div>
-                </div>
+              <div class="pb-6 font-semibold text-gray-700">
+                Featured Products
               </div>
-              <div class="py-6">
-                <div
-                  class="uppercase tracking-wide font-medium text-gray-500 text-sm"
+              <div class="max-w-[1500px] grid grid-cols-1 xl:grid-cols-3 gap-2">
+                <template
+                  v-for="product in issues[0].featured.slice(0, 3)"
+                  :key="product"
                 >
-                  More Products
-                </div>
-              </div>
-
-              <button
-                class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
-              >
-                <span>Edit</span>
-                <PencilSquareIcon class="h-5 w-5" />
-              </button>
-              <ul>
-                <template v-for="n in issues[0].featured.slice(3)" :key="n">
-                  <li class="py-4 border-b border-gray-200">
-                    <p class="font-semibold text-xl">
-                      <span class="text-gray-500">{{ n.classification }}</span>
-                      {{ n.title }}
-                    </p>
-                  </li>
+                  <div
+                    class="flex flex-col max-w-[768px] xl:max-w-[480px] px-6 py-4 bg-white rounded-md shadow-sm hover:shadow-md border border-slate-200 cursor-pointer"
+                  >
+                    <div class="max-h-[432px] xl:max-h-[270px] cursor-pointer">
+                      <img
+                        :src="getImg(product.src)"
+                        class="rounded-md"
+                        alt=""
+                      />
+                    </div>
+                    <div class="h-full flex flex-col justify-between">
+                      <div class="py-4">
+                        <p
+                          class="font-semibold text-lg line-clamp-2 xl:line-clamp-3"
+                        >
+                          <span class="text-gray-500">{{
+                            product.classification
+                          }}</span>
+                          {{ product.title }}
+                        </p>
+                      </div>
+                      <div class="flex space-x-2 font-medium text-sm">
+                        <div class="text-blue-700">{{ product.type }}</div>
+                        <div>•</div>
+                        <div class="text-gray-500">
+                          {{ product.date_posted }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </template>
-              </ul>
+              </div>
+              <div class="font-semibold text-gray-700 py-6">More Products</div>
+              <div
+                class="max-w-[800px] bg-white rounded-md border border-slate-200"
+              >
+                <ul>
+                  <template
+                    v-for="product in issues[0].featured.slice(3)"
+                    :key="product"
+                  >
+                    <li class="px-6 border-b border-gray-200 cursor-pointer">
+                      <div class="py-4">
+                        <p class="font-semibold text-lg line-clamp-2">
+                          <span class="text-gray-500">{{
+                            product.classification
+                          }}</span>
+                          {{ product.title }}
+                        </p>
+                      </div>
+                      <div class="pb-4 flex space-x-2 font-medium text-sm">
+                        <div class="text-blue-700">{{ product.type }}</div>
+                        <div>•</div>
+                        <div class="text-gray-500">
+                          {{ product.date_posted }}
+                        </div>
+                      </div>
+                    </li>
+                  </template>
+                </ul>
+              </div>
             </div>
             <!-- Issues -->
             <div :class="isActivePage('#issues') ? 'block' : 'hidden'">
               <div class="pt-8 pb-6">
-                <div
-                  class="text-2xl font-bold text-gray-700 uppercase tracking-wider pb-6 lg:max-w-none"
-                >
-                  Issues
-                </div>
-                <!-- <div class="text-gray-500 text-sm">6 issues</div> -->
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between pb-8">
+                  <div
+                    class="text-3xl font-semibold text-gray-700 lg:max-w-none"
+                  >
+                    Issues
+                  </div>
                   <a
                     class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80 cursor-pointer"
                   >
                     <PlusIcon class="h-4 w-4" />
                     <span class="ml-2.5">New Issue</span></a
                   >
+                </div>
+                <div class="flex justify-between items-center">
+                  <div class="text-gray-500">6 issues</div>
                   <div class="flex space-x-4">
                     <Listbox
                       v-model="selectedSort"
@@ -876,6 +873,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ComputerDesktopIcon,
+  DocumentMagnifyingGlassIcon,
   HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
@@ -915,6 +913,7 @@ export default {
     ChevronDownIcon,
     ChevronRightIcon,
     ComputerDesktopIcon,
+    DocumentMagnifyingGlassIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
@@ -1057,6 +1056,10 @@ export default {
       return hash === currentHash.value;
     };
 
+    const getImg = (src) => {
+      return new URL("../../assets/mocks/" + src, import.meta.url).href;
+    };
+
     return {
       dayjs,
       themeOptions,
@@ -1075,6 +1078,7 @@ export default {
       selectItemEventHandler,
       onEnter,
       isActivePage,
+      getImg,
     };
   },
 };
