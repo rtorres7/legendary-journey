@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex">
+  <div class="flex bg-white md:border-r border-slate-900/10">
     <!-- Less than sm -->
     <div
       class="w-full flex md:hidden justify-between items-center h-16 px-8 border-b bg-white text-gray-900 z-[5]"
@@ -191,9 +191,7 @@
       </div>
     </div>
     <!--- md to xl --->
-    <div
-      class="hidden md:block 2xl:hidden bg-white border-r border-slate-900/10 min-h-screen min-w-[80px]"
-    >
+    <div class="hidden md:block 2xl:hidden min-h-screen min-w-[80px]">
       <div class="flex flex-col">
         <div class="flex justify-center items-center py-6">
           <router-link to="/">
@@ -282,87 +280,112 @@
       </div>
     </div>
     <!--- 2xl or higher --->
-    <div
-      class="hidden 2xl:block bg-white border-r border-slate-900/10 min-h-screen min-w-[275px]"
-    >
-      <div class="flex flex-col">
-        <div class="text-blue-700 flex px-4 py-6">
-          <router-link to="/" class="flex items-center px-4">
-            <div class="rounded-full bg-blue-200 p-3">
-              <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
-            </div>
-            <span class="ml-4 font-bold text-3xl">Studio</span>
-          </router-link>
+    <div class="hidden 2xl:block min-w-[320px]">
+      <div class="flex flex-col justify-between py-6 min-h-screen">
+        <div>
+          <div class="text-blue-700 flex px-4 pb-6">
+            <router-link to="/" class="flex items-center px-4">
+              <div class="rounded-full bg-blue-200 p-3">
+                <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
+              </div>
+              <span class="ml-4 font-bold text-3xl">Studio</span>
+            </router-link>
+          </div>
+          <div class="text-gray-400 font-medium px-8 py-2">Menu</div>
+          <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
+            <li>
+              <div>
+                <a href="/studio#home">
+                  <div
+                    :class="
+                      isActivePage('#home')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActivePage('#home')">
+                      <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Home</span>
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <a href="/studio#live" class="">
+                  <div
+                    :class="
+                      isActivePage('#live')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActivePage('#live')">
+                      <VideoCameraIconSolid
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </template>
+                    <template v-else>
+                      <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Live Content</span>
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <a href="/studio#issues" class="">
+                  <div
+                    :class="
+                      isActivePage('#issues')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActivePage('#issues')">
+                      <NewspaperIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Issues</span>
+                  </div>
+                </a>
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="text-gray-400 font-medium px-8 py-2">Menu</div>
-        <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
-          <li>
-            <div>
-              <a href="/studio#home">
-                <div
-                  :class="
-                    isActivePage('#home')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
-                  "
-                  class="flex items-center px-4 py-3 cursor-pointer"
-                >
-                  <template v-if="isActivePage('#home')">
-                    <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else>
-                    <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <span class="ml-4 font-medium">Home</span>
+        <div class="px-6">
+          <div class="flex justify-between border-t border-slate-900/10 py-6">
+            <div class="flex">
+              <img
+                src="@/assets/mocks/avatar.jpg"
+                class="rounded-full w-[45px]"
+              />
+              <div class="ml-3 max-w-[170px]">
+                <div class="font-semibold text-sm line-clamp-1">
+                  Jonathan Oszczakiewicz
                 </div>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div>
-              <a href="/studio#live" class="">
-                <div
-                  :class="
-                    isActivePage('#live')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
-                  "
-                  class="flex items-center px-4 py-3 cursor-pointer"
-                >
-                  <template v-if="isActivePage('#live')">
-                    <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else>
-                    <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <span class="ml-4 font-medium">Live Content</span>
+                <div class="font-medium text-xs text-gray-400">
+                  Test Engineer
                 </div>
-              </a>
+              </div>
             </div>
-          </li>
-          <li>
-            <div>
-              <a href="/studio#issues" class="">
-                <div
-                  :class="
-                    isActivePage('#issues')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
-                  "
-                  class="flex items-center px-4 py-3 cursor-pointer"
-                >
-                  <template v-if="isActivePage('#issues')">
-                    <NewspaperIconSolid class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else>
-                    <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <span class="ml-4 font-medium">Issues</span>
-                </div>
-              </a>
-            </div>
-          </li>
-        </ul>
+            <button class="text-gray-500 hover:text-gray-700">
+              <span class="sr-only">User Menu</span>
+              <EllipsisVerticalIcon class="h-7 w-7" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -515,6 +538,7 @@ import {
 import {
   Bars3Icon,
   ComputerDesktopIcon,
+  EllipsisVerticalIcon,
   HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
@@ -543,6 +567,7 @@ export default {
     TransitionRoot,
     Bars3Icon,
     ComputerDesktopIcon,
+    EllipsisVerticalIcon,
     HomeIcon,
     HomeIconSolid,
     NewspaperIcon,

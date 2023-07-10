@@ -2,10 +2,10 @@
   <div class="h-full flex flex-col md:flex-row">
     <StudioNavigation />
     <div class="flex flex-col grow min-h-screen h-full">
-      <div class="relative grow">
+      <div class="relative grow bg-slate-50">
         <!-- Content Area -->
         <div
-          class="flex flex-col text-gray-900 w-full min-h-[calc(100vh-4rem)] h-full items-center bg-slate-50"
+          class="flex flex-col text-gray-900 w-full min-h-[calc(100vh-4rem)] h-full items-center"
         >
           <div
             class="max-w-[475px] sm:max-w-[768px] xl:max-w-[1600px] w-full p-6 md:p-8"
@@ -83,13 +83,14 @@
                   >Live Now</span
                 >
               </div> -->
-              <div class="max-w-[1480px] flex space-x-4 justify-end">
-                <button
+              <div class="max-w-[1480px] flex space-x-4 justify-end pt-8">
+                <a
                   class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+                  href="/studio#edit-issue"
                 >
                   <span>Edit</span>
                   <PencilSquareIcon class="h-5 w-5" />
-                </button>
+                </a>
                 <button
                   class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 border border-gray-300"
                 >
@@ -292,6 +293,260 @@
                 </template>
               </div>
             </div>
+            <!-- Edit Sample -->
+            <div :class="isActivePage('#edit-issue') ? 'block' : 'hidden'">
+              <div
+                class="flex justify-between items-center pt-8 pb-2 md:pb-8 max-w-[960px]"
+              >
+                <div class="text-3xl font-semibold text-gray-700">
+                  Issue Details
+                </div>
+                <div class="hidden md:flex space-x-4 items-center text-sm">
+                  <div
+                    class="tracking-tight uppercase font-medium text-gray-500"
+                  >
+                    Undo Changes
+                  </div>
+                  <button
+                    class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+                  >
+                    Save
+                  </button>
+                  <button class="text-gray-500 hover:text-gray-700">
+                    <span class="sr-only">User Menu</span>
+                    <EllipsisVerticalIcon class="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
+              <div
+                class="flex justify-end md:hidden space-x-4 items-center text-sm py-4"
+              >
+                <div class="tracking-tight uppercase font-medium text-gray-500">
+                  Undo Changes
+                </div>
+                <button
+                  class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+                >
+                  Save
+                </button>
+                <button class="text-gray-500 hover:text-gray-700">
+                  <span class="sr-only">User Menu</span>
+                  <EllipsisVerticalIcon class="h-6 w-6" />
+                </button>
+              </div>
+              <div
+                class="flex flex-col space-y-8 bg-white rounded-md border border-slate-200 p-10 max-w-[960px]"
+              >
+                <div class="flex flex-col space-y-6">
+                  <div>
+                    <div class="font-medium">Basics</div>
+                    <div class="text-sm text-gray-600">
+                      The information below will feature on the main page.
+                    </div>
+                  </div>
+                  <div class="flex flex-col space-y-6">
+                    <div class="max-w-[600px]">
+                      <label class="text-sm font-medium">Title</label>
+                      <input
+                        type="text"
+                        aria-labelledby="4"
+                        autocomplete="off"
+                        class="min-h-[2rem] flex w-full rounded-lg cursor-default py-1 px-2 mt-2 bg-transparent border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                      />
+                    </div>
+                    <div class="flex space-x-6">
+                      <div class="max-w-[250px]">
+                        <label id="2" class="text-sm font-medium"
+                          >Start Date</label
+                        >
+                        <div
+                          class="flex items-center min-h-[2rem] mt-2 py-1 px-4 rounded-lg border border-gray-300"
+                        >
+                          <CalendarIcon class="h-5 w-5 text-gray-400" />
+                          <input
+                            type="text"
+                            aria-labelledby="2"
+                            autocomplete="off"
+                            class="flex w-full cursor-default px-4 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div class="max-w-[250px]">
+                        <label id="3" class="text-sm font-medium"
+                          >Expires On</label
+                        >
+                        <div
+                          class="flex items-center min-h-[2rem] mt-2 py-1 px-4 rounded-lg border border-gray-300"
+                        >
+                          <CalendarIcon class="h-5 w-5 text-gray-400" />
+                          <input
+                            type="text"
+                            aria-labelledby="3"
+                            autocomplete="off"
+                            class="flex w-full cursor-default px-4 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col space-y-6">
+                  <div>
+                    <div class="font-medium">Content</div>
+                    <div class="text-sm text-gray-600">
+                      The top three products are shown with their thumbnails.
+                    </div>
+                  </div>
+                  <div class="flex flex-col space-y-8">
+                    <div class="text-sm">
+                      <div class="font-medium">Breaking Product</div>
+                      <Switch
+                        v-model="breakingEnabled"
+                        :class="breakingEnabled ? 'bg-blue-700' : 'bg-gray-300'"
+                        class="relative inline-flex mt-3 h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                      >
+                        <span class="sr-only">Use setting</span>
+                        <span
+                          aria-hidden="true"
+                          :class="
+                            breakingEnabled ? 'translate-x-9' : 'translate-x-0'
+                          "
+                          class="pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                        />
+                      </Switch>
+                      <div class="mt-2 text-gray-600">
+                        Only the first product will have a breaking label.
+                      </div>
+                    </div>
+                    <div>
+                      <div class="font-medium text-sm">Products</div>
+                      <ul
+                        class="rounded-md max-w-[800px] mt-3 border border-dashed border-gray-400"
+                      >
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="flex flex-col space-y-2">
+                            <div
+                              class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
+                            >
+                              Top Featured
+                            </div>
+                            <div class="text-sm text-gray-500">
+                              <span
+                                class="text-blue-700 font-semibold cursor-pointer"
+                                >Search for a product</span
+                              >
+                              to add.
+                            </div>
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="flex flex-col space-y-2">
+                            <div
+                              class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
+                            >
+                              Featured
+                            </div>
+                            <div class="text-sm text-gray-500">
+                              <span
+                                class="text-blue-700 font-semibold cursor-pointer"
+                                >Search for a product</span
+                              >
+                              to add.
+                            </div>
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="flex flex-col space-y-2">
+                            <div
+                              class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
+                            >
+                              Featured
+                            </div>
+                            <div class="text-sm text-gray-500">
+                              <span
+                                class="text-blue-700 font-semibold cursor-pointer"
+                                >Search for a product</span
+                              >
+                              to add.
+                            </div>
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="text-sm text-gray-500">
+                            <span
+                              class="text-blue-700 font-semibold cursor-pointer"
+                              >Search for a product</span
+                            >
+                            to add.
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="text-sm text-gray-500">
+                            <span
+                              class="text-blue-700 font-semibold cursor-pointer"
+                              >Search for a product</span
+                            >
+                            to add.
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="text-sm text-gray-500">
+                            <span
+                              class="text-blue-700 font-semibold cursor-pointer"
+                              >Search for a product</span
+                            >
+                            to add.
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="text-sm text-gray-500">
+                            <span
+                              class="text-blue-700 font-semibold cursor-pointer"
+                              >Search for a product</span
+                            >
+                            to add.
+                          </div>
+                        </li>
+                        <li
+                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                        >
+                          <div class="text-sm text-gray-500">
+                            <span
+                              class="text-blue-700 font-semibold cursor-pointer"
+                              >Search for a product</span
+                            >
+                            to add.
+                          </div>
+                        </li>
+                        <li class="flex justify-center items-center h-[100px]">
+                          <div class="text-sm text-gray-500">
+                            <span
+                              class="text-blue-700 font-semibold cursor-pointer"
+                              >Search for a product</span
+                            >
+                            to add.
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -308,12 +563,15 @@ import {
   ListboxButton,
   ListboxOptions,
   ListboxOption,
+  Switch,
 } from "@headlessui/vue";
 import {
   AdjustmentsHorizontalIcon,
+  CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
   DocumentMagnifyingGlassIcon,
+  EllipsisVerticalIcon,
   PencilSquareIcon,
   PlusIcon,
 } from "@heroicons/vue/24/outline";
@@ -329,14 +587,17 @@ export default {
     ListboxOptions,
     ListboxOption,
     AdjustmentsHorizontalIcon,
+    CalendarIcon,
     CheckIcon,
     ChevronDownIcon,
     DocumentMagnifyingGlassIcon,
+    EllipsisVerticalIcon,
     PencilSquareIcon,
     PlusIcon,
     MockIssueCard,
     MockLiveIssueCard,
     StudioNavigation,
+    Switch,
   },
   setup() {
     const currentHash = ref(window.location.hash || "#dashboard");
@@ -344,7 +605,7 @@ export default {
       { name: "Posting Date: Recent" },
       { name: "Posting Date: Last" },
     ];
-
+    const breakingEnabled = ref(false);
     const selectedSort = ref(sortOptions[0]);
 
     onMounted(() => {
@@ -367,6 +628,7 @@ export default {
       dayjs,
       themeOptions,
       sortOptions,
+      breakingEnabled,
       selectedSort,
       issues,
       isActivePage,
