@@ -2,7 +2,14 @@ const dotenv = require("dotenv");
 const path = require("path");
 const Joi = require("joi");
 
-dotenv.config({ path: path.join(__dirname, "../../.env") });
+let envPath = "../../.env";
+if (process.env.NODE_ENV === "test") {
+  envPath += ".test";
+}
+// console.log(`config:  envPath = ${envPath}`);
+
+dotenv.config({ path: path.join(__dirname, "../../.env.test") });
+
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().default("development"), // .valid("production", "development", "test").required(),
