@@ -10,18 +10,18 @@ const enumerateErrorFormat = winston.format((info) => {
 
 const logger = winston.createLogger({
   // https://github.com/winstonjs/winston
-  // level: config.env === "development" ? "debug" : "info",
+  // level: config.env === 'development' ? 'debug' : 'info',
   // error warn info http verbose debug silly
-  level: config.mxs.env === "container" ? "debug" : "info",
+  level: 'info', // config.mxs.env === 'container' ? 'debug' : 'info',
   format: winston.format.combine(
     enumerateErrorFormat(),
-    config.env === "development" ? winston.format.colorize() : winston.format.uncolorize(),
+    ['development', 'test'].some(i => i === config.env) ? winston.format.colorize() : winston.format.uncolorize(),
     winston.format.splat(),
     winston.format.printf(({ level, message }) => `${level}: ${message}`)
   ),
   transports: [
     new winston.transports.Console({
-      stderrLevels: ["error"],
+      stderrLevels: ["info"],
     }),
   ],
 });
