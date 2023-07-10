@@ -1,42 +1,36 @@
 const express = require("express");
 const router = express.Router();
-const { handleMongooseError } = require("../util/errors");
 const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const { runAsUser, pagingParams } = require('../util/request');
 const ProductService = require('../services/product-service');
 const productService = new ProductService();
 const WorkspaceService = require('../services/workspace');
 const workspaceService = new WorkspaceService();
 
 router.get("/drafts", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, skip, sortDir } = pagingParams(req);
 
-  // TODO: Need to find user from request
-  try {
-    const pageOfDrafts = await productService.findPageOfDraftProductsForUser(1, page, perPage, skip, sortDir);
-    res.json(pageOfDrafts);
-  } catch (error) {
-    handleMongooseError("Unable to find draft products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
-  }
+    try {
+      const pageOfDrafts = await productService.findPageOfDraftProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageOfDrafts);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find draft products: ${error.message}`, res);
+    }
+  });
 });
 
 router.get("/recent", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, skip, sortDir } = pagingParams(req);
 
-  // TODO: Need to find user from request
-  try {
-    const pageOfRecentProducts = await productService.findPageOfRecentProductsForUser(1, page, perPage, skip, sortDir);
-    res.json(pageOfRecentProducts);
-  } catch (error) {
-    handleMongooseError("Unable to find posted products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
-  }
+    try {
+      const pageOfRecentProducts = await productService.findPageOfRecentProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageOfRecentProducts);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find posted products: ${error.message}`, res);
+    }
+  });
 });
 
 router.get("/stats", (req, res) => {
@@ -45,65 +39,63 @@ router.get("/stats", (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, skip, sortDir } = pagingParams(req);
 
-  // TODO: Need to find user from request
-  try {
-    const pageOfProducts = await productService.findPageOfProductsForUser(1, page, perPage, skip, sortDir);
-    res.json(pageOfProducts);
-  } catch (error) {
-    handleMongooseError("Unable to find user's products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
-  }
+    try {
+      const pageOfProducts = await productService.findPageOfProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageOfProducts);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find user's products: ${error.message}`, res);
+    }
+  });
 });
 
 router.get("/saved", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, sortDir } = pagingParams(req);
+    const term = req.query.text;
+    const filters = req.query;
 
-  // TODO: We need user info so we can filter this by MY saved products
-  // TODO: We need to figure out how to return the actual products
-  const savedProducts = await workspaceService.findPageOfSavedProductsForUser(1, page, perPage, skip, sortDir);
-  res.json(savedProducts);
+    const savedProducts = await workspaceService.findPageOfSavedProductsForUser(currentUser.id, term, perPage, page, sortDir, filters);
+    res.json(savedProducts);
+  });
 });
 
 router.put("/saved/:productId", async (req, res) => {
-  // TODO: Need a real user
-  const savedProduct = await workspaceService.createSavedProduct(req.params.productId, 1);
-  res.json(savedProduct);
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const savedProduct = await workspaceService.createSavedProduct(req.params.productId, currentUser.id);
+    res.json(savedProduct);
+  });
 });
 
 router.delete("/saved/:productId", async (req, res) => {
-  // TODO: Need a real user
-  await workspaceService.deleteSavedProduct(req.params.productId, 1);
-  res.status(204).send();
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    await workspaceService.deleteSavedProduct(req.params.productId, 1);
+    res.status(204).send();
+  });
 });
 
 router.get('/collections', async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, skip, sortDir } = pagingParams(req);
 
-  // TODO: We need real users so we can filter this by current user
-  const collections = await workspaceService.findPageOfCollectionsForUser(1, page, perPage, skip, sortDir);
-  res.json(collections);
+    const collections = await workspaceService.findPageOfCollectionsForUser(currentUser.id, page, perPage, skip, sortDir);
+    res.json(collections);
+  });
 });
 
 router.post('/collections', async (req, res) => {
-  const savedCollection = await workspaceService.createCollection({
-    name: req.body.name,
-    description: req.body.description,
-    image: req.body.image,
-    createdBy: 1 // TODO: We need a real user
-  })
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const savedCollection = await workspaceService.createCollection({
+      name: req.body.name,
+      description: req.body.description,
+      image: req.body.image,
+      createdBy: currentUser.id,
+    })
 
-  res.json(savedCollection);
+    res.json(savedCollection);
+  });
 });
 
 router.put('/collections/:collectionId', async (req, res) => {

@@ -21,7 +21,6 @@
                     })
                 "
               >
-                <span class="sr-only">{{ category.name }}</span>
                 <component :is="category.icon" class="h-6 w-6" /><span
                   class="hidden lg:block pl-4"
                   >{{ category.name }}</span
@@ -1411,7 +1410,7 @@ export default {
         });
       } else {
         axios
-          .delete("/documents/" + route.params.doc_num + "/deleteMe")
+          .delete("/documents/" + route.params.id + "/deleteMe")
           .then((response) => {
             if (response.data.error) {
               createNotification({

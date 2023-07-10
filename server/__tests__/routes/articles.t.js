@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { setupApp } = require('../__utils__/expressUtils');
+const { setupApp, setupAppWithUser } = require('../__utils__/expressUtils');
 const { articles } = require("../__utils__/dataLoader");
 
 jest.mock('../../src/services/product-service.js', () => {
@@ -193,7 +193,7 @@ describe("Article Routes", () => {
   describe("POST /articles", () => {
     it("should create the given article", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupAppWithUser('/articles', router, { id: 1 });
 
       const postData = {
         document_action: "save",
@@ -215,7 +215,7 @@ describe("Article Routes", () => {
 
     it("should create the given article including producing_office", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupAppWithUser('/articles', router, { id: 1 });
 
       const postData = {
         document_action: "save",
@@ -238,7 +238,7 @@ describe("Article Routes", () => {
 
     it("should create the given article defaulting date published", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupAppWithUser('/articles', router, { id: 1 });
 
       const postData = {
         document_action: "save",
@@ -261,7 +261,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupAppWithUser('/articles', router, { id: 1 });
 
       const postData = {
         document_action: "save",

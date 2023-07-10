@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.22.xsd">
+
+    <changeSet id="2" author="chriroh">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique Identifier for user">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date collection was created">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date collection was updated">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="text" remarks="User's email">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="text" remarks="Name of the user"/>
+            <column name="first_name" type="text" remarks="First name of the user"/>
+            <column name="last_name" type="text" remarks="Last name of the user"/>
+            <column name="user_name" type="text" remarks="User's username"/>
+            <column name="enabled" type="boolean" remarks="Whether user is enabled or not" defaultValueBoolean="false"/>
+            <column name="email_verified" type="boolean" remarks="Whether user email has been verified" defaultValueBoolean="false"/>
+            <column name="has_org" type="boolean" remarks="Whether user has an org" defaultValueBoolean="false"/>
+            <column name="phone" type="bigint" remarks="User's phone number"/>
+            <column name="dn" type="text" remarks="User's cert distinguished name">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roles" type="varchar(50) []" remarks="List of roles that the user has"/>
+        </createTable>
+
+        <createIndex tableName="users" indexName="users_dn_idx">
+            <column name="dn"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

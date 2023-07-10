@@ -53,7 +53,7 @@
 ```
 cd client
 npm install
-npm run serve:offline
+npm run dev:offline
 ```
 
 ### Compiles and minifies for production in offline mode (must be in client folder)
@@ -78,6 +78,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 - Install Docker & Docker-Compose (https://docs.docker.com/get-docker/)
 - (Optional) Install a MongoDB Client (MongoDB Compass - https://www.mongodb.com/try/download/compass)
+- UDev2Dev .p12 certificate must be installed in browser (for auth)
 
 ### Building the Container Images
 
@@ -89,9 +90,16 @@ docker-compose build
 
 ```
 docker-compose up
-# App is running on localhost:8080
+# App is running on https://localhost:8443
 # Server (Node.js + Express.js) is running on localhost:3000
 # MongoDB is running on localhost:27017
+```
+
+### Building & Running the Containers Together
+
+```
+npm install
+npm start
 ```
 
 ### Stopping the Containers
@@ -104,6 +112,12 @@ docker-compose stop # this will safely maintain data in your MongoDB database co
 
 ```
 docker-compose down # this will delete any data persisted in your MongoDB database container
+```
+
+### Destroying all containers, volumes, and images
+
+```
+docker system prune -a --volumes
 ```
 
 ## How to run Sonar Analysis
