@@ -13,6 +13,7 @@
     "sonar": "sonar-scanner -Dsonar.login=$SONAR_TOKEN"
   },
   "dependencies": {
-    "concurrently": "^7.2.1"
+    "concurrently": "^7.2.1",
+    "passport-oauth2": "^1.7.0"
   }
 }

@@ -11,7 +11,9 @@ const Product = require("../models/products");
 
 const { handleMongooseError } = require("../util/errors");
 
-const ProductService = require("../services/product-service");
+const { runAsUser } = require('../util/request');
+
+const ProductService = require('../services/product-service');
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
@@ -56,6 +58,10 @@ router.post("/processDocument", (req, res) => {
     case "create":
       res.redirect(307, "/products/");
       break;
+    case "publish":
+      req.body.state = "posted";
+      updateProduct(req.body.id, req, res);
+      break;
     case "save":
       updateProduct(req.body.id, req, res);
       break;
@@ -69,53 +75,46 @@ router.post("/processDocument", (req, res) => {
 
 // POST
 router.post("/", async (req, res) => {
-  const topics = await metadataService.findTopicsFor(req.body.topics);
-  const issues = await metadataService.findIssuesForTopics(topics);
-  const producingOffices =
-    req.body.producing_office &&
-    (await metadataService.findProducingOfficesFor([
-      req.body.producing_office,
-    ]));
-  const productType = await metadataService.findProductType(
-    req.body.product_type_id
-  );
-  const reportingType = await metadataService.findReportingTypeFor(
-    req.body.product_type_id
-  );
-  const nonStateActors = await metadataService.findNonStateActorsFor(
-    req.body.non_state_actors
-  );
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const topics = await metadataService.findTopicsFor(req.body.topics);
+    const issues = await metadataService.findIssuesForTopics(topics);
+    const producingOffices = req.body.producing_office && await metadataService.findProducingOfficesFor([req.body.producing_office]);
+    const productType = await metadataService.findProductType(req.body.product_type_id);
+    const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
+    const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
 
-  const product = new Product({
-    createdAt: dayjs().toDate(),
-    datePublished: req.body.date_published || dayjs().format(),
-    htmlBody: req.body.html_body,
-    issues: issues,
-    needed: {},
-    orgRestricted: false,
-    productNumber: uuidv4(),
-    producingOffices: producingOffices,
-    productType: productType,
-    publicationNumber: req.body.publication_number,
-    reportingType: reportingType,
-    summary: req.body.summary,
-    title: req.body.title,
-    topics: topics,
-    nonStateActors: nonStateActors,
-    updatedAt: dayjs().toDate(),
+    const product = new Product({
+      createdAt: dayjs().toDate(),
+      createdBy: {
+        id: currentUser.id,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        dn: currentUser.dn,
+      },
+      datePublished: req.body.date_published || dayjs().format(),
+      htmlBody: req.body.html_body,
+      issues: issues,
+      needed: {},
+      orgRestricted: false,
+      productNumber: uuidv4(),
+      producingOffices: producingOffices,
+      productType: productType,
+      publicationNumber: req.body.publication_number,
+      reportingType: reportingType,
+      summary: req.body.summary,
+      title: req.body.title,
+      topics: topics,
+      nonStateActors: nonStateActors,
+      updatedAt: dayjs().toDate(),
+    });
+
+    try {
+      const savedProduct = await productService.createProduct(product);
+      res.json({ product: { id: savedProduct.id }, doc_num: savedProduct.productNumber });
+    } catch (error) {
+      res.json({ error: `There was a problem creating product: ${error.message}`});
+    }
   });
-
-  try {
-    const savedProduct = await productService.createProduct(product);
-    res.json({
-      product: { id: savedProduct.id },
-      doc_num: savedProduct.productNumber,
-    });
-  } catch (error) {
-    res.json({
-      error: `There was a problem creating product: ${error.message}`,
-    });
-  }
 });
 
 // Fetch single post
@@ -184,7 +183,7 @@ async function updateProduct(id, req, res) {
     req.body.product_type_id
   );
   const nonStateActors = await metadataService.findNonStateActorsFor(
-    req.body.nonStateActors
+    req.body.non_state_actors
   );
 
   const product = {
@@ -205,6 +204,7 @@ async function updateProduct(id, req, res) {
     publicationNumber: req.body.publication_number,
     regions: regions,
     reportingType: reportingType,
+    state: req.body.state,
     subregions: subregions,
     summary: req.body.summary,
     summaryClassification: req.body.summary_classif,

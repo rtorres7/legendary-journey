@@ -303,6 +303,29 @@
                     </div>
                   </MobileSideMenuDisclosure>
                 </li>
+                <li>
+                  <MobileSideMenuDisclosure :title="'Alerts'">
+                    <ul class="list-disc list-inside ml-4 mt-4">
+                      <template v-for="alert in metadata.alerts" :key="alert">
+                        <li>
+                          <router-link
+                            :to="{
+                              name: 'search',
+                              query: {
+                                'product_types[]': alert.code,
+                                view: 'grid',
+                                landing: true,
+                              },
+                            }"
+                            class="hover:underline cursor-pointer"
+                          >
+                            {{ alert.name }}
+                          </router-link>
+                        </li>
+                      </template>
+                    </ul>
+                  </MobileSideMenuDisclosure>
+                </li>
               </ul>
             </DialogPanel>
           </TransitionChild>

@@ -1,5 +1,5 @@
-const request = require("supertest");
-const { setupApp } = require("../__utils__/expressUtils");
+const request = require('supertest');
+const { setupAppWithUser } = require('../__utils__/expressUtils');
 
 jest.mock("../../src/services/product-service.js", () => {
   return jest.fn().mockImplementation(() => {
@@ -109,10 +109,10 @@ describe("Workspace Routes", () => {
     delete process.env.THROW_TEST_ERROR;
   });
 
-  describe("GET /workspace/drafts", () => {
-    it("should return draft products", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/drafts', () => {
+    it('should return draft products', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get("/workspace/drafts")
@@ -127,22 +127,24 @@ describe("Workspace Routes", () => {
     it("should return standard error response when lookup fails", () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
-      return request(app).get("/workspace/drafts").expect(500, {
-        message: "whoops",
-        code: 500,
-        fieldName: "",
-        itemId: "",
-      });
+      return request(app)
+        .get('/workspace/drafts')
+        .expect(500, {
+          message: 'Unable to find draft products: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
+        });
     });
   });
 
-  describe("GET /workspace/recent", () => {
-    it("should return recent posted products", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/recent', () => {
+    it('should return recent posted products', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get("/workspace/recent")
@@ -164,22 +166,24 @@ describe("Workspace Routes", () => {
     it("should return standard error response when lookup fails", () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
-      return request(app).get("/workspace/recent").expect(500, {
-        message: "whoops",
-        code: 500,
-        fieldName: "",
-        itemId: "",
-      });
+      return request(app)
+        .get('/workspace/recent')
+        .expect(500, {
+          message: 'Unable to find posted products: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
+        });
     });
   });
 
-  describe("GET /workspace/stats", () => {
-    it("should return stats", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/stats', () => {
+    it('should return stats', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get("/workspace/stats")
@@ -191,10 +195,10 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("GET /workspace/products", () => {
-    it("should return all my products", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/products', () => {
+    it('should return all my products', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get("/workspace/products")
@@ -217,22 +221,24 @@ describe("Workspace Routes", () => {
     it("should return standard error response when lookup fails", () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
-      return request(app).get("/workspace/products").expect(500, {
-        message: "whoops",
-        code: 500,
-        fieldName: "",
-        itemId: "",
-      });
+      return request(app)
+        .get('/workspace/products')
+        .expect(500, {
+          message: "Unable to find user's products: whoops",
+          code: 500,
+          fieldName: '',
+          itemId: ''
+        });
     });
   });
 
-  describe("GET /workspace/saved", () => {
-    it("should return all saved products", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/saved', () => {
+    it('should return all saved products', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get("/workspace/saved")
@@ -249,10 +255,10 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("PUT /workspace/saved/:productId", () => {
-    it("should mark a product saved", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('PUT /workspace/saved/:productId', () => {
+    it('should mark a product saved', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .put("/workspace/saved/fooProduct")
@@ -265,19 +271,19 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("DELETE /workspace/saved/:productId", () => {
-    it("should unmark a product saved", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('DELETE /workspace/saved/:productId', () => {
+    it('should unmark a product saved', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app).delete(`/workspace/saved/to-be-deleted`).expect(204);
     });
   });
 
-  describe("GET /workspace/collections", () => {
-    it("should return all collections", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/collections', () => {
+    it('should return all collections', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get("/workspace/collections")
@@ -292,10 +298,10 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("POST /workspace/collections", () => {
-    it("should create a collection", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('POST /workspace/collections', () => {
+    it('should create a collection', () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .post("/workspace/collections")
@@ -309,10 +315,10 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("PUT /workspace/collections/:collectionId", () => {
-    it("should update a collection", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('PUT /workspace/collections/:collectionId', () => {
+    it('should update a collection', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .put(`/workspace/collections/1`)
@@ -331,19 +337,19 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("DELETE /workspace/collections/:collectionId", () => {
-    it("should delete a collection", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('DELETE /workspace/collections/:collectionId', () => {
+    it('should delete a collection', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app).delete(`/workspace/collections/1`).expect(204);
     });
   });
 
-  describe("GET /workspace/collections/:collectionId/products", () => {
-    it("should return all products for a collection", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('GET /workspace/collections/:collectionId/products', () => {
+    it('should return all products for a collection', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .get(`/workspace/collections/1/products`)
@@ -357,9 +363,9 @@ describe("Workspace Routes", () => {
         });
     });
 
-    it("should return 404 when collection is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when collection is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .delete(`/workspace/collections/1000/products`)
@@ -367,37 +373,37 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("PUT /workspace/collections/:collectionId/products/:savedProductId", () => {
-    it("should add a saved product to a collection", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('PUT /workspace/collections/:collectionId/products/:savedProductId', () => {
+    it('should add a saved product to a collection', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .put(`/workspace/collections/1/products/1`)
         .expect(200);
     });
 
-    it("should return 404 when collection is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when collection is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .put(`/workspace/collections/1000/products/1`)
         .expect(404);
     });
 
-    it("should return 404 when saved product is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when saved product is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .put(`/workspace/collections/1/products/1000`)
         .expect(404);
     });
 
-    it("should return 404 when collection and saved product is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when collection and saved product is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .put("/workspace/collections/1000/products/1000")
@@ -405,37 +411,37 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("DELETE /workspace/collections/:collectionId/products/:savedProductId", () => {
-    it("should remove a saved product from a collection", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+  describe('DELETE /workspace/collections/:collectionId/products/:savedProductId', () => {
+    it('should remove a saved product from a collection', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .delete(`/workspace/collections/1/products/1`)
         .expect(204);
     });
 
-    it("should return 404 when collection is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when collection is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .delete(`/workspace/collections/1000/products/1`)
         .expect(404);
     });
 
-    it("should return 404 when saved product is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when saved product is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .delete(`/workspace/collections/1/products/1000`)
         .expect(404);
     });
 
-    it("should return 404 when collection and saved product is not found", async () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupApp("/workspace", router);
+    it('should return 404 when collection and saved product is not found', async () => {
+      const router = require('../../src/routes/workspace');
+      const app = setupAppWithUser('/workspace', router, { id: 1 });
 
       return request(app)
         .delete("/workspace/collections/1000/products/1000")

@@ -25,6 +25,12 @@ const ProductSchema = new Schema(
       },
     ],
     createdAt: Date,
+    createdBy: {
+      id: Number,
+      firstName: String,
+      lastName: String,
+      dn: String
+    },
     datePublished: Date,
     dissemOrgs: [
       {
@@ -129,10 +135,7 @@ ProductSchema.virtual("features").get(function () {
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: this.images,
-      needed:
-        this.needed && this.needed.orgs && this.needed.orgs.length > 0
-          ? this.needed
-          : {},
+      needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       nonStateActors: this.nonStateActors,
       product_type: this.productType.code,
@@ -169,10 +172,7 @@ ProductSchema.virtual("forWire").get(function () {
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: this.images,
-      needed:
-        this.needed && this.needed.orgs && this.needed.orgs.length > 0
-          ? this.needed
-          : {},
+      needed:this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
       state: this.state,
@@ -190,29 +190,27 @@ ProductSchema.virtual("indexable").get(function () {
   return {
     classification: this.classification,
     classificationXml: this.classificationXml,
-    countries: this.countries && this.countries.map((country) => country.code),
+    countries: this.countries?.map((country) => country.code),
+    createdById: this.createdBy?.id,
     datePublished: this.datePublished,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
-    issues: this.issues && this.issues.map((issue) => issue.code),
+    issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
-    producingOffices:
-      this.producingOffices &&
-      this.producingOffices.map((office) => office.code),
+    producingOffices: this.producingOffices?.map((office) => office.code),
     productNumber: this.productNumber,
-    productType: this.productType && this.productType.code,
-    regions: this.regions && this.regions.map((region) => region.code),
-    reportingType: this.reportingType && this.reportingType.code,
-    subregions:
-      this.subregions && this.subregions.map((subregion) => subregion.code),
+    productType: this.productType?.code,
+    regions: this.regions?.map((region) => region.code),
+    reportingType: this.reportingType?.code,
+    state: this.state,
+    subregions: this.subregions?.map((subregion) => subregion.code),
     summary: this.summary,
     summaryClassification: this.summaryClassification,
     title: this.title,
     titleClassification: this.titleClassification,
-    topics: this.topics && this.topics.map((topic) => topic.code),
-    nonStateActors:
-      this.nonStateActors && this.nonStateActors.map((actor) => actor.code),
+    topics: this.topics?.map((topic) => topic.code),
+    nonStateActors: this.nonStateActors?.map((actor) => actor.code),
     worldwide: this.worldwide,
   };
 });
@@ -228,6 +226,7 @@ ProductSchema.virtual("data.document").get(function () {
     htmlBody: this.htmlBody,
     id: this.get("_id"),
     issues: this.issues,
+    nonStateActors: this.nonStateActors,
     pocInfo: this.pocInfo,
     producingOffices: this.producingOffices,
     productNumber: this.productNumber,
@@ -250,7 +249,7 @@ ProductSchema.virtual("data.document").get(function () {
     date_published: this.datePublished,
     doc_num: this.productNumber,
     dissem_orgs: this.dissemOrgs,
-    nonStateActors: this.nonStateActors,
+    non_state_actors: this.nonStateActors,
     html_body: this.htmlBody,
     poc_info: this.pocInfo,
     producing_offices: this.producingOffices,
@@ -260,6 +259,7 @@ ProductSchema.virtual("data.document").get(function () {
     summary_classif_xml: this.summaryClassificationXml,
     title_classif: this.titleClassification,
     title_classif_xml: this.titleClassificationXml,
+    state: this.state,
   };
 });
 
@@ -267,9 +267,8 @@ ProductSchema.virtual("data.details").get(function () {
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
-    coauthors: this.coauthors && this.coauthors.map((author) => author.name), // UI needs a list not the objects right now
-    coordinators:
-      this.coordinators && this.coordinators.map((coord) => coord.name), // UI needs a list not the objects right now
+    coauthors: this.coauthors?.map((author) => author.name), // UI needs a list not the objects right now
+    coordinators: this.coordinators?.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
@@ -312,12 +311,10 @@ ProductSchema.virtual("data.details").get(function () {
     legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,
     posted_at: this.datePublished,
-    producing_offices:
-      this.producingOffices &&
-      this.producingOffices.map((office) => office.name),
+    producing_offices: this.producingOffices?.map((office) => office.name),
     product_type_id: this.productType.code,
     product_type_name: this.productType.name,
-    published_by: this.publishedBy && this.publishedBy.name,
+    published_by: this.publishedBy?.name,
     title_classif: this.titleClassification,
   };
 });

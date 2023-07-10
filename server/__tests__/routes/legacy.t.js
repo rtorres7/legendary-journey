@@ -46,7 +46,7 @@ describe("Legacy Routes", () => {
       return request(app)
         .get("/user_data")
         .expect(302)
-        .expect("Location", "/users/");
+        .expect("Location", "/auth/profile");
     });
   });
 

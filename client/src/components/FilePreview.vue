@@ -95,7 +95,7 @@ import {
   PhotoIcon,
   DocumentIcon,
 } from "@heroicons/vue/24/outline";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs/esm/index.js";
 
 export default {
   components: {

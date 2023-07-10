@@ -2,6 +2,7 @@ const dayjs = require("dayjs");
 const Product = require("../models/products");
 const ProductSearchService = require("../services/product-search-service");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
+const { handleMongooseError } = require("../util/errors");
 
 class ProductService {
   constructor() {
@@ -32,14 +33,9 @@ class ProductService {
     try {
       await this.productSearchService.create(savedProduct.indexable);
     } catch (error) {
-      console.log(
-        "There was a problem indexing product, rolling back database save",
-        error
-      );
-      await savedProduct.remove();
-      throw new Error(
-        "There was a problem indexing product, rolling back database save"
-      );
+      console.log('There was a problem indexing product, rolling back database save', error);
+      await Product.deleteOne({ _id: savedProduct.id });
+      throw new Error('There was a problem indexing product, rolling back database save');
     }
 
     return savedProduct;
@@ -77,12 +73,7 @@ class ProductService {
 
   async findFeaturesAndBriefs() {
     const featuredProducts = await Product.find().sort({ _id: -1 }).exec();
-    const briefProducts = await Product.find({
-      productTypes: { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
-    })
-      .sort({ datePublished: -1 })
-      .limit(3)
-      .exec();
+    const briefProducts = await Product.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
 
     return {
       featured: featuredProducts.map((product) => product.features),
@@ -110,8 +101,8 @@ class ProductService {
   }
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
-    // TODO: Need to add query for user
-    return await Product.find({ state: "draft" })
+    return await Product
+      .find({ state: 'draft', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -119,8 +110,9 @@ class ProductService {
   }
 
   async #countDraftProductsForUser(userId) {
-    // TODO: Need to add query for user
-    return await Product.count({ state: "draft" }).exec();
+    return await Product
+      .count({ state: 'draft', 'createdBy.id': userId })
+      .exec();
   }
 
   async findPageOfRecentProductsForUser(userId, page, limit, offset, sortDir) {
@@ -143,8 +135,8 @@ class ProductService {
   }
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
-    // TODO: Need to add query for user
-    return await Product.find({ state: "posted" })
+    return await Product
+      .find({ state: 'posted', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -152,8 +144,9 @@ class ProductService {
   }
 
   async #countRecentProductsForUser(userId) {
-    // TODO: Need to add query for user
-    return await Product.count({ state: "posted" }).exec();
+    return await Product
+      .count({ state: 'posted', 'createdBy.id': userId })
+      .exec();
   }
 
   async findPageOfProductsForUser(userId, page, limit, offset, sortDir) {
@@ -176,8 +169,8 @@ class ProductService {
   }
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
-    // TODO: Need to add query for user
-    return await Product.find()
+    return await Product
+      .find({ 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -185,8 +178,24 @@ class ProductService {
   }
 
   async #countAllProductsForUser(userId) {
-    // TODO: Need to add query for user
-    return await Product.count().exec();
+    return await Product
+      .count({ 'createdBy.id': userId })
+      .exec();
+  }
+
+  async initializeProductData() {
+    const indexesCreated = await this.productSearchService.createIndexesIfNecessary();
+
+    if (indexesCreated.includes('products')) {
+      try {
+        const products = await Product.find().exec();
+        products.forEach(product => {
+          this.productSearchService.create(product.indexable);
+        });
+      } catch (error) {
+        handleMongooseError('There was a problem initializing product seed data');
+      }
+    }
   }
 }
 

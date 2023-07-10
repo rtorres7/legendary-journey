@@ -20,15 +20,18 @@
           class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
         >
           <div class="flex">
-            <div>
+            <button
+              aria-label="print this product"
+              @click="printDocument"
+              @keyup.enter="printDocument"
+            >
               <tippy content="Print this Product">
                 <PrinterIcon
                   class="h-6 w-6 cursor-pointer"
                   aria-hidden="true"
-                  @click="printDocument"
                 />
               </tippy>
-            </div>
+            </button>
             <div
               class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
             >
@@ -58,13 +61,15 @@
             </div>
           </div>
           <div>
-            <tippy content="Copy URL to Clipboard">
-              <LinkIcon
-                class="h-6 w-6 cursor-pointer"
-                aria-hidden="true"
-                @click="copyUrl"
-              />
-            </tippy>
+            <button
+              aria-label="copy URL to clipboard"
+              @click="copyUrl"
+              @keyup.enter="copyUrl"
+            >
+              <tippy content="Copy URL to Clipboard">
+                <LinkIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+              </tippy>
+            </button>
           </div>
           <div
             v-show="

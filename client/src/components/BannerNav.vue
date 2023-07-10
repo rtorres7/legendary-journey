@@ -492,6 +492,17 @@
             </template>
           </BannerNavPopover>
         </li>
+        <li>
+          <div
+            class="font-semibold flex items-center hover:text-slate-100 dark:hover:text-slate-100 energy:hover:text-energy-yellow"
+            tabindex="0"
+          >
+            <a
+              :href="`/search?&product_types[]=10391&product_types[]=10389&product_types[]=10392&product_types[]=10390&view=grid`"
+              >Alerts</a
+            >
+          </div>
+        </li>
       </ul>
     </div>
     <!-- Mobile side menu -->

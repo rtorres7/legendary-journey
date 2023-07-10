@@ -248,7 +248,7 @@ describe("ProductService", () => {
       const results = await service.findFeaturesAndBriefs();
 
       expect(results.featured).toHaveLength(5);
-      expect(results.briefs).toHaveLength(3);
+      expect(results.briefs).toHaveLength(1);
     });
   });
 
