@@ -291,7 +291,60 @@
               <span class="ml-4 font-bold text-3xl">Studio</span>
             </router-link>
           </div>
-          <div class="text-gray-400 font-medium px-8 py-2">Menu</div>
+          <template
+            v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+          >
+            <div class="text-gray-400 font-medium px-8 py-2">Issue</div>
+            <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
+              <li>
+                <div>
+                  <a href="/studio#edit-issue">
+                    <div
+                      :class="
+                        isActivePage('#edit-issue')
+                          ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                          : 'hover:text-blue-700'
+                      "
+                      class="flex items-center px-4 py-3 cursor-pointer"
+                    >
+                      <template v-if="isActivePage('#edit-issue')">
+                        <PencilIconSolid class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <template v-else>
+                        <PencilIcon class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <span class="ml-4 font-medium">Details</span>
+                    </div>
+                  </a>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <a href="/studio#issue-metrics" class="">
+                    <div
+                      :class="
+                        isActivePage('#issue-metrics')
+                          ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                          : 'hover:text-blue-700'
+                      "
+                      class="flex items-center px-4 py-3 cursor-pointer"
+                    >
+                      <template v-if="isActivePage('#issue-metrics')">
+                        <ChartBarIconSolid class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <template v-else>
+                        <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <span class="ml-4 font-medium">Metrics</span>
+                    </div>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </template>
+          <div class="text-gray-400 font-medium px-8 py-2">
+            Content Management
+          </div>
           <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
             <li>
               <div>
@@ -537,12 +590,14 @@ import {
 } from "@headlessui/vue";
 import {
   Bars3Icon,
+  ChartBarIcon,
   ComputerDesktopIcon,
   EllipsisVerticalIcon,
   HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
+  PencilIcon,
   SunIcon,
   UserCircleIcon,
   VideoCameraIcon,
@@ -550,8 +605,10 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
+  ChartBarIcon as ChartBarIconSolid,
   HomeIcon as HomeIconSolid,
   NewspaperIcon as NewspaperIconSolid,
+  PencilIcon as PencilIconSolid,
   VideoCameraIcon as VideoCameraIconSolid,
 } from "@heroicons/vue/24/solid";
 const themeOptions = ["light", "dark", "system"];
@@ -566,6 +623,8 @@ export default {
     TransitionChild,
     TransitionRoot,
     Bars3Icon,
+    ChartBarIcon,
+    ChartBarIconSolid,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
     HomeIcon,
@@ -574,6 +633,8 @@ export default {
     NewspaperIconSolid,
     MagnifyingGlassIcon,
     MoonIcon,
+    PencilIcon,
+    PencilIconSolid,
     SunIcon,
     UserCircleIcon,
     VideoCameraIcon,
