@@ -1,553 +1,8 @@
 <template>
-  <div class="h-full flex">
-    <!-- Left Panel -->
-    <!--- Below 2XL but not Mobile --->
-    <div
-      class="hidden md:block 2xl:hidden bg-white border-r border-slate-900/10 min-h-screen min-w-[80px]"
-    >
-      <div class="flex flex-col">
-        <div class="h-16 flex items-center">
-          <router-link to="/" class="mx-auto px-4">
-            <VideoCameraIconSolid
-              class="h-7 w-7 text-blue-700"
-              aria-hidden="true"
-            />
-          </router-link>
-        </div>
-        <ul class="py-4 mx-auto text-gray-500 space-y-1">
-          <li>
-            <tippy content="Home   " placement="right" theme="demo">
-              <div
-                :class="
-                  isActivePage('#home')
-                    ? 'text-blue-700 bg-gray-200/25'
-                    : 'hover:text-blue-700 hover:bg-gray-200/25'
-                "
-                class="my-auto rounded cursor-pointer"
-              >
-                <a
-                  href="/studio#home"
-                  class="flex items-center justify-center h-12 w-12"
-                >
-                  <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
-              </div>
-            </tippy>
-          </li>
-          <li>
-            <tippy content="Live Content" placement="right" theme="demo">
-              <div
-                :class="
-                  isActivePage('#live')
-                    ? 'text-blue-700 bg-gray-200/25'
-                    : 'hover:text-blue-700 hover:bg-gray-200/25'
-                "
-                class="my-auto rounded cursor-pointer"
-              >
-                <a
-                  href="/studio#live"
-                  class="flex items-center justify-center h-12 w-12"
-                >
-                  <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
-              </div>
-            </tippy>
-          </li>
-          <li>
-            <tippy content="Issues" placement="right" theme="demo">
-              <div
-                :class="
-                  isActivePage('#issues')
-                    ? 'text-blue-700 bg-gray-200/25'
-                    : 'hover:text-blue-700 hover:bg-gray-200/25'
-                "
-                class="my-auto rounded cursor-pointer"
-              >
-                <a
-                  href="/studio#issues"
-                  class="flex items-center justify-center h-12 w-12"
-                >
-                  <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
-              </div>
-            </tippy>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!--- 2XL or Above --->
-    <div
-      class="hidden 2xl:block bg-white border-r border-slate-900/10 min-h-screen min-w-[250px]"
-    >
-      <div class="flex flex-col">
-        <div class="h-16 flex items-center">
-          <router-link to="/" class="flex mx-auto items-center px-4">
-            <VideoCameraIconSolid
-              class="h-7 w-7 text-blue-700"
-              aria-hidden="true"
-            />
-            <span class="ml-3 font-bold text-3xl tracking-tight">Studio</span>
-          </router-link>
-        </div>
-        <ul class="py-4 mx-auto text-gray-500 space-y-1">
-          <li>
-            <div>
-              <a href="/studio#home">
-                <div
-                  :class="
-                    isActivePage('#home')
-                      ? 'text-blue-700 bg-gray-200/25'
-                      : 'hover:text-blue-700 hover:bg-gray-200/25'
-                  "
-                  class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                >
-                  <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4 font-medium">Home</span>
-                </div>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div>
-              <a href="/studio#live" class="">
-                <div
-                  :class="
-                    isActivePage('#live')
-                      ? 'text-blue-700 bg-gray-200/25 '
-                      : 'hover:text-blue-700 hover:bg-gray-200/25'
-                  "
-                  class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                >
-                  <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4 font-medium">Live Content</span>
-                </div>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div>
-              <a href="/studio#issues" class="">
-                <div
-                  :class="
-                    isActivePage('#issues')
-                      ? 'text-blue-700 bg-gray-200/25'
-                      : 'hover:text-blue-700 hover:bg-gray-200/25'
-                  "
-                  class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                >
-                  <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
-                  <span class="ml-4 font-medium">Issues</span>
-                </div>
-              </a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- Right Panel -->
+  <div class="h-full flex flex-col md:flex-row">
+    <StudioNavigation />
     <div class="flex flex-col grow min-h-screen h-full">
       <div class="relative grow">
-        <!-- Desktop Nav Bar -->
-        <div
-          class="hidden h-16 px-8 border-b border-slate-900/10 shadow-sm md:flex justify-between items-center"
-        >
-          <div class="w-full flex">
-            <div class="self-center">
-              <MagnifyingGlassIcon
-                class="w-5 h-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </div>
-            <vue3-simple-typeahead
-              id="typeahead_id"
-              ref="typeaheadRef"
-              class="px-4 focus-visible:outline-none bg-transparent w-full text-slate-900 placeholder-shown:truncate text-sm"
-              aria-label="Search"
-              placeholder="Search for keywords or products"
-              :items="searches"
-              :min-input-length="1"
-              :item-projection="
-                (item) => {
-                  return item.text;
-                }
-              "
-              :select-on-tab="false"
-              @selectItem="selectItemEventHandler"
-              @keydown.enter.prevent="onEnter"
-            >
-              <template #list-item-text="slot">
-                <div
-                  class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 px-2 py-1 flex justify-between"
-                  :class="
-                    slot.item.type === 'user'
-                      ? 'text-purple-800 '
-                      : 'text-slate-800'
-                  "
-                >
-                  <span
-                    v-html="slot.boldMatchText(slot.itemProjection(slot.item))"
-                  />
-                  <template v-if="slot.item.type === 'user'">
-                    <button @click="deleteSearch(slot.item)">
-                      <XMarkIcon
-                        class="h-5 w-5 text-slate-800"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </template>
-                </div>
-              </template>
-            </vue3-simple-typeahead>
-          </div>
-          <div class="flex">
-            <div class="flex space-x-4 px-4">
-              <!-- Admin Dropdown -->
-              <Menu as="div" class="hidden md:block relative">
-                <div>
-                  <tippy content="Admin" theme="demo">
-                    <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                    >
-                      <span class="sr-only">Admin Menu</span>
-                      <WrenchIcon class="h-6 w-6" aria-hidden="true" />
-                    </MenuButton>
-                  </tippy>
-                </div>
-                <transition
-                  enterActiveClass="transition ease-out duration-100"
-                  enterFromClass="transform opacity-0 scale-95"
-                  enterToClass="transform opacity-100 scale-100"
-                  leaveActiveClass="transition ease-in duration-75"
-                  leaveFromClass="transform opacity-100 scale-100"
-                  leaveToClass="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                  >
-                    <MenuItem>
-                      <router-link
-                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
-                        :to="{
-                          name: 'products',
-                          params: {
-                            date: dayjs().format('YYYY-MM-DD'),
-                          },
-                        }"
-                      >
-                        Manage Products
-                      </router-link>
-                    </MenuItem>
-                    <MenuItem>
-                      <router-link
-                        to="/special_editions"
-                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
-                      >
-                        Manage Special Editions
-                      </router-link>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-              <!-- Theme dropdown -->
-              <Menu as="div" class="hidden md:block relative">
-                <div>
-                  <tippy content="Themes" theme="demo">
-                    <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
-                      :class="
-                        selectedTheme === 'system'
-                          ? 'text-gray-500 hover:text-gray-700'
-                          : 'text-amber-600 hover:text-amber-700'
-                      "
-                    >
-                      <span class="sr-only"
-                        >Open menu for toggling color palettes.</span
-                      >
-                      <template v-if="selectedTheme === 'dark'">
-                        <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                      <template v-else-if="selectedTheme === 'system'">
-                        <template v-if="isDark">
-                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else>
-                          <SunIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                      </template>
-                      <template v-else>
-                        <SunIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                    </MenuButton>
-                  </tippy>
-                </div>
-                <transition
-                  enterActiveClass="transition ease-out duration-100"
-                  enterFromClass="transform opacity-0 scale-95"
-                  enterToClass="transform opacity-100 scale-100"
-                  leaveActiveClass="transition ease-in duration-75"
-                  leaveFromClass="transform opacity-100 scale-100"
-                  leaveToClass="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                  >
-                    <MenuItem v-for="item in themeOptions" :key="item">
-                      <a
-                        :class="isActiveTheme(item)"
-                        class="py-1 px-3 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer"
-                        @click="changeTheme(item)"
-                      >
-                        <template v-if="item === 'light'">
-                          <SunIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else-if="item === 'dark'">
-                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else-if="item === 'system'">
-                          <ComputerDesktopIcon
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          /> </template
-                        ><span class="capitalize">{{ item }}</span></a
-                      >
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-            </div>
-            <div class="pl-4 border-l border-slate-900/10">
-              <!-- Profile dropdown -->
-              <Menu as="div" class="hidden md:block relative">
-                <div>
-                  <tippy content="User Menu" theme="demo">
-                    <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                    >
-                      <span class="sr-only">Open user menu.</span>
-                      <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
-                    </MenuButton>
-                  </tippy>
-                </div>
-                <transition
-                  enterActiveClass="transition ease-out duration-100"
-                  enterFromClass="transform opacity-0 scale-95"
-                  enterToClass="transform opacity-100 scale-100"
-                  leaveActiveClass="transition ease-in duration-75"
-                  leaveFromClass="transform opacity-100 scale-100"
-                  leaveToClass="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                  >
-                    <MenuItem>
-                      <router-link
-                        to="/"
-                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                      >
-                        Alvaro Ramirez
-                      </router-link>
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                        target="_blank"
-                        >User Support
-                      </a>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-            </div>
-          </div>
-        </div>
-        <!-- Mobile Nav Bar -->
-        <div
-          class="flex md:hidden justify-between items-center h-16 px-8 border-b bg-white text-gray-900"
-        >
-          <div class="flex">
-            <button
-              type="button"
-              class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              @click="openMobileMenuModal"
-            >
-              <span class="sr-only">Open main menu</span>
-              <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-            </button>
-            <router-link to="/" class="ml-4 flex mx-auto items-center">
-              <VideoCameraIconSolid
-                class="h-7 w-7 text-blue-700"
-                aria-hidden="true"
-              />
-              <span class="ml-3 font-bold text-3xl tracking-tight">Studio</span>
-            </router-link>
-          </div>
-          <div class="flex">
-            <div class="flex space-x-4 px-4">
-              <button
-                class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              >
-                <span class="sr-only">Search</span>
-                <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
-              </button>
-              <!-- Admin Dropdown -->
-              <Menu as="div" class="block md:hidden relative">
-                <div>
-                  <tippy content="Admin" theme="demo">
-                    <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    >
-                      <span class="sr-only">Admin Menu</span>
-                      <WrenchIcon class="h-6 w-6" aria-hidden="true" />
-                    </MenuButton>
-                  </tippy>
-                </div>
-                <transition
-                  enterActiveClass="transition ease-out duration-100"
-                  enterFromClass="transform opacity-0 scale-95"
-                  enterToClass="transform opacity-100 scale-100"
-                  leaveActiveClass="transition ease-in duration-75"
-                  leaveFromClass="transform opacity-100 scale-100"
-                  leaveToClass="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                  >
-                    <MenuItem>
-                      <router-link
-                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
-                        :to="{
-                          name: 'publish',
-                          params: {
-                            date: dayjs().format('YYYY-MM-DD'),
-                          },
-                        }"
-                      >
-                        Manage Products
-                      </router-link>
-                    </MenuItem>
-                    <MenuItem>
-                      <router-link
-                        to="/special_editions"
-                        class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
-                      >
-                        Manage Special Editions
-                      </router-link>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-              <!-- Theme dropdown -->
-              <Menu as="div" class="block md:hidden relative">
-                <div>
-                  <tippy content="Themes" theme="demo">
-                    <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
-                      :class="
-                        selectedTheme === 'system'
-                          ? 'text-gray-500 hover:text-gray-700'
-                          : 'text-amber-600 hover:text-amber-700'
-                      "
-                    >
-                      <span class="sr-only"
-                        >Open menu for toggling color palettes.</span
-                      >
-                      <template v-if="selectedTheme === 'dark'">
-                        <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                      <template v-else-if="selectedTheme === 'system'">
-                        <template v-if="isDark">
-                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else>
-                          <SunIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                      </template>
-                      <template v-else>
-                        <SunIcon class="h-6 w-6" aria-hidden="true" />
-                      </template>
-                    </MenuButton>
-                  </tippy>
-                </div>
-                <transition
-                  enterActiveClass="transition ease-out duration-100"
-                  enterFromClass="transform opacity-0 scale-95"
-                  enterToClass="transform opacity-100 scale-100"
-                  leaveActiveClass="transition ease-in duration-75"
-                  leaveFromClass="transform opacity-100 scale-100"
-                  leaveToClass="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                  >
-                    <MenuItem v-for="item in themeOptions" :key="item">
-                      <a
-                        :class="isActiveTheme(item)"
-                        class="py-1 px-3 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer"
-                        @click="changeTheme(item)"
-                      >
-                        <template v-if="item === 'light'">
-                          <SunIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else-if="item === 'dark'">
-                          <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else-if="item === 'system'">
-                          <ComputerDesktopIcon
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          /> </template
-                        ><span class="capitalize">{{ item }}</span></a
-                      >
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-            </div>
-            <div class="pl-4 border-l border-slate-900/10">
-              <!-- Profile dropdown -->
-              <Menu as="div" class="block md:hidden relative">
-                <div>
-                  <tippy content="User Menu" theme="demo">
-                    <MenuButton
-                      class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    >
-                      <span class="sr-only">Open user menu.</span>
-                      <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
-                    </MenuButton>
-                  </tippy>
-                </div>
-                <transition
-                  enterActiveClass="transition ease-out duration-100"
-                  enterFromClass="transform opacity-0 scale-95"
-                  enterToClass="transform opacity-100 scale-100"
-                  leaveActiveClass="transition ease-in duration-75"
-                  leaveFromClass="transform opacity-100 scale-100"
-                  leaveToClass="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
-                  >
-                    <MenuItem>
-                      <router-link
-                        to="/"
-                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                      >
-                        Alvaro Ramirez
-                      </router-link>
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                        target="_blank"
-                        >User Support
-                      </a>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
-            </div>
-          </div>
-        </div>
         <!-- Content Area -->
         <div
           class="flex flex-col text-gray-900 w-full min-h-[calc(100vh-4rem)] h-full items-center bg-slate-50"
@@ -558,27 +13,26 @@
             <!-- Home -->
             <div :class="isActivePage('#home') ? 'block' : 'hidden'">
               <div
-                class="flex space-x-1 justify-center xl:justify-start text-3xl text-gray-700 py-8"
+                class="flex space-x-1 justify-center xl:justify-start text-2xl py-8"
               >
-                <div class="font-bold uppercase tracking-wider">Current</div>
-                <div class="text-gray-500">Issue</div>
+                <div class="text-gray-700 font-bold uppercase tracking-wider">
+                  Current
+                </div>
+                <div class="text-gray-500 font-medium">Issue</div>
               </div>
               <div class="">
                 <MockLiveIssueCard :issue="issues[0]" />
                 <div
                   class="py-8 flex justify-center xl:justify-between items-center"
                 >
-                  <div
-                    class="text-xl font-bold text-gray-700 uppercase tracking-widest"
-                  >
+                  <div class="text-2xl font-bold text-gray-700">
                     Coming Soon
                   </div>
                   <a
-                    class="hidden xl:flex space-x-1 items-center text-gray-700 hover:text-gray-900 text-sm"
+                    class="hidden xl:block text-gray-500 hover:text-gray-700 text-sm font-medium"
                     href="/studio#issues"
                   >
-                    <span>More Issues</span>
-                    <ChevronRightIcon class="h-4 w-4" />
+                    See All
                   </a>
                 </div>
                 <div
@@ -589,11 +43,10 @@
                   <MockIssueCard :issue="issues[3]" class="hidden xl:flex" />
                 </div>
                 <a
-                  class="flex xl:hidden space-x-1 items-center justify-end py-8 text-gray-500 hover:text-gray-700 font-semibold"
+                  class="block xl:hidden text-end py-8 text-gray-500 hover:text-gray-700 text-sm font-medium"
                   href="/studio#issues"
                 >
-                  <span>More Issues</span>
-                  <ChevronRightIcon class="h-5 w-5" />
+                  See All
                 </a>
                 <!-- <div
                 class="text-xl font-bold text-gray-700 uppercase tracking-wider py-8"
@@ -844,57 +297,29 @@
       </div>
     </div>
   </div>
-  <!-- Mobile side menu -->
-  <MockMobileSideMenu
-    :isOpen="isMobileMenuOpen"
-    @close="closeMobileMenuModal"
-  />
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
 import { issues } from "../data";
-import { computed, onMounted, ref, watch } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
 import {
   Listbox,
   ListboxLabel,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
 } from "@headlessui/vue";
 import {
   AdjustmentsHorizontalIcon,
-  Bars3Icon,
   CheckIcon,
   ChevronDownIcon,
-  ComputerDesktopIcon,
   DocumentMagnifyingGlassIcon,
-  HomeIcon,
-  NewspaperIcon,
-  MagnifyingGlassIcon,
-  MoonIcon,
   PencilSquareIcon,
   PlusIcon,
-  SunIcon,
-  UserCircleIcon,
-  VideoCameraIcon,
-  WrenchIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import {
-  ChevronRightIcon,
-  VideoCameraIcon as VideoCameraIconSolid,
-  //EyeIcon,
-  //Square3Stack3DIcon,
-} from "@heroicons/vue/24/solid";
 import MockIssueCard from "@/demo-studio/components/MockIssueCard.vue";
 import MockLiveIssueCard from "@/demo-studio/components/MockLiveIssueCard.vue";
-import MockMobileSideMenu from "@/demo-studio/components/MockMobileSideMenu.vue";
+import StudioNavigation from "@/demo-studio/components/StudioNavigation.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
@@ -903,47 +328,17 @@ export default {
     ListboxButton,
     ListboxOptions,
     ListboxOption,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
     AdjustmentsHorizontalIcon,
-    Bars3Icon,
     CheckIcon,
     ChevronDownIcon,
-    ChevronRightIcon,
-    ComputerDesktopIcon,
     DocumentMagnifyingGlassIcon,
-    HomeIcon,
-    MagnifyingGlassIcon,
-    MoonIcon,
-    NewspaperIcon,
     PencilSquareIcon,
     PlusIcon,
-    SunIcon,
-    UserCircleIcon,
-    VideoCameraIcon,
-    VideoCameraIconSolid,
-    WrenchIcon,
-    XMarkIcon,
     MockIssueCard,
     MockLiveIssueCard,
-    MockMobileSideMenu,
+    StudioNavigation,
   },
   setup() {
-    const store = useStore();
-    const router = useRouter();
-    const isMobileMenuOpen = ref(false);
-    const removeSearch = ref(false);
-    const searches = computed(() => store.state.savedSearches.searches);
-    const loading = computed(() => store.state.savedSearches.loading);
-    const isDark = ref(localStorage.getItem("theme") === "dark" ? true : false);
-    if (localStorage.getItem("theme") === "system") {
-      isDark.value = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? true
-        : false;
-    }
-    const selectedTheme = ref(localStorage.getItem("theme"));
     const currentHash = ref(window.location.hash || "#dashboard");
     const sortOptions = [
       { name: "Posting Date: Recent" },
@@ -955,98 +350,6 @@ export default {
     onMounted(() => {
       window.location.hash = window.location.hash || "#home";
     });
-
-    const closeMobileMenuModal = () => {
-      isMobileMenuOpen.value = false;
-    };
-
-    const openMobileMenuModal = () => {
-      isMobileMenuOpen.value = true;
-    };
-
-    const changeTheme = (newTheme) => {
-      selectedTheme.value = newTheme;
-      localStorage.setItem("theme", newTheme);
-      if (localStorage.theme === "system") {
-        isDark.value = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? true
-          : false;
-        document.documentElement.classList.remove(
-          ...document.documentElement.classList
-        );
-        if (isDark.value) {
-          document.documentElement.classList.add("dark");
-        }
-      } else {
-        document.documentElement.classList.remove(
-          ...document.documentElement.classList
-        );
-        document.documentElement.classList.add(localStorage.theme);
-      }
-      store.dispatch("localStorage/saveTheme", selectedTheme.value);
-    };
-
-    const isActiveTheme = (selection) => {
-      if (selection === localStorage.theme) {
-        return "text-amber-600";
-      }
-    };
-
-    watch(selectedTheme, (newTheme) => {
-      changeTheme(newTheme);
-    });
-
-    const selectItemEventHandler = (item) => {
-      console.log("selectItemEventHandler: ", item);
-      if (removeSearch.value) {
-        console.log("no routing");
-        removeSearch.value = false;
-      } else {
-        router.push({
-          name: "search",
-          query: {
-            text: item.text,
-          },
-        });
-      }
-    };
-
-    const onEnter = (e) => {
-      store.dispatch("savedSearches/addSearch", {
-        text: e.target.value,
-        type: "user",
-      });
-      if (
-        localStorage.getItem("lastSort") === "asc" ||
-        localStorage.getItem("lastSort") === "desc"
-      ) {
-        router.push({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-            sort_dir: localStorage.getItem("lastSort"),
-          },
-        });
-      } else if (localStorage.getItem("lastSort") === "score") {
-        router.push({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-            sort_field: localStorage.getItem("lastSort"),
-          },
-        });
-      } else {
-        router.push({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-          },
-        });
-      }
-    };
 
     window.addEventListener("hashchange", ({ target }) => {
       currentHash.value = target.location.hash;
@@ -1063,20 +366,9 @@ export default {
     return {
       dayjs,
       themeOptions,
-      searches,
-      loading,
-      isDark,
-      selectedTheme,
       sortOptions,
       selectedSort,
       issues,
-      isMobileMenuOpen,
-      openMobileMenuModal,
-      closeMobileMenuModal,
-      changeTheme,
-      isActiveTheme,
-      selectItemEventHandler,
-      onEnter,
       isActivePage,
       getImg,
     };

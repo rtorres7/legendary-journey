@@ -109,12 +109,8 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
 <script>
-import { getValueForCode } from "@/helpers";
-import { computed, inject, ref } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { ref } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -145,12 +141,6 @@ export default {
   },
   emits: ["close"],
   setup(props, { emit }) {
-    const metadata = inject("metadata");
-    const store = useStore();
-    const router = useRouter();
-    const loadingMetadata = computed(() => store.state.metadata.loading);
-    const criteria = computed(() => store.state.metadata.criteria);
-
     const currentHash = ref(window.location.hash || "#home");
 
     window.addEventListener("hashchange", ({ target }) => {
@@ -161,52 +151,12 @@ export default {
       return hash === currentHash.value;
     };
 
-    const loadingSpecialEditionLinks = computed(
-      () => store.state.specialEditions.loading
-    );
-    const specialEditionLinks = computed(
-      () => store.state.specialEditions.links
-    );
-
-    const selectedCountry = ref(null);
     const close = () => {
       emit("close");
     };
 
-    const formattedSubregions = (codes) => {
-      const subregions = [];
-      codes.forEach((code) => {
-        const subregion = getValueForCode(criteria.value.subregions, code);
-        subregions.push(subregion);
-      });
-      return subregions;
-    };
-
-    const navigateToCountry = (country) => {
-      let query = {
-        view: "grid",
-        landing: true,
-      };
-      query["countries[]"] = country.code;
-      router.push({
-        name: "countries",
-        params: {
-          name: country.name,
-        },
-        query,
-      });
-    };
-
     return {
-      metadata,
       close,
-      loadingMetadata,
-      criteria,
-      loadingSpecialEditionLinks,
-      specialEditionLinks,
-      selectedCountry,
-      formattedSubregions,
-      navigateToCountry,
       isActivePage,
     };
   },

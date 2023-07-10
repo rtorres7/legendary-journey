@@ -81,11 +81,13 @@
           >
             {{ issue.title }}
           </p>
-          <p class="font-medium text-gray-500 text-sm">By {{ issue.author }}</p>
+          <p class="font-medium text-sm">By {{ issue.author }}</p>
         </div>
         <div class="pt-4">
-          <div class="text-xs text-red-800 uppercase py-2 tracking-wider">
-            Top <span class="text-gray-700">Product</span>
+          <div
+            class="text-xs text-blue-700 uppercase py-2 tracking-wider font-medium"
+          >
+            Top <span class="text-gray-500">Product</span>
           </div>
           <div class="text-sm line-clamp-2 hover:underline cursor-pointer">
             <span class="text-gray-500">{{
