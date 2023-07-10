@@ -15,18 +15,23 @@ const { runAsUser } = require('../util/request');
 
 const ProductService = require('../services/product-service');
 const productService = new ProductService();
-const MetadataService = require('../services/metadata');
+const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
 //GET articles by date
 router.get("/date/:date", async (req, res) => {
   try {
     const articles = await productService.findAllByDate(req.params.date);
-    res.json({ features: articles.map(article => article.forWire) });
+    res.json({ features: articles.map((article) => article.forWire) });
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-    handleMongooseError(`Unable to find articles for date ${req.params.date}`, error);
-    res.json({ error: `Unable to find articles for date ${req.params.date}: ${error.message}` });
+    handleMongooseError(
+      `Unable to find articles for date ${req.params.date}`,
+      error
+    );
+    res.json({
+      error: `Unable to find articles for date ${req.params.date}: ${error.message}`,
+    });
   }
 });
 
@@ -37,8 +42,13 @@ router.get("/:id", async (req, res) => {
     res.json(article.data.details);
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-    handleMongooseError(`Unable to find article with product number ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with product number ${req.params.id}: ${error.message}`});
+    handleMongooseError(
+      `Unable to find article with product number ${req.params.id}`,
+      error
+    );
+    res.json({
+      error: `Unable to find article with product number ${req.params.id}: ${error.message}`,
+    });
   }
 });
 
@@ -47,6 +57,10 @@ router.post("/processDocument", (req, res) => {
   switch (req.body.document_action) {
     case "create":
       res.redirect(307, "/articles/");
+      break;
+    case "publish":
+      req.body.state = "posted";
+      updateArticle(req.body.id, req, res);
       break;
     case "save":
       updateArticle(req.body.id, req, res);
@@ -106,8 +120,13 @@ router.get("/:id/edit", async (req, res) => {
     const product = await productService.findById(req.params.id);
     res.json(product.data.document);
   } catch (error) {
-    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error.message}`});
+    handleMongooseError(
+      `Unable to find article with id ${req.params.id}`,
+      error
+    );
+    res.json({
+      error: `Unable to find article with id ${req.params.id}: ${error.message}`,
+    });
   }
 });
 
@@ -116,8 +135,13 @@ router.get("/:id/view", async (req, res) => {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
   } catch (error) {
-    handleMongooseError(`Unable to find article with id ${req.params.id}`, error);
-    res.json({ error:  `Unable to find article with id ${req.params.id}: ${error.message}`});
+    handleMongooseError(
+      `Unable to find article with id ${req.params.id}`,
+      error
+    );
+    res.json({
+      error: `Unable to find article with id ${req.params.id}: ${error.message}`,
+    });
   }
 });
 
@@ -131,17 +155,33 @@ router.put("/:id", async (req, res) => {
 // contents of this method back in the update endpoint.
 async function updateArticle(id, req, res) {
   const countries = await metadataService.findCountriesFor(req.body.countries);
-  const subregions = await metadataService.findSubRegionsForCountries(req.body.countries);
-  const regions = await metadataService.findRegionsForSubRegions(subregions.map(subregion => subregion.code));
+  const subregions = await metadataService.findSubRegionsForCountries(
+    req.body.countries
+  );
+  const regions = await metadataService.findRegionsForSubRegions(
+    subregions.map((subregion) => subregion.code)
+  );
   const topics = await metadataService.findTopicsFor(req.body.topics);
   const issues = await metadataService.findIssuesForTopics(req.body.topics);
-  const producingOffices = await metadataService.findProducingOfficesFor(req.body.producing_offices);
+  const producingOffices = await metadataService.findProducingOfficesFor(
+    req.body.producing_offices
+  );
   const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
-  const coordinators = await metadataService.findCoordinatorsFor(req.body.coordinators);
-  const dissemOrgs = await metadataService.findDissemOrgsFor(req.body.dissem_orgs);
-  const productType = await metadataService.findProductType(req.body.product_type_id);
-  const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
-  const nonStateActors = await metadataService.findNonStateActorsFor(req.body.nonStateActors);
+  const coordinators = await metadataService.findCoordinatorsFor(
+    req.body.coordinators
+  );
+  const dissemOrgs = await metadataService.findDissemOrgsFor(
+    req.body.dissem_orgs
+  );
+  const productType = await metadataService.findProductType(
+    req.body.product_type_id
+  );
+  const reportingType = await metadataService.findReportingTypeFor(
+    req.body.product_type_id
+  );
+  const nonStateActors = await metadataService.findNonStateActorsFor(
+    req.body.non_state_actors
+  );
 
   const article = {
     classification: req.body.classification,
@@ -161,6 +201,7 @@ async function updateArticle(id, req, res) {
     publicationNumber: req.body.publication_number,
     regions: regions,
     reportingType: reportingType,
+    state: req.body.state,
     subregions: subregions,
     summary: req.body.summary,
     summaryClassification: req.body.summary_classif,
@@ -185,7 +226,9 @@ async function updateArticle(id, req, res) {
       state: updatedArticle.state,
     });
   } catch (error) {
-    res.json({ error: `There was a problem updating product: ${error.message}`});
+    res.json({
+      error: `There was a problem updating product: ${error.message}`,
+    });
   }
 }
 // Delete an article
@@ -194,7 +237,7 @@ router.delete("/:id", async (req, res) => {
     await productService.deleteProduct(req.params.id);
     res.json({ success: true });
   } catch (error) {
-    res.json({ error: 'Unable to delete article' });
+    res.json({ error: "Unable to delete article" });
   }
 });
 

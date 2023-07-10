@@ -48,6 +48,10 @@ const indices = [
           type: "keyword",
           index: true,
         },
+        state: {
+          type: "keyword",
+          index: true,
+        },
         subregions: {
           type: "keyword",
           index: true,

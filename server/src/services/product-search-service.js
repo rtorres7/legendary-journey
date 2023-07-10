@@ -1,3 +1,4 @@
+const { Client } = require("@elastic/elasticsearch");
 const constant = require("../util/constant.js");
 const runSearch = require('../util/search');
 
