@@ -82,9 +82,9 @@
               :to="{
                 name: 'edit',
                 params: {
-                  date: product?.feature_date,
-                  id: product?.feature_id ? product.feature_id : -1,
-                  doc_num: product?.doc_num,
+                  date: product.feature_date,
+                  id: product.id,
+                  doc_num: product.doc_num,
                 },
               }"
             >
