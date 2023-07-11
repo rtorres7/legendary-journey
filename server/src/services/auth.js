@@ -70,7 +70,8 @@ async function findUser(dn) {
 
 const OPEN_PATHS = [
   'login',
-  'callback'
+  'callback',
+  'api-docs'
 ]
 function ensureAuthenticated(req, res, next) {
   const fullPath = req.baseUrl + req.path;

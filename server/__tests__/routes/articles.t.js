@@ -79,7 +79,7 @@ describe("Article Routes", () => {
   describe("GET /articles/date/:date", () => {
     it("should return all articles for the given date", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/articles/date/2022-09-01")
@@ -95,7 +95,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/articles/date/2022-09-01')
@@ -108,7 +108,7 @@ describe("Article Routes", () => {
   describe("GET /articles/:id", () => {
     it("should return an article for the given productNumber", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/articles/WIReWIRe_sample_1")
@@ -123,7 +123,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/articles/WIReWIRe_sample_1')
@@ -136,7 +136,7 @@ describe("Article Routes", () => {
   describe("POST /articles/processDocument", () => {
     it("should send redirect to POST /articles when document_action is create", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .post("/articles/processDocument")
@@ -147,7 +147,7 @@ describe("Article Routes", () => {
 
     it("should send update document when document_action is save", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       const original = articles[0];
       const postData = {
@@ -181,7 +181,7 @@ describe("Article Routes", () => {
 
     it("should send a 404 if any other action is given", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .post("/articles/processDocument")
@@ -193,7 +193,7 @@ describe("Article Routes", () => {
   describe("POST /articles", () => {
     it("should create the given article", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser('/articles', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -215,7 +215,7 @@ describe("Article Routes", () => {
 
     it("should create the given article including producing_office", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser('/articles', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -238,7 +238,7 @@ describe("Article Routes", () => {
 
     it("should create the given article defaulting date published", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser('/articles', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -261,7 +261,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser('/articles', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -281,7 +281,7 @@ describe("Article Routes", () => {
   describe("GET /articles/:id/edit", () => {
     it("should return the requested article for editing", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/articles/64709619aa530082dd5cc416/edit")
@@ -296,7 +296,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/articles/64709619aa530082dd5cc416/edit')
@@ -309,7 +309,7 @@ describe("Article Routes", () => {
   describe("GET /articles/:id/view", () => {
     it("should return the requested article for viewing", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/articles/64709619aa530082dd5cc416/view")
@@ -324,7 +324,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/articles/64709619aa530082dd5cc416/view')
@@ -337,7 +337,7 @@ describe("Article Routes", () => {
   describe("PUT /articles/:id", () => {
     it("should update document", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       const original = articles[0];
 
@@ -367,7 +367,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       const original = articles[0];
 
@@ -391,7 +391,7 @@ describe("Article Routes", () => {
   describe("DELETE /articles/:id", () => {
     it("should delete the article from the db", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .delete("/articles/64709619aa530082dd5cc416")
@@ -402,7 +402,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp('/articles', router);
+      const app = setupApp(router);
 
       return request(app)
         .delete('/articles/64709619aa530082dd5cc416')

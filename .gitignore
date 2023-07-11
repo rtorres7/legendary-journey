@@ -5,3 +5,6 @@ db/
 .idea
 .scannerwork
 coverage
+swagger_output.json
+server/out/*
+
