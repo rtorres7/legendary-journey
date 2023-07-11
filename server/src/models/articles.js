@@ -307,6 +307,7 @@ ArticleSchema.virtual("data.details").get(function () {
       org_restricted: this.orgRestricted,
     },
     feature_date: this.datePublished,
+    feature_id: this.get("_id"),
     html_body: this.htmlBody,
     legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,
