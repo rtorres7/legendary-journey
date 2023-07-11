@@ -29,7 +29,7 @@ const articles = [
       {
         ancestry: "1000",
         ancestry_depth: 1,
-        category: "POLICY",
+        category: "IC",
         code: "BANKING",
         created_at: new Date("2011-07-30T16:38:33.000-04:00"),
         description: "Dept of Banking",
@@ -523,7 +523,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -540,7 +540,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -630,7 +630,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -647,7 +647,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -1993,7 +1993,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2010,7 +2010,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -2227,7 +2227,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2244,7 +2244,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
