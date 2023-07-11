@@ -70,19 +70,6 @@
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
               </div> -->
-              <!-- <div class="flex items-center space-x-2">
-                <span class="relative flex h-2 w-2">
-                  <span
-                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
-                  ></span>
-                  <span
-                    class="relative inline-flex rounded-full h-2 w-2 bg-red-500"
-                  ></span>
-                </span>
-                <span class="text-sm font-semibold tracking-wider uppercase"
-                  >Live Now</span
-                >
-              </div> -->
               <div class="max-w-[1480px] flex space-x-4 justify-end pt-8">
                 <a
                   class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
@@ -199,7 +186,7 @@
                   >
                 </div>
                 <div class="flex justify-between items-center">
-                  <div class="text-gray-500">6 issues</div>
+                  <div class="text-gray-500 font-medium">6 issues</div>
                   <div class="flex space-x-4">
                     <Listbox
                       v-model="selectedSort"
@@ -296,14 +283,14 @@
             <!-- Edit Sample -->
             <div :class="isActivePage('#edit-issue') ? 'block' : 'hidden'">
               <div
-                class="flex justify-between items-center pt-8 pb-2 md:pb-8 max-w-[960px]"
+                class="flex justify-between items-center pt-8 pb-2 md:pb-8 max-w-[1024px]"
               >
                 <div class="text-3xl font-semibold text-gray-700">
                   Issue Details
                 </div>
                 <div class="hidden md:flex space-x-4 items-center text-sm">
                   <div
-                    class="tracking-tight uppercase font-medium text-gray-500"
+                    class="tracking-tight uppercase font-medium text-gray-400"
                   >
                     Undo Changes
                   </div>
@@ -321,7 +308,7 @@
               <div
                 class="flex justify-end md:hidden space-x-4 items-center text-sm py-4"
               >
-                <div class="tracking-tight uppercase font-medium text-gray-500">
+                <div class="tracking-tight uppercase font-medium text-gray-400">
                   Undo Changes
                 </div>
                 <button
@@ -335,7 +322,7 @@
                 </button>
               </div>
               <div
-                class="flex flex-col space-y-8 bg-white rounded-md border border-slate-200 p-10 max-w-[960px]"
+                class="flex flex-col space-y-8 bg-white rounded-md border border-slate-200 p-10 max-w-[1024px]"
               >
                 <div class="flex flex-col space-y-6">
                   <div>
@@ -420,18 +407,67 @@
                     </div>
                     <div>
                       <div class="font-medium text-sm">Products</div>
-                      <ul
-                        class="rounded-md max-w-[800px] mt-3 border border-dashed border-gray-400"
-                      >
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                      <div class="flex mt-3">
+                        <ul
+                          class="w-full rounded-md max-w-[800px] border border-dashed border-gray-400"
                         >
-                          <div class="flex flex-col space-y-2">
-                            <div
-                              class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
-                            >
-                              Top Featured
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
+                            <div class="flex flex-col space-y-2">
+                              <div
+                                class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
+                              >
+                                Top Featured
+                              </div>
+                              <div class="text-sm text-gray-500">
+                                <span
+                                  class="text-blue-700 font-semibold cursor-pointer"
+                                  >Search for a product</span
+                                >
+                                to add.
+                              </div>
                             </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
+                            <div class="flex flex-col space-y-2">
+                              <div
+                                class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
+                              >
+                                Featured
+                              </div>
+                              <div class="text-sm text-gray-500">
+                                <span
+                                  class="text-blue-700 font-semibold cursor-pointer"
+                                  >Search for a product</span
+                                >
+                                to add.
+                              </div>
+                            </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
+                            <div class="flex flex-col space-y-2">
+                              <div
+                                class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
+                              >
+                                Featured
+                              </div>
+                              <div class="text-sm text-gray-500">
+                                <span
+                                  class="text-blue-700 font-semibold cursor-pointer"
+                                  >Search for a product</span
+                                >
+                                to add.
+                              </div>
+                            </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
                             <div class="text-sm text-gray-500">
                               <span
                                 class="text-blue-700 font-semibold cursor-pointer"
@@ -439,17 +475,10 @@
                               >
                               to add.
                             </div>
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="flex flex-col space-y-2">
-                            <div
-                              class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
-                            >
-                              Featured
-                            </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
                             <div class="text-sm text-gray-500">
                               <span
                                 class="text-blue-700 font-semibold cursor-pointer"
@@ -457,17 +486,10 @@
                               >
                               to add.
                             </div>
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="flex flex-col space-y-2">
-                            <div
-                              class="text-lg text-center font-bold text-gray-400/50 uppercase tracking-wide"
-                            >
-                              Featured
-                            </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
                             <div class="text-sm text-gray-500">
                               <span
                                 class="text-blue-700 font-semibold cursor-pointer"
@@ -475,73 +497,251 @@
                               >
                               to add.
                             </div>
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="text-sm text-gray-500">
-                            <span
-                              class="text-blue-700 font-semibold cursor-pointer"
-                              >Search for a product</span
-                            >
-                            to add.
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="text-sm text-gray-500">
-                            <span
-                              class="text-blue-700 font-semibold cursor-pointer"
-                              >Search for a product</span
-                            >
-                            to add.
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="text-sm text-gray-500">
-                            <span
-                              class="text-blue-700 font-semibold cursor-pointer"
-                              >Search for a product</span
-                            >
-                            to add.
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="text-sm text-gray-500">
-                            <span
-                              class="text-blue-700 font-semibold cursor-pointer"
-                              >Search for a product</span
-                            >
-                            to add.
-                          </div>
-                        </li>
-                        <li
-                          class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
-                        >
-                          <div class="text-sm text-gray-500">
-                            <span
-                              class="text-blue-700 font-semibold cursor-pointer"
-                              >Search for a product</span
-                            >
-                            to add.
-                          </div>
-                        </li>
-                        <li class="flex justify-center items-center h-[100px]">
-                          <div class="text-sm text-gray-500">
-                            <span
-                              class="text-blue-700 font-semibold cursor-pointer"
-                              >Search for a product</span
-                            >
-                            to add.
-                          </div>
-                        </li>
-                      </ul>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
+                            <div class="text-sm text-gray-500">
+                              <span
+                                class="text-blue-700 font-semibold cursor-pointer"
+                                >Search for a product</span
+                              >
+                              to add.
+                            </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px] border-b border-dashed border-gray-400"
+                          >
+                            <div class="text-sm text-gray-500">
+                              <span
+                                class="text-blue-700 font-semibold cursor-pointer"
+                                >Search for a product</span
+                              >
+                              to add.
+                            </div>
+                          </li>
+                          <li
+                            class="flex justify-center items-center h-[100px]"
+                          >
+                            <div class="text-sm text-gray-500">
+                              <span
+                                class="text-blue-700 font-semibold cursor-pointer"
+                                >Search for a product</span
+                              >
+                              to add.
+                            </div>
+                          </li>
+                        </ul>
+                        <ul class="">
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="mmax-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -587,6 +787,10 @@ import {
   PencilSquareIcon,
   PlusIcon,
 } from "@heroicons/vue/24/outline";
+import {
+  ChevronUpIcon as ChevronUpIconSolid,
+  ChevronDownIcon as ChevronDownIconSolid,
+} from "@heroicons/vue/24/solid";
 import MockIssueCard from "@/demo-studio/components/MockIssueCard.vue";
 import MockLiveIssueCard from "@/demo-studio/components/MockLiveIssueCard.vue";
 import StudioNavigation from "@/demo-studio/components/StudioNavigation.vue";
@@ -602,6 +806,8 @@ export default {
     CalendarIcon,
     CheckIcon,
     ChevronDownIcon,
+    ChevronDownIconSolid,
+    ChevronUpIconSolid,
     DocumentMagnifyingGlassIcon,
     EllipsisVerticalIcon,
     PencilSquareIcon,
@@ -614,8 +820,8 @@ export default {
   setup() {
     const currentHash = ref(window.location.hash || "#dashboard");
     const sortOptions = [
-      { name: "Posting Date: Recent" },
-      { name: "Posting Date: Last" },
+      { name: "Start Date: Recent" },
+      { name: "Start Date: Last" },
     ];
     const breakingEnabled = ref(false);
     const selectedSort = ref(sortOptions[0]);

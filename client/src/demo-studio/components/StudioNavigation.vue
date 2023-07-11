@@ -203,9 +203,69 @@
             </div>
           </router-link>
         </div>
+        <template
+          v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+        >
+          <ul class="pl-4 py-4 text-gray-500 space-y-1">
+            <li>
+              <tippy content="Issue Details" placement="right" theme="demo">
+                <div
+                  :class="
+                    isActivePage('#edit-issue')
+                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-blue-700'
+                  "
+                  class="cursor-pointer"
+                >
+                  <a
+                    href="/studio#edit-issue"
+                    class="flex items-center justify-center h-12 w-12"
+                  >
+                    <template v-if="isActivePage('#edit-issue')">
+                      <PencilIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <PencilIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </a>
+                </div>
+              </tippy>
+            </li>
+            <li>
+              <tippy content="Issue Metrics" placement="right" theme="demo">
+                <div
+                  :class="
+                    isActivePage('#issue-metrics')
+                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-blue-700'
+                  "
+                  class="cursor-pointer"
+                >
+                  <a
+                    href="/studio#issue-metrics"
+                    class="flex items-center justify-center h-12 w-12"
+                  >
+                    <template v-if="isActivePage('#issue-metrics')">
+                      <ChartBarIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </a>
+                </div>
+              </tippy>
+            </li>
+          </ul>
+        </template>
+        <div
+          v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+          class="mx-4"
+        >
+          <div class="border-t border-slate-900/10"></div>
+        </div>
         <ul class="pl-4 py-4 text-gray-500 space-y-1">
           <li>
-            <tippy content="Home   " placement="right" theme="demo">
+            <tippy content="Home" placement="right" theme="demo">
               <div
                 :class="
                   isActivePage('#home')
@@ -492,7 +552,68 @@
                   </router-link>
                 </div>
               </div>
-              <div class="text-gray-400 font-medium py-2 px-4">Menu</div>
+              <template
+                v-if="
+                  isActivePage('#edit-issue') || isActivePage('#issue-metrics')
+                "
+              >
+                <div class="text-gray-400 font-medium py-2 px-4">Issue</div>
+                <ul class="py-4 pl-4 font-medium text-gray-500 space-y-2">
+                  <li>
+                    <div>
+                      <a href="/studio#edit-issue" class="">
+                        <div
+                          :class="
+                            isActivePage('#edit-issue')
+                              ? 'text-blue-700 bg-blue-500/10 '
+                              : 'hover:text-blue-700 '
+                          "
+                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                        >
+                          <template v-if="isActivePage('#edit-issue')">
+                            <PencilIconSolid
+                              class="h-6 w-6"
+                              aria-hidden="true"
+                            />
+                          </template>
+                          <template v-else>
+                            <PencilIcon class="h-6 w-6" aria-hidden="true" />
+                          </template>
+                          <span class="ml-4">Details</span>
+                        </div>
+                      </a>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <a href="/studio#issue-metrics" class="">
+                        <div
+                          :class="
+                            isActivePage('#issue-metrics')
+                              ? 'text-blue-700 bg-blue-500/10 '
+                              : 'hover:text-blue-700 '
+                          "
+                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                        >
+                          <template v-if="isActivePage('#issue-metrics')">
+                            <ChartBarIconSolid
+                              class="h-6 w-6"
+                              aria-hidden="true"
+                            />
+                          </template>
+                          <template v-else>
+                            <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
+                          </template>
+                          <span class="ml-4">Metrics</span>
+                        </div>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </template>
+              <div class="text-gray-400 font-medium py-2 px-4">
+                Content Management
+              </div>
               <ul class="py-4 pl-4 font-medium text-gray-500 space-y-2">
                 <li>
                   <div>
