@@ -178,12 +178,13 @@
                   >
                     Issues
                   </div>
-                  <a
+                  <button
                     class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80 cursor-pointer"
+                    @click="openEdit"
                   >
                     <PlusIcon class="h-4 w-4" />
-                    <span class="ml-2.5">New Issue</span></a
-                  >
+                    <span class="ml-2.5">New Issue</span>
+                  </button>
                 </div>
                 <div class="flex justify-between items-center">
                   <div class="text-gray-500 font-medium">6 issues</div>
@@ -283,7 +284,7 @@
             <!-- Edit Sample -->
             <div :class="isActivePage('#edit-issue') ? 'block' : 'hidden'">
               <div
-                class="flex justify-between items-center pt-8 pb-2 md:pb-8 max-w-[1024px]"
+                class="flex justify-between items-center pt-8 pb-2 md:pb-8 max-w-[1000px]"
               >
                 <div class="text-3xl font-semibold text-gray-700">
                   Issue Details
@@ -322,8 +323,402 @@
                 </button>
               </div>
               <div
-                class="flex flex-col space-y-8 bg-white rounded-md border border-slate-200 p-10 max-w-[1024px]"
+                class="flex flex-col space-y-8 bg-white rounded-md border border-slate-200 p-10 max-w-[1000px]"
               >
+                <div class="flex flex-col space-y-6">
+                  <div>
+                    <div class="font-medium">Basics</div>
+                    <div class="text-sm text-gray-600">
+                      The information below will feature on the main page.
+                    </div>
+                  </div>
+                  <div class="flex flex-col space-y-6">
+                    <div class="max-w-[600px]">
+                      <label class="text-sm font-medium">Title</label>
+                      <input
+                        type="text"
+                        aria-labelledby="4"
+                        autocomplete="off"
+                        value="Russo-Ukrainan War"
+                        class="min-h-[2rem] flex w-full rounded-lg cursor-default py-1 px-2 mt-2 bg-transparent border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
+                      />
+                    </div>
+                    <div class="flex space-x-6">
+                      <div class="max-w-[250px]">
+                        <label id="2" class="text-sm font-medium"
+                          >Start Date</label
+                        >
+                        <div
+                          class="flex items-center min-h-[2rem] mt-2 py-1 px-4 rounded-lg border border-gray-300"
+                        >
+                          <CalendarIcon class="h-5 w-5 text-gray-400" />
+                          <input
+                            type="text"
+                            aria-labelledby="2"
+                            autocomplete="off"
+                            value="07-12-23 09:00"
+                            class="flex w-full cursor-default px-4 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div class="max-w-[250px]">
+                        <label id="3" class="text-sm font-medium"
+                          >Expires On</label
+                        >
+                        <div
+                          class="flex items-center min-h-[2rem] mt-2 py-1 px-4 rounded-lg border border-gray-300"
+                        >
+                          <CalendarIcon class="h-5 w-5 text-gray-400" />
+                          <input
+                            type="text"
+                            aria-labelledby="3"
+                            autocomplete="off"
+                            value="07-16-23 11:00"
+                            class="flex w-full cursor-default px-4 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col space-y-6">
+                  <div>
+                    <div class="font-medium">Content</div>
+                    <div class="text-sm text-gray-600">
+                      The top three products are shown with their thumbnails.
+                    </div>
+                  </div>
+                  <div class="flex flex-col space-y-8">
+                    <div class="text-sm">
+                      <div class="font-medium">Breaking Product</div>
+                      <Switch
+                        v-model="breakingEnabled"
+                        :class="breakingEnabled ? 'bg-blue-700' : 'bg-gray-300'"
+                        class="relative inline-flex mt-3 h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                      >
+                        <span class="sr-only">Use setting</span>
+                        <span
+                          aria-hidden="true"
+                          :class="
+                            breakingEnabled ? 'translate-x-9' : 'translate-x-0'
+                          "
+                          class="pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                        />
+                      </Switch>
+                      <div class="mt-2 text-gray-600">
+                        Only the first product will have a breaking label.
+                      </div>
+                    </div>
+                    <div>
+                      <div class="font-medium text-sm">Products</div>
+                      <div class="flex mt-3">
+                        <ul
+                          class="w-full rounded-md max-w-[900px] border border-dashed border-gray-400"
+                        >
+                          <template
+                            v-for="product in issues[0].featured"
+                            :key="product"
+                          >
+                            <li
+                              class="px-6 border-b border-gray-200 cursor-pointer h-[100px] flex flex-col justify-between"
+                            >
+                              <div class="py-4">
+                                <p class="font-semibold line-clamp-1">
+                                  <span class="text-gray-500">{{
+                                    product.classification
+                                  }}</span>
+                                  {{ product.title }}
+                                </p>
+                              </div>
+                              <div
+                                class="pb-4 flex space-x-2 font-medium text-xs"
+                              >
+                                <div class="text-blue-700">
+                                  {{ product.type }}
+                                </div>
+                                <div>•</div>
+                                <div class="text-gray-500">
+                                  {{ product.date_posted }}
+                                </div>
+                              </div>
+                            </li>
+                          </template>
+                        </ul>
+                        <ul class="">
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                          <li
+                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
+                          >
+                            <div class="flex flex-col space-y-1">
+                              <button
+                                type="button"
+                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                @click="open"
+                              >
+                                <span class="sr-only">Move down</span>
+                                <ChevronUpIconSolid
+                                  class="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <button
+                                class="mmax-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
+                              >
+                                <span class="sr-only">Move up</span>
+                                <ChevronDownIconSolid class="h-5 w-5" />
+                              </button>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Metrics Sample -->
+            <div :class="isActivePage('#issue-metrics') ? 'block' : 'hidden'">
+              <div class="flex items-center justify-center min-h-[75vh]">
+                <div class="flex flex-col space-y-4">
+                  <div class="text-6xl font-semibold">Coming Soon</div>
+                  <div class="text-2xl text-gray-400">
+                    Don't get too excited, the preview for this feature isn't
+                    ready just yet.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <TransitionRoot appear :show="isEditOpen" as="template">
+    <Dialog as="div" @close="closeEdit">
+      <div class="fixed inset-0 z-20 overflow-y-auto w-full">
+        <div class="min-h-screen px-4 text-center">
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+          >
+            <div class="fixed inset-0 bg-black/25" />
+          </TransitionChild>
+          <span class="inline-block h-screen align-middle" aria-hidden="true">
+            &#8203;
+          </span>
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="inline-block w-full min-w-[300px] sm:min-w-[600px] lg:min-w-[900px] h-[90vh] max-w-sm p-8 my-8 text-left overflow-auto align-middle transition-all transform text-gray-900 bg-white shadow-lg rounded-lg"
+            >
+              <button
+                type="button"
+                class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center"
+                tabindex="0"
+                @click="closeEdit"
+              >
+                <span class="sr-only">Close navigation</span>
+                <XMarkIcon class="h-5 w-5" aria-hidden="true" />
+              </button>
+              <div class="text-3xl font-semibold text-gray-700 py-8">
+                New Issue
+              </div>
+              <div class="flex flex-col space-y-8">
                 <div class="flex flex-col space-y-6">
                   <div>
                     <div class="font-medium">Basics</div>
@@ -746,36 +1141,40 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- Metrics Sample -->
-            <div :class="isActivePage('#issue-metrics') ? 'block' : 'hidden'">
-              <div class="flex items-center justify-center min-h-[75vh]">
-                <div class="flex flex-col space-y-4">
-                  <div class="text-6xl font-semibold">Coming Soon</div>
-                  <div class="text-2xl text-gray-400">
-                    Don't get too excited, the preview for this feature isn't
-                    ready just yet.
-                  </div>
-                </div>
+              <div
+                class="flex justify-end items-center space-x-6 mt-8 pt-8 border-t border-gray-200"
+              >
+                <button
+                  class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+                >
+                  Save
+                </button>
+                <button class="font-medium text-blue-700" @click="closeEdit">
+                  Close
+                </button>
               </div>
-            </div>
-          </div>
+            </DialogPanel>
+          </TransitionChild>
         </div>
       </div>
-    </div>
-  </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
 import { issues } from "../data";
 import { onMounted, ref } from "vue";
 import {
+  Dialog,
+  DialogPanel,
   Listbox,
   ListboxLabel,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
   Switch,
+  TransitionChild,
+  TransitionRoot,
 } from "@headlessui/vue";
 import {
   AdjustmentsHorizontalIcon,
@@ -786,6 +1185,7 @@ import {
   EllipsisVerticalIcon,
   PencilSquareIcon,
   PlusIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
   ChevronUpIcon as ChevronUpIconSolid,
@@ -797,6 +1197,8 @@ import StudioNavigation from "@/demo-studio/components/StudioNavigation.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
+    Dialog,
+    DialogPanel,
     Listbox,
     ListboxLabel,
     ListboxButton,
@@ -812,10 +1214,13 @@ export default {
     EllipsisVerticalIcon,
     PencilSquareIcon,
     PlusIcon,
+    XMarkIcon,
     MockIssueCard,
     MockLiveIssueCard,
     StudioNavigation,
     Switch,
+    TransitionChild,
+    TransitionRoot,
   },
   setup() {
     const currentHash = ref(window.location.hash || "#dashboard");
@@ -824,6 +1229,7 @@ export default {
       { name: "Start Date: Last" },
     ];
     const breakingEnabled = ref(false);
+    const isEditOpen = ref(false);
     const selectedSort = ref(sortOptions[0]);
 
     onMounted(() => {
@@ -842,15 +1248,26 @@ export default {
       return new URL("../../assets/mocks/" + src, import.meta.url).href;
     };
 
+    const closeEdit = () => {
+      isEditOpen.value = false;
+    };
+
+    const openEdit = () => {
+      isEditOpen.value = true;
+    };
+
     return {
       dayjs,
       themeOptions,
       sortOptions,
       breakingEnabled,
+      isEditOpen,
       selectedSort,
       issues,
       isActivePage,
       getImg,
+      closeEdit,
+      openEdit,
     };
   },
 };

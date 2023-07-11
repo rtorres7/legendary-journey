@@ -339,9 +339,11 @@
         </ul>
       </div>
     </div>
-    <!--- 2xl or higher --->
+    <!--- 2xl or higher - TODO: Rework how the width works --->
     <div class="hidden 2xl:block min-w-[320px]">
-      <div class="flex flex-col justify-between py-6 min-h-screen">
+      <div
+        class="flex flex-col justify-between py-6 min-h-screen fixed min-w-[320px]"
+      >
         <div>
           <div class="text-blue-700 flex px-4 pb-6">
             <router-link to="/" class="flex items-center px-4">
