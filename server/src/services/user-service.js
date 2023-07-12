@@ -5,36 +5,39 @@ class UserService {
     return await models.User.findOne({ where: { id: id } });
   }
 
+  async findByDN(dn) {
+    return await models.User.findOne({ where: { dn: dn }});
+  }
+
   async createUser(user) {
-    const savedUser = await models.User.create(user);
-
-    return savedUser;
+    return await models.User.create(user);
   }
 
-  async updateUser(id, user) {
-    const user = await models.User.findOne({ where: { id: id } })
-      .then(function (record) {
-        return record.update({ user });
-      })
-      .then(function (record) {
-        res.sendStatus(200);
-      });
+  async updateUser(id, userData) {
+    const result = await models.User.update(userData, {
+      where: {
+        id: id,
+      },
+      returning: true,
+    });
+
+    return result[1][0];
   }
 
-  async validateUser(dn) {
-    const foundUser = await models.User.findOne({ where: { dn: dn } });
-    if (!foundUser) {
-      console.log("Not found!");
-      res.sendStatus(404);
-    } else {
-      res.sendStatus(200);
-      return foundUser;
-    }
-  }
+  // async validateUser(dn) {
+  //   const foundUser = await models.User.findOne({ where: { dn: dn } });
+  //   if (!foundUser) {
+  //     console.log("Not found!");
+  //     res.sendStatus(404);
+  //   } else {
+  //     res.sendStatus(200);
+  //     return foundUser;
+  //   }
+  // }
 
   async deleteUser(id) {
     await models.User.destroy({ where: { id: id } });
   }
-
-  async;
 }
+
+module.exports = UserService;

@@ -19,7 +19,7 @@ db.articles.insertMany([
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -113,7 +113,7 @@ db.articles.insertMany([
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
@@ -439,23 +439,6 @@ db.articles.insertMany([
   },
 ]);
 db.users.drop();
-db.users.insertOne({
-  id: 50,
-  notifications: {
-    ntk: {},
-  },
-  authorizations: {
-    canManageWire: true,
-    canManageSpecialEditions: true,
-  },
-  name: "Jonathan Oszczakiewicz",
-  email: "jonathan@gmail.com",
-  roles: ["wire_editor", "ntk", "role_manager"],
-  has_org: true,
-  organization: "DNI",
-  phone_number: "999-9999",
-  dn: "Sample DN",
-});
 db.metadata.drop();
 db.metadata.insertOne({
   agency: "",
@@ -1954,7 +1937,7 @@ db.metadata.insertOne({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
@@ -1971,7 +1954,7 @@ db.metadata.insertOne({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2293,6 +2276,16 @@ db.metadata.insertOne({
       displayName: "Product Types",
       values: [
         {
+          name: "Alert",
+          code: 10391,
+          publishable: true,
+        },
+        {
+          name: "Bulletin",
+          code: 10389,
+          publishable: true,
+        },
+        {
           name: "Current",
           code: 10376,
           publishable: true,
@@ -2345,6 +2338,16 @@ db.metadata.insertOne({
         {
           name: "Threat Matrix",
           code: 10386,
+          publishable: true,
+        },
+        {
+          name: "Threat of Key Concern",
+          code: 10392,
+          publishable: true,
+        },
+        {
+          name: "Watch",
+          code: 10390,
           publishable: true,
         },
       ],
@@ -2864,7 +2867,7 @@ db.dissem_orgs.insertMany([
   {
     ancestry: "1000",
     ancestry_depth: 1,
-    category: "POLICY",
+    category: "IC",
     code: "ANCESTRY",
     created_at: new Date("2011-07-30T16:38:33.000-04:00"),
     description: "Dept of Ancestry",
@@ -2881,7 +2884,7 @@ db.dissem_orgs.insertMany([
   {
     ancestry: "1000",
     ancestry_depth: 1,
-    category: "POLICY",
+    category: "IC",
     code: "AGRICULTURE",
     created_at: new Date("2011-07-30T16:38:33.000-04:00"),
     description: "Dept of Agriculture",

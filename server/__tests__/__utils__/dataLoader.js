@@ -18,12 +18,18 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-09-01T13:16:43Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-01"),
     dissemOrgs: [
       {
         ancestry: "1000",
         ancestry_depth: 1,
-        category: "POLICY",
+        category: "IC",
         code: "BANKING",
         created_at: new Date("2011-07-30T16:38:33.000-04:00"),
         description: "Dept of Banking",
@@ -51,9 +57,9 @@ const articles = [
     needed: {},
     nonStateActors: [
       {
-        code: 'EU',
-        name: 'EU',
-      }
+        code: "EU",
+        name: "EU",
+      },
     ],
     orgRestricted: false,
     pocInfo: "(U) Produced by East Asia.",
@@ -118,6 +124,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-08-31T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-02"),
     dissemOrgs: [
       {
@@ -164,12 +176,12 @@ const articles = [
     needed: {},
     nonStateActors: [
       {
-        code: 'EU',
-        name: 'EU',
+        code: "EU",
+        name: "EU",
       },
       {
-        code: 'NATO',
-        name: 'NATO',
+        code: "NATO",
+        name: "NATO",
       },
     ],
     orgRestricted: false,
@@ -241,6 +253,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-08-30T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-03"),
     dissemOrgs: [
       {
@@ -336,6 +354,12 @@ const articles = [
       },
     ],
     createdAt: new Date("2022-08-29T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-04"),
     dissemOrgs: [],
     htmlBody: [
@@ -403,6 +427,12 @@ const articles = [
     classificationXml: "",
     countries: [],
     createdAt: new Date("2022-08-28T13:00:00Z"),
+    createdBy: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Smith',
+      dn: 'foo'
+    },
     datePublished: new Date("2022-09-05"),
     dissemOrgs: [],
     htmlBody: [
@@ -429,8 +459,8 @@ const articles = [
     ],
     productNumber: "WIReWIRe_sample_5",
     productType: {
-      name: "Current",
-      code: 10376,
+      name: "CT Digest",
+      code: 10379,
     },
     regions: [],
     reportingType: {
@@ -493,7 +523,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -510,7 +540,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -600,7 +630,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -617,7 +647,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -1941,7 +1971,7 @@ const metadata = new Metadata({
       ],
     },
     dissem_orgs: {
-      displayName: 'Audience',
+      displayName: "Audience",
       values: [
         {
           ancestry: "1000",
@@ -1963,7 +1993,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -1980,7 +2010,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -2197,7 +2227,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2214,7 +2244,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -2285,6 +2315,16 @@ const metadata = new Metadata({
       displayName: "Product Types",
       values: [
         {
+          name: "Alert",
+          code: 10391,
+          publishable: true,
+        },
+        {
+          name: "Bulletin",
+          code: 10389,
+          publishable: true,
+        },
+        {
           name: "Current",
           code: 10376,
           publishable: true,
@@ -2332,6 +2372,21 @@ const metadata = new Metadata({
         {
           name: "Terrorism Summary",
           code: 10385,
+          publishable: true,
+        },
+        {
+          name: "Threat Matrix",
+          code: 10386,
+          publishable: true,
+        },
+        {
+          name: "Threat of Key Concern",
+          code: 10392,
+          publishable: true,
+        },
+        {
+          name: "Watch",
+          code: 10390,
           publishable: true,
         },
       ],
@@ -2388,8 +2443,8 @@ const metadata = new Metadata({
           name: "Analysis: All Source",
           code: "analysis.all_source",
           productTypes: [
-            1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382,
-            10383, 10384, 10385,
+            1000, 1001, 10376, 10377, 10378, 10379, 10380, 10381, 10382, 10383,
+            10384, 10385, 10389, 10390, 10391, 10392,
           ],
         },
         {
@@ -2857,6 +2912,22 @@ const loadSavedProducts = async (postgresUrl) => {
   });
 };
 
+const loadSavedProductsForSearch = async (esUrl) => {
+  const client = new Client({ node: esUrl });
+
+  await client.index({
+    index: "savedproducts",
+    body: {
+      ...articles[0].indexable,
+      savedProductUserId: 1,
+      productId: "WIReWIRe_sample_1"
+    },
+    id: "blah"
+  });
+
+  await client.indices.refresh({ index: "savedproducts" });
+}
+
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -2903,13 +2974,29 @@ const loadCollectionProducts = async (postgresUrl) => {
   collection.addSavedProducts(savedProducts);
 };
 
+const loadUsers = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const userModel = require("../../src/models/user");
+  userModel(sequelize);
+
+  await sequelize.models.User.sync();
+
+  await sequelize.models.User.create({
+    email: "foo@example.com",
+    dn: "O=US,OU=OFFICE,CN=foo",
+  });
+};
+
 module.exports = {
   loadElasticSearch,
   loadMetadata,
   loadArticlesIntoMongo,
   loadSavedProducts,
+  loadSavedProductsForSearch,
   loadCollections,
   loadCollectionProducts,
+  loadUsers,
   articles,
   metadata,
 };

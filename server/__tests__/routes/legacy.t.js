@@ -2,109 +2,109 @@ const request = require('supertest');
 const { setupApp } = require("../__utils__/expressUtils");
 
 describe('Legacy Routes', () => {
-  describe('GET /:date_published/articles/:id/getDocumentData', () => {
-    it("should redirect to /articles/:id/edit", () => {
+  describe('GET /wires/:date_published/articles/:id/getDocumentData', () => {
+    it('should redirect to /articles/:id/edit', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/2022-09-01/articles/1/getDocumentData')
+        .get('/wires/2022-09-01/articles/1/getDocumentData')
         .expect(302)
-        .expect("Location", "/articles/1/edit");
+        .expect('Location', '/articles/1/edit');
     });
   });
 
-  describe('GET /documents/:id.json', () => {
-    it("should redirect to /articles/:id", () => {
+  describe('GET /preload/documents/:id.json', () => {
+    it('should redirect to /articles/:id', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/documents/1.json')
+        .get('/preload/documents/1.json')
         .expect(302)
-        .expect("Location", "/articles/1");
+        .expect('Location', '/articles/1');
     });
   });
 
-  describe('GET /:id/preview.json', () => {
-    it("should redirect to /articles/:id", () => {
+  describe('GET /documents/:id/preview.json', () => {
+    it('should redirect to /articles/:id', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/1/preview.json')
+        .get('/documents/1/preview.json')
         .expect(302)
-        .expect("Location", "/articles/1");
+        .expect('Location', '/articles/1');
     });
   });
 
-  describe('GET /user_data', () => {
-    it("should redirect to /users", () => {
+  describe('GET /my_wire/user_data', () => {
+    it('should redirect to /users', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/user_data')
+        .get('/my_wire/user_data')
         .expect(302)
-        .expect("Location", "/users/");
+        .expect('Location', '/auth/profile');
     });
   });
 
-  describe('GET /:doc_num', () => {
-    it("should redirect to /articles/:id", () => {
+  describe('GET /doucments/:doc_num', () => {
+    it('should redirect to /articles/:id', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/1')
+        .get('/documents/1')
         .expect(302)
-        .expect("Location", "/articles/1");
+        .expect('Location', '/articles/1');
     });
   });
 
-  describe('GET /:date_published/getWireByDate', () => {
-    it("should redirect to /articles/date/:date_published", () => {
+  describe('GET /wires/:date_published/getWireByDate', () => {
+    it('should redirect to /articles/date/:date_published', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/2022-09-01/getWireByDate')
+        .get('/wires/2022-09-01/getWireByDate')
         .expect(302)
-        .expect("Location", "/articles/date/2022-09-01");
+        .expect('Location', '/articles/date/2022-09-01');
     });
   });
 
-  describe('PUT /:date_published/articles/:id/visitorCount', () => {
-    it("should return success = true", () => {
+  describe('PUT /wires/:date_published/articles/:id/visitorCount', () => {
+    it('should return success = true', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .put('/2022-09-01/articles/1/visitorCount')
-        .expect(200, { success: true});
+        .put('/wires/2022-09-01/articles/1/visitorCount')
+        .expect(200, {success: true});
     });
   });
 
-  describe('GET /:doc_num/metrics/basic_metrics.json', () => {
-    it("should return basic metrics", () => {
+  describe('GET /documents/:doc_num/metrics/basic_metrics.json', () => {
+    it('should return basic metrics', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .get('/1/metrics/basic_metrics.json')
-        .expect(200, { metrics: { readership: {}, uniqueReadership: {}}});
+        .get('/documents/1/metrics/basic_metrics.json')
+        .expect(200, {metrics: {readership: {}, uniqueReadership: {}}});
     });
   });
 
-  describe('DELETE /:id/deleteMe', () => {
-    it("should redirect to /articles/:id/", () => {
+  describe('DELETE /documents/:id/deleteMe', () => {
+    it('should redirect to /articles/:id/', () => {
       const router = require('../../src/routes/legacy');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
-        .delete('/1/deleteMe')
+        .delete('/documents/1/deleteMe')
         .expect(307)
-        .expect("Location", "/articles/1");
+        .expect('Location', '/articles/1');
     });
   });
 });

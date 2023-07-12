@@ -20,15 +20,18 @@
           class="no-print flex lg:flex-col gap-y-4 gap-x-4 mb-4 pr-0 lg:pr-4"
         >
           <div class="flex">
-            <div>
+            <button
+              aria-label="print this product"
+              @click="printDocument"
+              @keyup.enter="printDocument"
+            >
               <tippy content="Print this Product">
                 <PrinterIcon
                   class="h-6 w-6 cursor-pointer"
                   aria-hidden="true"
-                  @click="printDocument"
                 />
               </tippy>
-            </div>
+            </button>
             <div
               class="bg-slate-200 dark:bg-slate-800 energy:bg-zinc-800 rounded-full w-fit h-full -mt-2 text-center text-sm p-1"
             >
@@ -58,13 +61,15 @@
             </div>
           </div>
           <div>
-            <tippy content="Copy URL to Clipboard">
-              <LinkIcon
-                class="h-6 w-6 cursor-pointer"
-                aria-hidden="true"
-                @click="copyUrl"
-              />
-            </tippy>
+            <button
+              aria-label="copy URL to clipboard"
+              @click="copyUrl"
+              @keyup.enter="copyUrl"
+            >
+              <tippy content="Copy URL to Clipboard">
+                <LinkIcon class="h-6 w-6 cursor-pointer" aria-hidden="true" />
+              </tippy>
+            </button>
           </div>
           <div
             v-show="
@@ -78,7 +83,7 @@
                 name: 'edit',
                 params: {
                   date: product?.feature_date,
-                  id: product?.feature_id ? product.feature_id : -1,
+                  id: product.feature_id ? product.feature_id : -1,
                   doc_num: product?.doc_num,
                 },
               }"
@@ -157,7 +162,7 @@
 </template>
 
 <script>
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 import { formatDate, hasProductAccess } from "@/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";

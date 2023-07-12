@@ -1,112 +1,223 @@
 const express = require("express");
 const router = express.Router();
-const { handleMongooseError } = require("../util/errors");
 const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const { runAsUser, pagingParams } = require('../util/request');
 const ProductService = require('../services/product-service');
 const productService = new ProductService();
 const WorkspaceService = require('../services/workspace');
 const workspaceService = new WorkspaceService();
 
-router.get("/drafts", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+router.get('/workspace/drafts', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a page of draft products created by the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfProducts'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definition/StandardError'
+      }
+    }
+   */
 
-  // TODO: Need to find user from request
-  try {
-    const pageOfDrafts = await productService.findPageOfDraftProductsForUser(1, page, perPage, skip, sortDir);
-    res.json(pageOfDrafts);
-  } catch (error) {
-    handleMongooseError("Unable to find draft products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
-  }
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const {perPage, page, skip, sortDir} = pagingParams(req);
+
+    try {
+      const pageOfDrafts = await productService.findPageOfDraftProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageOfDrafts);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find draft products: ${error.message}`, res);
+    }
+  });
 });
 
-router.get("/recent", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+router.get('/workspace/recent', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a page of most recently published products created by the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfProducts'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definition/StandardError'
+      }
+    }
+   */
 
-  // TODO: Need to find user from request
-  try {
-    const pageOfRecentProducts = await productService.findPageOfRecentProductsForUser(1, page, perPage, skip, sortDir);
-    res.json(pageOfRecentProducts);
-  } catch (error) {
-    handleMongooseError("Unable to find posted products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
-  }
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const {perPage, page, skip, sortDir} = pagingParams(req);
+
+    try {
+      const pageOfRecentProducts = await productService.findPageOfRecentProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageOfRecentProducts);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find posted products: ${error.message}`, res);
+    }
+  });
 });
 
-router.get("/stats", (req, res) => {
+router.get('/workspace/stats', (req, res) => {
+  /*
+    #swagger.summary = "Retrieve stats on current user's products. NOT IMPLEMENTED!"
+    #swagger.tags = ['Workspace']
+   */
+
   // TODO: Need to implement search for stats. This is here to stub out the call.
   res.json([]);
 });
 
-router.get("/products", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+router.get('/workspace/products', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a page of products created by the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfProducts'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definition/StandardError'
+      }
+    }
+   */
 
-  // TODO: Need to find user from request
-  try {
-    const pageOfProducts = await productService.findPageOfProductsForUser(1, page, perPage, skip, sortDir);
-    res.json(pageOfProducts);
-  } catch (error) {
-    handleMongooseError("Unable to find user's products", error);
-    KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
-  }
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const {perPage, page, skip, sortDir} = pagingParams(req);
+
+    try {
+      const pageOfProducts = await productService.findPageOfProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageOfProducts);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find user's products: ${error.message}`, res);
+    }
+  });
 });
 
-router.get("/saved", async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+router.get('/workspace/saved', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a page of saved products by the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfSavedProducts'
+      }
+    }
+   */
 
-  // TODO: We need user info so we can filter this by MY saved products
-  // TODO: We need to figure out how to return the actual products
-  const savedProducts = await workspaceService.findPageOfSavedProductsForUser(1, page, perPage, skip, sortDir);
-  res.json(savedProducts);
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const {perPage, page, sortDir} = pagingParams(req);
+    const term = req.query.text;
+    const filters = req.query;
+
+    const savedProducts = await workspaceService.findPageOfSavedProductsForUser(currentUser.id, term, perPage, page, sortDir, filters);
+    res.json(savedProducts);
+  });
 });
 
-router.put("/saved/:productId", async (req, res) => {
-  // TODO: Need a real user
-  const savedProduct = await workspaceService.createSavedProduct(req.params.productId, 1);
-  res.json(savedProduct);
+router.put('/workspace/saved/:productId', async (req, res) => {
+  /*
+    #swagger.summary = 'Saves a product for the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/SavedProduct'
+      }
+    }
+   */
+
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const savedProduct = await workspaceService.createSavedProduct(req.params.productId, currentUser.id);
+    res.json(savedProduct);
+  });
 });
 
-router.delete("/saved/:productId", async (req, res) => {
-  // TODO: Need a real user
-  await workspaceService.deleteSavedProduct(req.params.productId, 1);
-  res.status(204).send();
+router.delete('/workspace/saved/:productId', async (req, res) => {
+  /*
+    #swagger.summary = 'Deletes a saved product for the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[204] = {
+      schema: {
+      }
+    }
+   */
+
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    await workspaceService.deleteSavedProduct(req.params.productId, 1);
+    res.status(204).send();
+  });
 });
 
-router.get('/collections', async (req, res) => {
-  const perPage = req.query.perPage || 10;
-  const page = req.query.page || 1;
-  const skip = (page - 1) * perPage;
-  const sortDir = req.query.sortDir || 'desc';
+router.get('/workspace/collections', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieves a page of collections for the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfCollections'
+      }
+    }
+   */
 
-  // TODO: We need real users so we can filter this by current user
-  const collections = await workspaceService.findPageOfCollectionsForUser(1, page, perPage, skip, sortDir);
-  res.json(collections);
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const {perPage, page, skip, sortDir} = pagingParams(req);
+
+    const collections = await workspaceService.findPageOfCollectionsForUser(currentUser.id, page, perPage, skip, sortDir);
+    res.json(collections);
+  });
 });
 
-router.post('/collections', async (req, res) => {
-  const savedCollection = await workspaceService.createCollection({
-    name: req.body.name,
-    description: req.body.description,
-    image: req.body.image,
-    createdBy: 1 // TODO: We need a real user
-  })
+router.post('/workspace/collections', async (req, res) => {
+  /*
+    #swagger.summary = 'Creates a collection for saved products for the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.requestBody = {
+      schema: {
+        $ref: '#/definitions/NewCollection'
+      }
+    }
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/Collection'
+      }
+    }
+   */
 
-  res.json(savedCollection);
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const savedCollection = await workspaceService.createCollection({
+      name: req.body.name,
+      description: req.body.description,
+      image: req.body.image,
+      createdBy: currentUser.id,
+    })
+
+    res.json(savedCollection);
+  });
 });
 
-router.put('/collections/:collectionId', async (req, res) => {
+router.put('/workspace/collections/:collectionId', async (req, res) => {
+  /*
+    #swagger.summary = 'Updates a collection for saved products for the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.requestBody = {
+      schema: {
+        $ref: '#/definitions/NewCollection'
+      }
+    }
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/Collection'
+      }
+    }
+   */
+
   const updatedCollection = await workspaceService.updateCollection(req.params.collectionId, {
     name: req.body.name,
     description: req.body.description,
@@ -116,17 +227,56 @@ router.put('/collections/:collectionId', async (req, res) => {
   res.json(updatedCollection);
 });
 
-router.delete("/collections/:collectionId", async (req, res) => {
+router.delete('/workspace/collections/:collectionId', async (req, res) => {
+  /*
+    #swagger.summary = 'Deletes a collection'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[204] = {
+      schema: {
+      }
+    }
+   */
+
   await workspaceService.deleteCollection(req.params.collectionId);
   res.status(204).send();
 });
 
-router.get('/collections/:collectionId/products', async (req, res) => {
+router.get('/workspace/collections/:collectionId/products', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieves a list of saved products for the given collection for the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ListOfSavedProducts'
+      }
+    },
+    #swagger.responses[404] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+
   const savedProducts = await workspaceService.findSavedProductsInCollection(req.params.collectionId);
   KiwiStandardResponsesExpress.standardGetResponseWithMessage(savedProducts, `Unable to find collection with id ${req.params.collectionId}`, res);
 });
 
-router.put('/collections/:collectionId/products/:savedProductId', async (req, res) => {
+router.put('/workspace/collections/:collectionId/products/:savedProductId', async (req, res) => {
+  /*
+    #swagger.summary = 'Adds a saved product to a given collection'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/Collection'
+      }
+    },
+    #swagger.responses[404] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+
   const collection = await workspaceService.addSavedProductToCollection(req.params.collectionId, req.params.savedProductId);
 
   if (collection) {
@@ -136,7 +286,21 @@ router.put('/collections/:collectionId/products/:savedProductId', async (req, re
   }
 });
 
-router.delete('/collections/:collectionId/products/:savedProductId', async (req, res) => {
+router.delete('/workspace/collections/:collectionId/products/:savedProductId', async (req, res) => {
+  /*
+    #swagger.summary = 'Removes a saved product to a given collection'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[204] = {
+      schema: {
+      }
+    },
+    #swagger.responses[404] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+
   const collection = await workspaceService.removeSavedProductFromCollection(req.params.collectionId, req.params.savedProductId);
 
   if (collection) {

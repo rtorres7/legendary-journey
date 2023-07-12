@@ -24,7 +24,7 @@ describe('Index Routes', () => {
   describe('GET /metadata', () => {
     it("should return the metadata", () => {
       const router = require('../../src/routes/index');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/metadata')
@@ -39,7 +39,7 @@ describe('Index Routes', () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/index');
-      const app = setupApp('/', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/metadata')
