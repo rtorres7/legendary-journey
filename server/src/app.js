@@ -48,7 +48,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
-    store: MongoStore.create({ mongoUrl: `mongodb://${config.mongoose.url}/articles` }), // Default TTL is 14 days
+    store: MongoStore.create({ mongoUrl: `mongodb://${config.mongodb.url}/articles` }), // Default TTL is 14 days
   }),
 );
 

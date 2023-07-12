@@ -47,7 +47,7 @@ module.exports = {
     env: envVars.MXS_ENV,
     baseUri: envVars.MXS_BASE_URI,
   },
-  mongoose: {
+  mongodb: {
     url: envVars.MONGO_DATABASE_URL,
   },
   oauth: {
