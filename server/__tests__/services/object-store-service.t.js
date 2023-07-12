@@ -192,22 +192,22 @@ describe("ObjectStoreService", () => {
    * @return {Promise<StartedTestContainer>}
    */
   function createMinioContainer() {
+    // prettier-ignore
     return new GenericContainer("quay.io/minio/minio:latest")
       .withEnvironment({
-        // MINIO_BROWSER: "off",
+        MINIO_BROWSER: "off",
         MINIO_ROOT_USER: config.minio.accessKey,
         MINIO_ROOT_PASSWORD: config.minio.secretKey,
       })
-      .withExposedPorts({ container: 9000, host: 9000 }, { container: 9001, host: 9001 })
+      .withExposedPorts({ container: 9000, host: 9000 }) // , { container: 9001, host: 9001 })
       .withWaitStrategy(
         Wait.forAll([
           Wait.forListeningPorts(),
           Wait.forLogMessage(/1 Online/),
-          // Wait.forLogMessage(/SetCallHomeStatus/)
         ]),
       )
       .withTmpFs({ "/data": "rw,noexec,nosuid" })
-      .withCommand(["server", "/data", "--console-address", ":9001"])
+      .withCommand(["server", "/data"]) // , "--console-address", ":9001"])
       .start();
   }
 

@@ -49,7 +49,7 @@ app.use(
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({ mongoUrl: `mongodb://${config.mongoose.url}/articles` }), // Default TTL is 14 days
-  })
+  }),
 );
 
 /**
@@ -135,7 +135,6 @@ const legacyRouter = require("./routes/legacy");
 const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
-const docsRouter = require("./routes/docs.route");
 
 app.use("/", indexRouter);
 app.use("/alerts", alertRouter);
@@ -144,7 +143,6 @@ app.use("/auth", authRouter);
 app.use("/home", homeRouter);
 app.use("/search", searchRouter);
 app.use("/workspace", workspaceRouter);
-app.use("/docs", docsRouter);
 
 // Legacy routes
 app.use("/documents", legacyRouter);
