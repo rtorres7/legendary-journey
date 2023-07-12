@@ -442,242 +442,47 @@
                               class="w-full rounded-md max-w-[900px] border border-dashed border-gray-400"
                             >
                               <template
-                                v-for="product in issues[0].featured"
-                                :key="product"
+                                v-for="(product, index) in issues[0].featured"
+                                :key="index"
                               >
-                                <li
-                                  class="px-6 border-b border-gray-200 cursor-pointer h-[100px] flex flex-col justify-between"
-                                >
-                                  <div class="py-4">
-                                    <p class="font-semibold line-clamp-1">
-                                      <span class="text-gray-500">{{
-                                        product.classification
-                                      }}</span>
-                                      {{ product.title }}
-                                    </p>
-                                  </div>
-                                  <div
-                                    class="pb-4 flex space-x-2 font-medium text-xs"
-                                  >
-                                    <div class="text-blue-700">
-                                      {{ product.type }}
+                                <!-- <ProductListItem :product="product" :id="index" /> -->
+                                <li class="border-b border-gray-200 h-[100px]">
+                                  <ProductListItem
+                                    :product="product"
+                                    :position="
+                                      getPosition(
+                                        index,
+                                        issues[0].featured.length
+                                      )
+                                    "
+                                  />
+                                  <!-- <div class="hover:bg-gray-50">
+                                    <div
+                                      class="px-6 flex flex-col justify-between"
+                                    >
+                                      <div class="py-4">
+                                        <p class="font-semibold line-clamp-1">
+                                          <span class="text-gray-500">{{
+                                            product.classification
+                                          }}</span>
+                                          {{ product.title }}
+                                        </p>
+                                      </div>
+                                      <div
+                                        class="pb-4 flex space-x-2 font-medium text-xs"
+                                      >
+                                        <div class="text-blue-700">
+                                          {{ product.type }}
+                                        </div>
+                                        <div>•</div>
+                                        <div class="text-gray-500">
+                                          {{ product.date_posted }}
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div>•</div>
-                                    <div class="text-gray-500">
-                                      {{ product.date_posted }}
-                                    </div>
-                                  </div>
+                                  </div> -->
                                 </li>
                               </template>
-                            </ul>
-                            <ul class="">
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
-                              <li
-                                class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                              >
-                                <div class="flex flex-col space-y-1">
-                                  <button
-                                    type="button"
-                                    class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                    @click="open"
-                                  >
-                                    <span class="sr-only">Move down</span>
-                                    <ChevronUpIconSolid
-                                      class="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </button>
-                                  <button
-                                    class="mmax-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
-                                  >
-                                    <span class="sr-only">Move up</span>
-                                    <ChevronDownIconSolid class="h-5 w-5" />
-                                  </button>
-                                </div>
-                              </li>
                             </ul>
                           </div>
                         </div>
@@ -957,215 +762,6 @@
                             </div>
                           </li>
                         </ul>
-                        <ul class="">
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                          <li
-                            class="flex items-center w-full max-w-[100px] h-[100px] p-4"
-                          >
-                            <div class="flex flex-col space-y-1">
-                              <button
-                                type="button"
-                                class="max-w-xs rounded-full flex items-center hover:bg-gray-50 p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                                @click="open"
-                              >
-                                <span class="sr-only">Move down</span>
-                                <ChevronUpIconSolid
-                                  class="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                              <button
-                                class="mmax-w-xs rounded-full flex items-center p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-not-allowed"
-                              >
-                                <span class="sr-only">Move up</span>
-                                <ChevronDownIconSolid class="h-5 w-5" />
-                              </button>
-                            </div>
-                          </li>
-                        </ul>
                       </div>
                     </div>
                   </div>
@@ -1217,13 +813,10 @@ import {
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import {
-  ChevronUpIcon as ChevronUpIconSolid,
-  ChevronDownIcon as ChevronDownIconSolid,
-} from "@heroicons/vue/24/solid";
 import MockIssueCard from "@/demo-studio/components/MockIssueCard.vue";
 import MockLiveIssueCard from "@/demo-studio/components/MockLiveIssueCard.vue";
 import StudioNavigation from "@/demo-studio/components/StudioNavigation.vue";
+import ProductListItem from "@/demo-studio/components/ProductListItem.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
@@ -1238,8 +831,6 @@ export default {
     CalendarIcon,
     CheckIcon,
     ChevronDownIcon,
-    ChevronDownIconSolid,
-    ChevronUpIconSolid,
     DocumentMagnifyingGlassIcon,
     EllipsisVerticalIcon,
     PencilSquareIcon,
@@ -1248,6 +839,7 @@ export default {
     MockIssueCard,
     MockLiveIssueCard,
     StudioNavigation,
+    ProductListItem,
     Switch,
     TransitionChild,
     TransitionRoot,
@@ -1261,6 +853,7 @@ export default {
     const breakingEnabled = ref(false);
     const isEditOpen = ref(false);
     const selectedSort = ref(sortOptions[0]);
+    const hover = ref(false);
 
     onMounted(() => {
       window.location.hash = window.location.hash || "#home";
@@ -1275,7 +868,18 @@ export default {
     };
 
     const getImg = (src) => {
-      return new URL("../../assets/mocks/" + src, import.meta.url).href;
+      //return new URL("../../assets/mocks/" + src, import.meta.url).href;
+      return new URL(`../../assets/mocks/${src}`, import.meta.url).href;
+    };
+
+    const getPosition = (index, total) => {
+      if (index === 0) {
+        return "first";
+      }
+      if (index === total - 1) {
+        return "last";
+      }
+      return null;
     };
 
     const closeEdit = () => {
@@ -1293,9 +897,11 @@ export default {
       breakingEnabled,
       isEditOpen,
       selectedSort,
+      hover,
       issues,
       isActivePage,
       getImg,
+      getPosition,
       closeEdit,
       openEdit,
     };

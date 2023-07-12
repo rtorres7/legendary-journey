@@ -34,7 +34,7 @@
           <!-- Admin Dropdown -->
           <Menu as="div" class="block md:hidden relative">
             <div>
-              <tippy content="Admin" theme="demo">
+              <tippy content="Admin" theme="studio">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 >
@@ -81,7 +81,7 @@
           <!-- Theme dropdown -->
           <Menu as="div" class="block md:hidden relative">
             <div>
-              <tippy content="Themes" theme="demo">
+              <tippy content="Themes" theme="studio">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
                   :class="
@@ -149,7 +149,7 @@
           <!-- Profile dropdown -->
           <Menu as="div" class="block md:hidden relative">
             <div>
-              <tippy content="User Menu" theme="demo">
+              <tippy content="User Menu" theme="studio">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 >
@@ -209,7 +209,7 @@
           >
             <ul class="pl-4 py-4 text-gray-500 space-y-1">
               <li>
-                <tippy content="Issue Details" placement="right" theme="demo">
+                <tippy content="Issue Details" placement="right" theme="studio">
                   <div
                     :class="
                       isActivePage('#edit-issue')
@@ -233,7 +233,7 @@
                 </tippy>
               </li>
               <li>
-                <tippy content="Issue Metrics" placement="right" theme="demo">
+                <tippy content="Issue Metrics" placement="right" theme="studio">
                   <div
                     :class="
                       isActivePage('#issue-metrics')
@@ -266,7 +266,7 @@
           </div>
           <ul class="pl-4 py-4 text-gray-500 space-y-1">
             <li>
-              <tippy content="Home" placement="right" theme="demo">
+              <tippy content="Home" placement="right" theme="studio">
                 <div
                   :class="
                     isActivePage('#home')
@@ -290,7 +290,7 @@
               </tippy>
             </li>
             <li>
-              <tippy content="Live Content" placement="right" theme="demo">
+              <tippy content="Live Content" placement="right" theme="studio">
                 <div
                   :class="
                     isActivePage('#live')
@@ -317,7 +317,7 @@
               </tippy>
             </li>
             <li>
-              <tippy content="Issues" placement="right" theme="demo">
+              <tippy content="Issues" placement="right" theme="studio">
                 <div
                   :class="
                     isActivePage('#issues')
@@ -645,7 +645,7 @@
                         <template v-else>
                           <HomeIcon class="h-6 w-6" aria-hidden="true" />
                         </template>
-                        <span class="ml-4">Dashboard</span>
+                        <span class="ml-4">Home</span>
                       </div>
                     </a>
                   </div>
@@ -670,7 +670,7 @@
                         <template v-else>
                           <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
                         </template>
-                        <span class="ml-4">Live Content</span>
+                        <span class="ml-4">Live</span>
                       </div>
                     </a>
                   </div>

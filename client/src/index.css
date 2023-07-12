@@ -85,6 +85,11 @@
     @apply bg-slate-900 text-gray-50 shadow-sm shadow-slate-900;
   }
 
+  .tippy-box[data-theme~="studio"],
+  .light .tippy-box[data-theme~="studio"] {
+    @apply bg-blue-700 text-gray-50 shadow-sm shadow-blue-800;
+  }
+
   .dark .tippy-box[data-theme~="pegasus"] {
     @apply border border-slate-500 bg-slate-700 text-slate-300;
   }

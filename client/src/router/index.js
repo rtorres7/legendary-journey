@@ -10,9 +10,14 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
-import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
 import WorkspaceView from "../workspace/views/WorkspaceView.vue";
 import { isProduction } from "@/helpers";
+
+// Studio
+import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
+//import StudioHomeView from "@/demo-studio/views/StudioHomeView.vue";
+//import StudioLiveView from "@/demo-studio/views/StudioLiveView.vue";
+//import StudioIssuesView from "@"
 
 const routes = [
   {
