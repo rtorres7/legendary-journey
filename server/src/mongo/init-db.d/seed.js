@@ -19,7 +19,7 @@ db.products.insertMany([
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -113,7 +113,7 @@ db.products.insertMany([
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
@@ -1937,7 +1937,7 @@ db.metadata.insertOne({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
@@ -1954,7 +1954,7 @@ db.metadata.insertOne({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2867,7 +2867,7 @@ db.dissem_orgs.insertMany([
   {
     ancestry: "1000",
     ancestry_depth: 1,
-    category: "POLICY",
+    category: "IC",
     code: "ANCESTRY",
     created_at: new Date("2011-07-30T16:38:33.000-04:00"),
     description: "Dept of Ancestry",
@@ -2884,7 +2884,7 @@ db.dissem_orgs.insertMany([
   {
     ancestry: "1000",
     ancestry_depth: 1,
-    category: "POLICY",
+    category: "IC",
     code: "AGRICULTURE",
     created_at: new Date("2011-07-30T16:38:33.000-04:00"),
     description: "Dept of Agriculture",

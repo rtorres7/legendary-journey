@@ -79,7 +79,7 @@ describe("Product Routes", () => {
   describe("GET /products/date/:date", () => {
     it("should return all products for the given date", () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/products/date/2022-09-01")
@@ -95,7 +95,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/products/date/2022-09-01')
@@ -108,7 +108,7 @@ describe("Product Routes", () => {
   describe("GET /products/:id", () => {
     it("should return an product for the given productNumber", () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/products/WIReWIRe_sample_1")
@@ -123,7 +123,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/products/WIReWIRe_sample_1')
@@ -136,7 +136,7 @@ describe("Product Routes", () => {
   describe("POST /products/processDocument", () => {
     it("should send redirect to POST /products when document_action is create", () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .post("/products/processDocument")
@@ -147,7 +147,7 @@ describe("Product Routes", () => {
 
     it("should send update document when document_action is save", async () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       const original = products[0];
       const postData = {
@@ -181,7 +181,7 @@ describe("Product Routes", () => {
 
     it("should send a 404 if any other action is given", () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .post("/products/processDocument")
@@ -193,7 +193,7 @@ describe("Product Routes", () => {
   describe("POST /products", () => {
     it("should create the given product", () => {
       const router = require('../../src/routes/products');
-      const app = setupAppWithUser('/products', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -215,7 +215,7 @@ describe("Product Routes", () => {
 
     it("should create the given product including producing_office", () => {
       const router = require('../../src/routes/products');
-      const app = setupAppWithUser('/products', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -238,7 +238,7 @@ describe("Product Routes", () => {
 
     it("should create the given product defaulting date published", () => {
       const router = require('../../src/routes/products');
-      const app = setupAppWithUser('/products', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -261,7 +261,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupAppWithUser('/products', router, { id: 1 });
+      const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
         document_action: "save",
@@ -281,7 +281,7 @@ describe("Product Routes", () => {
   describe("GET /products/:id/edit", () => {
     it("should return the requested product for editing", async () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/products/64709619aa530082dd5cc416/edit")
@@ -296,7 +296,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/products/64709619aa530082dd5cc416/edit')
@@ -309,7 +309,7 @@ describe("Product Routes", () => {
   describe("GET /products/:id/view", () => {
     it("should return the requested product for viewing", async () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get("/products/64709619aa530082dd5cc416/view")
@@ -324,7 +324,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/products/64709619aa530082dd5cc416/view')
@@ -337,7 +337,7 @@ describe("Product Routes", () => {
   describe("PUT /products/:id", () => {
     it("should update document", async () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       const original = products[0];
 
@@ -367,7 +367,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       const original = products[0];
 
@@ -391,7 +391,7 @@ describe("Product Routes", () => {
   describe("DELETE /products/:id", () => {
     it("should delete the product from the db", () => {
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .delete("/products/64709619aa530082dd5cc416")
@@ -402,7 +402,7 @@ describe("Product Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/products');
-      const app = setupApp('/products', router);
+      const app = setupApp(router);
 
       return request(app)
         .delete('/products/64709619aa530082dd5cc416')

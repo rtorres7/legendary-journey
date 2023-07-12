@@ -27,10 +27,10 @@ describe('Auth Routes', () => {
 
       const router = require('../../src/routes/auth');
       app.use((req, res, next) => {
-        req.user = { id: 1 };
+        req.user = {id: 1};
         next();
       });
-      app.use('/auth', router);
+      app.use(router);
 
       return request(app)
         .get('/auth/profile')
@@ -44,7 +44,7 @@ describe('Auth Routes', () => {
       app.use(express.json());
 
       const router = require('../../src/routes/auth');
-      app.use('/auth', router);
+      app.use(router);
 
       return request(app)
         .get('/auth/login')
@@ -58,7 +58,7 @@ describe('Auth Routes', () => {
       app.use(express.json());
 
       const router = require('../../src/routes/auth');
-      app.use('/auth', router);
+      app.use(router);
 
       return request(app)
         .get('/auth/callback')
@@ -78,7 +78,7 @@ describe('Auth Routes', () => {
         })
         next();
       });
-      app.use('/auth', router);
+      app.use(router);
 
       return request(app)
         .delete('/auth/logout')
@@ -96,7 +96,7 @@ describe('Auth Routes', () => {
         })
         next();
       });
-      app.use('/auth', router);
+      app.use(router);
 
       return request(app)
         .delete('/auth/logout')

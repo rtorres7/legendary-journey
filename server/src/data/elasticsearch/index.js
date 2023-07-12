@@ -5,9 +5,13 @@ let esClient;
 if (esClient === undefined) {
   const esNode = process.env.ES_URL;
 
-  esClient = new elasticsearch.Client({
-    node: esNode,
-  });
+  if (esNode === 'SWAGGER') {
+    esClient = {}
+  } else {
+    esClient = new elasticsearch.Client({
+      node: esNode,
+    });
+  }
 }
 
 module.exports = esClient;

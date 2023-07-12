@@ -42,8 +42,8 @@ jest.mock("../../src/services/product-search-service.js", () => {
 describe("Search Routes", () => {
   describe("GET /search", () => {
     it("should return a search results with highlighting when text provided", () => {
-      const router = require("../../src/routes/search");
-      const app = setupApp("/search", router);
+      const router = require('../../src/routes/search');
+      const app = setupApp(router);
 
       return request(app)
         .get("/search?text=flu")
@@ -58,8 +58,8 @@ describe("Search Routes", () => {
     });
 
     it("should return a search results without highlighting when text not provided", () => {
-      const router = require("../../src/routes/search");
-      const app = setupApp("/search", router);
+      const router = require('../../src/routes/search');
+      const app = setupApp(router);
 
       return request(app)
         .get("/search")

@@ -30,8 +30,8 @@ describe("Home Routes", () => {
       const app = express();
       app.use(express.json());
 
-      const router = require("../../src/routes/home");
-      app.use("/home", router);
+      const router = require('../../src/routes/home');
+      app.use(router);
 
       return request(app)
         .get("/home/features")
@@ -46,8 +46,8 @@ describe("Home Routes", () => {
     it("should return error response when lookup fails", () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require("../../src/routes/home");
-      const app = setupApp("/home", router);
+      const router = require('../../src/routes/home');
+      const app = setupApp(router);
 
       return request(app).get("/home/features").expect(200, {
         error: "Unable to find features and briefs",

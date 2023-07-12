@@ -7,49 +7,110 @@ dayjs.extend(utc);
 const SpecialEditions = require("../models/special_editions");
 const DissemOrgs = require("../models/dissem_orgs");
 
-router.get("/:date_published/products/:id/getDocumentData", (req, res) => {
-  res.redirect(`/products/${req.params.id}/edit`);
-});
+router.get('/wires/:date_published/products/:id/getDocumentData', (req, res) => {
+    /*
+      #swagger.tags = ['Legacy']
+      #swagger.deprecated = true
+      #swagger.summary = 'DEPRECATED: Retrieve a product for editing. Use GET /products/{id}/edit'
+     */
 
-router.get("/get_dissem_orgs", function (req, res) {
+    res.redirect(`/products/${req.params.id}/edit`);
+  }
+);
+
+router.get('/wires/get_dissem_orgs', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieves dissem orgs. Can be retrieved from metadata'
+ */
+
   DissemOrgs.find({}, function (error, dissem_orgs) {
-    res.send({ dissem_orgs });
+    res.send({dissem_orgs});
   });
 });
 
-router.get("/documents/:id.json", function (req, res) {
+router.get('/preload/documents/:id.json', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve a product details . Use GET /products/{id}'
+ */
+
   res.redirect(`/products/${req.params.id}`);
 });
 
-router.get("/:id/preview.json", function (req, res) {
+router.get('/documents/:id/preview.json', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve a product for preview. Use GET /products/{id}'
+ */
+
   res.redirect(`/products/${req.params.id}`);
 });
 
-router.get("/user_data", function (req, res) {
-  res.redirect("/auth/profile");
+router.get('/my_wire/user_data', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve current user info. Use GET /auth/profile'
+ */
+
+  res.redirect('/auth/profile');
 });
 
-router.get("/links", function (req, res) {
+router.get('/special_editions/links', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve special editions.'
+ */
+
   SpecialEditions.findOne({}, function (error, special_editions) {
     res.send(special_editions);
   });
 });
 
-router.get("/:doc_num", function (req, res) {
+router.get('/documents/:doc_num', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve a product details. Use GET /products/{id}'
+ */
+
   res.redirect(`/products/${req.params.doc_num}`);
 });
 
-router.get("/:date_published/getWireByDate", function (req, res) {
+router.get('/wires/:date_published/getWireByDate', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve products for a given date. Use GET /products/date/{date}'
+ */
+
   res.redirect(`/products/date/${req.params.date_published}`);
 });
 
-router.put("/:date_published/products/:id/visitorCount", function (req, res) {
+router.put('/wires/:date_published/products/:id/visitorCount', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Updates the visitor count. NOT IMPLEMENTED!'
+ */
+
   res.status(200).json({
     success: true,
   });
 });
 
-router.get("/:doc_num/metrics/basic_metrics.json", function (req, res) {
+router.get('/documents/:doc_num/metrics/basic_metrics.json', function (req, res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve metrics for a given document. NOT IMPLEMENTED!'
+ */
+
   res.send({
     metrics: {
       readership: {},
@@ -59,7 +120,13 @@ router.get("/:doc_num/metrics/basic_metrics.json", function (req, res) {
 });
 
 // TODO: This will go away once the UI changes to use DELETE /products/:id
-router.delete("/:id/deleteMe", async (req, res) => {
+router.delete('/documents/:id/deleteMe', async (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Deletes a product. Use DELETE /products/{id}'
+ */
+
   res.redirect(307, `/products/${req.params.id}`);
 });
 
