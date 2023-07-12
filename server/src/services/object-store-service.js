@@ -1,6 +1,6 @@
-const constant = require("../util/constant.js");
+// const constant = require("../util/constant.js");
 const config = require("../config/config.js");
-const logger = require("../config/logger.js");
+// const logger = require("../config/logger.js");
 const { Client } = require("minio");
 
 class ObjectStoreService {

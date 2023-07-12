@@ -1,11 +1,9 @@
 const crypto = require("crypto");
-// const os = require("os");
 const fs = require("fs");
 const tmp = require("tmp");
 const { GenericContainer, StartedTestContainer, Wait } = require("testcontainers");
 const { BucketItemFromList, Client } = require("minio");
 const config = require("../../src/config/config.js");
-// const constant = require("../../src/util/constant");
 const logger = require("../../src/config/logger.js");
 
 const ObjectStoreService = require("../../src/services/object-store-service");
@@ -31,11 +29,8 @@ describe("ObjectStoreService", () => {
     service = new ObjectStoreService();
     minioClient = service.getClient();
     await initMinioData();
-    tmpSubDir = tmp.dirSync().name;
-  });
-
-  afterAll(async () => {
     tmp.setGracefulCleanup();
+    tmpSubDir = tmp.dirSync().name;
   });
 
   /*
@@ -131,6 +126,24 @@ describe("ObjectStoreService", () => {
         await expect(service.statObject(bucketName, objectName)).resolves.toMatchObject({ metaData: { "content-type": "binary/octet-stream" }, versionId: null });
       });
       it("should error trying to stat nonexistent object", async () => {
+        const bucketName = testName();
+        await expect(service.makeBucket(bucketName)).resolves.toBeUndefined();
+        await expect(service.statObject(bucketName, testName())).rejects.toThrow("Not Found");
+      });
+    });
+
+    describe("getObject", () => {
+      it("should get object", async () => {
+        const bucketName = testName();
+        await expect(service.makeBucket(bucketName)).resolves.toBeUndefined();
+        const objectName = await testCreateObject(bucketName);
+        const objectStat = await service.statObject(bucketName, objectName);
+        const stream = await service.getObject(bucketName, objectName);
+        const file = await testWriteStreamToFile(stream);
+        const fileStat = fs.statSync(file);
+        expect(objectStat.size).toEqual(fileStat.size);
+      });
+      it("should error trying to get nonexistent object", async () => {
         const bucketName = testName();
         await expect(service.makeBucket(bucketName)).resolves.toBeUndefined();
         await expect(service.statObject(bucketName, testName())).rejects.toThrow("Not Found");
@@ -277,6 +290,27 @@ describe("ObjectStoreService", () => {
           writer.once("drain", write);
         }
       }
+    });
+  }
+
+  /**
+   * Write stream to tmp file.
+   * @param {ReadableStream} reader
+   * @return {Promise<String>} file
+   */
+  function testWriteStreamToFile(reader) {
+    return new Promise((resolve, reject) => {
+      let size = 0;
+      const tmpObj = tmp.fileSync({ dir: tmpSubDir, mode: 0o600, prefix: "obj" });
+      const writer = fs.createWriteStream(tmpObj.name);
+      reader.on("data", (chunk) => {
+        size += chunk.length;
+      });
+      reader.on("end", () => {
+        logger.info(`wrote ${size} to ${tmpObj.name}`);
+        resolve(tmpObj.name);
+      });
+      reader.pipe(writer);
     });
   }
 });
