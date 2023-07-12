@@ -192,6 +192,18 @@ router.get('/articles/:id/edit', async (req, res) => {
   }
 });
 
+
+router.get('/articles/:id/view', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a product for viewing details'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDetails'
+      }
+    }
+   */
+  
   try {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
