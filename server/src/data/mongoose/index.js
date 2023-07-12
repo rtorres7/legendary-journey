@@ -5,6 +5,10 @@ let initialConnectionRetries = 0;
 function setupMongoose() {
   const mongoBaseUrl = process.env.MONGO_DATABASE_URL;
 
+  if (mongoBaseUrl === 'SWAGGER') {
+    return;
+  }
+
   // TODO: We should change articles to mxms or something else as that is the database name not the collection.
   mongoose.connect(`mongodb://${mongoBaseUrl}/articles`)
     .catch(error => {
