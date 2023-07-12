@@ -1,23 +1,64 @@
+const ProductService = require('./product-service');
 const { models } = require('../data/sequelize');
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
+const runSearch = require('../util/search');
+
+const PRODUCT_FIELDS = [
+  { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
+  { field: 'countries', aggregation: 'countries', filters: 'countries', filterType: 'AND' },
+  { field: 'issues', aggregation: 'issues', filters: 'issues', filterType: 'AND' },
+  { field: 'nonStateActors', aggregation: 'non_state_actors', filters: 'nonStateActors', filterType: 'AND'},
+  { field: 'producingOffices', aggregation: 'producing_offices', filters: 'producing_offices', filterType: 'OR' },
+  { field: 'productType', aggregation: 'product_types', filters: 'product_types', filterType: 'OR' },
+  { field: 'regions', aggregation: 'regions', filters: 'regions', filterType: 'AND' },
+  { field: 'reportingType', aggregation: 'reporting_types', filters: 'reporting_types', filterType: 'OR' },
+  { field: 'savedProductUserId' },
+  { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
+  { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
+]
 
 class WorkspaceService {
-  async findPageOfSavedProductsForUser(userId, page, limit, offset, sortDir) {
-    const { count, rows } = await models.SavedProduct.findAndCountAll({
-      offset: offset,
-      limit: limit,
-      order: [
-        ['createdAt', sortDir.toUpperCase()],
-      ],
-    });
 
-    return KiwiPage.of(page, limit, count, rows)
+  constructor() {
+    this.client = require('../data/elasticsearch');
+    this.index = 'savedproducts';
+    this.productService = new ProductService();
+  }
+
+  async findPageOfSavedProductsForUser(userId, term, perPage = 10, page = 1, sortDir = 'desc', filters = {}) {
+    const filtersWithUser = {
+      ...filters,
+      savedProductUserId: userId
+    }
+
+    const results = await runSearch(term, this.index, perPage, page, sortDir, filtersWithUser, PRODUCT_FIELDS);
+
+    return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of('createdAt', sortDir));
+      .addKiwiSort(KiwiSort.of('datePublished', sortDir))
+      .addSupplementaryData({ aggregations: results.aggregations });
   }
 
   async createSavedProduct(productId, userId) {
-    return await models.SavedProduct.create({ productId: productId, createdBy: userId });
+    const savedProduct = await models.SavedProduct.create({ productId: productId, createdBy: userId });
+
+    try {
+      const product = await this.productService.findById(productId);
+      const savedProductToIndex = {
+        ...product.indexable,
+        savedProductUserId: userId,
+        productId
+      };
+
+      await this.client.index({
+        index: this.index,
+        document: savedProductToIndex
+      });
+    } catch (error) {
+      console.log('There was a problem indexing saved product')
+    }
+
+    return savedProduct;
   }
 
   async deleteSavedProduct(productId, userId) {
@@ -26,6 +67,28 @@ class WorkspaceService {
         productId: productId,
         createdBy: userId
       },
+    });
+
+    await this.client.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                match: {
+                  productId: productId
+                }
+              },
+              {
+                match: {
+                  savedProductUserId: userId
+                }
+              }
+            ]
+          }
+        }
+      }
     });
   }
 

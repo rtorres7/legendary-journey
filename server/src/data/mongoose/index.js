@@ -4,7 +4,10 @@ let initialConnectionRetries = 0;
 
 function setupMongoose() {
   const mongoBaseUrl = process.env.MONGO_DATABASE_URL;
-  mongoose.set('strictQuery', false); // TODO: When we go to mongoose 7.x this line can go away.
+
+  if (mongoBaseUrl === 'SWAGGER') {
+    return;
+  }
 
   // TODO: We should change articles to mxms or something else as that is the database name not the collection.
   mongoose.connect(`mongodb://${mongoBaseUrl}/articles`)

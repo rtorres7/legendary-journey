@@ -1,16 +1,42 @@
+const { ElasticsearchContainer } = require("testcontainers");
 const { PostgreSqlContainer } = require('testcontainers');
-const {  loadSavedProducts, loadCollections, loadCollectionProducts } = require('../__utils__/dataLoader');
+const {  loadSavedProducts, loadCollections, loadCollectionProducts, loadSavedProductsForSearch } = require('../__utils__/dataLoader');
+const { Client } = require("@elastic/elasticsearch");
+const constant = require("../../src/util/constant");
+
+jest.mock('../../src/services/metadata.js', () => {
+  return jest.fn().mockImplementation(() => {
+    const { metadata } = require("../__utils__/dataLoader");
+    return {
+      findAllLookups: jest.fn().mockResolvedValue(metadata.criteria)
+    };
+  });
+});
 
 describe('Workspace Service', () => {
   let postgresContainer;
   let service;
+  let esContainer;
+  let client;
 
   beforeAll(async () => {
+    esContainer = await new ElasticsearchContainer().start();
+    process.env.ES_URL = esContainer.getHttpUrl();
+
+    client = new Client({ node: esContainer.getHttpUrl() });
+
+    // Setup index
+    await client.indices.create({
+      index: 'savedproducts',
+      mappings: constant.indices[1].mappings,
+    });
+
     postgresContainer = await new PostgreSqlContainer().start();
     process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
 
     // Load Saved Products
     await loadSavedProducts(postgresContainer.getConnectionUri());
+    await loadSavedProductsForSearch(esContainer.getHttpUrl());
     await loadCollections(postgresContainer.getConnectionUri());
     await loadCollectionProducts(postgresContainer.getConnectionUri());
   }, 120_000);
@@ -26,7 +52,7 @@ describe('Workspace Service', () => {
 
   describe('findPageOfSavedProductsForUser', () => {
     it('should return a page of saved products for user', async () => {
-      const products = await service.findPageOfSavedProductsForUser(1, 1, 10, 0, 'desc');
+      const products = await service.findPageOfSavedProductsForUser(1, '', 10, 1, 'desc');
 
       expect(products.content).toHaveLength(1);
       expect(products.content.map(product => product.productId)).toEqual(['WIReWIRe_sample_1']);
@@ -35,7 +61,7 @@ describe('Workspace Service', () => {
       expect(products.numberOfElements).toEqual(1);
       expect(products.totalPages).toEqual(1);
       expect(products.totalElements).toEqual(1);
-      expect(products.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
+      expect(products.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
     });
   });
 

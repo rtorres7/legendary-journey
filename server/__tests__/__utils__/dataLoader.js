@@ -29,7 +29,7 @@ const articles = [
       {
         ancestry: "1000",
         ancestry_depth: 1,
-        category: "POLICY",
+        category: "IC",
         code: "BANKING",
         created_at: new Date("2011-07-30T16:38:33.000-04:00"),
         description: "Dept of Banking",
@@ -459,8 +459,8 @@ const articles = [
     ],
     productNumber: "WIReWIRe_sample_5",
     productType: {
-      name: "Current",
-      code: 10376,
+      name: "CT Digest",
+      code: 10379,
     },
     regions: [],
     reportingType: {
@@ -523,7 +523,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -540,7 +540,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -630,7 +630,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -647,7 +647,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -1993,7 +1993,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2010,7 +2010,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -2227,7 +2227,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
@@ -2244,7 +2244,7 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
-          category: "POLICY",
+          category: "IC",
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
@@ -2912,6 +2912,22 @@ const loadSavedProducts = async (postgresUrl) => {
   });
 };
 
+const loadSavedProductsForSearch = async (esUrl) => {
+  const client = new Client({ node: esUrl });
+
+  await client.index({
+    index: "savedproducts",
+    body: {
+      ...articles[0].indexable,
+      savedProductUserId: 1,
+      productId: "WIReWIRe_sample_1"
+    },
+    id: "blah"
+  });
+
+  await client.indices.refresh({ index: "savedproducts" });
+}
+
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -2977,6 +2993,7 @@ module.exports = {
   loadMetadata,
   loadArticlesIntoMongo,
   loadSavedProducts,
+  loadSavedProductsForSearch,
   loadCollections,
   loadCollectionProducts,
   loadUsers,

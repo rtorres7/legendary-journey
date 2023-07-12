@@ -39,7 +39,7 @@ describe('ProductSearchService', () => {
   });
 
   beforeEach(() => {
-    service = new ProductSearchService(container.getHttpUrl());
+    service = new ProductSearchService();
   });
 
   describe('search', () => {
@@ -249,12 +249,12 @@ describe('ProductSearchService', () => {
 
     it('should allow filtering on productType with multiple productType using OR', async () => {
       const result = await service.search('', 10, 1, 'desc', { product_types: [10376, 10378] });
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
 
     it('should allow filtering on reportingType with single reportingType', async () => {
