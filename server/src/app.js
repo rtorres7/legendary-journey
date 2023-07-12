@@ -25,7 +25,8 @@ app.use((req, res, next) => {
     const redirector = res.redirect;
     res.redirect = function (urlOrStatus, url) {
       if (isNaN(urlOrStatus)) {
-        const redirectUrl = urlOrStatus === "/" ? urlOrStatus : "/api" + urlOrStatus;
+        const redirectUrl =
+          urlOrStatus === "/" ? urlOrStatus : "/api" + urlOrStatus;
         redirector.call(this, redirectUrl);
       } else {
         const redirectUrl = url === "/" ? url : "/api" + url;
@@ -48,7 +49,9 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
-    store: MongoStore.create({ mongoUrl: `mongodb://${config.mongodb.url}/articles` }), // Default TTL is 14 days
+    store: MongoStore.create({
+      mongoUrl: `mongodb://${config.mongodb.url}/articles`,
+    }), // Default TTL is 14 days
   }),
 );
 
@@ -106,22 +109,22 @@ app.use(auth.ensureAuthenticated);
  * Documentation
  * Adds api documentation
  */
-if (process.env.MXS_ENV === 'container') {
-  const swaggerUi = require('swagger-ui-express');
-  const swaggerFile = require('./swagger_output.json');
+if (process.env.MXS_ENV === "container") {
+  const swaggerUi = require("swagger-ui-express");
+  const swaggerFile = require("./swagger_output.json");
 
   const opts = {
     explorer: true,
     swaggerOptions: {
-      oauth2RedirectUrl: 'https://localhost:8443/api-docs/oauth2-redirect.html',
+      oauth2RedirectUrl: "https://localhost:8443/api-docs/oauth2-redirect.html",
       oauth: {
         clientId: process.env.MXS_OAUTH_ID,
         clientSecret: process.env.MXS_OAUTH_SECRET,
-      }
-    }
-  }
+      },
+    },
+  };
 
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, opts));
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile, opts));
 }
 
 /***********************************
@@ -158,23 +161,6 @@ const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
-app.use("/", indexRouter);
-app.use("/alerts", alertRouter);
-app.use("/articles", articlesRouter);
-app.use("/auth", authRouter);
-app.use("/home", homeRouter);
-app.use("/search", searchRouter);
-app.use("/workspace", workspaceRouter);
-const alertRouter = require('./routes/alerts');
-const articlesRouter = require('./routes/articles');
-const authRouter = require('./routes/auth');
-const homeRouter = require('./routes/home');
-const indexRouter = require('./routes');
-const legacyRouter = require('./routes/legacy');
-const searchRouter = require('./routes/search');
-const workspaceRouter = require('./routes/workspace');
-const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
-
 app.use(indexRouter);
 app.use(alertRouter);
 app.use(articlesRouter);
@@ -194,7 +180,11 @@ app.use((req, res) => {
 // error handler
 // define as the last app.use callback
 app.use((err, req, res) => {
-  KiwiStandardResponsesExpress.standardErrorResponse(err.status || 500, err.message, res);
+  KiwiStandardResponsesExpress.standardErrorResponse(
+    err.status || 500,
+    err.message,
+    res,
+  );
 });
 
 module.exports = app;
