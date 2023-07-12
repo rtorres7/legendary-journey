@@ -174,7 +174,7 @@
                     to="/"
                     class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
                   >
-                    Alvaro Ramirez
+                    Jonathan Oszczakiewicz
                   </router-link>
                 </MenuItem>
                 <MenuItem>
@@ -191,160 +191,171 @@
       </div>
     </div>
     <!--- md to xl --->
-    <div class="hidden md:block 2xl:hidden min-h-screen min-w-[80px]">
-      <div class="flex flex-col">
-        <div class="flex justify-center items-center py-6">
-          <router-link to="/">
-            <div class="rounded-full bg-blue-200 p-3">
-              <VideoCameraIconSolid
-                class="h-6 w-6 text-blue-700"
-                aria-hidden="true"
-              />
-            </div>
-          </router-link>
-        </div>
-        <template
-          v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
-        >
+    <div class="hidden md:block 2xl:hidden">
+      <div class="flex grow-0 flex-col max-h-full min-h-screen w-[80px]">
+        <div class="flex grow flex-col pt-6">
+          <div class="flex justify-center items-center pb-6">
+            <router-link to="/">
+              <div class="rounded-full bg-blue-200 p-3">
+                <VideoCameraIconSolid
+                  class="h-6 w-6 text-blue-700"
+                  aria-hidden="true"
+                />
+              </div>
+            </router-link>
+          </div>
+          <template
+            v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+          >
+            <ul class="pl-4 py-4 text-gray-500 space-y-1">
+              <li>
+                <tippy content="Issue Details" placement="right" theme="demo">
+                  <div
+                    :class="
+                      isActivePage('#edit-issue')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="cursor-pointer"
+                  >
+                    <a
+                      href="/studio#edit-issue"
+                      class="flex items-center justify-center h-12 w-12"
+                    >
+                      <template v-if="isActivePage('#edit-issue')">
+                        <PencilIconSolid class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <template v-else>
+                        <PencilIcon class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                    </a>
+                  </div>
+                </tippy>
+              </li>
+              <li>
+                <tippy content="Issue Metrics" placement="right" theme="demo">
+                  <div
+                    :class="
+                      isActivePage('#issue-metrics')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="cursor-pointer"
+                  >
+                    <a
+                      href="/studio#issue-metrics"
+                      class="flex items-center justify-center h-12 w-12"
+                    >
+                      <template v-if="isActivePage('#issue-metrics')">
+                        <ChartBarIconSolid class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                      <template v-else>
+                        <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
+                      </template>
+                    </a>
+                  </div>
+                </tippy>
+              </li>
+            </ul>
+          </template>
+          <div
+            v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+            class="mx-4"
+          >
+            <div class="border-t border-slate-900/10"></div>
+          </div>
           <ul class="pl-4 py-4 text-gray-500 space-y-1">
             <li>
-              <tippy content="Issue Details" placement="right" theme="demo">
+              <tippy content="Home" placement="right" theme="demo">
                 <div
                   :class="
-                    isActivePage('#edit-issue')
+                    isActivePage('#home')
                       ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                       : 'hover:text-blue-700'
                   "
                   class="cursor-pointer"
                 >
                   <a
-                    href="/studio#edit-issue"
+                    href="/studio#home"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#edit-issue')">
-                      <PencilIconSolid class="h-6 w-6" aria-hidden="true" />
+                    <template v-if="isActivePage('#home')">
+                      <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <PencilIcon class="h-6 w-6" aria-hidden="true" />
+                      <HomeIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
               </tippy>
             </li>
             <li>
-              <tippy content="Issue Metrics" placement="right" theme="demo">
+              <tippy content="Live Content" placement="right" theme="demo">
                 <div
                   :class="
-                    isActivePage('#issue-metrics')
+                    isActivePage('#live')
                       ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                       : 'hover:text-blue-700'
                   "
                   class="cursor-pointer"
                 >
                   <a
-                    href="/studio#issue-metrics"
+                    href="/studio#live"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#issue-metrics')">
-                      <ChartBarIconSolid class="h-6 w-6" aria-hidden="true" />
+                    <template v-if="isActivePage('#live')">
+                      <VideoCameraIconSolid
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
                     </template>
                     <template v-else>
-                      <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
+                      <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </a>
+                </div>
+              </tippy>
+            </li>
+            <li>
+              <tippy content="Issues" placement="right" theme="demo">
+                <div
+                  :class="
+                    isActivePage('#issues')
+                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-blue-700'
+                  "
+                  class="cursor-pointer"
+                >
+                  <a
+                    href="/studio#issues"
+                    class="flex items-center justify-center h-12 w-12"
+                  >
+                    <template v-if="isActivePage('#issues')">
+                      <NewspaperIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
               </tippy>
             </li>
           </ul>
-        </template>
-        <div
-          v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
-          class="mx-4"
-        >
-          <div class="border-t border-slate-900/10"></div>
         </div>
-        <ul class="pl-4 py-4 text-gray-500 space-y-1">
-          <li>
-            <tippy content="Home" placement="right" theme="demo">
-              <div
-                :class="
-                  isActivePage('#home')
-                    ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                    : 'hover:text-blue-700'
-                "
-                class="cursor-pointer"
-              >
-                <a
-                  href="/studio#home"
-                  class="flex items-center justify-center h-12 w-12"
-                >
-                  <template v-if="isActivePage('#home')">
-                    <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else>
-                    <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                </a>
-              </div>
-            </tippy>
-          </li>
-          <li>
-            <tippy content="Live Content" placement="right" theme="demo">
-              <div
-                :class="
-                  isActivePage('#live')
-                    ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                    : 'hover:text-blue-700'
-                "
-                class="cursor-pointer"
-              >
-                <a
-                  href="/studio#live"
-                  class="flex items-center justify-center h-12 w-12"
-                >
-                  <template v-if="isActivePage('#live')">
-                    <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else>
-                    <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                </a>
-              </div>
-            </tippy>
-          </li>
-          <li>
-            <tippy content="Issues" placement="right" theme="demo">
-              <div
-                :class="
-                  isActivePage('#issues')
-                    ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                    : 'hover:text-blue-700'
-                "
-                class="cursor-pointer"
-              >
-                <a
-                  href="/studio#issues"
-                  class="flex items-center justify-center h-12 w-12"
-                >
-                  <template v-if="isActivePage('#issues')">
-                    <NewspaperIconSolid class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else>
-                    <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                </a>
-              </div>
-            </tippy>
-          </li>
-        </ul>
+        <div class="px-6 pb-6 grow-0">
+          <div div class="border-t border-slate-900/10 py-6">
+            <img
+              src="@/assets/mocks/avatar.jpg"
+              class="rounded-full w-[45px]"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <!--- 2xl or higher - TODO: Rework how the width works --->
-    <div class="hidden 2xl:block min-w-[320px]">
-      <div
-        class="flex flex-col justify-between py-6 min-h-screen fixed min-w-[320px]"
-      >
-        <div>
+    <div class="hidden 2xl:block">
+      <div class="flex grow-0 flex-col max-h-full min-h-screen w-[320px]">
+        <div class="flex grow flex-col pt-6">
           <div class="text-blue-700 flex px-4 pb-6">
             <router-link to="/" class="flex items-center px-4">
               <div class="rounded-full bg-blue-200 p-3">
@@ -450,7 +461,7 @@
                     <template v-else>
                       <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                    <span class="ml-4 font-medium">Live Content</span>
+                    <span class="ml-4 font-medium">Live</span>
                   </div>
                 </a>
               </div>
@@ -479,7 +490,7 @@
             </li>
           </ul>
         </div>
-        <div class="px-6">
+        <div class="px-6 pb-6 grow-0">
           <div class="flex justify-between border-t border-slate-900/10 py-6">
             <div class="flex">
               <img
