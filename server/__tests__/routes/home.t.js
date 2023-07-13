@@ -31,7 +31,7 @@ describe('Home Routes', () => {
       app.use(express.json());
 
       const router = require('../../src/routes/home');
-      app.use('/home', router);
+      app.use(router);
 
       return request(app)
         .get('/home/features')
@@ -47,7 +47,7 @@ describe('Home Routes', () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/home');
-      const app = setupApp('/home', router);
+      const app = setupApp(router);
 
       return request(app)
         .get('/home/features')

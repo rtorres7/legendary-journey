@@ -102,8 +102,30 @@ app.use(auth.passport.session());
  */
 app.use(auth.ensureAuthenticated)
 
+/**
+ * Documentation
+ * Adds api documentation
+ */
+if (process.env.MXS_ENV === 'container') {
+  const swaggerUi = require('swagger-ui-express');
+  const swaggerFile = require('./swagger_output.json');
+
+  const opts = {
+    explorer: true,
+    swaggerOptions: {
+      oauth2RedirectUrl: 'https://localhost:8443/api-docs/oauth2-redirect.html',
+      oauth: {
+        clientId: process.env.MXS_OAUTH_ID,
+        clientSecret: process.env.MXS_OAUTH_SECRET,
+      }
+    }
+  }
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, opts));
+}
+
 /***********************************
- * Middleware setup
+ * Data setup
  **********************************/
 
 // Setup mongoose
@@ -126,30 +148,26 @@ if (process.env.MXS_ENV === 'container') {
 /***********************************
  * Route setup
  **********************************/
-const alertRouter = require("./routes/alerts");
-const articlesRouter = require("./routes/articles");
+const alertRouter = require('./routes/alerts');
+const articlesRouter = require('./routes/articles');
 const authRouter = require('./routes/auth');
-const homeRouter = require("./routes/home");
-const indexRouter = require("./routes");
-const legacyRouter = require("./routes/legacy");
-const searchRouter = require("./routes/search");
-const workspaceRouter = require("./routes/workspace");
-const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const homeRouter = require('./routes/home');
+const indexRouter = require('./routes');
+const legacyRouter = require('./routes/legacy');
+const searchRouter = require('./routes/search');
+const workspaceRouter = require('./routes/workspace');
+const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 
-app.use("/", indexRouter);
-app.use("/alerts", alertRouter);
-app.use("/articles", articlesRouter);
-app.use("/auth", authRouter);
-app.use("/home", homeRouter);
-app.use("/search", searchRouter);
-app.use("/workspace", workspaceRouter);
+app.use(indexRouter);
+app.use(alertRouter);
+app.use(articlesRouter);
+app.use(authRouter);
+app.use(homeRouter);
+app.use(searchRouter);
+app.use(workspaceRouter);
 
 // Legacy routes
-app.use("/documents", legacyRouter);
-app.use("/my_wire", legacyRouter);
-app.use("/preload", legacyRouter);
-app.use("/special_editions", legacyRouter);
-app.use("/wires", legacyRouter);
+app.use(legacyRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {

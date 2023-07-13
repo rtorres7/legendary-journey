@@ -29,7 +29,7 @@ const ArticleSchema = new Schema(
       id: Number,
       firstName: String,
       lastName: String,
-      dn: String
+      dn: String,
     },
     datePublished: Date,
     dissemOrgs: [
@@ -110,7 +110,7 @@ const ArticleSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 ArticleSchema.virtual("features").get(function () {
@@ -133,6 +133,7 @@ ArticleSchema.virtual("features").get(function () {
     attributes: {
       date_published: this.datePublished,
       doc_num: this.productNumber,
+      feature_id: this.get("_id"),
       id: this.get("_id"),
       images: this.images,
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
@@ -172,7 +173,7 @@ ArticleSchema.virtual("forWire").get(function () {
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: this.images,
-      needed:this.needed?.orgs?.length > 0 ? this.needed : {},
+      needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
       state: this.state,
@@ -307,6 +308,7 @@ ArticleSchema.virtual("data.details").get(function () {
       org_restricted: this.orgRestricted,
     },
     feature_date: this.datePublished,
+    feature_id: this.get("_id"),
     html_body: this.htmlBody,
     legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,

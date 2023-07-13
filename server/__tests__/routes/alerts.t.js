@@ -4,7 +4,7 @@ const router = require('../../src/routes/alerts');
 
 const app = express();
 app.use(express.json());
-app.use('/alerts', router);
+app.use(router);
 
 describe('Alert Routes', () => {
   describe('GET /alerts/list', () => {
