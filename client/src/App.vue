@@ -31,7 +31,7 @@
         "
       />
     </transition-group>
-    <template v-if="!isDemo">
+    <!-- <template v-if="!isDemo">
       <button class="skipLink" @click="skipToMain">Skip to main content</button>
       <TheBanner v-if="!['attachment'].includes($route.name)" />
       <main
@@ -90,6 +90,71 @@
       <main role="main" class="bg-white text-gray-900">
         <router-view />
       </main>
+    </template> -->
+    <template v-if="domain === 'current'">
+      <button class="skipLink" @click="skipToMain">Skip to main content</button>
+      <TheBanner v-if="!['attachment'].includes($route.name)" />
+      <main
+        role="main"
+        class="bg-white dark:bg-slate-900 energy:bg-zinc-900 text-slate-900 dark:text-slate-300 energy:text-zinc-300"
+      >
+        <template v-if="!loadingAlerts && undismissedAlerts.length > 0">
+          <ul
+            id="app-announcements"
+            class="print:hidden bg-orange-200 text-slate-900"
+            role="alert"
+          >
+            <template v-for="alert in undismissedAlerts" :key="alert">
+              <li
+                v-if="!alert.destroyed"
+                class="flex justify-between items-center px-10 py-2 first:pt-4 last:pb-4"
+              >
+                <div class="inline-block leading-relaxed">
+                  <MegaphoneIcon class="inline h-6 w-6" aria-hidden="true" />
+                  <span class="sr-only">new notification from Current</span>
+                  <strong class="font-semibold mx-2">{{ alert.title }}</strong>
+                  <span v-html="alert.message"></span>
+                </div>
+                <button
+                  class="ml-2 text-zinc-600 hover:text-zinc-900"
+                  @click="storeDismissedAlertInCookie(alert)"
+                >
+                  <span class="sr-only">Close</span>
+                  <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                </button>
+              </li>
+            </template>
+          </ul>
+        </template>
+        <div
+          ref="mainContent"
+          class="max-w-8xl min-h-[80vh] md:min-h-[88vh] lg:min-h-[65vh] mx-auto py-3 px-4 sm:px-6 lg:px-8"
+          tabindex="-1"
+        >
+          <template v-if="loadingUser">
+            <div class="max-w-fit m-auto mt-[30vh]">
+              <MaxLoadingSpinner class="w-32 h-32" />
+            </div>
+          </template>
+          <template v-else>
+            <AuthorizatonWrapper>
+              <router-view />
+            </AuthorizatonWrapper>
+            <ScrollToTopButton />
+          </template>
+        </div>
+      </main>
+      <TheFooter v-if="!['attachment'].includes($route.name)" />
+    </template>
+    <template v-if="domain === 'workspace'">
+      <main role="main" class="bg-white text-gray-900">
+        <router-view />
+      </main>
+    </template>
+    <template v-if="domain === 'studio'">
+      <main role="main" class="bg-white text-gray-900">
+        <StudioShell />
+      </main>
     </template>
   </div>
 </template>
@@ -107,6 +172,8 @@ import TheBanner from "@/components/TheBanner.vue";
 import TheFooter from "@/components/TheFooter.vue";
 import ToastNotification from "@/components/ToastNotification.vue";
 import { MegaphoneIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+//studio shell
+import StudioShell from "@/studio/StudioShell.vue";
 
 export default {
   components: {
@@ -117,6 +184,7 @@ export default {
     ToastNotification,
     MegaphoneIcon,
     XMarkIcon,
+    StudioShell,
   },
   setup() {
     const route = useRoute();
@@ -146,6 +214,8 @@ export default {
     const isDemo = computed(() => {
       return route.meta.demo ? true : false;
     });
+
+    const domain = computed(() => route.meta.domain);
 
     watch(useRoute(), () => {
       topOfApp.value.focus();
@@ -196,6 +266,7 @@ export default {
       stopBodyOverflow,
       allowBodyOverflow,
       isDemo,
+      domain,
       topOfApp,
       mainContent,
       skipToMain,

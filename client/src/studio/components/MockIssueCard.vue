@@ -1,17 +1,13 @@
 <template>
-  <div
-    class="flex flex-col max-w-[720px] xl:max-w-[1280px] xl:flex-row xl:max-h-[360px] bg-white shadow-md hover:shadow-lg"
-  >
-    <div
-      class="max-h-[405px] xl:max-h-none max-w-none xl:max-w-[640px] cursor-pointer"
-    >
+  <div class="flex flex-col max-w-[675px] bg-white shadow-md hover:shadow-lg">
+    <div class="max-h-[380px] cursor-pointer">
       <img :src="getImg(issue.src)" alt="" />
     </div>
-    <div class="relative p-6">
+    <div class="relative py-4 px-6 h-full">
       <div class="text-gray-500 hover:text-gray-900 absolute top-3 right-3">
         <Menu as="div" class="relative">
           <div>
-            <tippy content="More" placement="bottom" theme="studio">
+            <tippy content="More" placement="bottom" theme="demo">
               <MenuButton
                 class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
               >
@@ -32,15 +28,14 @@
               class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
             >
               <MenuItem>
-                <a
+                <div
                   class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                  href="/studio#edit-issue"
                 >
                   <PencilSquareIcon class="h-5 w-5" aria-hidden="true" /><span
                     class="capitalize"
                     >Edit</span
                   >
-                </a>
+                </div>
               </MenuItem>
               <MenuItem>
                 <div
@@ -56,65 +51,50 @@
           </transition>
         </Menu>
       </div>
-      <div class="flex flex-col justify-between h-full">
+      <div class="flex flex-col">
         <div>
-          <div class="flex items-center space-x-2">
-            <span class="relative flex h-2 w-2">
-              <span
-                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
-              ></span>
-              <span
-                class="relative inline-flex rounded-full h-2 w-2 bg-red-500"
-              ></span>
-            </span>
-            <span class="text-sm font-semibold tracking-wider uppercase"
-              >Live Now</span
-            >
-          </div>
-          <div class="text-3xl py-2 font-semibold">
-            <a
-              class="hover:underline underline-offset-2 decoration-2"
-              href="/studio#live"
-            >
-              {{ issue.title }}
-            </a>
-          </div>
-          <div class="flex flex-col py-1 space-y-2 font-medium text-sm">
-            <p>By {{ issue.author }}</p>
-            <p class="text-gray-400">Updated {{ issue.last_updated }}</p>
-          </div>
-        </div>
-        <div class="py-2">
-          <div
-            class="text-xs uppercase text-blue-700 py-1 tracking-wider font-medium"
+          <template v-if="issue.live"
+            ><div class="flex items-center space-x-2">
+              <span class="relative flex h-[.4em] w-[.4rem]">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-[.4rem] w-[.4rem] bg-red-500"
+                ></span>
+              </span>
+              <span class="text-xs font-semibold tracking-wider uppercase"
+                >Live Now</span
+              >
+            </div></template
           >
-            Featured
-            <span class="text-gray-500">Products</span>
-          </div>
-          <ul class="text-xs text-gray-700">
-            <li
-              class="border-b border-dotted border-gray-300 text-base font-medium py-2"
+          <template v-else>
+            <div
+              class="flex items-center space-x-2 text-gray-500 uppercase text-xs font-medium"
             >
-              <div class="line-clamp-2 hover:underline cursor-pointer">
-                <span class="text-gray-500">{{
-                  issue.featured[0].classification
-                }}</span>
-                {{ issue.featured[0].title }}
-              </div>
-            </li>
-            <li class="border-b border-dotted border-gray-300 py-2">
-              <div class="line-clamp-1 hover:underline cursor-pointer">
-                {{ issue.featured[1].classification }}
-                {{ issue.featured[1].title }}
-              </div>
-            </li>
-            <li class="py-2">
-              <div class="line-clamp-1 hover:underline cursor-pointer">
-                {{ issue.featured[2].classification }}
-                {{ issue.featured[2].title }}
-              </div>
-            </li>
-          </ul>
+              <ClockIcon class="h-5 w-5" aria-hidden="true" />
+              <span>Posts in {{ issue.posting_date }}</span>
+            </div>
+          </template>
+          <p
+            class="text-xl py-2 hover:underline underline-offset-2 decoration-1 decoration-gray-500 font-semibold cursor-pointer"
+          >
+            {{ issue.title }}
+          </p>
+          <p class="font-medium text-sm">By {{ issue.author }}</p>
+        </div>
+        <div class="pt-4">
+          <div
+            class="text-xs text-blue-700 uppercase py-2 tracking-wider font-medium"
+          >
+            Top <span class="text-gray-500">Product</span>
+          </div>
+          <div class="text-sm line-clamp-2 hover:underline cursor-pointer">
+            <span class="text-gray-500">{{
+              issue.featured[0].classification
+            }}</span>
+            {{ issue.featured[0].title }}
+          </div>
         </div>
       </div>
     </div>
@@ -123,6 +103,7 @@
 <script>
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
+  ClockIcon,
   EllipsisHorizontalIcon,
   PencilSquareIcon,
   ShareIcon,
@@ -133,6 +114,7 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
+    ClockIcon,
     EllipsisHorizontalIcon,
     PencilSquareIcon,
     ShareIcon,

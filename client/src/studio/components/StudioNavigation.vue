@@ -154,10 +154,7 @@
                   class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 >
                   <span class="sr-only">Open user menu.</span>
-                  <img
-                    src="@/assets/mocks/avatar.jpg"
-                    class="rounded-full w-7 h-7"
-                  />
+                  <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
                 </MenuButton>
               </tippy>
             </div>
@@ -170,7 +167,7 @@
               leaveToClass="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-[200px] rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
               >
                 <MenuItem>
                   <router-link
@@ -314,37 +311,6 @@
                     </template>
                     <template v-else>
                       <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                  </a>
-                </div>
-              </tippy>
-            </li>
-            <li>
-              <tippy
-                content="Content Calendar"
-                placement="right"
-                theme="studio"
-              >
-                <div
-                  :class="
-                    isActivePage('#calendar')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
-                  "
-                  class="cursor-pointer"
-                >
-                  <a
-                    href="/studio#calendar"
-                    class="flex items-center justify-center h-12 w-12"
-                  >
-                    <template v-if="isActivePage('#calendar')">
-                      <CalendarDaysIconSolid
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    <template v-else>
-                      <CalendarDaysIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
@@ -496,31 +462,6 @@
                       <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <span class="ml-4 font-medium">Live</span>
-                  </div>
-                </a>
-              </div>
-            </li>
-            <li>
-              <div>
-                <a href="/studio#calendar" class="">
-                  <div
-                    :class="
-                      isActivePage('#calendar')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
-                    "
-                    class="flex items-center px-4 py-3 cursor-pointer"
-                  >
-                    <template v-if="isActivePage('#calendar')">
-                      <CalendarDaysIconSolid
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    <template v-else>
-                      <CalendarDaysIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <span class="ml-4 font-medium">Calendar</span>
                   </div>
                 </a>
               </div>
@@ -736,34 +677,6 @@
                 </li>
                 <li>
                   <div>
-                    <a href="/studio#calendar" class="">
-                      <div
-                        :class="
-                          isActivePage('#calendar')
-                            ? 'text-blue-700 bg-blue-500/10 '
-                            : 'hover:text-blue-700 '
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <template v-if="isActivePage('#calendar')">
-                          <CalendarDaysIconSolid
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <template v-else>
-                          <CalendarDaysIcon
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <span class="ml-4">Calendar</span>
-                      </div>
-                    </a>
-                  </div>
-                </li>
-                <li>
-                  <div>
                     <a href="/studio#issues" class="">
                       <div
                         :class="
@@ -812,7 +725,6 @@ import {
 import {
   Bars3Icon,
   ChartBarIcon,
-  CalendarDaysIcon,
   ComputerDesktopIcon,
   EllipsisVerticalIcon,
   HomeIcon,
@@ -821,13 +733,13 @@ import {
   MoonIcon,
   PencilIcon,
   SunIcon,
+  UserCircleIcon,
   VideoCameraIcon,
   WrenchIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
   ChartBarIcon as ChartBarIconSolid,
-  CalendarDaysIcon as CalendarDaysIconSolid,
   HomeIcon as HomeIconSolid,
   NewspaperIcon as NewspaperIconSolid,
   PencilIcon as PencilIconSolid,
@@ -847,8 +759,6 @@ export default {
     Bars3Icon,
     ChartBarIcon,
     ChartBarIconSolid,
-    CalendarDaysIcon,
-    CalendarDaysIconSolid,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
     HomeIcon,
@@ -860,6 +770,7 @@ export default {
     PencilIcon,
     PencilIconSolid,
     SunIcon,
+    UserCircleIcon,
     VideoCameraIcon,
     VideoCameraIconSolid,
     WrenchIcon,

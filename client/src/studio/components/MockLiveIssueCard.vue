@@ -11,7 +11,7 @@
       <div class="text-gray-500 hover:text-gray-900 absolute top-3 right-3">
         <Menu as="div" class="relative">
           <div>
-            <tippy content="More" placement="bottom" theme="studio">
+            <tippy content="More" placement="bottom" theme="demo">
               <MenuButton
                 class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
               >
@@ -32,15 +32,20 @@
               class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
             >
               <MenuItem>
-                <a
+                <router-link
                   class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                  href="/studio#edit-issue"
+                  :to="{
+                    name: 'studio-issue-detail',
+                    params: {
+                      id: 'ci-500',
+                    },
+                  }"
                 >
                   <PencilSquareIcon class="h-5 w-5" aria-hidden="true" /><span
                     class="capitalize"
                     >Edit</span
                   >
-                </a>
+                </router-link>
               </MenuItem>
               <MenuItem>
                 <div

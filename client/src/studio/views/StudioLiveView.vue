@@ -55,7 +55,6 @@
                     >
                       See All
                     </a>
-                    <div class="py-8"></div>
                     <!-- <div
                 class="text-xl font-bold text-gray-700 uppercase tracking-wider py-8"
               >
@@ -164,31 +163,25 @@
                         v-for="product in issues[0].featured.slice(3)"
                         :key="product"
                       >
-                        <div
-                          class="hover:underline border-b border-gray-200 cursor-pointer"
+                        <li
+                          class="px-6 border-b border-gray-200 cursor-pointer"
                         >
-                          <li class="px-6">
-                            <div class="py-4">
-                              <p class="font-semibold text-lg line-clamp-2">
-                                <span class="text-gray-500">{{
-                                  product.classification
-                                }}</span>
-                                {{ product.title }}
-                              </p>
+                          <div class="py-4">
+                            <p class="font-semibold text-lg line-clamp-2">
+                              <span class="text-gray-500">{{
+                                product.classification
+                              }}</span>
+                              {{ product.title }}
+                            </p>
+                          </div>
+                          <div class="pb-4 flex space-x-2 font-medium text-sm">
+                            <div class="text-blue-700">{{ product.type }}</div>
+                            <div>•</div>
+                            <div class="text-gray-500">
+                              {{ product.date_posted }}
                             </div>
-                            <div
-                              class="pb-4 flex space-x-2 font-medium text-sm"
-                            >
-                              <div class="text-blue-700">
-                                {{ product.type }}
-                              </div>
-                              <div>•</div>
-                              <div class="text-gray-500">
-                                {{ product.date_posted }}
-                              </div>
-                            </div>
-                          </li>
-                        </div>
+                          </div>
+                        </li>
                       </template>
                     </ul>
                   </div>
@@ -307,18 +300,6 @@
                     </template>
                   </div>
                 </div>
-                <!-- Calendar  -->
-                <div :class="isActivePage('#calendar') ? 'block' : 'hidden'">
-                  <div class="flex items-center justify-center min-h-[75vh]">
-                    <div class="flex flex-col space-y-4">
-                      <div class="text-6xl font-semibold">Coming Soon</div>
-                      <div class="text-2xl text-gray-400">
-                        Don't get too excited, the preview for this feature
-                        isn't ready just yet.
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <!-- Edit Sample -->
                 <div :class="isActivePage('#edit-issue') ? 'block' : 'hidden'">
                   <div
@@ -369,8 +350,7 @@
                       <div>
                         <div class="font-medium">Basics</div>
                         <div class="text-sm text-gray-600">
-                          The information below will feature on the Current
-                          portal.
+                          The information below will feature on the main page.
                         </div>
                       </div>
                       <div class="flex flex-col space-y-6">
@@ -452,7 +432,7 @@
                             />
                           </Switch>
                           <div class="mt-2 text-gray-600">
-                            The top product will have a breaking label.
+                            Only the first product will have a breaking label.
                           </div>
                         </div>
                         <div>
@@ -652,7 +632,7 @@
                         />
                       </Switch>
                       <div class="mt-2 text-gray-600">
-                        The top product will have a breaking label.
+                        Only the first product will have a breaking label.
                       </div>
                     </div>
                     <div>
@@ -788,12 +768,12 @@
                 </div>
               </div>
               <div
-                class="flex justify-end items-center space-x-6 mt-8 pt-8 border-t border-gray-200 text-sm"
+                class="flex justify-end items-center space-x-6 mt-8 pt-8 border-t border-gray-200"
               >
                 <button
                   class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
                 >
-                  Create
+                  Save
                 </button>
                 <button class="font-medium text-blue-700" @click="closeEdit">
                   Close
@@ -805,23 +785,6 @@
       </div>
     </Dialog>
   </TransitionRoot>
-  <!-- TODO: Notes -->
-  <!-- Unique Visitors 500k
-
-Top Creators this month
-
-Issues
-kevin   6
-julie  5
-tim corbitt 3
-
-Products
-
-
-
-Draft
-Scheduled 
-Posted -->
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";

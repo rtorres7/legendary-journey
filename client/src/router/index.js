@@ -15,9 +15,12 @@ import { isProduction } from "@/helpers";
 
 // Studio
 import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
-//import StudioHomeView from "@/demo-studio/views/StudioHomeView.vue";
-//import StudioLiveView from "@/demo-studio/views/StudioLiveView.vue";
-//import StudioIssuesView from "@"
+
+import StudioHomeView from "@/studio/views/StudioHomeView.vue";
+import StudioLiveView from "@/studio/views/StudioLiveView.vue";
+import StudioIssuesView from "@/studio/views/StudioIssuesView.vue";
+import StudioIssueDetailView from "@/studio/views/StudioIssueDetailView.vue";
+import StudioIssueMetricsView from "@/studio/views/StudioIssueMetricsView.vue";
 
 const routes = [
   {
@@ -25,6 +28,7 @@ const routes = [
     name: "home",
     component: HomeView,
     meta: {
+      domain: "current",
       title: "Current",
     },
   },
@@ -32,11 +36,17 @@ const routes = [
     path: "/product/:doc_num/preview",
     name: "product-preview",
     component: ProductView,
+    meta: {
+      domain: "current",
+    },
   },
   {
     path: "/product/:doc_num",
     name: "product",
     component: ProductView,
+    meta: {
+      domain: "current",
+    },
   },
   {
     path: "/attachment/:url?",
@@ -44,6 +54,7 @@ const routes = [
     component: AttachmentView,
     props: true,
     meta: {
+      domain: "current",
       viewType: "attachment",
     },
   },
@@ -52,6 +63,7 @@ const routes = [
     name: "issues",
     component: SearchView,
     meta: {
+      domain: "current",
       viewType: "search",
     },
   },
@@ -60,6 +72,7 @@ const routes = [
     name: "regions",
     component: SearchView,
     meta: {
+      domain: "current",
       viewType: "search",
     },
   },
@@ -68,6 +81,7 @@ const routes = [
     name: "subregions",
     component: SearchView,
     meta: {
+      domain: "current",
       viewType: "search",
     },
   },
@@ -76,6 +90,7 @@ const routes = [
     name: "countries",
     component: SearchView,
     meta: {
+      domain: "current",
       viewType: "search",
     },
   },
@@ -84,6 +99,7 @@ const routes = [
     name: "search",
     component: SearchView,
     meta: {
+      domain: "current",
       viewType: "search",
     },
   },
@@ -92,6 +108,7 @@ const routes = [
     name: "searchTips",
     component: SearchTipsView,
     meta: {
+      domain: "current",
       title: "Advanced Search Tips",
     },
   },
@@ -100,6 +117,7 @@ const routes = [
     name: "products",
     component: PublishProductView,
     meta: {
+      domain: "current",
       title: "Manage Products",
     },
   },
@@ -108,6 +126,7 @@ const routes = [
     name: "specialEdition",
     component: SpecialEditionView,
     meta: {
+      domain: "current",
       title: "Special Edition",
     },
   },
@@ -116,6 +135,7 @@ const routes = [
     name: "specialEditions",
     component: SpecialEditionsManagerView,
     meta: {
+      domain: "current",
       title: "Manage Special Editions",
     },
   },
@@ -124,6 +144,7 @@ const routes = [
     name: "edit",
     component: EditProductView,
     meta: {
+      domain: "current",
       title: "Edit Product",
     },
   },
@@ -131,7 +152,10 @@ const routes = [
     path: "/:pathMatch(.*)*",
     name: "notFound",
     component: NotFoundView,
-    meta: { title: "Page Not Found" },
+    meta: {
+      domain: "current",
+      title: "Page Not Found",
+    },
   },
 ];
 
@@ -141,6 +165,7 @@ if (!isProduction()) {
     name: "workspace-demo",
     component: MockWorkspaceView,
     meta: {
+      domain: "workspace",
       title: "Workspace",
       demo: true,
     },
@@ -153,6 +178,7 @@ if (!isProduction()) {
     name: "workspace",
     component: WorkspaceView,
     meta: {
+      domain: "workspace",
       title: "Workspace",
       demo: true,
     },
@@ -162,10 +188,58 @@ if (!isProduction()) {
     name: "studio",
     component: MockStudioView,
     meta: {
+      domain: "workspace",
       title: "Current Studio",
       demo: true,
     },
   });
+  routes.push(
+    {
+      path: "/new-studio",
+      name: "new-studio",
+      component: StudioHomeView,
+      meta: {
+        domain: "studio",
+        title: "Current Studio",
+      },
+    },
+    {
+      path: "/new-studio/issue/:id",
+      name: "studio-issue-detail",
+      component: StudioIssueDetailView,
+      meta: {
+        domain: "studio",
+        title: "Issue Detail",
+      },
+    },
+    {
+      path: "/new-studio/issue/:id/metrics",
+      name: "studio-issue-metrics",
+      component: StudioIssueMetricsView,
+      meta: {
+        domain: "studio",
+        title: "Issue Metrics",
+      },
+    },
+    {
+      path: "/new-studio/issues",
+      name: "studio-issues",
+      component: StudioIssuesView,
+      meta: {
+        domain: "studio",
+        title: "Issues",
+      },
+    },
+    {
+      path: "/new-studio/live",
+      name: "studio-live",
+      component: StudioLiveView,
+      meta: {
+        domain: "studio",
+        title: "Live Issue",
+      },
+    }
+  );
 }
 
 const router = createRouter({
