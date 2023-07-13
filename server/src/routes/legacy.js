@@ -32,7 +32,7 @@ router.get("/wires/get_dissem_orgs", function (req, res) {
   });
 });
 
-router.get('/preload/documents/:id.json', function (req, res) {
+router.get("/preload/documents/:id.json", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
@@ -42,7 +42,7 @@ router.get('/preload/documents/:id.json', function (req, res) {
   res.redirect(`/articles/${req.params.id}`);
 });
 
-router.get('/documents/:id/preview.json', function (req, res) {
+router.get("/documents/:id/preview.json", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
@@ -52,14 +52,14 @@ router.get('/documents/:id/preview.json', function (req, res) {
   res.redirect(`/articles/${req.params.id}`);
 });
 
-router.get('/my_wire/user_data', function (req, res) {
+router.get("/my_wire/user_data", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Retrieve current user info. Use GET /auth/profile'
  */
 
-  res.redirect('/auth/profile');
+  res.redirect("/auth/profile");
 });
 
 router.get("/special_editions/links", async (req, res) => {
@@ -73,7 +73,7 @@ router.get("/special_editions/links", async (req, res) => {
   res.json(specialEditions);
 });
 
-router.get('/documents/:doc_num', function (req, res) {
+router.get("/documents/:doc_num", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
@@ -83,7 +83,7 @@ router.get('/documents/:doc_num', function (req, res) {
   res.redirect(`/articles/${req.params.doc_num}`);
 });
 
-router.get('/wires/:date_published/getWireByDate', function (req, res) {
+router.get("/wires/:date_published/getWireByDate", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
@@ -127,7 +127,7 @@ router.get(
 );
 
 // TODO: This will go away once the UI changes to use DELETE /articles/:id
-router.delete('/documents/:id/deleteMe', async (req, res) => {
+router.delete("/documents/:id/deleteMe", async (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
