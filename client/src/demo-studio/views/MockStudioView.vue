@@ -821,8 +821,12 @@ Products
 
 Draft
 Scheduled 
-Posted -->
-</template>
+Posted 
+
+
+
+
+--></template>
 <script>
 import dayjs from "dayjs/esm/index.js";
 import { issues } from "../data";
