@@ -57,6 +57,7 @@ const ArticleSchema = new Schema(
       },
     ],
     orgRestricted: Boolean,
+    pdfVersionBase64: String,
     pocInfo: String,
     producingOffices: [
       {
@@ -199,6 +200,7 @@ ArticleSchema.virtual("indexable").get(function () {
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
+    pdfVersionRaw: this.pdfVersionBase64,
     producingOffices: this.producingOffices?.map((office) => office.code),
     productNumber: this.productNumber,
     productType: this.productType?.code,

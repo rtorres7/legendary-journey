@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node --watch src/swagger.js",
     "server-dependencies": "npm install",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --runInBand",
     "lint": "eslint --ext .js --ignore-path .gitignore --fix src",
     "swagger-autogen": "POSTGRES_CONNECTION_URL=SWAGGER MXS_OAUTH_ID=maximus ES_URL=SWAGGER MONGO_DATABASE_URL=SWAGGER node src/swagger.js"
   },

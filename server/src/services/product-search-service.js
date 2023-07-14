@@ -1,4 +1,3 @@
-const { Client } = require("@elastic/elasticsearch");
 const constant = require("../util/constant.js");
 const runSearch = require('../util/search');
 
@@ -65,6 +64,25 @@ class ProductSearchService {
         index: indexConfig.index,
         mappings: indexConfig.mappings,
       });
+
+      if (indexConfig.pipelines) {
+        for (const pipeline of indexConfig.pipelines) {
+          const processor = {};
+          processor[pipeline.type] = {
+            field: pipeline.field,
+            remove_binary: true,
+          };
+
+          console.log('ES Pipeline processor', processor);
+          await this.client.ingest.putPipeline({
+            id: 'mxms-attachment-pipeline',
+            body: {
+              description: pipeline.description,
+              processors: [processor],
+            },
+          });
+        }
+      }
 
       indexesCreated.push(indexConfig.index);
     }
