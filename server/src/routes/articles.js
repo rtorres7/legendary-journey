@@ -63,11 +63,11 @@ router.get('/articles/:productNumber', async (req, res) => {
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
     handleMongooseError(
-      `Unable to find article with product number ${req.params.id}`,
-      error
+      `Unable to find article with product number ${req.params.productNumber}`,
+      error,
     );
     res.json({
-      error: `Unable to find article with product number ${req.params.id}: ${error.message}`,
+      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
     });
   }
 });
