@@ -49,6 +49,11 @@ services:
       - MXS_OAUTH_ID=maximus
       - MXS_OAUTH_SECRET=jJjVjNLQJ9r3dTc64rt2cFwenmEeusaY
       - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/localhost.crt #TODO: trust self-signed cert to avoid "oauthError: Error: self-signed certificate"
+      - MINIO_ENDPOINT=127.0.0.1
+      - MINIO_PORT=9000
+      - MINIO_USE_SSL=false
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=keyboard cat
     container_name: server
 
   postgres:
@@ -179,7 +184,7 @@ services:
 
   keycloak:
     container_name: keycloak-container
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:21.1
     # prettier-ignore
     entrypoint:
       [
