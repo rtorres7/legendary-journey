@@ -11,9 +11,9 @@ const Article = require("../models/articles");
 
 const { handleMongooseError } = require("../util/errors");
 
-const { runAsUser } = require('../util/request');
+const { runAsUser } = require("../util/request");
 
-const ProductService = require('../services/product-service');
+const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
@@ -124,7 +124,7 @@ router.post('/articles/', async (req, res) => {
   await runAsUser(req, res, async (currentUser, req, res) => {
     const topics = await metadataService.findTopicsFor(req.body.topics);
     const issues = await metadataService.findIssuesForTopics(topics);
-    const producingOffices = req.body.producing_office && await metadataService.findProducingOfficesFor([req.body.producing_office]);
+    const producingOffices = req.body.producing_office && (await metadataService.findProducingOfficesFor([req.body.producing_office]));
     const productType = await metadataService.findProductType(req.body.product_type_id);
     const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
     const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
@@ -158,7 +158,7 @@ router.post('/articles/', async (req, res) => {
       const savedArticle = await productService.createProduct(article);
       res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
     } catch (error) {
-      res.json({ error: `There was a problem creating product: ${error.message}`});
+      res.json({ error: `There was a problem creating product: ${error.message}` });
     }
   });
 });
@@ -189,6 +189,7 @@ router.get('/articles/:id/edit', async (req, res) => {
   }
 });
 
+
 router.get('/articles/:id/view', async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product for viewing details'
@@ -199,7 +200,7 @@ router.get('/articles/:id/view', async (req, res) => {
       }
     }
    */
-
+  
   try {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
