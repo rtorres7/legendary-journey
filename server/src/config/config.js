@@ -3,12 +3,15 @@ const path = require("path");
 const Joi = require("joi");
 const fs = require("fs");
 
-let envPath = "../../.env";
-if (process.env.NODE_ENV === "test") {
+let envPath = path.join(__dirname, "../../.env");
+if (process.env.CONFIG_OVERRIDE != undefined) {
+  envPath += "." + process.env.CONFIG_OVERRIDE;
+} else if (process.env.NODE_ENV === "test") {
   envPath += ".test";
 }
+console.log(`config:  loading ${envPath}`);
 if (fs.existsSync(envPath)) {
-  dotenv.config({ path: path.join(__dirname, envPath) });
+  dotenv.config({ path: envPath });
 }
 
 const envVarsSchema = Joi.object()
