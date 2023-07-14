@@ -62,6 +62,9 @@
   },
   "eslintConfig": {
     "root": true,
+    "parserOptions": {
+      "ecmaVersion": 2023
+    },
     "env": {
       "node": true,
       "es2021": true

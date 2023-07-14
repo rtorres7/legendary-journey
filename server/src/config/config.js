@@ -1,14 +1,15 @@
 const dotenv = require("dotenv");
 const path = require("path");
 const Joi = require("joi");
+const fs = require("fs");
 
 let envPath = "../../.env";
 if (process.env.NODE_ENV === "test") {
   envPath += ".test";
 }
-// console.log(`config:  envPath = ${envPath}`);
-
-dotenv.config({ path: path.join(__dirname, "../../.env.test") });
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: path.join(__dirname, envPath) });
+}
 
 const envVarsSchema = Joi.object()
   .keys({
