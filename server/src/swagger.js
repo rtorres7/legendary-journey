@@ -83,6 +83,9 @@ const doc = {
               type: 'object'
             }
           },
+          featureId: {
+            type: 'string',
+          },
           needed: {
             type: 'object',
             description: 'What attributes are required for access',
@@ -1368,6 +1371,9 @@ const doc = {
             items: {
               type: 'string'
             }
+          },
+          featureId: {
+            type: 'string'
           },
           needed: {
             type: 'object',

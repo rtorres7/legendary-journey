@@ -118,6 +118,7 @@ ArticleSchema.virtual("features").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     images: this.images,
     needed: this.needed,
     orgRestricted: this.orgRestricted,
@@ -277,6 +278,7 @@ ArticleSchema.virtual("data.details").get(function () {
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     issues: this.issues,
     legacyCurrentId: this.legacyCurrentId,
     pocInfo: this.pocInfo,

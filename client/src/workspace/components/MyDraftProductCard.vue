@@ -48,9 +48,9 @@
                   :to="{
                     name: 'edit',
                     params: {
-                      date: dayjs(product.date_published).format('YYYY-MM-DD'),
-                      id: product.id,
-                      doc_num: product.doc_num,
+                      date: dayjs(product.datePublished).format('YYYY-MM-DD'),
+                      id: product.featureId,
+                      doc_num: product.productNumber,
                     },
                   }"
                 >
@@ -83,7 +83,7 @@
         <router-link
           :to="{
             name: product.state === 'draft' ? 'product-preview' : 'product',
-            params: { doc_num: product.doc_num },
+            params: { doc_num: product.productNumber },
           }"
         >
           <div class="flex items-center space-x-4">
@@ -93,22 +93,22 @@
               :icon="productIcon"
             />
             <div class="text-xs text-gray-500">
-              {{ product.product_type_name }}
+              {{ product.productType.name }}
             </div>
           </div>
           <p
             class="font-semibold text-gray-700 line-clamp-2 mt-4"
-            :title="`${product.title_classification} ${product.title}`"
+            :title="`${product.titleClassification} ${product.title}`"
           >
             <span
-              v-if="product.title_classification"
+              v-if="product.titleClassification"
               class="font-medium text-gray-500"
-              >({{ product.title_classification }})</span
+              >({{ product.titleClassification }})</span
             >
             {{ product.title }}
           </p>
           <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            {{ dayjs(product.date_published).format("YYYY-MM-DD") }}
+            {{ dayjs(product.datePublished).format("YYYY-MM-DD") }}
           </div>
         </router-link>
       </div>
