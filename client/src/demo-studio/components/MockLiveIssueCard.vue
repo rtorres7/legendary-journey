@@ -86,10 +86,9 @@
         </div>
         <div class="py-2">
           <div
-            class="text-xs uppercase text-blue-700 py-1 tracking-wider font-medium"
+            class="text-xs uppercase text-gray-500 py-1 tracking-wider font-medium"
           >
-            Featured
-            <span class="text-gray-500">Products</span>
+            Featured Products
           </div>
           <ul class="text-xs text-gray-700">
             <li

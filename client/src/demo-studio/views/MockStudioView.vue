@@ -1,7 +1,12 @@
 <template>
-  <div class="h-full flex flex-col md:flex-row">
+  <div class="h-screen flex flex-col md:flex-row">
+    <!-- <div
+      class="block sm:hidden bg-blue-700 text-gray-50 uppercase text-center text-xs"
+    >
+      Unclassified
+    </div> -->
     <StudioNavigation />
-    <div class="flex h-screen grow flex-col overflow-hidden">
+    <div class="flex grow flex-col overflow-hidden">
       <div class="flex min-h-0 flex-1">
         <div class="flex w-full">
           <div class="relative grow bg-slate-50 text-gray-900">

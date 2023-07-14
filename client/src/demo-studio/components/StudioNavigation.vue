@@ -269,15 +269,15 @@
           </div>
           <ul class="pl-4 py-4 text-gray-500 space-y-1">
             <li>
-              <tippy content="Home" placement="right" theme="studio">
-                <div
-                  :class="
-                    isActivePage('#home')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
-                  "
-                  class="cursor-pointer"
-                >
+              <div
+                :class="
+                  isActivePage('#home')
+                    ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                    : 'hover:text-blue-700'
+                "
+                class="cursor-pointer"
+              >
+                <tippy content="Home" placement="right" theme="studio">
                   <a
                     href="/studio#home"
                     class="flex items-center justify-center h-12 w-12"
@@ -289,8 +289,8 @@
                       <HomeIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
-                </div>
-              </tippy>
+                </tippy>
+              </div>
             </li>
             <li>
               <tippy content="Live Content" placement="right" theme="studio">
@@ -307,13 +307,10 @@
                     class="flex items-center justify-center h-12 w-12"
                   >
                     <template v-if="isActivePage('#live')">
-                      <VideoCameraIconSolid
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      />
+                      <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                      <SignalIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
@@ -487,13 +484,10 @@
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
                     <template v-if="isActivePage('#live')">
-                      <VideoCameraIconSolid
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      />
+                      <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                      <SignalIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <span class="ml-4 font-medium">Live</span>
                   </div>
@@ -721,13 +715,10 @@
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
                         <template v-if="isActivePage('#live')">
-                          <VideoCameraIconSolid
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
+                          <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
                         </template>
                         <template v-else>
-                          <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                          <SignalIcon class="h-6 w-6" aria-hidden="true" />
                         </template>
                         <span class="ml-4">Live</span>
                       </div>
@@ -820,8 +811,8 @@ import {
   MagnifyingGlassIcon,
   MoonIcon,
   PencilIcon,
+  SignalIcon,
   SunIcon,
-  VideoCameraIcon,
   WrenchIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
@@ -831,6 +822,7 @@ import {
   HomeIcon as HomeIconSolid,
   NewspaperIcon as NewspaperIconSolid,
   PencilIcon as PencilIconSolid,
+  SignalIcon as SignalIconSolid,
   VideoCameraIcon as VideoCameraIconSolid,
 } from "@heroicons/vue/24/solid";
 const themeOptions = ["light", "dark", "system"];
@@ -859,8 +851,9 @@ export default {
     MoonIcon,
     PencilIcon,
     PencilIconSolid,
+    SignalIcon,
+    SignalIconSolid,
     SunIcon,
-    VideoCameraIcon,
     VideoCameraIconSolid,
     WrenchIcon,
     XMarkIcon,

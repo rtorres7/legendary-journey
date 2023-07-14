@@ -85,9 +85,9 @@
         </div>
         <div class="pt-4">
           <div
-            class="text-xs text-blue-700 uppercase py-2 tracking-wider font-medium"
+            class="text-xs text-gray-500 uppercase py-2 tracking-wider font-medium"
           >
-            Top <span class="text-gray-500">Product</span>
+            Top Product
           </div>
           <div class="text-sm line-clamp-2 hover:underline cursor-pointer">
             <span class="text-gray-500">{{
