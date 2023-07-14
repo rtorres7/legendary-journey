@@ -250,6 +250,8 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001" # console, random if not specified on command line
+    networks:
+      - your-network
     command: server /data --console-address :9001
 
 volumes:

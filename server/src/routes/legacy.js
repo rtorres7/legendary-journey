@@ -113,7 +113,7 @@ router.get('/documents/:doc_num/metrics/basic_metrics.json', function (req, res)
 
   res.send({
     metrics: {
-      readership: [],
+      readership: {},
       uniqueReadership: {},
     },
   });

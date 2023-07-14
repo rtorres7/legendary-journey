@@ -97,9 +97,6 @@ router.post('/articles/processDocument', (req, res) => {
     case "save":
       updateArticle(req.body.id, req, res);
       break;
-    case "publish":
-      res.sendStatus(501);
-      break;
     default:
       res.sendStatus(404);
   }
