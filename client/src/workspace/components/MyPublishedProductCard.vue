@@ -19,7 +19,7 @@
         <router-link
           :to="{
             name: product.state === 'draft' ? 'product-preview' : 'product',
-            params: { doc_num: product.doc_num },
+            params: { doc_num: product.productNumber },
           }"
         >
           <div class="max-h-[261px] cursor-pointer">
@@ -96,11 +96,11 @@
                           :to="{
                             name: 'edit',
                             params: {
-                              date: dayjs(product.date_published).format(
+                              date: dayjs(product.datePublished).format(
                                 'YYYY-MM-DD'
                               ),
-                              id: product.id,
-                              doc_num: product.doc_num,
+                              id: product.featureId,
+                              doc_num: product.productNumber,
                             },
                           }"
                         >
@@ -134,18 +134,18 @@
               class="hover:underline cursor-pointer"
               :to="{
                 name: product.state === 'draft' ? 'product-preview' : 'product',
-                params: { doc_num: product.doc_num },
+                params: { doc_num: product.productNumber },
               }"
             >
               <div class="text-xs text-blue-700 font-medium pb-2">
-                {{ product.product_type_name }}
+                {{ product.productType.name }}
               </div>
               <p
                 class="font-semibold text-gray-700 line-clamp-3"
-                :title="`${product.title_classif} ${product.title}`"
+                :title="`${product.titleClassification} ${product.title}`"
               >
                 <span class="font-medium text-gray-500"
-                  >({{ product.title_classif }})</span
+                  >({{ product.titleClassification }})</span
                 >
                 {{ product.title }}
               </p>
@@ -155,13 +155,13 @@
             class="hover:underline cursor-pointer absolute bottom-0"
             :to="{
               name: product.state === 'draft' ? 'product-preview' : 'product',
-              params: { doc_num: product.doc_num },
+              params: { doc_num: product.productNumber },
             }"
           >
             <div class="px-4 text-sm text-gray-500 pb-4">
               <div class="flex space-x-2">
                 <div>
-                  {{ dayjs(product.date_published).format("YYYY-MM-DD") }}
+                  {{ dayjs(product.datePublished).format("YYYY-MM-DD") }}
                 </div>
                 <div>•</div>
                 <div>{{ product.views }} views</div>

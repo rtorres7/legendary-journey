@@ -4,7 +4,7 @@
       v-if="loadingUser"
       class="h-8 bg-slate-200 rounded mb-8 w-1/2 animate-pulse"
     ></div>
-    <div v-if="!loadingUser" class="text-2xl text-gray-700">
+    <div v-if="!loadingUser && currentUsername" class="text-2xl text-gray-700">
       {{ currentUsername }}'s Workspace
     </div>
     <template v-if="!loadingDrafts && !loadingPublished">
@@ -17,9 +17,7 @@
         >
           <template v-for="(product, index) in myDrafts" :key="product">
             <MyDraftProductCard
-              :product="
-                environment === 'offline' ? product : product.attributes
-              "
+              :product="product"
               :productIcon="getProductIcon(product)"
               type="product"
               :class="index < numCards ? 'block' : 'hidden'"
@@ -62,7 +60,7 @@
       >
         <template v-for="(product, index) in myPublished" :key="product">
           <MyPublishedProductCard
-            :product="environment === 'offline' ? product : product.attributes"
+            :product="product"
             type="product"
             :class="index < numCards ? 'block' : 'hidden'"
             @delete="deleteProduct(product)"
@@ -131,12 +129,22 @@ export default {
     const loadingStats = ref(true);
     const createNotification = inject("create-notification");
     const deleteProduct = (product) => {
-      axios.post("/documents/" + product.attributes.doc_num + "/deleteMe");
+      axios.post("/documents/" + product.productNumber + "/deleteMe");
     };
     const getProductIcon = (product) => {
-      const p = metadata.product_types.find(
-        (p) => p.code == product.attributes.product_type
-      );
+      let p;
+      if (
+        environment.value != "production" &&
+        environment.value != "development"
+      ) {
+        p = metadata.product_types.find(
+          (p) => p.code == product.productType.code
+        );
+      } else {
+        p = metadata.product_types.find(
+          (p) => p.code == product.productType.id
+        );
+      }
       if (p.icon != null) {
         return p.icon;
       } else {
