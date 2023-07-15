@@ -277,16 +277,16 @@
                 "
                 class="cursor-pointer"
               >
-                <tippy content="Home" placement="right" theme="studio">
+                <tippy content="Dashboard" placement="right" theme="studio">
                   <a
                     href="/studio#home"
                     class="flex items-center justify-center h-12 w-12"
                   >
                     <template v-if="isActivePage('#home')">
-                      <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2IconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </tippy>
@@ -366,6 +366,30 @@
                     </template>
                     <template v-else>
                       <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </a>
+                </div>
+              </tippy>
+            </li>
+            <li>
+              <tippy content="Products" placement="right" theme="studio">
+                <div
+                  :class="
+                    isActivePage('#products')
+                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-blue-700'
+                  "
+                  class="cursor-pointer"
+                >
+                  <a
+                    href="/studio#products"
+                    class="flex items-center justify-center h-12 w-12"
+                  >
+                    <template v-if="isActivePage('#products')">
+                      <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
@@ -462,12 +486,12 @@
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
                     <template v-if="isActivePage('#home')">
-                      <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2IconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                    <span class="ml-4 font-medium">Home</span>
+                    <span class="ml-4 font-medium">Dashboard</span>
                   </div>
                 </a>
               </div>
@@ -537,6 +561,28 @@
                       <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <span class="ml-4 font-medium">Issues</span>
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <a href="/studio#products" class="">
+                  <div
+                    :class="
+                      isActivePage('#products')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActivePage('#products')">
+                      <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Products</span>
                   </div>
                 </a>
               </div>
@@ -693,12 +739,15 @@
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
                         <template v-if="isActivePage('#home')">
-                          <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                          <Squares2X2IconSolid
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
                         </template>
                         <template v-else>
-                          <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                          <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                         </template>
-                        <span class="ml-4">Home</span>
+                        <span class="ml-4">Dashboard</span>
                       </div>
                     </a>
                   </div>
@@ -778,6 +827,31 @@
                     </a>
                   </div>
                 </li>
+                <li>
+                  <div>
+                    <a href="/studio#products" class="">
+                      <div
+                        :class="
+                          isActivePage('#products')
+                            ? 'text-blue-700 bg-blue-500/10 '
+                            : 'hover:text-blue-700 '
+                        "
+                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                      >
+                        <template v-if="isActivePage('#products')">
+                          <BriefcaseIconSolid
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        </template>
+                        <template v-else>
+                          <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <span class="ml-4">Products</span>
+                      </div>
+                    </a>
+                  </div>
+                </li>
               </ul>
             </DialogPanel>
           </TransitionChild>
@@ -802,27 +876,29 @@ import {
 } from "@headlessui/vue";
 import {
   Bars3Icon,
+  BriefcaseIcon,
   ChartBarIcon,
   CalendarDaysIcon,
   ComputerDesktopIcon,
   EllipsisVerticalIcon,
-  HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
   PencilIcon,
   SignalIcon,
+  Squares2X2Icon,
   SunIcon,
   WrenchIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
+  BriefcaseIcon as BriefcaseIconSolid,
   ChartBarIcon as ChartBarIconSolid,
   CalendarDaysIcon as CalendarDaysIconSolid,
-  HomeIcon as HomeIconSolid,
   NewspaperIcon as NewspaperIconSolid,
   PencilIcon as PencilIconSolid,
   SignalIcon as SignalIconSolid,
+  Squares2X2Icon as Squares2X2IconSolid,
   VideoCameraIcon as VideoCameraIconSolid,
 } from "@heroicons/vue/24/solid";
 const themeOptions = ["light", "dark", "system"];
@@ -837,14 +913,14 @@ export default {
     TransitionChild,
     TransitionRoot,
     Bars3Icon,
+    BriefcaseIcon,
+    BriefcaseIconSolid,
     ChartBarIcon,
     ChartBarIconSolid,
     CalendarDaysIcon,
     CalendarDaysIconSolid,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
-    HomeIcon,
-    HomeIconSolid,
     NewspaperIcon,
     NewspaperIconSolid,
     MagnifyingGlassIcon,
@@ -853,6 +929,8 @@ export default {
     PencilIconSolid,
     SignalIcon,
     SignalIconSolid,
+    Squares2X2Icon,
+    Squares2X2IconSolid,
     SunIcon,
     VideoCameraIconSolid,
     WrenchIcon,
