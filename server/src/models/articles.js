@@ -29,7 +29,7 @@ const ArticleSchema = new Schema(
       id: Number,
       firstName: String,
       lastName: String,
-      dn: String
+      dn: String,
     },
     datePublished: Date,
     dissemOrgs: [
@@ -57,6 +57,7 @@ const ArticleSchema = new Schema(
       },
     ],
     orgRestricted: Boolean,
+    pdfVersionBase64: String,
     pocInfo: String,
     producingOffices: [
       {
@@ -110,13 +111,14 @@ const ArticleSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 ArticleSchema.virtual("features").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     images: this.images,
     needed: this.needed,
     orgRestricted: this.orgRestricted,
@@ -133,6 +135,7 @@ ArticleSchema.virtual("features").get(function () {
     attributes: {
       date_published: this.datePublished,
       doc_num: this.productNumber,
+      feature_id: this.get("_id"),
       id: this.get("_id"),
       images: this.images,
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
@@ -172,7 +175,7 @@ ArticleSchema.virtual("forWire").get(function () {
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: this.images,
-      needed:this.needed?.orgs?.length > 0 ? this.needed : {},
+      needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
       state: this.state,
@@ -198,6 +201,7 @@ ArticleSchema.virtual("indexable").get(function () {
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
+    pdfVersionRaw: this.pdfVersionBase64,
     producingOffices: this.producingOffices?.map((office) => office.code),
     productNumber: this.productNumber,
     productType: this.productType?.code,
@@ -274,6 +278,7 @@ ArticleSchema.virtual("data.details").get(function () {
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     issues: this.issues,
     legacyCurrentId: this.legacyCurrentId,
     pocInfo: this.pocInfo,
@@ -307,6 +312,7 @@ ArticleSchema.virtual("data.details").get(function () {
       org_restricted: this.orgRestricted,
     },
     feature_date: this.datePublished,
+    feature_id: this.get("_id"),
     html_body: this.htmlBody,
     legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,

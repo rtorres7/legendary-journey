@@ -11,15 +11,25 @@ const Article = require("../models/articles");
 
 const { handleMongooseError } = require("../util/errors");
 
-const { runAsUser } = require('../util/request');
+const { runAsUser } = require("../util/request");
 
-const ProductService = require('../services/product-service');
+const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
 //GET articles by date
-router.get("/date/:date", async (req, res) => {
+router.get('/articles/date/:date', async (req, res) => {
+  /*
+    #swagger.summary = 'Get a list of products for a given date'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/Features'
+      }
+    }
+   */
+
   try {
     const articles = await productService.findAllByDate(req.params.date);
     res.json({ features: articles.map((article) => article.forWire) });
@@ -36,27 +46,49 @@ router.get("/date/:date", async (req, res) => {
 });
 
 //GET articles by id
-router.get("/:id", async (req, res) => {
+router.get('/articles/:productNumber', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a product with a given product number'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDetails'
+      }
+    }
+   */
+
   try {
-    const article = await productService.findByProductNumber(req.params.id);
+    const article = await productService.findByProductNumber(req.params.productNumber);
     res.json(article.data.details);
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
     handleMongooseError(
-      `Unable to find article with product number ${req.params.id}`,
-      error
+      `Unable to find article with product number ${req.params.productNumber}`,
+      error,
     );
     res.json({
-      error: `Unable to find article with product number ${req.params.id}: ${error.message}`,
+      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
     });
   }
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
-router.post("/processDocument", (req, res) => {
+router.post('/articles/processDocument', (req, res) => {
+  /*
+    #swagger.tags = ['Products']
+    #swagger.deprecated = true
+    #swagger.summary = 'DEPRECATED: Single endpoint that supports create, publish, and save/update actions. Use dedicated endpoints to accomplish the same calls.'
+    #swagger.responses[200] = {
+      description: 'Updates a given product. Same action as PUT /articles/{id}'
+    }
+    #swagger.responses[307] = {
+      description: 'Redirects the create action to POST /articles'
+    }
+   */
+
   switch (req.body.document_action) {
-    case "create":
-      res.redirect(307, "/articles/");
+    case 'create':
+      res.redirect(307, '/articles/');
       break;
     case "publish":
       req.body.state = "posted";
@@ -71,11 +103,28 @@ router.post("/processDocument", (req, res) => {
 });
 
 // POST
-router.post("/", async (req, res) => {
+router.post('/articles/', async (req, res) => {
+  /*
+    #swagger.summary = 'Create a new product'
+    #swagger.tags = ['Products']
+    #swagger.requestBody = {
+      required: true,
+      schema: { $ref: "#/definitions/NewProduct" }
+    }
+    #swagger.responses[200] = {
+      schema: {
+        article: {
+          id: ''
+        },
+        doc_num: ''
+      }
+    }
+   */
+
   await runAsUser(req, res, async (currentUser, req, res) => {
     const topics = await metadataService.findTopicsFor(req.body.topics);
     const issues = await metadataService.findIssuesForTopics(topics);
-    const producingOffices = req.body.producing_office && await metadataService.findProducingOfficesFor([req.body.producing_office]);
+    const producingOffices = req.body.producing_office && (await metadataService.findProducingOfficesFor([req.body.producing_office]));
     const productType = await metadataService.findProductType(req.body.product_type_id);
     const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
     const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
@@ -109,13 +158,23 @@ router.post("/", async (req, res) => {
       const savedArticle = await productService.createProduct(article);
       res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
     } catch (error) {
-      res.json({ error: `There was a problem creating product: ${error.message}`});
+      res.json({ error: `There was a problem creating product: ${error.message}` });
     }
   });
 });
 
 // Fetch single post
-router.get("/:id/edit", async (req, res) => {
+router.get('/articles/:id/edit', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a product for editing'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDocument'
+      }
+    }
+   */
+
   try {
     const product = await productService.findById(req.params.id);
     res.json(product.data.document);
@@ -130,7 +189,18 @@ router.get("/:id/edit", async (req, res) => {
   }
 });
 
-router.get("/:id/view", async (req, res) => {
+
+router.get('/articles/:id/view', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a product for viewing details'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDetails'
+      }
+    }
+   */
+  
   try {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
@@ -146,7 +216,28 @@ router.get("/:id/view", async (req, res) => {
 });
 
 // Update an article
-router.put("/:id", async (req, res) => {
+router.put('/articles/:id', async (req, res) => {
+  /*
+    #swagger.summary = 'Update a product'
+    #swagger.tags = ['Products']
+    #swagger.requestBody = {
+      required: true,
+      schema: { $ref: "#/definitions/UpdateProduct" }
+    }
+    #swagger.responses[200] = {
+      schema: {
+        success: true,
+        article: {
+          $ref: '#/definitions/ProductDocument'
+        },
+        date: '2023-01-01',
+        doc_num: '',
+        id: '',
+        state: ''
+      }
+    }
+   */
+
   await updateArticle(req.params.id, req, res);
 });
 
@@ -219,7 +310,7 @@ async function updateArticle(id, req, res) {
     const updatedArticle = await productService.updateProduct(id, article);
     res.json({
       success: true,
-      article: updatedArticle,
+      article: updatedArticle.data.document,
       date: updatedArticle.datePublished,
       doc_num: updatedArticle.productNumber,
       id: updatedArticle._id,
@@ -232,12 +323,22 @@ async function updateArticle(id, req, res) {
   }
 }
 // Delete an article
-router.delete("/:id", async (req, res) => {
+router.delete('/articles/:id', async (req, res) => {
+  /*
+    #swagger.summary = 'Delete a given product'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        success: true
+      }
+    }
+   */
+
   try {
     await productService.deleteProduct(req.params.id);
-    res.json({ success: true });
+    res.json({success: true});
   } catch (error) {
-    res.json({ error: "Unable to delete article" });
+    res.json({error: 'Unable to delete article'});
   }
 });
 

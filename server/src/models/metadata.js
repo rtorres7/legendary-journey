@@ -66,12 +66,6 @@ const MetadataSchema = new Schema(
             code: String,
             name: String,
             digraph: String,
-            topics: [
-              {
-                name: String,
-                codes: [],
-              },
-            ],
           },
         ],
       },
@@ -80,7 +74,7 @@ const MetadataSchema = new Schema(
         values: [],
       },
       fisa_role: {
-        displayname: String,
+        displayName: String,
         values: [],
       },
       issues: {
