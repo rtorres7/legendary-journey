@@ -49,6 +49,11 @@ services:
       - MXS_OAUTH_ID=maximus
       - MXS_OAUTH_SECRET=jJjVjNLQJ9r3dTc64rt2cFwenmEeusaY
       - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/localhost.crt #TODO: trust self-signed cert to avoid "oauthError: Error: self-signed certificate"
+      - MINIO_ENDPOINT=127.0.0.1
+      - MINIO_PORT=9000
+      - MINIO_USE_SSL=false
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=keyboard cat
     container_name: server
 
   postgres:
@@ -179,7 +184,8 @@ services:
 
   keycloak:
     container_name: keycloak-container
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:21.1
+    # prettier-ignore
     entrypoint:
       [
         "/opt/keycloak/bin/kc.sh",
@@ -226,7 +232,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
     ports:
-#      - 8080:80
+      # - 8080:80
       - 8443:443
     networks:
       - your-network
@@ -235,12 +241,32 @@ services:
       - server
       - client
 
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: keyboard cat
+    volumes:
+      - minio-data:/data
+    expose:
+      - 9000
+    ports:
+      - "9000:9000"
+      - "9001:9001" # console, random if not specified on command line
+    networks:
+      - your-network
+    command: server /data --console-address :9001
+
 volumes:
   elasticsearch-data:
     driver: local
   pg-data:
     driver: local
   keycloak-db-data:
+    driver: local
+  minio-data:
     driver: local
 
 networks:

@@ -57,6 +57,7 @@ const ArticleSchema = new Schema(
       },
     ],
     orgRestricted: Boolean,
+    pdfVersionBase64: String,
     pocInfo: String,
     producingOffices: [
       {
@@ -117,6 +118,7 @@ ArticleSchema.virtual("features").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     images: this.images,
     needed: this.needed,
     orgRestricted: this.orgRestricted,
@@ -199,6 +201,7 @@ ArticleSchema.virtual("indexable").get(function () {
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
+    pdfVersionRaw: this.pdfVersionBase64,
     producingOffices: this.producingOffices?.map((office) => office.code),
     productNumber: this.productNumber,
     productType: this.productType?.code,
@@ -275,6 +278,7 @@ ArticleSchema.virtual("data.details").get(function () {
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     issues: this.issues,
     legacyCurrentId: this.legacyCurrentId,
     pocInfo: this.pocInfo,

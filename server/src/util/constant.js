@@ -91,6 +91,13 @@ const indices = [
         },
       },
     },
+    pipelines: [
+      {
+        type: "attachment",
+        field: "pdfVersionRaw",
+        targetField: "pdfVersion",
+      },
+    ],
   },
   {
     index: "savedproducts",
