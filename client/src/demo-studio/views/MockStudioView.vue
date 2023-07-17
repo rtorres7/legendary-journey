@@ -148,7 +148,9 @@
                             </p>
                           </div>
                           <div class="flex space-x-2 font-medium text-sm">
-                            <div class="text-blue-700">{{ product.type }}</div>
+                            <div class="text-blue-700">
+                              {{ product.type }}
+                            </div>
                             <div>•</div>
                             <div class="text-gray-500">
                               {{ product.date_posted }}
