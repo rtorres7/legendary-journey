@@ -1290,7 +1290,8 @@ export default {
         !form.value.summaryClassificationXML ||
         !form.value.classificationXML ||
         !form.value.publicationDate ||
-        form.value.producing_offices.length === 0
+        form.value.producing_offices.length === 0 ||
+        form.value.non_state_actors.length === 0
       );
     });
 
