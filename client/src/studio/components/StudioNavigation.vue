@@ -154,7 +154,10 @@
                   class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 >
                   <span class="sr-only">Open user menu.</span>
-                  <UserCircleIcon class="h-6 w-6" aria-hidden="true" />
+                  <img
+                    src="@/assets/mocks/avatar.jpg"
+                    class="rounded-full w-7 h-7"
+                  />
                 </MenuButton>
               </tippy>
             </div>
@@ -167,7 +170,7 @@
               leaveToClass="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                class="origin-top-right absolute right-0 mt-2 w-[200px] rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
               >
                 <MenuItem>
                   <router-link
@@ -205,14 +208,17 @@
             </router-link>
           </div>
           <template
-            v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+            v-if="
+              isActiveRoute('studio-issue-detail') ||
+              isActiveRoute('studio-issue-metrics')
+            "
           >
             <ul class="pl-4 py-4 text-gray-500 space-y-1">
               <li>
                 <tippy content="Issue Details" placement="right" theme="studio">
                   <div
                     :class="
-                      isActivePage('#edit-issue')
+                      isActiveRoute('studio-issue-detail')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
@@ -266,28 +272,28 @@
           </div>
           <ul class="pl-4 py-4 text-gray-500 space-y-1">
             <li>
-              <tippy content="Home" placement="right" theme="studio">
-                <div
-                  :class="
-                    isActivePage('#home')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
-                  "
-                  class="cursor-pointer"
-                >
+              <div
+                :class="
+                  isActivePage('#home')
+                    ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                    : 'hover:text-blue-700'
+                "
+                class="cursor-pointer"
+              >
+                <tippy content="Dashboard" placement="right" theme="studio">
                   <a
                     href="/studio#home"
                     class="flex items-center justify-center h-12 w-12"
                   >
                     <template v-if="isActivePage('#home')">
-                      <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2IconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
-                </div>
-              </tippy>
+                </tippy>
+              </div>
             </li>
             <li>
               <tippy content="Live Content" placement="right" theme="studio">
@@ -304,13 +310,41 @@
                     class="flex items-center justify-center h-12 w-12"
                   >
                     <template v-if="isActivePage('#live')">
-                      <VideoCameraIconSolid
+                      <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <SignalIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </a>
+                </div>
+              </tippy>
+            </li>
+            <li>
+              <tippy
+                content="Content Calendar"
+                placement="right"
+                theme="studio"
+              >
+                <div
+                  :class="
+                    isActivePage('#calendar')
+                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-blue-700'
+                  "
+                  class="cursor-pointer"
+                >
+                  <a
+                    href="/studio#calendar"
+                    class="flex items-center justify-center h-12 w-12"
+                  >
+                    <template v-if="isActivePage('#calendar')">
+                      <CalendarDaysIconSolid
                         class="h-6 w-6"
                         aria-hidden="true"
                       />
                     </template>
                     <template v-else>
-                      <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                      <CalendarDaysIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
@@ -335,6 +369,30 @@
                     </template>
                     <template v-else>
                       <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                  </a>
+                </div>
+              </tippy>
+            </li>
+            <li>
+              <tippy content="Products" placement="right" theme="studio">
+                <div
+                  :class="
+                    isActivePage('#products')
+                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-blue-700'
+                  "
+                  class="cursor-pointer"
+                >
+                  <a
+                    href="/studio#products"
+                    class="flex items-center justify-center h-12 w-12"
+                  >
+                    <template v-if="isActivePage('#products')">
+                      <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                   </a>
                 </div>
@@ -421,54 +479,76 @@
           <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
             <li>
               <div>
-                <a href="/studio#home">
+                <router-link to="/studio">
                   <div
                     :class="
-                      isActivePage('#home')
+                      isActivePage('new-studio')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('#home')">
-                      <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                    <template v-if="isActivePage('new-studio')">
+                      <Squares2X2IconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
-                      <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                      <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                    <span class="ml-4 font-medium">Home</span>
+                    <span class="ml-4 font-medium">Dashboard</span>
                   </div>
-                </a>
+                </router-link>
               </div>
             </li>
             <li>
               <div>
-                <a href="/studio#live" class="">
+                <router-link to="/studio/live">
                   <div
                     :class="
-                      isActivePage('#live')
+                      isActivePage('studio-live')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('#live')">
-                      <VideoCameraIconSolid
+                    <template v-if="isActivePage('studio-live')">
+                      <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <SignalIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Live</span>
+                  </div>
+                </router-link>
+              </div>
+            </li>
+            <li>
+              <div>
+                <a href="/studio/calendar" class="">
+                  <div
+                    :class="
+                      isActivePage('#calendar')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActivePage('#calendar')">
+                      <CalendarDaysIconSolid
                         class="h-6 w-6"
                         aria-hidden="true"
                       />
                     </template>
                     <template v-else>
-                      <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                      <CalendarDaysIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                    <span class="ml-4 font-medium">Live</span>
+                    <span class="ml-4 font-medium">Calendar</span>
                   </div>
                 </a>
               </div>
             </li>
             <li>
               <div>
-                <a href="/studio#issues" class="">
+                <a href="/studio/issues" class="">
                   <div
                     :class="
                       isActivePage('#issues')
@@ -484,6 +564,28 @@
                       <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <span class="ml-4 font-medium">Issues</span>
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <a href="/studio/products" class="">
+                  <div
+                    :class="
+                      isActivePage('#products')
+                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-blue-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActivePage('#products')">
+                      <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Products</span>
                   </div>
                 </a>
               </div>
@@ -640,12 +742,15 @@
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
                         <template v-if="isActivePage('#home')">
-                          <HomeIconSolid class="h-6 w-6" aria-hidden="true" />
+                          <Squares2X2IconSolid
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
                         </template>
                         <template v-else>
-                          <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                          <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                         </template>
-                        <span class="ml-4">Home</span>
+                        <span class="ml-4">Dashboard</span>
                       </div>
                     </a>
                   </div>
@@ -662,15 +767,40 @@
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
                         <template v-if="isActivePage('#live')">
-                          <VideoCameraIconSolid
+                          <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <template v-else>
+                          <SignalIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <span class="ml-4">Live</span>
+                      </div>
+                    </a>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <a href="/studio#calendar" class="">
+                      <div
+                        :class="
+                          isActivePage('#calendar')
+                            ? 'text-blue-700 bg-blue-500/10 '
+                            : 'hover:text-blue-700 '
+                        "
+                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                      >
+                        <template v-if="isActivePage('#calendar')">
+                          <CalendarDaysIconSolid
                             class="h-6 w-6"
                             aria-hidden="true"
                           />
                         </template>
                         <template v-else>
-                          <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                          <CalendarDaysIcon
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
                         </template>
-                        <span class="ml-4">Live</span>
+                        <span class="ml-4">Calendar</span>
                       </div>
                     </a>
                   </div>
@@ -700,6 +830,31 @@
                     </a>
                   </div>
                 </li>
+                <li>
+                  <div>
+                    <a href="/studio#products" class="">
+                      <div
+                        :class="
+                          isActivePage('#products')
+                            ? 'text-blue-700 bg-blue-500/10 '
+                            : 'hover:text-blue-700 '
+                        "
+                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                      >
+                        <template v-if="isActivePage('#products')">
+                          <BriefcaseIconSolid
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        </template>
+                        <template v-else>
+                          <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                        </template>
+                        <span class="ml-4">Products</span>
+                      </div>
+                    </a>
+                  </div>
+                </li>
               </ul>
             </DialogPanel>
           </TransitionChild>
@@ -709,9 +864,9 @@
   </TransitionRoot>
 </template>
 <script>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   Dialog,
   DialogPanel,
@@ -724,25 +879,29 @@ import {
 } from "@headlessui/vue";
 import {
   Bars3Icon,
+  BriefcaseIcon,
   ChartBarIcon,
+  CalendarDaysIcon,
   ComputerDesktopIcon,
   EllipsisVerticalIcon,
-  HomeIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
   PencilIcon,
+  SignalIcon,
+  Squares2X2Icon,
   SunIcon,
-  UserCircleIcon,
-  VideoCameraIcon,
   WrenchIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
+  BriefcaseIcon as BriefcaseIconSolid,
   ChartBarIcon as ChartBarIconSolid,
-  HomeIcon as HomeIconSolid,
+  CalendarDaysIcon as CalendarDaysIconSolid,
   NewspaperIcon as NewspaperIconSolid,
   PencilIcon as PencilIconSolid,
+  SignalIcon as SignalIconSolid,
+  Squares2X2Icon as Squares2X2IconSolid,
   VideoCameraIcon as VideoCameraIconSolid,
 } from "@heroicons/vue/24/solid";
 const themeOptions = ["light", "dark", "system"];
@@ -757,21 +916,25 @@ export default {
     TransitionChild,
     TransitionRoot,
     Bars3Icon,
+    BriefcaseIcon,
+    BriefcaseIconSolid,
     ChartBarIcon,
     ChartBarIconSolid,
+    CalendarDaysIcon,
+    CalendarDaysIconSolid,
     ComputerDesktopIcon,
     EllipsisVerticalIcon,
-    HomeIcon,
-    HomeIconSolid,
     NewspaperIcon,
     NewspaperIconSolid,
     MagnifyingGlassIcon,
     MoonIcon,
     PencilIcon,
     PencilIconSolid,
+    SignalIcon,
+    SignalIconSolid,
+    Squares2X2Icon,
+    Squares2X2IconSolid,
     SunIcon,
-    UserCircleIcon,
-    VideoCameraIcon,
     VideoCameraIconSolid,
     WrenchIcon,
     XMarkIcon,
@@ -779,6 +942,9 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+
+    const route = useRoute();
+
     const isOpen = ref(false);
     const removeSearch = ref(false);
     const searches = computed(() => store.state.savedSearches.searches);
@@ -790,11 +956,6 @@ export default {
         : false;
     }
     const selectedTheme = ref(localStorage.getItem("theme"));
-    const currentHash = ref(window.location.hash || "#dashboard");
-
-    onMounted(() => {
-      window.location.hash = window.location.hash || "#home";
-    });
 
     const close = () => {
       isOpen.value = false;
@@ -851,12 +1012,8 @@ export default {
       }
     };
 
-    window.addEventListener("hashchange", ({ target }) => {
-      currentHash.value = target.location.hash;
-    });
-
-    const isActivePage = (hash) => {
-      return hash === currentHash.value;
+    const isActiveRoute = (name) => {
+      return route.name === name;
     };
 
     return {
@@ -871,7 +1028,7 @@ export default {
       changeTheme,
       isActiveTheme,
       selectItemEventHandler,
-      isActivePage,
+      isActiveRoute,
     };
   },
 };

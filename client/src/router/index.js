@@ -18,7 +18,9 @@ import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
 
 import StudioHomeView from "@/studio/views/StudioHomeView.vue";
 import StudioLiveView from "@/studio/views/StudioLiveView.vue";
+import StudioCalendarView from "@/studio/views/StudioCalendarView.vue";
 import StudioIssuesView from "@/studio/views/StudioIssuesView.vue";
+import StudioProductsView from "@/studio/views/StudioProductsView.vue";
 import StudioIssueDetailView from "@/studio/views/StudioIssueDetailView.vue";
 import StudioIssueMetricsView from "@/studio/views/StudioIssueMetricsView.vue";
 
@@ -204,25 +206,25 @@ if (!isProduction()) {
       },
     },
     {
-      path: "/new-studio/issue/:id",
-      name: "studio-issue-detail",
-      component: StudioIssueDetailView,
+      path: "/studio/live",
+      name: "studio-live",
+      component: StudioLiveView,
       meta: {
         domain: "studio",
-        title: "Issue Detail",
+        title: "Live Issue",
       },
     },
     {
-      path: "/new-studio/issue/:id/metrics",
-      name: "studio-issue-metrics",
-      component: StudioIssueMetricsView,
+      path: "/studio/calendar",
+      name: "studio-calendar",
+      component: StudioCalendarView,
       meta: {
         domain: "studio",
-        title: "Issue Metrics",
+        title: "Calendar",
       },
     },
     {
-      path: "/new-studio/issues",
+      path: "/studio/issues",
       name: "studio-issues",
       component: StudioIssuesView,
       meta: {
@@ -231,12 +233,30 @@ if (!isProduction()) {
       },
     },
     {
-      path: "/new-studio/live",
-      name: "studio-live",
-      component: StudioLiveView,
+      path: "/studio/products",
+      name: "studio-products",
+      component: StudioProductsView,
       meta: {
         domain: "studio",
-        title: "Live Issue",
+        title: "Products",
+      },
+    },
+    {
+      path: "/studio/issue/:id",
+      name: "studio-issue-detail",
+      component: StudioIssueDetailView,
+      meta: {
+        domain: "studio",
+        title: "Issue Detail",
+      },
+    },
+    {
+      path: "/studio/issue/:id/metrics",
+      name: "studio-issue-metrics",
+      component: StudioIssueMetricsView,
+      meta: {
+        domain: "studio",
+        title: "Issue Metrics",
       },
     }
   );
