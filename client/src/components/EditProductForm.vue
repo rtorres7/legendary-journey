@@ -230,7 +230,9 @@
                             for="image-input"
                             class="relative cursor-pointer focus-within:ring-2 font-medium"
                           >
-                            <div class="flex items-center px-2 md:px-6 py-3">
+                            <div
+                              class="flex items-center px-2 md:px-6 py-3 not-sr-only"
+                            >
                               <template
                                 v-if="thumbnailFile?.status === 'loading'"
                               >
@@ -962,7 +964,7 @@ export default {
     const { files, addFiles, removeFile } = useFileList();
     const thumbnailFile = ref(null);
     const thumbnailBinary = ref(null);
-    const { uploadFile, uploadFiles } = createUploader(
+    const { uploadFile } = createUploader(
       "/documents/" + props.documentNumber + "/attachments/"
     );
     const product = ref(props.product);
