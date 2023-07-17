@@ -863,6 +863,10 @@ const doc = {
           fullName: {
             type: 'string'
           },
+          name: {
+            type: 'string',
+            deprecated: true
+          },
           lastName: {
             type: 'string'
           },
