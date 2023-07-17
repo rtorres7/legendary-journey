@@ -777,32 +777,45 @@
       class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-52 h-52 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10 contrast-0"
       icon="warning"
     />
-    <template v-if="allDissemOrgsSelected()">
-      <p class="py-12">
-        This product will be disseminated to all Organizations including NT-50
-        Organizations.
-      </p>
-    </template>
-    <template v-if="!isUserOrgIncluded()">
-      <div class="flex flex-col space-y-6">
-        <p>Please include your organization {{ userOrg }} in your selection.</p>
+    <div class="flex flex-col space-y-6">
+      <template v-if="allDissemOrgsSelected()">
+        <p class="py-12">
+          This product will be disseminated to all Organizations including NT-50
+          Organizations.
+        </p>
+      </template>
+      <template v-else>
+        <template v-if="!isUserOrgAvailable()">
+          <p>
+            Your organization {{ userOrg }} is not available in the list for
+            selection.
+          </p>
+        </template>
+        <template v-else>
+          <template v-if="!isUserOrgIncluded()">
+            <p>
+              Please include your organization {{ userOrg }} in your selection.
+            </p>
+          </template>
+        </template>
         <p>
           Selecting an organization you are not a member of will prevent you
           from viewing and performing certain functions on this product.
         </p>
-      </div>
-      <div class="flex pt-8">
-        <input
-          id="hideDialog"
-          v-model="hideDialog"
-          type="checkbox"
-          name="hideDialog"
-        />
-        <label for="hideDialog" class="ml-2 text-sm"
-          >Do not show this again</label
-        >
-      </div>
-    </template>
+
+        <div class="flex pt-8">
+          <input
+            id="hideDialog"
+            v-model="hideDialog"
+            type="checkbox"
+            name="hideDialog"
+          />
+          <label for="hideDialog" class="ml-2 text-sm"
+            >Do not show this again</label
+          >
+        </div>
+      </template>
+    </div>
   </MaxDialog>
   <MaxOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
@@ -1068,6 +1081,19 @@ export default {
         checkAllIntelOrgs.value = true;
       } else {
         checkAllIntelOrgs.value = false;
+      }
+    };
+
+    const isUserOrgAvailable = () => {
+      const availableDissemOrgs = [];
+      if (lists.dissemOrgs.length != 0) {
+        for (const dissemOrg of lists.dissemOrgs) {
+          availableDissemOrgs.push(dissemOrg.code);
+        }
+        if (availableDissemOrgs.includes(userOrg.value)) {
+          return true;
+        }
+        return false;
       }
     };
 
@@ -1690,6 +1716,7 @@ export default {
       notInFilePreview,
       toggleAllIntelOrgs,
       updateToggleAllIntelOrgs,
+      isUserOrgAvailable,
       isUserOrgIncluded,
       allDissemOrgsSelected,
       removeItem,
