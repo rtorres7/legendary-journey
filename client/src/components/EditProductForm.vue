@@ -476,6 +476,11 @@
                         >(includes NT-50 Organizations).</span
                       >
                     </p>
+                    <p class="text-sm">
+                      Selecting an organization you are not a member of will
+                      prevent you from viewing and performing certain functions
+                      on this product.
+                    </p>
                     <div class="flex">
                       <input
                         id="intelOrgs"
@@ -766,20 +771,36 @@
     class="max-w-[600px]"
     @close="closeDissemOrgWarningDialog"
   >
-    <div class="flex flex-col space-y-6">
-      <template v-if="allDissemOrgsSelected()">
-        <p>
-          This product will be disseminated to all Organizations including NT-50
-          Organizations.
-        </p>
-      </template>
-      <template v-if="!isUserOrgIncluded()">
+    <MaxProductIcon
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-52 h-52 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10 contrast-0"
+      icon="warning"
+    />
+    <template v-if="allDissemOrgsSelected()">
+      <p class="py-12">
+        This product will be disseminated to all Organizations including NT-50
+        Organizations.
+      </p>
+    </template>
+    <template v-if="!isUserOrgIncluded()">
+      <div class="flex flex-col space-y-6">
+        <p>Please include your organization {{ userOrg }} in your selection.</p>
         <p>
           Selecting an organization you are not a member of will prevent you
           from viewing and performing certain functions on this product.
         </p>
-      </template>
-    </div>
+      </div>
+      <div class="flex pt-8">
+        <input
+          id="hideDialog"
+          v-model="hideDialog"
+          type="checkbox"
+          name="hideDialog"
+        />
+        <label for="hideDialog" class="ml-2 text-sm"
+          >Do not show this again</label
+        >
+      </div>
+    </template>
   </MaxDialog>
   <MaxOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
@@ -804,6 +825,7 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import dayjs from "dayjs/esm/index.js";
+import { useCookies } from "vue3-cookies";
 import { formatDate } from "@/helpers";
 import {
   BriefcaseIcon,
@@ -932,6 +954,7 @@ export default {
       },
     };
     const createNotification = inject("create-notification");
+    const { cookies } = useCookies();
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
@@ -993,6 +1016,13 @@ export default {
     const checkAllIntelOrgs = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
+    const hideDialog = ref();
+    const saveHideDialog = () => {
+      if (hideDialog.value) {
+        cookies.set("formDialogs", "hide", 0);
+      }
+    };
+    const dialogPreference = ref(cookies.get("formDialogs"));
 
     const attachmentDrop = (event) => {
       attachmentDropzoneFile.value = event.dataTransfer.files[0];
@@ -1161,7 +1191,11 @@ export default {
           payload.value[property] = codes;
           if (property === "dissem_orgs") {
             updateToggleAllIntelOrgs();
-            if (!isUserOrgIncluded() || allDissemOrgsSelected()) {
+            saveHideDialog();
+            if (
+              (!isUserOrgIncluded() && !hideDialog.value) ||
+              allDissemOrgsSelected()
+            ) {
               openDissemOrgWarningDialog();
             }
           }
@@ -1631,6 +1665,7 @@ export default {
       categories,
       environment,
       extraConfig,
+      userOrg,
       thumbnailFile,
       files,
       addFiles,
@@ -1645,6 +1680,9 @@ export default {
       checkAllIntelOrgs,
       selectedPublicationDate,
       attachmentDropzoneFile,
+      hideDialog,
+      saveHideDialog,
+      dialogPreference,
       attachmentDrop,
       attachmentSelectedFile,
       notInFilePreview,
