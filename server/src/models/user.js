@@ -52,6 +52,13 @@ module.exports = (sequelize) => {
       defaultValue: []
     },
 
+    name: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return this.fullName
+      }
+    },
+
     authorizations: {
       type: DataTypes.VIRTUAL,
       get() {
