@@ -77,12 +77,12 @@
             >
           </div>
           <div class="text-3xl py-2 font-semibold">
-            <a
+            <router-link
               class="hover:underline underline-offset-2 decoration-2"
-              href="/studio#live"
+              to="/studio/live"
             >
               {{ issue.title }}
-            </a>
+            </router-link>
           </div>
           <div class="flex flex-col py-1 space-y-2 font-medium text-sm">
             <p>By {{ issue.author }}</p>

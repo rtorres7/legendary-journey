@@ -1,51 +1,22 @@
 <template>
+  <!-- Calendar  -->
   <div>
-    <div class="flex space-x-1 justify-center xl:justify-start text-2xl py-8">
-      <div class="text-gray-700 font-bold uppercase tracking-wider">
-        Current
+    <div class="flex items-center justify-center min-h-[75vh]">
+      <div class="flex flex-col space-y-4">
+        <div class="text-6xl font-semibold">Coming Soon</div>
+        <div class="text-2xl text-gray-400">
+          Don't get too excited, the preview for this feature isn't ready just
+          yet.
+        </div>
       </div>
-      <div class="text-gray-500 font-medium">Issue</div>
-    </div>
-    <div>
-      <MockLiveIssueCard :issue="issues[0]" />
-      <div class="py-8 flex justify-center xl:justify-between items-center">
-        <div class="text-2xl font-bold text-gray-700">Coming Soon</div>
-        <a
-          class="hidden xl:block text-gray-500 hover:text-gray-700 text-sm font-medium"
-          href="/studio#issues"
-        >
-          See All
-        </a>
-      </div>
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
-      >
-        <MockIssueCard :issue="issues[1]" />
-        <MockIssueCard :issue="issues[2]" />
-        <MockIssueCard :issue="issues[3]" class="hidden xl:flex" />
-      </div>
-      <a
-        class="block xl:hidden text-end py-8 text-gray-500 hover:text-gray-700 text-sm font-medium"
-        href="/studio#issues"
-      >
-        See All
-      </a>
     </div>
   </div>
 </template>
 <script>
-import { issues } from "../data";
-import MockIssueCard from "@/demo-studio/components/MockIssueCard.vue";
-import MockLiveIssueCard from "@/studio/components/MockLiveIssueCard.vue";
 export default {
-  components: {
-    MockIssueCard,
-    MockLiveIssueCard,
-  },
+  components: {},
   setup() {
-    return {
-      issues,
-    };
+    return {};
   },
 };
 </script>

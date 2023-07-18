@@ -224,17 +224,17 @@
                     "
                     class="cursor-pointer"
                   >
-                    <a
-                      href="/studio#edit-issue"
+                    <router-link
+                      :to="'/studio/issue/is-001'"
                       class="flex items-center justify-center h-12 w-12"
                     >
-                      <template v-if="isActivePage('#edit-issue')">
+                      <template v-if="isActiveRoute('studio-issue-detail')">
                         <PencilIconSolid class="h-6 w-6" aria-hidden="true" />
                       </template>
                       <template v-else>
                         <PencilIcon class="h-6 w-6" aria-hidden="true" />
                       </template>
-                    </a>
+                    </router-link>
                   </div>
                 </tippy>
               </li>
@@ -242,30 +242,33 @@
                 <tippy content="Issue Metrics" placement="right" theme="studio">
                   <div
                     :class="
-                      isActivePage('#issue-metrics')
+                      isActiveRoute('studio-issue-metrics')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="cursor-pointer"
                   >
-                    <a
-                      href="/studio#issue-metrics"
+                    <router-link
+                      :to="'/studio/issue/is-001/metrics'"
                       class="flex items-center justify-center h-12 w-12"
                     >
-                      <template v-if="isActivePage('#issue-metrics')">
+                      <template v-if="isActiveRoute('studio-issue-metrics')">
                         <ChartBarIconSolid class="h-6 w-6" aria-hidden="true" />
                       </template>
                       <template v-else>
                         <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
                       </template>
-                    </a>
+                    </router-link>
                   </div>
                 </tippy>
               </li>
             </ul>
           </template>
           <div
-            v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+            v-if="
+              isActiveRoute('studio-issue-detail') ||
+              isActiveRoute('studio-issue-metrics')
+            "
             class="mx-4"
           >
             <div class="border-t border-slate-900/10"></div>
@@ -274,24 +277,24 @@
             <li>
               <div
                 :class="
-                  isActivePage('#home')
+                  isActiveRoute('studio')
                     ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                     : 'hover:text-blue-700'
                 "
                 class="cursor-pointer"
               >
                 <tippy content="Dashboard" placement="right" theme="studio">
-                  <a
-                    href="/studio#home"
+                  <router-link
+                    to="/studio"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#home')">
+                    <template v-if="isActiveRoute('studio')">
                       <Squares2X2IconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
                       <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                  </a>
+                  </router-link>
                 </tippy>
               </div>
             </li>
@@ -299,23 +302,23 @@
               <tippy content="Live Content" placement="right" theme="studio">
                 <div
                   :class="
-                    isActivePage('#live')
+                    isActiveRoute('studio-live')
                       ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                       : 'hover:text-blue-700'
                   "
                   class="cursor-pointer"
                 >
-                  <a
-                    href="/studio#live"
+                  <router-link
+                    to="/studio/live"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#live')">
+                    <template v-if="isActiveRoute('studio-live')">
                       <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
                       <SignalIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                  </a>
+                  </router-link>
                 </div>
               </tippy>
             </li>
@@ -327,17 +330,17 @@
               >
                 <div
                   :class="
-                    isActivePage('#calendar')
+                    isActiveRoute('studio-calendar')
                       ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                       : 'hover:text-blue-700'
                   "
                   class="cursor-pointer"
                 >
-                  <a
-                    href="/studio#calendar"
+                  <router-link
+                    to="/studio/calendar"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#calendar')">
+                    <template v-if="isActiveRoute('studio-calendar')">
                       <CalendarDaysIconSolid
                         class="h-6 w-6"
                         aria-hidden="true"
@@ -346,7 +349,7 @@
                     <template v-else>
                       <CalendarDaysIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                  </a>
+                  </router-link>
                 </div>
               </tippy>
             </li>
@@ -354,23 +357,23 @@
               <tippy content="Issues" placement="right" theme="studio">
                 <div
                   :class="
-                    isActivePage('#issues')
+                    isActiveRoute('studio-issues')
                       ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                       : 'hover:text-blue-700'
                   "
                   class="cursor-pointer"
                 >
-                  <a
-                    href="/studio#issues"
+                  <router-link
+                    to="/studio/issues"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#issues')">
+                    <template v-if="isActiveRoute('studio-issues')">
                       <NewspaperIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
                       <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                  </a>
+                  </router-link>
                 </div>
               </tippy>
             </li>
@@ -378,23 +381,23 @@
               <tippy content="Products" placement="right" theme="studio">
                 <div
                   :class="
-                    isActivePage('#products')
+                    isActiveRoute('studio-products')
                       ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                       : 'hover:text-blue-700'
                   "
                   class="cursor-pointer"
                 >
-                  <a
-                    href="/studio#products"
+                  <router-link
+                    to="/studio/products"
                     class="flex items-center justify-center h-12 w-12"
                   >
-                    <template v-if="isActivePage('#products')">
+                    <template v-if="isActiveRoute('studio-products')">
                       <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
                       <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
-                  </a>
+                  </router-link>
                 </div>
               </tippy>
             </li>
@@ -423,22 +426,25 @@
             </router-link>
           </div>
           <template
-            v-if="isActivePage('#edit-issue') || isActivePage('#issue-metrics')"
+            v-if="
+              isActiveRoute('studio-issue-detail') ||
+              isActiveRoute('studio-issue-metrics')
+            "
           >
             <div class="text-gray-400 font-medium px-8 py-2">Issue</div>
             <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
               <li>
                 <div>
-                  <a href="/studio#edit-issue">
+                  <router-link :to="'/studio/issue/is-001'">
                     <div
                       :class="
-                        isActivePage('#edit-issue')
+                        isActiveRoute('studio-issue-detail')
                           ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                           : 'hover:text-blue-700'
                       "
                       class="flex items-center px-4 py-3 cursor-pointer"
                     >
-                      <template v-if="isActivePage('#edit-issue')">
+                      <template v-if="isActiveRoute('studio-issue-detail')">
                         <PencilIconSolid class="h-6 w-6" aria-hidden="true" />
                       </template>
                       <template v-else>
@@ -446,21 +452,21 @@
                       </template>
                       <span class="ml-4 font-medium">Details</span>
                     </div>
-                  </a>
+                  </router-link>
                 </div>
               </li>
               <li>
                 <div>
-                  <a href="/studio#issue-metrics" class="">
+                  <router-link :to="'/studio/issue/is-001/metrics'">
                     <div
                       :class="
-                        isActivePage('#issue-metrics')
+                        isActiveRoute('studio-issue-metrics')
                           ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                           : 'hover:text-blue-700'
                       "
                       class="flex items-center px-4 py-3 cursor-pointer"
                     >
-                      <template v-if="isActivePage('#issue-metrics')">
+                      <template v-if="isActiveRoute('studio-issue-metrics')">
                         <ChartBarIconSolid class="h-6 w-6" aria-hidden="true" />
                       </template>
                       <template v-else>
@@ -468,7 +474,7 @@
                       </template>
                       <span class="ml-4 font-medium">Metrics</span>
                     </div>
-                  </a>
+                  </router-link>
                 </div>
               </li>
             </ul>
@@ -482,13 +488,13 @@
                 <router-link to="/studio">
                   <div
                     :class="
-                      isActivePage('new-studio')
+                      isActiveRoute('studio')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('new-studio')">
+                    <template v-if="isActiveRoute('studio')">
                       <Squares2X2IconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
@@ -504,13 +510,13 @@
                 <router-link to="/studio/live">
                   <div
                     :class="
-                      isActivePage('studio-live')
+                      isActiveRoute('studio-live')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('studio-live')">
+                    <template v-if="isActiveRoute('studio-live')">
                       <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
@@ -523,16 +529,16 @@
             </li>
             <li>
               <div>
-                <a href="/studio/calendar" class="">
+                <router-link to="/studio/calendar" class="">
                   <div
                     :class="
-                      isActivePage('#calendar')
+                      isActiveRoute('studio-calendar')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('#calendar')">
+                    <template v-if="isActiveRoute('studio-calendar')">
                       <CalendarDaysIconSolid
                         class="h-6 w-6"
                         aria-hidden="true"
@@ -543,21 +549,21 @@
                     </template>
                     <span class="ml-4 font-medium">Calendar</span>
                   </div>
-                </a>
+                </router-link>
               </div>
             </li>
             <li>
               <div>
-                <a href="/studio/issues" class="">
+                <router-link to="/studio/issues" class="">
                   <div
                     :class="
-                      isActivePage('#issues')
+                      isActiveRoute('studio-issues')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('#issues')">
+                    <template v-if="isActiveRoute('studio-issues')">
                       <NewspaperIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
@@ -565,21 +571,21 @@
                     </template>
                     <span class="ml-4 font-medium">Issues</span>
                   </div>
-                </a>
+                </router-link>
               </div>
             </li>
             <li>
               <div>
-                <a href="/studio/products" class="">
+                <router-link to="/studio/products" class="">
                   <div
                     :class="
-                      isActivePage('#products')
+                      isActiveRoute('studio-products')
                         ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
                         : 'hover:text-blue-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
-                    <template v-if="isActivePage('#products')">
+                    <template v-if="isActiveRoute('studio-products')">
                       <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <template v-else>
@@ -587,7 +593,7 @@
                     </template>
                     <span class="ml-4 font-medium">Products</span>
                   </div>
-                </a>
+                </router-link>
               </div>
             </li>
           </ul>
@@ -669,23 +675,24 @@
               </div>
               <template
                 v-if="
-                  isActivePage('#edit-issue') || isActivePage('#issue-metrics')
+                  isActiveRoute('studio-issue-detail') ||
+                  isActiveRoute('studio-issue-metrics')
                 "
               >
                 <div class="text-gray-400 font-medium py-2 px-4">Issue</div>
                 <ul class="py-4 pl-4 font-medium text-gray-500 space-y-2">
                   <li>
                     <div>
-                      <a href="/studio#edit-issue" class="">
+                      <router-link :to="'/studio/issue/is-001'">
                         <div
                           :class="
-                            isActivePage('#edit-issue')
+                            isActiveRoute('studio-issue-detail')
                               ? 'text-blue-700 bg-blue-500/10 '
                               : 'hover:text-blue-700 '
                           "
                           class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                         >
-                          <template v-if="isActivePage('#edit-issue')">
+                          <template v-if="isActiveRoute('studio-issue-detail')">
                             <PencilIconSolid
                               class="h-6 w-6"
                               aria-hidden="true"
@@ -696,21 +703,26 @@
                           </template>
                           <span class="ml-4">Details</span>
                         </div>
-                      </a>
+                      </router-link>
                     </div>
                   </li>
                   <li>
                     <div>
-                      <a href="/studio#issue-metrics" class="">
+                      <router-link
+                        :to="'/studio/issue/is-001/metrics'"
+                        class=""
+                      >
                         <div
                           :class="
-                            isActivePage('#issue-metrics')
+                            isActiveRoute('studio-issue-metrics')
                               ? 'text-blue-700 bg-blue-500/10 '
                               : 'hover:text-blue-700 '
                           "
                           class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                         >
-                          <template v-if="isActivePage('#issue-metrics')">
+                          <template
+                            v-if="isActiveRoute('studio-issue-metrics')"
+                          >
                             <ChartBarIconSolid
                               class="h-6 w-6"
                               aria-hidden="true"
@@ -721,7 +733,7 @@
                           </template>
                           <span class="ml-4">Metrics</span>
                         </div>
-                      </a>
+                      </router-link>
                     </div>
                   </li>
                 </ul>
@@ -732,16 +744,16 @@
               <ul class="py-4 pl-4 font-medium text-gray-500 space-y-2">
                 <li>
                   <div>
-                    <a href="/studio#home" class="">
+                    <router-link to="/studio" class="">
                       <div
                         :class="
-                          isActivePage('#home')
+                          isActiveRoute('studio')
                             ? 'text-blue-700 bg-blue-500/10 '
                             : 'hover:text-blue-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
-                        <template v-if="isActivePage('#home')">
+                        <template v-if="isActiveRoute('studio')">
                           <Squares2X2IconSolid
                             class="h-6 w-6"
                             aria-hidden="true"
@@ -752,21 +764,21 @@
                         </template>
                         <span class="ml-4">Dashboard</span>
                       </div>
-                    </a>
+                    </router-link>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <a href="/studio#live" class="">
+                    <router-link to="/studio/live" class="">
                       <div
                         :class="
-                          isActivePage('#live')
+                          isActiveRoute('studio-live')
                             ? 'text-blue-700 bg-blue-500/10 '
                             : 'hover:text-blue-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
-                        <template v-if="isActivePage('#live')">
+                        <template v-if="isActiveRoute('studio-live')">
                           <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
                         </template>
                         <template v-else>
@@ -774,21 +786,21 @@
                         </template>
                         <span class="ml-4">Live</span>
                       </div>
-                    </a>
+                    </router-link>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <a href="/studio#calendar" class="">
+                    <router-link to="/studio/calendar">
                       <div
                         :class="
-                          isActivePage('#calendar')
+                          isActiveRoute('studio-calendar')
                             ? 'text-blue-700 bg-blue-500/10 '
                             : 'hover:text-blue-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
-                        <template v-if="isActivePage('#calendar')">
+                        <template v-if="isActiveRoute('studio-calendar')">
                           <CalendarDaysIconSolid
                             class="h-6 w-6"
                             aria-hidden="true"
@@ -802,21 +814,21 @@
                         </template>
                         <span class="ml-4">Calendar</span>
                       </div>
-                    </a>
+                    </router-link>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <a href="/studio#issues" class="">
+                    <router-link to="/studio/issues" class="">
                       <div
                         :class="
-                          isActivePage('#issues')
+                          isActiveRoute('studio-issues')
                             ? 'text-blue-700 bg-blue-500/10 '
                             : 'hover:text-blue-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
-                        <template v-if="isActivePage('#issues')">
+                        <template v-if="isActiveRoute('studio-issues')">
                           <NewspaperIconSolid
                             class="h-6 w-6"
                             aria-hidden="true"
@@ -827,21 +839,21 @@
                         </template>
                         <span class="ml-4">Issues</span>
                       </div>
-                    </a>
+                    </router-link>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <a href="/studio#products" class="">
+                    <router-link to="/studio/products" class="">
                       <div
                         :class="
-                          isActivePage('#products')
+                          isActiveRoute('studio-products')
                             ? 'text-blue-700 bg-blue-500/10 '
                             : 'hover:text-blue-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
-                        <template v-if="isActivePage('#products')">
+                        <template v-if="isActiveRoute('studio-products')">
                           <BriefcaseIconSolid
                             class="h-6 w-6"
                             aria-hidden="true"
@@ -852,7 +864,7 @@
                         </template>
                         <span class="ml-4">Products</span>
                       </div>
-                    </a>
+                    </router-link>
                   </div>
                 </li>
               </ul>

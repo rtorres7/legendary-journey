@@ -10,12 +10,12 @@
       <MockLiveIssueCard :issue="issues[0]" />
       <div class="py-8 flex justify-center xl:justify-between items-center">
         <div class="text-2xl font-bold text-gray-700">Coming Soon</div>
-        <a
+        <router-link
           class="hidden xl:block text-gray-500 hover:text-gray-700 text-sm font-medium"
-          href="/studio#issues"
+          to="/studio/issues"
         >
           See All
-        </a>
+        </router-link>
       </div>
       <div
         class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
@@ -24,12 +24,12 @@
         <MockIssueCard :issue="issues[2]" />
         <MockIssueCard :issue="issues[3]" class="hidden xl:flex" />
       </div>
-      <a
+      <router-link
         class="block xl:hidden text-end py-8 text-gray-500 hover:text-gray-700 text-sm font-medium"
-        href="/studio#issues"
+        to="/studio/issues"
       >
         See All
-      </a>
+      </router-link>
     </div>
   </div>
 </template>

@@ -1,13 +1,18 @@
 <template>
   <div>
     <div class="max-w-[1480px] flex space-x-4 justify-end pt-8">
-      <a
+      <router-link
         class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
-        href="/studio#edit-issue"
+        :to="{
+          name: 'studio-issue-detail',
+          params: {
+            id: 'ci-500',
+          },
+        }"
       >
         <span>Edit</span>
         <PencilSquareIcon class="h-5 w-5" />
-      </a>
+      </router-link>
       <button
         class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 border border-gray-300"
       >

@@ -14,7 +14,7 @@ import WorkspaceView from "../workspace/views/WorkspaceView.vue";
 import { isProduction } from "@/helpers";
 
 // Studio
-import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
+//import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
 
 import StudioHomeView from "@/studio/views/StudioHomeView.vue";
 import StudioLiveView from "@/studio/views/StudioLiveView.vue";
@@ -185,20 +185,20 @@ if (!isProduction()) {
       demo: true,
     },
   });
-  routes.push({
-    path: "/studio",
-    name: "studio",
-    component: MockStudioView,
-    meta: {
-      domain: "workspace",
-      title: "Current Studio",
-      demo: true,
-    },
-  });
+  // routes.push({
+  //   path: "/studio",
+  //   name: "studio",
+  //   component: MockStudioView,
+  //   meta: {
+  //     domain: "workspace",
+  //     title: "Current Studio",
+  //     demo: true,
+  //   },
+  // });
   routes.push(
     {
-      path: "/new-studio",
-      name: "new-studio",
+      path: "/studio",
+      name: "studio",
       component: StudioHomeView,
       meta: {
         domain: "studio",
