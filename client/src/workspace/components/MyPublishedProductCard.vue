@@ -1,11 +1,13 @@
 <template>
   <div
-    class="flex flex-col bg-white rounded-md relative max-w-[464px] shadow-md hover:shadow-lg mb-2"
+    class="flex flex-col bg-white rounded-md relative max-w-[464px] h-full shadow-md hover:shadow-lg mb-2"
   >
     <template v-if="loading">
       <div class="animate-pulse min-h-[370px] max-h-[555px]">
-        <div class="h-3/5 min-h-[177px] max-h-[261px] bg-slate-200"></div>
-        <div class="h-2/5 pt-4 px-4 flex flex-col justify-between">
+        <div
+          class="h-[190px] sm:h-[150px] md:h-[187px] lg:h-[157px] xl:h-[205px] 2xl:h-[186px] w-full bg-slate-200"
+        ></div>
+        <div class="h-[150px] pt-4 px-4 flex flex-col justify-between">
           <div>
             <h1 class="h-6 bg-slate-200 rounded mb-2"></h1>
             <h2 class="h-6 bg-slate-200 rounded"></h2>
@@ -22,8 +24,17 @@
             params: { doc_num: product.productNumber },
           }"
         >
-          <div class="max-h-[261px] cursor-pointer">
-            <ProductImage :product="product" />
+          <div class="cursor-pointer">
+            <ProductImage
+              v-if="product.images.length != 0"
+              class="min-h-[190px] sm:min-h-[150px] md:min-h-[187px] lg:min-h-[157px] xl:min-h-[205px] 2xl:min-h-[186px]"
+              :product="product"
+            />
+            <img
+              v-else
+              src="@/assets/image-not-available-wire-size.png"
+              class="h-[190px] sm:h-[150px] md:h-[187px] lg:h-[157px] xl:h-[205px] 2xl:h-[186px] w-full"
+            />
           </div>
         </router-link>
         <div class="flex flex-col py-6 justify-between">
@@ -91,7 +102,7 @@
                       </MenuItem>
                     </template>
                     <template v-if="type === 'product'">
-                      <MenuItem>
+                      <MenuItem v-if="product.featureId">
                         <router-link
                           :to="{
                             name: 'edit',
