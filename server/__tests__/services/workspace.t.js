@@ -35,8 +35,8 @@ describe('Workspace Service', () => {
     process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
 
     // Load Saved Products
-    await loadSavedProducts(postgresContainer.getConnectionUri());
-    await loadSavedProductsForSearch(esContainer.getHttpUrl());
+    const savedProduct = await loadSavedProducts(postgresContainer.getConnectionUri());
+    await loadSavedProductsForSearch(esContainer.getHttpUrl(), savedProduct.id);
     await loadCollections(postgresContainer.getConnectionUri());
     await loadCollectionProducts(postgresContainer.getConnectionUri());
   }, 120_000);
@@ -85,7 +85,7 @@ describe('Workspace Service', () => {
     });
   });
 
-  describe('indPageOfCollectionsForUser', () => {
+  describe('findPageOfCollectionsForUser', () => {
     it('should return a page of collection for user', async () => {
       const collections = await service.findPageOfCollectionsForUser(1, 1, 10, 0, 'desc');
 
@@ -134,25 +134,65 @@ describe('Workspace Service', () => {
   describe('findSavedProductsInCollection', () => {
     it('should return list of saved products associated with given collection', async () => {
       const { models } = require('../../src/data/sequelize');
-      const collection = await models.Collection.findOne({ where: { name: 'Sample Collection' }});
+      const collection = await models.Collection.findOne({ where: {name: 'Sample Collection' }});
+      const product = await models.SavedProduct.findOne({ where: {productId: "WIReWIRe_sample_1" }});
 
-      const products = await service.findSavedProductsInCollection(collection.id);
+      await collection.addSavedProduct(product);
 
-      expect(products).toHaveLength(1);
-      expect(products[0].productId).toEqual('WIReWIRe_sample_1');
+      await client.update({
+        index: 'savedproducts',
+        refresh: true,
+        id: product.id.toString(),
+        doc: {
+          collection: [collection.id]
+        }
+      });
+
+      const products = await service.findSavedProductsInCollection(collection.id, '');
+
+      expect(products.content).toHaveLength(1);
+      expect(products.content.map(product => product.productId)).toEqual(['WIReWIRe_sample_1']);
+      expect(products.size).toEqual(10);
+      expect(products.number).toEqual(1);
+      expect(products.numberOfElements).toEqual(1);
+      expect(products.totalPages).toEqual(1);
+      expect(products.totalElements).toEqual(1);
+      expect(products.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
     });
   });
 
   describe('addSavedProductToCollection', () => {
     it('should add a new saved product to a given collection', async () => {
       const { models } = require('../../src/data/sequelize');
-      const collection = await models.Collection.create({ name: 'bar' });
-      const product = await models.SavedProduct.create({ productId: 'wooo' });
+      const collection = await models.Collection.findOne({ where: { name: 'Sample Collection' }});
+      const product = await models.SavedProduct.findOne({ where: { productId: "WIReWIRe_sample_1" }});
 
       const savedCollection = await service.addSavedProductToCollection(collection.id, product.id);
 
       expect(savedCollection.SavedProducts).toHaveLength(1);
       expect(savedCollection.SavedProducts[0].id).toEqual(product.id);
+
+      const results = await client.search({
+        index: 'savedproducts',
+        query: {
+          bool: {
+            must: [
+              {
+                match: {
+                  productId: 'WIReWIRe_sample_1',
+                },
+              },
+              {
+                match: {
+                  savedProductUserId: 1,
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      expect(results.hits.hits[0]._source.collection).toEqual([collection.id]);
     });
 
     it('should return null if the collection can not be found', async () => {
@@ -175,15 +215,69 @@ describe('Workspace Service', () => {
   });
 
   describe('removeSavedProductFromCollection', () => {
-    it('should add a new saved product to a given collection', async () => {
+    it('should remove a saved product from a given collection', async () => {
       const { models } = require('../../src/data/sequelize');
-      const collection = await models.Collection.create({ name: 'bar' });
-      const product = await models.SavedProduct.create({ productId: 'wooo' });
+      const collection = await models.Collection.findOne({ where: {name: 'Sample Collection' }});
+      const product = await models.SavedProduct.findOne({ where: {productId: "WIReWIRe_sample_1" }});
+
       await collection.addSavedProduct(product);
+
+      await client.update({
+        index: 'savedproducts',
+        refresh: true,
+        id: product.id.toString(),
+        doc: {
+          collection: [collection.id]
+        }
+      });
+
+      const preResults = await client.search({
+        index: 'savedproducts',
+        query: {
+          bool: {
+            must: [
+              {
+                match: {
+                  productId: 'WIReWIRe_sample_1',
+                },
+              },
+              {
+                match: {
+                  savedProductUserId: 1,
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      expect(preResults.hits.hits[0]._source.collection).toEqual([collection.id]);
 
       const savedCollection = await service.removeSavedProductFromCollection(collection.id, product.id);
 
       expect(savedCollection.SavedProducts).toHaveLength(0);
+
+      const postResults = await client.search({
+        index: 'savedproducts',
+        query: {
+          bool: {
+            must: [
+              {
+                match: {
+                  productId: 'WIReWIRe_sample_1',
+                },
+              },
+              {
+                match: {
+                  savedProductUserId: 1,
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      expect(postResults.hits.hits[0]._source.collection).toEqual([]);
     });
 
     it('should return null if the collection can not be found', async () => {
