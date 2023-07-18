@@ -478,11 +478,15 @@
                         >(includes NT-50 Organizations).</span
                       >
                     </p>
-                    <p class="text-sm">
-                      Selecting an organization you are not a member of will
-                      prevent you from viewing and performing certain functions
-                      on this product.
-                    </p>
+                    <template v-if="!isUserOrgIncluded()">
+                      <p
+                        class="text-sm text-red-700 dark:text-red-400 energy:text-red-400"
+                      >
+                        You have selected an organization that you are not a
+                        member of. This will prevent you from viewing and
+                        performing certain functions on this product.
+                      </p>
+                    </template>
                     <div class="flex">
                       <input
                         id="intelOrgs"
