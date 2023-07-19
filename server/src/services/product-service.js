@@ -72,7 +72,7 @@ class ProductService {
   }
 
   async findFeaturesAndBriefs() {
-    const featuredProducts = await Article.find().sort({ _id: -1 }).exec();
+    const featuredProducts = await Article.find({'state': 'posted'}).sort({ _id: -1 }).exec();
     const briefProducts = await Article.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
 
     return {

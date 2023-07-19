@@ -51,6 +51,11 @@ router.get('/documents/:id/preview.json', function (req, res) {
 });
 
 router.get('/documents/:docNum/related_documents.json', function (req,res) {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve related documents. Use GET /relatedSearch/{productNumber}'
+ */
 
   res.redirect('/relatedSearch/' +req.params.docNum);
 });

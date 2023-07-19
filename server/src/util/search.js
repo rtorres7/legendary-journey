@@ -98,7 +98,7 @@ async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc',
   const results = await client.search(searchParams);
   const aggregationResults = await resolveAggregations(results.aggregations);
   const highlightedResults = augmentResults(results);
-
+  
   return {
     searchId: '',
     results: highlightedResults,
@@ -123,9 +123,13 @@ function buildSortClause(sortMethod) {
 
 function buildQueryFromFilters(term, filters, fields) {
   const query = {};
-
+  
   if (term !== undefined && term !== '') {
-    query.match = { htmlBody: term };
+    query.bool={};
+    query.bool.must=[];
+    query.bool.must.push({match: { htmlBody: term}}, {match: {state: "posted"}});
+  } else {
+    query.match = {state: "posted"};
   }
 
   if (filters.start_date !== undefined && filters.end_date !== undefined) {
