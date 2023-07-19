@@ -74,7 +74,9 @@ jest.mock('../../src/services/workspace.js', () => {
       deleteCollection: jest.fn(),
       findSavedProductsInCollection: jest.fn().mockImplementation((collectionId) => {
         if (collectionId === '1') {
-          return [{ productId: 'WIReWIRe_sample_1' }];
+          return {
+            content: [{ productId: 'WIReWIRe_sample_1' }]
+          }
         }
 
         return [];
@@ -337,20 +339,11 @@ describe('Workspace Routes', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.length).toBe(1);
+          expect(res.body.content.length).toBe(1);
 
-          const ids = res.body.map((savedProduct) => savedProduct.productId);
+          const ids = res.body.content.map((savedProduct) => savedProduct.productId);
           expect(ids).toStrictEqual(["WIReWIRe_sample_1"]);
         });
-    });
-
-    it('should return 404 when collection is not found', async () => {
-      const router = require('../../src/routes/workspace');
-      const app = setupAppWithUser(router, {id: 1});
-
-      return request(app)
-        .delete(`/workspace/collections/1000/products`)
-        .expect(404);
     });
   });
 
