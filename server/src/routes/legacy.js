@@ -50,6 +50,11 @@ router.get('/documents/:id/preview.json', function (req, res) {
   res.redirect(`/articles/${req.params.id}`);
 });
 
+router.get('/documents/:docNum/related_documents.json', function (req,res) {
+
+  res.redirect('/relatedSearch/' +req.params.docNum);
+});
+
 router.get('/my_wire/user_data', function (req, res) {
   /*
   #swagger.tags = ['Legacy']

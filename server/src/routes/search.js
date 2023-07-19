@@ -36,4 +36,11 @@ router.get('/search', async (req, res) => {
   res.json(results);
 });
 
+router.get('/relatedSearch/:id', async (req, res) => {
+
+  const results = await searchService.relatedSearch(req.params.id);
+  res.json(results);
+
+});
+
 module.exports = router;

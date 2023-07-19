@@ -21,7 +21,15 @@ class ProductSearchService {
   }
 
   async search(term, perPage=10, page=1, sortMethod='desc', filters = {}) {
-    return await runSearch(term, this.index, perPage, page, sortMethod, filters, PRODUCT_FIELDS);
+    return await runSearch.runSearch(term, this.index, perPage, page, sortMethod, filters, PRODUCT_FIELDS);
+  }
+
+  async searchOne(productNumber) {
+    return await runSearch.runSearchOne(productNumber);
+  }
+
+  async relatedSearch(id) {
+    return await runSearch.runRelatedSearch(id);
   }
 
   async create(product) {
