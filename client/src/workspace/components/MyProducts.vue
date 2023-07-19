@@ -107,9 +107,7 @@
         >
           <template v-for="product in myPublished" :key="product">
             <MyPublishedProductCard
-              :product="
-                environment === 'offline' ? product : product.attributes
-              "
+              :product="product"
               type="product"
               @delete="deleteProduct(product)"
             />
@@ -161,7 +159,7 @@ export default {
     const selectedSort = ref(sortOptions[0]);
     const createNotification = inject("create-notification");
     const deleteProduct = (product) => {
-      axios.post("/documents/" + product.attributes.doc_num + "/deleteMe");
+      axios.post("/documents/" + product.productNumber + "/deleteMe");
     };
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {

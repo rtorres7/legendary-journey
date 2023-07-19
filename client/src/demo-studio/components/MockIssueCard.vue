@@ -7,7 +7,7 @@
       <div class="text-gray-500 hover:text-gray-900 absolute top-3 right-3">
         <Menu as="div" class="relative">
           <div>
-            <tippy content="More" placement="bottom" theme="demo">
+            <tippy content="More" placement="bottom" theme="studio">
               <MenuButton
                 class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
               >
@@ -85,9 +85,9 @@
         </div>
         <div class="pt-4">
           <div
-            class="text-xs text-blue-700 uppercase py-2 tracking-wider font-medium"
+            class="text-xs text-gray-500 uppercase py-2 tracking-wider font-medium"
           >
-            Top <span class="text-gray-500">Product</span>
+            Top Product
           </div>
           <div class="text-sm line-clamp-2 hover:underline cursor-pointer">
             <span class="text-gray-500">{{
@@ -127,7 +127,8 @@ export default {
   },
   setup() {
     const getImg = (src) => {
-      return new URL("../../assets/mocks/" + src, import.meta.url).href;
+      //return new URL("../../assets/mocks/" + src, import.meta.url).href;
+      return new URL(`../../assets/mocks/${src}`, import.meta.url).href;
     };
 
     return {

@@ -625,7 +625,7 @@ export default {
         articles.value.splice(indexOfArticle, 1);
       } else {
         axios
-          .delete("/documents/" + selectedProduct.value.doc_num + "/deleteMe")
+          .delete("/documents/" + selectedProduct.value.id + "/deleteMe")
           .then((response) => {
             if (response.data.error) {
               createNotification({

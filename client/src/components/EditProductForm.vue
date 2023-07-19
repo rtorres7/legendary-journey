@@ -230,7 +230,9 @@
                             for="image-input"
                             class="relative cursor-pointer focus-within:ring-2 font-medium"
                           >
-                            <div class="flex items-center px-2 md:px-6 py-3">
+                            <div
+                              class="flex items-center px-2 md:px-6 py-3 not-sr-only"
+                            >
                               <template
                                 v-if="thumbnailFile?.status === 'loading'"
                               >
@@ -476,6 +478,15 @@
                         >(includes NT-50 Organizations).</span
                       >
                     </p>
+                    <template v-if="!isUserOrgIncluded()">
+                      <p
+                        class="text-sm text-red-700 dark:text-red-400 energy:text-red-400"
+                      >
+                        You have selected an organization that you are not a
+                        member of. This will prevent you from viewing and
+                        performing certain functions on this product.
+                      </p>
+                    </template>
                     <div class="flex">
                       <input
                         id="intelOrgs"
@@ -760,6 +771,56 @@
       Only shown when the product is featured on the front page.
     </p>
   </MaxDialog>
+  <MaxDialog
+    :isOpen="isDissemOrgWarningDialogOpen"
+    :title="'Dissemination Warning'"
+    class="max-w-[600px]"
+    @close="closeDissemOrgWarningDialog"
+  >
+    <MaxProductIcon
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-52 h-52 text-mission-blue/10 dark:text-slate-300/10 energy:text-zinc-300/10 contrast-0"
+      icon="warning"
+    />
+    <div class="flex flex-col space-y-6">
+      <template v-if="allDissemOrgsSelected()">
+        <p class="py-12">
+          This product will be disseminated to all Organizations including NT-50
+          Organizations.
+        </p>
+      </template>
+      <template v-else>
+        <template v-if="!isUserOrgAvailable()">
+          <p>
+            Your organization {{ userOrg }} is not available in the list for
+            selection.
+          </p>
+        </template>
+        <template v-else>
+          <template v-if="!isUserOrgIncluded()">
+            <p>
+              Please include your organization {{ userOrg }} in your selection.
+            </p>
+          </template>
+        </template>
+        <p>
+          Selecting an organization you are not a member of will prevent you
+          from viewing and performing certain functions on this product.
+        </p>
+
+        <div class="flex pt-8">
+          <input
+            id="hideDialog"
+            v-model="hideDialog"
+            type="checkbox"
+            name="hideDialog"
+          />
+          <label for="hideDialog" class="ml-2 text-sm"
+            >Do not show this again</label
+          >
+        </div>
+      </template>
+    </div>
+  </MaxDialog>
   <MaxOverlay :show="savingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
@@ -783,6 +844,7 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import dayjs from "dayjs/esm/index.js";
+import { useCookies } from "vue3-cookies";
 import { formatDate } from "@/helpers";
 import {
   BriefcaseIcon,
@@ -911,13 +973,15 @@ export default {
       },
     };
     const createNotification = inject("create-notification");
+    const { cookies } = useCookies();
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
+    const userOrg = computed(() => store.getters["user/organization"]);
     const { files, addFiles, removeFile } = useFileList();
     const thumbnailFile = ref(null);
     const thumbnailBinary = ref(null);
-    const { uploadFile, uploadFiles } = createUploader(
+    const { uploadFile } = createUploader(
       "/documents/" + props.documentNumber + "/attachments/"
     );
     const product = ref(props.product);
@@ -971,6 +1035,13 @@ export default {
     const checkAllIntelOrgs = ref(false);
     const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
+    const hideDialog = ref();
+    const saveHideDialog = () => {
+      if (hideDialog.value) {
+        cookies.set("formDialogs", "hide", 0);
+      }
+    };
+    const dialogPreference = ref(cookies.get("formDialogs"));
 
     const attachmentDrop = (event) => {
       attachmentDropzoneFile.value = event.dataTransfer.files[0];
@@ -1014,6 +1085,42 @@ export default {
         checkAllIntelOrgs.value = true;
       } else {
         checkAllIntelOrgs.value = false;
+      }
+    };
+
+    const isUserOrgAvailable = () => {
+      const availableDissemOrgs = [];
+      if (lists.dissemOrgs.length != 0) {
+        for (const dissemOrg of lists.dissemOrgs) {
+          availableDissemOrgs.push(dissemOrg.code);
+        }
+        if (availableDissemOrgs.includes(userOrg.value)) {
+          return true;
+        }
+        return false;
+      }
+    };
+
+    const isUserOrgIncluded = () => {
+      const selectedDissemOrgs = [];
+      if (form.value.dissemOrgs.length != 0) {
+        for (const dissemOrg of form.value.dissemOrgs) {
+          selectedDissemOrgs.push(dissemOrg.code);
+        }
+        if (selectedDissemOrgs.includes(userOrg.value)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    const allDissemOrgsSelected = () => {
+      if (lists.dissemOrgs.length === form.value.dissemOrgs.length) {
+        return true;
+      } else {
+        return false;
       }
     };
 
@@ -1116,6 +1223,13 @@ export default {
           payload.value[property] = codes;
           if (property === "dissem_orgs") {
             updateToggleAllIntelOrgs();
+            saveHideDialog();
+            if (
+              (!isUserOrgIncluded() && !hideDialog.value) ||
+              allDissemOrgsSelected()
+            ) {
+              openDissemOrgWarningDialog();
+            }
           }
           break;
         default:
@@ -1288,7 +1402,8 @@ export default {
         !form.value.summaryClassificationXML ||
         !form.value.classificationXML ||
         !form.value.publicationDate ||
-        form.value.producing_offices.length === 0
+        form.value.producing_offices.length === 0 ||
+        form.value.non_state_actors.length === 0
       );
     });
 
@@ -1328,6 +1443,13 @@ export default {
           });
       }
       isPreviewDialogOpen.value = true;
+    };
+    const isDissemOrgWarningDialogOpen = ref(false);
+    const openDissemOrgWarningDialog = () => {
+      isDissemOrgWarningDialogOpen.value = true;
+    };
+    const closeDissemOrgWarningDialog = () => {
+      isDissemOrgWarningDialogOpen.value = false;
     };
 
     const uploadThumbnail = (event) => {
@@ -1576,6 +1698,7 @@ export default {
       categories,
       environment,
       extraConfig,
+      userOrg,
       thumbnailFile,
       files,
       addFiles,
@@ -1590,11 +1713,17 @@ export default {
       checkAllIntelOrgs,
       selectedPublicationDate,
       attachmentDropzoneFile,
+      hideDialog,
+      saveHideDialog,
+      dialogPreference,
       attachmentDrop,
       attachmentSelectedFile,
       notInFilePreview,
       toggleAllIntelOrgs,
       updateToggleAllIntelOrgs,
+      isUserOrgAvailable,
+      isUserOrgIncluded,
+      allDissemOrgsSelected,
       removeItem,
       updateField,
       updateSelectedDate,
@@ -1608,6 +1737,9 @@ export default {
       isPreviewDialogOpen,
       closePreviewDialog,
       openPreviewDialog,
+      isDissemOrgWarningDialogOpen,
+      openDissemOrgWarningDialog,
+      closeDissemOrgWarningDialog,
       uploadThumbnail,
       onInputChange,
       onDrop,

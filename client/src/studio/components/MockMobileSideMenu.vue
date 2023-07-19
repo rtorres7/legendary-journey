@@ -1,0 +1,167 @@
+<template>
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" class="block md:hidden" @close="close">
+      <div class="fixed z-20 inset-0 overflow-y-auto w-full">
+        <div class="min-h-screen text-center">
+          <TransitionChild
+            as="template"
+            enter="transition-opacity ease-linear duration-300"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+          >
+            <div class="fixed inset-0 bg-black/25" />
+          </TransitionChild>
+          <TransitionChild
+            as="template"
+            enter="transform transition ease-in-out duration-300"
+            enter-from="-translate-x-full"
+            enter-to="translate-x-0"
+            leave="transform transition ease-in-out duration-300"
+            leave-from="translate-x-0"
+            leave-to="-translate-x-full"
+          >
+            <DialogPanel
+              class="relative min-h-screen w-72 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-gray-500 bg-white shadow-lg"
+            >
+              <button
+                type="button"
+                class="absolute top-5 right-5 w-8 h-8 flex items-center justify-center hover:text-gray-700"
+                tabindex="0"
+                @click="close"
+              >
+                <span class="sr-only">Close main menu</span
+                ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
+              </button>
+              <div class="flex flex-col">
+                <div class="flex">
+                  <router-link to="/" class="ml-4 flex mx-auto items-center">
+                    <VideoCameraIconSolid
+                      class="h-7 w-7 text-blue-700"
+                      aria-hidden="true"
+                    />
+                    <span
+                      class="ml-3 font-bold text-3xl tracking-tight text-gray-900"
+                      >Studio</span
+                    >
+                  </router-link>
+                </div>
+              </div>
+              <ul class="py-4 space-y-1">
+                <li>
+                  <div>
+                    <a href="/studio#home" class="">
+                      <div
+                        :class="
+                          isActivePage('#home')
+                            ? 'text-blue-700 bg-gray-200/25'
+                            : 'hover:text-blue-700 hover:bg-gray-200/25'
+                        "
+                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                      >
+                        <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                        <span class="ml-4">Dashboard</span>
+                      </div>
+                    </a>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <a href="/studio#live" class="">
+                      <div
+                        :class="
+                          isActivePage('#live')
+                            ? 'text-blue-700 bg-gray-200/25'
+                            : 'hover:text-blue-700 hover:bg-gray-200/25'
+                        "
+                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                      >
+                        <VideoCameraIcon class="h-6 w-6" aria-hidden="true" />
+                        <span class="ml-4">Live Content</span>
+                      </div>
+                    </a>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <a href="/studio#issues" class="">
+                      <div
+                        :class="
+                          isActivePage('#issues')
+                            ? 'text-blue-700 bg-gray-200/25'
+                            : 'hover:text-blue-700 hover:bg-gray-200/25'
+                        "
+                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                      >
+                        <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
+                        <span class="ml-4">Issues</span>
+                      </div>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+</template>
+<script>
+import { ref } from "vue";
+import {
+  Dialog,
+  DialogPanel,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import {
+  HomeIcon,
+  NewspaperIcon,
+  VideoCameraIcon,
+  XMarkIcon,
+} from "@heroicons/vue/24/outline";
+import { VideoCameraIcon as VideoCameraIconSolid } from "@heroicons/vue/24/solid";
+export default {
+  components: {
+    Dialog,
+    DialogPanel,
+    TransitionChild,
+    TransitionRoot,
+    HomeIcon,
+    NewspaperIcon,
+    VideoCameraIcon,
+    VideoCameraIconSolid,
+    XMarkIcon,
+  },
+  props: {
+    isOpen: Boolean,
+  },
+  emits: ["close"],
+  setup(props, { emit }) {
+    const currentHash = ref(window.location.hash || "#home");
+
+    window.addEventListener("hashchange", ({ target }) => {
+      currentHash.value = target.location.hash;
+    });
+
+    const isActivePage = (hash) => {
+      return hash === currentHash.value;
+    };
+
+    const close = () => {
+      emit("close");
+    };
+
+    return {
+      close,
+      isActivePage,
+    };
+  },
+};
+</script>
+<style lang="scss">
+/* Empty on Purpose */
+</style>
