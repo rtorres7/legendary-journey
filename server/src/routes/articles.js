@@ -200,7 +200,7 @@ router.get('/articles/:id/view', async (req, res) => {
       }
     }
    */
-  
+
   try {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
@@ -347,6 +347,20 @@ router.delete('/articles/:id', async (req, res) => {
   } catch (error) {
     res.json({error: 'Unable to delete article'});
   }
+});
+
+const multer = require('multer');
+const ObjectStorageEngine = require('../util/object-storage-engine');
+const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'});
+const upload = multer({ storage: engine });
+router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res) => {
+  /*
+    #swagger.summary = 'Upload an attachment for the given product'
+    #swagger.tags = ['Products']
+   */
+
+  console.log("Body: ", req.file);
+  res.json({att_id: 1, success: true});
 });
 
 module.exports = router;
