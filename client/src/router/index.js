@@ -10,7 +10,6 @@ import SearchTipsView from "../views/SearchTipsView.vue";
 import SpecialEditionView from "../views/SpecialEditionView.vue";
 import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
 import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
-import WorkspaceView from "../workspace/views/WorkspaceView.vue";
 import { isProduction } from "@/helpers";
 
 // Studio
@@ -21,6 +20,11 @@ import StudioLiveView from "@/studio/views/StudioLiveView.vue";
 import StudioIssuesView from "@/studio/views/StudioIssuesView.vue";
 import StudioIssueDetailView from "@/studio/views/StudioIssueDetailView.vue";
 import StudioIssueMetricsView from "@/studio/views/StudioIssueMetricsView.vue";
+
+//Workspace
+// import WorkspaceView from "../workspace/views/WorkspaceView.vue";
+import DashboardView from "../workspace/views/DashboardView.vue";
+import MyProductsView from "../workspace/views/MyProductsView.vue";
 
 const routes = [
   {
@@ -173,16 +177,36 @@ if (!isProduction()) {
 }
 
 if (!isProduction()) {
-  routes.push({
-    path: "/workspace",
-    name: "workspace",
-    component: WorkspaceView,
-    meta: {
-      domain: "workspace",
-      title: "Workspace",
-      demo: true,
+  routes.push(
+    // {
+    //   path: "/workspace",
+    //   name: "workspace",
+    //   component: WorkspaceView,
+    //   meta: {
+    //     domain: "workspace",
+    //     title: "Workspace",
+    //     // demo: true,
+    //   },
+    // },
+    {
+      path: "/workspace",
+      name: "dashboard",
+      component: DashboardView,
+      meta: {
+        domain: "workspace",
+        title: "Dashboard",
+      },
     },
-  });
+    {
+      path: "/workspace/my-products",
+      name: "myProducts",
+      component: MyProductsView,
+      meta: {
+        domain: "workspace",
+        title: "My Products",
+      },
+    }
+  );
   routes.push({
     path: "/studio",
     name: "studio",

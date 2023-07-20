@@ -28,14 +28,14 @@
       </template>
       <div class="py-6 flex justify-between items-center">
         <div class="text-lg font-bold">My Recent Products</div>
-        <a
+        <router-link
           v-if="myPublished.length > 4"
           class="flex items-center text-gray-500 text-sm font-semibold"
-          href="/workspace#products"
+          to="/workspace/my-products"
         >
           <span>More Products</span>
           <ChevronRightIcon class="h-4 w-4" />
-        </a>
+        </router-link>
       </div>
     </template>
     <template v-if="myPublished.length == 0 && !loadingPublished">
@@ -115,8 +115,8 @@
 import { computed, inject, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
-import MyDraftProductCard from "./MyDraftProductCard.vue";
-import MyPublishedProductCard from "./MyPublishedProductCard.vue";
+import MyDraftProductCard from "../components/MyDraftProductCard.vue";
+import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "@/data";
 import {
   ChevronRightIcon,

@@ -148,7 +148,7 @@
     </template>
     <template v-if="domain === 'workspace'">
       <main role="main" class="bg-white text-gray-900">
-        <router-view />
+        <WorkspaceShell />
       </main>
     </template>
     <template v-if="domain === 'studio'">
@@ -174,6 +174,7 @@ import ToastNotification from "@/components/ToastNotification.vue";
 import { MegaphoneIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 //studio shell
 import StudioShell from "@/studio/StudioShell.vue";
+import WorkspaceShell from "@/workspace/WorkspaceShell.vue";
 
 export default {
   components: {
@@ -185,6 +186,7 @@ export default {
     MegaphoneIcon,
     XMarkIcon,
     StudioShell,
+    WorkspaceShell,
   },
   setup() {
     const route = useRoute();

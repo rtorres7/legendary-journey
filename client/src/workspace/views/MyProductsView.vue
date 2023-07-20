@@ -12,7 +12,7 @@
           {{ numProducts }} products
         </div>
       </template>
-      <div class="flex space-x-4">
+      <!-- <div class="flex space-x-4">
         <Listbox
           v-model="selectedSort"
           as="div"
@@ -83,7 +83,7 @@
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
         </button>
-      </div>
+      </div> -->
     </div>
     <template v-if="loadingPublished">
       <div
@@ -136,31 +136,31 @@
 <script>
 import { computed, onMounted, inject, ref } from "vue";
 import axios from "@/config/wireAxios";
-import MyPublishedProductCard from "./MyPublishedProductCard.vue";
+import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "@/data";
-import {
-  AdjustmentsHorizontalIcon,
-  ChevronDownIcon,
-  CheckIcon,
-} from "@heroicons/vue/24/solid";
-import {
-  Listbox,
-  ListboxLabel,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-} from "@headlessui/vue";
+// import {
+//   AdjustmentsHorizontalIcon,
+//   ChevronDownIcon,
+//   CheckIcon,
+// } from "@heroicons/vue/24/solid";
+// import {
+//   Listbox,
+//   ListboxLabel,
+//   ListboxButton,
+//   ListboxOptions,
+//   ListboxOption,
+// } from "@headlessui/vue";
 export default {
   components: {
     MyPublishedProductCard,
-    AdjustmentsHorizontalIcon,
-    ChevronDownIcon,
-    CheckIcon,
-    Listbox,
-    ListboxLabel,
-    ListboxButton,
-    ListboxOptions,
-    ListboxOption,
+    // AdjustmentsHorizontalIcon,
+    // ChevronDownIcon,
+    // CheckIcon,
+    // Listbox,
+    // ListboxLabel,
+    // ListboxButton,
+    // ListboxOptions,
+    // ListboxOption,
   },
   setup() {
     const environment = ref(import.meta.env.MODE);
