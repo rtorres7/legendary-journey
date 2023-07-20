@@ -27,21 +27,8 @@ const articles = [
     datePublished: new Date("2022-09-01"),
     dissemOrgs: [
       {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "IC",
         code: "BANKING",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Banking",
-        id: 3,
-        label: "Banking",
-        legacy: false,
         name: "BANKING",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
       },
     ],
     htmlBody:
@@ -133,21 +120,8 @@ const articles = [
     datePublished: new Date("2022-09-02"),
     dissemOrgs: [
       {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
         code: "ANCESTRY",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Ancestry",
-        id: 1,
-        label: "Ancestry",
-        legacy: false,
         name: "ANCESTRY",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
       },
     ],
     htmlBody: [
@@ -262,21 +236,8 @@ const articles = [
     datePublished: new Date("2022-09-03"),
     dissemOrgs: [
       {
-        ancestry: "1000",
-        ancestry_depth: 1,
-        category: "POLICY",
         code: "COMMERCE",
-        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-        description: "Dept of Commerce",
-        id: 4,
-        label: "Commerce",
-        legacy: false,
-        name: "COMMERCE",
-        ntk_org: true,
-        position: 2,
-        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-        usgov_org: true,
-        visible: true,
+        name: "COMMERCE"
       },
     ],
     htmlBody: [
