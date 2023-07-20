@@ -137,4 +137,13 @@ router.delete("/documents/:id/deleteMe", async (req, res) => {
   res.redirect(307, `/articles/${req.params.id}`);
 });
 
+router.post("/documents/:id/attachments", (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Upload an attachment to the product. Use POST /articles/{id}/attachments'
+ */
+  res.redirect(307, `/articles/${req.params.id}/attachments`);
+})
+
 module.exports = router;

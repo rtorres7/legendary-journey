@@ -982,7 +982,7 @@ export default {
     const thumbnailFile = ref(null);
     const thumbnailBinary = ref(null);
     const { uploadFile } = createUploader(
-      "/documents/" + props.documentNumber + "/attachments/"
+      import.meta.env.MODE === "container" ? "/api/documents/" + props.documentNumber + "/attachments/" : "/documents/" + props.documentNumber + "/attachments/"
     );
     const product = ref(props.product);
     const savingProduct = ref(false);
