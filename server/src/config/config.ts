@@ -27,6 +27,8 @@ if (process.env.DOTENV) {
   }
 }
 
+// console.log(`envPath ${envPath}`);
+
 if (envPath) {
   if (fs.existsSync(envPath)) {
     // console.info(`config:  dotenv config ${envPath}`);
@@ -73,6 +75,9 @@ const config = {
     env: envVars.MXS_ENV,
     baseUri: envVars.MXS_BASE_URI,
   },
+  elasticsearch: {
+    url: envVars.ES_URL,
+  },
   mongodb: {
     url: envVars.MONGO_DATABASE_URL,
   },
@@ -90,4 +95,4 @@ const config = {
   },
 };
 
-export default config;
+export = config;

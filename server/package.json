@@ -6,7 +6,7 @@
     "start": "nodemon src/swagger.js",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --runInBand",
-    "test:watch": "jest --watch",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "lint": "eslint --fix src",
     "swagger-autogen": "DOTENV=swagger node src/swagger.js",
     "clean": "rimraf coverage dist tmp",
@@ -16,8 +16,9 @@
     "copy-assets": "copyfiles --all --exclude \"./**/*.{ts,tsx,js,jsx}\" \"./src/**/*\" \"./env/**/*\" ./dist"
   },
   "jest": {
-    "preset": "ts-jest",
+    "preset": "ts-jest/presets/js-with-ts",
     "testEnvironment": "node",
+    "roots": ["__tests__"],
     "setupFilesAfterEnv": [
       "<rootDir>/__tests__/__utils__/testSetup.js"
     ],
@@ -36,7 +37,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.6.0",
-    "@kiwiproject/kiwi-js": "^0.6.1",
+    "@kiwiproject/kiwi-js": "^0.7.0",
     "cache-manager": "^5.2.2",
     "connect-mongo": "^5.0.0",
     "cors": "^2.8.5",

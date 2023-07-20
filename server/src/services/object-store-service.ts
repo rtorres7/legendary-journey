@@ -1,7 +1,6 @@
 // const constant = require("../util/constant.js");
 import { BucketItem, BucketItemFromList, BucketItemStat, Client, ItemBucketMetadata, UploadedObjectInfo } from 'minio';
 import { Readable } from 'stream';
-import { metadata } from '../../__tests__/__utils__/dataLoader';
 import config from '../config/config';
 
 export class ObjectStoreService {
@@ -92,7 +91,7 @@ export class ObjectStoreService {
    * Minio.Client.putObject(bucketName: string, objectName: string, stream: ReadableStream | Buffer | string, metaData?: ItemBucketMetadata): Promise<UploadedObjectInfo>
    */
   async putObject(bucketName: string, objectName: string, stream: Readable | Buffer | string, metaData?: ItemBucketMetadata): Promise<UploadedObjectInfo> {
-    return this.getClient().putObject(bucketName, objectName, stream, metadata);
+    return this.getClient().putObject(bucketName, objectName, stream, metaData);
   }
 
   /**
