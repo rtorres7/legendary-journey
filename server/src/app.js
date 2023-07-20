@@ -60,7 +60,7 @@ app.use(
  *
  * Sets up the HTTP request logging.
  */
-if (config.env !== "test") {
+if (process.env.NODE_ENV !== "test") {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
 }
