@@ -125,7 +125,7 @@
                           </div>
                         </router-link>
                       </MenuItem>
-                      <MenuItem>
+                      <MenuItem v-if="product.featureId">
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                           @click="deleteProduct"

@@ -21,7 +21,7 @@
               :productIcon="getProductIcon(product)"
               type="product"
               :class="index < numCards ? 'block' : 'hidden'"
-              @delete="deleteProduct(product)"
+              @delete="openDeleteDialog(product)"
             />
           </template>
         </div>
@@ -63,7 +63,7 @@
             :product="product"
             type="product"
             :class="index < numCards ? 'block' : 'hidden'"
-            @delete="deleteProduct(product)"
+            @delete="openDeleteDialog(product)"
           />
         </template>
       </div>
@@ -93,6 +93,22 @@
         <div class="font-semibold text-xl text-slate-700">2.4m</div>
       </div>
     </div>
+    <MaxDialog
+      :isOpen="isDeleteDialogOpen"
+      :title="'Delete Product'"
+      class="max-w-fit"
+      @close="closeDeleteDialog"
+    >
+      <p class="py-4 pr-4">Are you sure you want to do this?</p>
+      <template #actions>
+        <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
+          >Cancel</MaxButton
+        >
+        <MaxButton color="danger" @click.prevent="deleteProduct">
+          Delete
+        </MaxButton>
+      </template>
+    </MaxDialog>
   </div>
 </template>
 <script>
@@ -128,8 +144,72 @@ export default {
     const loadingPublished = ref(true);
     const loadingStats = ref(true);
     const createNotification = inject("create-notification");
-    const deleteProduct = (product) => {
-      axios.post("/documents/" + product.productNumber + "/deleteMe");
+    const selectedProduct = ref();
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+    const deleteProduct = () => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+          type: "success",
+        });
+        closeDeleteDialog();
+        if (selectedProduct.value.state == "draft") {
+          let p = myDrafts.value.find(
+            (item) => item.productNumber == selectedProduct.value.productNumber
+          );
+          let indexOfProduct = myDrafts.value.indexOf(p);
+          myDrafts.value.splice(indexOfProduct, 1);
+        } else {
+          let p = myPublished.value.find(
+            (item) => item.productNumber == selectedProduct.value.productNumber
+          );
+          let indexOfProduct = myPublished.value.indexOf(p);
+          myPublished.value.splice(indexOfProduct, 1);
+        }
+      } else {
+        axios
+          .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+                type: "success",
+              });
+              closeDeleteDialog();
+              if (selectedProduct.value.state == "draft") {
+                let p = myDrafts.value.find(
+                  (item) =>
+                    item.productNumber == selectedProduct.value.productNumber
+                );
+                let indexOfProduct = myDrafts.value.indexOf(p);
+                myDrafts.value.splice(indexOfProduct, 1);
+              } else {
+                let p = myPublished.value.find(
+                  (item) =>
+                    item.productNumber == selectedProduct.value.productNumber
+                );
+                let indexOfProduct = myPublished.value.indexOf(p);
+                myPublished.value.splice(indexOfProduct, 1);
+              }
+            }
+          });
+      }
     };
     const getProductIcon = (product) => {
       let p;
@@ -234,6 +314,9 @@ export default {
       loadingDrafts,
       loadingPublished,
       loadingStats,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
       deleteProduct,
       getProductIcon,
       screenWidth,

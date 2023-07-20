@@ -109,12 +109,28 @@
             <MyPublishedProductCard
               :product="product"
               type="product"
-              @delete="deleteProduct(product)"
+              @delete="openDeleteDialog(product)"
             />
           </template>
         </div>
       </template>
     </template>
+    <MaxDialog
+      :isOpen="isDeleteDialogOpen"
+      :title="'Delete Product'"
+      class="max-w-fit"
+      @close="closeDeleteDialog"
+    >
+      <p class="py-4 pr-4">Are you sure you want to do this?</p>
+      <template #actions>
+        <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
+          >Cancel</MaxButton
+        >
+        <MaxButton color="danger" @click.prevent="deleteProduct">
+          Delete
+        </MaxButton>
+      </template>
+    </MaxDialog>
   </div>
 </template>
 <script>
@@ -158,8 +174,55 @@ export default {
     ];
     const selectedSort = ref(sortOptions[0]);
     const createNotification = inject("create-notification");
-    const deleteProduct = (product) => {
-      axios.post("/documents/" + product.productNumber + "/deleteMe");
+    const selectedProduct = ref();
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+    const deleteProduct = () => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+          type: "success",
+        });
+        closeDeleteDialog();
+        let p = myPublished.value.find(
+          (item) => item.productNumber == selectedProduct.value.productNumber
+        );
+        let indexOfProduct = myPublished.value.indexOf(p);
+        myPublished.value.splice(indexOfProduct, 1);
+      } else {
+        axios
+          .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+                type: "success",
+              });
+              closeDeleteDialog();
+              let p = myPublished.value.find(
+                (item) =>
+                  item.productNumber == selectedProduct.value.productNumber
+              );
+              let indexOfProduct = myPublished.value.indexOf(p);
+              myPublished.value.splice(indexOfProduct, 1);
+            }
+          });
+      }
     };
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
@@ -196,6 +259,9 @@ export default {
       numProducts,
       sortOptions,
       selectedSort,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
       deleteProduct,
     };
   },
