@@ -6,7 +6,7 @@ WORKDIR /data/
 COPY package*.json ./
 
 # Create node_modules directory and .cache as root, then give node user ownership
-RUN mkdir -p /data/node_modules/.cache && chown -R node:node /data/
+RUN mkdir -p /data/node_modules/.cache && mkdir -p /data/build/src && chown -R node:node /data/
 
 # Switch to 'node' user and install dependencies
 USER node

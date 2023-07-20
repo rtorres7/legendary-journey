@@ -7,6 +7,7 @@ let envPath: string;
 
 // console.log(`DOTENV = ${process.env.DOTENV}`);
 // console.log(`NODE_ENV = ${process.env.NODE_ENV}`);
+// console.log(`MXS_ENV = ${process.env.MXS_ENV}`);
 
 if (process.env.DOTENV) {
   envPath = path.join(__dirname, `../../env/${process.env.DOTENV}.env`);
@@ -68,7 +69,7 @@ if (error) {
   throw new Error(`Config validation error: ${error.message}`);
 }
 
-const config = {
+export const config = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mxs: {
@@ -95,4 +96,4 @@ const config = {
   },
 };
 
-export = config;
+export default config;

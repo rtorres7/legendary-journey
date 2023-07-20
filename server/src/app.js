@@ -1,11 +1,11 @@
 const cors = require("cors");
 const express = require("express");
-const config = require("./config/config");
-const morgan = require("./config/morgan");
 const MongoStore = require("connect-mongo");
 const auth = require("./services/auth");
 const path = require("path");
 const session = require("express-session");
+const { config } = require("./config/config");
+const { successHandler, errorHandler } = require("./config/morgan");
 
 const app = express();
 
@@ -50,7 +50,7 @@ app.use(
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({
-      mongoUrl: `mongodb://${config.mongodb.url}/articles`,
+      mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles`,
     }), // Default TTL is 14 days
   }),
 );
@@ -61,8 +61,8 @@ app.use(
  * Sets up the HTTP request logging.
  */
 if (process.env.NODE_ENV !== "test") {
-  app.use(morgan.successHandler);
-  app.use(morgan.errorHandler);
+  app.use(successHandler);
+  app.use(errorHandler);
 }
 
 /**
@@ -139,7 +139,7 @@ setupMongoose();
 require("./data/elasticsearch");
 
 // Load seed data
-if (config.mxs.env === "container") {
+if (process.env.MXS_ENV === "container") {
   const ProductService = require("./services/product-service");
   const productService = new ProductService();
   productService.initializeProductData();

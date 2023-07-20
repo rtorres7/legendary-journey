@@ -3,7 +3,7 @@ const { Client } = require("@elastic/elasticsearch");
 const ProductSearchService = require("../../src/services/product-search-service");
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
-const logger = require("../../src/config/logger");
+const { logger } = require("../../src/config/logger");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {

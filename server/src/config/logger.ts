@@ -8,7 +8,7 @@ const enumerateErrorFormat = winston.format((info) => {
   return info;
 });
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   // https://github.com/winstonjs/winston
   // level: config.env === 'development' ? 'debug' : 'info',
   // error warn info http verbose debug silly
@@ -28,4 +28,4 @@ const logger = winston.createLogger({
   ],
 });
 
-export = logger;
+export default logger;

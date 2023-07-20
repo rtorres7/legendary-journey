@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const { Sequelize } = require("sequelize");
 
-const logger = require("../../src/config/logger");
+const { logger } = require("../../src/config/logger");
 
 const articles = [
   new Article({
