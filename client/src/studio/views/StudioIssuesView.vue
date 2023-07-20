@@ -3,20 +3,21 @@
     <div class="pt-8 pb-6">
       <div class="flex justify-between pb-8">
         <div class="text-3xl font-semibold text-gray-700 lg:max-w-none">
-          Products
+          Issues
         </div>
         <button
           class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80 cursor-pointer"
+          @click="openEdit"
         >
           <PlusIcon class="h-4 w-4" />
-          <span class="ml-2.5">New Product</span>
+          <span class="ml-2.5">New Issue</span>
         </button>
       </div>
       <div class="flex justify-between items-center">
-        <div class="text-gray-500 font-medium">16 products</div>
+        <div class="text-gray-500 font-medium">6 issues</div>
         <div class="flex space-x-4">
           <Listbox
-            v-model="selectedSortProduct"
+            v-model="selectedSort"
             as="div"
             class="min-w-[260px] hidden md:inline-flex items-center text-gray-700"
           >
@@ -32,7 +33,7 @@
                 class="relative w-full min-h-[2.125rem] rounded cursor-default pl-3 pr-10 text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-offset-2"
               >
                 <span class="text-sm block truncate capitalize">{{
-                  selectedSortProduct.name
+                  selectedSort.name
                 }}</span>
                 <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronDownIcon class="h-4 w-4" aria-hidden="true" />
@@ -50,7 +51,7 @@
                   class="absolute w-full py-1 mt-1 overflow-auto text-gray-900 bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none z-[5]"
                 >
                   <ListboxOption
-                    v-for="item in sortOptionsProducts"
+                    v-for="item in sortOptions"
                     v-slot="{ active, selected }"
                     :key="item.name"
                     :value="item"
@@ -94,8 +95,8 @@
     <div
       class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-center"
     >
-      <template v-for="n in products" :key="n">
-        <MockProductCard :product="n" type="product" />
+      <template v-for="n in issues" :key="n">
+        <MockIssueCard :issue="n" />
       </template>
     </div>
   </div>
@@ -377,7 +378,7 @@
 <script>
 import dayjs from "dayjs/esm/index.js";
 import { issues, products } from "../data";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import {
   Dialog,
   DialogPanel,
@@ -398,7 +399,7 @@ import {
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import MockProductCard from "@/demo-studio/components/MockProductCard.vue";
+import MockIssueCard from "@/demo-studio/components/MockIssueCard.vue";
 const themeOptions = ["light", "dark", "system"];
 export default {
   components: {
@@ -415,7 +416,7 @@ export default {
     ChevronDownIcon,
     PlusIcon,
     XMarkIcon,
-    MockProductCard,
+    MockIssueCard,
     Switch,
     TransitionChild,
     TransitionRoot,
@@ -436,6 +437,14 @@ export default {
     const selectedSort = ref(sortOptions[0]);
     const selectedSortProduct = ref(sortOptionsProducts[0]);
     const hover = ref(false);
+
+    onMounted(() => {
+      window.location.hash = window.location.hash || "#home";
+    });
+
+    window.addEventListener("hashchange", ({ target }) => {
+      currentHash.value = target.location.hash;
+    });
 
     const isActivePage = (hash) => {
       return hash === currentHash.value;
