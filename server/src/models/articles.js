@@ -1,9 +1,36 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const AttachmentSchema = new Schema({
+    fileName: String,
+    mimeType: String,
+    createdAt: Date,
+    fileSize: Number,
+    type: String,
+    attachmentId: String,
+    destination: String,
+    visible: Boolean,
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  });
+
+AttachmentSchema.virtual("mime_type").get(function () {
+  return this.mimeType;
+});
+
+AttachmentSchema.virtual("file_name").get(function () {
+  return this.fileName;
+});
+
+AttachmentSchema.virtual("file_size").get(function () {
+  return this.fileSize;
+});
+
 const ArticleSchema = new Schema(
   {
-    attachmentsMetadata: [],
+    attachmentsMetadata: [AttachmentSchema],
     classification: String,
     classificationXml: String,
     coauthors: [
@@ -222,6 +249,7 @@ ArticleSchema.virtual("indexable").get(function () {
 
 ArticleSchema.virtual("data.document").get(function () {
   return {
+    attachments: this.attachmentsMetadata,
     classification: this.classification,
     coauthors: this.coauthors,
     coordinators: this.coordinators,

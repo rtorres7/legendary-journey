@@ -14,22 +14,23 @@ class ObjectStorageEngine {
       await this.service.makeBucket(this.bucket);
     }
 
-    console.log("Params", req.params);
-    console.log("File: ", file)
-    console.log("Name: ", file.originalname);
-    const uploadedObject = await this.service.putObject(this.bucket, `${this.prefix}/${file.originalname}`, file.stream);
+    const uploadedObject = await this.service.putObject(this.bucket, `${this.prefix}/${file.originalname}`, file.stream, { 'content-type': file.mimetype });
 
-    console.log('Saved: ', uploadedObject);
+    const stats = await this.service.statObject(this.bucket, `${this.prefix}/${file.originalname}`);
+
     cb(null, {
       bucket: this.bucket,
       path: `${this.prefix}/${file.originalname}`,
       etag: uploadedObject.etag,
-      version: uploadedObject.versionId
+      version: uploadedObject.versionId,
+      size: stats.size,
+      storage: 'minio'
     });
   }
 
   async _removeFile(req, file, cb) {
-    cb();
+    await this.service.removeObject(this.bucket, `${this.prefix}/${file.originalname}`);
+    cb(null, {});
   }
 }
 
