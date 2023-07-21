@@ -621,6 +621,7 @@
                                 <tippy content="Download" :delay="[500, null]">
                                   <router-link
                                     :to="
+                                      apiBaseUrl +
                                       '/documents/' +
                                       documentNumber +
                                       '/attachments/' +
@@ -938,6 +939,9 @@ export default {
     const router = useRouter();
     const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
+    const apiBaseUrl = computed(() => {
+      return import.meta.env.MODE === "container" ? "/api" : "";
+    });
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
       toolbar: {
@@ -982,7 +986,7 @@ export default {
     const thumbnailFile = ref(null);
     const thumbnailBinary = ref(null);
     const { uploadFile } = createUploader(
-      "/documents/" + props.documentNumber + "/attachments/"
+      apiBaseUrl.value + "/documents/" + props.documentNumber + "/attachments/"
     );
     const product = ref(props.product);
     const savingProduct = ref(false);
@@ -1509,7 +1513,7 @@ export default {
     };
 
     const removeDocument = (attachmentID, doc_num) => {
-      fetch("/documents/" + doc_num + "/attachments/" + attachmentID, {
+      fetch(apiBaseUrl.value + "/documents/" + doc_num + "/attachments/" + attachmentID, {
         method: "DELETE",
       })
         .then(() => {
@@ -1749,6 +1753,7 @@ export default {
       publishProduct,
       saveProduct,
       cancel,
+      apiBaseUrl,
     };
   },
 };
