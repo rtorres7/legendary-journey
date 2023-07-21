@@ -20,7 +20,7 @@
       </li>
       <li v-for="attachment in attachments" :key="attachment.binary_id">
         <router-link
-          :to="attachmentLink + '/' + attachment.file_name"
+          :to="apiBaseUrl + attachmentLink + '/' + attachment.file_name"
           target="_blank"
         >
           <div class="flex hover:underline">
@@ -54,6 +54,9 @@ export default {
   },
   setup(props) {
     const route = useRoute();
+    const apiBaseUrl = computed(() => {
+      return import.meta.env.MODE === "container" ? "/api" : "";
+    });
     const docNum = computed(
       () => `${route.params.doc_num}` || props.article.doc_num
     );
@@ -85,6 +88,7 @@ export default {
       attachmentLink,
       pdfVersions,
       attachments,
+      apiBaseUrl,
     };
   },
 };
