@@ -119,6 +119,7 @@ ArticleSchema.virtual("features").get(function () {
     datePublished: this.datePublished,
     id: this.get("_id"),
     featureId: this.get("_id"),
+    doc_num: this.productNumber,
     images: this.images,
     needed: this.needed,
     orgRestricted: this.orgRestricted,
