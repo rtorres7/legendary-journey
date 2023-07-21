@@ -42,7 +42,7 @@
             <div
               class="text-gray-500 hover:text-gray-900 absolute top-0 right-0 cursor-pointer"
             >
-              <Menu as="div" class="relative">
+              <Menu as="div" class="relative z-50">
                 <div>
                   <tippy content="More" placement="bottom" theme="demo">
                     <MenuButton
@@ -67,7 +67,7 @@
                   <MenuItems
                     class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                   >
-                    <MenuItem>
+                    <!-- <MenuItem>
                       <div
                         class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                       >
@@ -76,8 +76,8 @@
                           >Share</span
                         >
                       </div>
-                    </MenuItem>
-                    <template v-if="type === 'product' || type === 'favorites'">
+                    </MenuItem> -->
+                    <!-- <template v-if="type === 'product' || type === 'favorites'">
                       <MenuItem>
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
@@ -100,7 +100,7 @@
                           >
                         </div>
                       </MenuItem>
-                    </template>
+                    </template> -->
                     <template v-if="type === 'product'">
                       <MenuItem v-if="product.featureId">
                         <router-link

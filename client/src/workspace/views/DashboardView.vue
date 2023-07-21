@@ -93,7 +93,7 @@
         <div class="font-semibold text-xl text-slate-700">2.4m</div>
       </div>
     </div>
-    <MaxDialog
+    <BaseDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Product'"
       class="max-w-fit"
@@ -101,20 +101,22 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
-          >Cancel</MaxButton
+        <BaseButton color="secondary" @click.prevent="closeDeleteDialog"
+          >Cancel</BaseButton
         >
-        <MaxButton color="danger" @click.prevent="deleteProduct">
+        <BaseButton color="danger" @click.prevent="deleteProduct">
           Delete
-        </MaxButton>
+        </BaseButton>
       </template>
-    </MaxDialog>
+    </BaseDialog>
   </div>
 </template>
 <script>
 import { computed, inject, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import axios from "@/config/wireAxios";
+import BaseDialog from "../components/BaseDialog.vue";
+import BaseButton from "../components/BaseButton.vue";
 import MyDraftProductCard from "../components/MyDraftProductCard.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "@/data";
@@ -130,6 +132,8 @@ export default {
     ChevronRightIcon,
     EyeIcon,
     Square3Stack3DIcon,
+    BaseDialog,
+    BaseButton,
   },
   setup() {
     const store = useStore();

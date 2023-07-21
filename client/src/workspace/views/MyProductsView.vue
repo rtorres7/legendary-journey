@@ -115,7 +115,7 @@
         </div>
       </template>
     </template>
-    <MaxDialog
+    <BaseDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Product'"
       class="max-w-fit"
@@ -123,19 +123,21 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
-          >Cancel</MaxButton
+        <BaseButton color="secondary" @click.prevent="closeDeleteDialog"
+          >Cancel</BaseButton
         >
-        <MaxButton color="danger" @click.prevent="deleteProduct">
+        <BaseButton color="danger" @click.prevent="deleteProduct">
           Delete
-        </MaxButton>
+        </BaseButton>
       </template>
-    </MaxDialog>
+    </BaseDialog>
   </div>
 </template>
 <script>
 import { computed, onMounted, inject, ref } from "vue";
 import axios from "@/config/wireAxios";
+import BaseDialog from "../components/BaseDialog.vue";
+import BaseButton from "../components/BaseButton.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "@/data";
 // import {
@@ -153,6 +155,8 @@ import { productDetails } from "@/data";
 export default {
   components: {
     MyPublishedProductCard,
+    BaseDialog,
+    BaseButton,
     // AdjustmentsHorizontalIcon,
     // ChevronDownIcon,
     // CheckIcon,
