@@ -273,27 +273,28 @@ async function updateArticle(id, req, res) {
   const nonStateActors = await metadataService.findNonStateActorsFor(
     req.body.non_state_actors
   );
-
+  const testing = coauthors.map((author) => {name=> author.name, code=> author.code})
+  console.log("COAUTHORS ======================= ", coauthors)
   const article = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
-    coauthors: coauthors,
-    coordinators: coordinators,
-    countries: countries,
-    nonStateActors: nonStateActors,
+    coauthors: coauthors.map(({name, code}) => ({name, code})),
+    coordinators: coordinators.map(({name, code}) => ({name, code})),
+    countries: countries.map(({name, code}) => ({name, code})),
+    nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
     datePublished: req.body.date_published,
-    dissemOrgs: dissemOrgs,
+    dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
     htmlBody: req.body.html_body,
     issues: issues,
     pocInfo: req.body.poc_info,
-    producingOffices: producingOffices,
+    producingOffices: producingOffices.map(({name, code}) => ({name, code})),
     productNumber: req.body.doc_num,
     productType: productType,
     publicationNumber: req.body.publication_number,
-    regions: regions,
+    regions: regions.map(({name, code}) => ({name, code})),
     reportingType: reportingType,
     state: req.body.state,
-    subregions: subregions,
+    subregions: subregions.map(({name, code}) => ({name, code})),
     summary: req.body.summary,
     summaryClassification: req.body.summary_classif,
     summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
@@ -303,6 +304,12 @@ async function updateArticle(id, req, res) {
     topics: topics,
     thumbnailCaption: req.body.thumbnailCaption,
     updatedAt: dayjs().toDate(),
+    updatedBy: {
+      id: req.user.id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      dn: req.user.dn,
+    },
     worldwide: req.body.worldwide,
   };
 
