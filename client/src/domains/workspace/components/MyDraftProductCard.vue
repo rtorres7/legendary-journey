@@ -43,7 +43,7 @@
                   >
                 </div>
               </MenuItem>
-              <MenuItem>
+              <MenuItem v-if="product.featureId">
                 <router-link
                   :to="{
                     name: 'edit',
@@ -64,7 +64,7 @@
                   </div>
                 </router-link>
               </MenuItem>
-              <MenuItem>
+              <MenuItem v-if="product.featureId">
                 <div
                   class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                   @click="deleteProduct"
@@ -165,7 +165,7 @@ export default {
       },
       {
         name: "briefcase",
-        color: "violet",
+        color: "purple",
       },
       {
         name: "community",
@@ -189,7 +189,7 @@ export default {
       },
       {
         name: "phone",
-        color: "violet",
+        color: "purple",
       },
       {
         name: "file",
@@ -206,7 +206,11 @@ export default {
     ];
     const getIconColor = (iconName) => {
       let icon = icons.find((icon) => icon.name == iconName);
-      return `text-${icon.color}-500`;
+      if (icon) {
+        return `text-${icon.color}-500`;
+      } else {
+        return "text-green-500";
+      }
     };
     return {
       deleteProduct,

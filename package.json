@@ -10,10 +10,14 @@
     "install-all-deps": "node_modules/.bin/concurrently 'npm run server-dependencies' 'npm run client-dependencies'",
     "client": "cd client && npm run serve:offline",
     "dev": "node_modules/.bin/concurrently 'npm run server' 'npm run client'",
-    "sonar": "sonar-scanner -Dsonar.login=$SONAR_TOKEN"
+    "sonar": "sonar-scanner -Dsonar.login=$SONAR_TOKEN",
+    "check:server-deps": "node_modules/.bin/npm-check-updates --packageFile server/package.json",
+    "check:client-deps": "node_modules/.bin/npm-check-updates --packageFile client/package.json",
+    "check:root-deps": "node_modules/.bin/npm-check-updates --packageFile package.json",
+    "check:all-deps": "node_modules/.bin/concurrently 'npm run check:root-deps' 'npm run check:client-deps' 'npm run check:server-deps'"
   },
   "dependencies": {
-    "concurrently": "^7.2.1",
-    "passport-oauth2": "^1.7.0"
+    "concurrently": "8.2.0",
+    "npm-check-updates": "16.10.16"
   }
 }
