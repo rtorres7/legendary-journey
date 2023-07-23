@@ -7,7 +7,7 @@
     </div>
     <div class="h-full flex flex-col py-4 justify-between">
       <div class="relative pb-6 px-4">
-        <div class="text-xs text-blue-700 font-medium pb-2">
+        <div class="text-xs text-indigo-700 font-medium pb-2">
           {{ product.type }}
         </div>
         <p

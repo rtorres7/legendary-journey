@@ -6,7 +6,7 @@
           Issues
         </div>
         <button
-          class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80 cursor-pointer"
+          class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-indigo-700 hover:border-blue-600 active:bg-indigo-800 active:text-gray-200/80 cursor-pointer"
           @click="openEdit"
         >
           <PlusIcon class="h-4 w-4" />
@@ -208,7 +208,9 @@
                       <div class="font-medium">Breaking Product</div>
                       <Switch
                         v-model="breakingEnabled"
-                        :class="breakingEnabled ? 'bg-blue-700' : 'bg-gray-300'"
+                        :class="
+                          breakingEnabled ? 'bg-indigo-700' : 'bg-gray-300'
+                        "
                         class="relative inline-flex mt-3 h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                       >
                         <span class="sr-only">Use setting</span>
@@ -241,7 +243,7 @@
                               </div>
                               <div class="text-sm text-gray-500">
                                 <span
-                                  class="text-blue-700 font-semibold cursor-pointer"
+                                  class="text-indigo-700 font-semibold cursor-pointer"
                                   >Search for a product</span
                                 >
                                 to add.
@@ -259,7 +261,7 @@
                               </div>
                               <div class="text-sm text-gray-500">
                                 <span
-                                  class="text-blue-700 font-semibold cursor-pointer"
+                                  class="text-indigo-700 font-semibold cursor-pointer"
                                   >Search for a product</span
                                 >
                                 to add.
@@ -277,7 +279,7 @@
                               </div>
                               <div class="text-sm text-gray-500">
                                 <span
-                                  class="text-blue-700 font-semibold cursor-pointer"
+                                  class="text-indigo-700 font-semibold cursor-pointer"
                                   >Search for a product</span
                                 >
                                 to add.
@@ -289,7 +291,7 @@
                           >
                             <div class="text-sm text-gray-500">
                               <span
-                                class="text-blue-700 font-semibold cursor-pointer"
+                                class="text-indigo-700 font-semibold cursor-pointer"
                                 >Search for a product</span
                               >
                               to add.
@@ -300,7 +302,7 @@
                           >
                             <div class="text-sm text-gray-500">
                               <span
-                                class="text-blue-700 font-semibold cursor-pointer"
+                                class="text-indigo-700 font-semibold cursor-pointer"
                                 >Search for a product</span
                               >
                               to add.
@@ -311,7 +313,7 @@
                           >
                             <div class="text-sm text-gray-500">
                               <span
-                                class="text-blue-700 font-semibold cursor-pointer"
+                                class="text-indigo-700 font-semibold cursor-pointer"
                                 >Search for a product</span
                               >
                               to add.
@@ -322,7 +324,7 @@
                           >
                             <div class="text-sm text-gray-500">
                               <span
-                                class="text-blue-700 font-semibold cursor-pointer"
+                                class="text-indigo-700 font-semibold cursor-pointer"
                                 >Search for a product</span
                               >
                               to add.
@@ -333,7 +335,7 @@
                           >
                             <div class="text-sm text-gray-500">
                               <span
-                                class="text-blue-700 font-semibold cursor-pointer"
+                                class="text-indigo-700 font-semibold cursor-pointer"
                                 >Search for a product</span
                               >
                               to add.
@@ -344,7 +346,7 @@
                           >
                             <div class="text-sm text-gray-500">
                               <span
-                                class="text-blue-700 font-semibold cursor-pointer"
+                                class="text-indigo-700 font-semibold cursor-pointer"
                                 >Search for a product</span
                               >
                               to add.
@@ -360,11 +362,11 @@
                 class="flex justify-end items-center space-x-6 mt-8 pt-8 border-t border-gray-200 text-sm"
               >
                 <button
-                  class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+                  class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-indigo-700 hover:border-blue-600 active:bg-indigo-800 active:text-gray-200/80"
                 >
                   Create
                 </button>
-                <button class="font-medium text-blue-700" @click="closeEdit">
+                <button class="font-medium text-indigo-700" @click="closeEdit">
                   Close
                 </button>
               </div>

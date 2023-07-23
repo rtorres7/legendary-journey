@@ -2,7 +2,7 @@
   <div>
     <div class="max-w-[1480px] flex space-x-4 justify-end pt-8">
       <router-link
-        class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+        class="flex space-x-2 min-h-[2.125rem] items-center text-sm rounded-md px-4 transition-colors text-gray-50 bg-indigo-700 hover:border-blue-600 active:bg-indigo-800 active:text-gray-200/80"
         :to="{
           name: 'studio-issue-detail',
           params: {
@@ -21,7 +21,7 @@
       </button>
     </div>
     <div class="py-8">
-      <div class="text-blue-600 font-medium text-sm">Changes in 4 days</div>
+      <div class="text-indigo-600 font-medium text-sm">Changes in 4 days</div>
       <div class="text-5xl py-2 font-bold">
         {{ issues[0].title }}
       </div>
@@ -50,7 +50,7 @@
               </p>
             </div>
             <div class="flex space-x-2 font-medium text-sm">
-              <div class="text-blue-700">{{ product.type }}</div>
+              <div class="text-indigo-700">{{ product.type }}</div>
               <div>•</div>
               <div class="text-gray-500">
                 {{ product.date_posted }}
@@ -72,7 +72,7 @@
               </p>
             </div>
             <div class="pb-4 flex space-x-2 font-medium text-sm">
-              <div class="text-blue-700">{{ product.type }}</div>
+              <div class="text-indigo-700">{{ product.type }}</div>
               <div>•</div>
               <div class="text-gray-500">
                 {{ product.date_posted }}

@@ -15,9 +15,9 @@
         </button>
         <router-link
           to="/"
-          class="text-blue-700 ml-6 flex mx-auto items-center"
+          class="text-indigo-700 ml-6 flex mx-auto items-center"
         >
-          <div class="rounded-full bg-blue-200 p-2">
+          <div class="rounded-full bg-indigo-200 p-2">
             <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
           </div>
           <span class="ml-3 font-bold text-2xl">Studio</span>
@@ -199,9 +199,9 @@
         <div class="flex grow flex-col pt-6">
           <div class="flex justify-center items-center pb-6">
             <router-link to="/">
-              <div class="rounded-full bg-blue-200 p-3">
+              <div class="rounded-full bg-indigo-200 p-3">
                 <VideoCameraIconSolid
-                  class="h-6 w-6 text-blue-700"
+                  class="h-6 w-6 text-indigo-700"
                   aria-hidden="true"
                 />
               </div>
@@ -219,8 +219,8 @@
                   <div
                     :class="
                       isActiveRoute('studio-issue-detail')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="cursor-pointer"
                   >
@@ -243,8 +243,8 @@
                   <div
                     :class="
                       isActiveRoute('studio-issue-metrics')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="cursor-pointer"
                   >
@@ -278,8 +278,8 @@
               <div
                 :class="
                   isActiveRoute('studio')
-                    ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                    : 'hover:text-blue-700'
+                    ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                    : 'hover:text-indigo-700'
                 "
                 class="cursor-pointer"
               >
@@ -303,8 +303,8 @@
                 <div
                   :class="
                     isActiveRoute('studio-live')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
                 >
@@ -331,8 +331,8 @@
                 <div
                   :class="
                     isActiveRoute('studio-calendar')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
                 >
@@ -358,8 +358,8 @@
                 <div
                   :class="
                     isActiveRoute('studio-issues')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
                 >
@@ -382,8 +382,8 @@
                 <div
                   :class="
                     isActiveRoute('studio-products')
-                      ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                      : 'hover:text-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
                 >
@@ -417,9 +417,9 @@
     <div class="hidden 2xl:block">
       <div class="flex grow-0 flex-col max-h-full min-h-screen w-[320px]">
         <div class="flex grow flex-col pt-6">
-          <div class="text-blue-700 flex px-4 pb-6">
+          <div class="text-indigo-700 flex px-4 pb-6">
             <router-link to="/" class="flex items-center px-4">
-              <div class="rounded-full bg-blue-200 p-3">
+              <div class="rounded-full bg-indigo-200 p-3">
                 <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
               </div>
               <span class="ml-4 font-bold text-3xl">Studio</span>
@@ -439,8 +439,8 @@
                     <div
                       :class="
                         isActiveRoute('studio-issue-detail')
-                          ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                          : 'hover:text-blue-700'
+                          ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                          : 'hover:text-indigo-700'
                       "
                       class="flex items-center px-4 py-3 cursor-pointer"
                     >
@@ -461,8 +461,8 @@
                     <div
                       :class="
                         isActiveRoute('studio-issue-metrics')
-                          ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                          : 'hover:text-blue-700'
+                          ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                          : 'hover:text-indigo-700'
                       "
                       class="flex items-center px-4 py-3 cursor-pointer"
                     >
@@ -489,8 +489,8 @@
                   <div
                     :class="
                       isActiveRoute('studio')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
@@ -511,8 +511,8 @@
                   <div
                     :class="
                       isActiveRoute('studio-live')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
@@ -533,8 +533,8 @@
                   <div
                     :class="
                       isActiveRoute('studio-calendar')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
@@ -558,8 +558,8 @@
                   <div
                     :class="
                       isActiveRoute('studio-issues')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
@@ -580,8 +580,8 @@
                   <div
                     :class="
                       isActiveRoute('studio-products')
-                        ? 'text-blue-700 bg-blue-500/10 rounded-l-lg border-r border-r-blue-700'
-                        : 'hover:text-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
@@ -660,10 +660,10 @@
                 <span class="sr-only">Close main menu</span
                 ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
               </button>
-              <div class="text-blue-700 flex flex-col py-6">
+              <div class="text-indigo-700 flex flex-col py-6">
                 <div class="flex">
                   <router-link to="/" class="ml-4 flex mx-auto items-center">
-                    <div class="rounded-full bg-blue-200 p-3">
+                    <div class="rounded-full bg-indigo-200 p-3">
                       <VideoCameraIconSolid
                         class="h-6 w-6"
                         aria-hidden="true"
@@ -687,8 +687,8 @@
                         <div
                           :class="
                             isActiveRoute('studio-issue-detail')
-                              ? 'text-blue-700 bg-blue-500/10 '
-                              : 'hover:text-blue-700 '
+                              ? 'text-indigo-700 bg-indigo-500/10 '
+                              : 'hover:text-indigo-700 '
                           "
                           class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                         >
@@ -715,8 +715,8 @@
                         <div
                           :class="
                             isActiveRoute('studio-issue-metrics')
-                              ? 'text-blue-700 bg-blue-500/10 '
-                              : 'hover:text-blue-700 '
+                              ? 'text-indigo-700 bg-indigo-500/10 '
+                              : 'hover:text-indigo-700 '
                           "
                           class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                         >
@@ -748,8 +748,8 @@
                       <div
                         :class="
                           isActiveRoute('studio')
-                            ? 'text-blue-700 bg-blue-500/10 '
-                            : 'hover:text-blue-700 '
+                            ? 'text-indigo-700 bg-indigo-500/10 '
+                            : 'hover:text-indigo-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -773,8 +773,8 @@
                       <div
                         :class="
                           isActiveRoute('studio-live')
-                            ? 'text-blue-700 bg-blue-500/10 '
-                            : 'hover:text-blue-700 '
+                            ? 'text-indigo-700 bg-indigo-500/10 '
+                            : 'hover:text-indigo-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -795,8 +795,8 @@
                       <div
                         :class="
                           isActiveRoute('studio-calendar')
-                            ? 'text-blue-700 bg-blue-500/10 '
-                            : 'hover:text-blue-700 '
+                            ? 'text-indigo-700 bg-indigo-500/10 '
+                            : 'hover:text-indigo-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -823,8 +823,8 @@
                       <div
                         :class="
                           isActiveRoute('studio-issues')
-                            ? 'text-blue-700 bg-blue-500/10 '
-                            : 'hover:text-blue-700 '
+                            ? 'text-indigo-700 bg-indigo-500/10 '
+                            : 'hover:text-indigo-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >
@@ -848,8 +848,8 @@
                       <div
                         :class="
                           isActiveRoute('studio-products')
-                            ? 'text-blue-700 bg-blue-500/10 '
-                            : 'hover:text-blue-700 '
+                            ? 'text-indigo-700 bg-indigo-500/10 '
+                            : 'hover:text-indigo-700 '
                         "
                         class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                       >

@@ -9,7 +9,7 @@
           Undo Changes
         </div>
         <button
-          class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+          class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-indigo-700 hover:border-blue-600 active:bg-indigo-800 active:text-gray-200/80"
         >
           Save
         </button>
@@ -24,7 +24,7 @@
         Undo Changes
       </div>
       <button
-        class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80"
+        class="rounded-md px-4 py-2 transition-colors text-gray-50 bg-indigo-700 hover:border-blue-600 active:bg-indigo-800 active:text-gray-200/80"
       >
         Save
       </button>
@@ -100,7 +100,7 @@
             <div class="font-medium">Breaking Product</div>
             <Switch
               v-model="breakingEnabled"
-              :class="breakingEnabled ? 'bg-blue-700' : 'bg-gray-300'"
+              :class="breakingEnabled ? 'bg-indigo-700' : 'bg-gray-300'"
               class="relative inline-flex mt-3 h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
             >
               <span class="sr-only">Use setting</span>

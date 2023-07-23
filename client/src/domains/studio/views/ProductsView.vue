@@ -6,7 +6,7 @@
           Products
         </div>
         <button
-          class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-blue-700 hover:border-blue-600 active:bg-blue-800 active:text-gray-200/80 cursor-pointer"
+          class="inline-flex items-center justify-center rounded-lg border py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-sm outline-2 outline-offset-2 transition-colors text-gray-50 bg-indigo-700 hover:border-blue-600 active:bg-indigo-800 active:text-gray-200/80 cursor-pointer"
         >
           <PlusIcon class="h-4 w-4" />
           <span class="ml-2.5">New Product</span>

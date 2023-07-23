@@ -12,7 +12,7 @@
         </p>
       </div>
       <div class="pb-4 flex space-x-2 font-medium text-xs">
-        <div class="text-blue-700">
+        <div class="text-indigo-700">
           {{ product.type }}
         </div>
         <div>•</div>
