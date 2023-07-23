@@ -119,9 +119,9 @@
 </template>
 <script>
 import { computed, onMounted, inject, ref } from "vue";
-import axios from "@/config/wireAxios";
+import axios from "@/shared/config/wireAxios";
 import MyPublishedProductCard from "./MyPublishedProductCard.vue";
-import { productDetails } from "@/data";
+import { productDetails } from "@/current/data";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,

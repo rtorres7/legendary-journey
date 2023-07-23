@@ -40,7 +40,7 @@
 <script>
 import YouNav from "../../you/YouNav";
 import { mapState } from "vuex";
-import Pretend from "@/components/header/navbar/Pretend";
+import Pretend from "@/current/components/header/navbar/Pretend";
 
 export default {
   name: "YouLink",

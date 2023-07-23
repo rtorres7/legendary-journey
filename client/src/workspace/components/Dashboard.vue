@@ -98,10 +98,10 @@
 <script>
 import { computed, inject, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import axios from "@/config/wireAxios";
+import axios from "@/shared/config/wireAxios";
 import MyDraftProductCard from "./MyDraftProductCard.vue";
 import MyPublishedProductCard from "./MyPublishedProductCard.vue";
-import { productDetails } from "@/data";
+import { productDetails } from "@/current/data";
 import {
   ChevronRightIcon,
   EyeIcon,

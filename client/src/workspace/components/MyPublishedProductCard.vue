@@ -183,7 +183,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import ProductImage from "@/components/ProductImage.vue";
+import ProductImage from "@/current/components/ProductImage.vue";
 import dayjs from "dayjs/esm/index.js";
 export default {
   components: {
