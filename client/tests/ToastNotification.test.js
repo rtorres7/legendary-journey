@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ToastNotification from "@/current/components/ToastNotification.vue";
+import ToastNotification from "@current/components/ToastNotification.vue";
 import { describe, expect, test } from "vitest";
 
 describe("ToastNotification.vue", () => {

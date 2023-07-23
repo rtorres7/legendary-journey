@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
   <template v-if="domain === 'current'">
     <CurrentShell />
@@ -18,8 +17,8 @@
 <script>
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import CurrentShell from "@/current/DomainShell.vue";
-import StudioShell from "@/studio/DomainShell.vue";
+import CurrentShell from "@current/DomainShell.vue";
+import StudioShell from "@studio/DomainShell.vue";
 
 export default {
   components: {
