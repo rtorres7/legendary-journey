@@ -101,3 +101,5 @@ export class ObjectStoreService {
     return this.getClient().removeObject(bucketName, objectName);
   }
 }
+
+export default ObjectStoreService;
