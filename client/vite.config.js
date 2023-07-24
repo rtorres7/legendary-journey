@@ -37,6 +37,12 @@ export default defineConfig({
           new URL("./src/domains/studio", import.meta.url)
         ),
       },
+      {
+        find: "@workspace",
+        replacement: fileURLToPath(
+          new URL("./src/domains/workspace", import.meta.url)
+        ),
+      },
     ],
   },
   server: {

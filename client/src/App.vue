@@ -4,7 +4,7 @@
   </template>
   <template v-if="domain === 'workspace'">
     <main role="main" class="bg-white text-gray-900">
-      <router-view />
+      <WorkspaceShell />
     </main>
   </template>
   <template v-if="domain === 'studio'">
@@ -19,11 +19,13 @@ import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import CurrentShell from "@current/DomainShell.vue";
 import StudioShell from "@studio/DomainShell.vue";
+import WorkspaceShell from "@workspace/DomainShell.vue";
 
 export default {
   components: {
     CurrentShell,
     StudioShell,
+    WorkspaceShell,
   },
   setup() {
     const route = useRoute();

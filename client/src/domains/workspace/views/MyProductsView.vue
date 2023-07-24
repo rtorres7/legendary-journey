@@ -12,7 +12,7 @@
           {{ numProducts }} products
         </div>
       </template>
-      <div class="flex space-x-4">
+      <!-- <div class="flex space-x-4">
         <Listbox
           v-model="selectedSort"
           as="div"
@@ -83,7 +83,7 @@
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
         </button>
-      </div>
+      </div> -->
     </div>
     <template v-if="loadingPublished">
       <div
@@ -115,7 +115,7 @@
         </div>
       </template>
     </template>
-    <MaxDialog
+    <BaseDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Product'"
       class="max-w-fit"
@@ -123,44 +123,48 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <MaxButton color="secondary" @click.prevent="closeDeleteDialog"
-          >Cancel</MaxButton
+        <BaseButton color="secondary" @click.prevent="closeDeleteDialog"
+          >Cancel</BaseButton
         >
-        <MaxButton color="danger" @click.prevent="deleteProduct">
+        <BaseButton color="danger" @click.prevent="deleteProduct">
           Delete
-        </MaxButton>
+        </BaseButton>
       </template>
-    </MaxDialog>
+    </BaseDialog>
   </div>
 </template>
 <script>
 import { computed, onMounted, inject, ref } from "vue";
 import axios from "@/shared/config/wireAxios";
-import MyPublishedProductCard from "./MyPublishedProductCard.vue";
-import { productDetails } from "@current/data";
-import {
-  AdjustmentsHorizontalIcon,
-  ChevronDownIcon,
-  CheckIcon,
-} from "@heroicons/vue/24/solid";
-import {
-  Listbox,
-  ListboxLabel,
-  ListboxButton,
-  ListboxOptions,
-  ListboxOption,
-} from "@headlessui/vue";
+import BaseDialog from "../components/BaseDialog.vue";
+import BaseButton from "../components/BaseButton.vue";
+import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
+import { productDetails } from "../data";
+// import {
+//   AdjustmentsHorizontalIcon,
+//   ChevronDownIcon,
+//   CheckIcon,
+// } from "@heroicons/vue/24/solid";
+// import {
+//   Listbox,
+//   ListboxLabel,
+//   ListboxButton,
+//   ListboxOptions,
+//   ListboxOption,
+// } from "@headlessui/vue";
 export default {
   components: {
     MyPublishedProductCard,
-    AdjustmentsHorizontalIcon,
-    ChevronDownIcon,
-    CheckIcon,
-    Listbox,
-    ListboxLabel,
-    ListboxButton,
-    ListboxOptions,
-    ListboxOption,
+    BaseDialog,
+    BaseButton,
+    // AdjustmentsHorizontalIcon,
+    // ChevronDownIcon,
+    // CheckIcon,
+    // Listbox,
+    // ListboxLabel,
+    // ListboxButton,
+    // ListboxOptions,
+    // ListboxOption,
   },
   setup() {
     const environment = ref(import.meta.env.MODE);

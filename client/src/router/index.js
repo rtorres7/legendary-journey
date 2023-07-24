@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { isProduction } from "@current/helpers";
 import MockWorkspaceView from "@/domains/demo/views/MockWorkspaceView.vue";
-import WorkspaceView from "@/domains/workspace/views/WorkspaceView.vue";
 
 // Current
 import CurrentAttachmentView from "@current/views/AttachmentView.vue";
@@ -227,26 +226,38 @@ const studioRoutes = [
   },
 ];
 
-const routes = [...currentRoutes, ...studioRoutes];
+//Workspace
+import DashboardView from "@workspace/views/DashboardView.vue";
+import MyProductsView from "@workspace/views/MyProductsView.vue";
+
+const workspaceRoutes = [
+  {
+    path: "/workspace",
+    name: "dashboard",
+    component: DashboardView,
+    meta: {
+      domain: "workspace",
+      title: "Dashboard",
+    },
+  },
+  {
+    path: "/workspace/products",
+    name: "myProducts",
+    component: MyProductsView,
+    meta: {
+      domain: "workspace",
+      title: "My Products",
+    },
+  },
+];
+
+const routes = [...currentRoutes, ...studioRoutes, ...workspaceRoutes];
 
 if (!isProduction()) {
   routes.push({
     path: "/workspace-demo",
     name: "workspace-demo",
     component: MockWorkspaceView,
-    meta: {
-      domain: "workspace",
-      title: "Workspace",
-      demo: true,
-    },
-  });
-}
-
-if (!isProduction()) {
-  routes.push({
-    path: "/workspace",
-    name: "workspace",
-    component: WorkspaceView,
     meta: {
       domain: "workspace",
       title: "Workspace",
