@@ -1,16 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const DissemSchema = new Schema({
-  name: String,
-  code: String,
+const DissemSchema = new Schema(
+  {
+    name: String,
+    code: String,
   },
   {
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
-  });
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
 
-const AttachmentSchema = new Schema({
+const AttachmentSchema = new Schema(
+  {
     fileName: String,
     mimeType: String,
     createdAt: Date,
@@ -23,19 +26,37 @@ const AttachmentSchema = new Schema({
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  });
+  },
+);
 
-AttachmentSchema.virtual("mime_type").get(function () {
+AttachmentSchema.virtual('mime_type').get(function () {
   return this.mimeType;
 });
 
-AttachmentSchema.virtual("file_name").get(function () {
+AttachmentSchema.virtual('file_name').get(function () {
   return this.fileName;
 });
 
-AttachmentSchema.virtual("file_size").get(function () {
+AttachmentSchema.virtual('file_size').get(function () {
   return this.fileSize;
 });
+
+const ThumbnailSchema = new Schema(
+  {
+    fileName: String,
+    mimeType: String,
+    createdAt: Date,
+    fileSize: Number,
+    type: String,
+    thumbnailId: String,
+    destination: String,
+    visible: Boolean,
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
 
 const ArticleSchema = new Schema(
   {
@@ -80,7 +101,7 @@ const ArticleSchema = new Schema(
     },
     state: {
       type: String,
-      default: "draft",
+      default: 'draft',
     },
     subregions: [DissemSchema],
     summary: String,
@@ -89,6 +110,7 @@ const ArticleSchema = new Schema(
     title: String,
     titleClassification: String,
     titleClassificationXml: String,
+    thumbnailMetadata: [ThumbnailSchema],    
     thumbnailCaption: String,
     topics: [DissemSchema],
     updatedBy: {
@@ -106,11 +128,11 @@ const ArticleSchema = new Schema(
   },
 );
 
-ArticleSchema.virtual("features").get(function () {
+ArticleSchema.virtual('features').get(function () {
   return {
     datePublished: this.datePublished,
-    id: this.get("_id"),
-    featureId: this.get("_id"),
+    id: this.get('_id'),
+    featureId: this.get('_id'),
     doc_num: this.productNumber,
     images: this.images,
     needed: this.needed,
@@ -128,8 +150,8 @@ ArticleSchema.virtual("features").get(function () {
     attributes: {
       date_published: this.datePublished,
       doc_num: this.productNumber,
-      feature_id: this.get("_id"),
-      id: this.get("_id"),
+      feature_id: this.get('_id'),
+      id: this.get('_id'),
       images: this.images,
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
@@ -147,10 +169,10 @@ ArticleSchema.virtual("features").get(function () {
   };
 });
 
-ArticleSchema.virtual("forWire").get(function () {
+ArticleSchema.virtual('forWire').get(function () {
   return {
     datePublished: this.datePublished,
-    id: this.get("_id"),
+    id: this.get('_id'),
     images: this.images,
     needed: this.needed,
     orgRestricted: this.orgRestricted,
@@ -166,7 +188,7 @@ ArticleSchema.virtual("forWire").get(function () {
     attributes: {
       date_published: this.datePublished,
       doc_num: this.productNumber,
-      id: this.get("_id"),
+      id: this.get('_id'),
       images: this.images,
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
@@ -182,7 +204,7 @@ ArticleSchema.virtual("forWire").get(function () {
   };
 });
 
-ArticleSchema.virtual("indexable").get(function () {
+ArticleSchema.virtual('indexable').get(function () {
   return {
     classification: this.classification,
     classificationXml: this.classificationXml,
@@ -190,7 +212,7 @@ ArticleSchema.virtual("indexable").get(function () {
     createdById: this.createdBy?.id,
     datePublished: this.datePublished,
     htmlBody: this.htmlBody,
-    id: this.get("_id"),
+    id: this.get('_id'),
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
@@ -213,7 +235,7 @@ ArticleSchema.virtual("indexable").get(function () {
   };
 });
 
-ArticleSchema.virtual("data.document").get(function () {
+ArticleSchema.virtual('data.document').get(function () {
   return {
     attachments: this.attachmentsMetadata,
     classification: this.classification,
@@ -223,7 +245,7 @@ ArticleSchema.virtual("data.document").get(function () {
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
-    id: this.get("_id"),
+    id: this.get('_id'),
     issues: this.issues,
     nonStateActors: this.nonStateActors,
     pocInfo: this.pocInfo,
@@ -262,8 +284,8 @@ ArticleSchema.virtual("data.document").get(function () {
   };
 });
 
-ArticleSchema.virtual("data.details").get(function () {
-  console.log("COAUTH ======== ", this.coauthors)
+ArticleSchema.virtual('data.details').get(function () {
+  console.log('COAUTH ======== ', this.coauthors);
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
@@ -273,8 +295,8 @@ ArticleSchema.virtual("data.details").get(function () {
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
-    id: this.get("_id"),
-    featureId: this.get("_id"),
+    id: this.get('_id'),
+    featureId: this.get('_id'),
     issues: this.issues,
     legacyCurrentId: this.legacyCurrentId,
     pocInfo: this.pocInfo,
@@ -308,9 +330,9 @@ ArticleSchema.virtual("data.details").get(function () {
       org_restricted: this.orgRestricted,
     },
     feature_date: this.datePublished,
-    feature_id: this.get("_id"),
+    feature_id: this.get('_id'),
     html_body: this.htmlBody,
-    legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
+    legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== '',
     poc_info: this.pocInfo,
     posted_at: this.datePublished,
     producing_offices: this.producingOffices?.map((office) => office.name),
@@ -321,6 +343,6 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
-const Article = mongoose.model("Article", ArticleSchema, "articles");
+const Article = mongoose.model('Article', ArticleSchema, 'articles');
 
 module.exports = Article;

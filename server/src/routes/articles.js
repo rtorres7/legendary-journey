@@ -1,7 +1,10 @@
+import ObjectStoreService from '../services/object-store-service';
+import _ from 'lodash-es';
+// import _ from 'lodash';
+
 const express = require("express");
 const router = express.Router();
 
-const _ = require("lodash");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
@@ -18,7 +21,8 @@ const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
-const { ObjectStoreService } = require('../services/object-store-service');
+// const { ObjectStoreService } = require('../services/object-store-service');
+
 const objectStoreService = new ObjectStoreService();
 
 const multer = require('multer');
@@ -282,8 +286,8 @@ async function updateArticle(id, req, res) {
   const nonStateActors = await metadataService.findNonStateActorsFor(
     req.body.non_state_actors
   );
-  const testing = coauthors.map((author) => {name=> author.name, code=> author.code})
-  console.log("COAUTHORS ======================= ", coauthors)
+  const testing = coauthors.map((author) => {name=> author.name, code=> author.code;});
+  console.log("COAUTHORS ======================= ", coauthors);
   const article = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml

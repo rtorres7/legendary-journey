@@ -4,7 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "npm run copy-assets && npm run build && concurrently --names \"build,node\" \"npm:build:watch\" \"npm run delay && nodemon build/src/swagger.js\"",
+    "prestart": "npm run copy-assets && npm run build",
+    "start": "concurrently --names \"build,node\" \"npm:build:watch\" \"npm run delay && nodemon build/src/swagger.js\"",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --runInBand",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
@@ -23,9 +24,14 @@
     "roots": [
       "__tests__"
     ],
-    "reporters": [["summary", {
-      "summaryThreshold": 1
-    }]],
+    "reporters": [
+      [
+        "summary",
+        {
+          "summaryThreshold": 1
+        }
+      ]
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/__tests__/__utils__/testSetup.js"
     ],
@@ -46,6 +52,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "8.8.1",
     "@kiwiproject/kiwi-js": "0.7.0",
+    "@types/lodash-es": "^4.17.8",
     "cache-manager": "5.2.3",
     "connect-mongo": "5.0.0",
     "cors": "2.8.5",
@@ -55,6 +62,7 @@
     "express-session": "1.17.3",
     "joi": "17.9.2",
     "jsonwebtoken": "9.0.1",
+    "lodash-es": "^4.17.21",
     "minio": "7.1.1",
     "mongoose": "7.4.0",
     "morgan": "1.10.0",

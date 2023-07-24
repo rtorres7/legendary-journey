@@ -6,8 +6,6 @@ import config from '../config/config';
 export class ObjectStoreService {
   private static minioClient: Client;
 
-  constructor() {}
-
   /**
    * Minio.Client
    */
