@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const DissemSchema = new Schema({
+  name: String,
+  code: String,
+  },
+  {
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
+  });
+
 const AttachmentSchema = new Schema({
     fileName: String,
     mimeType: String,
@@ -33,24 +42,9 @@ const ArticleSchema = new Schema(
     attachmentsMetadata: [AttachmentSchema],
     classification: String,
     classificationXml: String,
-    coauthors: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
-    coordinators: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
-    countries: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    coauthors: [DissemSchema],
+    coordinators: [DissemSchema],
+    countries: [DissemSchema],
     createdAt: Date,
     createdBy: {
       id: Number,
@@ -59,39 +53,19 @@ const ArticleSchema = new Schema(
       dn: String,
     },
     datePublished: Date,
-    dissemOrgs: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    dissemOrgs: [DissemSchema],
     htmlBody: String,
     images: [],
-    issues: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    issues: [DissemSchema],
     legacyCurrentId: String,
     needed: {
       orgs: [],
     },
-    nonStateActors: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    nonStateActors: [DissemSchema],
     orgRestricted: Boolean,
     pdfVersionBase64: String,
     pocInfo: String,
-    producingOffices: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    producingOffices: [DissemSchema],
     productNumber: String,
     productType: {
       name: String,
@@ -99,12 +73,7 @@ const ArticleSchema = new Schema(
     },
     publicationNumber: String,
     publishedBy: {},
-    regions: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    regions: [DissemSchema],
     reportingType: {
       name: String,
       code: String,
@@ -113,12 +82,7 @@ const ArticleSchema = new Schema(
       type: String,
       default: "draft",
     },
-    subregions: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    subregions: [DissemSchema],
     summary: String,
     summaryClassification: String,
     summaryClassificationXml: String,
@@ -126,12 +90,13 @@ const ArticleSchema = new Schema(
     titleClassification: String,
     titleClassificationXml: String,
     thumbnailCaption: String,
-    topics: [
-      {
-        name: String,
-        code: String,
-      },
-    ],
+    topics: [DissemSchema],
+    updatedBy: {
+      id: Number,
+      firstName: String,
+      lastName: String,
+      dn: String,
+    },
     updatedAt: Date,
     worldwide: Boolean,
   },
@@ -243,6 +208,7 @@ ArticleSchema.virtual("indexable").get(function () {
     titleClassification: this.titleClassification,
     topics: this.topics?.map((topic) => topic.code),
     nonStateActors: this.nonStateActors?.map((actor) => actor.code),
+    updatedById: this.updatedBy?.id,
     worldwide: this.worldwide,
   };
 });
@@ -297,6 +263,7 @@ ArticleSchema.virtual("data.document").get(function () {
 });
 
 ArticleSchema.virtual("data.details").get(function () {
+  console.log("COAUTH ======== ", this.coauthors)
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
