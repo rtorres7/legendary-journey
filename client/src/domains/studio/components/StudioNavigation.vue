@@ -20,7 +20,7 @@
           <div class="rounded-full bg-indigo-200 p-2">
             <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
           </div>
-          <span class="ml-3 font-bold text-2xl">Studio</span>
+          <span class="ml-3 font-bold text-xl">Studio</span>
         </router-link>
       </div>
       <div class="flex">
@@ -52,7 +52,7 @@
               leaveToClass="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-xs"
               >
                 <MenuItem>
                   <router-link
@@ -83,7 +83,7 @@
             <div>
               <tippy content="Themes" theme="studio">
                 <MenuButton
-                  class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
+                  class="max-w-xs rounded-full flex items-center text-xs focus:outline-none focus:ring-2 focus:ring-gray-600"
                   :class="
                     selectedTheme === 'system'
                       ? 'text-gray-500 hover:text-gray-700'
@@ -119,7 +119,7 @@
               leaveToClass="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-xs"
               >
                 <MenuItem v-for="item in themeOptions" :key="item">
                   <a
@@ -170,7 +170,7 @@
               leaveToClass="transform opacity-0 scale-95"
             >
               <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-[200px] rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                class="origin-top-right absolute right-0 mt-2 w-[200px] rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-xs"
               >
                 <MenuItem>
                   <router-link
@@ -219,7 +219,7 @@
                   <div
                     :class="
                       isActiveRoute('studio-issue-detail')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="cursor-pointer"
@@ -243,7 +243,7 @@
                   <div
                     :class="
                       isActiveRoute('studio-issue-metrics')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="cursor-pointer"
@@ -278,7 +278,7 @@
               <div
                 :class="
                   isActiveRoute('studio')
-                    ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                    ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                     : 'hover:text-indigo-700'
                 "
                 class="cursor-pointer"
@@ -303,7 +303,7 @@
                 <div
                   :class="
                     isActiveRoute('studio-live')
-                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                       : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
@@ -331,7 +331,7 @@
                 <div
                   :class="
                     isActiveRoute('studio-calendar')
-                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                       : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
@@ -358,7 +358,7 @@
                 <div
                   :class="
                     isActiveRoute('studio-issues')
-                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                       : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
@@ -382,7 +382,7 @@
                 <div
                   :class="
                     isActiveRoute('studio-products')
-                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                      ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                       : 'hover:text-indigo-700'
                   "
                   class="cursor-pointer"
@@ -415,14 +415,14 @@
     </div>
     <!--- 2xl or higher - TODO: Rework how the width works --->
     <div class="hidden 2xl:block">
-      <div class="flex grow-0 flex-col max-h-full min-h-screen w-[320px]">
+      <div class="flex grow-0 flex-col max-h-full min-h-screen w-[250px]">
         <div class="flex grow flex-col pt-6">
           <div class="text-indigo-700 flex px-4 pb-6">
-            <router-link to="/" class="flex items-center px-4">
+            <router-link to="/studio" class="flex items-center px-4">
               <div class="rounded-full bg-indigo-200 p-3">
                 <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
               </div>
-              <span class="ml-4 font-bold text-3xl">Studio</span>
+              <span class="ml-4 font-bold text-2xl">Studio</span>
             </router-link>
           </div>
           <template
@@ -431,15 +431,15 @@
               isActiveRoute('studio-issue-metrics')
             "
           >
-            <div class="text-gray-400 font-medium px-8 py-2">Issue</div>
-            <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
+            <div class="text-gray-400 font-medium px-8 py-2 text-sm">Issue</div>
+            <ul class="pl-6 py-4 font-medium text-gray-500 space-y-1 text-sm">
               <li>
                 <div>
                   <router-link :to="'/studio/issue/is-001'">
                     <div
                       :class="
                         isActiveRoute('studio-issue-detail')
-                          ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                          ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                           : 'hover:text-indigo-700'
                       "
                       class="flex items-center px-4 py-3 cursor-pointer"
@@ -461,7 +461,7 @@
                     <div
                       :class="
                         isActiveRoute('studio-issue-metrics')
-                          ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                          ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                           : 'hover:text-indigo-700'
                       "
                       class="flex items-center px-4 py-3 cursor-pointer"
@@ -479,17 +479,15 @@
               </li>
             </ul>
           </template>
-          <div class="text-gray-400 font-medium px-8 py-2">
-            Content Management
-          </div>
-          <ul class="pl-6 py-4 font-medium text-gray-500 space-y-2">
+          <div class="text-gray-400 font-medium px-8 py-2 text-sm">Menu</div>
+          <ul class="pl-6 py-3 font-medium text-gray-500 space-y-1 text-sm">
             <li>
               <div>
                 <router-link to="/studio">
                   <div
                     :class="
                       isActiveRoute('studio')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
@@ -507,11 +505,85 @@
             </li>
             <li>
               <div>
+                <router-link to="/studio/find">
+                  <div
+                    :class="
+                      isActiveRoute('studio-find')
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
+                        : 'hover:text-indigo-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActiveRoute('studio-find')">
+                      <MagnifyingGlassIconSolid
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </template>
+                    <template v-else>
+                      <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Find</span>
+                  </div>
+                </router-link>
+              </div>
+            </li>
+            <li>
+              <div>
+                <router-link to="/studio/saved">
+                  <div
+                    :class="
+                      isActiveRoute('studio-saved')
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
+                        : 'hover:text-indigo-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActiveRoute('studio-saved')">
+                      <BookmarkIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">Saved</span>
+                  </div>
+                </router-link>
+              </div>
+            </li>
+            <li>
+              <div>
+                <router-link to="/studio/portfolio">
+                  <div
+                    :class="
+                      isActiveRoute('studio-portfolio')
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
+                        : 'hover:text-indigo-700'
+                    "
+                    class="flex items-center px-4 py-3 cursor-pointer"
+                  >
+                    <template v-if="isActiveRoute('studio-portfolio')">
+                      <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <template v-else>
+                      <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                    </template>
+                    <span class="ml-4 font-medium">My Portfolio</span>
+                  </div>
+                </router-link>
+              </div>
+            </li>
+          </ul>
+          <div class="text-gray-400 font-medium px-8 py-2 text-sm">
+            Content Management
+          </div>
+          <ul class="pl-6 py-3 font-medium text-gray-500 space-y-2 text-sm">
+            <li>
+              <div>
                 <router-link to="/studio/live">
                   <div
                     :class="
                       isActiveRoute('studio-live')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
@@ -533,7 +605,7 @@
                   <div
                     :class="
                       isActiveRoute('studio-calendar')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
@@ -558,7 +630,7 @@
                   <div
                     :class="
                       isActiveRoute('studio-issues')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
@@ -580,16 +652,19 @@
                   <div
                     :class="
                       isActiveRoute('studio-products')
-                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-blue-700'
+                        ? 'text-indigo-700 bg-indigo-500/10 rounded-l-lg border-r border-r-indigo-700'
                         : 'hover:text-indigo-700'
                     "
                     class="flex items-center px-4 py-3 cursor-pointer"
                   >
                     <template v-if="isActiveRoute('studio-products')">
-                      <BriefcaseIconSolid class="h-6 w-6" aria-hidden="true" />
+                      <RectangleStackIconSolid
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
                     </template>
                     <template v-else>
-                      <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                      <RectangleStackIcon class="h-6 w-6" aria-hidden="true" />
                     </template>
                     <span class="ml-4 font-medium">Products</span>
                   </div>
@@ -598,15 +673,50 @@
             </li>
           </ul>
         </div>
-        <div class="px-6 pb-6 grow-0">
-          <div class="flex justify-between border-t border-slate-900/10 py-6">
+        <div class="pb-4 grow-0">
+          <ul class="pl-6 py-4 font-medium text-gray-500 space-y-1 text-sm">
+            <li>
+              <div>
+                <div
+                  class="flex items-center px-4 py-2 cursor-pointer hover:text-indigo-700"
+                >
+                  <Cog8ToothIcon class="h-6 w-6" aria-hidden="true" />
+                  <span class="ml-4 font-medium">Settings</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div>
+                <div
+                  class="flex items-center px-4 py-2 cursor-pointer hover:text-indigo-700"
+                >
+                  <QuestionMarkCircleIcon class="h-6 w-6" aria-hidden="true" />
+                  <span class="ml-4 font-medium">Help</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <router-link to="/">
+                <div
+                  class="flex items-center px-4 py-2 cursor-pointer hover:text-indigo-700"
+                >
+                  <ArrowLeftOnRectangleIcon
+                    class="h-6 w-6"
+                    aria-hidden="true"
+                  />
+                  <span class="ml-4 font-medium">Exit Demo</span>
+                </div>
+              </router-link>
+            </li>
+          </ul>
+          <!-- <div class="flex justify-between border-t border-slate-900/10 py-6">
             <div class="flex">
               <img
                 src="@/shared/assets/mocks/avatar.jpg"
                 class="rounded-full w-[45px]"
               />
               <div class="ml-3 max-w-[170px]">
-                <div class="font-semibold text-sm line-clamp-1">
+                <div class="font-semibold text-xs line-clamp-1">
                   Jonathan Oszczakiewicz
                 </div>
                 <div class="font-medium text-xs text-gray-400">
@@ -618,7 +728,7 @@
               <span class="sr-only">User Menu</span>
               <EllipsisVerticalIcon class="h-7 w-7" />
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -662,14 +772,17 @@
               </button>
               <div class="text-indigo-700 flex flex-col py-6">
                 <div class="flex">
-                  <router-link to="/" class="ml-4 flex mx-auto items-center">
+                  <router-link
+                    to="/studio"
+                    class="ml-4 flex mx-auto items-center"
+                  >
                     <div class="rounded-full bg-indigo-200 p-3">
                       <VideoCameraIconSolid
                         class="h-6 w-6"
                         aria-hidden="true"
                       />
                     </div>
-                    <span class="ml-3 font-bold text-3xl">Studio</span>
+                    <span class="ml-3 font-bold text-2xl">Studio</span>
                   </router-link>
                 </div>
               </div>
@@ -890,16 +1003,21 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import {
+  ArrowLeftOnRectangleIcon,
   Bars3Icon,
   BriefcaseIcon,
+  BookmarkIcon,
   ChartBarIcon,
   CalendarDaysIcon,
+  Cog8ToothIcon,
   ComputerDesktopIcon,
-  EllipsisVerticalIcon,
+  // EllipsisVerticalIcon,
   NewspaperIcon,
   MagnifyingGlassIcon,
   MoonIcon,
   PencilIcon,
+  QuestionMarkCircleIcon,
+  RectangleStackIcon,
   SignalIcon,
   Squares2X2Icon,
   SunIcon,
@@ -908,10 +1026,13 @@ import {
 } from "@heroicons/vue/24/outline";
 import {
   BriefcaseIcon as BriefcaseIconSolid,
+  BookmarkIcon as BookmarkIconSolid,
   ChartBarIcon as ChartBarIconSolid,
   CalendarDaysIcon as CalendarDaysIconSolid,
+  MagnifyingGlassIcon as MagnifyingGlassIconSolid,
   NewspaperIcon as NewspaperIconSolid,
   PencilIcon as PencilIconSolid,
+  RectangleStackIcon as RectangleStackIconSolid,
   SignalIcon as SignalIconSolid,
   Squares2X2Icon as Squares2X2IconSolid,
   VideoCameraIcon as VideoCameraIconSolid,
@@ -927,21 +1048,29 @@ export default {
     MenuItems,
     TransitionChild,
     TransitionRoot,
+    ArrowLeftOnRectangleIcon,
     Bars3Icon,
     BriefcaseIcon,
     BriefcaseIconSolid,
+    BookmarkIcon,
+    BookmarkIconSolid,
     ChartBarIcon,
     ChartBarIconSolid,
     CalendarDaysIcon,
     CalendarDaysIconSolid,
+    Cog8ToothIcon,
     ComputerDesktopIcon,
-    EllipsisVerticalIcon,
+    // EllipsisVerticalIcon,
     NewspaperIcon,
     NewspaperIconSolid,
     MagnifyingGlassIcon,
+    MagnifyingGlassIconSolid,
     MoonIcon,
     PencilIcon,
     PencilIconSolid,
+    QuestionMarkCircleIcon,
+    RectangleStackIcon,
+    RectangleStackIconSolid,
     SignalIcon,
     SignalIconSolid,
     Squares2X2Icon,
@@ -976,6 +1105,75 @@ export default {
     const open = () => {
       isOpen.value = true;
     };
+
+    const navigationItems = [
+      {
+        categoryLabel: "Menu",
+        items: [
+          {
+            itemLabel: "Dashboard",
+            icon: "Squares2X2",
+            tooltip: "Dashboard",
+            routeLink: "/studio",
+            routeName: "studio",
+          },
+          {
+            itemLabel: "Find",
+            icon: "MagnifyingGlass",
+            tooltip: "Find",
+            routeLink: "/studio/find",
+            routeName: "studio-find",
+          },
+          {
+            itemLabel: "Saved",
+            icon: "Bookmark",
+            tooltip: "Saved",
+            routeLink: "/studio/saved",
+            routeName: "studio-saved",
+          },
+          {
+            itemLabel: "My Portfolio",
+            icon: "Briefcase",
+            tooltip: "My Portfolio",
+            routeLink: "/studio/portfolio",
+            routeName: "studio-portfolio",
+          },
+        ],
+      },
+      {
+        categoryLabel: "Content Management",
+        items: [
+          {
+            itemLabel: "Live",
+            icon: "Signal",
+            tooltip: "Live Content",
+            routeLink: "/studio/live",
+            routeName: "studio-live",
+          },
+          {
+            itemLabel: "Calendar",
+            icon: "Calendar",
+            tooltip: "Content Calendar",
+            routeLink: "/studio/calendar",
+            routeName: "studio-calendar",
+          },
+          {
+            itemLabel: "Issues",
+            icon: "Newspaper",
+            tooltip: "Issues",
+            routeLink: "/studio/issues",
+            routeName: "studio-issues",
+          },
+          {
+            itemLabel: "Products",
+            icon: "RectangleStack",
+            tooltip: "Products",
+            routeLink: "/studio/products",
+            routeName: "studio-products",
+          },
+        ],
+      },
+    ];
 
     const changeTheme = (newTheme) => {
       selectedTheme.value = newTheme;
@@ -1037,6 +1235,7 @@ export default {
       isOpen,
       open,
       close,
+      navigationItems,
       changeTheme,
       isActiveTheme,
       selectItemEventHandler,

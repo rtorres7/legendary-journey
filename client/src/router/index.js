@@ -154,6 +154,9 @@ const currentRoutes = [
 
 // Studio
 import StudioHomeView from "@studio/views/HomeView.vue";
+import StudioSearchView from "@studio/views/SearchView.vue";
+import StudioSavedView from "@studio/views/SavedView.vue";
+import StudioPortfolioView from "@studio/views/PortfolioView.vue";
 import StudioLiveView from "@studio/views/LiveView.vue";
 import StudioCalendarView from "@studio/views/CalendarView.vue";
 import StudioIssuesView from "@studio/views/IssuesView.vue";
@@ -169,6 +172,33 @@ const studioRoutes = [
     meta: {
       domain: "studio",
       title: "Current Studio",
+    },
+  },
+  {
+    path: "/studio/find",
+    name: "studio-find",
+    component: StudioSearchView,
+    meta: {
+      domain: "studio",
+      title: "Find",
+    },
+  },
+  {
+    path: "/studio/saved",
+    name: "studio-saved",
+    component: StudioSavedView,
+    meta: {
+      domain: "studio",
+      title: "Saved",
+    },
+  },
+  {
+    path: "/studio/portfolio",
+    name: "studio-portfolio",
+    component: StudioPortfolioView,
+    meta: {
+      domain: "studio",
+      title: "Portfolio",
     },
   },
   {
