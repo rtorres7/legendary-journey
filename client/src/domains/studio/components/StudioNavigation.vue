@@ -31,119 +31,6 @@
             <span class="sr-only">Search</span>
             <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
           </button>
-          <!-- Admin Dropdown -->
-          <Menu as="div" class="block md:hidden relative">
-            <div>
-              <tippy content="Admin" theme="studio">
-                <MenuButton
-                  class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                >
-                  <span class="sr-only">Admin Menu</span>
-                  <WrenchIcon class="h-6 w-6" aria-hidden="true" />
-                </MenuButton>
-              </tippy>
-            </div>
-            <transition
-              enterActiveClass="transition ease-out duration-100"
-              enterFromClass="transform opacity-0 scale-95"
-              enterToClass="transform opacity-100 scale-100"
-              leaveActiveClass="transition ease-in duration-75"
-              leaveFromClass="transform opacity-100 scale-100"
-              leaveToClass="transform opacity-0 scale-95"
-            >
-              <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-xs"
-              >
-                <MenuItem>
-                  <router-link
-                    class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
-                    :to="{
-                      name: 'publish',
-                      params: {
-                        date: dayjs().format('YYYY-MM-DD'),
-                      },
-                    }"
-                  >
-                    Manage Products
-                  </router-link>
-                </MenuItem>
-                <MenuItem>
-                  <router-link
-                    to="/special_editions"
-                    class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Manage Special Editions
-                  </router-link>
-                </MenuItem>
-              </MenuItems>
-            </transition>
-          </Menu>
-          <!-- Theme dropdown -->
-          <Menu as="div" class="block md:hidden relative">
-            <div>
-              <tippy content="Themes" theme="studio">
-                <MenuButton
-                  class="max-w-xs rounded-full flex items-center text-xs focus:outline-none focus:ring-2 focus:ring-gray-600"
-                  :class="
-                    selectedTheme === 'system'
-                      ? 'text-gray-500 hover:text-gray-700'
-                      : 'text-amber-600 hover:text-amber-700'
-                  "
-                >
-                  <span class="sr-only"
-                    >Open menu for toggling color palettes.</span
-                  >
-                  <template v-if="selectedTheme === 'dark'">
-                    <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                  <template v-else-if="selectedTheme === 'system'">
-                    <template v-if="isDark">
-                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <template v-else>
-                      <SunIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                  </template>
-                  <template v-else>
-                    <SunIcon class="h-6 w-6" aria-hidden="true" />
-                  </template>
-                </MenuButton>
-              </tippy>
-            </div>
-            <transition
-              enterActiveClass="transition ease-out duration-100"
-              enterFromClass="transform opacity-0 scale-95"
-              enterToClass="transform opacity-100 scale-100"
-              leaveActiveClass="transition ease-in duration-75"
-              leaveFromClass="transform opacity-100 scale-100"
-              leaveToClass="transform opacity-0 scale-95"
-            >
-              <MenuItems
-                class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-xs"
-              >
-                <MenuItem v-for="item in themeOptions" :key="item">
-                  <a
-                    :class="isActiveTheme(item)"
-                    class="py-1 px-3 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer"
-                    @click="changeTheme(item)"
-                  >
-                    <template v-if="item === 'light'">
-                      <SunIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <template v-else-if="item === 'dark'">
-                      <MoonIcon class="h-6 w-6" aria-hidden="true" />
-                    </template>
-                    <template v-else-if="item === 'system'">
-                      <ComputerDesktopIcon
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      /> </template
-                    ><span class="capitalize">{{ item }}</span></a
-                  >
-                </MenuItem>
-              </MenuItems>
-            </transition>
-          </Menu>
         </div>
         <div class="pl-4 border-l border-slate-900/10">
           <!-- Profile dropdown -->
@@ -317,13 +204,43 @@
             </template>
           </template>
         </div>
-        <div class="px-6 pb-6 grow-0">
-          <div div class="border-t border-slate-900/10 py-6">
-            <img
-              src="@/shared/assets/mocks/avatar.jpg"
-              class="rounded-full w-[45px]"
-            />
-          </div>
+        <div class="pb-6 grow-0">
+          <ul class="pl-7 py-4 font-medium text-gray-500 space-y-1">
+            <li>
+              <div>
+                <tippy content="Settings" placement="right" theme="studio">
+                  <div
+                    class="flex items-center py-2 cursor-pointer hover:text-indigo-700"
+                  >
+                    <Cog8ToothIcon class="h-6 w-6" aria-hidden="true" />
+                  </div>
+                </tippy>
+              </div>
+            </li>
+            <li>
+              <tippy content="Help" placement="right" theme="studio">
+                <div
+                  class="flex items-center py-2 cursor-pointer hover:text-indigo-700"
+                >
+                  <QuestionMarkCircleIcon class="h-6 w-6" aria-hidden="true" />
+                </div>
+              </tippy>
+            </li>
+            <li>
+              <tippy content="Exit Demo" placement="right" theme="studio">
+                <router-link to="/">
+                  <div
+                    class="flex items-center py-2 cursor-pointer hover:text-indigo-700"
+                  >
+                    <ArrowLeftOnRectangleIcon
+                      class="h-6 w-6"
+                      aria-hidden="true"
+                    />
+                  </div>
+                </router-link>
+              </tippy>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -537,217 +454,135 @@
                 <span class="sr-only">Close main menu</span
                 ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
               </button>
-              <div class="text-indigo-700 flex flex-col py-6">
-                <div class="flex">
-                  <router-link
-                    to="/studio"
-                    class="ml-4 flex mx-auto items-center"
-                  >
-                    <div class="rounded-full bg-indigo-200 p-3">
-                      <VideoCameraIconSolid
-                        class="h-6 w-6"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <span class="ml-3 font-bold text-2xl">Studio</span>
-                  </router-link>
-                </div>
+              <div class="flex text-indigo-700 py-6">
+                <router-link
+                  to="/studio"
+                  class="ml-4 flex mx-auto items-center"
+                >
+                  <div class="rounded-full bg-indigo-200 p-3">
+                    <VideoCameraIconSolid class="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <span class="ml-3 font-bold text-2xl">Studio</span>
+                </router-link>
               </div>
-              <template
-                v-if="
-                  isActiveRoute('studio-issue-detail') ||
-                  isActiveRoute('studio-issue-metrics')
-                "
-              >
-                <div class="text-gray-400 font-medium py-2 px-4">Issue</div>
-                <ul class="py-4 pl-4 font-medium text-gray-500 space-y-2">
-                  <li>
-                    <div>
-                      <router-link :to="'/studio/issue/is-001'">
-                        <div
-                          :class="
-                            isActiveRoute('studio-issue-detail')
-                              ? 'text-indigo-700 bg-indigo-500/10 '
-                              : 'hover:text-indigo-700 '
-                          "
-                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                        >
-                          <template v-if="isActiveRoute('studio-issue-detail')">
-                            <PencilIconSolid
-                              class="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </template>
-                          <template v-else>
-                            <PencilIcon class="h-6 w-6" aria-hidden="true" />
-                          </template>
-                          <span class="ml-4">Details</span>
-                        </div>
-                      </router-link>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <router-link
-                        :to="'/studio/issue/is-001/metrics'"
-                        class=""
-                      >
-                        <div
-                          :class="
-                            isActiveRoute('studio-issue-metrics')
-                              ? 'text-indigo-700 bg-indigo-500/10 '
-                              : 'hover:text-indigo-700 '
-                          "
-                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                        >
-                          <template
-                            v-if="isActiveRoute('studio-issue-metrics')"
+              <div class="text-sm">
+                <template
+                  v-if="
+                    isActiveRoute('studio-issue-detail') ||
+                    isActiveRoute('studio-issue-metrics')
+                  "
+                >
+                  <div class="text-gray-400 font-medium py-2 px-4">Issue</div>
+                  <ul class="py-4 pl-4 font-medium text-gray-500 space-y-1">
+                    <li>
+                      <div>
+                        <router-link :to="'/studio/issue/is-001'">
+                          <div
+                            :class="
+                              isActiveRoute('studio-issue-detail')
+                                ? 'text-indigo-700 bg-indigo-500/10 '
+                                : 'hover:text-indigo-700 '
+                            "
+                            class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                           >
-                            <ChartBarIconSolid
-                              class="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </template>
-                          <template v-else>
-                            <ChartBarIcon class="h-6 w-6" aria-hidden="true" />
-                          </template>
-                          <span class="ml-4">Metrics</span>
+                            <template
+                              v-if="isActiveRoute('studio-issue-detail')"
+                            >
+                              <PencilIconSolid
+                                class="h-6 w-6"
+                                aria-hidden="true"
+                              />
+                            </template>
+                            <template v-else>
+                              <PencilIcon class="h-6 w-6" aria-hidden="true" />
+                            </template>
+                            <span class="ml-4">Details</span>
+                          </div>
+                        </router-link>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <router-link
+                          :to="'/studio/issue/is-001/metrics'"
+                          class=""
+                        >
+                          <div
+                            :class="
+                              isActiveRoute('studio-issue-metrics')
+                                ? 'text-indigo-700 bg-indigo-500/10 '
+                                : 'hover:text-indigo-700 '
+                            "
+                            class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                          >
+                            <template
+                              v-if="isActiveRoute('studio-issue-metrics')"
+                            >
+                              <ChartBarIconSolid
+                                class="h-6 w-6"
+                                aria-hidden="true"
+                              />
+                            </template>
+                            <template v-else>
+                              <ChartBarIcon
+                                class="h-6 w-6"
+                                aria-hidden="true"
+                              />
+                            </template>
+                            <span class="ml-4">Metrics</span>
+                          </div>
+                        </router-link>
+                      </div>
+                    </li>
+                  </ul>
+                </template>
+                <template v-for="category in navigationItems" :key="category">
+                  <div class="text-gray-400 font-medium py-2 px-4">
+                    {{ category.categoryLabel }}
+                  </div>
+                  <ul class="py-3 pl-4 font-medium text-gray-500 space-y-1">
+                    <template
+                      v-for="categoryItem in category.items"
+                      :key="categoryItem"
+                    >
+                      <li>
+                        <div>
+                          <router-link :to="categoryItem.routeLink" class="">
+                            <div
+                              :class="
+                                isActiveRoute(categoryItem.routeName)
+                                  ? 'text-indigo-700 bg-indigo-500/10 '
+                                  : 'hover:text-indigo-700 '
+                              "
+                              class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                            >
+                              <template
+                                v-if="isActiveRoute(categoryItem.routeName)"
+                              >
+                                <component
+                                  :is="categoryItem.icon + 'IconSolid'"
+                                  class="h-6 w-6"
+                                  aria-hidden="true"
+                                />
+                              </template>
+                              <template v-else>
+                                <component
+                                  :is="categoryItem.icon + 'Icon'"
+                                  class="h-6 w-6"
+                                  aria-hidden="true"
+                                />
+                              </template>
+                              <span class="ml-4">{{
+                                categoryItem.itemLabel
+                              }}</span>
+                            </div>
+                          </router-link>
                         </div>
-                      </router-link>
-                    </div>
-                  </li>
-                </ul>
-              </template>
-              <div class="text-gray-400 font-medium py-2 px-4">
-                Content Management
+                      </li>
+                    </template>
+                  </ul>
+                </template>
               </div>
-              <ul class="py-4 pl-4 font-medium text-gray-500 space-y-2">
-                <li>
-                  <div>
-                    <router-link to="/studio" class="">
-                      <div
-                        :class="
-                          isActiveRoute('studio')
-                            ? 'text-indigo-700 bg-indigo-500/10 '
-                            : 'hover:text-indigo-700 '
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <template v-if="isActiveRoute('studio')">
-                          <Squares2X2IconSolid
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <template v-else>
-                          <Squares2X2Icon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <span class="ml-4">Dashboard</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <router-link to="/studio/live" class="">
-                      <div
-                        :class="
-                          isActiveRoute('studio-live')
-                            ? 'text-indigo-700 bg-indigo-500/10 '
-                            : 'hover:text-indigo-700 '
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <template v-if="isActiveRoute('studio-live')">
-                          <SignalIconSolid class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <template v-else>
-                          <SignalIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <span class="ml-4">Live</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <router-link to="/studio/calendar">
-                      <div
-                        :class="
-                          isActiveRoute('studio-calendar')
-                            ? 'text-indigo-700 bg-indigo-500/10 '
-                            : 'hover:text-indigo-700 '
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <template v-if="isActiveRoute('studio-calendar')">
-                          <CalendarDaysIconSolid
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <template v-else>
-                          <CalendarDaysIcon
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <span class="ml-4">Calendar</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <router-link to="/studio/issues" class="">
-                      <div
-                        :class="
-                          isActiveRoute('studio-issues')
-                            ? 'text-indigo-700 bg-indigo-500/10 '
-                            : 'hover:text-indigo-700 '
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <template v-if="isActiveRoute('studio-issues')">
-                          <NewspaperIconSolid
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <template v-else>
-                          <NewspaperIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <span class="ml-4">Issues</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <router-link to="/studio/products" class="">
-                      <div
-                        :class="
-                          isActiveRoute('studio-products')
-                            ? 'text-indigo-700 bg-indigo-500/10 '
-                            : 'hover:text-indigo-700 '
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <template v-if="isActiveRoute('studio-products')">
-                          <BriefcaseIconSolid
-                            class="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </template>
-                        <template v-else>
-                          <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
-                        </template>
-                        <span class="ml-4">Products</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-              </ul>
             </DialogPanel>
           </TransitionChild>
         </div>
