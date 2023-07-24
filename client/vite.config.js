@@ -1,10 +1,10 @@
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
+import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 import ckeditor5 from "@ckeditor/vite-plugin-ckeditor5";
 import vue from "@vitejs/plugin-vue";
-const path = require("path");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,7 +23,25 @@ export default defineConfig({
       },
       {
         find: "@",
-        replacement: path.resolve(__dirname, "./src"),
+        replacement: fileURLToPath(new URL("./src", import.meta.url)),
+      },
+      {
+        find: "@current",
+        replacement: fileURLToPath(
+          new URL("./src/domains/current", import.meta.url)
+        ),
+      },
+      {
+        find: "@studio",
+        replacement: fileURLToPath(
+          new URL("./src/domains/studio", import.meta.url)
+        ),
+      },
+      {
+        find: "@workspace",
+        replacement: fileURLToPath(
+          new URL("./src/domains/workspace", import.meta.url)
+        ),
       },
     ],
   },

@@ -87,7 +87,7 @@
 
   .tippy-box[data-theme~="studio"],
   .light .tippy-box[data-theme~="studio"] {
-    @apply bg-blue-700 text-gray-50 shadow-sm shadow-blue-800;
+    @apply bg-indigo-700 text-gray-50 shadow-sm shadow-indigo-800;
   }
 
   .dark .tippy-box[data-theme~="pegasus"] {

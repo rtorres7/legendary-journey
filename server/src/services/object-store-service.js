@@ -98,8 +98,8 @@ class ObjectStoreService {
    * Minio.Client.putObject(bucketName: string, objectName: string, stream: ReadableStream | Buffer | string, metaData?: ItemBucketMetadata): Promise<UploadedObjectInfo>
    * @return {Promise<UploadedObjectInfo>}
    */
-  async putObject(bucketName, objectName, stream) {
-    return this.getClient().putObject(bucketName, objectName, stream);
+  async putObject(bucketName, objectName, stream, metadata={}) {
+    return this.getClient().putObject(bucketName, objectName, stream, metadata);
   }
 
   /**

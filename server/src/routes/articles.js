@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const _ = require("lodash");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
@@ -17,6 +18,14 @@ const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
+const ObjectStoreService = require('../services/object-store-service');
+const objectStoreService = new ObjectStoreService();
+
+const multer = require('multer');
+const ObjectStorageEngine = require('../util/object-storage-engine');
+const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'}); // TODO: This needs to be updated
+const upload = multer({ storage: engine });
 
 //GET articles by date
 router.get('/articles/date/:date', async (req, res) => {
@@ -200,7 +209,7 @@ router.get('/articles/:id/view', async (req, res) => {
       }
     }
    */
-  
+
   try {
     const product = await productService.findById(req.params.id);
     res.json(product.data.details);
@@ -273,27 +282,28 @@ async function updateArticle(id, req, res) {
   const nonStateActors = await metadataService.findNonStateActorsFor(
     req.body.non_state_actors
   );
-
+  const testing = coauthors.map((author) => {name=> author.name, code=> author.code})
+  console.log("COAUTHORS ======================= ", coauthors)
   const article = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
-    coauthors: coauthors,
-    coordinators: coordinators,
-    countries: countries,
-    nonStateActors: nonStateActors,
+    coauthors: coauthors.map(({name, code}) => ({name, code})),
+    coordinators: coordinators.map(({name, code}) => ({name, code})),
+    countries: countries.map(({name, code}) => ({name, code})),
+    nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
     datePublished: req.body.date_published,
-    dissemOrgs: dissemOrgs,
+    dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
     htmlBody: req.body.html_body,
     issues: issues,
     pocInfo: req.body.poc_info,
-    producingOffices: producingOffices,
+    producingOffices: producingOffices.map(({name, code}) => ({name, code})),
     productNumber: req.body.doc_num,
     productType: productType,
     publicationNumber: req.body.publication_number,
-    regions: regions,
+    regions: regions.map(({name, code}) => ({name, code})),
     reportingType: reportingType,
     state: req.body.state,
-    subregions: subregions,
+    subregions: subregions.map(({name, code}) => ({name, code})),
     summary: req.body.summary,
     summaryClassification: req.body.summary_classif,
     summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
@@ -303,6 +313,12 @@ async function updateArticle(id, req, res) {
     topics: topics,
     thumbnailCaption: req.body.thumbnailCaption,
     updatedAt: dayjs().toDate(),
+    updatedBy: {
+      id: req.user.id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      dn: req.user.dn,
+    },
     worldwide: req.body.worldwide,
   };
 
@@ -340,6 +356,112 @@ router.delete('/articles/:id', async (req, res) => {
   } catch (error) {
     res.json({error: 'Unable to delete article'});
   }
+});
+
+router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res) => {
+  /*
+    #swagger.summary = 'Upload an attachment for the given product'
+    #swagger.tags = ['Products']
+    #swagger.requestBody = {
+      content: {
+        'multipart/form-data': {}
+      }
+    }
+    #swagger.responses[200] = {
+      schema: {
+        att_id: 'abc'
+        success: true,
+      }
+    }
+   */
+
+  const id = uuidv4();
+  const attachment = {
+    attachmentId: id,
+    fileName: req.file.originalname,
+    mimeType: req.file.mimetype,
+    createdAt: new Date(),
+    fileSize: req.file.size,
+    type: 'ATTACHMENT',
+    destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
+    visible: true
+  };
+
+  await productService.addAttachment(req.params.productNumber, attachment);
+
+  res.json({att_id: id, success: true});
+});
+
+router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
+  /*
+    #swagger.summary = 'Download a given attachment for the given product'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      content: {
+        'application/pdf': {}
+      }
+    }
+    #swagger.responses[404] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+
+  const product = await productService.findByProductNumber(req.params.productNumber);
+
+  const attachments = product.attachmentsMetadata.filter(att =>
+    att.id === req.params.attachmentId ||
+    att.attachmentId === req.params.attachmentId ||
+    att.fileName === req.params.attachmentId
+  );
+
+  if (attachments.length === 0) {
+    KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
+  } else {
+    const attachment = attachments[0];
+    res.attachment(attachment.fileName);
+
+    // eslint-disable-next-line no-unused-vars
+    const [_protocol, path] = attachment.destination.split("//");
+    const bucketSeparatorIndex = path.indexOf("/");
+    const bucket = path.substring(0, bucketSeparatorIndex);
+    const objectName = path.substring(bucketSeparatorIndex);
+
+    const fileStream = await objectStoreService.getObject(bucket, objectName);
+
+    fileStream.pipe(res);
+  }
+});
+
+router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
+  /*
+    #swagger.summary = 'Remove a given attachment for the given product'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        success: true
+      }
+    }
+   */
+
+  const product = await productService.findByProductNumber(req.params.productNumber);
+
+  const removedAttachments = _.remove(product.attachmentsMetadata, (att => att.id === req.params.attachmentId || att.attachmentId === req.params.attachmentId));
+  product.markModified('attachmentsMetadata');
+  await product.save();
+
+  for (const att of removedAttachments) {
+    // eslint-disable-next-line no-unused-vars
+    const [_protocol, path] = att.destination.split("//");
+    const bucketSeparatorIndex = path.indexOf("/");
+    const bucket = path.substring(0, bucketSeparatorIndex);
+    const objectName = path.substring(bucketSeparatorIndex);
+
+    await objectStoreService.removeObject(bucket, objectName);
+  }
+
+  res.json({ success: true });
 });
 
 module.exports = router;
