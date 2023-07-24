@@ -1,4 +1,4 @@
-const ObjectStoreService = require('../services/object-store-service');
+const { ObjectStoreService } = require('../services/object-store-service');
 
 class ObjectStorageEngine {
 
