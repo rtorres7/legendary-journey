@@ -26,13 +26,17 @@
         >
           <div class="cursor-pointer">
             <ProductImage
-              v-if="product.images.length != 0"
+              v-if="
+                environment == 'offline'
+                  ? product.product_image
+                  : product.images.length != 0
+              "
               class="min-h-[190px] sm:min-h-[150px] md:min-h-[187px] lg:min-h-[157px] xl:min-h-[205px] 2xl:min-h-[186px]"
               :product="product"
             />
             <img
               v-else
-              src="@/assets/image-not-available-wire-size.png"
+              src="@/shared/assets/image-not-available-wire-size.png"
               class="h-[190px] sm:h-[150px] md:h-[187px] lg:h-[157px] xl:h-[205px] 2xl:h-[186px] w-full"
             />
           </div>
@@ -42,7 +46,7 @@
             <div
               class="text-gray-500 hover:text-gray-900 absolute top-0 right-0 cursor-pointer"
             >
-              <Menu as="div" class="relative">
+              <Menu as="div" class="relative z-50">
                 <div>
                   <tippy content="More" placement="bottom" theme="demo">
                     <MenuButton
@@ -67,7 +71,7 @@
                   <MenuItems
                     class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                   >
-                    <MenuItem>
+                    <!-- <MenuItem>
                       <div
                         class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                       >
@@ -76,8 +80,8 @@
                           >Share</span
                         >
                       </div>
-                    </MenuItem>
-                    <template v-if="type === 'product' || type === 'favorites'">
+                    </MenuItem> -->
+                    <!-- <template v-if="type === 'product' || type === 'favorites'">
                       <MenuItem>
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
@@ -100,7 +104,7 @@
                           >
                         </div>
                       </MenuItem>
-                    </template>
+                    </template> -->
                     <template v-if="type === 'product'">
                       <MenuItem v-if="product.featureId">
                         <router-link
@@ -174,8 +178,8 @@
                 <div>
                   {{ dayjs(product.datePublished).format("YYYY-MM-DD") }}
                 </div>
-                <div>•</div>
-                <div>{{ product.views }} views</div>
+                <!-- <div>•</div>
+                <div>{{ product.views }} views</div> -->
               </div>
             </div>
           </router-link>
@@ -185,6 +189,7 @@
   </div>
 </template>
 <script>
+import { ref } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   BookmarkIcon,
@@ -194,7 +199,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import ProductImage from "@current/components/ProductImage.vue";
+import ProductImage from "@workspace/components/ProductImage.vue";
 import dayjs from "dayjs/esm/index.js";
 export default {
   components: {
@@ -226,6 +231,7 @@ export default {
   },
   emits: ["delete"],
   setup(props, { emit }) {
+    const environment = ref(import.meta.env.MODE);
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
     };
@@ -233,6 +239,7 @@ export default {
       emit("delete", props.product);
     };
     return {
+      environment,
       getImg,
       deleteProduct,
       dayjs,

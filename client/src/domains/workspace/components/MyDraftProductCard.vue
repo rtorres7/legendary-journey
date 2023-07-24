@@ -33,7 +33,7 @@
             <MenuItems
               class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
             >
-              <MenuItem>
+              <!-- <MenuItem>
                 <div
                   class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                 >
@@ -42,7 +42,7 @@
                     >Share</span
                   >
                 </div>
-              </MenuItem>
+              </MenuItem> -->
               <MenuItem v-if="product.featureId">
                 <router-link
                   :to="{
@@ -87,7 +87,7 @@
           }"
         >
           <div class="flex items-center space-x-4">
-            <MaxProductIcon
+            <ProductIcon
               class="w-8 h-8"
               :class="getIconColor(productIcon)"
               :icon="productIcon"
@@ -124,6 +124,7 @@ import {
   TrashIcon,
 } from "@heroicons/vue/24/outline";
 import dayjs from "dayjs/esm/index.js";
+import ProductIcon from "./ProductIcon.vue";
 export default {
   components: {
     Menu,
@@ -134,6 +135,7 @@ export default {
     PencilSquareIcon,
     ShareIcon,
     TrashIcon,
+    ProductIcon,
   },
   props: {
     product: {
