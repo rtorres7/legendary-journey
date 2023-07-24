@@ -1,7 +1,6 @@
 {
   "env": {
     "node": true,
-    "dom": true,
     "es2022": true
   },
   "extends": [
