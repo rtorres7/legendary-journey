@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { isProduction } from "@current/helpers";
+
+// Demo
 import MockWorkspaceView from "@/domains/demo/views/MockWorkspaceView.vue";
 
 // Current
@@ -281,17 +283,17 @@ const workspaceRoutes = [
   },
 ];
 
-const routes = [...currentRoutes, ...studioRoutes, ...workspaceRoutes];
+let routes = [...currentRoutes];
 
 if (!isProduction()) {
+  routes = [...currentRoutes, ...studioRoutes, ...workspaceRoutes];
   routes.push({
-    path: "/workspace-demo",
-    name: "workspace-demo",
+    path: "/demo",
+    name: "demo",
     component: MockWorkspaceView,
     meta: {
-      domain: "workspace",
-      title: "Workspace",
-      demo: true,
+      domain: "demo",
+      title: "Workspace Demo",
     },
   });
 }

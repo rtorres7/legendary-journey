@@ -31,6 +31,12 @@
             <span class="sr-only">Search</span>
             <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
           </button>
+          <button
+            class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            <span class="sr-only">Notifications</span>
+            <BellIcon class="h-6 w-6" aria-hidden="true" />
+          </button>
         </div>
         <div class="pl-4 border-l border-slate-900/10">
           <!-- Profile dropdown -->
@@ -85,7 +91,7 @@
       <div class="flex grow-0 flex-col max-h-full min-h-screen w-[80px]">
         <div class="flex grow flex-col pt-6">
           <div class="flex justify-center items-center pb-6">
-            <router-link to="/">
+            <router-link to="/studio">
               <div class="rounded-full bg-indigo-200 p-3">
                 <VideoCameraIconSolid
                   class="h-6 w-6 text-indigo-700"
@@ -607,6 +613,7 @@ import {
 import {
   ArrowLeftOnRectangleIcon,
   Bars3Icon,
+  BellIcon,
   BriefcaseIcon,
   BookmarkIcon,
   ChartBarIcon,
@@ -652,6 +659,7 @@ export default {
     TransitionRoot,
     ArrowLeftOnRectangleIcon,
     Bars3Icon,
+    BellIcon,
     BriefcaseIcon,
     BriefcaseIconSolid,
     BookmarkIcon,
