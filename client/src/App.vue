@@ -2,6 +2,9 @@
   <template v-if="domain === 'current'">
     <CurrentShell />
   </template>
+  <template v-if="domain === 'demo'">
+    <router-view />
+  </template>
   <template v-if="domain === 'workspace'">
     <main role="main" class="bg-white text-gray-900">
       <WorkspaceShell />

@@ -24,7 +24,7 @@
                 class="my-auto rounded cursor-pointer"
               >
                 <a
-                  href="/workspace#dashboard"
+                  href="/demo#dashboard"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <HomeIcon class="h-6 w-6" aria-hidden="true" />
@@ -43,7 +43,7 @@
                 class="my-auto rounded cursor-pointer"
               >
                 <a
-                  href="/workspace#products"
+                  href="/demo#products"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
@@ -62,7 +62,7 @@
                 class="my-auto rounded cursor-pointer"
               >
                 <a
-                  href="/workspace#saved"
+                  href="/demo#saved"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
@@ -81,7 +81,7 @@
                 class="my-auto rounded cursor-pointer"
               >
                 <a
-                  href="/workspace#favorites"
+                  href="/demo#favorites"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <StarIcon class="h-6 w-6" aria-hidden="true" />
@@ -100,7 +100,7 @@
                 class="my-auto rounded cursor-pointer"
               >
                 <a
-                  href="/workspace#collections"
+                  href="/demo#collections"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <FolderIcon class="h-6 w-6" aria-hidden="true" />
@@ -614,7 +614,7 @@
               <div class="text-lg font-bold">My Recent Products</div>
               <a
                 class="flex items-center text-gray-500 text-sm font-semibold"
-                href="/workspace#products"
+                href="/demo#products"
               >
                 <span>More Products</span>
                 <ChevronRightIcon class="h-4 w-4" />
