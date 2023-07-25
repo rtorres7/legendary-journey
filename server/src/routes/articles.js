@@ -282,8 +282,7 @@ async function updateArticle(id, req, res) {
   const nonStateActors = await metadataService.findNonStateActorsFor(
     req.body.non_state_actors
   );
-  const testing = coauthors.map((author) => {name=> author.name, code=> author.code})
-  console.log("COAUTHORS ======================= ", coauthors)
+
   const article = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
