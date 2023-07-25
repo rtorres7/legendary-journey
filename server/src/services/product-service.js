@@ -197,6 +197,13 @@ class ProductService {
       }
     }
   }
+
+  async addAttachment(productNumber, attachmentData) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.attachmentsMetadata = [...product.attachmentsMetadata, attachmentData];
+
+    await product.save();
+  }
 }
 
 module.exports = ProductService;

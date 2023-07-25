@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import SimpleTypeahead from "vue3-simple-typeahead";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
-import App from "../App.vue";
+import App from "@/App.vue";
 import router from "@/router";
 import store from "@/store";
 import "vue3-carousel/dist/carousel.css";
@@ -13,9 +13,12 @@ import { plugin as VueTippy } from "vue-tippy";
 import "tippy.js/dist/tippy.css"; // optional for styling
 import "tippy.js/animations/scale.css";
 
-const componentFiles = import.meta.glob("../components/max-ui/*.vue", {
-  eager: true,
-});
+const componentFiles = import.meta.glob(
+  "../domains/current/components/max-ui/*.vue",
+  {
+    eager: true,
+  }
+);
 
 const app = createApp(App);
 
@@ -39,7 +42,7 @@ const setup = async () => {
     const fetchedData = await fetch("/production.metadata.json");
     app.provide("metadata", await fetchedData.json());
   } else {
-    const metadata = await import("@/config/low.metadata.json");
+    const metadata = await import("@/shared/config/low.metadata.json");
     app.provide("metadata", metadata);
   }
   app
