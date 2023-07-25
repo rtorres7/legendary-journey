@@ -26,18 +26,8 @@
         >
           <div class="cursor-pointer">
             <ProductImage
-              v-if="
-                environment == 'offline'
-                  ? product.product_image
-                  : product.images.length != 0
-              "
-              class="min-h-[190px] sm:min-h-[150px] md:min-h-[187px] lg:min-h-[157px] xl:min-h-[205px] 2xl:min-h-[186px]"
+              class="min-w-[184px] max-w-[464px]"
               :product="product"
-            />
-            <img
-              v-else
-              src="@/shared/assets/image-not-available-wire-size.png"
-              class="h-[190px] sm:h-[150px] md:h-[187px] lg:h-[157px] xl:h-[205px] 2xl:h-[186px] w-full"
             />
           </div>
         </router-link>
