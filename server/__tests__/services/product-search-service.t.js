@@ -3,6 +3,7 @@ const { Client } = require("@elastic/elasticsearch");
 const ProductSearchService = require("../../src/services/product-search-service");
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
+const { logger } = require("../../src/config/logger");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -21,6 +22,7 @@ describe('ProductSearchService', () => {
   beforeAll(async () => {
     container = await new ElasticsearchContainer().start();
     process.env.ES_URL = container.getHttpUrl();
+    logger.info(`ProductSearchService.beforeAll:  ${container.getHttpUrl()}`);
 
     client = new Client({ node: container.getHttpUrl() });
 

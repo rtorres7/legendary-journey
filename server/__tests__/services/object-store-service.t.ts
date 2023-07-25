@@ -1,22 +1,19 @@
-const crypto = require("crypto");
-const fs = require("fs");
-const tmp = require("tmp");
-const { GenericContainer, StartedTestContainer, Wait } = require("testcontainers");
-const { BucketItemFromList, Client } = require("minio");
-const config = require("../../src/config/config.js");
-const logger = require("../../src/config/logger.js");
+import crypto from "crypto";
+import fs from "fs";
+import "jest-extended";
+import { Client } from "minio";
+import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import tmp from "tmp";
+import config from "../../src/config/config";
+import logger from "../../src/config/logger";
+import { ObjectStoreService } from "../../src/services/object-store-service";
 
-const ObjectStoreService = require("../../src/services/object-store-service");
 // https://jest-extended.jestcommunity.dev/docs/matchers
 describe("ObjectStoreService", () => {
-  /** @type {StartedTestContainer} */
-  let minio;
-  /** @type {Client} */
-  let minioClient;
-  /** @type {ObjectStoreService} */
-  let service;
-  /** @type {String} */
-  let tmpSubDir;
+  let minio: StartedTestContainer;
+  let minioClient: Client;
+  let service: ObjectStoreService;
+  let tmpSubDir: string;
 
   beforeAll(async () => {
     // https://node.testcontainers.org/configuration/
@@ -192,7 +189,6 @@ describe("ObjectStoreService", () => {
    * @return {Promise<StartedTestContainer>}
    */
   function createMinioContainer() {
-    // prettier-ignore
     return new GenericContainer("quay.io/minio/minio:latest")
       .withEnvironment({
         MINIO_BROWSER: "off",
@@ -225,21 +221,21 @@ describe("ObjectStoreService", () => {
   /**
    * @return {String} random bucket name
    */
-  function testName() {
+  function testName(): string {
     return "test-" + crypto.randomBytes(4).toString("hex").toLowerCase();
   }
 
   /**
    * Create tmp object in bucket
-   * @param {String} bucketName
-   * @param {Number} objectName optional default random name
-   * @param {Number} objectSize optional default 1048576
-   * @return {Promise<String>} file/object name
+   * @param {string} bucketName
+   * @param {string} objectName optional default random name
+   * @param {number} objectSize optional default 1048576
+   * @return {Promise<string>} file/object name
    */
-  async function testCreateObject(bucketName, objectName, objectSize) {
+  async function testCreateObject(bucketName: string, objectName?: string, objectSize?: number): Promise<string> {
     objectSize = objectSize === undefined ? 1048576 : objectSize;
     const file = await testCreateFile(objectSize);
-    objectName = !!objectName ? objectName : file.split("/").pop();
+    objectName = objectName ? objectName : file.split("/").pop();
     const readStream = fs.createReadStream(file, "binary");
     return new Promise((resolve, reject) => {
       service
@@ -257,7 +253,7 @@ describe("ObjectStoreService", () => {
    * @param {Number} size size in bytes
    * @return {Promise<String>} file path
    */
-  function testCreateFile(size) {
+  function testCreateFile(size: number): Promise<string> {
     return new Promise((resolve, reject) => {
       const tmpObj = tmp.fileSync({ dir: tmpSubDir, mode: 0o600, prefix: "obj" });
       const writer = fs.createWriteStream(tmpObj.name);
@@ -273,8 +269,7 @@ describe("ObjectStoreService", () => {
           i -= chunkSize;
           if (i === 0) {
             // Last time!
-            writer.end(chunk, "binary", (err) => {
-              if (err) reject(err);
+            writer.end(chunk, "binary", () => {
               // logger.info(`testCreateFile:  ${tmpObj.name}`);
               resolve(tmpObj.name);
             });
@@ -298,7 +293,7 @@ describe("ObjectStoreService", () => {
    * @param {ReadableStream} reader
    * @return {Promise<String>} file
    */
-  function testWriteStreamToFile(reader) {
+  function testWriteStreamToFile(reader: NodeJS.ReadableStream): Promise<string> {
     return new Promise((resolve, reject) => {
       let size = 0;
       const tmpObj = tmp.fileSync({ dir: tmpSubDir, mode: 0o600, prefix: "obj" });

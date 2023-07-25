@@ -18,7 +18,7 @@ const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
-const ObjectStoreService = require('../services/object-store-service');
+const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
 
 const multer = require('multer');

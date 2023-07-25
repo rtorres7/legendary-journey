@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 
 const { Sequelize } = require("sequelize");
 
+const { logger } = require("../../src/config/logger");
+
 const articles = [
   new Article({
     classification: "UNC",
@@ -2826,6 +2828,7 @@ const loadElasticSearch = async (esUrl) => {
   const client = new Client({ node: esUrl });
 
   for (const article of articles) {
+    logger.info(`loading article ${article._id}`)
     await client.index({
       index: "products",
       body: article.indexable,

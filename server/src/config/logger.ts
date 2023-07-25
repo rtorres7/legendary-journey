@@ -1,5 +1,5 @@
-const winston = require("winston");
-const config = require("./config");
+import winston from "winston";
+import config from "./config";
 
 const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
@@ -8,16 +8,18 @@ const enumerateErrorFormat = winston.format((info) => {
   return info;
 });
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   // https://github.com/winstonjs/winston
   // level: config.env === 'development' ? 'debug' : 'info',
   // error warn info http verbose debug silly
-  level: 'info', // config.mxs.env === 'container' ? 'debug' : 'info',
+  level: "info", // config.mxs.env === 'container' ? 'debug' : 'info',
   format: winston.format.combine(
     enumerateErrorFormat(),
-    ['development', 'test'].some(i => i === config.env) ? winston.format.colorize() : winston.format.uncolorize(),
+    ["development", "test"].some((i) => i === config.env)
+      ? winston.format.colorize()
+      : winston.format.uncolorize(),
     winston.format.splat(),
-    winston.format.printf(({ level, message }) => `${level}: ${message}`)
+    winston.format.printf(({ level, message }) => `${level}: ${message}`),
   ),
   transports: [
     new winston.transports.Console({
@@ -26,4 +28,4 @@ const logger = winston.createLogger({
   ],
 });
 
-module.exports = logger;
+export default logger;
