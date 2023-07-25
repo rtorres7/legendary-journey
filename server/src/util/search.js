@@ -2,6 +2,75 @@ const dayjs = require("dayjs");
 const MetadataService = require('../services/metadata');
 const metadataService = new MetadataService();
 
+async function runSearchOne(productNum) {
+
+  const searchOneParms = {
+    index: "products",  
+    query: {
+        match: {
+          "productNumber": productNum 
+        }
+      }
+  };
+
+  const client = require('../data/elasticsearch');
+  const results = await client.search(searchOneParms);
+  
+return results.hits.hits[0]._id
+
+}
+
+async function runRelatedSearch(product) {
+  
+  const productSearchOne = await runSearchOne(product);
+  const relatedParams = {
+    index: "products",
+   
+    query: {
+      
+      more_like_this: {
+        fields: ["title", "html_body", "summary", "topics", "countries"],
+        like: [{
+          "_index": "products",
+          "_id": productSearchOne
+        }],
+        min_term_freq: 1,
+        max_query_terms: 12
+      },
+    },
+  };
+
+  const client = require('../data/elasticsearch');
+  const results = await client.search(relatedParams);
+  
+
+  var relatedJSON = [];
+  var i=1;
+  results.hits.hits.map(hit => {
+    if (i < 6) {
+      relatedJSON.push({ id: hit._id, position: i, document_id: product, 
+        "document": { 
+          "id": hit._source.id, 
+          doc_link: hit._source.productNumber, 
+          doc_num: hit._source.productNumber, 
+          title: hit._source.title, 
+          title_classification: hit._source.titleClassification } 
+      });
+    }
+    i=i+1
+  });
+
+  const relatedResult = {relatedDocuments: relatedJSON}
+
+console.log("RESULTS FROM RELATED SEARCH", JSON.stringify(relatedResult))
+
+return relatedResult
+
+
+}
+
+
+
 async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc', filters = {}, fields = []) {
   const skipCount = (page - 1) * perPage;
   const sortClause = buildSortClause(sortMethod);
@@ -29,7 +98,7 @@ async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc',
   const results = await client.search(searchParams);
   const aggregationResults = await resolveAggregations(results.aggregations);
   const highlightedResults = augmentResults(results);
-
+  
   return {
     searchId: '',
     results: highlightedResults,
@@ -54,9 +123,13 @@ function buildSortClause(sortMethod) {
 
 function buildQueryFromFilters(term, filters, fields) {
   const query = {};
-
+  
   if (term !== undefined && term !== '') {
-    query.match = { htmlBody: term };
+    query.bool={};
+    query.bool.must=[];
+    query.bool.must.push({match: { htmlBody: term}}, {match: {state: "posted"}});
+  } else {
+    query.match = {state: "posted"};
   }
 
   if (filters.start_date !== undefined && filters.end_date !== undefined) {
@@ -185,4 +258,4 @@ function adjustResultsForUI(result) {
   return result;
 }
 
-module.exports = runSearch;
+module.exports = {runSearch, runRelatedSearch};
