@@ -1,6 +1,7 @@
 const request = require("supertest");
 const { setupApp, setupAppWithUser } = require('../__utils__/expressUtils');
 const { articles } = require("../__utils__/dataLoader");
+const router = require('../../src/routes/articles');
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -54,18 +55,18 @@ jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
     const { metadata } = require("../__utils__/dataLoader");
     return {
-      findCountriesFor: jest.fn().mockResolvedValueOnce(metadata.criteria.countries.values),
+      findCountriesFor: jest.fn().mockResolvedValue(metadata.criteria.countries.values),
       findSubRegionsForCountries: jest.fn().mockResolvedValue(metadata.criteria.subregions.values),
-      findRegionsForSubRegions: jest.fn().mockResolvedValueOnce(metadata.criteria.regions.values),
-      findTopicsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.topics.values),
-      findIssuesForTopics: jest.fn().mockResolvedValueOnce(metadata.criteria.issues.values),
-      findProducingOfficesFor: jest.fn().mockResolvedValueOnce(metadata.criteria.producing_offices.values),
-      findCoauthorsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.coauthors.values),
-      findCoordinatorsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.coordinators.values),
-      findDissemOrgsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.dissem_orgs.values),
-      findProductType: jest.fn().mockResolvedValueOnce(metadata.criteria.product_types.values[0]),
-      findReportingTypeFor: jest.fn().mockResolvedValueOnce(metadata.criteria.reporting_types.values[0]),
-      findNonStateActorsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.non_state_actors.values),
+      findRegionsForSubRegions: jest.fn().mockResolvedValue(metadata.criteria.regions.values),
+      findTopicsFor: jest.fn().mockResolvedValue(metadata.criteria.topics.values),
+      findIssuesForTopics: jest.fn().mockResolvedValue(metadata.criteria.issues.values),
+      findProducingOfficesFor: jest.fn().mockResolvedValue(metadata.criteria.producing_offices.values),
+      findCoauthorsFor: jest.fn().mockResolvedValue(metadata.criteria.coauthors.values),
+      findCoordinatorsFor: jest.fn().mockResolvedValue(metadata.criteria.coordinators.values),
+      findDissemOrgsFor: jest.fn().mockResolvedValue(metadata.criteria.dissem_orgs.values),
+      findProductType: jest.fn().mockResolvedValue(metadata.criteria.product_types.values[0]),
+      findReportingTypeFor: jest.fn().mockResolvedValue(metadata.criteria.reporting_types.values[0]),
+      findNonStateActorsFor: jest.fn().mockResolvedValue(metadata.criteria.non_state_actors.values),
     };
   });
 });
@@ -147,7 +148,7 @@ describe("Article Routes", () => {
 
     it("should send update document when document_action is save", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       const original = articles[0];
       const postData = {
@@ -337,7 +338,7 @@ describe("Article Routes", () => {
   describe("PUT /articles/:id", () => {
     it("should update document", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       const original = articles[0];
 
@@ -367,7 +368,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       const original = articles[0];
 
