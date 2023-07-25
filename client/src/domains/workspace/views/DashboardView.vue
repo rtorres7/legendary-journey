@@ -10,7 +10,7 @@
     <template v-if="!loadingDrafts && !loadingPublished">
       <template v-if="myDrafts.length > 0">
         <div class="py-6 flex items-center">
-          <div class="text-lg font-bold">Continue where you left off</div>
+          <div class="text-lg font-bold">Continue Working With Your Drafts</div>
         </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
@@ -105,7 +105,10 @@
           >Cancel</BaseButton
         >
         <BaseButton color="danger" @click.prevent="deleteProduct">
-          Delete
+          <template v-if="loadingDelete">
+            <LoadingSpinner class="h-5 w-5 ml-2.5" />
+          </template>
+          <template v-else>Delete</template>
         </BaseButton>
       </template>
     </BaseDialog>
@@ -119,6 +122,7 @@ import BaseDialog from "../components/BaseDialog.vue";
 import BaseButton from "../components/BaseButton.vue";
 import MyDraftProductCard from "../components/MyDraftProductCard.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
+import LoadingSpinner from "../components/LoadingSpinner.vue";
 import { productDetails } from "../data";
 import {
   ChevronRightIcon,
@@ -129,6 +133,7 @@ export default {
   components: {
     MyDraftProductCard,
     MyPublishedProductCard,
+    LoadingSpinner,
     ChevronRightIcon,
     EyeIcon,
     Square3Stack3DIcon,
@@ -149,6 +154,7 @@ export default {
     const loadingStats = ref(true);
     const createNotification = inject("create-notification");
     const selectedProduct = ref();
+    const loadingDelete = ref(false);
     const isDeleteDialogOpen = ref(false);
     const closeDeleteDialog = () => {
       isDeleteDialogOpen.value = false;
@@ -179,6 +185,7 @@ export default {
           myPublished.value.splice(indexOfProduct, 1);
         }
       } else {
+        loadingDelete.value = true;
         axios
           .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
           .then((response) => {
@@ -189,12 +196,14 @@ export default {
                 type: "error",
                 autoClose: false,
               });
+              loadingDelete.value = false;
             } else {
               createNotification({
                 title: "Product Deleted",
                 message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
                 type: "success",
               });
+              loadingDelete.value = false;
               closeDeleteDialog();
               if (selectedProduct.value.state == "draft") {
                 let p = myDrafts.value.find(
@@ -318,6 +327,7 @@ export default {
       loadingDrafts,
       loadingPublished,
       loadingStats,
+      loadingDelete,
       isDeleteDialogOpen,
       openDeleteDialog,
       closeDeleteDialog,
