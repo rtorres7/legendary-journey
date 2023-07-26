@@ -51,25 +51,25 @@
               </div>
             </tippy>
           </li>
-          <!-- <li>
+          <li>
             <tippy content="Saved Products" placement="right" theme="demo">
               <div
                 :class="
-                  isActivePage('#saved')
+                  route.name == 'saved'
                     ? 'text-gray-50 bg-slate-800/90'
                     : 'hover:text-gray-50 hover:bg-slate-800/90'
                 "
                 class="my-auto rounded cursor-pointer"
               >
-                <a
-                  href="/workspace#saved"
+                <router-link
+                  to="/workspace/saved"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
+                </router-link>
               </div>
             </tippy>
-          </li> -->
+          </li>
           <!-- <li>
             <tippy content="Collections" placement="right" theme="demo">
               <div
@@ -514,7 +514,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   // AdjustmentsHorizontalIcon,
   Bars3Icon,
-  // BookmarkIcon,
+  BookmarkIcon,
   BriefcaseIcon,
   // CheckIcon,
   // ChevronDownIcon,
@@ -539,7 +539,7 @@ export default {
     MenuItems,
     // AdjustmentsHorizontalIcon,
     Bars3Icon,
-    // BookmarkIcon,
+    BookmarkIcon,
     BriefcaseIcon,
     // CheckIcon,
     // ChevronDownIcon,

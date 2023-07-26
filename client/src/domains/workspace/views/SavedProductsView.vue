@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="text-2xl text-gray-700">My Products</div>
+    <div class="text-2xl text-gray-700">Saved Products</div>
     <div class="py-6 sm:flex justify-between items-center">
-      <template v-if="loadingPublished">
+      <template v-if="loadingSaved">
         <div
           class="h-6 bg-slate-200 rounded mb-2 w-1/3 lg:1/4 animate-pulse"
         ></div>
@@ -85,7 +85,7 @@
         </button>
       </div> -->
     </div>
-    <template v-if="loadingPublished">
+    <template v-if="loadingSaved">
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       ></div>
@@ -98,60 +98,29 @@
       </div>
     </template>
     <template v-else>
-      <template v-if="myPublished.length == 0">
-        <p class="italic">No published products to show</p>
+      <template v-if="mySaved.length == 0">
+        <p class="italic">No saved products to show</p>
       </template>
       <template v-else>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
-          <template v-for="product in myPublished" :key="product">
+          <template v-for="product in mySaved" :key="product">
             <MyPublishedProductCard
               :product="product"
-              type="product"
-              @delete="openDeleteDialog(product)"
+              type="saved"
+              @remove="removeSavedProduct(product)"
             />
           </template>
         </div>
       </template>
     </template>
-    <BaseDialog
-      :isOpen="isDeleteDialogOpen"
-      :title="'Delete Product'"
-      class="max-w-fit"
-      @close="closeDeleteDialog"
-    >
-      <p class="py-4 pr-4">Are you sure you want to do this?</p>
-      <template #actions>
-        <BaseButton
-          class="w-[100px]"
-          color="secondary"
-          @click.prevent="closeDeleteDialog"
-          >Cancel</BaseButton
-        >
-        <BaseButton
-          class="w-[100px]"
-          color="danger"
-          @click.prevent="deleteProduct"
-        >
-          <div :class="loadingDelete ? 'flex space-x-4' : ''">
-            <span>Delete</span>
-            <span v-if="loadingDelete">
-              <LoadingSpinner class="h-5 w-5" />
-            </span>
-          </div>
-        </BaseButton>
-      </template>
-    </BaseDialog>
   </div>
 </template>
 <script>
 import { computed, onMounted, inject, ref } from "vue";
 import axios from "@/shared/config/wireAxios";
-import BaseDialog from "../components/BaseDialog.vue";
-import BaseButton from "../components/BaseButton.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
-import LoadingSpinner from "../components/LoadingSpinner.vue";
 import { productDetails } from "../data";
 // import {
 //   AdjustmentsHorizontalIcon,
@@ -168,9 +137,6 @@ import { productDetails } from "../data";
 export default {
   components: {
     MyPublishedProductCard,
-    LoadingSpinner,
-    BaseDialog,
-    BaseButton,
     // AdjustmentsHorizontalIcon,
     // ChevronDownIcon,
     // CheckIcon,
@@ -182,9 +148,9 @@ export default {
   },
   setup() {
     const environment = ref(import.meta.env.MODE);
-    const myPublished = ref([]);
-    const loadingPublished = ref(true);
-    const numProducts = computed(() => myPublished.value.length);
+    const mySaved = ref([]);
+    const loadingSaved = ref(true);
+    const numProducts = computed(() => mySaved.value.length);
     const sortOptions = [
       { name: "Newest" },
       { name: "Oldest" },
@@ -192,58 +158,40 @@ export default {
     ];
     const selectedSort = ref(sortOptions[0]);
     const createNotification = inject("create-notification");
-    const selectedProduct = ref();
-    const loadingDelete = ref(false);
-    const isDeleteDialogOpen = ref(false);
-    const closeDeleteDialog = () => {
-      isDeleteDialogOpen.value = false;
-    };
-    const openDeleteDialog = (product) => {
-      selectedProduct.value = product;
-      isDeleteDialogOpen.value = true;
-    };
-    const deleteProduct = () => {
+    const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createNotification({
-          title: "Product Deleted",
-          message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+          title: "Saved Product Removed",
+          message: `Product ${product.productNumber} has been removed.`,
           type: "success",
         });
-        closeDeleteDialog();
-        let p = myPublished.value.find(
-          (item) => item.productNumber == selectedProduct.value.productNumber
+        let p = mySaved.value.find(
+          (item) => item.productNumber == product.productNumber
         );
-        let indexOfProduct = myPublished.value.indexOf(p);
-        myPublished.value.splice(indexOfProduct, 1);
+        let indexOfProduct = mySaved.value.indexOf(p);
+        mySaved.value.splice(indexOfProduct, 1);
       } else {
-        loadingDelete.value = true;
-        axios
-          .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
-          .then((response) => {
-            if (response.data.error) {
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-              loadingDelete.value = false;
-            } else {
-              createNotification({
-                title: "Product Deleted",
-                message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
-                type: "success",
-              });
-              loadingDelete.value = false;
-              closeDeleteDialog();
-              let p = myPublished.value.find(
-                (item) =>
-                  item.productNumber == selectedProduct.value.productNumber
-              );
-              let indexOfProduct = myPublished.value.indexOf(p);
-              myPublished.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            createNotification({
+              title: "Product Deleted",
+              message: `Product ${product.productNumber} has been removed.`,
+              type: "success",
+            });
+            let p = mySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = mySaved.value.indexOf(p);
+            mySaved.value.splice(indexOfProduct, 1);
+          }
+        });
       }
     };
     onMounted(() => {
@@ -255,18 +203,18 @@ export default {
               products.push(product.data);
             }
           });
-          myPublished.value = products;
-          loadingPublished.value = false;
+          mySaved.value = products;
+          loadingSaved.value = false;
         }, 1000);
       } else {
-        axios.get("/workspace/recent").then((response) => {
-          loadingPublished.value = false;
+        axios.get("/workspace/saved").then((response) => {
+          loadingSaved.value = false;
           if (response.data) {
-            myPublished.value = response.data.content;
+            mySaved.value = response.data.content;
           } else {
             createNotification({
               title: "Error",
-              message: "There was an error retrieving Recent Products.",
+              message: "There was an error retrieving Saved Products.",
               type: "error",
               autoClose: false,
             });
@@ -276,16 +224,12 @@ export default {
     });
     return {
       environment,
-      myPublished,
-      loadingPublished,
+      mySaved,
+      loadingSaved,
       numProducts,
       sortOptions,
       selectedSort,
-      loadingDelete,
-      isDeleteDialogOpen,
-      openDeleteDialog,
-      closeDeleteDialog,
-      deleteProduct,
+      removeSavedProduct,
     };
   },
 };

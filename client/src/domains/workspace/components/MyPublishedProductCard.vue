@@ -68,10 +68,11 @@
                         >
                       </div>
                     </MenuItem> -->
-                    <!-- <template v-if="type === 'product' || type === 'favorites'">
+                    <template v-if="type === 'product' || type === 'favorites'">
                       <MenuItem>
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                          @click="saveProduct(product)"
                         >
                           <BookmarkIcon
                             class="h-5 w-5"
@@ -84,6 +85,7 @@
                       <MenuItem>
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                          @click="removeSavedProduct"
                         >
                           <XMarkIcon class="h-5 w-5" aria-hidden="true" /><span
                             class="capitalize"
@@ -91,7 +93,7 @@
                           >
                         </div>
                       </MenuItem>
-                    </template> -->
+                    </template>
                     <template v-if="type === 'product'">
                       <MenuItem v-if="product.featureId">
                         <router-link
@@ -176,7 +178,8 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { inject, ref } from "vue";
+import axios from "@/shared/config/wireAxios";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   BookmarkIcon,
@@ -216,19 +219,51 @@ export default {
       default: false,
     },
   },
-  emits: ["delete"],
+  emits: ["delete", "remove"],
   setup(props, { emit }) {
     const environment = ref(import.meta.env.MODE);
+    const createNotification = inject("create-notification");
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
     };
     const deleteProduct = () => {
       emit("delete", props.product);
     };
+    const removeSavedProduct = () => {
+      emit("remove", props.product);
+    };
+    const saveProduct = (product) => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Product Saved",
+          message: `Product ${product.productNumber} has been saved.`,
+          type: "success",
+        });
+      } else {
+        axios.put("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            createNotification({
+              title: "Product Saved",
+              message: `Product ${product.productNumber} has been saved.`,
+              type: "success",
+            });
+          }
+        });
+      }
+    };
     return {
       environment,
       getImg,
       deleteProduct,
+      removeSavedProduct,
+      saveProduct,
       dayjs,
     };
   },
