@@ -22,7 +22,7 @@
       <template v-if="!smartRender">
         <img
           class="max-h-full w-full m-auto object-contain bg-[#f1f1f1]"
-          src="@/shared/assets/image-not-available-wire-size.png"
+          src="@/shared/assets/image-not-available-16x9.png"
           alt=""
         />
       </template>
