@@ -1,32 +1,26 @@
 import { createRouter, createWebHistory } from "vue-router";
-import AttachmentView from "../views/AttachmentView.vue";
-import EditProductView from "../views/EditProductView.vue";
-import HomeView from "../views/HomeView.vue";
-import NotFoundView from "../views/NotFoundView.vue";
-import ProductView from "../views/ProductView.vue";
-import PublishProductView from "../views/PublishProductView.vue";
-import SearchView from "../views/SearchView.vue";
-import SearchTipsView from "../views/SearchTipsView.vue";
-import SpecialEditionView from "../views/SpecialEditionView.vue";
-import SpecialEditionsManagerView from "../views/SpecialEditionsManagerView.vue";
-import MockWorkspaceView from "@/demo/views/MockWorkspaceView.vue";
-import WorkspaceView from "../workspace/views/WorkspaceView.vue";
-import { isProduction } from "@/helpers";
+import { isProduction } from "@current/helpers";
 
-// Studio
-import MockStudioView from "@/demo-studio/views/MockStudioView.vue";
+// Demo
+import MockWorkspaceView from "@/domains/demo/views/MockWorkspaceView.vue";
 
-import StudioHomeView from "@/studio/views/StudioHomeView.vue";
-import StudioLiveView from "@/studio/views/StudioLiveView.vue";
-import StudioIssuesView from "@/studio/views/StudioIssuesView.vue";
-import StudioIssueDetailView from "@/studio/views/StudioIssueDetailView.vue";
-import StudioIssueMetricsView from "@/studio/views/StudioIssueMetricsView.vue";
+// Current
+import CurrentAttachmentView from "@current/views/AttachmentView.vue";
+import CurrentEditProductView from "@current/views/EditProductView.vue";
+import CurrentHomeView from "@current/views/HomeView.vue";
+import CurrentNotFoundView from "@current/views/NotFoundView.vue";
+import CurrentProductView from "@current/views/ProductView.vue";
+import CurrentPublishProductView from "@current/views/PublishProductView.vue";
+import CurrentSearchView from "@current/views/SearchView.vue";
+import CurrentSearchTipsView from "@current/views/SearchTipsView.vue";
+import CurrentSpecialEditionView from "@current/views/SpecialEditionView.vue";
+import CurrentSpecialEditionsManagerView from "@current/views/SpecialEditionsManagerView.vue";
 
-const routes = [
+const currentRoutes = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: CurrentHomeView,
     meta: {
       domain: "current",
       title: "Current",
@@ -35,7 +29,7 @@ const routes = [
   {
     path: "/product/:doc_num/preview",
     name: "product-preview",
-    component: ProductView,
+    component: CurrentProductView,
     meta: {
       domain: "current",
     },
@@ -43,7 +37,7 @@ const routes = [
   {
     path: "/product/:doc_num",
     name: "product",
-    component: ProductView,
+    component: CurrentProductView,
     meta: {
       domain: "current",
     },
@@ -51,7 +45,7 @@ const routes = [
   {
     path: "/attachment/:url?",
     name: "attachment",
-    component: AttachmentView,
+    component: CurrentAttachmentView,
     props: true,
     meta: {
       domain: "current",
@@ -61,7 +55,7 @@ const routes = [
   {
     path: "/issues/:name",
     name: "issues",
-    component: SearchView,
+    component: CurrentSearchView,
     meta: {
       domain: "current",
       viewType: "search",
@@ -70,7 +64,7 @@ const routes = [
   {
     path: "/regions/:name",
     name: "regions",
-    component: SearchView,
+    component: CurrentSearchView,
     meta: {
       domain: "current",
       viewType: "search",
@@ -79,7 +73,7 @@ const routes = [
   {
     path: "/subregions/:name",
     name: "subregions",
-    component: SearchView,
+    component: CurrentSearchView,
     meta: {
       domain: "current",
       viewType: "search",
@@ -88,7 +82,7 @@ const routes = [
   {
     path: "/countries/:name",
     name: "countries",
-    component: SearchView,
+    component: CurrentSearchView,
     meta: {
       domain: "current",
       viewType: "search",
@@ -97,7 +91,7 @@ const routes = [
   {
     path: "/search",
     name: "search",
-    component: SearchView,
+    component: CurrentSearchView,
     meta: {
       domain: "current",
       viewType: "search",
@@ -106,7 +100,7 @@ const routes = [
   {
     path: "/search_tips",
     name: "searchTips",
-    component: SearchTipsView,
+    component: CurrentSearchTipsView,
     meta: {
       domain: "current",
       title: "Advanced Search Tips",
@@ -115,7 +109,7 @@ const routes = [
   {
     path: "/:date/products",
     name: "products",
-    component: PublishProductView,
+    component: CurrentPublishProductView,
     meta: {
       domain: "current",
       title: "Manage Products",
@@ -124,7 +118,7 @@ const routes = [
   {
     path: "/special_editions/:id(\\d+)",
     name: "specialEdition",
-    component: SpecialEditionView,
+    component: CurrentSpecialEditionView,
     meta: {
       domain: "current",
       title: "Special Edition",
@@ -133,7 +127,7 @@ const routes = [
   {
     path: "/special_editions",
     name: "specialEditions",
-    component: SpecialEditionsManagerView,
+    component: CurrentSpecialEditionsManagerView,
     meta: {
       domain: "current",
       title: "Manage Special Editions",
@@ -142,7 +136,7 @@ const routes = [
   {
     path: "/product/:date/:id/:doc_num/edit",
     name: "edit",
-    component: EditProductView,
+    component: CurrentEditProductView,
     meta: {
       domain: "current",
       title: "Edit Product",
@@ -151,7 +145,7 @@ const routes = [
   {
     path: "/:pathMatch(.*)*",
     name: "notFound",
-    component: NotFoundView,
+    component: CurrentNotFoundView,
     meta: {
       domain: "current",
       title: "Page Not Found",
@@ -159,87 +153,149 @@ const routes = [
   },
 ];
 
-if (!isProduction()) {
-  routes.push({
-    path: "/workspace-demo",
-    name: "workspace-demo",
-    component: MockWorkspaceView,
-    meta: {
-      domain: "workspace",
-      title: "Workspace",
-      demo: true,
-    },
-  });
-}
+// Studio
+import StudioHomeView from "@studio/views/HomeView.vue";
+import StudioSearchView from "@studio/views/SearchView.vue";
+import StudioSavedView from "@studio/views/SavedView.vue";
+import StudioPortfolioView from "@studio/views/PortfolioView.vue";
+import StudioLiveView from "@studio/views/LiveView.vue";
+import StudioCalendarView from "@studio/views/CalendarView.vue";
+import StudioIssuesView from "@studio/views/IssuesView.vue";
+import StudioProductsView from "@studio/views/ProductsView.vue";
+import StudioIssueDetailView from "@studio/views/IssueDetailView.vue";
+import StudioIssueMetricsView from "@studio/views/IssueMetricsView.vue";
 
-if (!isProduction()) {
-  routes.push({
-    path: "/workspace",
-    name: "workspace",
-    component: WorkspaceView,
-    meta: {
-      domain: "workspace",
-      title: "Workspace",
-      demo: true,
-    },
-  });
-  routes.push({
+const studioRoutes = [
+  {
     path: "/studio",
     name: "studio",
-    component: MockStudioView,
+    component: StudioHomeView,
+    meta: {
+      domain: "studio",
+      title: "Current Studio",
+    },
+  },
+  {
+    path: "/studio/find",
+    name: "studio-find",
+    component: StudioSearchView,
+    meta: {
+      domain: "studio",
+      title: "Find",
+    },
+  },
+  {
+    path: "/studio/saved",
+    name: "studio-saved",
+    component: StudioSavedView,
+    meta: {
+      domain: "studio",
+      title: "Saved",
+    },
+  },
+  {
+    path: "/studio/portfolio",
+    name: "studio-portfolio",
+    component: StudioPortfolioView,
+    meta: {
+      domain: "studio",
+      title: "Portfolio",
+    },
+  },
+  {
+    path: "/studio/live",
+    name: "studio-live",
+    component: StudioLiveView,
+    meta: {
+      domain: "studio",
+      title: "Live Issue",
+    },
+  },
+  {
+    path: "/studio/calendar",
+    name: "studio-calendar",
+    component: StudioCalendarView,
+    meta: {
+      domain: "studio",
+      title: "Calendar",
+    },
+  },
+  {
+    path: "/studio/issues",
+    name: "studio-issues",
+    component: StudioIssuesView,
+    meta: {
+      domain: "studio",
+      title: "Issues",
+    },
+  },
+  {
+    path: "/studio/products",
+    name: "studio-products",
+    component: StudioProductsView,
+    meta: {
+      domain: "studio",
+      title: "Products",
+    },
+  },
+  {
+    path: "/studio/issue/:id",
+    name: "studio-issue-detail",
+    component: StudioIssueDetailView,
+    meta: {
+      domain: "studio",
+      title: "Issue Detail",
+    },
+  },
+  {
+    path: "/studio/issue/:id/metrics",
+    name: "studio-issue-metrics",
+    component: StudioIssueMetricsView,
+    meta: {
+      domain: "studio",
+      title: "Issue Metrics",
+    },
+  },
+];
+
+//Workspace
+import DashboardView from "@workspace/views/DashboardView.vue";
+import MyProductsView from "@workspace/views/MyProductsView.vue";
+
+const workspaceRoutes = [
+  {
+    path: "/workspace",
+    name: "dashboard",
+    component: DashboardView,
     meta: {
       domain: "workspace",
-      title: "Current Studio",
-      demo: true,
+      title: "Dashboard",
+    },
+  },
+  {
+    path: "/workspace/products",
+    name: "myProducts",
+    component: MyProductsView,
+    meta: {
+      domain: "workspace",
+      title: "My Products",
+    },
+  },
+];
+
+let routes = [...currentRoutes];
+
+if (!isProduction()) {
+  routes = [...currentRoutes, ...studioRoutes, ...workspaceRoutes];
+  routes.push({
+    path: "/demo",
+    name: "demo",
+    component: MockWorkspaceView,
+    meta: {
+      domain: "demo",
+      title: "Workspace Demo",
     },
   });
-  routes.push(
-    {
-      path: "/new-studio",
-      name: "new-studio",
-      component: StudioHomeView,
-      meta: {
-        domain: "studio",
-        title: "Current Studio",
-      },
-    },
-    {
-      path: "/new-studio/issue/:id",
-      name: "studio-issue-detail",
-      component: StudioIssueDetailView,
-      meta: {
-        domain: "studio",
-        title: "Issue Detail",
-      },
-    },
-    {
-      path: "/new-studio/issue/:id/metrics",
-      name: "studio-issue-metrics",
-      component: StudioIssueMetricsView,
-      meta: {
-        domain: "studio",
-        title: "Issue Metrics",
-      },
-    },
-    {
-      path: "/new-studio/issues",
-      name: "studio-issues",
-      component: StudioIssuesView,
-      meta: {
-        domain: "studio",
-        title: "Issues",
-      },
-    },
-    {
-      path: "/new-studio/live",
-      name: "studio-live",
-      component: StudioLiveView,
-      meta: {
-        domain: "studio",
-        title: "Live Issue",
-      },
-    }
-  );
 }
 
 const router = createRouter({
