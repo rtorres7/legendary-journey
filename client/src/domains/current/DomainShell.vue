@@ -92,7 +92,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { useCookies } from "vue3-cookies";
 import { reject } from "lodash";
-import useNotifications from "@current/composables//notifications";
+import useNotifications from "@current/composables/notifications";
 import AuthorizatonWrapper from "@current/components/AuthorizationWrapper.vue";
 import ScrollToTopButton from "@current/components/ScrollToTopButton.vue";
 import TheBanner from "@current/components/TheBanner.vue";

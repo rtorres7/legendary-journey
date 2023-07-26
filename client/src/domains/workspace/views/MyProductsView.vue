@@ -241,7 +241,7 @@ export default {
           loadingPublished.value = false;
         }, 1000);
       } else {
-        axios.get("workspace/recent").then((response) => {
+        axios.get("/workspace/recent").then((response) => {
           loadingPublished.value = false;
           if (response.data) {
             myPublished.value = response.data.content;
