@@ -276,7 +276,7 @@ export default {
           loadingPublished.value = false;
         }, 1000);
       } else {
-        axios.get("workspace/drafts").then((response) => {
+        axios.get("/workspace/drafts").then((response) => {
           loadingDrafts.value = false;
           if (response.data) {
             myDrafts.value = response.data.content;
@@ -284,7 +284,7 @@ export default {
             console.log("Couldn't retrieve drafts");
           }
         });
-        axios.get("workspace/recent").then((response) => {
+        axios.get("/workspace/recent").then((response) => {
           loadingPublished.value = false;
           if (response.data) {
             myPublished.value = response.data.content;
@@ -297,7 +297,7 @@ export default {
             });
           }
         });
-        axios.get("workspace/stats").then((response) => {
+        axios.get("/workspace/stats").then((response) => {
           if (response.data) {
             myStats.value = response.data.content;
           } else {

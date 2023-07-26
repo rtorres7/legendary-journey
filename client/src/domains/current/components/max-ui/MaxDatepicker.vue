@@ -14,7 +14,7 @@
 
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
-import uniqueID from "@current/composables//uniqueID";
+import uniqueID from "@current/composables/uniqueID";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 export default {
