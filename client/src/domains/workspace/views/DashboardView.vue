@@ -101,14 +101,23 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <BaseButton color="secondary" @click.prevent="closeDeleteDialog"
+        <BaseButton
+          class="w-[100px]"
+          color="secondary"
+          @click.prevent="closeDeleteDialog"
           >Cancel</BaseButton
         >
-        <BaseButton color="danger" @click.prevent="deleteProduct">
-          <template v-if="loadingDelete">
-            <LoadingSpinner class="h-5 w-5 ml-2.5" />
-          </template>
-          <template v-else>Delete</template>
+        <BaseButton
+          class="w-[100px]"
+          color="danger"
+          @click.prevent="deleteProduct"
+        >
+          <div :class="loadingDelete ? 'flex space-x-4' : ''">
+            <span>Delete</span>
+            <span v-if="loadingDelete">
+              <LoadingSpinner class="h-5 w-5" />
+            </span>
+          </div>
         </BaseButton>
       </template>
     </BaseDialog>

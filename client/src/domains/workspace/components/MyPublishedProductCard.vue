@@ -46,7 +46,7 @@
             <div
               class="text-gray-500 hover:text-gray-900 absolute top-0 right-0 cursor-pointer"
             >
-              <Menu as="div" class="relative z-50">
+              <Menu as="div" class="relative z-10">
                 <div>
                   <tippy content="More" placement="bottom" theme="demo">
                     <MenuButton
