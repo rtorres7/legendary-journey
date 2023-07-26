@@ -12,7 +12,7 @@ jest.mock('../../src/services/auth.js', () => {
       })
     },
     ensureAuthentication: jest.fn()
-  }
+  };
 });
 
 describe('Auth Routes', () => {
@@ -75,7 +75,7 @@ describe('Auth Routes', () => {
       app.use((req, res, next) => {
         req.logout = jest.fn().mockImplementation((cb) => {
           cb(undefined);
-        })
+        });
         next();
       });
       app.use(router);
@@ -93,7 +93,7 @@ describe('Auth Routes', () => {
       app.use((req, res, next) => {
         req.logout = jest.fn().mockImplementation((cb) => {
           cb(new Error('Something went wrong'));
-        })
+        });
         next();
       });
       app.use(router);

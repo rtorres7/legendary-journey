@@ -14,7 +14,7 @@ jest.mock('../../src/services/product-service.js', () => {
         return {
           featured: articles,
           briefs: articles.slice(0, 3),
-        }
+        };
       })
     };
   });

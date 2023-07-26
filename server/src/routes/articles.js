@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
 
-const { handleMongooseError } = require("../util/errors").default;
+const { handleMongooseError } = require("../util/errors");
 
 const { runAsUser } = require("../util/request");
 

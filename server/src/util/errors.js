@@ -1,6 +1,6 @@
-import { logger } from "../config/logger";
+const { logger } = require("../config/logger");
 
-const handleMongooseError = (msg, error) => {
+export const handleMongooseError = (msg, error) => {
   if (error) {
     if (process.env.NODE_ENV === 'test') {
       logger.info(msg, error);
@@ -10,6 +10,4 @@ const handleMongooseError = (msg, error) => {
   }
 };
 
-export default {
-  handleMongooseError
-};
+export default handleMongooseError;

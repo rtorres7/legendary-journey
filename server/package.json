@@ -8,6 +8,7 @@
     "start": "concurrently --names \"build,node\" \"npm:build:watch\" \"npm run delay && nodemon build/src/swagger.js\"",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --runInBand --detectOpenHandles",
+    "testone": "node --experimental-vm-modules node_modules/.bin/jest --detectOpenHandles",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "lint": "eslint --ignore-path .gitignore --fix src",
     "swagger-autogen": "DOTENV=swagger node src/swagger.js",
