@@ -1,4 +1,4 @@
-const { handleMongooseError } = require('../../src/util/errors');
+const { handleMongooseError } = require('../../src/util/errors').default;
 
 describe('Errors', () => {
   describe('handleMongooseError', () => {
@@ -22,6 +22,6 @@ describe('Errors', () => {
       handleMongooseError('No error', null);
 
       expect(warn).not.toHaveBeenCalled();
-    })
-  })
-})
+    });
+  });
+});

@@ -1,7 +1,3 @@
-import ObjectStoreService from '../services/object-store-service';
-import _ from 'lodash-es';
-// import _ from 'lodash';
-
 const express = require("express");
 const router = express.Router();
 
@@ -13,7 +9,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
 
-const { handleMongooseError } = require("../util/errors");
+const { handleMongooseError } = require("../util/errors").default;
 
 const { runAsUser } = require("../util/request");
 
@@ -21,15 +17,17 @@ const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
-// const { ObjectStoreService } = require('../services/object-store-service');
-
-const objectStoreService = new ObjectStoreService();
 
 const multer = require('multer');
+
+const { ObjectStoreService } = require('../services/object-store-service');
+const objectStoreService = new ObjectStoreService();
 const ObjectStorageEngine = require('../util/object-storage-engine');
 const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'}); // TODO: This needs to be updated
 const upload = multer({ storage: engine });
+
+const _ = require('lodash');
 
 //GET articles by date
 router.get('/articles/date/:date', async (req, res) => {
@@ -86,7 +84,7 @@ router.get('/articles/:productNumber', async (req, res) => {
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
-router.post('/articles/processDocument', (req, res) => {
+router.post('/articles/processDocument', async (req, res, next) => {
   /*
     #swagger.tags = ['Products']
     #swagger.deprecated = true
@@ -99,19 +97,24 @@ router.post('/articles/processDocument', (req, res) => {
     }
    */
 
-  switch (req.body.document_action) {
-    case 'create':
-      res.redirect(307, '/articles/');
-      break;
-    case "publish":
-      req.body.state = "posted";
-      updateArticle(req.body.id, req, res);
-      break;
-    case "save":
-      updateArticle(req.body.id, req, res);
-      break;
-    default:
-      res.sendStatus(404);
+  try {
+    switch (req.body.document_action) {
+      case 'create':
+        res.redirect(307, '/articles/');
+        break;
+      case "publish":
+        req.body.state = "posted";
+        await updateArticle(req.body.id, req, res, next);
+        break;
+      case "save":
+        await updateArticle(req.body.id, req, res, next);
+        break;
+      default:
+        res.sendStatus(404);
+    }
+  } catch (err) {
+    console.log(`POST /articles/processDocument:  caught error`, err);
+    next(err);
   }
 });
 
@@ -203,7 +206,7 @@ router.get('/articles/:id/edit', async (req, res) => {
 });
 
 
-router.get('/articles/:id/view', async (req, res) => {
+router.get('/articles/:id/view', async (req, res, next) => {
   /*
     #swagger.summary = 'Retrieve a product for viewing details'
     #swagger.tags = ['Products']
@@ -229,7 +232,7 @@ router.get('/articles/:id/view', async (req, res) => {
 });
 
 // Update an article
-router.put('/articles/:id', async (req, res) => {
+router.put('/articles/:id', async (req, res, next) => {
   /*
     #swagger.summary = 'Update a product'
     #swagger.tags = ['Products']
@@ -250,14 +253,18 @@ router.put('/articles/:id', async (req, res) => {
       }
     }
    */
-
-  await updateArticle(req.params.id, req, res);
+  try {
+    await updateArticle(req.params.id, req, res, next);
+  } catch (err) {
+    console.log(`PUT /articles/${req.params.id}:  caught error`, err);
+    next(err);
+  }
 });
 
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
-async function updateArticle(id, req, res) {
+async function updateArticle(id, req, res, next) {
   const countries = await metadataService.findCountriesFor(req.body.countries);
   const subregions = await metadataService.findSubRegionsForCountries(
     req.body.countries
@@ -271,6 +278,9 @@ async function updateArticle(id, req, res) {
     req.body.producing_offices
   );
   const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
+  if (!coauthors) {
+    throw new Error('coauthors not found');
+  }
   const coordinators = await metadataService.findCoordinatorsFor(
     req.body.coordinators
   );
@@ -286,8 +296,8 @@ async function updateArticle(id, req, res) {
   const nonStateActors = await metadataService.findNonStateActorsFor(
     req.body.non_state_actors
   );
+  // console.log("COAUTHORS ======================= ", coauthors);
   const testing = coauthors.map((author) => {name=> author.name, code=> author.code;});
-  console.log("COAUTHORS ======================= ", coauthors);
   const article = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
@@ -340,6 +350,7 @@ async function updateArticle(id, req, res) {
     res.json({
       error: `There was a problem updating product: ${error.message}`,
     });
+    throw error;
   }
 }
 // Delete an article

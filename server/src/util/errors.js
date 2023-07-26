@@ -1,9 +1,15 @@
+import { logger } from "../config/logger";
+
 const handleMongooseError = (msg, error) => {
   if (error) {
-    console.warn(msg, error);
+    if (process.env.NODE_ENV === 'test') {
+      logger.info(msg, error);
+    } else {
+      logger.error(msg, error);
+    }
   }
-}
+};
 
-module.exports = {
+export default {
   handleMongooseError
-}
+};

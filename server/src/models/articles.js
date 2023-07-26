@@ -285,7 +285,7 @@ ArticleSchema.virtual('data.document').get(function () {
 });
 
 ArticleSchema.virtual('data.details').get(function () {
-  console.log('COAUTH ======== ', this.coauthors);
+  // console.log('COAUTH ======== ', this.coauthors);
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,

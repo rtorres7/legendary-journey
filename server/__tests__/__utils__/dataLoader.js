@@ -2828,7 +2828,7 @@ const loadElasticSearch = async (esUrl) => {
   const client = new Client({ node: esUrl });
 
   for (const article of articles) {
-    logger.info(`loading article ${article._id}`)
+    logger.info(`loading article ${article._id}`);
     await client.index({
       index: "products",
       body: article.indexable,
@@ -2890,7 +2890,7 @@ const loadSavedProductsForSearch = async (esUrl) => {
   });
 
   await client.indices.refresh({ index: "savedproducts" });
-}
+};
 
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);

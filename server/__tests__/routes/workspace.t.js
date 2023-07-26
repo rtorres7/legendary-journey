@@ -12,7 +12,7 @@ jest.mock('../../src/services/product-service.js', () => {
 
         return {
           content: articles.filter(article => article.state === 'draft'),
-        }
+        };
       }),
       findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
@@ -21,7 +21,7 @@ jest.mock('../../src/services/product-service.js', () => {
 
         return {
           content: articles.filter(article => article.state === 'posted'),
-        }
+        };
       }),
       findPageOfProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
@@ -30,7 +30,7 @@ jest.mock('../../src/services/product-service.js', () => {
 
         return {
           content: articles,
-        }
+        };
       })
     };
   });
@@ -42,16 +42,16 @@ jest.mock('../../src/services/workspace.js', () => {
       findPageOfSavedProductsForUser: jest.fn().mockImplementation(() => {
         return {
           content: [{ productId: 'WIReWIRe_sample_1' }]
-        }
+        };
       }),
       createSavedProduct: jest.fn().mockImplementation((productId) => {
-        return { id: 1, productId: productId }
+        return { id: 1, productId: productId };
       }),
       deleteSavedProduct: jest.fn(),
       findPageOfCollectionsForUser: jest.fn().mockImplementation(() => {
         return {
           content: [{ name: 'Sample Collection' }],
-        }
+        };
       }),
       createCollection: jest.fn().mockImplementation((data) => {
         return {
@@ -60,7 +60,7 @@ jest.mock('../../src/services/workspace.js', () => {
           description: data.description,
           image: data.image,
           createdBy: data.createdBy
-        }
+        };
       }),
       updateCollection: jest.fn().mockImplementation((id, data) => {
         return {
@@ -69,7 +69,7 @@ jest.mock('../../src/services/workspace.js', () => {
           description: data.description,
           image: data.image,
           createdBy: data.createdBy
-        }
+        };
       }),
       deleteCollection: jest.fn(),
       findSavedProductsInCollection: jest.fn().mockImplementation((collectionId) => {

@@ -186,9 +186,8 @@ describe("ObjectStoreService", () => {
 
   /**
    * Create minio container
-   * @return {Promise<StartedTestContainer>}
    */
-  function createMinioContainer() {
+  function createMinioContainer(): Promise<StartedTestContainer> {
     return new GenericContainer("quay.io/minio/minio:latest")
       .withEnvironment({
         MINIO_BROWSER: "off",
@@ -208,7 +207,7 @@ describe("ObjectStoreService", () => {
   }
 
   /** Initialize test buckets and objects */
-  async function initMinioData() {
+  async function initMinioData(): Promise<void> {
     if (!(await service.bucketExists("attachments"))) {
       await service.makeBucket("attachments");
     } else {
@@ -290,8 +289,6 @@ describe("ObjectStoreService", () => {
 
   /**
    * Write stream to tmp file.
-   * @param {ReadableStream} reader
-   * @return {Promise<String>} file
    */
   function testWriteStreamToFile(reader: NodeJS.ReadableStream): Promise<string> {
     return new Promise((resolve, reject) => {

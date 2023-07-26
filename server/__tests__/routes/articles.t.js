@@ -1,19 +1,21 @@
-const request = require("supertest");
-const { setupApp, setupAppWithUser } = require('../__utils__/expressUtils');
-const { articles } = require("../__utils__/dataLoader");
+import {expect, jest, test, fail} from '@jest/globals';
+import request from "supertest";
+import { setupApp, setupAppWithUser } from '../__utils__/expressUtils';
+import { articles } from "../__utils__/dataLoader";
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
     const { articles } = require("../__utils__/dataLoader");
     return {
       findAllByDate: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.findAllByDate:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return [articles[1]];
       }),
       findByProductNumber: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.findByProductNumber:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -21,6 +23,7 @@ jest.mock('../../src/services/product-service.js', () => {
         return articles[0];
       }),
       updateProduct: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.updateProduct:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -28,6 +31,7 @@ jest.mock('../../src/services/product-service.js', () => {
         return articles[0];
       }),
       createProduct: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.createProduct:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -35,6 +39,7 @@ jest.mock('../../src/services/product-service.js', () => {
         return articles[0];
       }),
       findById: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.findById:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -42,6 +47,7 @@ jest.mock('../../src/services/product-service.js', () => {
         return articles[0];
       }),
       deleteProduct: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.deleteProduct:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -53,22 +59,30 @@ jest.mock('../../src/services/product-service.js', () => {
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
     const { metadata } = require("../__utils__/dataLoader");
+    const metaPromise = function(name, value) {
+      return new Promise((resolve, reject) => {
+        console.log(`metadata.${name}:  ${value}`);
+        resolve(value);
+      });
+    };
     return {
-      findCountriesFor: jest.fn().mockResolvedValueOnce(metadata.criteria.countries.values),
+      findCountriesFor: jest.fn().mockResolvedValue(metadata.criteria.countries.values),
       findSubRegionsForCountries: jest.fn().mockResolvedValue(metadata.criteria.subregions.values),
-      findRegionsForSubRegions: jest.fn().mockResolvedValueOnce(metadata.criteria.regions.values),
-      findTopicsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.topics.values),
-      findIssuesForTopics: jest.fn().mockResolvedValueOnce(metadata.criteria.issues.values),
-      findProducingOfficesFor: jest.fn().mockResolvedValueOnce(metadata.criteria.producing_offices.values),
-      findCoauthorsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.coauthors.values),
-      findCoordinatorsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.coordinators.values),
-      findDissemOrgsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.dissem_orgs.values),
-      findProductType: jest.fn().mockResolvedValueOnce(metadata.criteria.product_types.values[0]),
-      findReportingTypeFor: jest.fn().mockResolvedValueOnce(metadata.criteria.reporting_types.values[0]),
-      findNonStateActorsFor: jest.fn().mockResolvedValueOnce(metadata.criteria.non_state_actors.values),
+      findRegionsForSubRegions: jest.fn().mockResolvedValue(metadata.criteria.regions.values),
+      findTopicsFor: jest.fn().mockResolvedValue(metadata.criteria.topics.values),
+      findIssuesForTopics: jest.fn().mockResolvedValue(metadata.criteria.issues.values),
+      findProducingOfficesFor: jest.fn().mockResolvedValue(metadata.criteria.producing_offices.values),
+      findCoauthorsFor: jest.fn().mockResolvedValue(metadata.criteria.coauthors.values),
+      findCoordinatorsFor: jest.fn().mockResolvedValue(metadata.criteria.coordinators.values),
+      findDissemOrgsFor: jest.fn().mockResolvedValue(metadata.criteria.dissem_orgs.values),
+      findProductType: jest.fn().mockResolvedValue(metadata.criteria.product_types.values[0]),
+      findReportingTypeFor: jest.fn().mockResolvedValue(metadata.criteria.reporting_types.values[0]),
+      findNonStateActorsFor: jest.fn().mockResolvedValue(metadata.criteria.non_state_actors.values),
     };
   });
 });
+
+const USER = { id: 1, firstName: 'First', lastName: 'Last', dn: 'O=org,OU=orgunit,CN=commonname' };
 
 describe("Article Routes", () => {
   afterEach(() => {
@@ -78,6 +92,8 @@ describe("Article Routes", () => {
 
   describe("GET /articles/date/:date", () => {
     it("should return all articles for the given date", () => {
+      delete process.env.THROW_TEST_ERROR;
+
       const router = require('../../src/routes/articles');
       const app = setupApp(router);
 
@@ -147,7 +163,7 @@ describe("Article Routes", () => {
 
     it("should send update document when document_action is save", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, USER);
 
       const original = articles[0];
       const postData = {
@@ -176,6 +192,9 @@ describe("Article Routes", () => {
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
+        })
+        .catch(err => {
+          fail(err);
         });
     });
 
@@ -193,7 +212,7 @@ describe("Article Routes", () => {
   describe("POST /articles", () => {
     it("should create the given article", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -215,7 +234,7 @@ describe("Article Routes", () => {
 
     it("should create the given article including producing_office", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -238,7 +257,7 @@ describe("Article Routes", () => {
 
     it("should create the given article defaulting date published", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -261,7 +280,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -337,7 +356,7 @@ describe("Article Routes", () => {
   describe("PUT /articles/:id", () => {
     it("should update document", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, USER);
 
       const original = articles[0];
 
@@ -347,6 +366,7 @@ describe("Article Routes", () => {
         id: original.id,
         date_published: original.datePublished,
         doc_num: original.productNumber,
+        coauthors: ["ANCESTRY"],
       };
 
       return request(app)
@@ -354,7 +374,8 @@ describe("Article Routes", () => {
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
-        .then(async (res) => {
+        .then(async (res, rej) => {
+          expect(rej).toBeUndefined();
           expect(res.body.success).toBe(true);
           expect(res.body.date).toEqual(original.datePublished.toISOString());
           expect(res.body.doc_num).toBe(original.productNumber);
@@ -367,7 +388,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, USER);
 
       const original = articles[0];
 
@@ -377,6 +398,7 @@ describe("Article Routes", () => {
         id: original.id,
         date_published: original.datePublished,
         doc_num: original.productNumber,
+        coauthors: ["ANCESTRY"],
       };
 
       return request(app)
