@@ -123,11 +123,23 @@
     >
       <p class="py-4 pr-4">Are you sure you want to do this?</p>
       <template #actions>
-        <BaseButton color="secondary" @click.prevent="closeDeleteDialog"
+        <BaseButton
+          class="w-[100px]"
+          color="secondary"
+          @click.prevent="closeDeleteDialog"
           >Cancel</BaseButton
         >
-        <BaseButton color="danger" @click.prevent="deleteProduct">
-          Delete
+        <BaseButton
+          class="w-[100px]"
+          color="danger"
+          @click.prevent="deleteProduct"
+        >
+          <div :class="loadingDelete ? 'flex space-x-4' : ''">
+            <span>Delete</span>
+            <span v-if="loadingDelete">
+              <LoadingSpinner class="h-5 w-5" />
+            </span>
+          </div>
         </BaseButton>
       </template>
     </BaseDialog>
@@ -179,6 +191,7 @@ export default {
     const selectedSort = ref(sortOptions[0]);
     const createNotification = inject("create-notification");
     const selectedProduct = ref();
+    const loadingDelete = ref(false);
     const isDeleteDialogOpen = ref(false);
     const closeDeleteDialog = () => {
       isDeleteDialogOpen.value = false;
@@ -201,6 +214,7 @@ export default {
         let indexOfProduct = myPublished.value.indexOf(p);
         myPublished.value.splice(indexOfProduct, 1);
       } else {
+        loadingDelete.value = true;
         axios
           .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
           .then((response) => {
@@ -211,12 +225,14 @@ export default {
                 type: "error",
                 autoClose: false,
               });
+              loadingDelete.value = false;
             } else {
               createNotification({
                 title: "Product Deleted",
                 message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
                 type: "success",
               });
+              loadingDelete.value = false;
               closeDeleteDialog();
               let p = myPublished.value.find(
                 (item) =>
@@ -263,6 +279,7 @@ export default {
       numProducts,
       sortOptions,
       selectedSort,
+      loadingDelete,
       isDeleteDialogOpen,
       openDeleteDialog,
       closeDeleteDialog,
