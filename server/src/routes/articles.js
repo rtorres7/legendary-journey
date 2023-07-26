@@ -479,4 +479,107 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
   res.json({ success: true });
 });
 
+router.post('/articles/:productNumber/thumbnails', upload.single('file'), async (req, res) => {
+  /*
+    #swagger.summary = 'Upload an thumbnail for the given product'
+    #swagger.tags = ['Products']
+    #swagger.requestBody = {
+      content: { 'multipart/form-data': {} }
+    }
+    #swagger.responses[200] = {
+      schema: {
+        att_id: 'abc'
+        success: true,
+      }
+    }
+   */
+
+  const id = uuidv4();
+  const thumbnail = {
+    thumbnailId: id,
+    fileName: req.file.originalname,
+    mimeType: req.file.mimetype,
+    createdAt: new Date(),
+    fileSize: req.file.size,
+    type: 'THUMBNAIL',
+    destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
+    visible: true,
+  };
+
+  await productService.addThumbnail(req.params.productNumber, thumbnail);
+
+  res.json({ thumbnail_id: id, success: true });
+});
+
+router.get('/articles/:productNumber/thumbnails/:thumbnailId', async (req, res) => {
+  /*
+    #swagger.summary = 'Download a given thumbnail for the given product'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      content: {
+        'application/pdf': {}
+      }
+    }
+    #swagger.responses[404] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+
+  const product = await productService.findByProductNumber(req.params.productNumber);
+
+  const thumbnails = product.thumbnailsMetadata.filter((thumb) =>
+    thumb.id === req.params.thumbnailId ||
+    thumb.thumbnailId === req.params.thumbnailId ||
+    thumb.fileName === req.params.thumbnailId);
+
+  if (thumbnails.length === 0) {
+    KiwiStandardResponsesExpress.standardNotFoundResponse('Unable to find thumbnail', res);
+  } else {
+    const thumbnail = thumbnails[0];
+    res.thumbnail(thumbnail.fileName);
+
+    // eslint-disable-next-line no-unused-vars
+    const [_protocol, path] = thumbnail.destination.split('//');
+    const bucketSeparatorIndex = path.indexOf('/');
+    const bucket = path.substring(0, bucketSeparatorIndex);
+    const objectName = path.substring(bucketSeparatorIndex);
+
+    const fileStream = await objectStoreService.getObject(bucket, objectName);
+
+    fileStream.pipe(res);
+  }
+});
+
+router.delete('/articles/:productNumber/thumbnails/:thumbnailId', async (req, res) => {
+  /*
+    #swagger.summary = 'Remove a given thumbnail for the given product'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        success: true
+      }
+    }
+   */
+
+  const product = await productService.findByProductNumber(req.params.productNumber);
+
+  const removedthumbnails = _.remove(product.thumbnailsMetadata, (thumb => thumb.id === req.params.thumbnailId || thumb.thumbnailId === req.params.thumbnailId));
+  product.markModified('thumbnailsMetadata');
+  await product.save();
+
+  for (const thumb of removedthumbnails) {
+    // eslint-disable-next-line no-unused-vars
+    const [_protocol, path] = thumb.destination.split("//");
+    const bucketSeparatorIndex = path.indexOf("/");
+    const bucket = path.substring(0, bucketSeparatorIndex);
+    const objectName = path.substring(bucketSeparatorIndex);
+
+    await objectStoreService.removeObject(bucket, objectName);
+  }
+
+  res.json({ success: true });
+});
+
 module.exports = router;

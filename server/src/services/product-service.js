@@ -204,6 +204,13 @@ class ProductService {
 
     await product.save();
   }
+
+  async addThumbnail(productNumber, thumbnailData) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.thumbnailsMetadata = [...product.thumbnailsMetadata, thumbnailData];
+
+    await product.save();
+  }
 }
 
 module.exports = ProductService;
