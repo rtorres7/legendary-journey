@@ -25,10 +25,7 @@
           }"
         >
           <div class="cursor-pointer">
-            <ProductImage
-              class="min-w-[184px] max-w-[464px]"
-              :product="product"
-            />
+            <ProductImage class="max-h-[237px]" :product="product" />
           </div>
         </router-link>
         <div class="flex flex-col py-6 justify-between">
