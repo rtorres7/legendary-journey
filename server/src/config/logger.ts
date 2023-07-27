@@ -1,29 +1,28 @@
 import winston from "winston";
 import config from "./config";
 
-const enumerateErrorFormat = winston.format((info) => {
-  if (info instanceof Error) {
-    Object.assign(info, { message: info.stack });
-  }
-  return info;
-});
+const colorFormat = ['development', 'test'].some((i) => i === config.nodeEnv) ? winston.format.colorize() : winston.format.uncolorize();
 
 export const logger = winston.createLogger({
   // https://github.com/winstonjs/winston
-  // level: config.env === 'development' ? 'debug' : 'info',
+  // level: config.nodeEnv === 'development' ? 'debug' : 'info',
   // error warn info http verbose debug silly
-  level: "info", // config.mxs.env === 'container' ? 'debug' : 'info',
+  level: 'info', // config.mxs.env === 'container' ? 'debug' : 'info',
   format: winston.format.combine(
-    enumerateErrorFormat(),
-    ["development", "test"].some((i) => i === config.env)
-      ? winston.format.colorize()
-      : winston.format.uncolorize(),
+    winston.format.errors({ stack: true }),
+    winston.format.timestamp(),
     winston.format.splat(),
-    winston.format.printf(({ level, message }) => `${level}: ${message}`),
+    colorFormat,
+    winston.format.printf(({ level, message, timestamp, stack }) => {
+      if (stack && level.includes('error')) { // colorize changes the level?
+        return `${timestamp} ${level}: ${message}\n${stack}`;
+      }
+      return `${timestamp} ${level}: ${message}`;
+    }),
   ),
   transports: [
     new winston.transports.Console({
-      stderrLevels: ["info"],
+      stderrLevels: ['info'],
     }),
   ],
 });

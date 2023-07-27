@@ -7,8 +7,8 @@
     "prestart": "npm run copy-assets && npm run build",
     "start": "concurrently --names \"build,node\" \"npm:build:watch\" \"npm run delay && nodemon build/src/swagger.js\"",
     "server-dependencies": "npm install",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest -i --coverage --runInBand --detectOpenHandles",
-    "testone": "node --experimental-vm-modules node_modules/.bin/jest --detectOpenHandles",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles",
+    "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --verbose=true",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "lint": "eslint --ignore-path .gitignore --fix src",
     "swagger-autogen": "DOTENV=swagger node src/swagger.js",
@@ -34,7 +34,7 @@
       ]
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/__tests__/__utils__/testSetup.js"
+      "<rootDir>/__tests__/__utils__/jest.setup.ts"
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/__tests__/__utils__",

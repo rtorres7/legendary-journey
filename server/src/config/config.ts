@@ -70,7 +70,7 @@ if (error) {
 }
 
 export const config = {
-  env: envVars.NODE_ENV,
+  nodeEnv: envVars.NODE_ENV,
   port: envVars.PORT,
   mxs: {
     env: envVars.MXS_ENV,

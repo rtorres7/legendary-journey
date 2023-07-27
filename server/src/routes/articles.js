@@ -18,14 +18,13 @@ const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
-const multer = require('multer');
+const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 
 const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
-const ObjectStorageEngine = require('../util/object-storage-engine');
-const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
-const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'}); // TODO: This needs to be updated
-const upload = multer({ storage: engine });
+
+const upload = objectStoreService.buildUpload("foo", "bar");
+const { logger } = require('../config/logger');
 
 const _ = require('lodash');
 
@@ -113,7 +112,7 @@ router.post('/articles/processDocument', async (req, res, next) => {
         res.sendStatus(404);
     }
   } catch (err) {
-    console.log(`POST /articles/processDocument:  caught error`, err);
+    logger.error(`POST /articles/processDocument:`, err);
     next(err);
   }
 });
@@ -256,7 +255,7 @@ router.put('/articles/:id', async (req, res, next) => {
   try {
     await updateArticle(req.params.id, req, res, next);
   } catch (err) {
-    console.log(`PUT /articles/${req.params.id}:  caught error`, err);
+    logger.error(`PUT /articles/${req.params.id}:`, err);
     next(err);
   }
 });

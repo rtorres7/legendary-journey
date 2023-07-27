@@ -1,7 +1,10 @@
-import {expect, jest, test, fail} from '@jest/globals';
+import { expect, jest } from '@jest/globals';
 import request from "supertest";
-import { setupApp, setupAppWithUser } from '../__utils__/expressUtils';
+
+import { MinioContainerUtils } from '../__utils__/containerUtils';
 import { articles } from "../__utils__/dataLoader";
+import { setupApp, setupAppWithUser } from '../__utils__/expressUtils';
+import { Client } from 'minio';
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -19,7 +22,6 @@ jest.mock('../../src/services/product-service.js', () => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       updateProduct: jest.fn().mockImplementation(() => {
@@ -27,7 +29,6 @@ jest.mock('../../src/services/product-service.js', () => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       createProduct: jest.fn().mockImplementation(() => {
@@ -35,7 +36,6 @@ jest.mock('../../src/services/product-service.js', () => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       findById: jest.fn().mockImplementation(() => {
@@ -43,7 +43,6 @@ jest.mock('../../src/services/product-service.js', () => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       deleteProduct: jest.fn().mockImplementation(() => {
@@ -85,6 +84,19 @@ jest.mock('../../src/services/metadata.js', () => {
 const USER = { id: 1, firstName: 'First', lastName: 'Last', dn: 'O=org,OU=orgunit,CN=commonname' };
 
 describe("Article Routes", () => {
+
+  let minioServer;
+  let minioClient;
+
+  beforeAll(async () => {
+    minioServer = await MinioContainerUtils.startContainer();
+    minioClient = MinioContainerUtils.newClient();
+  });
+
+  afterAll(async () => {
+    minioServer.close();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
     delete process.env.THROW_TEST_ERROR;
@@ -192,9 +204,6 @@ describe("Article Routes", () => {
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
-        })
-        .catch(err => {
-          fail(err);
         });
     });
 
