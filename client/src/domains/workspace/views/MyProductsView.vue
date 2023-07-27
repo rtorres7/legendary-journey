@@ -151,6 +151,7 @@ import axios from "@/shared/config/wireAxios";
 import BaseDialog from "../components/BaseDialog.vue";
 import BaseButton from "../components/BaseButton.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
+import LoadingSpinner from "../components/LoadingSpinner.vue";
 import { productDetails } from "../data";
 // import {
 //   AdjustmentsHorizontalIcon,
@@ -167,6 +168,7 @@ import { productDetails } from "../data";
 export default {
   components: {
     MyPublishedProductCard,
+    LoadingSpinner,
     BaseDialog,
     BaseButton,
     // AdjustmentsHorizontalIcon,
