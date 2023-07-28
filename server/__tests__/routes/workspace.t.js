@@ -76,7 +76,7 @@ jest.mock('../../src/services/workspace.js', () => {
         if (collectionId === '1') {
           return {
             content: [{ productId: 'WIReWIRe_sample_1' }]
-          }
+          };
         }
 
         return [];
