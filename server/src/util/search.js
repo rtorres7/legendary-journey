@@ -62,8 +62,6 @@ async function runRelatedSearch(product) {
 
   const relatedResult = {relatedDocuments: relatedJSON}
 
-console.log("RESULTS FROM RELATED SEARCH", JSON.stringify(relatedResult))
-
 return relatedResult
 
 
@@ -93,7 +91,7 @@ async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc',
   if (query !== null) {
     searchParams.query = query;
   }
-
+  
   const client = require('../data/elasticsearch');
   const results = await client.search(searchParams);
   const aggregationResults = await resolveAggregations(results.aggregations);
@@ -123,26 +121,33 @@ function buildSortClause(sortMethod) {
 
 function buildQueryFromFilters(term, filters, fields) {
   const query = {};
+  query.bool={};
+  query.bool.must=[];
   
   if (term !== undefined && term !== '') {
-    query.bool={};
-    query.bool.must=[];
-    query.bool.must.push({match: { htmlBody: term}}, {match: {state: "posted"}});
-  } else {
-    query.match = {state: "posted"};
-  }
+    query.bool.must.push({
+      multi_match: {
+        query: term, 
+        fields: [ "title", "htmlBody" ]
+      }
+    });
+  } 
+  query.bool.must.push({match: {state: "posted"}});
 
   if (filters.start_date !== undefined && filters.end_date !== undefined) {
     const start = dayjs(filters.start_date).startOf('day');
     const end = dayjs(filters.end_date).endOf('day');
+    
 
-    query.range = {
+
+    query.bool.must.push({range: {
       datePublished: {
         gte: start,
         lte: end,
       }
-    }
+    }});
   }
+  
 
   fields
     .filter(field => { return field.filterType !== undefined })
