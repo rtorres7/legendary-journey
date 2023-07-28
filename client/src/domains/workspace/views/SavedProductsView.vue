@@ -12,7 +12,7 @@
           {{ numProducts }} products
         </div>
       </template>
-      <!-- <div class="flex space-x-4">
+      <div class="flex space-x-4">
         <Listbox
           v-model="selectedSort"
           as="div"
@@ -83,7 +83,7 @@
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
         </button>
-      </div> -->
+      </div>
     </div>
     <template v-if="loadingSaved">
       <div
@@ -118,45 +118,65 @@
   </div>
 </template>
 <script>
-import { computed, onMounted, inject, ref } from "vue";
+import { computed, onMounted, inject, ref, watch } from "vue";
 import axios from "@/shared/config/wireAxios";
+import { useRoute, useRouter } from "vue-router";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "../data";
-// import {
-//   AdjustmentsHorizontalIcon,
-//   ChevronDownIcon,
-//   CheckIcon,
-// } from "@heroicons/vue/24/solid";
-// import {
-//   Listbox,
-//   ListboxLabel,
-//   ListboxButton,
-//   ListboxOptions,
-//   ListboxOption,
-// } from "@headlessui/vue";
+import {
+  AdjustmentsHorizontalIcon,
+  ChevronDownIcon,
+  CheckIcon,
+} from "@heroicons/vue/24/solid";
+import {
+  Listbox,
+  ListboxLabel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/vue";
 export default {
   components: {
     MyPublishedProductCard,
-    // AdjustmentsHorizontalIcon,
-    // ChevronDownIcon,
-    // CheckIcon,
-    // Listbox,
-    // ListboxLabel,
-    // ListboxButton,
-    // ListboxOptions,
-    // ListboxOption,
+    AdjustmentsHorizontalIcon,
+    ChevronDownIcon,
+    CheckIcon,
+    Listbox,
+    ListboxLabel,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
   },
   setup() {
     const environment = ref(import.meta.env.MODE);
+    const route = useRoute();
+    const router = useRouter();
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
     const sortOptions = [
-      { name: "Newest" },
-      { name: "Oldest" },
-      { name: "Most Views" },
+      { name: "Newest", key: "desc", type: "sortDir" },
+      { name: "Oldest", key: "asc", type: "sortDir" },
+      { name: "Most Views", key: "views", type: "sortDir" },
     ];
-    const selectedSort = ref(sortOptions[0]);
+    const getSortOption = (query) => {
+      const sortDir = query.sortDir ? query.sortDir : undefined;
+      // const sortField = query.sort_field ? query.sort_field : undefined;
+      if (sortDir) {
+        return sortDir === "asc"
+          ? sortOptions[1]
+          : sortDir === "views"
+          ? sortOptions[2]
+          : sortOptions[0];
+      }
+      // if (sortField && !sortDir) {
+      //   if (sortField === "score") {
+      //     return sortOptions[2];
+      //   }
+      // }
+      return sortOptions[0];
+    };
+    const selectedSort = ref(getSortOption(route.query));
     const createNotification = inject("create-notification");
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
@@ -222,6 +242,26 @@ export default {
         });
       }
     });
+
+    watch([selectedSort], () => {
+      let query = { ...route.query, page: route.query.page };
+      // if (selectedSort.value.type === "sort_dir") {
+      // if (query.sort_field) {
+      //   delete query["sort_field"];
+      // }
+      query = { ...query, sortDir: selectedSort.value.key };
+      // } else {
+      //   if (query.sort_dir) {
+      //     delete query["sort_dir"];
+      //   }
+      //   query = { ...query, sort_field: selectedSort.value.key };
+      // }
+      router.push({
+        query,
+      });
+      // localStorage.setItem("lastSort", selectedSort.value.key);
+    });
+
     return {
       environment,
       mySaved,
