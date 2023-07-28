@@ -402,6 +402,7 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
   };
 
   await productService.addAttachment(req.params.productNumber, attachment);
+  logger.info(`POST /articles/${req.params.productNumber}/attachments:  attachmentId:${id}`);
 
   res.json({att_id: id, success: true});
 });
@@ -421,6 +422,7 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
       }
     }
    */
+  logger.info(`GET /articles/${req.params.productNumber}/attachments/${req.params.attachmentId}`);
 
   const product = await productService.findByProductNumber(req.params.productNumber);
 
@@ -504,6 +506,7 @@ router.post('/articles/:productNumber/thumbnails', upload.single('file'), async 
     destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
     visible: true,
   };
+  // logger.info("thumbnailMetadata:" + JSON.stringify(thumbnail));
 
   await productService.addThumbnail(req.params.productNumber, thumbnail);
 

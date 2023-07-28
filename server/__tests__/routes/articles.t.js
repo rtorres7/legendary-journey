@@ -85,18 +85,6 @@ const USER = { id: 1, firstName: 'First', lastName: 'Last', dn: 'O=org,OU=orguni
 
 describe("Article Routes", () => {
 
-  let minioServer;
-  let minioClient;
-
-  beforeAll(async () => {
-    minioServer = await MinioContainerUtils.startContainer();
-    minioClient = MinioContainerUtils.newClient();
-  });
-
-  afterAll(async () => {
-    minioServer.close();
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
     delete process.env.THROW_TEST_ERROR;

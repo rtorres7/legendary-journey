@@ -201,14 +201,12 @@ class ProductService {
   async addAttachment(productNumber, attachmentData) {
     const product = await Article.findOne({ productNumber: productNumber });
     product.attachmentsMetadata = [...product.attachmentsMetadata, attachmentData];
-
     await product.save();
   }
 
-  async addThumbnail(productNumber, thumbnailData) {
+  async setThumbnail(productNumber, thumbnailMetadata) {
     const product = await Article.findOne({ productNumber: productNumber });
-    product.thumbnailsMetadata = [...product.thumbnailsMetadata, thumbnailData];
-
+    product.thumbnailMetadata = thumbnailMetadata;
     await product.save();
   }
 }

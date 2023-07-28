@@ -1,13 +1,11 @@
 import winston from "winston";
-import config from "./config";
 
-const colorFormat = ['development', 'test'].some((i) => i === config.nodeEnv) ? winston.format.colorize() : winston.format.uncolorize();
+const colorFormat = ['development', 'test'].some((i) => i === process.env.NODE_ENV) ? winston.format.colorize() : winston.format.uncolorize();
 
 export const logger = winston.createLogger({
   // https://github.com/winstonjs/winston
-  // level: config.nodeEnv === 'development' ? 'debug' : 'info',
   // error warn info http verbose debug silly
-  level: 'info', // config.mxs.env === 'container' ? 'debug' : 'info',
+  level: 'info', // process.env.MXS_ENV === 'container' ? 'debug' : 'info',
   format: winston.format.combine(
     winston.format.errors({ stack: true }),
     winston.format.timestamp(),

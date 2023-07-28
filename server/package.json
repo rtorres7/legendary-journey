@@ -22,6 +22,7 @@
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
     "testEnvironment": "node",
+    "verbose": true,
     "roots": [
       "__tests__"
     ],

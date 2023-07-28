@@ -40,6 +40,10 @@ jest.mock('../../src/services/product-service.js', () => {
         logger.info('ProductServiceMock.addAttachment:');
         return Promise.resolve(true);
       }),
+      addThumbnail: jest.fn().mockImplementation(() => {
+        logger.info('ProductServiceMock.addThumbnail:');
+        return Promise.resolve(true);
+      }),
     };
   });
 });
@@ -67,69 +71,160 @@ jest.mock('../../src/services/metadata.js', () => {
 const USER = { id: 1, firstName: 'First', lastName: 'Last', dn: 'O=org,OU=orgunit,CN=commonname' };
 
 describe('Article Attachment Routes', () => {
-  let minioServer: StartedTestContainer;
-  let minioClient: Client;
+
+  let server: StartedTestContainer;
+  let port: number;
+  let client: Client;
 
   beforeAll(async () => {
-    minioServer = await MinioContainerUtils.startContainer();
-    minioClient = MinioContainerUtils.newClient();
+    server = await MinioContainerUtils.startContainer();
+    client = MinioContainerUtils.newClient();
   });
 
-  afterAll(async () => {
-    minioServer.stop();
-  });
+  describe('Attachments', () => {
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    delete process.env.THROW_TEST_ERROR;
-  });
+    afterEach(() => {
+      jest.clearAllMocks();
+      delete process.env.THROW_TEST_ERROR;
+    });
 
-  describe('POST /articles/:productNumber/attachments', () => {
-    it('should put an attachment in the object store', async () => {
-      const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, USER);
+    describe('POST /articles/:productNumber/attachments', () => {
+      it('should put an attachment in the object store', async () => {
+        const router = require('../../src/routes/articles');
+        const app = setupAppWithUser(router, USER);
 
-      const original = articles[0];
-      const postData = {
-        document_action: 'save',
-        classification: 'S',
-        id: original.id,
-        date_published: original.datePublished,
-        doc_num: original.productNumber,
-        countries: ['AFG'],
-        topics: ['TERR'],
-        producing_offices: ['ANCESTRY', 'OTHER'],
-        coauthors: ['ANCESTRY'],
-        coordinators: ['ANCESTRY'],
-        dissem_orgs: ['ANCESTRY'],
-        product_type_id: 10378,
-      };
+        const original = articles[0];
+        const postData = {
+          document_action: 'save',
+          classification: 'S',
+          id: original.id,
+          date_published: original.datePublished,
+          doc_num: original.productNumber,
+          countries: ['AFG'],
+          topics: ['TERR'],
+          producing_offices: ['ANCESTRY', 'OTHER'],
+          coauthors: ['ANCESTRY'],
+          coordinators: ['ANCESTRY'],
+          dissem_orgs: ['ANCESTRY'],
+          product_type_id: 10378,
+        };
 
+        // create product
+        await request(app)
+          .post('/articles/processDocument')
+          .send(postData)
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .then(async (res) => {
+            expect(res.body.success).toBe(true);
+            expect(res.body.date).toEqual(original.datePublished.toISOString());
+            expect(res.body.doc_num).toBe(original.productNumber);
+            expect(res.body.id).toBe(original.id);
+            expect(res.body.state).toBe(original.state);
+          });
+
+        const file = await MinioContainerUtils.fileWriteRandomToTmp();
+        let attachmentId: string;
+
+        // create attachment
+        await request(app)
+          .post(`/articles/${original.id}/attachments`)
+          .field('Content-Type', 'multipart/form-data')
+          .set({ connection: 'keep-alive' })
+          .attach('file', file)
+          .expect(200)
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .then(async (res) => {
+            expect(res.body.success).toBe(true);
+            expect(res.body.att_id).toBeDefined();
+            logger.info(`att_id:${res.body.thumbnail_id}`);
+          });
+
+        /*
+      // can't run this since product service is mocked and does not return saved attachments
+      // get attachment
       await request(app)
-        .post('/articles/processDocument')
-        .send(postData)
+        .get(`/articles/${original.id}/attachments/${attachmentId}`)
         .expect(200)
-        .expect('Content-Type', /json/)
+        .expect('Content-Type', /binary/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.date).toEqual(original.datePublished.toISOString());
-          expect(res.body.doc_num).toBe(original.productNumber);
-          expect(res.body.id).toBe(original.id);
-          expect(res.body.state).toBe(original.state);
         });
+      */
+      });
+    });
+  });
 
-      const file = await MinioContainerUtils.fileWriteRandomToTmp();
+  describe('Thumbnail', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+      delete process.env.THROW_TEST_ERROR;
+    });
 
+    describe('POST /articles/:productNumber/thumbnails', () => {
+      it('should put an thumbnail in the object store', async () => {
+        const router = require('../../src/routes/articles');
+        const app = setupAppWithUser(router, USER);
+
+        const original = articles[0];
+        const postData = {
+          document_action: 'save',
+          classification: 'S',
+          id: original.id,
+          date_published: original.datePublished,
+          doc_num: original.productNumber,
+          countries: ['AFG'],
+          topics: ['TERR'],
+          producing_offices: ['ANCESTRY', 'OTHER'],
+          coauthors: ['ANCESTRY'],
+          coordinators: ['ANCESTRY'],
+          dissem_orgs: ['ANCESTRY'],
+          product_type_id: 10378,
+        };
+
+        // create product
+        await request(app)
+          .post('/articles/processDocument')
+          .send(postData)
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .then(async (res) => {
+            expect(res.body.success).toBe(true);
+            expect(res.body.date).toEqual(original.datePublished.toISOString());
+            expect(res.body.doc_num).toBe(original.productNumber);
+            expect(res.body.id).toBe(original.id);
+            expect(res.body.state).toBe(original.state);
+          });
+
+        const file = await MinioContainerUtils.fileWriteRandomToTmp();
+        let thumbnailId: string;
+
+        // create thumbnail
+        await request(app)
+          .post(`/articles/${original.id}/thumbnails`)
+          .field('Content-Type', 'multipart/form-data')
+          .set({ connection: 'keep-alive' })
+          .attach('file', file)
+          .expect(200)
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .then(async (res) => {
+            expect(res.body.success).toBe(true);
+            expect(res.body.thumbnail_id).toBeDefined();
+            logger.info(`thumbnail_id:${res.body.thumbnail_id}`);
+          });
+
+        /*
+      // can't run this since product service is mocked and does not return saved thumbnails
+      // get thumbnail
       await request(app)
-        .post(`/articles/${original.id}/attachments`)
-        .field('Content-Type', 'multipart/form-data')
-        .set({ connection: 'keep-alive' })
-        .attach('file', file)
+        .get(`/articles/${original.id}/thumbnails/${thumbnailId}`)
         .expect(200)
-        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect('Content-Type', /binary/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
         });
+      */
+      });
     });
   });
 });

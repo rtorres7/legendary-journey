@@ -110,8 +110,8 @@ const ArticleSchema = new Schema(
     title: String,
     titleClassification: String,
     titleClassificationXml: String,
-    thumbnailMetadata: [ThumbnailSchema],    
     thumbnailCaption: String,
+    thumbnailMetadata: ThumbnailSchema,
     topics: [DissemSchema],
     updatedBy: {
       id: Number,
@@ -263,6 +263,7 @@ ArticleSchema.virtual('data.document').get(function () {
     titleClassificationXml: this.titleClassificationXml,
     topics: this.topics,
     thumbnailCaption: this.thumbnailCaption,
+    thumbnailMetadata: this.thumbnailMetadata,
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields
@@ -316,6 +317,7 @@ ArticleSchema.virtual('data.details').get(function () {
     titleClassificationXml: this.titleClassificationXml,
     topics: this.topics,
     thumbnailCaption: this.thumbnailCaption,
+    thumbnailMetadata: this.thumbnailMetadata,
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import { Client } from 'minio';
-import { GenericContainer, StartedTestContainer, Wait } from 'testcontainers';
+import { GenericContainer, MongoDBContainer, StartedMongoDBContainer, StartedTestContainer, Wait } from 'testcontainers';
 import tmp from 'tmp';
 
 import config from '../../src/config/config';
@@ -13,17 +13,21 @@ const tmpSubDir = tmp.dirSync().name;
 export class MinioContainerUtils {
   /** */
   static async startContainer(): Promise<StartedTestContainer> {
-    return await new GenericContainer('quay.io/minio/minio:latest')
+    const container = await new GenericContainer('quay.io/minio/minio:latest')
       .withEnvironment({
         MINIO_BROWSER: 'off',
         MINIO_ROOT_USER: config.minio.accessKey,
         MINIO_ROOT_PASSWORD: config.minio.secretKey,
       })
-      .withExposedPorts({ container: 9000, host: 9000 }) // , { container: 9001, host: 9001 })
+      .withExposedPorts(9000) // , 9001)
       .withWaitStrategy(Wait.forAll([Wait.forListeningPorts(), Wait.forLogMessage(/1 Online/)]))
       .withTmpFs({ '/data': 'rw,noexec,nosuid' })
       .withCommand(['server', '/data']) // , "--console-address", ":9001"])
       .start();
+    const port = container.getFirstMappedPort();
+    logger.info(`MinioContainerUtils.startContainer:  port:${port}`);
+    config.minio.port = port;
+    return Promise.resolve(container);
   }
 
   /** */

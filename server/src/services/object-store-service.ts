@@ -14,7 +14,7 @@ export class ObjectStoreService {
   /** Minio.Client */
   getClient(): Client {
     if (ObjectStoreService.minioClient == null) {
-      // logger.info('ObjectStoreService.getClient:  connecting...');
+      // logger.info(`ObjectStoreService.getClient:  port:${config.minio.port}`);
       ObjectStoreService.minioClient = new Client({
         endPoint: config.minio.endPoint,
         port: config.minio.port,
@@ -22,7 +22,6 @@ export class ObjectStoreService {
         accessKey: config.minio.accessKey,
         secretKey: config.minio.secretKey,
       });
-      // logger.info('ObjectStoreService.getClient:  connected');
     }
     return ObjectStoreService.minioClient;
   }
