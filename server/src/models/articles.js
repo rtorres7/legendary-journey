@@ -12,8 +12,7 @@ const DissemSchema = new Schema(
   },
 );
 
-const AttachmentSchema = new Schema(
-  {
+const AttachmentSchema = new Schema({
     fileName: String,
     mimeType: String,
     createdAt: Date,
@@ -24,10 +23,9 @@ const AttachmentSchema = new Schema(
     visible: Boolean,
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  },
-);
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
+  });
 
 AttachmentSchema.virtual('mime_type').get(function () {
   return this.mimeType;
@@ -285,8 +283,7 @@ ArticleSchema.virtual('data.document').get(function () {
   };
 });
 
-ArticleSchema.virtual('data.details').get(function () {
-  // console.log('COAUTH ======== ', this.coauthors);
+ArticleSchema.virtual("data.details").get(function () {
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
