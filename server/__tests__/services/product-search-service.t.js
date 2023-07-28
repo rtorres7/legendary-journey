@@ -320,6 +320,23 @@ describe('ProductSearchService', () => {
     });
   });
 
+  describe('relatedSearch', () => {
+
+    it('should return related documents', async ()=> {
+      const result = await service.relatedSearch('WIReWIRe_sample_1');
+      expect(result.results).toBeGreaterThan(1);
+
+    });
+
+    it('should return one document', async ()=> {
+      const result = await service.searchOne('WIReWIRe_sample_1');
+      expect(result.results).toHaveLength(1);
+      expect(result.totalCount).toEqual(1);
+
+    });
+
+  });
+
   describe('create', () => {
     it('should index the given product', async () => {
       const product = {

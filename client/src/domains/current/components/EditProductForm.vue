@@ -870,8 +870,8 @@ import {
   getProductImageUrl,
 } from "@current/helpers";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
-import useFileList from "@current/composables//file-list";
-import createUploader from "@current/composables//file-uploader";
+import useFileList from "@current/composables/file-list";
+import createUploader from "@current/composables/file-uploader";
 import DropZone from "@current/components/DropZone.vue";
 import FilePreview from "@current/components/FilePreview.vue";
 import EditProductFormSection from "@current/components/EditProductFormSection.vue";
@@ -1513,9 +1513,16 @@ export default {
     };
 
     const removeDocument = (attachmentID, doc_num) => {
-      fetch(apiBaseUrl.value + "/documents/" + doc_num + "/attachments/" + attachmentID, {
-        method: "DELETE",
-      })
+      fetch(
+        apiBaseUrl.value +
+          "/documents/" +
+          doc_num +
+          "/attachments/" +
+          attachmentID,
+        {
+          method: "DELETE",
+        }
+      )
         .then(() => {
           var ulElem = document.getElementById("attachment" + attachmentID);
           ulElem.parentNode.removeChild(ulElem);

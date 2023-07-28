@@ -2870,13 +2870,13 @@ const loadSavedProducts = async (postgresUrl) => {
 
   await sequelize.models.SavedProduct.sync();
 
-  await sequelize.models.SavedProduct.create({
+  return await sequelize.models.SavedProduct.create({
     productId: "WIReWIRe_sample_1",
     createdBy: 1,
   });
 };
 
-const loadSavedProductsForSearch = async (esUrl) => {
+const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
   const client = new Client({ node: esUrl });
 
   await client.index({
@@ -2884,9 +2884,10 @@ const loadSavedProductsForSearch = async (esUrl) => {
     body: {
       ...articles[0].indexable,
       savedProductUserId: 1,
-      productId: "WIReWIRe_sample_1"
+      productId: "WIReWIRe_sample_1",
+      id: savedProductId
     },
-    id: "blah"
+    id: savedProductId
   });
 
   await client.indices.refresh({ index: "savedproducts" });

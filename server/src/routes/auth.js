@@ -59,7 +59,7 @@ router.delete('/auth/logout', (req, res) => {
       return;
     }
 
-    res.send(204);
+    res.sendStatus(204);
   });
 });
 

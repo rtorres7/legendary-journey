@@ -7,7 +7,7 @@ jest.mock('../../src/services/auth.js', () => {
       authenticate: jest.fn().mockImplementation((strategy) => {
         expect(strategy).toEqual('oauth2');
         return (req, res) => {
-          res.send(200);
+          res.sendStatus(200);
         };
       })
     },

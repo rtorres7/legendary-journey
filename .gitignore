@@ -19,5 +19,3 @@ swagger_output.json
 server/out/*
 
 *.code-workspace
-
-.env

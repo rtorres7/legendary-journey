@@ -21,7 +21,7 @@
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
-import uniqueID from "@current/composables//uniqueID";
+import uniqueID from "@current/composables/uniqueID";
 
 export default {
   components: {},
