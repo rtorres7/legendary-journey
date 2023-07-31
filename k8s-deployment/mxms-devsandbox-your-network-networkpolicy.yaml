@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: mxms-devsandbox-your-network
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/mxms-devsandbox-your-network: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/mxms-devsandbox-your-network: "true"

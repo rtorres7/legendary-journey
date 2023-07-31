@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s-deployment
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: liquibase
+  name: liquibase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: liquibase
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s-deployment
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/mxms-devsandbox-your-network: "true"
+        io.kompose.service: liquibase
+    spec:
+      containers:
+        - args:
+            - --url=jdbc:postgresql://postgres:5432/maximus
+            - --changelog-file=changelog-root.xml
+            - --username=maximus
+            - --password=magic
+            - update
+          env:
+            - name: LIQUIBASE_SECURE_PARSING
+              value: "false"
+          image: liquibase/liquibase
+          name: liquibase
+          resources: {}
+          volumeMounts:
+            - mountPath: /liquibase/changelog
+              name: liquibase-claim0
+      restartPolicy: Always
+      volumes:
+        - name: liquibase-claim0
+          persistentVolumeClaim:
+            claimName: liquibase-claim0
+status: {}

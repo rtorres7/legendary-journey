@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -o k8s-deployment
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -o k8s-deployment
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/mxms-devsandbox-your-network: "true"
+        io.kompose.service: nginx
+    spec:
+      containers:
+        - image: nginx:latest
+          name: nginx
+          ports:
+            - containerPort: 443
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: nginx-claim0
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx-claim1
+            - mountPath: /etc/nginx/certs
+              name: nginx-claim2
+      restartPolicy: Always
+      volumes:
+        - name: nginx-claim0
+          persistentVolumeClaim:
+            claimName: nginx-claim0
+        - name: nginx-claim1
+          persistentVolumeClaim:
+            claimName: nginx-claim1
+        - name: nginx-claim2
+          persistentVolumeClaim:
+            claimName: nginx-claim2
+status: {}
