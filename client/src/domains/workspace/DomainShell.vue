@@ -126,17 +126,17 @@
                         contact us</a
                       >.
                     </p>
-                    <!-- <div class="flex pt-8">
-                      <input
-                        id="hideDialog"
-                        v-model="hideDialog"
-                        type="checkbox"
-                        name="hideDialog"
-                      />
-                      <label for="hideDialog" class="ml-2 text-sm"
-                        >Don't show this again</label
-                      >
-                    </div> -->
+                  </div>
+                  <div class="flex pt-8 pb-3">
+                    <input
+                      id="hideDialog"
+                      v-model="hideDialog"
+                      type="checkbox"
+                      name="hideDialog"
+                    />
+                    <label for="hideDialog" class="ml-2 text-sm"
+                      >Do not show this again</label
+                    >
                   </div>
                 </div>
                 <div class="flex justify-end pt-4 border-t border-slate-900/10">

@@ -1,10 +1,12 @@
 <template>
   <div class="h-full flex">
     <!-- Left Panel -->
-    <div class="hidden md:block bg-slate-900 min-h-screen w-20">
-      <div class="flex flex-col">
-        <div class="h-16">
-          <router-link to="/">
+    <div
+      class="hidden md:flex grow-0 flex-col bg-slate-900 max-h-full min-h-screen w-[80px]"
+    >
+      <div class="flex grow flex-col pt-6">
+        <div class="pb-6">
+          <router-link to="/workspace">
             <img
               class="mx-auto w-16 h-16"
               src="@/shared/assets/nctc_logo.svg"
@@ -91,6 +93,27 @@
           </li> -->
         </ul>
       </div>
+      <ul class="pb-6 mx-auto text-gray-400 space-y-1">
+        <li>
+          <tippy content="About" placement="right" theme="demo">
+            <button
+              class="flex items-center justify-center h-12 w-12"
+              @click="openAboutDialog"
+            >
+              <InformationCircleIcon class="h-6 w-6" aria-hidden="true" />
+            </button>
+          </tippy>
+        </li>
+        <li>
+          <tippy content="Exit Workspace" placement="right" theme="demo">
+            <router-link to="/">
+              <div class="flex items-center justify-center h-12 w-12">
+                <ArrowLeftOnRectangleIcon class="h-6 w-6" aria-hidden="true" />
+              </div>
+            </router-link>
+          </tippy>
+        </li>
+      </ul>
     </div>
     <!-- Right Panel -->
     <div class="flex flex-col min-h-screen w-full h-full">
@@ -381,6 +404,111 @@
   </div>
   <!-- Mobile side menu -->
   <MobileSideMenu :isOpen="isMobileMenuOpen" @close="closeMobileMenuModal" />
+  <TransitionRoot appear :show="isAboutDialogOpen" as="template">
+    <Dialog as="div" @close="closeAboutDialog">
+      <div class="fixed inset-0 z-20 overflow-y-auto w-full">
+        <div class="min-h-screen px-4 text-center">
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+          >
+            <div class="fixed inset-0 bg-black/30" />
+          </TransitionChild>
+          <span class="inline-block h-screen align-middle" aria-hidden="true">
+            &#8203;
+          </span>
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="inline-block max-w-[650px] w-full p-6 text-left align-middle transition-all transform text-gray-900 bg-white shadow-lg rounded-lg"
+              v-bind="$attrs"
+            >
+              <div class="border-b border-slate-900/10 pb-4">
+                <div class="flex items-center space-x-2">
+                  <span class="text-lg">My Workspace</span
+                  ><span
+                    class="bg-blue-600 text-gray-50 px-2 py-1 rounded-md text-sm uppercase"
+                    >Beta</span
+                  >
+                </div>
+              </div>
+              <div class="py-4">
+                <div class="py-3">
+                  <h1 class="text-gray-700 text-2xl font-medium pb-4">
+                    My Workspace: A new tool designed to enhance your daily
+                    activities
+                  </h1>
+                  <p class="text-gray-700 py-2">
+                    Built to reside within the Current ecosystem, your
+                    activities on Current will translate and tailor your
+                    Workspace experience.
+                  </p>
+                </div>
+                <div class="flex flex-col space-y-3 py-3">
+                  <div>
+                    <h2 class="text-gray-500 font-medium text-xl pb-4">
+                      Dashboard
+                    </h2>
+                    <p class="pb-4">
+                      Quickly get an overview of your recent activities, such as
+                      products you recently saved, as well those recently
+                      created and published by your organization. You'll also
+                      see meaningful stats pertaining to your organization.
+                    </p>
+                  </div>
+                  <div>
+                    <h2 class="text-gray-500 font-medium text-xl pb-4">
+                      Saved Products
+                    </h2>
+                    <p class="pb-4">
+                      Whether it's through filtering down or sorting through
+                      your saved products, you'll easily be able to manage your
+                      saved products.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex flex-col space-y-1 py-3 text-gray-600">
+                  <p>
+                    More features will be announced at a later date. For
+                    questions/feedback regarding the Workspace, we welcome you
+                    to
+                    <a
+                      :href="`${metadata.user_support.help_url}`"
+                      class="text-blue-600 focus-visible:outline-none"
+                    >
+                      contact us</a
+                    >.
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-end pt-4 border-t border-slate-900/10">
+                <div class="flex space-x-3">
+                  <button
+                    class="bg-transparent hover:bg-slate-50 select-none text-sm shadow-sm rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 border border-slate-900/10"
+                    @click.prevent="closeAboutDialog"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
@@ -393,9 +521,19 @@ import {
 import { computed, inject, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import {
+  Dialog,
+  DialogPanel,
+  TransitionChild,
+  TransitionRoot,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/vue";
 import {
   // AdjustmentsHorizontalIcon,
+  ArrowLeftOnRectangleIcon,
   Bars3Icon,
   // BookmarkIcon,
   BriefcaseIcon,
@@ -403,6 +541,7 @@ import {
   // ChevronDownIcon,
   // FolderIcon,
   HomeIcon,
+  InformationCircleIcon,
   MagnifyingGlassIcon,
   // PlusIcon,
   UserCircleIcon,
@@ -412,11 +551,16 @@ import {
 import MobileSideMenu from "./MobileSideMenu.vue";
 export default {
   components: {
+    Dialog,
+    DialogPanel,
+    TransitionChild,
+    TransitionRoot,
     Menu,
     MenuButton,
     MenuItem,
     MenuItems,
     // AdjustmentsHorizontalIcon,
+    ArrowLeftOnRectangleIcon,
     Bars3Icon,
     // BookmarkIcon,
     BriefcaseIcon,
@@ -424,6 +568,7 @@ export default {
     // ChevronDownIcon,
     // FolderIcon,
     HomeIcon,
+    InformationCircleIcon,
     MagnifyingGlassIcon,
     // PlusIcon,
     UserCircleIcon,
@@ -509,6 +654,13 @@ export default {
         });
       }
     };
+    const isAboutDialogOpen = ref(false);
+    const closeAboutDialog = () => {
+      isAboutDialogOpen.value = false;
+    };
+    const openAboutDialog = () => {
+      isAboutDialogOpen.value = true;
+    };
     return {
       dayjs,
       metadata,
@@ -528,6 +680,9 @@ export default {
       isActiveTheme,
       selectItemEventHandler,
       onEnter,
+      isAboutDialogOpen,
+      closeAboutDialog,
+      openAboutDialog,
     };
   },
 };
