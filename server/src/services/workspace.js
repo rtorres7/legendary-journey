@@ -29,7 +29,7 @@ class WorkspaceService {
     term,
     perPage = 10,
     page = 1,
-    sortDir = "desc",
+    sortDir = sortDir,
     filters = {},
   ) {
     const filtersWithUser = {
@@ -37,7 +37,7 @@ class WorkspaceService {
       savedProductUserId: userId,
     };
 
-    const results = await runSearch(
+    const results = await runSearch.runSearch(
       term,
       this.index,
       perPage,

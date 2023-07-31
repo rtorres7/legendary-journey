@@ -176,11 +176,21 @@
       </div>
     </template>
   </div>
+  <Overlay :show="savingProduct">
+    <div class="max-w-xs inline-block">
+      <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
+      <div class="w-fit m-auto">
+        <LoadingSpinner class="h-16 w-16" />
+      </div>
+    </div>
+  </Overlay>
 </template>
 <script>
 import { inject, ref } from "vue";
 import axios from "@/shared/config/wireAxios";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import Overlay from "./Overlay.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 import {
   BookmarkIcon,
   EllipsisVerticalIcon,
@@ -204,6 +214,8 @@ export default {
     TrashIcon,
     XMarkIcon,
     ProductImage,
+    Overlay,
+    LoadingSpinner,
   },
   props: {
     product: {
@@ -232,6 +244,7 @@ export default {
     const removeSavedProduct = () => {
       emit("remove", props.product);
     };
+    const savingProduct = ref(false);
     const saveProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createNotification({
@@ -240,8 +253,10 @@ export default {
           type: "success",
         });
       } else {
+        savingProduct.value = true;
         axios.put("/workspace/saved/" + product.id).then((response) => {
           if (response.data.error) {
+            savingProduct.value = false;
             createNotification({
               title: "Error",
               message: response.data.error,
@@ -249,6 +264,7 @@ export default {
               autoClose: false,
             });
           } else {
+            savingProduct.value = false;
             createNotification({
               title: "Product Saved",
               message: `Product ${product.productNumber} has been saved.`,
@@ -263,6 +279,7 @@ export default {
       getImg,
       deleteProduct,
       removeSavedProduct,
+      savingProduct,
       saveProduct,
       dayjs,
     };

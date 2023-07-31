@@ -1,7 +1,7 @@
 <template>
   <svg
     v-bind="$attrs"
-    class="animate-spin -ml-1 mr-3 text-slate-300 energy:text-zinc-300"
+    class="animate-spin -ml-1 mr-3 text-slate-400 energy:text-zinc-300"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"

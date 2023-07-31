@@ -79,6 +79,7 @@
         </Listbox>
         <button
           class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
+          @click="openFacetsDialog"
         >
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
@@ -116,6 +117,35 @@
       </template>
     </template>
   </div>
+  <BaseDialog
+    :isOpen="isFacetsDialogOpen"
+    class="max-w-fit"
+    @close="closeFacetsDialog"
+  >
+    <!-- <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
+      <template v-for="facet in aggregations" :key="facet">
+        <div>
+          <p class="font-semibold">{{ facet.displayName }}</p>
+          <template v-for="row in facet.rows" :key="row">
+            <p>{{ row.name }} ({{ row.count }})</p>
+          </template>
+        </div>
+      </template>
+    </div> -->
+    <Facets
+      :facets="aggregations"
+      class="grid grid-cols-2 md:grid-cols-3 gap-4"
+      @filter="getSavedProducts(route.query)"
+    />
+  </BaseDialog>
+  <Overlay :show="removingProduct">
+    <div class="max-w-xs inline-block">
+      <p class="mb-4 font-semibold text-2xl">Removing Product...</p>
+      <div class="w-fit m-auto">
+        <LoadingSpinner class="h-16 w-16" />
+      </div>
+    </div>
+  </Overlay>
 </template>
 <script>
 import { computed, onMounted, inject, ref, watch } from "vue";
@@ -123,6 +153,10 @@ import axios from "@/shared/config/wireAxios";
 import { useRoute, useRouter } from "vue-router";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "../data";
+import Overlay from "../components/Overlay.vue";
+import LoadingSpinner from "../components/LoadingSpinner.vue";
+import BaseDialog from "../components/BaseDialog.vue";
+import Facets from "../components/Facets.vue";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
@@ -146,6 +180,10 @@ export default {
     ListboxButton,
     ListboxOptions,
     ListboxOption,
+    Overlay,
+    LoadingSpinner,
+    BaseDialog,
+    Facets,
   },
   setup() {
     const environment = ref(import.meta.env.MODE);
@@ -154,6 +192,14 @@ export default {
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
+    const aggregations = ref([]);
+    const isFacetsDialogOpen = ref(false);
+    const closeFacetsDialog = () => {
+      isFacetsDialogOpen.value = false;
+    };
+    const openFacetsDialog = () => {
+      isFacetsDialogOpen.value = true;
+    };
     const sortOptions = [
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
@@ -178,6 +224,7 @@ export default {
     };
     const selectedSort = ref(getSortOption(route.query));
     const createNotification = inject("create-notification");
+    const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createNotification({
@@ -191,8 +238,10 @@ export default {
         let indexOfProduct = mySaved.value.indexOf(p);
         mySaved.value.splice(indexOfProduct, 1);
       } else {
+        removingProduct.value = true;
         axios.delete("/workspace/saved/" + product.id).then((response) => {
           if (response.data.error) {
+            removingProduct.value = false;
             createNotification({
               title: "Error",
               message: response.data.error,
@@ -200,8 +249,9 @@ export default {
               autoClose: false,
             });
           } else {
+            removingProduct.value = false;
             createNotification({
-              title: "Product Deleted",
+              title: "Product Removed",
               message: `Product ${product.productNumber} has been removed.`,
               type: "success",
             });
@@ -214,7 +264,8 @@ export default {
         });
       }
     };
-    onMounted(() => {
+
+    const getSavedProducts = (query) => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
           let products = [];
@@ -227,24 +278,54 @@ export default {
           loadingSaved.value = false;
         }, 1000);
       } else {
-        axios.get("/workspace/saved").then((response) => {
-          loadingSaved.value = false;
-          if (response.data) {
-            mySaved.value = response.data.content;
-          } else {
-            createNotification({
-              title: "Error",
-              message: "There was an error retrieving Saved Products.",
-              type: "error",
-              autoClose: false,
-            });
-          }
-        });
+        axios
+          .get("/workspace/saved", {
+            params: { sortDir: query.sortDir, filters: query },
+          })
+          .then((response) => {
+            loadingSaved.value = false;
+            if (response.data) {
+              mySaved.value = response.data.content;
+              aggregations.value = response.data.supplementaryData.aggregations;
+              console.log(aggregations.value);
+            } else {
+              createNotification({
+                title: "Error",
+                message: "There was an error retrieving Saved Products.",
+                type: "error",
+                autoClose: false,
+              });
+            }
+          });
       }
+    };
+
+    onMounted(() => {
+      getSavedProducts(route.query);
     });
 
+    // watch([route.query], () => {
+    //   // let query = { ...route.query };
+    //   // if (selectedSort.value.type === "sort_dir") {
+    //   // if (query.sort_field) {
+    //   //   delete query["sort_field"];
+    //   // }
+    //   // query = { ...query, sortDir: selectedSort.value.key };
+    //   // } else {
+    //   //   if (query.sort_dir) {
+    //   //     delete query["sort_dir"];
+    //   //   }
+    //   //   query = { ...query, sort_field: selectedSort.value.key };
+    //   // }
+    //   router.push({
+    //     query,
+    //   });
+    //   getSavedProducts(query);
+    //   // localStorage.setItem("lastSort", selectedSort.value.key);
+    // });
+
     watch([selectedSort], () => {
-      let query = { ...route.query, page: route.query.page };
+      let query = { ...route.query };
       // if (selectedSort.value.type === "sort_dir") {
       // if (query.sort_field) {
       //   delete query["sort_field"];
@@ -259,17 +340,25 @@ export default {
       router.push({
         query,
       });
+      getSavedProducts(query);
       // localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     return {
       environment,
+      route,
       mySaved,
       loadingSaved,
       numProducts,
+      aggregations,
+      isFacetsDialogOpen,
+      closeFacetsDialog,
+      openFacetsDialog,
       sortOptions,
       selectedSort,
+      removingProduct,
       removeSavedProduct,
+      getSavedProducts,
     };
   },
 };
