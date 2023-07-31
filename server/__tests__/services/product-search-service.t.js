@@ -3,6 +3,7 @@ const { Client } = require("@elastic/elasticsearch");
 const ProductSearchService = require("../../src/services/product-search-service");
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
+const { logger } = require("../../src/config/logger");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -21,6 +22,7 @@ describe('ProductSearchService', () => {
   beforeAll(async () => {
     container = await new ElasticsearchContainer().start();
     process.env.ES_URL = container.getHttpUrl();
+    logger.info(`ProductSearchService.beforeAll:  ${container.getHttpUrl()}`);
 
     client = new Client({ node: container.getHttpUrl() });
 
@@ -316,6 +318,23 @@ describe('ProductSearchService', () => {
       const ids = result.results.map((hit) => hit.productNumber);
       expect(ids).toStrictEqual(["WIReWIRe_sample_2"]);
     });
+  });
+
+  describe('relatedSearch', () => {
+
+    it('should return related documents', async ()=> {
+      const result = await service.relatedSearch('WIReWIRe_sample_1');
+      expect(result.results).toBeGreaterThan(1);
+
+    });
+
+    it('should return one document', async ()=> {
+      const result = await service.searchOne('WIReWIRe_sample_1');
+      expect(result.results).toHaveLength(1);
+      expect(result.totalCount).toEqual(1);
+
+    });
+
   });
 
   describe('create', () => {

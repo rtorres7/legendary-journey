@@ -18,44 +18,62 @@ const PRODUCT_FIELDS = [
 ]
 
 class WorkspaceService {
-
   constructor() {
-    this.client = require('../data/elasticsearch');
-    this.index = 'savedproducts';
+    this.client = require("../data/elasticsearch");
+    this.index = "savedproducts";
     this.productService = new ProductService();
   }
 
-  async findPageOfSavedProductsForUser(userId, term, perPage = 10, page = 1, sortDir = 'desc', filters = {}) {
+  async findPageOfSavedProductsForUser(
+    userId,
+    term,
+    perPage = 10,
+    page = 1,
+    sortDir = "desc",
+    filters = {},
+  ) {
     const filtersWithUser = {
       ...filters,
-      savedProductUserId: userId
-    }
+      savedProductUserId: userId,
+    };
 
-    const results = await runSearch(term, this.index, perPage, page, sortDir, filtersWithUser, PRODUCT_FIELDS);
+    const results = await runSearch(
+      term,
+      this.index,
+      perPage,
+      page,
+      sortDir,
+      filtersWithUser,
+      PRODUCT_FIELDS,
+    );
 
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of('datePublished', sortDir))
+      .addKiwiSort(KiwiSort.of("datePublished", sortDir))
       .addSupplementaryData({ aggregations: results.aggregations });
   }
 
   async createSavedProduct(productId, userId) {
-    const savedProduct = await models.SavedProduct.create({ productId: productId, createdBy: userId });
+    const savedProduct = await models.SavedProduct.create({
+      productId: productId,
+      createdBy: userId,
+    });
 
     try {
       const product = await this.productService.findById(productId);
       const savedProductToIndex = {
         ...product.indexable,
         savedProductUserId: userId,
-        productId
+        productId,
+        id: savedProduct.id
       };
 
       await this.client.index({
         index: this.index,
-        document: savedProductToIndex
+        document: savedProductToIndex,
       });
     } catch (error) {
-      console.log('There was a problem indexing saved product')
+      console.log("There was a problem indexing saved product");
     }
 
     return savedProduct;
@@ -65,7 +83,7 @@ class WorkspaceService {
     await models.SavedProduct.destroy({
       where: {
         productId: productId,
-        createdBy: userId
+        createdBy: userId,
       },
     });
 
@@ -77,18 +95,18 @@ class WorkspaceService {
             must: [
               {
                 match: {
-                  productId: productId
-                }
+                  productId: productId,
+                },
               },
               {
                 match: {
-                  savedProductUserId: userId
-                }
-              }
-            ]
-          }
-        }
-      }
+                  savedProductUserId: userId,
+                },
+              },
+            ],
+          },
+        },
+      },
     });
   }
 
@@ -96,14 +114,12 @@ class WorkspaceService {
     const { count, rows } = await models.Collection.findAndCountAll({
       offset: offset,
       limit: limit,
-      order: [
-        ['createdAt', sortDir.toUpperCase()],
-      ],
+      order: [["createdAt", sortDir.toUpperCase()]],
     });
 
     return KiwiPage.of(page, limit, count, rows)
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of('createdAt', sortDir));
+      .addKiwiSort(KiwiSort.of("createdAt", sortDir));
   }
 
   async createCollection(collectionData) {
@@ -129,29 +145,77 @@ class WorkspaceService {
     });
   }
 
-  async findSavedProductsInCollection(collectionId) {
-    const collections = await models.Collection.findAll({ where: { id: collectionId }, include: models.SavedProduct });
-    return collections.map(collection => collection.SavedProducts).flat();
+  async findSavedProductsInCollection(collectionId, term, perPage = 10, page = 1, sortDir = "desc", filters = {}) {
+    const filtersWithUser = {
+      ...filters,
+      collection: collectionId
+    };
+
+    const results = await runSearch(
+      term,
+      this.index,
+      perPage,
+      page,
+      sortDir,
+      filtersWithUser,
+      PRODUCT_FIELDS
+    );
+
+    return KiwiPage.of(page, perPage, results.totalCount, results.results)
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("datePublished", sortDir))
+      .addSupplementaryData({ aggregations: results.aggregations });
   }
 
   async addSavedProductToCollection(collectionId, savedProductId) {
-    const collection = await models.Collection.findOne({ where: { id: collectionId } });
-    const savedProduct = await models.SavedProduct.findOne({ where: { id: savedProductId } });
+    const collection = await models.Collection.findOne({
+      where: { id: collectionId },
+    });
+    const savedProduct = await models.SavedProduct.findOne({
+      where: { id: savedProductId },
+    });
 
     if (collection && savedProduct) {
       await collection.addSavedProduct(savedProduct);
+
+      const reloadedSavedProduct = await savedProduct.reload({
+        include: models.Collection,
+      });
+
+      await this.updateCollectionsInIndex(reloadedSavedProduct);
+
       return await collection.reload({ include: models.SavedProduct });
     }
 
     return null;
   }
 
+  async updateCollectionsInIndex(savedProduct) {
+    await this.client.update({
+      index: this.index,
+      refresh: true,
+      id: savedProduct.id.toString(),
+      doc: {
+        collection: savedProduct.Collections.map((collection) => collection.id)
+      }
+    });
+  }
+
   async removeSavedProductFromCollection(collectionId, savedProductId) {
-    const collection = await models.Collection.findOne({ where: { id: collectionId } });
-    const savedProduct = await models.SavedProduct.findOne({ where: { id: savedProductId } });
+    const collection = await models.Collection.findOne({
+      where: { id: collectionId },
+    });
+    const savedProduct = await models.SavedProduct.findOne({
+      where: { id: savedProductId },
+    });
 
     if (collection && savedProduct) {
       await collection.removeSavedProduct(savedProduct);
+      const reloadedSavedProduct = await savedProduct.reload({
+        include: models.Collection,
+      });
+      await this.updateCollectionsInIndex(reloadedSavedProduct);
+
       return await collection.reload({ include: models.SavedProduct });
     }
 

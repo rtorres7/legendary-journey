@@ -36,4 +36,24 @@ router.get('/search', async (req, res) => {
   res.json(results);
 });
 
+router.get('/relatedSearch/:id', async (req, res) => {
+  /*
+    #swagger.tags = ['Search']
+    #swagger.summary = 'Runs a search for related products'
+    #swagger.parameters['id'] = {
+      description: 'The Document Product Number',
+      type: 'string'
+    }
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDocument'
+      }
+    }
+ */
+
+  const results = await searchService.relatedSearch(req.params.id);
+  res.json(results);
+
+});
+
 module.exports = router;

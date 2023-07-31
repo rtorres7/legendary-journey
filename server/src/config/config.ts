@@ -1,22 +1,47 @@
-const dotenv = require("dotenv");
-const path = require("path");
-const Joi = require("joi");
-const fs = require("fs");
+import dotenv from "dotenv";
+import fs from "fs";
+import Joi from "joi";
+import path from "path";
 
-let envPath = path.join(__dirname, "../../.env");
-if (process.env.CONFIG_OVERRIDE != undefined) {
-  envPath += "." + process.env.CONFIG_OVERRIDE;
-} else if (process.env.NODE_ENV === "test") {
-  envPath += ".test";
+let envPath: string;
+
+// console.log(`DOTENV = ${process.env.DOTENV}`);
+// console.log(`NODE_ENV = ${process.env.NODE_ENV}`);
+// console.log(`MXS_ENV = ${process.env.MXS_ENV}`);
+
+if (process.env.DOTENV) {
+  envPath = path.join(__dirname, `../../env/${process.env.DOTENV}.env`);
+} else if (process.env.NODE_ENV) {
+  switch (process.env.NODE_ENV) {
+    case "development":
+      // local development
+      envPath = path.join(__dirname, "../../env/development.env");
+      break;
+    case "test":
+      // jest
+      envPath = path.join(__dirname, "../../env/test.env");
+      break;
+    case "production":
+      break;
+    default:
+      throw new Error(`unhandled NODE_ENV ${process.env.NODE_ENV}`);
+  }
 }
-console.log(`config:  loading ${envPath}`);
-if (fs.existsSync(envPath)) {
-  dotenv.config({ path: envPath });
+
+// console.log(`envPath ${envPath}`);
+
+if (envPath) {
+  if (fs.existsSync(envPath)) {
+    // console.info(`config:  dotenv config ${envPath}`);
+    dotenv.config({ path: envPath });
+  } else {
+    // console.info(`config:  dotenv file not found ${envPath}`);
+  }
 }
 
 const envVarsSchema = Joi.object()
   .keys({
-    NODE_ENV: Joi.string().default("development"), // .valid("production", "development", "test").required(),
+    NODE_ENV: Joi.string().optional().allow(""), // .string().valid("production", "development", "test").required(),
     PORT: Joi.number().default(3000),
 
     ES_URL: Joi.string().required().description("Elasticsearch URL"),
@@ -44,12 +69,15 @@ if (error) {
   throw new Error(`Config validation error: ${error.message}`);
 }
 
-module.exports = {
+export const config = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mxs: {
     env: envVars.MXS_ENV,
     baseUri: envVars.MXS_BASE_URI,
+  },
+  elasticsearch: {
+    url: envVars.ES_URL,
   },
   mongodb: {
     url: envVars.MONGO_DATABASE_URL,
@@ -60,10 +88,12 @@ module.exports = {
     caCerts: envVars.NODE_EXTRA_CA_CERTS,
   },
   minio: {
-    endpoint: envVars.MINIO_ENDPOINT,
+    endPoint: envVars.MINIO_ENDPOINT,
     port: envVars.MINIO_PORT,
     useSsl: envVars.MINIO_USE_SSL,
     accessKey: envVars.MINIO_ACCESS_KEY,
     secretKey: envVars.MINIO_SECRET_KEY,
   },
 };
+
+export default config;

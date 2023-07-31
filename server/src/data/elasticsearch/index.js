@@ -9,7 +9,7 @@ if (esClient === undefined) {
     esClient = {}
   } else {
     esClient = new elasticsearch.Client({
-      node: esNode,
+      nodes: esNode,
     });
   }
 }

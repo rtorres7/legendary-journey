@@ -108,6 +108,10 @@ const indices = [
           type: "keyword",
           index: true,
         },
+        collection: {
+          type: "keyword",
+          index: true,
+        },
         countries: {
           type: "keyword",
           index: true,

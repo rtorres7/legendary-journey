@@ -451,9 +451,9 @@ export default {
     watch(loadingHomeProductsEnabled, (enabled) => {
       console.log("loadingHomeProductsEnabled: ", enabled);
       if (enabled) {
-        store.dispatch("features/toggleLoading", true);
+        store.dispatch("features/setLoading", true);
       } else {
-        store.dispatch("features/toggleLoading", false);
+        store.dispatch("features/setLoading", false);
       }
     });
 

@@ -32,6 +32,7 @@ services:
     volumes:
       - ./server:/data
       - /data/node_modules
+      - /data/build
       - ./certs/localhost.crt:/etc/ssl/certs/localhost.crt
     depends_on: #TODO: conditions deprecated in Compose File Version 3.x
       elasticsearch:

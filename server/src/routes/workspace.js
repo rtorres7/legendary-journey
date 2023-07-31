@@ -247,18 +247,17 @@ router.get('/workspace/collections/:collectionId/products', async (req, res) => 
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
-        $ref: '#/definitions/ListOfSavedProducts'
-      }
-    },
-    #swagger.responses[404] = {
-      schema: {
-        $ref: '#/definitions/StandardError'
+        $ref: '#/definitions/PageOfSavedProducts'
       }
     }
    */
 
-  const savedProducts = await workspaceService.findSavedProductsInCollection(req.params.collectionId);
-  KiwiStandardResponsesExpress.standardGetResponseWithMessage(savedProducts, `Unable to find collection with id ${req.params.collectionId}`, res);
+  const {perPage, page, sortDir} = pagingParams(req);
+  const term = req.query.text;
+  const filters = req.query;
+
+  const savedProducts = await workspaceService.findSavedProductsInCollection(req.params.collectionId, term, perPage, page, sortDir, filters);
+  res.json(savedProducts);
 });
 
 router.put('/workspace/collections/:collectionId/products/:savedProductId', async (req, res) => {

@@ -37,7 +37,7 @@
 <script>
 /* eslint-disable no-undef */
 import { onBeforeUnmount, ref } from "vue";
-import uniqueID from "@current/composables//uniqueID";
+import uniqueID from "@current/composables/uniqueID";
 export default {
   components: {},
   props: {

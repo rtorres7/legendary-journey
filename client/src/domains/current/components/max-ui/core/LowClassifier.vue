@@ -58,7 +58,7 @@
 </template>
 <script>
 /* eslint-disable no-undef */
-import uniqueID from "@current/composables//uniqueID";
+import uniqueID from "@current/composables/uniqueID";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 export default {

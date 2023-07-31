@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import uniqueID from "@current/composables//uniqueID";
+import uniqueID from "@current/composables/uniqueID";
 import { useField } from "vee-validate";
 export default {
   components: {},

@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 
 export class UploadableFile {
   constructor(file) {
@@ -29,7 +31,7 @@ export const getValueForName = (list, name) => {
 };
 
 export const formatDate = (date) => {
-  return dayjs(date).format("DD MMMM YYYY");
+  return dayjs(date).utc().format("DD MMMM YYYY");
 };
 
 export const isProductLocked = (product) => {

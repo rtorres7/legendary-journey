@@ -15,7 +15,7 @@
   />
 </template>
 <script>
-import uniqueID from "@current/composables//uniqueID";
+import uniqueID from "@current/composables/uniqueID";
 export default {
   props: {
     label: {
