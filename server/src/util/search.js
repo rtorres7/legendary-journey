@@ -4,30 +4,29 @@ const metadataService = new MetadataService();
 
 async function runSearchOne(productNum) {
 
-  const searchOneParms = {
-    index: "products",  
+  const searchOneParams = {
+    index: "products",
     query: {
-        match: {
-          "productNumber": productNum 
-        }
+      match: {
+        "productNumber": productNum
       }
+    }
   };
 
   const client = require('../data/elasticsearch');
-  const results = await client.search(searchOneParms);
-  
-return results.hits.hits[0]._id
+  const results = await client.search(searchOneParams);
 
+  return results.hits.hits[0]._id;
 }
 
 async function runRelatedSearch(product) {
-  
+
   const productSearchOne = await runSearchOne(product);
   const relatedParams = {
     index: "products",
-   
+
     query: {
-      
+
       more_like_this: {
         fields: ["title", "html_body", "summary", "topics", "countries"],
         like: [{
@@ -42,32 +41,26 @@ async function runRelatedSearch(product) {
 
   const client = require('../data/elasticsearch');
   const results = await client.search(relatedParams);
-  
 
-  var relatedJSON = [];
-  var i=1;
+
+  const relatedJSON = [];
+  let i= 1;
   results.hits.hits.map(hit => {
     if (i < 6) {
-      relatedJSON.push({ id: hit._id, position: i, document_id: product, 
-        "document": { 
-          "id": hit._source.id, 
-          doc_link: hit._source.productNumber, 
-          doc_num: hit._source.productNumber, 
-          title: hit._source.title, 
-          title_classification: hit._source.titleClassification } 
+      relatedJSON.push({ id: hit._id, position: i, document_id: product,
+        "document": {
+          "id": hit._source.id,
+          doc_link: hit._source.productNumber,
+          doc_num: hit._source.productNumber,
+          title: hit._source.title,
+          title_classification: hit._source.titleClassification }
       });
     }
-    i=i+1
+    i++;
   });
 
-  const relatedResult = {relatedDocuments: relatedJSON}
-
-return relatedResult
-
-
+  return {relatedDocuments: relatedJSON};
 }
-
-
 
 async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc', filters = {}, fields = []) {
   const skipCount = (page - 1) * perPage;
@@ -83,7 +76,8 @@ async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc',
     aggs: aggregations,
     highlight: {
       fields: {
-        htmlBody: {}
+        htmlBody: {},
+        "pdfVersion.content": {}
       }
     }
   };
@@ -91,12 +85,12 @@ async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc',
   if (query !== null) {
     searchParams.query = query;
   }
-  
+
   const client = require('../data/elasticsearch');
   const results = await client.search(searchParams);
   const aggregationResults = await resolveAggregations(results.aggregations);
   const highlightedResults = augmentResults(results);
-  
+
   return {
     searchId: '',
     results: highlightedResults,
@@ -105,7 +99,7 @@ async function runSearch(term, indexName, perPage=10, page=1, sortMethod='desc',
     totalCount: results.hits.total.value,
     siteEnhancement: '',
     daClassifError: ''
-  }
+  };
 }
 
 function buildSortClause(sortMethod) {
@@ -123,22 +117,20 @@ function buildQueryFromFilters(term, filters, fields) {
   const query = {};
   query.bool={};
   query.bool.must=[];
-  
+
   if (term !== undefined && term !== '') {
     query.bool.must.push({
       multi_match: {
-        query: term, 
-        fields: [ "title", "htmlBody" ]
+        query: term,
+        fields: [ "title", "htmlBody", "pdfVersion.content" ]
       }
     });
-  } 
+  }
   query.bool.must.push({match: {state: "posted"}});
 
   if (filters.start_date !== undefined && filters.end_date !== undefined) {
     const start = dayjs(filters.start_date).startOf('day');
     const end = dayjs(filters.end_date).endOf('day');
-    
-
 
     query.bool.must.push({range: {
       datePublished: {
@@ -147,7 +139,7 @@ function buildQueryFromFilters(term, filters, fields) {
       }
     }});
   }
-  
+
 
   fields
     .filter(field => { return field.filterType !== undefined })
@@ -244,7 +236,10 @@ function augmentResults(results) {
     if (hit.highlight === undefined) {
       return adjustResultsForUI(hit._source);
     }
-    return { ...(adjustResultsForUI(hit._source)), highlighted_result: hit.highlight.htmlBody };
+
+    const highlightedResult = hit.highlight.htmlBody || hit.highlight['pdfVersion.content'];
+
+    return { ...(adjustResultsForUI(hit._source)), highlighted_result: highlightedResult };
   });
 }
 
@@ -256,7 +251,7 @@ function adjustResultsForUI(result) {
   result.summary_classif = result.summaryClassification;
   result.date_published = result.datePublished;
   result.html_body = result.htmlBody;
-  result.needed = result.needed && result.needed.orgs && result.needed.orgs.length > 0 ? result.needed : {};
+  result.needed = result.needed?.orgs?.length > 0 ? result.needed : {};
   result.org_restricted = result.orgRestricted;
   result.doc_num = result.productNumber;
 

@@ -12,7 +12,8 @@ const PRODUCT_FIELDS = [
   { field: 'reportingType', aggregation: 'reporting_types', filters: 'reporting_types', filterType: 'OR' },
   { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
   { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
-]
+];
+
 class ProductSearchService {
   constructor() {
     this.client = require('../data/elasticsearch');
@@ -21,10 +22,6 @@ class ProductSearchService {
 
   async search(term, perPage=10, page=1, sortMethod='desc', filters = {}) {
     return await runSearch.runSearch(term, this.index, perPage, page, sortMethod, filters, PRODUCT_FIELDS);
-  }
-
-  async searchOne(productNumber) {
-    return await runSearch.runSearchOne(productNumber);
   }
 
   async relatedSearch(id) {
@@ -59,6 +56,26 @@ class ProductSearchService {
       id,
     });
   }
+
+  async indexAttachment(id, attachmentBase64) {
+    await this.client.updateByQuery({
+      index: this.index,
+      pipeline: "mxms-attachment-pipeline",
+      query: {
+        term: {
+          "_id": id
+        }
+      },
+      script: {
+        source: "ctx._source.pdfVersionRaw=params['attachmentContent']",
+        lang: 'painless',
+        params: {
+          attachmentContent: attachmentBase64
+        }
+      }
+    });
+  }
+
   async createIndexesIfNecessary() {
     const indexesCreated = [];
 
@@ -78,6 +95,7 @@ class ProductSearchService {
           const processor = {};
           processor[pipeline.type] = {
             field: pipeline.field,
+            target_field: pipeline.targetField,
             remove_binary: true,
           };
 
