@@ -1564,7 +1564,7 @@ export default {
               });
               router.push({
                 name: "products",
-                params: { date: route.params.date },
+                params: { date: dayjs(route.params.date).format("YYYY-MM-DD") },
               });
             }
           });
