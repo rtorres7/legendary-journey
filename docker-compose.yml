@@ -226,7 +226,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
     ports:
-#      - 8080:80
+      #      - 8080:80
       - 8443:443
     networks:
       - your-network
@@ -234,6 +234,16 @@ services:
       - keycloak
       - server
       - client
+
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
 
 volumes:
   elasticsearch-data:
