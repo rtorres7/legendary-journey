@@ -542,7 +542,7 @@
               <EditProductFormSection
                 id="attachments"
                 title="Attachments"
-                description="Attachments will be immediately saved upon upload."
+                description='Attachments will be immediately saved upon upload. If multiple PDFs are uploaded, the first PDF uploaded will be titled "PDF version of this product".'
               >
                 <div
                   class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6"
@@ -662,15 +662,6 @@
                       </li>
                     </ul>
                   </div>
-                </div>
-                <div
-                  class="text-sm text-red-700 dark:text-red-400 energy:text-red-400"
-                >
-                  <template v-if="multiplePdfs()"
-                    >Multiple PDF files have been uploaded. The first PDF
-                    uploaded will be titled "PDF version of this
-                    product".</template
-                  >
                 </div>
               </EditProductFormSection>
               <EditProductFormSection
@@ -1543,23 +1534,6 @@ export default {
         .catch(console.log("Failed"));
     };
 
-    const multiplePdfs = () => {
-      const pdfsAttached = form.value.attachments.filter((attachment) =>
-        attachment.mime_type.includes("application/pdf")
-      ).length;
-      const pdfsUploaded = files.value.filter((file) =>
-        file.file.type.includes("application/pdf")
-      ).length;
-      if (
-        pdfsAttached > 1 ||
-        (pdfsAttached && pdfsUploaded) ||
-        pdfsUploaded > 1
-      ) {
-        return true;
-      }
-      return false;
-    };
-
     const deleteDocument = () => {
       if (import.meta.env.MODE === "offline") {
         router.push({
@@ -1786,7 +1760,6 @@ export default {
       onDrop,
       convertedFileSize,
       removeDocument,
-      multiplePdfs,
       deleteDocument,
       publishProduct,
       saveProduct,
