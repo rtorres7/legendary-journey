@@ -8,7 +8,7 @@
         <div class="pb-6">
           <router-link to="/workspace">
             <img
-              class="mx-auto w-16 h-16"
+              class="mx-auto w-[75px] h-[20px]"
               src="@/shared/assets/nctc_logo.svg"
               alt="NCTC. Seal. Link to homepage."
             />
@@ -256,6 +256,14 @@
                           class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
                         >
                           {{ currentUsername }}
+                        </router-link>
+                      </MenuItem>
+                      <MenuItem>
+                        <router-link
+                          to="/workspace"
+                          class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                        >
+                          My Workspace
                         </router-link>
                       </MenuItem>
                       <MenuItem>

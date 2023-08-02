@@ -127,17 +127,6 @@
                       >.
                     </p>
                   </div>
-                  <div class="flex pt-8 pb-3">
-                    <input
-                      id="hideDialog"
-                      v-model="hideDialog"
-                      type="checkbox"
-                      name="hideDialog"
-                    />
-                    <label for="hideDialog" class="ml-2 text-sm"
-                      >Do not show this again</label
-                    >
-                  </div>
                 </div>
                 <div class="flex justify-end pt-4 border-t border-slate-900/10">
                   <div class="flex space-x-3">
@@ -193,18 +182,12 @@ export default {
 
     provide("create-notification", createNotification);
 
-    const hideDialog = ref();
-    const saveHideDialog = () => {
-      if (hideDialog.value) {
-        cookies.set("betaInfoNotice", true, "7d");
-      }
-    };
     const dialogPreference = ref(cookies.get("betaInfoNotice"));
 
     const isOpen = ref(true);
 
     const close = () => {
-      saveHideDialog();
+      cookies.set("betaInfoNotice", true, "21d");
       isOpen.value = false;
     };
 
@@ -222,7 +205,6 @@ export default {
       removeNotifications,
       stopBodyOverflow,
       allowBodyOverflow,
-      hideDialog,
       dialogPreference,
       isOpen,
       close,

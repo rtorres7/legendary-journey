@@ -247,6 +247,17 @@
                     {{ loadingUser ? "Loading..." : currentUsername }}
                   </router-link>
                 </MenuItem>
+                <template v-if="!isProduction()">
+                  <MenuItem>
+                    <router-link
+                      to="/workspace"
+                      class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
+                      target="_blank"
+                    >
+                      My Workspace
+                    </router-link>
+                  </MenuItem>
+                </template>
                 <MenuItem>
                   <a
                     class="flex cursor-pointer py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
@@ -551,6 +562,17 @@
                       >{{ loadingUser ? "Loading..." : currentUsername }}</a
                     >
                   </li>
+                  <template v-if="!isProduction()">
+                    <li>
+                      <router-link
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
+                        to="/workspace"
+                        target="_blank"
+                      >
+                        My Workspace
+                      </router-link>
+                    </li>
+                  </template>
                   <li v-show="canManageWire">
                     <router-link
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
@@ -663,7 +685,7 @@
 
 <script>
 import dayjs from "dayjs/esm/index.js";
-import { getValueForCode } from "@current/helpers";
+import { getValueForCode, isProduction } from "@current/helpers";
 import { inject, ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -886,6 +908,7 @@ export default {
     return {
       dayjs,
       metadata,
+      isProduction,
       environment,
       isLiveDemo,
       selectedCountry,

@@ -24,7 +24,7 @@
             leave-to="-translate-x-full"
           >
             <DialogPanel
-              class="relative min-h-screen w-72 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-gray-400 bg-slate-900 shadow-lg"
+              class="flex grow-0 flex-col relative min-h-screen w-72 max-w-calc[(100%-3rem)] p-6 text-left align-top transition-all transform text-gray-400 bg-slate-900 shadow-lg"
             >
               <button
                 type="button"
@@ -35,42 +35,52 @@
                 <span class="sr-only">Close main menu</span
                 ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
               </button>
-              <ul class="space-y-2">
-                <li>
-                  <div>
-                    <router-link to="/workspace">
-                      <div
-                        :class="
-                          route.name == 'dashboard'
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <HomeIcon class="h-6 w-6" aria-hidden="true" />
-                        <span class="ml-4">Dashboard</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <router-link to="/workspace/products">
-                      <div
-                        :class="
-                          route.name == 'myProducts'
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
-                        <span class="ml-4">My Products</span>
-                      </div>
-                    </router-link>
-                  </div>
-                </li>
-                <!-- <li>
+              <div class="flex grow flex-col">
+                <div class="pb-6">
+                  <router-link to="/workspace">
+                    <img
+                      class="w-[150px] h-[50px]"
+                      src="@/shared/assets/nctc_logo.svg"
+                      alt="NCTC. Seal. Link to homepage."
+                    />
+                  </router-link>
+                </div>
+                <ul class="space-y-2">
+                  <li>
+                    <div>
+                      <router-link to="/workspace">
+                        <div
+                          :class="
+                            route.name == 'dashboard'
+                              ? 'text-gray-50 bg-slate-800/90'
+                              : 'hover:text-gray-50 hover:bg-slate-800/90'
+                          "
+                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                        >
+                          <HomeIcon class="h-6 w-6" aria-hidden="true" />
+                          <span class="ml-4">Dashboard</span>
+                        </div>
+                      </router-link>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <router-link to="/workspace/products">
+                        <div
+                          :class="
+                            route.name == 'myProducts'
+                              ? 'text-gray-50 bg-slate-800/90'
+                              : 'hover:text-gray-50 hover:bg-slate-800/90'
+                          "
+                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                        >
+                          <BriefcaseIcon class="h-6 w-6" aria-hidden="true" />
+                          <span class="ml-4">My Products</span>
+                        </div>
+                      </router-link>
+                    </div>
+                  </li>
+                  <!-- <li>
                   <div>
                     <a href="/workspace#saved" class="">
                       <div
@@ -104,6 +114,22 @@
                     </a>
                   </div>
                 </li> -->
+                </ul>
+              </div>
+              <ul class="text-gray-400 space-y-1">
+                <li>
+                  <router-link to="/">
+                    <div
+                      class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px] hover:text-gray-50"
+                    >
+                      <ArrowLeftOnRectangleIcon
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                      <span class="ml-4">Exit Workspace</span>
+                    </div>
+                  </router-link>
+                </li>
               </ul>
             </DialogPanel>
           </TransitionChild>
@@ -122,10 +148,9 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import {
+  ArrowLeftOnRectangleIcon,
   HomeIcon,
   BriefcaseIcon,
-  BookmarkIcon,
-  FolderIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 export default {
@@ -134,10 +159,9 @@ export default {
     DialogPanel,
     TransitionChild,
     TransitionRoot,
+    ArrowLeftOnRectangleIcon,
     HomeIcon,
     BriefcaseIcon,
-    BookmarkIcon,
-    FolderIcon,
     XMarkIcon,
   },
   props: {
