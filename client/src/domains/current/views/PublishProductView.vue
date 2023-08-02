@@ -178,10 +178,14 @@
                     <span
                       class="line-clamp-1"
                       :title="
-                        dayjs(product.date_published).format('MMMM D, YYYY')
+                        dayjs(product.date_published)
+                          .utc()
+                          .format('MMMM D, YYYY')
                       "
                       >{{
-                        dayjs(product.date_published).format("MMMM D, YYYY")
+                        dayjs(product.date_published)
+                          .utc()
+                          .format("MMMM D, YYYY")
                       }}</span
                     >
                   </div>
@@ -456,7 +460,9 @@
 
 <script>
 import { productDetails } from "@current/data";
-import dayjs from "dayjs/esm/index.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+// dayjs.extend(utc);
 import { useCookies } from "vue3-cookies";
 import axios from "@/shared/config/wireAxios";
 import { computed, inject, onMounted, ref, watch } from "vue";
@@ -780,6 +786,7 @@ export default {
 
     return {
       dayjs,
+      utc,
       routeDate,
       selectedDate,
       loadingPreview,
