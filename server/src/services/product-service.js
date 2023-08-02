@@ -3,10 +3,13 @@ const Article = require("../models/articles");
 const ProductSearchService = require("../services/product-search-service");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const { handleMongooseError } = require("../util/errors");
+const _ = require("lodash");
+const { ObjectStoreService } = require('../services/object-store-service');
 
 class ProductService {
   constructor() {
     this.productSearchService = new ProductSearchService();
+    this.objectStoreService = new ObjectStoreService();
   }
 
   async findAllByDate(date) {
@@ -201,6 +204,28 @@ class ProductService {
   async addAttachment(productNumber, attachmentData) {
     const product = await Article.findOne({ productNumber: productNumber });
     product.attachmentsMetadata = [...product.attachmentsMetadata, attachmentData];
+
+    const firstPdfIdx = _.findIndex(product.attachmentsMetadata, att => att.mimeType === "application/pdf");
+
+    if (firstPdfIdx === product.attachmentsMetadata.length - 1) {
+      const [, path] = attachmentData.destination.split("//");
+      const bucketSeparatorIndex = path.indexOf("/");
+      const bucket = path.substring(0, bucketSeparatorIndex);
+      const objectName = path.substring(bucketSeparatorIndex);
+
+      const pdfStream = await this.objectStoreService.getObject(bucket, objectName);
+      const chunks = [];
+
+      pdfStream.on('data', chunk => {
+        chunks.push(chunk);
+      });
+
+      pdfStream.on("end", () => {
+        const result = Buffer.concat(chunks);
+        const base64String = result.toString("base64");
+        this.productSearchService.indexAttachment(product.id, base64String);
+      });
+    }
 
     await product.save();
   }

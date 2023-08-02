@@ -146,7 +146,7 @@ router.post('/articles/', async (req, res) => {
         lastName: currentUser.lastName,
         dn: currentUser.dn,
       },
-      datePublished: req.body.date_published || dayjs().format(),
+      datePublished: req.body.date_published || dayjs().format('YYYY-MM-DD'),
       htmlBody: req.body.html_body,
       issues: issues,
       needed: {},
@@ -290,7 +290,7 @@ async function updateArticle(id, req, res) {
     coordinators: coordinators.map(({name, code}) => ({name, code})),
     countries: countries.map(({name, code}) => ({name, code})),
     nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
-    datePublished: req.body.date_published,
+    datePublished: dayjs(req.body.date_published).format('YYYY-MM-DD'),
     dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
     htmlBody: req.body.html_body,
     issues: issues,
@@ -326,7 +326,7 @@ async function updateArticle(id, req, res) {
     res.json({
       success: true,
       article: updatedArticle.data.document,
-      date: updatedArticle.datePublished,
+      date: dayjs(updatedArticle.datePublished).format('YYYY-MM-DD'),
       doc_num: updatedArticle.productNumber,
       id: updatedArticle._id,
       state: updatedArticle.state,
@@ -421,8 +421,7 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
     const attachment = attachments[0];
     res.attachment(attachment.fileName);
 
-    // eslint-disable-next-line no-unused-vars
-    const [_protocol, path] = attachment.destination.split("//");
+    const [, path] = attachment.destination.split("//");
     const bucketSeparatorIndex = path.indexOf("/");
     const bucket = path.substring(0, bucketSeparatorIndex);
     const objectName = path.substring(bucketSeparatorIndex);
@@ -451,8 +450,7 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
   await product.save();
 
   for (const att of removedAttachments) {
-    // eslint-disable-next-line no-unused-vars
-    const [_protocol, path] = att.destination.split("//");
+    const [, path] = att.destination.split("//");
     const bucketSeparatorIndex = path.indexOf("/");
     const bucket = path.substring(0, bucketSeparatorIndex);
     const objectName = path.substring(bucketSeparatorIndex);

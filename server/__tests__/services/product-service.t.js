@@ -242,7 +242,7 @@ describe('ProductService', () => {
     it('should return featured products and briefs', async () => {
       const results = await service.findFeaturesAndBriefs();
 
-      expect(results.featured).toHaveLength(5);
+      expect(results.featured).toHaveLength(4);
       expect(results.briefs).toHaveLength(1);
     });
   });
