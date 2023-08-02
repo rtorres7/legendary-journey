@@ -436,8 +436,7 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
     const attachment = attachments[0];
     res.attachment(attachment.fileName);
 
-    // eslint-disable-next-line no-unused-vars
-    const [_protocol, path] = attachment.destination.split("//");
+    const [, path] = attachment.destination.split("//");
     const bucketSeparatorIndex = path.indexOf("/");
     const bucket = path.substring(0, bucketSeparatorIndex);
     const objectName = path.substring(bucketSeparatorIndex);
@@ -466,8 +465,7 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
   await product.save();
 
   for (const att of removedAttachments) {
-    // eslint-disable-next-line no-unused-vars
-    const [_protocol, path] = att.destination.split("//");
+    const [, path] = att.destination.split("//");
     const bucketSeparatorIndex = path.indexOf("/");
     const bucket = path.substring(0, bucketSeparatorIndex);
     const objectName = path.substring(bucketSeparatorIndex);

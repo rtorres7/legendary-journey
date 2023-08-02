@@ -1,33 +1,27 @@
 <template>
-  <div id="img-container" class="relative overflow-hidden">
-    <template v-if="hasArticleImage(product)">
-      <div
-        v-show="!smartRender"
-        id="image-blur"
-        class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-        :style="{ background: 'url(' + getImgUrl(product) + ')' }"
-      ></div>
+  <template v-if="hasArticleImage(product)">
+    <div
+      id="image-blur"
+      class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
+      :style="{ background: 'url(' + getImgUrl(product) + ')' }"
+    ></div>
+    <img
+      id="product-img"
+      class="inset-x-0 absolute h-full mx-auto z-[3]"
+      :src="getImgUrl(product)"
+      alt=""
+      @load="onImgLoad"
+    />
+  </template>
+  <template v-else>
+    <template v-if="!smartRender">
       <img
-        id="product-img"
-        :class="[
-          smartRender ? '' : 'inset-x-0',
-          'absolute h-full mx-auto z-[3]',
-        ]"
-        :src="getImgUrl(product)"
+        class="max-h-full w-full m-auto object-contain bg-[#f1f1f1]"
+        src="@/shared/assets/image-not-available-16x9.png"
         alt=""
-        @load="onImgLoad"
       />
     </template>
-    <template v-else>
-      <template v-if="!smartRender">
-        <img
-          class="max-h-full w-full m-auto object-contain bg-[#f1f1f1]"
-          src="@/shared/assets/image-not-available-16x9.png"
-          alt=""
-        />
-      </template>
-    </template>
-  </div>
+  </template>
 </template>
 <script>
 import { computed } from "vue";

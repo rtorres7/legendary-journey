@@ -208,7 +208,7 @@ class ProductService {
     const firstPdfIdx = _.findIndex(product.attachmentsMetadata, att => att.mimeType === "application/pdf");
 
     if (firstPdfIdx === product.attachmentsMetadata.length - 1) {
-      const [_protocol, path] = attachmentData.destination.split("//");
+      const [, path] = attachmentData.destination.split("//");
       const bucketSeparatorIndex = path.indexOf("/");
       const bucket = path.substring(0, bucketSeparatorIndex);
       const objectName = path.substring(bucketSeparatorIndex);

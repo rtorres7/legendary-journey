@@ -542,7 +542,7 @@
               <EditProductFormSection
                 id="attachments"
                 title="Attachments"
-                description="Attachments will be immediately saved upon upload."
+                description='Attachments will be immediately saved upon upload. If multiple PDFs are uploaded, the first PDF uploaded will be titled "PDF version of this product".'
               >
                 <div
                   class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6"
