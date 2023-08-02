@@ -17,16 +17,16 @@
       </div>
     </template>
     <template v-else>
-      <div id="img-container" class="cursor-pointer max-h-[261px]">
-        <router-link
-          :to="{
-            name: product.state === 'draft' ? 'product-preview' : 'product',
-            params: { doc_num: product.productNumber },
-          }"
-        >
-          <ProductImage :product="product" />
-        </router-link>
-      </div>
+      <router-link
+        :to="{
+          name: product.state === 'draft' ? 'product-preview' : 'product',
+          params: { doc_num: product.productNumber },
+        }"
+        class="relative overflow-hidden cursor-pointer max-h-[261px] h-full aspect-video"
+        target="_blank"
+      >
+        <ProductImage :product="product" />
+      </router-link>
       <div class="flex flex-col py-6 justify-between">
         <div class="relative pb-6 px-4">
           <div
@@ -134,6 +134,7 @@
               name: product.state === 'draft' ? 'product-preview' : 'product',
               params: { doc_num: product.productNumber },
             }"
+            target="_blank"
           >
             <div class="text-xs text-blue-700 font-medium pb-2">
               {{ product.productType.name }}
@@ -174,12 +175,9 @@
 import { ref } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
-  BookmarkIcon,
   EllipsisVerticalIcon,
   PencilSquareIcon,
-  ShareIcon,
   TrashIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import ProductImage from "@workspace/components/ProductImage.vue";
 import dayjs from "dayjs/esm/index.js";
@@ -189,12 +187,9 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
-    BookmarkIcon,
     EllipsisVerticalIcon,
     PencilSquareIcon,
-    ShareIcon,
     TrashIcon,
-    XMarkIcon,
     ProductImage,
   },
   props: {

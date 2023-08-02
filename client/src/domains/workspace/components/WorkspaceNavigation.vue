@@ -179,7 +179,11 @@
             <div class="flex">
               <div class="flex space-x-4 px-4">
                 <!-- Admin Dropdown -->
-                <Menu as="div" class="hidden md:block relative">
+                <Menu
+                  v-show="canManageSpecialEditions || canManageWire"
+                  as="div"
+                  class="hidden md:block relative"
+                >
                   <div>
                     <tippy content="Admin" theme="demo">
                       <MenuButton
@@ -201,7 +205,7 @@
                     <MenuItems
                       class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
-                      <MenuItem>
+                      <MenuItem v-show="canManageWire">
                         <router-link
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                           :to="{
@@ -214,7 +218,7 @@
                           Manage Products
                         </router-link>
                       </MenuItem>
-                      <MenuItem>
+                      <MenuItem v-show="canManageSpecialEditions">
                         <router-link
                           to="/special_editions"
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
@@ -226,7 +230,14 @@
                   </transition>
                 </Menu>
               </div>
-              <div class="pl-4 border-l border-slate-900/10">
+              <div
+                class="pl-4"
+                :class="
+                  canManageWire || canManageSpecialEditions
+                    ? 'border-l border-slate-900/10'
+                    : ''
+                "
+              >
                 <!-- Profile dropdown -->
                 <Menu as="div" class="hidden md:block relative">
                   <div>
@@ -273,6 +284,15 @@
                           >User Support
                         </a>
                       </MenuItem>
+                      <template v-if="environment === 'offline'">
+                        <MenuItem>
+                          <a
+                            class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                            @click="openTestConsoleModal"
+                            >Test Console</a
+                          >
+                        </MenuItem>
+                      </template>
                     </MenuItems>
                   </transition>
                 </Menu>
@@ -308,7 +328,11 @@
                   </router-link>
                 </tippy>
                 <!-- Admin Dropdown -->
-                <Menu as="div" class="block md:hidden relative">
+                <Menu
+                  v-show="canManageSpecialEditions || canManageWire"
+                  as="div"
+                  class="block md:hidden relative"
+                >
                   <div>
                     <tippy content="Admin" theme="demo">
                       <MenuButton
@@ -330,7 +354,7 @@
                     <MenuItems
                       class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
-                      <MenuItem>
+                      <MenuItem v-show="canManageWire">
                         <router-link
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                           :to="{
@@ -343,7 +367,7 @@
                           Manage Products
                         </router-link>
                       </MenuItem>
-                      <MenuItem>
+                      <MenuItem v-show="canManageSpecialEditions">
                         <router-link
                           to="/special_editions"
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
@@ -517,6 +541,11 @@
       </div>
     </Dialog>
   </TransitionRoot>
+  <!-- Test Console -->
+  <TestConsoleDialog
+    :isOpen="isTestConsoleMenuOpen"
+    @close="closeTestConsoleModal"
+  />
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
@@ -557,6 +586,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import MobileSideMenu from "./MobileSideMenu.vue";
+import TestConsoleDialog from "@current/components/TestConsoleDialog.vue";
 export default {
   components: {
     Dialog,
@@ -584,15 +614,21 @@ export default {
     XMarkIcon,
     // MockProductCard,
     MobileSideMenu,
+    TestConsoleDialog,
   },
   setup() {
     const metadata = inject("metadata");
+    const environment = ref(import.meta.env.MODE);
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
     const currentUsername = computed(() => store.state.user.user.name);
     const isMobileMenuOpen = ref(false);
     const removeSearch = ref(false);
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
+    const canManageSpecialEditions = computed(
+      () => store.getters["user/canManageSpecialEditions"]
+    );
     const searches = computed(() => store.state.savedSearches.searches);
     const loading = computed(() => store.state.savedSearches.loading);
     const sortOptions = [
@@ -601,6 +637,13 @@ export default {
       { name: "Most Views" },
     ];
     const selectedSort = ref(sortOptions[0]);
+    const isTestConsoleMenuOpen = ref(false);
+    const openTestConsoleModal = () => {
+      isTestConsoleMenuOpen.value = true;
+    };
+    const closeTestConsoleModal = () => {
+      isTestConsoleMenuOpen.value = false;
+    };
     const closeMobileMenuModal = () => {
       isMobileMenuOpen.value = false;
     };
@@ -672,8 +715,11 @@ export default {
     return {
       dayjs,
       metadata,
+      environment,
       route,
       currentUsername,
+      canManageWire,
+      canManageSpecialEditions,
       searches,
       loading,
       sortOptions,
@@ -682,6 +728,9 @@ export default {
       favoriteProducts,
       collectionProducts,
       selectedSort,
+      isTestConsoleMenuOpen,
+      closeTestConsoleModal,
+      openTestConsoleModal,
       isMobileMenuOpen,
       openMobileMenuModal,
       closeMobileMenuModal,

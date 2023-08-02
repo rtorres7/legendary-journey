@@ -1,6 +1,17 @@
 <template>
   <template v-if="hasArticleImage(product)">
-    <img id="product-img" :src="getImgUrl(product)" alt="" @load="onImgLoad" />
+    <div
+      id="image-blur"
+      class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
+      :style="{ background: 'url(' + getImgUrl(product) + ')' }"
+    ></div>
+    <img
+      id="product-img"
+      class="inset-x-0 absolute h-full mx-auto z-[3]"
+      :src="getImgUrl(product)"
+      alt=""
+      @load="onImgLoad"
+    />
   </template>
   <template v-else>
     <template v-if="!smartRender">
