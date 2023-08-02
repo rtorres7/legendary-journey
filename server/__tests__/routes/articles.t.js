@@ -2,6 +2,7 @@ const request = require("supertest");
 const { setupApp, setupAppWithUser } = require('../__utils__/expressUtils');
 const { articles } = require("../__utils__/dataLoader");
 const router = require('../../src/routes/articles');
+const dayjs = require('dayjs');
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -173,7 +174,7 @@ describe("Article Routes", () => {
         .expect("Content-Type", /json/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.date).toEqual(original.datePublished.toISOString());
+          expect(res.body.date).toEqual(dayjs(original.datePublished).format("YYYY-MM-DD"));
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
@@ -357,7 +358,7 @@ describe("Article Routes", () => {
         .expect("Content-Type", /json/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.date).toEqual(original.datePublished.toISOString());
+          expect(res.body.date).toEqual(dayjs(original.datePublished).format("YYYY-MM-DD"));
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
