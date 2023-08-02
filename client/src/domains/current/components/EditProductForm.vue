@@ -844,7 +844,9 @@ import { productDetails } from "@current/data";
 import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import dayjs from "dayjs/esm/index.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 import { useCookies } from "vue3-cookies";
 import { formatDate } from "@current/helpers";
 import {
@@ -1181,7 +1183,9 @@ export default {
       );
       const product = { ...payload };
       if (product.title) {
-        form.value.title = `${dayjs().format("DD MMMM YYYY")} ${product.title}`;
+        form.value.title = `${dayjs().utc().format("DD MMMM YYYY")} ${
+          product.title
+        }`;
       }
       if (product.summary) {
         form.value.summary = product.summary;
@@ -1253,7 +1257,7 @@ export default {
     };
 
     const updateSelectedDate = (model) => {
-      form.value.publicationDate = dayjs(model).format("YYYY-MM-DD");
+      form.value.publicationDate = dayjs(model).utc().format("YYYY-MM-DD");
       payload.value.date_published = form.value.publicationDate;
     };
 
@@ -1375,9 +1379,9 @@ export default {
           productFromBackend.code === updatedProduct.product_type_id
       );
       form.value.publicationDate = updatedProduct.date_published;
-      selectedPublicationDate.value = dayjs(
-        product.value.date_published
-      ).toDate();
+      selectedPublicationDate.value = dayjs(product.value.date_published)
+        .utc()
+        .format("YYYY/MM/DD");
       form.value.classificationXML = updatedProduct.classification_xml;
       form.value.pocInfo = updatedProduct.poc_info;
       form.value.title = updatedProduct.title;
@@ -1560,7 +1564,7 @@ export default {
               });
               router.push({
                 name: "products",
-                params: { date: route.params.date },
+                params: { date: dayjs(route.params.date).format("YYYY-MM-DD") },
               });
             }
           });

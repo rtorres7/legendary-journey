@@ -2828,7 +2828,6 @@ const loadElasticSearch = async (esUrl) => {
   const client = new Client({ node: esUrl });
 
   for (const article of articles) {
-    logger.info(`loading article ${article._id}`);
     await client.index({
       index: "products",
       body: article.indexable,
