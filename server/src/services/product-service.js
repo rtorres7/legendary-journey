@@ -109,9 +109,43 @@ class ProductService {
       .exec();
   }
 
+  async findPageOfSavedProducts(userId, page, limit, offset, sortDir) {
+    const savedAll = await this.#findAllSavedProducts(
+      userId,
+      limit,
+      offset,
+      sortDir
+    );
+    const savedCount = await this.#countSavedProducts();
+
+    return KiwiPage.of(
+      page,
+      limit,
+      draftCount,
+      savedAll.map((saved) => saved.features)
+    )
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("updatedAt", sortDir));
+  }
+
+  async #findAllSavedProducts(limit, offset, sortDir) {
+    return await Article
+      .find({ state: 'posted' })
+      .limit(limit)
+      .skip(offset)
+      .sort({ updatedAt: sortDir.toLowerCase() })
+      .exec();
+  }
+
   async #countDraftProductsForUser(userId) {
     return await Article
       .count({ state: 'draft', 'createdBy.id': userId })
+      .exec();
+  }
+
+  async #countSavedProducts() {
+    return await Article
+      .count({ state: 'posted' })
       .exec();
   }
 

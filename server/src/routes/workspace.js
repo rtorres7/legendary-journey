@@ -122,6 +122,27 @@ router.get('/workspace/saved', async (req, res) => {
   });
 });
 
+router.get('/workspace/savedall', async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve a page of recently saved productd'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfSavedProducts'
+      }
+    }
+   */
+
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const {perPage, page, sortDir} = pagingParams(req);
+    const term = req.query.text;
+    const filters = req.query;
+
+    const savedProductsAll = await productService.findPageOfSavedProducts(currentUser.id, term, perPage, page, sortDir, filters);
+    res.json(savedProductsAll);
+  });
+});
+
 router.put('/workspace/saved/:productId', async (req, res) => {
   /*
     #swagger.summary = 'Saves a product for the current user'
