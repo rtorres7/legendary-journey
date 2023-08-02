@@ -5,10 +5,6 @@ import path from "path";
 
 let envPath: string;
 
-// console.log(`DOTENV = ${process.env.DOTENV}`);
-// console.log(`NODE_ENV = ${process.env.NODE_ENV}`);
-// console.log(`MXS_ENV = ${process.env.MXS_ENV}`);
-
 if (process.env.DOTENV) {
   envPath = path.join(__dirname, `../../env/${process.env.DOTENV}.env`);
 } else if (process.env.NODE_ENV) {
@@ -28,14 +24,9 @@ if (process.env.DOTENV) {
   }
 }
 
-// console.log(`envPath ${envPath}`);
-
 if (envPath) {
   if (fs.existsSync(envPath)) {
-    // console.info(`config:  dotenv config ${envPath}`);
     dotenv.config({ path: envPath });
-  } else {
-    // console.info(`config:  dotenv file not found ${envPath}`);
   }
 }
 

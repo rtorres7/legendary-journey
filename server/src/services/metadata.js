@@ -22,7 +22,7 @@ class MetadataService {
     }
 
     const lookups = await this.findAllLookups();
-    return await lookups.issues.values.filter((issue) => {
+    return lookups.issues.values.filter((issue) => {
       return (
         issue.topics
           .map((topic) => topic.codes)
@@ -42,14 +42,14 @@ class MetadataService {
 
   async findProductType(code) {
     const lookups = await this.findAllLookups();
-    return await lookups.product_types.values.filter(
+    return lookups.product_types.values.filter(
       (productType) => productType.code === code
     )[0];
   }
 
   async findReportingTypeFor(productTypeId) {
     const lookups = await this.findAllLookups();
-    const types = await lookups.reporting_types.values.filter((reportingType) =>
+    const types = lookups.reporting_types.values.filter((reportingType) =>
       reportingType.productTypes.includes(productTypeId)
     );
 
@@ -71,7 +71,7 @@ class MetadataService {
     }
 
     const lookups = await this.findAllLookups();
-    return await lookups.subregions.values.filter((subregion) => {
+    return lookups.subregions.values.filter((subregion) => {
       return (
         subregion.country_codes.filter((code) => countries.includes(code))
           .length > 0
@@ -85,7 +85,7 @@ class MetadataService {
     }
 
     const lookups = await this.findAllLookups();
-    return await lookups.regions.values.filter((region) => {
+    return lookups.regions.values.filter((region) => {
       return (
         region.subregions.filter((code) => subregions.includes(code)).length > 0
       );
