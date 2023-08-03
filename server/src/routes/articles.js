@@ -20,6 +20,8 @@ const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
+const ProductSearchService = require("../services/product-search-service");
+const searchService = new ProductSearchService();
 
 const multer = require('multer');
 const ObjectStorageEngine = require('../util/object-storage-engine');
@@ -456,6 +458,8 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
     const objectName = path.substring(bucketSeparatorIndex);
 
     await objectStoreService.removeObject(bucket, objectName);
+
+    await searchService.removeIndexedAttachment(product.id, att.attachmentId);
   }
 
   res.json({ success: true });
