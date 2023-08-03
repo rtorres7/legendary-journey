@@ -135,7 +135,6 @@
     <Facets
       :facets="aggregations"
       class="grid grid-cols-2 md:grid-cols-3 gap-4"
-      @filter="getSavedProducts(route.query)"
     />
   </BaseDialog>
   <Overlay :show="removingProduct">
@@ -189,6 +188,7 @@ export default {
     const environment = ref(import.meta.env.MODE);
     const route = useRoute();
     const router = useRouter();
+    const path = computed(() => route.fullPath);
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
@@ -203,7 +203,7 @@ export default {
     const sortOptions = [
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
-      { name: "Most Views", key: "views", type: "sortDir" },
+      // { name: "Most Views", key: "views", type: "sortDir" },
     ];
     const getSortOption = (query) => {
       const sortDir = query.sortDir ? query.sortDir : undefined;
@@ -239,33 +239,47 @@ export default {
         mySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios.delete("/workspace/saved/" + product.id).then((response) => {
-          if (response.data.error) {
-            removingProduct.value = false;
-            createNotification({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              autoClose: false,
-            });
-          } else {
-            removingProduct.value = false;
-            createNotification({
-              title: "Product Removed",
-              message: `Product ${product.productNumber} has been removed.`,
-              type: "success",
-            });
-            let p = mySaved.value.find(
-              (item) => item.productNumber == product.productNumber
-            );
-            let indexOfProduct = mySaved.value.indexOf(p);
-            mySaved.value.splice(indexOfProduct, 1);
-          }
-        });
+        axios
+          .delete("/workspace/saved/" + product.productId)
+          .then((response) => {
+            if (response.data.error) {
+              removingProduct.value = false;
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              removingProduct.value = false;
+              createNotification({
+                title: "Product Removed",
+                message: `Product ${product.productNumber} has been removed.`,
+                type: "success",
+              });
+              let p = mySaved.value.find(
+                (item) => item.productNumber == product.productNumber
+              );
+              let indexOfProduct = mySaved.value.indexOf(p);
+              mySaved.value.splice(indexOfProduct, 1);
+            }
+          });
       }
     };
 
-    const getSavedProducts = (query) => {
+    // const getFilters = (query) => {
+    //   console.log("????????????", query);
+    //   console.log("????????????", route.query);
+    //   let params = {};
+    //   params["topics"] = ["HLTH"];
+    //   console.log(params);
+    //   return params;
+    // };
+
+    const getSavedProducts = (path) => {
+      // let filters = getFilters(query);
+      console.log("hello ", route);
+      console.log("passed in path: ", path);
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
           let products = [];
@@ -278,51 +292,64 @@ export default {
           loadingSaved.value = false;
         }, 1000);
       } else {
-        axios
-          .get("/workspace/saved", {
-            params: { sortDir: query.sortDir, filters: query },
-          })
-          .then((response) => {
-            loadingSaved.value = false;
-            if (response.data) {
-              mySaved.value = response.data.content;
-              aggregations.value = response.data.supplementaryData.aggregations;
-              console.log(aggregations.value);
-            } else {
-              createNotification({
-                title: "Error",
-                message: "There was an error retrieving Saved Products.",
-                type: "error",
-                autoClose: false,
-              });
-            }
-          });
+        if (route.name == "saved") {
+          axios
+            .get(path, {
+              // params: {
+              //   page: query.page,
+              //   sortDir: query.sortDir,
+              //   topics: [query.topics],
+              //   // topics: ["HLTH"],
+              //   // non_state_actors: ["EU"],
+              //   // filters: { topics: ["INR"] },
+              //   // query: '{"topics", "=", "INR"}',
+              //   // query: "{topics, INR}",
+              // },
+            })
+            .then((response) => {
+              // console.log("boog ", query);
+              loadingSaved.value = false;
+              if (response.data) {
+                mySaved.value = response.data.content;
+                aggregations.value =
+                  response.data.supplementaryData.aggregations;
+                console.log(aggregations.value);
+              } else {
+                createNotification({
+                  title: "Error",
+                  message: "There was an error retrieving Saved Products.",
+                  type: "error",
+                  autoClose: false,
+                });
+              }
+            });
+        }
       }
     };
 
     onMounted(() => {
-      getSavedProducts(route.query);
+      getSavedProducts(path.value);
     });
 
-    // watch([route.query], () => {
-    //   // let query = { ...route.query };
-    //   // if (selectedSort.value.type === "sort_dir") {
-    //   // if (query.sort_field) {
-    //   //   delete query["sort_field"];
-    //   // }
-    //   // query = { ...query, sortDir: selectedSort.value.key };
-    //   // } else {
-    //   //   if (query.sort_dir) {
-    //   //     delete query["sort_dir"];
-    //   //   }
-    //   //   query = { ...query, sort_field: selectedSort.value.key };
-    //   // }
-    //   router.push({
-    //     query,
-    //   });
-    //   getSavedProducts(query);
-    //   // localStorage.setItem("lastSort", selectedSort.value.key);
-    // });
+    watch([path], () => {
+      // let query = { ...route.query };
+      // if (selectedSort.value.type === "sort_dir") {
+      // if (query.sort_field) {
+      //   delete query["sort_field"];
+      // }
+      // query = { ...query, sortDir: selectedSort.value.key };
+      // } else {
+      //   if (query.sort_dir) {
+      //     delete query["sort_dir"];
+      //   }
+      //   query = { ...query, sort_field: selectedSort.value.key };
+      // }
+      // router.push({
+      //   query,
+      // });
+      getSavedProducts(path.value);
+      // localStorage.setItem("lastSort", selectedSort.value.key);
+    });
 
     watch([selectedSort], () => {
       let query = { ...route.query };
@@ -340,13 +367,14 @@ export default {
       router.push({
         query,
       });
-      getSavedProducts(query);
+      getSavedProducts(path.value);
       // localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     return {
       environment,
       route,
+      path,
       mySaved,
       loadingSaved,
       numProducts,

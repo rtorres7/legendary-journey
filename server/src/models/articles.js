@@ -19,6 +19,10 @@ const AttachmentSchema = new Schema({
     attachmentId: String,
     destination: String,
     visible: Boolean,
+  },
+  {
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
   });
 
 AttachmentSchema.virtual("mime_type").get(function () {
@@ -259,7 +263,6 @@ ArticleSchema.virtual("data.document").get(function () {
 });
 
 ArticleSchema.virtual("data.details").get(function () {
-  console.log("COAUTH ======== ", this.coauthors)
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,

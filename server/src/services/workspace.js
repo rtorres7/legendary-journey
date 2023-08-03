@@ -29,7 +29,7 @@ class WorkspaceService {
     term,
     perPage = 10,
     page = 1,
-    sortDir = sortDir,
+    sortDir = "desc",
     filters = {},
   ) {
     const filtersWithUser = {
