@@ -276,7 +276,6 @@ export default {
             if (response.data) {
               mySaved.value = response.data.content;
               aggregations.value = response.data.supplementaryData.aggregations;
-              console.log(aggregations.value);
             } else {
               createNotification({
                 title: "Error",

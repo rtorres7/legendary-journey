@@ -1,6 +1,17 @@
 <template>
   <template v-if="hasArticleImage(product)">
-    <img id="product-img" :src="getImgUrl(product)" alt="" @load="onImgLoad" />
+    <div
+      id="image-blur"
+      class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
+      :style="{ background: 'url(' + getImgUrl(product) + ')' }"
+    ></div>
+    <img
+      id="product-img"
+      class="inset-x-0 absolute h-full mx-auto z-[3]"
+      :src="getImgUrl(product)"
+      alt=""
+      @load="onImgLoad"
+    />
   </template>
   <template v-else>
     <template v-if="!smartRender">
@@ -16,7 +27,6 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { isEmpty } from "@current/helpers";
-
 export default {
   props: {
     product: {
@@ -31,10 +41,8 @@ export default {
   emits: ["imageLoaded", "imageNotFound"],
   setup(props, { emit }) {
     const store = useStore();
-
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
     const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
-
     const hasArticleImage = (product) => {
       if (sampleImage.value || uploadBinary.value) {
         return true;
@@ -52,7 +60,6 @@ export default {
       }
       return hasImages;
     };
-
     const getImgUrl = (product) => {
       if (sampleImage.value) {
         return new URL("@/shared/assets/sydney.jpg", import.meta.url).href;
@@ -78,7 +85,6 @@ export default {
         updatedAt
       );
     };
-
     const onImgLoad = () => {
       if (props.smartRender) {
         const articleImgWidth =
@@ -86,7 +92,6 @@ export default {
         emit("imageLoaded", articleImgWidth);
       }
     };
-
     return {
       hasArticleImage,
       onImgLoad,
