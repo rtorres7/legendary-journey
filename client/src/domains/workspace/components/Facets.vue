@@ -47,7 +47,6 @@ export default {
       required: true,
     },
   },
-  // emits: ["filter"],
   setup(props) {
     const route = useRoute();
     const router = useRouter();
@@ -103,7 +102,6 @@ export default {
         name: route.name,
         query,
       });
-      // emit("filter");
     };
 
     return {

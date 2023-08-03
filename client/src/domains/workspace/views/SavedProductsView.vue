@@ -122,16 +122,6 @@
     class="max-w-fit"
     @close="closeFacetsDialog"
   >
-    <!-- <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
-      <template v-for="facet in aggregations" :key="facet">
-        <div>
-          <p class="font-semibold">{{ facet.displayName }}</p>
-          <template v-for="row in facet.rows" :key="row">
-            <p>{{ row.name }} ({{ row.count }})</p>
-          </template>
-        </div>
-      </template>
-    </div> -->
     <Facets
       :facets="aggregations"
       class="grid grid-cols-2 md:grid-cols-3 gap-4"
@@ -267,19 +257,7 @@ export default {
       }
     };
 
-    // const getFilters = (query) => {
-    //   console.log("????????????", query);
-    //   console.log("????????????", route.query);
-    //   let params = {};
-    //   params["topics"] = ["HLTH"];
-    //   console.log(params);
-    //   return params;
-    // };
-
     const getSavedProducts = (path) => {
-      // let filters = getFilters(query);
-      console.log("hello ", route);
-      console.log("passed in path: ", path);
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
           let products = [];
@@ -293,36 +271,21 @@ export default {
         }, 1000);
       } else {
         if (route.name == "saved") {
-          axios
-            .get(path, {
-              // params: {
-              //   page: query.page,
-              //   sortDir: query.sortDir,
-              //   topics: [query.topics],
-              //   // topics: ["HLTH"],
-              //   // non_state_actors: ["EU"],
-              //   // filters: { topics: ["INR"] },
-              //   // query: '{"topics", "=", "INR"}',
-              //   // query: "{topics, INR}",
-              // },
-            })
-            .then((response) => {
-              // console.log("boog ", query);
-              loadingSaved.value = false;
-              if (response.data) {
-                mySaved.value = response.data.content;
-                aggregations.value =
-                  response.data.supplementaryData.aggregations;
-                console.log(aggregations.value);
-              } else {
-                createNotification({
-                  title: "Error",
-                  message: "There was an error retrieving Saved Products.",
-                  type: "error",
-                  autoClose: false,
-                });
-              }
-            });
+          axios.get(path).then((response) => {
+            loadingSaved.value = false;
+            if (response.data) {
+              mySaved.value = response.data.content;
+              aggregations.value = response.data.supplementaryData.aggregations;
+              console.log(aggregations.value);
+            } else {
+              createNotification({
+                title: "Error",
+                message: "There was an error retrieving Saved Products.",
+                type: "error",
+                autoClose: false,
+              });
+            }
+          });
         }
       }
     };
@@ -332,23 +295,7 @@ export default {
     });
 
     watch([path], () => {
-      // let query = { ...route.query };
-      // if (selectedSort.value.type === "sort_dir") {
-      // if (query.sort_field) {
-      //   delete query["sort_field"];
-      // }
-      // query = { ...query, sortDir: selectedSort.value.key };
-      // } else {
-      //   if (query.sort_dir) {
-      //     delete query["sort_dir"];
-      //   }
-      //   query = { ...query, sort_field: selectedSort.value.key };
-      // }
-      // router.push({
-      //   query,
-      // });
       getSavedProducts(path.value);
-      // localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     watch([selectedSort], () => {
