@@ -249,7 +249,7 @@ export default {
         });
       } else {
         savingProduct.value = true;
-        axios.put("/workspace/saved/" + product.productId).then((response) => {
+        axios.put("/workspace/saved/" + product.id).then((response) => {
           if (response.data.error) {
             savingProduct.value = false;
             createNotification({
