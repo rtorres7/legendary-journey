@@ -4,8 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "prestart": "npm run copy-assets && npm run build",
-    "start": "concurrently --names \"build,node\" \"npm:build:watch\" \"npm run delay && nodemon build/src/swagger.js\"",
+    "start": "node --require ts-node/register src/swagger.ts",
+    "start:inspect": "node --watch --require ts-node/register --inspect=0.0.0.0:9229 src/swagger.ts",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles",
     "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --verbose=true",
@@ -17,7 +17,10 @@
     "build:watch": "tsc --watch --project tsconfig.json",
     "build:release": "npm run clean && npm run copy-assets && tsc --project tsconfig.release.json",
     "copy-assets": "copyfiles --all --exclude \"./**/*.{ts,tsx,js,jsx}\" \"./src/**/*\" \"./env/**/*\" ./build",
-    "delay": "node -e \"setTimeout(() => process.exit(0), 5000)\""
+    "delay": "node -e \"setTimeout(() => process.exit(0), 5000)\"",
+    "prestart:tsc": "npm run clean && npm run copy-assets && npm run build",
+    "start:tsc": "concurrently --names \"build,node\" \"npm:build:watch\" \"npm run delay && nodemon build/src/swagger.js\"",
+    "start:ts-node": "npm run clean && ts-node src/swagger.js"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
