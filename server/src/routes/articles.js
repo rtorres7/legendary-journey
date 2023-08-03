@@ -68,6 +68,17 @@ router.get('/articles/:productNumber', async (req, res) => {
 
   try {
     const article = await productService.findByProductNumber(req.params.productNumber);
+
+    // Increase the view counters
+    // Note: The actual implementation might depend on how you identify unique users
+    article.data.details.totalViews++;
+    if (isNewUserView(req)) {
+      article.data.details.uniqueViews++;
+    }
+
+    // Save the changes
+    await productService.updateProduct(article._id, article);
+
     res.json(article.data.details);
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
@@ -80,6 +91,14 @@ router.get('/articles/:productNumber', async (req, res) => {
     });
   }
 });
+
+// This is a placeholder for a function that would determine if this is a unique view
+// It might involve checking if the user is logged in or identifying them based on their IP or a cookie
+function isNewUserView(req) {
+  // TODO: Implement this function
+  return false;
+}
+
 
 // POST (adapter to support /processDocument while working towards splitting it up)
 router.post('/articles/processDocument', (req, res) => {
