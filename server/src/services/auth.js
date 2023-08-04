@@ -72,10 +72,14 @@ const OPEN_PATHS = [
   'login',
   'callback',
   'api-docs'
-]
-function ensureAuthenticated(req, res, next) {
-  const fullPath = req.baseUrl + req.path;
+];
 
+function ensureAuthenticated(req, res, next) {
+  if (process.env.MXS_ENV === "container" && req.referer?.includes("api-docs")) {
+    return next();
+  }
+
+  const fullPath = req.baseUrl + req.path;
   const isOpen = OPEN_PATHS.filter(path => fullPath.includes(path)).length > 0;
 
   if (isOpen || req.isAuthenticated()) {

@@ -18,7 +18,7 @@ router.get('/workspace/drafts', async (req, res) => {
     }
     #swagger.responses[500] = {
       schema: {
-        $ref: '#/definition/StandardError'
+        $ref: '#/definitions/StandardError'
       }
     }
    */
@@ -46,7 +46,7 @@ router.get('/workspace/recent', async (req, res) => {
     }
     #swagger.responses[500] = {
       schema: {
-        $ref: '#/definition/StandardError'
+        $ref: '#/definitions/StandardError'
       }
     }
    */
@@ -84,7 +84,7 @@ router.get('/workspace/products', async (req, res) => {
     }
     #swagger.responses[500] = {
       schema: {
-        $ref: '#/definition/StandardError'
+        $ref: '#/definitions/StandardError'
       }
     }
    */
