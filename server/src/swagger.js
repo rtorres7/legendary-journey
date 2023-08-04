@@ -37,25 +37,6 @@ const doc = {
       description: 'Workspace API'
     }
   ],
-  securityDefinitions: {
-    OAuth2: {
-      type: 'oauth2',
-      flows: {
-        authorizationCode: {
-          authorizationUrl: 'https://localhost:8443/realms/mxms/protocol/openid-connect/auth',
-          tokenUrl: 'https://localhost:8443/realms/mxms/protocol/openid-connect/token',
-          scopes: {
-            openid: 'Openid',
-            profile: 'Profile',
-            roles: 'Roles'
-          }
-        }
-      }
-    }
-  },
-  security: {
-    OAuth2: ['openid', 'profile', 'roles']
-  },
   components: {
     '@schemas': {
       Alert: {
