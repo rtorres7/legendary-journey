@@ -75,8 +75,10 @@ export const getProductImageUrl = (images, docNum) => {
   } else {
     updatedAt = "";
   }
+  const apiBaseUrl = import.meta.env.MODE === "container" ? "/api" : "";
   return (
     window.location.origin +
+    apiBaseUrl +
     "/documents/" +
     docNum +
     "/images/article?updated_at=" +

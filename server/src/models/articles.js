@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const path = require('path');
+const _ = require('lodash');
+
 const Schema = mongoose.Schema;
 
 const DissemSchema = new Schema(
@@ -13,19 +16,20 @@ const DissemSchema = new Schema(
 );
 
 const AttachmentSchema = new Schema({
-    fileName: String,
-    mimeType: String,
-    createdAt: Date,
-    fileSize: Number,
-    type: String,
-    attachmentId: String,
-    destination: String,
-    visible: Boolean,
-  },
-  {
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
-  });
+  fileName: String,
+  mimeType: String,
+  createdAt: Date,
+  updatedAt: Date,
+  fileSize: Number,
+  type: String,
+  attachmentId: String,
+  destination: String,
+  visible: Boolean,
+},
+{
+  toJSON: {virtuals: true},
+  toObject: {virtuals: true},
+});
 
 AttachmentSchema.virtual('mime_type').get(function () {
   return this.mimeType;
@@ -39,22 +43,23 @@ AttachmentSchema.virtual('file_size').get(function () {
   return this.fileSize;
 });
 
-const ThumbnailSchema = new Schema(
-  {
-    fileName: String,
-    mimeType: String,
-    createdAt: Date,
-    fileSize: Number,
-    type: String,
-    thumbnailId: String,
-    destination: String,
-    visible: Boolean,
-  },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  },
-);
+AttachmentSchema.virtual('created_at').get(function () {
+  return this.createdAt;
+});
+
+AttachmentSchema.virtual('updated_at').get(function () {
+  return this.updatedAt ? this.updatedAt : this.createdAt;
+});
+
+AttachmentSchema.virtual('updated_at').get(function () {
+  return this.updatedAt ? this.updatedAt : this.createdAt;
+});
+
+AttachmentSchema.virtual('usage').get(function () {
+  const parsed = path.parse(this.fileName);
+  const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
+  return isThumbnail ? 'article' : '';
+});
 
 const ArticleSchema = new Schema(
   {
@@ -109,7 +114,6 @@ const ArticleSchema = new Schema(
     titleClassification: String,
     titleClassificationXml: String,
     thumbnailCaption: String,
-    thumbnailMetadata: ThumbnailSchema,
     topics: [DissemSchema],
     updatedBy: {
       id: Number,
@@ -234,8 +238,20 @@ ArticleSchema.virtual('indexable').get(function () {
 });
 
 ArticleSchema.virtual('data.document').get(function () {
+
+  const attachments = [];
+  const images = [];
+  for (const i of this.attachmentsMetadata) {
+    if (i.usage === 'article') {
+      images.push(i);
+    } else {
+      attachments.push(i);
+    }
+  };
+
   return {
-    attachments: this.attachmentsMetadata,
+    // attachments: this.attachmentsMetadata,
+    attachments,
     classification: this.classification,
     coauthors: this.coauthors,
     coordinators: this.coordinators,
@@ -261,7 +277,6 @@ ArticleSchema.virtual('data.document').get(function () {
     titleClassificationXml: this.titleClassificationXml,
     topics: this.topics,
     thumbnailCaption: this.thumbnailCaption,
-    thumbnailMetadata: this.thumbnailMetadata,
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields
@@ -271,6 +286,7 @@ ArticleSchema.virtual('data.document').get(function () {
     dissem_orgs: this.dissemOrgs,
     non_state_actors: this.nonStateActors,
     html_body: this.htmlBody,
+    images,
     poc_info: this.pocInfo,
     producing_offices: this.producingOffices,
     product_type_id: this.productType.code,
@@ -314,7 +330,6 @@ ArticleSchema.virtual("data.details").get(function () {
     titleClassificationXml: this.titleClassificationXml,
     topics: this.topics,
     thumbnailCaption: this.thumbnailCaption,
-    thumbnailMetadata: this.thumbnailMetadata,
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields

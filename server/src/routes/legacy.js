@@ -174,31 +174,17 @@ router.delete("/documents/:id/attachments/:attachmentId", (req, res) => {
   res.redirect(`/articles/${req.params.id}/attachments/${req.params.attachmentId}`);
 });
 
-router.post("/documents/:id/thumbnails", (req, res) => {
+router.get("/documents/:id/images/article", (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Upload an thumbnail to the product. Use POST /articles/{id}/thumbnails'
- */
-  res.redirect(307, `/articles/${req.params.id}/thumbnails`);
-});
-
-router.get("/documents/:id/thumbnails/:thumbnailId", (req, res) => {
-  /*
-  #swagger.tags = ['Legacy']
-  #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Download an thumbnail attached to the product. Use GET /articles/{id}/thumbnails/{thumbnailId}'
- */
-  res.redirect(`/articles/${req.params.id}/thumbnails/${req.params.thumbnailId}`);
-});
-
-router.delete("/documents/:id/thumbnails/:thumbnailId", (req, res) => {
-  /*
-  #swagger.tags = ['Legacy']
-  #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Remove an thumbnail attached to the product. Use DELETE /articles/{id}/thumbnails/{thumbnailId}'
- */
-  res.redirect(`/articles/${req.params.id}/thumbnails/${req.params.thumbnailId}`);
+  #swagger.summary = 'DEPRECATED: Download an thumbnail image attached to the product. Use GET /articles/{id}/attachments/{attachmentId}'
+  */
+  let url = `/articles/${req.params.id}/attachments/article`;
+  if (req.params.updated_at) {
+    url += `?update_at=${req.params.updated_at}`;
+  }
+  res.redirect(url);
 });
 
 
