@@ -3,18 +3,18 @@ const { setupApp } = require("../__utils__/expressUtils");
 
 jest.mock('../../src/services/product-search-service.js', () => {
   return jest.fn().mockImplementation(() => {
-    const { articles } = require("../__utils__/dataLoader");
-    const filteredArticles = articles.filter(article => article.htmlBody.includes('flu'))
-      .map(article => {
-        const product = article.indexable;
+    const { products } = require("../__utils__/dataLoader");
+    const filteredProducts = products.filter(product => product.htmlBody.includes('flu'))
+      .map(product => {
+        const product = product.indexable;
         product.highlighted_result = ["(U) Both COVID-19 and <em>flu</em> vaccines have been shown to reduce illness, hospitalizations, and deaths."]
         return product;
       });
-    const allArticles = articles.map(article => article.indexable);
+    const allProducts = products.map(product => product.indexable);
     return {
       search: jest.fn()
-        .mockResolvedValueOnce({ searchId: '', results: filteredArticles, aggregations: [], pages: 1, totalCount: 2, siteEnhancement: '', deClassifError: '' })
-        .mockResolvedValueOnce({ searchId: '', results: allArticles, aggregations: [], pages: 1, totalCount: 5, siteEnhancement: '', deClassifError: '' })
+        .mockResolvedValueOnce({ searchId: '', results: filteredProducts, aggregations: [], pages: 1, totalCount: 2, siteEnhancement: '', deClassifError: '' })
+        .mockResolvedValueOnce({ searchId: '', results: allProducts, aggregations: [], pages: 1, totalCount: 5, siteEnhancement: '', deClassifError: '' })
     };
   });
 });

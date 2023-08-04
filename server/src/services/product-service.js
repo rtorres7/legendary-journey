@@ -1,5 +1,5 @@
 const dayjs = require("dayjs");
-const Article = require("../models/articles");
+const Product = require("../models/products");
 const ProductSearchService = require("../services/product-search-service");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const { handleMongooseError } = require("../util/errors");
@@ -17,17 +17,17 @@ class ProductService {
     const start = day.startOf("day").toDate();
     const end = day.endOf("day").toDate();
 
-    return await Article.find({
+    return await Product.find({
       datePublished: { $gte: start, $lte: end },
     }).exec();
   }
 
   async findByProductNumber(productNumber) {
-    return await Article.findOne({ productNumber: productNumber }).exec();
+    return await Product.findOne({ productNumber: productNumber }).exec();
   }
 
   async findById(id) {
-    return await Article.findById(id).exec();
+    return await Product.findById(id).exec();
   }
 
   async createProduct(product) {
@@ -37,7 +37,7 @@ class ProductService {
       await this.productSearchService.create(savedProduct.indexable);
     } catch (error) {
       console.log('There was a problem indexing product, rolling back database save', error);
-      await Article.deleteOne({ _id: savedProduct.id });
+      await Product.deleteOne({ _id: savedProduct.id });
       throw new Error('There was a problem indexing product, rolling back database save');
     }
 
@@ -45,7 +45,7 @@ class ProductService {
   }
 
   async updateProduct(id, product) {
-    const updatedProduct = await Article.findByIdAndUpdate(
+    const updatedProduct = await Product.findByIdAndUpdate(
       { _id: id },
       product,
       { new: true }
@@ -63,7 +63,7 @@ class ProductService {
   }
 
   async deleteProduct(id) {
-    await Article.deleteOne({ _id: id }).exec();
+    await Product.deleteOne({ _id: id }).exec();
 
     try {
       await this.productSearchService.delete(id);
@@ -75,8 +75,8 @@ class ProductService {
   }
 
   async findFeaturesAndBriefs() {
-    const featuredProducts = await Article.find({'state': 'posted'}).sort({ _id: -1 }).exec();
-    const briefProducts = await Article.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
+    const featuredProducts = await Product.find({'state': 'posted'}).sort({ _id: -1 }).exec();
+    const briefProducts = await Product.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
 
     return {
       featured: featuredProducts.map((product) => product.features),
@@ -104,7 +104,7 @@ class ProductService {
   }
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
+    return await Product
       .find({ state: 'draft', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
@@ -113,7 +113,7 @@ class ProductService {
   }
 
   async #countDraftProductsForUser(userId) {
-    return await Article
+    return await Product
       .count({ state: 'draft', 'createdBy.id': userId })
       .exec();
   }
@@ -138,7 +138,7 @@ class ProductService {
   }
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
+    return await Product
       .find({ state: 'posted', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
@@ -147,7 +147,7 @@ class ProductService {
   }
 
   async #countRecentProductsForUser(userId) {
-    return await Article
+    return await Product
       .count({ state: 'posted', 'createdBy.id': userId })
       .exec();
   }
@@ -172,7 +172,7 @@ class ProductService {
   }
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
+    return await Product
       .find({ 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
@@ -181,7 +181,7 @@ class ProductService {
   }
 
   async #countAllProductsForUser(userId) {
-    return await Article
+    return await Product
       .count({ 'createdBy.id': userId })
       .exec();
   }
@@ -191,7 +191,7 @@ class ProductService {
 
     if (indexesCreated.includes('products')) {
       try {
-        const products = await Article.find().exec();
+        const products = await Product.find().exec();
         products.forEach(product => {
           this.productSearchService.create(product.indexable);
         });
@@ -202,7 +202,7 @@ class ProductService {
   }
 
   async addAttachment(productNumber, attachmentData) {
-    const product = await Article.findOne({ productNumber: productNumber });
+    const product = await Product.findOne({ productNumber: productNumber });
     product.attachmentsMetadata = [...product.attachmentsMetadata, attachmentData];
 
     const firstPdfIdx = _.findIndex(product.attachmentsMetadata, att => att.mimeType === "application/pdf");

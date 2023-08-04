@@ -3,7 +3,7 @@ const { setupAppWithUser } = require('../__utils__/expressUtils');
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
-    const { articles } = require("../__utils__/dataLoader");
+    const { products } = require("../__utils__/dataLoader");
     return {
       findPageOfDraftProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
@@ -11,7 +11,7 @@ jest.mock('../../src/services/product-service.js', () => {
         }
 
         return {
-          content: articles.filter(article => article.state === 'draft'),
+          content: products.filter(product => product.state === 'draft'),
         }
       }),
       findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
@@ -20,7 +20,7 @@ jest.mock('../../src/services/product-service.js', () => {
         }
 
         return {
-          content: articles.filter(article => article.state === 'posted'),
+          content: products.filter(product => product.state === 'posted'),
         }
       }),
       findPageOfProductsForUser: jest.fn().mockImplementation(() => {
@@ -29,7 +29,7 @@ jest.mock('../../src/services/product-service.js', () => {
         }
 
         return {
-          content: articles,
+          content: products,
         }
       })
     };

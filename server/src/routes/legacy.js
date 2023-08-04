@@ -13,10 +13,10 @@ router.get(
     /*
       #swagger.tags = ['Legacy']
       #swagger.deprecated = true
-      #swagger.summary = 'DEPRECATED: Retrieve a product for editing. Use GET /articles/{id}/edit'
+      #swagger.summary = 'DEPRECATED: Retrieve a product for editing. Use GET /products/{id}/edit'
      */
 
-    res.redirect(`/articles/${req.params.id}/edit`);
+    res.redirect(`/products/${req.params.id}/edit`);
   },
 );
 
@@ -36,20 +36,20 @@ router.get("/preload/documents/:id.json", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Retrieve a product details . Use GET /articles/{id}'
+  #swagger.summary = 'DEPRECATED: Retrieve a product details . Use GET /products/{id}'
  */
 
-  res.redirect(`/articles/${req.params.id}`);
+  res.redirect(`/products/${req.params.id}`);
 });
 
 router.get("/documents/:id/preview.json", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Retrieve a product for preview. Use GET /articles/{id}'
+  #swagger.summary = 'DEPRECATED: Retrieve a product for preview. Use GET /products/{id}'
  */
 
-  res.redirect(`/articles/${req.params.id}`);
+  res.redirect(`/products/${req.params.id}`);
 });
 
 router.get("/documents/:docNum/related_documents.json", function (req,res) {
@@ -87,20 +87,20 @@ router.get("/documents/:doc_num", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Retrieve a product details. Use GET /articles/{id}'
+  #swagger.summary = 'DEPRECATED: Retrieve a product details. Use GET /products/{id}'
  */
 
-  res.redirect(`/articles/${req.params.doc_num}`);
+  res.redirect(`/products/${req.params.doc_num}`);
 });
 
 router.get("/wires/:date_published/getWireByDate", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Retrieve products for a given date. Use GET /articles/date/{date}'
+  #swagger.summary = 'DEPRECATED: Retrieve products for a given date. Use GET /products/date/{date}'
  */
 
-  res.redirect(`/articles/date/${req.params.date_published}`);
+  res.redirect(`/products/date/${req.params.date_published}`);
 });
 
 router.put(
@@ -136,42 +136,51 @@ router.get(
   },
 );
 
-// TODO: This will go away once the UI changes to use DELETE /articles/:id
+// TODO: This will go away once the UI changes to use DELETE /products/:id
 router.delete("/documents/:id/deleteMe", async (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Deletes a product. Use DELETE /articles/{id}'
+  #swagger.summary = 'DEPRECATED: Deletes a product. Use DELETE /products/{id}'
  */
 
-  res.redirect(307, `/articles/${req.params.id}`);
+  res.redirect(307, `/products/${req.params.id}`);
 });
 
 router.post("/documents/:id/attachments", (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Upload an attachment to the product. Use POST /articles/{id}/attachments'
+  #swagger.summary = 'DEPRECATED: Upload an attachment to the product. Use POST /products/{id}/attachments'
  */
-  res.redirect(307, `/articles/${req.params.id}/attachments`);
+  res.redirect(307, `/products/${req.params.id}/attachments`);
+});
+
+router.post("/articles/processDocument", (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Process a product for create or updated. Use POST /products/processDocument'
+ */
+  res.redirect(307, `/products/processDocument`);
 });
 
 router.get("/documents/:id/attachments/:attachmentId", (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Download an attachment attached to the product. Use GET /articles/{id}/attachments/{attachmentId}'
+  #swagger.summary = 'DEPRECATED: Download an attachment attached to the product. Use GET /products/{id}/attachments/{attachmentId}'
  */
-  res.redirect(`/articles/${req.params.id}/attachments/${req.params.attachmentId}`);
+  res.redirect(`/products/${req.params.id}/attachments/${req.params.attachmentId}`);
 });
 
 router.delete("/documents/:id/attachments/:attachmentId", (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Remove an attachment attached to the product. Use DELETE /articles/{id}/attachments/{attachmentId}'
+  #swagger.summary = 'DEPRECATED: Remove an attachment attached to the product. Use DELETE /products/{id}/attachments/{attachmentId}'
  */
-  res.redirect(`/articles/${req.params.id}/attachments/${req.params.attachmentId}`);
+  res.redirect(`/products/${req.params.id}/attachments/${req.params.attachmentId}`);
 });
 
 module.exports = router;

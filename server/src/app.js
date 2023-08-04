@@ -50,7 +50,7 @@ app.use(
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({
-      mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles`,
+      mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/products`,
     }), // Default TTL is 14 days
   }),
 );
@@ -152,7 +152,7 @@ if (process.env.MXS_ENV === "container") {
  * Route setup
  **********************************/
 const alertRouter = require("./routes/alerts");
-const articlesRouter = require("./routes/articles");
+const productsRouter = require("./routes/products");
 const authRouter = require("./routes/auth");
 const homeRouter = require("./routes/home");
 const indexRouter = require("./routes");
@@ -163,7 +163,7 @@ const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use(indexRouter);
 app.use(alertRouter);
-app.use(articlesRouter);
+app.use(productsRouter);
 app.use(authRouter);
 app.use(homeRouter);
 app.use(searchRouter);

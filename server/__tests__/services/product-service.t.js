@@ -9,7 +9,7 @@ const utc = require("dayjs/plugin/utc");
 const dayjs = require("dayjs");
 dayjs.extend(utc);
 
-const Article = require("../../src/models/articles");
+const Article = require("../../src/models/products");
 
 jest.mock('../../src/services/product-search-service.js', () => {
   return jest.fn().mockImplementation(() => {

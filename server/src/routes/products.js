@@ -8,7 +8,7 @@ dayjs.extend(utc);
 
 const { v4: uuidv4 } = require("uuid");
 
-const Article = require("../models/articles");
+const Product = require("../models/products");
 
 const { handleMongooseError } = require("../util/errors");
 
@@ -29,8 +29,8 @@ const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'}); // TODO: This needs to be updated
 const upload = multer({ storage: engine });
 
-//GET articles by date
-router.get('/articles/date/:date', async (req, res) => {
+//GET products by date
+router.get('/products/date/:date', async (req, res) => {
   /*
     #swagger.summary = 'Get a list of products for a given date'
     #swagger.tags = ['Products']
@@ -42,22 +42,22 @@ router.get('/articles/date/:date', async (req, res) => {
    */
 
   try {
-    const articles = await productService.findAllByDate(req.params.date);
-    res.json({ features: articles.map((article) => article.forWire) });
+    const products = await productService.findAllByDate(req.params.date);
+    res.json({ features: products.map((product) => product.forWire) });
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
     handleMongooseError(
-      `Unable to find articles for date ${req.params.date}`,
+      `Unable to find products for date ${req.params.date}`,
       error
     );
     res.json({
-      error: `Unable to find articles for date ${req.params.date}: ${error.message}`,
+      error: `Unable to find products for date ${req.params.date}: ${error.message}`,
     });
   }
 });
 
-//GET articles by id
-router.get('/articles/:productNumber', async (req, res) => {
+//GET products by id
+router.get('/products/:productNumber', async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product with a given product number'
     #swagger.tags = ['Products']
@@ -69,44 +69,44 @@ router.get('/articles/:productNumber', async (req, res) => {
    */
 
   try {
-    const article = await productService.findByProductNumber(req.params.productNumber);
-    res.json(article.data.details);
+    const product = await productService.findByProductNumber(req.params.productNumber);
+    res.json(product.data.details);
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
     handleMongooseError(
-      `Unable to find article with product number ${req.params.productNumber}`,
+      `Unable to find product with product number ${req.params.productNumber}`,
       error,
     );
     res.json({
-      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+      error: `Unable to find product with product number ${req.params.productNumber}: ${error.message}`,
     });
   }
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
-router.post('/articles/processDocument', (req, res) => {
+router.post('/products/processDocument', (req, res) => {
   /*
     #swagger.tags = ['Products']
     #swagger.deprecated = true
     #swagger.summary = 'DEPRECATED: Single endpoint that supports create, publish, and save/update actions. Use dedicated endpoints to accomplish the same calls.'
     #swagger.responses[200] = {
-      description: 'Updates a given product. Same action as PUT /articles/{id}'
+      description: 'Updates a given product. Same action as PUT /products/{id}'
     }
     #swagger.responses[307] = {
-      description: 'Redirects the create action to POST /articles'
+      description: 'Redirects the create action to POST /products'
     }
    */
-
+  console.log("HERE1", req.body)
   switch (req.body.document_action) {
     case 'create':
-      res.redirect(307, '/articles/');
+      res.redirect(307, '/products/');
       break;
     case "publish":
       req.body.state = "posted";
-      updateArticle(req.body.id, req, res);
+      updateProduct(req.body.id, req, res);
       break;
     case "save":
-      updateArticle(req.body.id, req, res);
+      updateProduct(req.body.id, req, res);
       break;
     default:
       res.sendStatus(404);
@@ -114,7 +114,7 @@ router.post('/articles/processDocument', (req, res) => {
 });
 
 // POST
-router.post('/articles/', async (req, res) => {
+router.post('/products/', async (req, res) => {
   /*
     #swagger.summary = 'Create a new product'
     #swagger.tags = ['Products']
@@ -124,7 +124,7 @@ router.post('/articles/', async (req, res) => {
     }
     #swagger.responses[200] = {
       schema: {
-        article: {
+        product: {
           id: ''
         },
         doc_num: ''
@@ -140,7 +140,7 @@ router.post('/articles/', async (req, res) => {
     const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
     const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
 
-    const article = new Article({
+    const product = new Product({
       createdAt: dayjs().toDate(),
       createdBy: {
         id: currentUser.id,
@@ -166,8 +166,8 @@ router.post('/articles/', async (req, res) => {
     });
 
     try {
-      const savedArticle = await productService.createProduct(article);
-      res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
+      const savedProduct = await productService.createProduct(product);
+      res.json({ product: { id: savedProduct.id }, doc_num: savedProduct.productNumber, article: { id: savedProduct.id }, doc_num: savedProduct.productNumber });
     } catch (error) {
       res.json({ error: `There was a problem creating product: ${error.message}` });
     }
@@ -175,7 +175,7 @@ router.post('/articles/', async (req, res) => {
 });
 
 // Fetch single post
-router.get('/articles/:id/edit', async (req, res) => {
+router.get('/products/:id/edit', async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product for editing'
     #swagger.tags = ['Products']
@@ -191,17 +191,17 @@ router.get('/articles/:id/edit', async (req, res) => {
     res.json(product.data.document);
   } catch (error) {
     handleMongooseError(
-      `Unable to find article with id ${req.params.id}`,
+      `Unable to find product with id ${req.params.id}`,
       error
     );
     res.json({
-      error: `Unable to find article with id ${req.params.id}: ${error.message}`,
+      error: `Unable to find product with id ${req.params.id}: ${error.message}`,
     });
   }
 });
 
 
-router.get('/articles/:id/view', async (req, res) => {
+router.get('/products/:id/view', async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product for viewing details'
     #swagger.tags = ['Products']
@@ -217,17 +217,17 @@ router.get('/articles/:id/view', async (req, res) => {
     res.json(product.data.details);
   } catch (error) {
     handleMongooseError(
-      `Unable to find article with id ${req.params.id}`,
+      `Unable to find product with id ${req.params.id}`,
       error
     );
     res.json({
-      error: `Unable to find article with id ${req.params.id}: ${error.message}`,
+      error: `Unable to find product with id ${req.params.id}: ${error.message}`,
     });
   }
 });
 
-// Update an article
-router.put('/articles/:id', async (req, res) => {
+// Update an product
+router.put('/products/:id', async (req, res) => {
   /*
     #swagger.summary = 'Update a product'
     #swagger.tags = ['Products']
@@ -238,7 +238,7 @@ router.put('/articles/:id', async (req, res) => {
     #swagger.responses[200] = {
       schema: {
         success: true,
-        article: {
+        product: {
           $ref: '#/definitions/ProductDocument'
         },
         date: '2023-01-01',
@@ -249,13 +249,13 @@ router.put('/articles/:id', async (req, res) => {
     }
    */
 
-  await updateArticle(req.params.id, req, res);
+  await updateProduct(req.params.id, req, res);
 });
 
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
-async function updateArticle(id, req, res) {
+async function updateProduct(id, req, res) {
   const countries = await metadataService.findCountriesFor(req.body.countries);
   const subregions = await metadataService.findSubRegionsForCountries(
     req.body.countries
@@ -285,7 +285,7 @@ async function updateArticle(id, req, res) {
     req.body.non_state_actors
   );
 
-  const article = {
+  const product = {
     classification: req.body.classification,
     classificationXml: req.body.classification, // This will need to changed when we have real xml
     coauthors: coauthors.map(({name, code}) => ({name, code})),
@@ -324,14 +324,14 @@ async function updateArticle(id, req, res) {
   };
 
   try {
-    const updatedArticle = await productService.updateProduct(id, article);
+    const updatedProduct = await productService.updateProduct(id, product);
     res.json({
       success: true,
-      article: updatedArticle.data.document,
-      date: dayjs(updatedArticle.datePublished).format('YYYY-MM-DD'),
-      doc_num: updatedArticle.productNumber,
-      id: updatedArticle._id,
-      state: updatedArticle.state,
+      product: updatedProduct.data.document,
+      date: dayjs(updatedProduct.datePublished).format('YYYY-MM-DD'),
+      doc_num: updatedProduct.productNumber,
+      id: updatedProduct._id,
+      state: updatedProduct.state,
     });
   } catch (error) {
     res.json({
@@ -339,8 +339,8 @@ async function updateArticle(id, req, res) {
     });
   }
 }
-// Delete an article
-router.delete('/articles/:id', async (req, res) => {
+// Delete an product
+router.delete('/products/:id', async (req, res) => {
   /*
     #swagger.summary = 'Delete a given product'
     #swagger.tags = ['Products']
@@ -355,11 +355,11 @@ router.delete('/articles/:id', async (req, res) => {
     await productService.deleteProduct(req.params.id);
     res.json({success: true});
   } catch (error) {
-    res.json({error: 'Unable to delete article'});
+    res.json({error: 'Unable to delete product'});
   }
 });
 
-router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res) => {
+router.post('/products/:productNumber/attachments', upload.single('file'), async (req, res) => {
   /*
     #swagger.summary = 'Upload an attachment for the given product'
     #swagger.tags = ['Products']
@@ -393,7 +393,7 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
   res.json({att_id: id, success: true});
 });
 
-router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
+router.get('/products/:productNumber/attachments/:attachmentId', async (req, res) => {
   /*
     #swagger.summary = 'Download a given attachment for the given product'
     #swagger.tags = ['Products']
@@ -434,7 +434,7 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
   }
 });
 
-router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
+router.delete('/products/:productNumber/attachments/:attachmentId', async (req, res) => {
   /*
     #swagger.summary = 'Remove a given attachment for the given product'
     #swagger.tags = ['Products']

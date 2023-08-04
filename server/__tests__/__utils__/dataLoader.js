@@ -1,4 +1,4 @@
-const Article = require("../../src/models/articles");
+const Product = require("../../src/models/products");
 const Metadata = require("../../src/models/metadata");
 
 const { Client } = require("@elastic/elasticsearch");
@@ -8,8 +8,8 @@ const { Sequelize } = require("sequelize");
 
 const { logger } = require("../../src/config/logger");
 
-const articles = [
-  new Article({
+const products = [
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -81,7 +81,7 @@ const articles = [
       },
     ],
     summary:
-      "Summary: This is a test summary description of this article. The contents of this article is coming from an article template that's published into our system. The key/value pairs of this article contain many properties that are used to determine the type of article and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
+      "Summary: This is a test summary description of this product. The contents of this product is coming from an product template that's published into our system. The key/value pairs of this product contain many properties that are used to determine the type of product and other valuable metadata that feeds into the rest of the system. Some more text here to keep the summary going for much longer and address concerns with the line clamp plugin for TailwindCSS.",
     summaryClassification: "U",
     summaryClassificationXml: "",
     title:
@@ -97,7 +97,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: false,
   }),
-  new Article({
+  new Product({
     classification: "S",
     classificationXml: "",
     countries: [
@@ -218,7 +218,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: false,
   }),
-  new Article({
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -306,7 +306,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: true,
   }),
-  new Article({
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -385,7 +385,7 @@ const articles = [
     updatedAt: new Date("2022-09-01T18:42:30Z"),
     worldwide: true,
   }),
-  new Article({
+  new Product({
     classification: "UNC",
     classificationXml: "",
     countries: [],
@@ -2827,11 +2827,11 @@ const metadata = new Metadata({
 const loadElasticSearch = async (esUrl) => {
   const client = new Client({ node: esUrl });
 
-  for (const article of articles) {
+  for (const product of products) {
     await client.index({
       index: "products",
-      body: article.indexable,
-      id: article.id,
+      body: product.indexable,
+      id: product.id,
     });
   }
 
@@ -2847,16 +2847,16 @@ const loadMetadata = async (mongoUrl) => {
   mongoose.connection.close();
 };
 
-const loadArticlesIntoMongo = async (mongoUrl) => {
+const loadProductsIntoMongo = async (mongoUrl) => {
   await mongoose.connect(mongoUrl, {
     useNewUrlParser: true,
   });
 
-  for (let article of articles) {
-    if (Array.isArray(article.htmlBody)) {
-      article.htmlBody = article.htmlBody.join("");
+  for (let product of products) {
+    if (Array.isArray(product.htmlBody)) {
+      product.htmlBody = product.htmlBody.join("");
     }
-    await article.save();
+    await product.save();
   }
   mongoose.connection.close();
 };
@@ -2881,7 +2881,7 @@ const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
   await client.index({
     index: "savedproducts",
     body: {
-      ...articles[0].indexable,
+      ...products[0].indexable,
       savedProductUserId: 1,
       productId: "WIReWIRe_sample_1",
       id: savedProductId
@@ -2955,12 +2955,12 @@ const loadUsers = async (postgresUrl) => {
 module.exports = {
   loadElasticSearch,
   loadMetadata,
-  loadArticlesIntoMongo,
+  loadProductsIntoMongo,
   loadSavedProducts,
   loadSavedProductsForSearch,
   loadCollections,
   loadCollectionProducts,
   loadUsers,
-  articles,
+  products,
   metadata,
 };

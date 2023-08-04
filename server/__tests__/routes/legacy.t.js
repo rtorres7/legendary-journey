@@ -2,39 +2,39 @@ const request = require('supertest');
 const { setupApp } = require("../__utils__/expressUtils");
 
 describe('Legacy Routes', () => {
-  describe('GET /wires/:date_published/articles/:id/getDocumentData', () => {
-    it('should redirect to /articles/:id/edit', () => {
+  describe('GET /wires/:date_published/products/:id/getDocumentData', () => {
+    it('should redirect to /products/:id/edit', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
 
       return request(app)
-        .get('/wires/2022-09-01/articles/1/getDocumentData')
+        .get('/wires/2022-09-01/products/1/getDocumentData')
         .expect(302)
-        .expect('Location', '/articles/1/edit');
+        .expect('Location', '/products/1/edit');
     });
   });
 
   describe('GET /preload/documents/:id.json', () => {
-    it('should redirect to /articles/:id', () => {
+    it('should redirect to /products/:id', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
 
       return request(app)
         .get('/preload/documents/1.json')
         .expect(302)
-        .expect('Location', '/articles/1');
+        .expect('Location', '/products/1');
     });
   });
 
   describe('GET /documents/:id/preview.json', () => {
-    it('should redirect to /articles/:id', () => {
+    it('should redirect to /products/:id', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
 
       return request(app)
         .get('/documents/1/preview.json')
         .expect(302)
-        .expect('Location', '/articles/1');
+        .expect('Location', '/products/1');
     });
   });
 
@@ -51,30 +51,30 @@ describe('Legacy Routes', () => {
   });
 
   describe('GET /doucments/:doc_num', () => {
-    it('should redirect to /articles/:id', () => {
+    it('should redirect to /products/:id', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
 
       return request(app)
         .get('/documents/1')
         .expect(302)
-        .expect('Location', '/articles/1');
+        .expect('Location', '/products/1');
     });
   });
 
   describe('GET /wires/:date_published/getWireByDate', () => {
-    it('should redirect to /articles/date/:date_published', () => {
+    it('should redirect to /products/date/:date_published', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
 
       return request(app)
         .get('/wires/2022-09-01/getWireByDate')
         .expect(302)
-        .expect('Location', '/articles/date/2022-09-01');
+        .expect('Location', '/products/date/2022-09-01');
     });
   });
 
-  describe('PUT /wires/:date_published/articles/:id/visitorCount', () => {
+  describe('PUT /wires/:date_published/products/:id/visitorCount', () => {
     it('should return success = true', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
@@ -97,14 +97,14 @@ describe('Legacy Routes', () => {
   });
 
   describe('DELETE /documents/:id/deleteMe', () => {
-    it('should redirect to /articles/:id/', () => {
+    it('should redirect to /products/:id/', () => {
       const router = require('../../src/routes/legacy');
       const app = setupApp(router);
 
       return request(app)
         .delete('/documents/1/deleteMe')
         .expect(307)
-        .expect('Location', '/articles/1');
+        .expect('Location', '/products/1');
     });
   });
 });

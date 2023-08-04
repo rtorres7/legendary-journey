@@ -37,7 +37,7 @@ AttachmentSchema.virtual("file_size").get(function () {
   return this.fileSize;
 });
 
-const ArticleSchema = new Schema(
+const ProductSchema = new Schema(
   {
     attachmentsMetadata: [AttachmentSchema],
     classification: String,
@@ -106,7 +106,7 @@ const ArticleSchema = new Schema(
   },
 );
 
-ArticleSchema.virtual("features").get(function () {
+ProductSchema.virtual("features").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
@@ -147,7 +147,7 @@ ArticleSchema.virtual("features").get(function () {
   };
 });
 
-ArticleSchema.virtual("forWire").get(function () {
+ProductSchema.virtual("forWire").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
@@ -182,7 +182,7 @@ ArticleSchema.virtual("forWire").get(function () {
   };
 });
 
-ArticleSchema.virtual("indexable").get(function () {
+ProductSchema.virtual("indexable").get(function () {
   return {
     classification: this.classification,
     classificationXml: this.classificationXml,
@@ -213,7 +213,7 @@ ArticleSchema.virtual("indexable").get(function () {
   };
 });
 
-ArticleSchema.virtual("data.document").get(function () {
+ProductSchema.virtual("data.document").get(function () {
   return {
     attachments: this.attachmentsMetadata,
     classification: this.classification,
@@ -262,7 +262,7 @@ ArticleSchema.virtual("data.document").get(function () {
   };
 });
 
-ArticleSchema.virtual("data.details").get(function () {
+ProductSchema.virtual("data.details").get(function () {
   return {
     attachmentsMetadata: this.attachmentsMetadata,
     classification: this.classification,
@@ -320,6 +320,6 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
-const Article = mongoose.model("Article", ArticleSchema, "articles");
+const Product = mongoose.model("Product", ProductSchema, "products");
 
-module.exports = Article;
+module.exports = Product;

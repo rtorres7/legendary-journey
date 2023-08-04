@@ -1,47 +1,47 @@
 const request = require("supertest");
 const { setupApp, setupAppWithUser } = require('../__utils__/expressUtils');
-const { articles } = require("../__utils__/dataLoader");
-const router = require('../../src/routes/articles');
+const { products } = require("../__utils__/dataLoader");
+const router = require('../../src/routes/products');
 const dayjs = require('dayjs');
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
-    const { articles } = require("../__utils__/dataLoader");
+    const { products } = require("../__utils__/dataLoader");
     return {
       findAllByDate: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
 
-        return [articles[1]];
+        return [products[1]];
       }),
       findByProductNumber: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
 
-        return articles[0];
+        return products[0];
       }),
       updateProduct: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
 
-        return articles[0];
+        return products[0];
       }),
       createProduct: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
 
-        return articles[0];
+        return products[0];
       }),
       findById: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
 
-        return articles[0];
+        return products[0];
       }),
       deleteProduct: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
@@ -72,19 +72,19 @@ jest.mock('../../src/services/metadata.js', () => {
   });
 });
 
-describe("Article Routes", () => {
+describe("Product Routes", () => {
   afterEach(() => {
     jest.clearAllMocks();
     delete process.env.THROW_TEST_ERROR;
   });
 
-  describe("GET /articles/date/:date", () => {
-    it("should return all articles for the given date", () => {
-      const router = require('../../src/routes/articles');
+  describe("GET /products/date/:date", () => {
+    it("should return all products for the given date", () => {
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get("/articles/date/2022-09-01")
+        .get("/products/date/2022-09-01")
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -96,24 +96,24 @@ describe("Article Routes", () => {
     it('should return error response when lookup fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get('/articles/date/2022-09-01')
+        .get('/products/date/2022-09-01')
         .expect(200, {
-          error: 'Unable to find articles for date 2022-09-01: whoops'
+          error: 'Unable to find products for date 2022-09-01: whoops'
         });
     });
   });
 
-  describe("GET /articles/:id", () => {
-    it("should return an article for the given productNumber", () => {
-      const router = require('../../src/routes/articles');
+  describe("GET /products/:id", () => {
+    it("should return an product for the given productNumber", () => {
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get("/articles/WIReWIRe_sample_1")
+        .get("/products/WIReWIRe_sample_1")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -124,34 +124,34 @@ describe("Article Routes", () => {
     it('should return error response when lookup fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get('/articles/WIReWIRe_sample_1')
+        .get('/products/WIReWIRe_sample_1')
         .expect(200, {
-          error: 'Unable to find article with product number WIReWIRe_sample_1: whoops'
+          error: 'Unable to find product with product number WIReWIRe_sample_1: whoops'
         });
     });
   });
 
-  describe("POST /articles/processDocument", () => {
-    it("should send redirect to POST /articles when document_action is create", () => {
-      const router = require('../../src/routes/articles');
+  describe("POST /products/processDocument", () => {
+    it("should send redirect to POST /products when document_action is create", () => {
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .post("/articles/processDocument")
+        .post("/products/processDocument")
         .send({ document_action: "create" })
         .expect(307)
-        .expect("Location", "/articles/");
+        .expect("Location", "/products/");
     });
 
     it("should send update document when document_action is save", async () => {
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
-      const original = articles[0];
+      const original = products[0];
       const postData = {
         document_action: "save",
         classification: "S",
@@ -168,7 +168,7 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles/processDocument")
+        .post("/products/processDocument")
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
@@ -182,19 +182,19 @@ describe("Article Routes", () => {
     });
 
     it("should send a 404 if any other action is given", () => {
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .post("/articles/processDocument")
+        .post("/products/processDocument")
         .send({ document_action: "other" })
         .expect(404);
     });
   });
 
-  describe("POST /articles", () => {
-    it("should create the given article", () => {
-      const router = require('../../src/routes/articles');
+  describe("POST /products", () => {
+    it("should create the given product", () => {
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
@@ -204,19 +204,19 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles")
+        .post("/products")
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
-          expect(res.body.article).toBeDefined();
-          expect(res.body.article.id).toBeDefined();
+          expect(res.body.product).toBeDefined();
+          expect(res.body.product.id).toBeDefined();
           expect(res.body.doc_num).toBeDefined();
         });
     });
 
-    it("should create the given article including producing_office", () => {
-      const router = require('../../src/routes/articles');
+    it("should create the given product including producing_office", () => {
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
@@ -227,19 +227,19 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles")
+        .post("/products")
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
-          expect(res.body.article).toBeDefined();
-          expect(res.body.article.id).toBeDefined();
+          expect(res.body.product).toBeDefined();
+          expect(res.body.product.id).toBeDefined();
           expect(res.body.doc_num).toBeDefined();
         });
     });
 
-    it("should create the given article defaulting date published", () => {
-      const router = require('../../src/routes/articles');
+    it("should create the given product defaulting date published", () => {
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
@@ -248,13 +248,13 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles")
+        .post("/products")
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
-          expect(res.body.article).toBeDefined();
-          expect(res.body.article.id).toBeDefined();
+          expect(res.body.product).toBeDefined();
+          expect(res.body.product.id).toBeDefined();
           expect(res.body.doc_num).toBeDefined();
         });
     });
@@ -262,7 +262,7 @@ describe("Article Routes", () => {
     it('should return error response when create fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
       const postData = {
@@ -272,7 +272,7 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .post("/articles")
+        .post("/products")
         .send(postData)
         .expect(200, {
           error: 'There was a problem creating product: whoops'
@@ -280,68 +280,68 @@ describe("Article Routes", () => {
     });
   });
 
-  describe("GET /articles/:id/edit", () => {
-    it("should return the requested article for editing", async () => {
-      const router = require('../../src/routes/articles');
+  describe("GET /products/:id/edit", () => {
+    it("should return the requested product for editing", async () => {
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get("/articles/64709619aa530082dd5cc416/edit")
+        .get("/products/64709619aa530082dd5cc416/edit")
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
-          expect(res.body.id).toBe(articles[0].id);
+          expect(res.body.id).toBe(products[0].id);
         });
     });
 
     it('should return error response when lookup fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get('/articles/64709619aa530082dd5cc416/edit')
+        .get('/products/64709619aa530082dd5cc416/edit')
         .expect(200, {
-          error: 'Unable to find article with id 64709619aa530082dd5cc416: whoops'
+          error: 'Unable to find product with id 64709619aa530082dd5cc416: whoops'
         });
     });
   });
 
-  describe("GET /articles/:id/view", () => {
-    it("should return the requested article for viewing", async () => {
-      const router = require('../../src/routes/articles');
+  describe("GET /products/:id/view", () => {
+    it("should return the requested product for viewing", async () => {
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get("/articles/64709619aa530082dd5cc416/view")
+        .get("/products/64709619aa530082dd5cc416/view")
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
-          expect(res.body.id).toBe(articles[0].id);
+          expect(res.body.id).toBe(products[0].id);
         });
     });
 
     it('should return error response when lookup fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .get('/articles/64709619aa530082dd5cc416/view')
+        .get('/products/64709619aa530082dd5cc416/view')
         .expect(200, {
-          error: 'Unable to find article with id 64709619aa530082dd5cc416: whoops'
+          error: 'Unable to find product with id 64709619aa530082dd5cc416: whoops'
         });
     });
   });
 
-  describe("PUT /articles/:id", () => {
+  describe("PUT /products/:id", () => {
     it("should update document", async () => {
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
-      const original = articles[0];
+      const original = products[0];
 
       const postData = {
         document_action: "save",
@@ -352,7 +352,7 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .put(`/articles/${original.id}`)
+        .put(`/products/${original.id}`)
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
@@ -368,10 +368,10 @@ describe("Article Routes", () => {
     it('should return error response when update fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupAppWithUser(router, {id: 1});
 
-      const original = articles[0];
+      const original = products[0];
 
       const postData = {
         document_action: "save",
@@ -382,7 +382,7 @@ describe("Article Routes", () => {
       };
 
       return request(app)
-        .put(`/articles/${original.id}`)
+        .put(`/products/${original.id}`)
         .send(postData)
         .expect(200, {
           error: 'There was a problem updating product: whoops'
@@ -390,26 +390,26 @@ describe("Article Routes", () => {
     });
   });
 
-  describe("DELETE /articles/:id", () => {
-    it("should delete the article from the db", () => {
-      const router = require('../../src/routes/articles');
+  describe("DELETE /products/:id", () => {
+    it("should delete the product from the db", () => {
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .delete("/articles/64709619aa530082dd5cc416")
+        .delete("/products/64709619aa530082dd5cc416")
         .expect(200, { success: true });
     });
 
     it('should return error response when delete fails', () => {
       process.env.THROW_TEST_ERROR = true;
 
-      const router = require('../../src/routes/articles');
+      const router = require('../../src/routes/products');
       const app = setupApp(router);
 
       return request(app)
-        .delete('/articles/64709619aa530082dd5cc416')
+        .delete('/products/64709619aa530082dd5cc416')
         .expect(200, {
-          error: 'Unable to delete article'
+          error: 'Unable to delete product'
         });
     });
   });

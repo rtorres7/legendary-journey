@@ -4,7 +4,7 @@ const { setupApp } = require("../__utils__/expressUtils");
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
-    const { articles } = require("../__utils__/dataLoader");
+    const { products } = require("../__utils__/dataLoader");
     return {
       findFeaturesAndBriefs: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
@@ -12,8 +12,8 @@ jest.mock('../../src/services/product-service.js', () => {
         }
 
         return {
-          featured: articles,
-          briefs: articles.slice(0, 3),
+          featured: products,
+          briefs: products.slice(0, 3),
         }
       })
     };
@@ -26,7 +26,7 @@ describe('Home Routes', () => {
   });
 
   describe('GET /features', () => {
-    it("should return featured articles and briefs", () => {
+    it("should return featured products and briefs", () => {
       const app = express();
       app.use(express.json());
 
