@@ -37,7 +37,7 @@ class WorkspaceService {
       savedProductUserId: userId,
     };
 
-    const results = await runSearch.runSearch(
+    const results = await runSearch(
       term,
       this.index,
       perPage,
@@ -151,7 +151,7 @@ class WorkspaceService {
       collection: collectionId
     };
 
-    const results = await runSearch.runSearch(
+    const results = await runSearch(
       term,
       this.index,
       perPage,

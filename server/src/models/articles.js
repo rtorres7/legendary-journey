@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const path = require('path');
 const _ = require('lodash');
+const dayjs = require("dayjs");
+
 
 const Schema = mongoose.Schema;
 
@@ -348,15 +350,19 @@ ArticleSchema.virtual("data.details").get(function () {
 });
 
 function findArticleImage(attachmentsMetadata) {
-  const images = [];
-  for (const i of attachmentsMetadata) {
-    if (i.usage === 'article') {
-      images.push(i);
+  const latest = _.reduce(attachmentsMetadata, function(result, value) {
+    if (value.usage === 'article') {
+      if (result == null) {
+        return value;
+      }
+      if (dayjs(result.updatedAt).isBefore(dayjs(value.updatedAt))) {
+        return value;
+      }
     }
-  };
-  return images;
+    return result;
+  }, null);
+  return [latest];
 }
-
 
 const Article = mongoose.model('Article', ArticleSchema, 'articles');
 

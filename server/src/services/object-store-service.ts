@@ -143,21 +143,21 @@ export class ObjectStorageEngine implements multer.StorageEngine {
   }
 
   async _handleFile(req: Request, file: Express.Multer.File, cb: (error?: any, info?: Partial<Express.Multer.File> & Record<string, any>) => void): Promise<void> {
-    logger.info('ObjectStorageEngine._handleFile:  ' + JSON.stringify(_.pick(file, ['originalname', 'encoding', 'mimetype', 'size', 'destination', 'filename', 'path'])));
-
+    logger.info('ObjectStorageEngine._handleFile:  %O', file);
+    
     const bucketExists = await this.service.bucketExists(this.bucket);
     if (!bucketExists) {
       await this.service.makeBucket(this.bucket);
     }
 
     const id = uuidv4();
-    const objectPath = `${this.prefix}/${id}/${file.originalname}`;
-    const uploadedObject = await this.service.putObject(this.bucket, objectPath, file.stream, { 'content-type': file.mimetype });
-    const stats = await this.service.statObject(this.bucket, objectPath);
+    const path = `${this.prefix}/${id}/${file.originalname}`;
+    const uploadedObject = await this.service.putObject(this.bucket, path, file.stream, { 'content-type': file.mimetype });
+    const stats = await this.service.statObject(this.bucket, path);
 
     cb(null, {
       bucket: this.bucket,
-      path: objectPath,
+      path,
       etag: uploadedObject.etag,
       version: uploadedObject.versionId,
       size: stats.size,
@@ -166,7 +166,7 @@ export class ObjectStorageEngine implements multer.StorageEngine {
   }
 
   async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void): Promise<void> {
-    logger.info('ObjectStorageEngine._removeFile:  ' + JSON.stringify(_.pick(file, ['originalname', 'encoding', 'mimetype', 'size', 'destination', 'filename', 'path'])));
+    logger.info('ObjectStorageEngine._removeFile:  %O', file);
     await this.service.removeObject(this.bucket, file.path);
     cb(null);
   }

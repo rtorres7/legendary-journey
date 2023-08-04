@@ -373,7 +373,7 @@ router.delete('/articles/:id', async (req, res) => {
   }
 });
 
-router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res) => {
+router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res, next) => {
   /*
     #swagger.summary = 'Upload an attachment for the given product'
     #swagger.tags = ['Products']
@@ -390,28 +390,33 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
     }
    */
   
-  const id = uuidv4();
-  const parsed = path.parse(this.fileName);
-  const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
-  const isVisible = req.params.is_visible ? req.params.is_visible !== 'false' : !isThumbnail;
- 
-  const attachment = {
-    attachmentId: id,
-    fileName: req.file.originalname,
-    mimeType: req.file.mimetype,
-    createdAt: new Date(),
-    fileSize: req.file.size,
-    type: 'ATTACHMENT',
-    destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
-    visible: isVisible,
-  };
+  try {
+    const id = uuidv4();
+    const parsed = path.parse(req.file.originalname);
+    const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
+    const isVisible = req.params.is_visible ? req.params.is_visible !== 'false' : !isThumbnail;
   
-  
-  await productService.addAttachment(req.params.productNumber, attachment);
-  // logger.info(`POST /articles/${req.params.productNumber}/attachments:  attachmentId:${id}, is_visible:${req.params.is_visible}`);
-  // logger.info("%O", attachment);
+    const attachment = {
+      attachmentId: id,
+      fileName: req.file.originalname,
+      mimeType: req.file.mimetype,
+      createdAt: new Date(),
+      fileSize: req.file.size,
+      type: 'ATTACHMENT',
+      destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
+      visible: isVisible,
+    };
+    
+    
+    await productService.addAttachment(req.params.productNumber, attachment);
+    // logger.info(`POST /articles/${req.params.productNumber}/attachments:  attachmentId:${id}, is_visible:${req.params.is_visible}`);
+    // logger.info("%O", attachment);
 
-  res.json({att_id: id, success: true});
+    res.json({att_id: id, success: true});
+  } catch (err) {
+    logger.error(`POST /articles/${req.params.productNumber}/attachments:`, err);
+    next(err);
+  }
 });
 
 router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
