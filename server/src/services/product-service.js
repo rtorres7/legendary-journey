@@ -111,7 +111,6 @@ class ProductService {
 
   async findPageOfSavedProducts(userId, page, limit, offset, sortDir) {
     const savedAll = await this.#findAllSavedProducts(
-      userId,
       limit,
       offset,
       sortDir
@@ -121,7 +120,7 @@ class ProductService {
     return KiwiPage.of(
       page,
       limit,
-      draftCount,
+      savedCount,
       savedAll.map((saved) => saved.features)
     )
       .usingOneAsFirstPage()

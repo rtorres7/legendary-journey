@@ -134,11 +134,9 @@ router.get('/workspace/savedall', async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const {perPage, page, sortDir} = pagingParams(req);
-    const term = req.query.text;
-    const filters = req.query;
+    const {perPage, page, skip, sortDir} = pagingParams(req);
 
-    const savedProductsAll = await productService.findPageOfSavedProducts(currentUser.id, term, perPage, page, sortDir, filters);
+    const savedProductsAll = await productService.findPageOfSavedProducts(currentUser.id, page, perPage, skip, sortDir);
     res.json(savedProductsAll);
   });
 });
