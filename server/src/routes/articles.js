@@ -22,6 +22,8 @@ const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 
 const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
+const ProductSearchService = require("../services/product-search-service");
+const searchService = new ProductSearchService();
 
 const upload = objectStoreService.buildUpload("foo", "bar");
 const { logger } = require('../config/logger');
@@ -381,7 +383,7 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
     }
     #swagger.responses[200] = {
       schema: {
-        att_id: 'abc'
+        att_id: 'abc',
         success: true,
       }
     }
@@ -475,6 +477,8 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
     const objectName = path.substring(bucketSeparatorIndex);
 
     await objectStoreService.removeObject(bucket, objectName);
+
+    await searchService.removeIndexedAttachment(product.id, att.attachmentId);
   }
 
   res.json({ success: true });
