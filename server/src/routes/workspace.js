@@ -122,7 +122,7 @@ router.get('/workspace/saved', async (req, res) => {
   });
 });
 
-router.get('/workspace/savedall', async (req, res) => {
+router.get('/workspace/savedAll', async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a page of recently saved productd'
     #swagger.tags = ['Workspace']
