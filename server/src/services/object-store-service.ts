@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { BucketItem, BucketItemFromList, BucketItemStat, Client, ItemBucketMetadata, UploadedObjectInfo } from 'minio';
 import multer from 'multer';
 import { Readable } from 'stream';
+import { v4 as uuidv4 } from "uuid";
 
 import config from '../config/config';
 import logger from '../config/logger';
@@ -149,12 +150,14 @@ export class ObjectStorageEngine implements multer.StorageEngine {
       await this.service.makeBucket(this.bucket);
     }
 
-    const uploadedObject = await this.service.putObject(this.bucket, `${this.prefix}/${file.originalname}`, file.stream, { 'content-type': file.mimetype });
-    const stats = await this.service.statObject(this.bucket, `${this.prefix}/${file.originalname}`);
+    const id = uuidv4();
+    const objectPath = `${this.prefix}/${id}/${file.originalname}`;
+    const uploadedObject = await this.service.putObject(this.bucket, objectPath, file.stream, { 'content-type': file.mimetype });
+    const stats = await this.service.statObject(this.bucket, objectPath);
 
     cb(null, {
       bucket: this.bucket,
-      path: `${this.prefix}/${file.originalname}`,
+      path: objectPath,
       etag: uploadedObject.etag,
       version: uploadedObject.versionId,
       size: stats.size,
@@ -164,7 +167,7 @@ export class ObjectStorageEngine implements multer.StorageEngine {
 
   async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void): Promise<void> {
     logger.info('ObjectStorageEngine._removeFile:  ' + JSON.stringify(_.pick(file, ['originalname', 'encoding', 'mimetype', 'size', 'destination', 'filename', 'path'])));
-    await this.service.removeObject(this.bucket, `${this.prefix}/${file.originalname}`);
+    await this.service.removeObject(this.bucket, file.path);
     cb(null);
   }
 }
