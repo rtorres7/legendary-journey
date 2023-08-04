@@ -355,13 +355,15 @@ function findArticleImage(attachmentsMetadata) {
       if (result == null) {
         return value;
       }
-      if (dayjs(result.updatedAt).isBefore(dayjs(value.updatedAt))) {
+      // console.log(`result:${result.updated_at}, value:${value.updated_at}`);
+      if (dayjs(result.updated_at).isBefore(dayjs(value.updated_at))) {
         return value;
       }
     }
     return result;
   }, null);
-  return [latest];
+  // console.log(`latest:${latest.updated_at}`);
+  return latest != null ? [latest] : [];
 }
 
 const Article = mongoose.model('Article', ArticleSchema, 'articles');

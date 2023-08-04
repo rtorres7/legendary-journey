@@ -438,12 +438,26 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
 
   const product = await productService.findByProductNumber(req.params.productNumber);
 
-  const attachments = product.attachmentsMetadata.filter(att =>
-    att.id === req.params.attachmentId ||
-    att.attachmentId === req.params.attachmentId ||
-    att.fileName === req.params.attachmentId ||
-    (req.params.attachmentId === 'article' && att.usage === 'article')
-  );
+  let attachments;
+  if (req.params.attachmentId === 'article') {
+    const last = product.attachmentsMetadata.reduce((acc, value) => {
+      if (value.usage === 'article') {
+        if (acc == null) {
+          return value;
+        }
+        if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
+          return value;
+        }
+        return acc;
+      }
+    });
+    attachments = last != null ? [last] : [];
+  } else {
+    attachments = product.attachmentsMetadata.filter(att =>
+      att.id === req.params.attachmentId ||
+      att.attachmentId === req.params.attachmentId ||
+      att.fileName === req.params.attachmentId);
+  }
 
   if (attachments.length === 0) {
     KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
