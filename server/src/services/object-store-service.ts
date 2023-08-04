@@ -1,4 +1,3 @@
-// const constant = require("../util/constant.js");
 import { BucketItem, BucketItemFromList, BucketItemStat, Client, ItemBucketMetadata, UploadedObjectInfo } from 'minio';
 import { Readable } from 'stream';
 import config from '../config/config';
@@ -6,14 +5,15 @@ import config from '../config/config';
 export class ObjectStoreService {
   private static minioClient: Client;
 
-  constructor() {}
+  constructor() {
+    // Nothing to initialize
+  }
 
   /**
    * Minio.Client
    */
   getClient(): Client {
     if (ObjectStoreService.minioClient == null) {
-      // logger.info('ObjectStoreService.getClient:  connecting...');
       ObjectStoreService.minioClient = new Client({
         endPoint: config.minio.endPoint,
         port: config.minio.port,
@@ -21,7 +21,6 @@ export class ObjectStoreService {
         accessKey: config.minio.accessKey,
         secretKey: config.minio.secretKey,
       });
-      // logger.info('ObjectStoreService.getClient:  connected');
     }
     return ObjectStoreService.minioClient;
   }
@@ -31,8 +30,6 @@ export class ObjectStoreService {
    */
   async makeBucket(bucketName: string): Promise<void> {
     return this.getClient().makeBucket(bucketName);
-    // .then(() => logger.info(`ObjectStoreService.makeBucket:  created bucket ${bucketName}`))
-    // .catch((error) => logger.error("ObjectStoreService.makeBucket:", error));
   }
 
   /**
@@ -54,8 +51,6 @@ export class ObjectStoreService {
    */
   async removeBucket(bucketName: string): Promise<void> {
     return this.getClient().removeBucket(bucketName);
-    // .then(() => logger.info(`ObjectStoreService.removeBucket:  removed bucket ${bucketName}`))
-    // .catch((error) => logger.error("ObjectStoreService.removeBucket:", error));
   }
 
   /**
@@ -63,7 +58,6 @@ export class ObjectStoreService {
    */
   async listObjects(bucketName: string): Promise<BucketItem[]> {
     const bucketStream = this.getClient().listObjects(bucketName); // BucketStream<BucketItem>
-    // .catch((error) => logger.error("ObjectStoreService.listObjects:", error));
     return new Promise((resolve, reject) => {
       const data = [];
       bucketStream.on('data', (obj) => data.push(obj));

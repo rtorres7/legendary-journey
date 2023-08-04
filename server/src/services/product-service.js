@@ -208,7 +208,7 @@ class ProductService {
     const firstPdfIdx = _.findIndex(product.attachmentsMetadata, att => att.mimeType === "application/pdf");
 
     if (firstPdfIdx === product.attachmentsMetadata.length - 1) {
-      const [_protocol, path] = attachmentData.destination.split("//");
+      const [, path] = attachmentData.destination.split("//");
       const bucketSeparatorIndex = path.indexOf("/");
       const bucket = path.substring(0, bucketSeparatorIndex);
       const objectName = path.substring(bucketSeparatorIndex);
@@ -223,7 +223,7 @@ class ProductService {
       pdfStream.on("end", () => {
         const result = Buffer.concat(chunks);
         const base64String = result.toString("base64");
-        this.productSearchService.indexAttachment(product.id, base64String);
+        this.productSearchService.indexAttachment(product.id, attachmentData.attachmentId, base64String);
       });
     }
 

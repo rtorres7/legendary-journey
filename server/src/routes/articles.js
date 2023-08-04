@@ -20,6 +20,8 @@ const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
+const ProductSearchService = require("../services/product-search-service");
+const searchService = new ProductSearchService();
 
 const multer = require('multer');
 const ObjectStorageEngine = require('../util/object-storage-engine');
@@ -421,8 +423,7 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
     const attachment = attachments[0];
     res.attachment(attachment.fileName);
 
-    // eslint-disable-next-line no-unused-vars
-    const [_protocol, path] = attachment.destination.split("//");
+    const [, path] = attachment.destination.split("//");
     const bucketSeparatorIndex = path.indexOf("/");
     const bucket = path.substring(0, bucketSeparatorIndex);
     const objectName = path.substring(bucketSeparatorIndex);
@@ -451,13 +452,14 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
   await product.save();
 
   for (const att of removedAttachments) {
-    // eslint-disable-next-line no-unused-vars
-    const [_protocol, path] = att.destination.split("//");
+    const [, path] = att.destination.split("//");
     const bucketSeparatorIndex = path.indexOf("/");
     const bucket = path.substring(0, bucketSeparatorIndex);
     const objectName = path.substring(bucketSeparatorIndex);
 
     await objectStoreService.removeObject(bucket, objectName);
+
+    await searchService.removeIndexedAttachment(product.id, att.attachmentId);
   }
 
   res.json({ success: true });

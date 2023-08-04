@@ -71,6 +71,9 @@ const indices = [
         orgRestricted: {
           type: "text",
         },
+        pdfVersionAttachmentId: {
+          type: "text"
+        },
         productNumber: {
           type: "text",
         },
