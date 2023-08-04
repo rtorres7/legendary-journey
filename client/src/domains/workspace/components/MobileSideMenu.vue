@@ -80,24 +80,24 @@
                       </router-link>
                     </div>
                   </li>
+                  <li>
+                    <div>
+                      <router-link to="/workspace/saved">
+                        <div
+                          :class="
+                            route.name == 'saved'
+                              ? 'text-gray-50 bg-slate-800/90'
+                              : 'hover:text-gray-50 hover:bg-slate-800/90'
+                          "
+                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                        >
+                          <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
+                          <span class="ml-4">Saved</span>
+                        </div>
+                      </router-link>
+                    </div>
+                  </li>
                   <!-- <li>
-                  <div>
-                    <a href="/workspace#saved" class="">
-                      <div
-                        :class="
-                          isActivePage('#saved')
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <BookmarkIcon class="h-6 w-6" aria-hidden="true" />
-                        <span class="ml-4">Saved</span>
-                      </div>
-                    </a>
-                  </div>
-                </li>
-                <li>
                   <div>
                     <a href="/workspace#collections" class="">
                       <div
@@ -152,6 +152,7 @@ import {
   HomeIcon,
   BriefcaseIcon,
   XMarkIcon,
+  BookmarkIcon,
 } from "@heroicons/vue/24/outline";
 export default {
   components: {
@@ -163,6 +164,7 @@ export default {
     HomeIcon,
     BriefcaseIcon,
     XMarkIcon,
+    BookmarkIcon,
   },
   props: {
     isOpen: Boolean,
