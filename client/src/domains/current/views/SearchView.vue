@@ -442,13 +442,13 @@
             >
               <div class="h-fit px-2 text-center">
                 <span class="block font-semibold">{{
-                  dayjs(item.date_published).format("DD")
+                  dayjs(item.date_published).utc().format("DD")
                 }}</span>
                 <span class="block text-sm">{{
-                  dayjs(item.date_published).format("MMMM")
+                  dayjs(item.date_published).utc().format("MMMM")
                 }}</span>
                 <span class="block text-sm">{{
-                  dayjs(item.date_published).format("YYYY")
+                  dayjs(item.date_published).utc().format("YYYY")
                 }}</span>
               </div>
               <div class="relative px-2 w-full">
@@ -596,7 +596,10 @@
 </template>
 
 <script>
-import dayjs from "dayjs/esm/index.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
 import { productDetails } from "@current/data";
 import axios from "@/shared/config/wireAxios";
 import {

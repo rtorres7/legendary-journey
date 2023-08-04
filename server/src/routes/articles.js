@@ -368,7 +368,7 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
     }
     #swagger.responses[200] = {
       schema: {
-        att_id: 'abc'
+        att_id: 'abc',
         success: true,
       }
     }
