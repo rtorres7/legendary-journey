@@ -32,7 +32,7 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { isEmpty } from "@current/helpers";
+import { isEmpty, getProductImageUrl } from "@current/helpers";
 
 export default {
   props: {
@@ -53,6 +53,7 @@ export default {
     const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
 
     const hasArticleImage = (product) => {
+      console.log('ProductImage:', product);
       if (sampleImage.value || uploadBinary.value) {
         return true;
       }
@@ -77,23 +78,7 @@ export default {
       if (uploadBinary.value) {
         return uploadBinary.value;
       }
-      let updatedAt;
-      if (Array.isArray(product.images)) {
-        updatedAt = product.images.filter(
-          (image) => image.usage == "article"
-        )[0].updated_at;
-      } else if (product.images && product.images.table.article) {
-        updatedAt = product.images.table.article.table.updated_at;
-      } else {
-        updatedAt = "";
-      }
-      return (
-        window.location.origin +
-        "/documents/" +
-        product.doc_num +
-        "/images/article?updated_at=" +
-        updatedAt
-      );
+      return getProductImageUrl(product.images, product.doc_num);
     };
 
     const onImgLoad = () => {

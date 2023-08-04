@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const path = require('path');
 
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
@@ -390,7 +391,10 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
    */
   
   const id = uuidv4();
-  const visible = req.params.is_visible ? req.params.is_visible !== 'false' : true;
+  const parsed = path.parse(this.fileName);
+  const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
+  const isVisible = req.params.is_visible ? req.params.is_visible !== 'false' : !isThumbnail;
+ 
   const attachment = {
     attachmentId: id,
     fileName: req.file.originalname,
@@ -399,7 +403,7 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
     fileSize: req.file.size,
     type: 'ATTACHMENT',
     destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
-    visible
+    visible: isVisible,
   };
   
   

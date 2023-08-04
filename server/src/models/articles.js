@@ -136,7 +136,8 @@ ArticleSchema.virtual('features').get(function () {
     id: this.get('_id'),
     featureId: this.get('_id'),
     doc_num: this.productNumber,
-    images: this.images,
+    // images: this.images,
+    images: findArticleImage(this.attachmentsMetadata),
     needed: this.needed,
     orgRestricted: this.orgRestricted,
     nonStateActors: this.nonStateActors,
@@ -154,7 +155,8 @@ ArticleSchema.virtual('features').get(function () {
       doc_num: this.productNumber,
       feature_id: this.get('_id'),
       id: this.get('_id'),
-      images: this.images,
+      // images: this.images,
+      images: findArticleImage(this.attachmentsMetadata),
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       nonStateActors: this.nonStateActors,
@@ -175,7 +177,8 @@ ArticleSchema.virtual('forWire').get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get('_id'),
-    images: this.images,
+    // images: this.images,
+    images: findArticleImage(this.attachmentsMetadata),
     needed: this.needed,
     orgRestricted: this.orgRestricted,
     productNumber: this.productNumber,
@@ -191,7 +194,8 @@ ArticleSchema.virtual('forWire').get(function () {
       date_published: this.datePublished,
       doc_num: this.productNumber,
       id: this.get('_id'),
-      images: this.images,
+      // images: this.images,
+      images: findArticleImage(this.attachmentsMetadata),
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
@@ -238,20 +242,9 @@ ArticleSchema.virtual('indexable').get(function () {
 });
 
 ArticleSchema.virtual('data.document').get(function () {
-
-  const attachments = [];
-  const images = [];
-  for (const i of this.attachmentsMetadata) {
-    if (i.usage === 'article') {
-      images.push(i);
-    } else {
-      attachments.push(i);
-    }
-  };
-
   return {
     // attachments: this.attachmentsMetadata,
-    attachments,
+    attachments: this.attachmentsMetadata,
     classification: this.classification,
     coauthors: this.coauthors,
     coordinators: this.coordinators,
@@ -286,7 +279,7 @@ ArticleSchema.virtual('data.document').get(function () {
     dissem_orgs: this.dissemOrgs,
     non_state_actors: this.nonStateActors,
     html_body: this.htmlBody,
-    images,
+    images: findArticleImage(this.attachmentsMetadata),
     poc_info: this.pocInfo,
     producing_offices: this.producingOffices,
     product_type_id: this.productType.code,
@@ -356,6 +349,17 @@ ArticleSchema.virtual("data.details").get(function () {
     title_classif: this.titleClassification,
   };
 });
+
+function findArticleImage(attachmentsMetadata) {
+  const images = [];
+  for (const i of attachmentsMetadata) {
+    if (i.usage === 'article') {
+      images.push(i);
+    }
+  };
+  return images;
+}
+
 
 const Article = mongoose.model('Article', ArticleSchema, 'articles');
 
