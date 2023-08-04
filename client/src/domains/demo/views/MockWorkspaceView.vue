@@ -633,7 +633,7 @@
                 </Menu>
               </div>
               <div class="flex items-center space-x-4">
-                <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
+                <MaxProductIcon class="w-8 h-8 text-blue-500" icon="wave" />
                 <div class="text-xs text-gray-500">Current</div>
               </div>
               <p
