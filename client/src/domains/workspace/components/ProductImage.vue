@@ -27,6 +27,7 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { isEmpty } from "@current/helpers";
+
 export default {
   props: {
     product: {
@@ -41,8 +42,10 @@ export default {
   emits: ["imageLoaded", "imageNotFound"],
   setup(props, { emit }) {
     const store = useStore();
+
     const sampleImage = computed(() => store.state.testConsole.sampleImage);
     const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
+
     const hasArticleImage = (product) => {
       if (sampleImage.value || uploadBinary.value) {
         return true;
@@ -60,6 +63,7 @@ export default {
       }
       return hasImages;
     };
+
     const getImgUrl = (product) => {
       if (sampleImage.value) {
         return new URL("@/shared/assets/sydney.jpg", import.meta.url).href;
@@ -85,6 +89,7 @@ export default {
         updatedAt
       );
     };
+
     const onImgLoad = () => {
       if (props.smartRender) {
         const articleImgWidth =
@@ -92,6 +97,7 @@ export default {
         emit("imageLoaded", articleImgWidth);
       }
     };
+
     return {
       hasArticleImage,
       onImgLoad,

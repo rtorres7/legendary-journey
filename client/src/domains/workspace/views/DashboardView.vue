@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
     <div
       v-if="loadingUser"
       class="h-8 bg-slate-200 rounded mb-8 w-1/2 animate-pulse"

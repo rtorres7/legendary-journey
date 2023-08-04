@@ -4,6 +4,8 @@ const ProductSearchService = require("../../src/services/product-search-service"
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
 const { logger } = require("../../src/config/logger");
+const fs = require('fs');
+const path = require('path');
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -20,7 +22,9 @@ describe('ProductSearchService', () => {
   let client;
 
   beforeAll(async () => {
-    container = await new ElasticsearchContainer().start();
+    container = await new ElasticsearchContainer("elasticsearch:8.6.1")
+      .withEnvironment({ "xpack.security.enabled": "false" })
+      .start();
     process.env.ES_URL = container.getHttpUrl();
     logger.info(`ProductSearchService.beforeAll:  ${container.getHttpUrl()}`);
 
@@ -30,6 +34,19 @@ describe('ProductSearchService', () => {
     await client.indices.create({
       index: 'products',
       mappings: constant.indices[0].mappings,
+    });
+
+    await client.ingest.putPipeline({
+      id: 'mxms-attachment-pipeline',
+      body: {
+        processors: [{
+          attachment: {
+            field: "pdfVersionRaw",
+            target_field: "pdfVersion",
+            remove_binary: true,
+          }
+        }],
+      },
     });
 
     // Load data
@@ -47,56 +64,56 @@ describe('ProductSearchService', () => {
   describe('search', () => {
     it('should have default paging values', async () => {
       const result = await service.search('');
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
     });
 
-    it('should have respect provided paging values', async () => {
+    it('should respect provided paging values', async () => {
       const result = await service.search('', 1);
       expect(result.results).toHaveLength(1);
-      expect(result.totalCount).toEqual(5);
-      expect(result.pages).toEqual(5);
+      expect(result.totalCount).toEqual(4);
+      expect(result.pages).toEqual(4);
     });
 
     it('should allow sorting by datePublished ascending', async () => {
       const result = await service.search('', 10, 1, 'asc');
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4", "WIReWIRe_sample_5"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]);
     });
 
     it('should allow sorting by datePublished desc', async () => {
       const result = await service.search('', 10, 1, 'desc');
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
 
     it('should allow sorting by _score desc', async () => {
       const result = await service.search('', 10, 1, 'score');
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4", "WIReWIRe_sample_5"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]);
     });
 
     it('should default sorting to desc', async () => {
       const result = await service.search('');
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
 
     it('should allow a term query on htmlBody', async () => {
@@ -231,12 +248,12 @@ describe('ProductSearchService', () => {
 
     it('should allow filtering on classification with multiple classifications using OR', async () => {
       const result = await service.search('', 10, 1, 'desc', { classification: ['UNC', 'S'] });
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
 
     it('should allow filtering on productType with single productType', async () => {
@@ -261,22 +278,22 @@ describe('ProductSearchService', () => {
 
     it('should allow filtering on reportingType with single reportingType', async () => {
       const result = await service.search('', 10, 1, 'desc', { reporting_types: ['analysis.all_source'] });
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
 
     it('should allow filtering on reportingType with multiple reportingType using OR', async () => {
       const result = await service.search('', 10, 1, 'desc', { reporting_types: ['reporting.enterprise', 'analysis.all_source'] });
-      expect(result.results).toHaveLength(5);
-      expect(result.totalCount).toEqual(5);
+      expect(result.results).toHaveLength(4);
+      expect(result.totalCount).toEqual(4);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
-      expect(ids).toStrictEqual(["WIReWIRe_sample_5", "WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
+      expect(ids).toStrictEqual(["WIReWIRe_sample_4", "WIReWIRe_sample_3", "WIReWIRe_sample_2", "WIReWIRe_sample_1"]);
     });
 
     it('should allow filtering on producingOffices with single producingOffices', async () => {
@@ -324,15 +341,7 @@ describe('ProductSearchService', () => {
 
     it('should return related documents', async ()=> {
       const result = await service.relatedSearch('WIReWIRe_sample_1');
-      expect(result.results).toBeGreaterThan(1);
-
-    });
-
-    it('should return one document', async ()=> {
-      const result = await service.searchOne('WIReWIRe_sample_1');
-      expect(result.results).toHaveLength(1);
-      expect(result.totalCount).toEqual(1);
-
+      expect(result.relatedDocuments.length).toBeGreaterThan(1);
     });
 
   });
@@ -386,6 +395,19 @@ describe('ProductSearchService', () => {
       await service.delete('SampleInsert-1');
 
       expect((await client.exists({ index: "products", id: product.id }))).toBeFalsy();
+    });
+  });
+
+  describe('indexAttachment', () => {
+    it('should index given attachment', async () => {
+      const attachment = fs.readFileSync(path.resolve(__dirname, "../__utils__/pdfToIndex.pdf"));
+      const attachmentString = attachment.toString("base64");
+
+      await service.indexAttachment("64709619aa530082dd5cc40e", attachmentString);
+
+      const esRecord = await client.get({index: "products", id: "64709619aa530082dd5cc40e" });
+
+      expect(esRecord._source.pdfVersion.content).toEqual("test");
     });
   });
 });

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
     <div class="text-2xl text-gray-700">My Products</div>
     <div class="py-6 sm:flex justify-between items-center">
       <template v-if="loadingPublished">

@@ -22,7 +22,7 @@
           name: product.state === 'draft' ? 'product-preview' : 'product',
           params: { doc_num: product.productNumber },
         }"
-        class="relative overflow-hidden cursor-pointer max-h-[261px] h-full aspect-video"
+        class="relative overflow-hidden cursor-pointer max-h-[261px] aspect-video"
         target="_blank"
       >
         <ProductImage :product="product" />

@@ -151,7 +151,7 @@ class WorkspaceService {
       collection: collectionId
     };
 
-    const results = await runSearch(
+    const results = await runSearch.runSearch(
       term,
       this.index,
       perPage,

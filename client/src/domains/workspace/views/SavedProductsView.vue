@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
     <div class="text-2xl text-gray-700">Saved Products</div>
     <div class="py-6 sm:flex justify-between items-center">
       <template v-if="loadingSaved">
@@ -9,7 +9,8 @@
       </template>
       <template v-else>
         <div v-if="numProducts > 0" class="font-semibold mb-4 sm:mb-0">
-          {{ numProducts }} products
+          <template v-if="numProducts == 1">{{ numProducts }} product</template>
+          <template v-else>{{ numProducts }} products</template>
         </div>
       </template>
       <div class="flex space-x-4">
