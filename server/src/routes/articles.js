@@ -259,9 +259,8 @@ router.put('/articles/:id', async (req, res, next) => {
   try {
     await updateArticle(req.params.id, req, res, next);
   } catch (error) {
-    res.json({
-      error: `Unable to update article with id ${req.params.id}: ${error.message}`,
-    });
+    logger.error(`Unable to update article with id ${req.params.id}: ${error.message}`);
+    next(error);
   }
 });
 
