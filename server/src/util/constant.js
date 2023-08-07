@@ -65,6 +65,9 @@ const indices = [
         classificationXml: {
           type: "keyword",
         },
+        images: {
+          type: "object",
+        },
         needed: {
           type: "object",
         },
@@ -175,6 +178,9 @@ const indices = [
         createdById: {
           type: "keyword",
           index: true,
+        },
+        images: {
+          type: "object",
         },
         needed: {
           type: "object",

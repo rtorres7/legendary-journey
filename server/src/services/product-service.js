@@ -228,7 +228,7 @@ class ProductService {
     }
 
     await product.save();
-    this.productSearchService.update(product);
+    this.productSearchService.update(product.indexable);
   }
 }
 
