@@ -90,8 +90,8 @@ describe("Feeds Routes", () => {
   });
 
   describe("POST /special_editions", () => {
-    it("should create a collection", () => {
-      const router = require("../../src/routes/workspace");
+    it("should create a feed", () => {
+      const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       const newFeed = {
@@ -113,13 +113,13 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("PUT /workspace/collections/:collectionId", () => {
-    it("should update a collection", async () => {
-      const router = require("../../src/routes/workspace");
+  describe("PUT /special_editions/:collectionId", () => {
+    it("should update a feed", async () => {
+      const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .put(`/workspace/collections/1`)
+        .put(`/special_editions/1`)
         .send({
           name: "Updated name",
           searchParams: "toasted",
@@ -137,9 +137,9 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("DELETE /workspace/collections/:collectionId", () => {
-    it("should delete a collection", async () => {
-      const router = require("../../src/routes/workspace");
+  describe("DELETE /special_editions/:collectionId", () => {
+    it("should delete a feed", async () => {
+      const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app).delete(`/special_editions/1`).expect(204);
