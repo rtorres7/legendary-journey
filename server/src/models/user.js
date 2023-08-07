@@ -1,6 +1,9 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
+
+  const Organization = sequelize.models.Organization;
+
   sequelize.define("User", {
     email: {
       type: DataTypes.STRING,
@@ -55,8 +58,17 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.VIRTUAL,
       get() {
-        return this.fullName
+        return this.fullName;
       }
+    },
+
+    organizationId: {
+      type: DataTypes.BIGINT,
+      references: {
+        model: Organization,
+        key: "id",
+      },
+      allowNull: false,
     },
 
     authorizations: {
@@ -73,7 +85,7 @@ module.exports = (sequelize) => {
           canPreviewWireSubscriptionEmail: this.roles.some(role => ['wire_editor', 'community_editor'].includes(role)),
           canViewDocumentAdminTools: this.roles.some(role => ['wire_editor', 'community_editor'].includes(role)),
           canManageSpecialEditions: this.roles.includes('special_edition_manager')
-        }
+        };
       }
     }
   }, {

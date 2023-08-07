@@ -2890,7 +2890,7 @@ const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
   });
 
   await client.indices.refresh({ index: "savedproducts" });
-}
+};
 
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
@@ -2939,16 +2939,33 @@ const loadCollectionProducts = async (postgresUrl) => {
 };
 
 const loadUsers = async (postgresUrl) => {
+ 
   const sequelize = new Sequelize(postgresUrl);
-
+  
   const userModel = require("../../src/models/user");
   userModel(sequelize);
 
-  await sequelize.models.User.sync();
+  const organizationModel = require("../../src/models/organization");
+  organizationModel(sequelize);
+
+  await sequelize.models.Organization.sync().catch(e => console.error(e));
+  await sequelize.models.User.sync().catch(e => console.error(e));
+
+  sequelize.models.Organization.hasMany(sequelize.models.User, { foreignKey: 'organizationId' });
+  sequelize.models.User.belongsTo(sequelize.models.Organization, { foreignKey: 'organizationId' });
+
+  await sequelize.models.Organization.create({
+    name: "DNI",
+  });
+
+  const organization = await sequelize.models.Organization.findOne({ where: { name: "DNI" } });
+
+  if (!organization) throw new Error("Organization not found");
 
   await sequelize.models.User.create({
     email: "foo@example.com",
     dn: "O=US,OU=OFFICE,CN=foo",
+    organizationId: organization.id,
   });
 };
 
