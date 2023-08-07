@@ -162,7 +162,7 @@
           <div class="px-4 text-sm text-gray-500 pb-4">
             <div class="flex space-x-2">
               <div>
-                {{ dayjs(product.datePublished).format("YYYY-MM-DD") }}
+                {{ dayjs(product.datePublished).utc().format("DD MMMM YYYY") }}
               </div>
               <!-- <div>•</div>
                 <div>{{ product.views }} views</div> -->
@@ -195,7 +195,9 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import ProductImage from "@workspace/components/ProductImage.vue";
-import dayjs from "dayjs/esm/index.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 export default {
   components: {
     Menu,
@@ -276,6 +278,7 @@ export default {
       savingProduct,
       saveProduct,
       dayjs,
+      utc,
     };
   },
 };

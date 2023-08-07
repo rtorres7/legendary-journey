@@ -108,7 +108,7 @@
             {{ product.title }}
           </p>
           <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            {{ dayjs(product.datePublished).format("YYYY-MM-DD") }}
+            {{ dayjs(product.datePublished).utc().format("DD MMMM YYYY") }}
           </div>
         </router-link>
       </div>
@@ -123,7 +123,9 @@ import {
   ShareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
-import dayjs from "dayjs/esm/index.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 import ProductIcon from "./ProductIcon.vue";
 export default {
   components: {
@@ -219,6 +221,7 @@ export default {
       icons,
       getIconColor,
       dayjs,
+      utc,
     };
   },
 };
