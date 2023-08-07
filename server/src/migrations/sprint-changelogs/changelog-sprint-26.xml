@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.22.xsd">
+
+    <changeSet id="3" author="danikol">
+        <createTable tableName="feeds">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique Identifier for a feed">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date feed was created">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date feed was updated">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text" remarks="Feed's name">
+                <constraints nullable="false"/>
+            </column>
+            <column name="searchParams" type="text" remarks="The search URL for this feed">
+                <constraints nullable="false"/>
+            </column>
+            <column name="selectedReadings" type="text []" remarks="A list of products associated with this feed"/>
+            <column name="state" type="text" remarks="The state of the feed (Archived, Draft, Posted)">
+              <constraints nullable="false"/>
+            </column>
+            <column name="order" type="integer" remarks="A list of products associated with this feed"/>
+            <column name="classification" type="text" remarks="A list of products associated with this feed">
+              <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

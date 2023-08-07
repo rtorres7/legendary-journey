@@ -22,9 +22,9 @@ const articles = [
     createdAt: new Date("2022-09-01T13:16:43Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-01"),
     dissemOrgs: [
@@ -115,9 +115,9 @@ const articles = [
     createdAt: new Date("2022-08-31T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-02"),
     dissemOrgs: [
@@ -231,15 +231,15 @@ const articles = [
     createdAt: new Date("2022-08-30T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-03"),
     dissemOrgs: [
       {
         code: "COMMERCE",
-        name: "COMMERCE"
+        name: "COMMERCE",
       },
     ],
     htmlBody: [
@@ -319,9 +319,9 @@ const articles = [
     createdAt: new Date("2022-08-29T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-04"),
     dissemOrgs: [],
@@ -392,9 +392,9 @@ const articles = [
     createdAt: new Date("2022-08-28T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-05"),
     dissemOrgs: [],
@@ -2861,6 +2861,22 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
   mongoose.connection.close();
 };
 
+const loadFeeds = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const feedsModel = require("../../src/models/feed");
+  feedsModel(sequelize);
+
+  await sequelize.models.Feed.sync();
+
+  return await sequelize.models.Feed.create({
+    name: "Test Feed #1",
+    searchParams: "https://localhost:8443/search?text=test123",
+    state: "Draft",
+    classification: "U",
+  });
+};
+
 const loadSavedProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -2884,13 +2900,13 @@ const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
       ...articles[0].indexable,
       savedProductUserId: 1,
       productId: "WIReWIRe_sample_1",
-      id: savedProductId
+      id: savedProductId,
     },
-    id: savedProductId
+    id: savedProductId,
   });
 
   await client.indices.refresh({ index: "savedproducts" });
-}
+};
 
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
@@ -2956,6 +2972,7 @@ module.exports = {
   loadElasticSearch,
   loadMetadata,
   loadArticlesIntoMongo,
+  loadFeeds,
   loadSavedProducts,
   loadSavedProductsForSearch,
   loadCollections,

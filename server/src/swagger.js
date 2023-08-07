@@ -1,1709 +1,1764 @@
-const swaggerAutogen = require('swagger-autogen')({openapi: '3.1.0'});
+const swaggerAutogen = require("swagger-autogen")({ openapi: "3.1.0" });
 
 const doc = {
   info: {
-    title: 'Maximus API'
+    title: "Maximus API",
   },
-  host: 'localhost:8443',
-  schemes: ['https'],
-  basePath: '/api',
+  host: "localhost:8443",
+  schemes: ["https"],
+  basePath: "/",
   tags: [
     {
-      name: 'Alerts',
-      description: 'Alert API'
+      name: "Alerts",
+      description: "Alert API",
     },
     {
-      name: 'Products',
-      description: 'Product API'
+      name: "Products",
+      description: "Product API",
     },
     {
-      name: 'Auth',
-      description: 'Authentication API'
+      name: "Auth",
+      description: "Authentication API",
     },
     {
-      name: 'Metadata',
-      description: 'Metadata API'
+      name: "Metadata",
+      description: "Metadata API",
     },
     {
-      name: 'Legacy',
-      description: 'Legacy API calls'
+      name: "Legacy",
+      description: "Legacy API calls",
     },
     {
-      name: 'Search',
-      description: 'Search API'
+      name: "Search",
+      description: "Search API",
     },
     {
-      name: 'Workspace',
-      description: 'Workspace API'
-    }
+      name: "Workspace",
+      description: "Workspace API",
+    },
   ],
+  securityDefinitions: {
+    OAuth2: {
+      type: "oauth2",
+      flows: {
+        authorizationCode: {
+          authorizationUrl:
+            "https://localhost:8443/realms/mxms/protocol/openid-connect/auth",
+          tokenUrl:
+            "https://localhost:8443/realms/mxms/protocol/openid-connect/token",
+          scopes: {
+            openid: "Openid",
+            profile: "Profile",
+            roles: "Roles",
+          },
+        },
+      },
+    },
+  },
+  security: {
+    OAuth2: ["openid", "profile", "roles"],
+  },
   components: {
-    '@schemas': {
+    "@schemas": {
       Alert: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'number'
-          }
-        }
+            type: "number",
+          },
+        },
       },
       ProductForWire: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'string'
+            type: "string",
           },
           datePublished: {
-            type: 'string',
-            description: 'The date the product was published'
+            type: "string",
+            description: "The date the product was published",
           },
           images: {
-            type: 'array',
-            description: 'List of images attached to the product',
+            type: "array",
+            description: "List of images attached to the product",
             items: {
-              type: 'object'
-            }
+              type: "object",
+            },
           },
           featureId: {
-            type: 'string',
+            type: "string",
           },
           needed: {
-            type: 'object',
-            description: 'What attributes are required for access',
+            type: "object",
+            description: "What attributes are required for access",
             properties: {
               orgs: {
-                type: 'array',
-                description: 'List of organizations needed by the user for access',
+                type: "array",
+                description:
+                  "List of organizations needed by the user for access",
                 items: {
-                  type: 'string'
-                }
-              }
-            }
+                  type: "string",
+                },
+              },
+            },
           },
           orgRestricted: {
-            type: 'boolean',
-            description: 'Indicator if the product is restricted access by organizations'
+            type: "boolean",
+            description:
+              "Indicator if the product is restricted access by organizations",
           },
           productNumber: {
-            type: 'string',
-            description: 'The unique identifier of the product, sometimes referenced as doc_num'
+            type: "string",
+            description:
+              "The unique identifier of the product, sometimes referenced as doc_num",
           },
           productType: {
-            type: 'object',
-            description: 'The type of the product',
+            type: "object",
+            description: "The type of the product",
             properties: {
               name: {
-                type: 'string',
-                description: 'The name of the product type'
+                type: "string",
+                description: "The name of the product type",
               },
               code: {
-                type: 'number',
-                description: 'The code of the product type'
+                type: "number",
+                description: "The code of the product type",
               },
               publishable: {
-                type: 'boolean',
-                description: 'Whether the type is publishable'
-              }
-            }
+                type: "boolean",
+                description: "Whether the type is publishable",
+              },
+            },
           },
           state: {
-            type: 'string',
-            description: 'The state of the product',
-            enum: ['draft', 'submitted', 'posted', 'staged']
+            type: "string",
+            description: "The state of the product",
+            enum: ["draft", "submitted", "posted", "staged"],
           },
           summary: {
-            type: 'string',
-            description: 'The summary text of the product'
+            type: "string",
+            description: "The summary text of the product",
           },
           summaryClassification: {
-            type: 'string',
-            description: 'The classification of the summary text'
+            type: "string",
+            description: "The classification of the summary text",
           },
           title: {
-            type: 'string',
-            description: 'The title text of the product'
+            type: "string",
+            description: "The title text of the product",
           },
           titleClassification: {
-            type: 'string',
-            description: 'The classification of the title text'
+            type: "string",
+            description: "The classification of the title text",
           },
           attributes: {
-            type: 'object',
-            description: 'Legacy UI fields, all nested properties are available in the root as camelCase',
+            type: "object",
+            description:
+              "Legacy UI fields, all nested properties are available in the root as camelCase",
             deprecated: true,
             properties: {
               date_published: {
-                type: 'string'
+                type: "string",
               },
               doc_num: {
-                type: 'string'
+                type: "string",
               },
               id: {
-                type: 'string'
+                type: "string",
               },
               images: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object'
-                }
+                  type: "object",
+                },
               },
               needed: {
-                type: 'object',
+                type: "object",
                 properties: {
                   org_restricted: {
-                    type: 'boolean'
-                  }
-                }
+                    type: "boolean",
+                  },
+                },
               },
               product_type: {
-                type: 'string'
+                type: "string",
               },
               state: {
-                type: 'string'
+                type: "string",
               },
               summary: {
-                type: 'string'
+                type: "string",
               },
               summary_classification: {
-                type: 'string'
+                type: "string",
               },
               summary_classif: {
-                type: 'string'
+                type: "string",
               },
               title: {
-                type: 'string'
+                type: "string",
               },
               title_classification: {
-                type: 'string'
+                type: "string",
               },
               title_classif: {
-                type: 'string'
-              }
-            }
-          }
-        }
+                type: "string",
+              },
+            },
+          },
+        },
       },
       Features: {
-        type: 'object',
+        type: "object",
         properties: {
           features: {
-            type: 'array',
+            type: "array",
             items: {
-              $ref: '#/components/schemas/ProductForWire'
-            }
-          }
-        }
+              $ref: "#/components/schemas/ProductForWire",
+            },
+          },
+        },
       },
       MetadataOrgLookup: {
-        type: 'object',
+        type: "object",
         properties: {
           ancestry: {
-            type: 'string'
+            type: "string",
           },
           ancestry_depth: {
-            type: 'number'
+            type: "number",
           },
           category: {
-            type: 'string'
+            type: "string",
           },
           code: {
-            type: 'string'
+            type: "string",
           },
           created_at: {
-            type: 'string'
+            type: "string",
           },
           description: {
-            type: 'string'
+            type: "string",
           },
           id: {
-            type: 'number'
+            type: "number",
           },
           label: {
-            type: 'string'
+            type: "string",
           },
           legacy: {
-            type: 'boolean'
+            type: "boolean",
           },
           name: {
-            type: 'string'
+            type: "string",
           },
           ntk_org: {
-            type: 'boolean'
+            type: "boolean",
           },
           position: {
-            type: 'number',
+            type: "number",
           },
           updated_at: {
-            type: 'string'
+            type: "string",
           },
           usgov_org: {
-            type: 'boolean'
+            type: "boolean",
           },
           visible: {
-            type: 'boolean'
-          }
-        }
+            type: "boolean",
+          },
+        },
       },
       MetadataGenericLookup: {
-        type: 'object',
+        type: "object",
         properties: {
           name: {
-            type: 'string',
-            description: 'The name of the lookup value'
+            type: "string",
+            description: "The name of the lookup value",
           },
           code: {
-            type: 'string',
-            description: 'The code of the lookup value'
-          }
-        }
+            type: "string",
+            description: "The code of the lookup value",
+          },
+        },
       },
       ProductDetails: {
         allOf: [
           {
-            $ref: '#/components/schemas/ProductForWire'
+            $ref: "#/components/schemas/ProductForWire",
           },
           {
-            type: 'object',
+            type: "object",
             properties: {
               attachmentsMetadata: {
-                type: 'object',
-                description: 'Metadata about the attachments on the product'
+                type: "object",
+                description: "Metadata about the attachments on the product",
               },
               classification: {
-                type: 'string',
-                description: 'The overall classification of the product'
+                type: "string",
+                description: "The overall classification of the product",
               },
               coauthors: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               coordinators: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               countries: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     name: {
-                      type: 'string'
+                      type: "string",
                     },
                     code: {
-                      type: 'string'
+                      type: "string",
                     },
                     diagraph: {
-                      type: 'string'
-                    }
-                  }
-                }
+                      type: "string",
+                    },
+                  },
+                },
               },
               dissemOrgs: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               htmlBody: {
-                type: 'string'
+                type: "string",
               },
               issues: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataGenericLookup'
-                }
+                  $ref: "#/components/schemas/MetadataGenericLookup",
+                },
               },
               legacyCurrentId: {
-                type: 'string'
+                type: "string",
               },
               nonStateActors: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               pocInfo: {
-                type: 'string'
+                type: "string",
               },
               producingOffices: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               publicationNumber: {
-                type: 'string'
+                type: "string",
               },
               publishedBy: {
-                type: 'object'
+                type: "object",
               },
               regions: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     name: {
-                      type: 'string'
+                      type: "string",
                     },
                     code: {
-                      type: 'string'
+                      type: "string",
                     },
                     subregions: {
-                      type: 'array',
+                      type: "array",
                       items: {
-                        type: 'string'
-                      }
-                    }
-                  }
-                }
+                        type: "string",
+                      },
+                    },
+                  },
+                },
               },
               subregions: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     name: {
-                      type: 'string'
+                      type: "string",
                     },
                     code: {
-                      type: 'string'
+                      type: "string",
                     },
                     country_codes: {
-                      type: 'array',
+                      type: "array",
                       items: {
-                        type: 'string'
-                      }
-                    }
-                  }
-                }
+                        type: "string",
+                      },
+                    },
+                  },
+                },
               },
               summaryClassificationXml: {
-                type: 'string'
+                type: "string",
               },
               titleClassificationXml: {
-                type: 'string'
+                type: "string",
               },
               topics: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataGenericLookup'
-                }
+                  $ref: "#/components/schemas/MetadataGenericLookup",
+                },
               },
               thumbnailCaption: {
-                type: 'string'
+                type: "string",
               },
               worldwide: {
-                type: 'boolean'
+                type: "boolean",
               },
               attachments_metadata: {
                 deprecated: true,
-                type: 'object'
+                type: "object",
               },
               date_published: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               display_date: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               dissem_orgs: {
                 deprecated: true,
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               doc_num: {
-                type: 'string',
-                deprecated: true
+                type: "string",
+                deprecated: true,
               },
               document: {
                 deprecated: true,
-                type: 'object',
+                type: "object",
                 properties: {
                   needed: {
-                    type: 'object',
+                    type: "object",
                     properties: {
                       orgs: {
-                        type: 'array',
+                        type: "array",
                         items: {
-                          type: 'string'
-                        }
-                      }
-                    }
+                          type: "string",
+                        },
+                      },
+                    },
                   },
                   org_restricted: {
-                    type: 'boolean'
-                  }
-                }
+                    type: "boolean",
+                  },
+                },
               },
               feature_date: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               html_body: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               legacy: {
                 deprecated: true,
-                type: 'boolean'
+                type: "boolean",
               },
               poc_info: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               posted_at: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               producing_offices: {
                 deprecated: true,
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               product_type_id: {
-                type: 'string',
-                deprecated: true
+                type: "string",
+                deprecated: true,
               },
               product_type_name: {
-                type: 'string',
-                deprecated: true
+                type: "string",
+                deprecated: true,
               },
               published_by: {
                 deprecated: true,
-                type: 'object'
+                type: "object",
               },
               title_classif: {
                 deprecated: true,
-                type: 'string'
-              }
-            }
-          }
-        ]
+                type: "string",
+              },
+            },
+          },
+        ],
       },
       NewProduct: {
-        type: 'object',
+        type: "object",
         properties: {
           topics: {
-            type: 'array',
-            description: 'List of topic codes',
+            type: "array",
+            description: "List of topic codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           producing_office: {
-            type: 'string',
-            description: 'Code for the producing office'
+            type: "string",
+            description: "Code for the producing office",
           },
           product_type_id: {
-            type: 'string',
-            description: 'Code for the product type'
+            type: "string",
+            description: "Code for the product type",
           },
           non_state_actors: {
-            type: 'array',
-            description: 'List of non state actor codes',
+            type: "array",
+            description: "List of non state actor codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           date_published: {
-            type: 'string',
-            description: 'The date the product is to be published'
+            type: "string",
+            description: "The date the product is to be published",
           },
           html_body: {
-            type: 'string',
-            description: 'The main content of the product'
+            type: "string",
+            description: "The main content of the product",
           },
           publication_number: {
-            type: 'string',
-            description: 'The product\'s publication number'
+            type: "string",
+            description: "The product's publication number",
           },
           summary: {
-            type: 'string',
-            description: 'The summary of the product'
+            type: "string",
+            description: "The summary of the product",
           },
           title: {
-            type: 'string',
-            description: 'The title of the product'
-          }
-        }
+            type: "string",
+            description: "The title of the product",
+          },
+        },
       },
       ProductDocument: {
         allOf: [
           {
-            $ref: '#/components/schemas/ProductForWire'
+            $ref: "#/components/schemas/ProductForWire",
           },
           {
-            type: 'object',
+            type: "object",
             properties: {
               classification: {
-                type: 'string',
-                description: 'The overall classification of the product'
+                type: "string",
+                description: "The overall classification of the product",
               },
               coauthors: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               coordinators: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               countries: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     name: {
-                      type: 'string'
+                      type: "string",
                     },
                     code: {
-                      type: 'string'
+                      type: "string",
                     },
                     diagraph: {
-                      type: 'string'
-                    }
-                  }
-                }
+                      type: "string",
+                    },
+                  },
+                },
               },
               dissemOrgs: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               htmlBody: {
-                type: 'string'
+                type: "string",
               },
               issues: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataGenericLookup'
-                }
+                  $ref: "#/components/schemas/MetadataGenericLookup",
+                },
               },
               nonStateActors: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               pocInfo: {
-                type: 'string'
+                type: "string",
               },
               producingOffices: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               publicationNumber: {
-                type: 'string'
+                type: "string",
               },
               regions: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     name: {
-                      type: 'string'
+                      type: "string",
                     },
                     code: {
-                      type: 'string'
+                      type: "string",
                     },
                     subregions: {
-                      type: 'array',
+                      type: "array",
                       items: {
-                        type: 'string'
-                      }
-                    }
-                  }
-                }
+                        type: "string",
+                      },
+                    },
+                  },
+                },
               },
               subregions: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'object',
+                  type: "object",
                   properties: {
                     name: {
-                      type: 'string'
+                      type: "string",
                     },
                     code: {
-                      type: 'string'
+                      type: "string",
                     },
                     country_codes: {
-                      type: 'array',
+                      type: "array",
                       items: {
-                        type: 'string'
-                      }
-                    }
-                  }
-                }
+                        type: "string",
+                      },
+                    },
+                  },
+                },
               },
               summaryClassificationXml: {
-                type: 'string'
+                type: "string",
               },
               titleClassificationXml: {
-                type: 'string'
+                type: "string",
               },
               topics: {
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataGenericLookup'
-                }
+                  $ref: "#/components/schemas/MetadataGenericLookup",
+                },
               },
               thumbnailCaption: {
-                type: 'string'
+                type: "string",
               },
               worldwide: {
-                type: 'boolean'
+                type: "boolean",
               },
               date_published: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               dissem_orgs: {
                 deprecated: true,
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               doc_num: {
-                type: 'string',
-                deprecated: true
+                type: "string",
+                deprecated: true,
               },
               html_body: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               poc_info: {
                 deprecated: true,
-                type: 'string'
+                type: "string",
               },
               producing_offices: {
                 deprecated: true,
-                type: 'array',
+                type: "array",
                 items: {
-                  $ref: '#/components/schemas/MetadataOrgLookup'
-                }
+                  $ref: "#/components/schemas/MetadataOrgLookup",
+                },
               },
               product_type_id: {
-                type: 'string',
-                deprecated: true
+                type: "string",
+                deprecated: true,
               },
               publication_number: {
-                type: 'string',
-                deprecated: true
+                type: "string",
+                deprecated: true,
               },
               title_classif: {
                 deprecated: true,
-                type: 'string'
-              }
-            }
-          }
-        ]
+                type: "string",
+              },
+            },
+          },
+        ],
       },
       UpdateProduct: {
-        type: 'object',
+        type: "object",
         properties: {
           countries: {
-            type: 'array',
-            description: 'List of country codes',
+            type: "array",
+            description: "List of country codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           topics: {
-            type: 'array',
-            description: 'List of topic codes',
+            type: "array",
+            description: "List of topic codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           producing_offices: {
-            type: 'array',
-            description: 'List of office codes',
+            type: "array",
+            description: "List of office codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           coauthors: {
-            type: 'array',
-            description: 'List of coauthor codes',
+            type: "array",
+            description: "List of coauthor codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           coordinators: {
-            type: 'array',
-            description: 'List of coordinator codes',
+            type: "array",
+            description: "List of coordinator codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           dissem_orgs: {
-            type: 'array',
-            description: 'List of dissem org codes',
+            type: "array",
+            description: "List of dissem org codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           product_type_id: {
-            type: 'string',
-            description: 'Code for the product type'
+            type: "string",
+            description: "Code for the product type",
           },
           nonStateActors: {
-            type: 'array',
-            description: 'List of non state actor codes',
+            type: "array",
+            description: "List of non state actor codes",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           classification: {
-            type: 'string',
-            description: 'The classification of the product'
+            type: "string",
+            description: "The classification of the product",
           },
           date_published: {
-            type: 'string',
-            description: 'The date the product is to be published'
+            type: "string",
+            description: "The date the product is to be published",
           },
           html_body: {
-            type: 'string',
-            description: 'The main content of the product'
+            type: "string",
+            description: "The main content of the product",
           },
           poc_info: {
-            type: 'string',
-            description: 'The poc information'
+            type: "string",
+            description: "The poc information",
           },
           publication_number: {
-            type: 'string',
-            description: 'The product\'s publication number'
+            type: "string",
+            description: "The product's publication number",
           },
           summary: {
-            type: 'string',
-            description: 'The summary of the product'
+            type: "string",
+            description: "The summary of the product",
           },
           summary_classif: {
-            type: 'string',
-            description: 'The summary classification of the product'
+            type: "string",
+            description: "The summary classification of the product",
           },
           title: {
-            type: 'string',
-            description: 'The title of the product'
+            type: "string",
+            description: "The title of the product",
           },
           title_classif: {
-            type: 'string',
-            description: 'The title classification of the product'
+            type: "string",
+            description: "The title classification of the product",
           },
           thumbnailCaption: {
-            type: 'string',
-            description: 'The caption for the thumbnail image'
+            type: "string",
+            description: "The caption for the thumbnail image",
           },
           worldwide: {
-            type: 'boolean',
-            description: 'Whether the product should be marked as worldwide'
-          }
-        }
+            type: "boolean",
+            description: "Whether the product should be marked as worldwide",
+          },
+        },
       },
       FeaturesAndBriefs: {
-        type: 'object',
+        type: "object",
         properties: {
           featured: {
-            type: 'array',
-            description: 'List of products that are to be featured on the home page',
+            type: "array",
+            description:
+              "List of products that are to be featured on the home page",
             items: {
-              $ref: '#/components/schemas/ProductForWire'
-            }
+              $ref: "#/components/schemas/ProductForWire",
+            },
           },
           briefs: {
-            type: 'array',
-            description: 'List of products that used for situational awareness',
+            type: "array",
+            description: "List of products that used for situational awareness",
             items: {
-              $ref: '#/components/schemas/ProductForWire'
-            }
-          }
-        }
+              $ref: "#/components/schemas/ProductForWire",
+            },
+          },
+        },
       },
       User: {
-        type: 'object',
+        type: "object",
         properties: {
           email: {
-            type: 'string'
+            type: "string",
           },
           fullName: {
-            type: 'string'
+            type: "string",
           },
           name: {
-            type: 'string',
-            deprecated: true
+            type: "string",
+            deprecated: true,
           },
           lastName: {
-            type: 'string'
+            type: "string",
           },
           firstName: {
-            type: 'string'
+            type: "string",
           },
           userName: {
-            type: 'string'
+            type: "string",
           },
           enabled: {
-            type: 'boolean'
+            type: "boolean",
           },
           emailVerified: {
-            type: 'boolean'
+            type: "boolean",
           },
           hasOrg: {
-            type: 'boolean'
+            type: "boolean",
           },
           phone: {
-            type: 'number'
+            type: "number",
           },
           dn: {
-            type: 'string'
+            type: "string",
           },
           roles: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           authorizations: {
-            type: 'object',
+            type: "object",
             properties: {
               canExportZip: {
-                type: 'boolean'
+                type: "boolean",
               },
               canManageRelatedProducts: {
-                type: 'boolean'
+                type: "boolean",
               },
               canUnpublishDocuments: {
-                type: 'boolean'
+                type: "boolean",
               },
               canUpdateAttachments: {
-                type: 'boolean'
+                type: "boolean",
               },
               canManageSelects: {
-                type: 'boolean'
+                type: "boolean",
               },
               canManageFeatures: {
-                type: 'boolean'
+                type: "boolean",
               },
               canManageWire: {
-                type: 'boolean'
+                type: "boolean",
               },
               canPreviewWireSubscriptionEmail: {
-                type: 'boolean'
+                type: "boolean",
               },
               canViewDocumentAdminTools: {
-                type: 'boolean'
+                type: "boolean",
               },
               canManageSpecialEditions: {
-                type: 'boolean'
-              }
-            }
-          }
-        }
+                type: "boolean",
+              },
+            },
+          },
+        },
       },
       StandardError: {
-        type: 'object',
+        type: "object",
         properties: {
           code: {
-            type: 'number',
-            description: 'The status code'
+            type: "number",
+            description: "The status code",
           },
           message: {
-            type: 'string',
-            description: 'The error message'
+            type: "string",
+            description: "The error message",
           },
           itemId: {
-            type: 'string',
-            description: 'An optional id of an item that caused the error'
+            type: "string",
+            description: "An optional id of an item that caused the error",
           },
           fieldName: {
-            type: 'string',
-            description: 'An optional field name that caused the error'
-          }
-        }
+            type: "string",
+            description: "An optional field name that caused the error",
+          },
+        },
       },
       Metadata: {
-        type: 'object',
+        type: "object",
         properties: {
           agency: {
-            type: 'string'
+            type: "string",
           },
           contactEmail: {
-            type: 'string'
+            type: "string",
           },
           featuresAvailable: {
-            type: 'string'
+            type: "string",
           },
           highlightsBanner: {
-            type: 'string'
+            type: "string",
           },
           highlightsNavHeader: {
-            type: 'string'
+            type: "string",
           },
           name: {
-            type: 'string'
+            type: "string",
           },
           nonProduction: {
-            type: 'boolean'
+            type: "boolean",
           },
           project: {
-            type: 'string'
+            type: "string",
           },
           resourceLinks: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           searchFilters: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           siteClassification: {
-            type: 'string'
+            type: "string",
           },
           siteDefaultTitle: {
-            type: 'string'
+            type: "string",
           },
           criteria: {
-            type: 'object',
+            type: "object",
             properties: {
               classification: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataGenericLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataGenericLookup",
+                    },
+                  },
+                },
               },
               coauthors: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataOrgLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataOrgLookup",
+                    },
+                  },
+                },
               },
               coordinators: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataOrgLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataOrgLookup",
+                    },
+                  },
+                },
               },
               countries: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       properties: {
                         code: {
-                          type: 'string'
+                          type: "string",
                         },
                         name: {
-                          type: 'string'
+                          type: "string",
                         },
                         diagraph: {
-                          type: 'string'
-                        }
-                      }
-                    }
-                  }
-                }
+                          type: "string",
+                        },
+                      },
+                    },
+                  },
+                },
               },
               domestic_regions: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object'
-                    }
-                  }
-                }
+                      type: "object",
+                    },
+                  },
+                },
               },
               fisa_role: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object'
-                    }
-                  }
-                }
+                      type: "object",
+                    },
+                  },
+                },
               },
               issues: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       properties: {
                         name: {
-                          type: 'string'
+                          type: "string",
                         },
                         code: {
-                          type: 'string'
+                          type: "string",
                         },
                         topics: {
-                          type: 'array',
+                          type: "array",
                           items: {
-                            type: 'object',
+                            type: "object",
                             properties: {
                               name: {
-                                type: 'string'
+                                type: "string",
                               },
                               codes: {
-                                type: 'array',
+                                type: "array",
                                 items: {
-                                  type: 'string'
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+                                  type: "string",
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
               media_tags: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataGenericLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataGenericLookup",
+                    },
+                  },
+                },
               },
               non_state_actors: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataGenericLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataGenericLookup",
+                    },
+                  },
+                },
               },
               producing_offices: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataOrgLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataOrgLookup",
+                    },
+                  },
+                },
               },
               product_types: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       properties: {
                         name: {
-                          type: 'string'
+                          type: "string",
                         },
                         code: {
-                          type: 'number'
+                          type: "number",
                         },
                         publishable: {
-                          type: 'boolean'
-                        }
-                      }
-                    }
-                  }
-                }
+                          type: "boolean",
+                        },
+                      },
+                    },
+                  },
+                },
               },
               regions: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       properties: {
                         name: {
-                          type: 'string'
+                          type: "string",
                         },
                         code: {
-                          type: 'string'
+                          type: "string",
                         },
                         subregions: {
-                          type: 'array',
+                          type: "array",
                           items: {
-                            type: 'string'
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+                            type: "string",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
               reporting_types: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       properties: {
                         name: {
-                          type: 'string'
+                          type: "string",
                         },
                         code: {
-                          type: 'string'
+                          type: "string",
                         },
                         productTypes: {
-                          type: 'array',
+                          type: "array",
                           items: {
-                            type: 'string'
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+                            type: "string",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
               selected_for: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataGenericLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataGenericLookup",
+                    },
+                  },
+                },
               },
               subregions: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      type: 'object',
+                      type: "object",
                       properties: {
                         name: {
-                          type: 'string'
+                          type: "string",
                         },
                         code: {
-                          type: 'string'
+                          type: "string",
                         },
                         country_codes: {
-                          type: 'array',
+                          type: "array",
                           items: {
-                            type: 'string'
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+                            type: "string",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
               topics: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataGenericLookup'
-                    }
-                  }
-                }
+                      $ref: "#/components/schemas/MetadataGenericLookup",
+                    },
+                  },
+                },
               },
               dissem_orgs: {
-                type: 'object',
+                type: "object",
                 properties: {
                   displayName: {
-                    type: 'string'
+                    type: "string",
                   },
                   values: {
-                    type: 'array',
+                    type: "array",
                     items: {
-                      $ref: '#/components/schemas/MetadataOrgLookup'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+                      $ref: "#/components/schemas/MetadataOrgLookup",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       IndexedProduct: {
-        type: 'object',
+        type: "object",
         properties: {
           classification: {
-            type: 'string'
+            type: "string",
           },
           classificationXml: {
-            type: 'string'
+            type: "string",
           },
           countries: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           createdById: {
-            type: 'number'
+            type: "number",
           },
           datePublished: {
-            type: 'string'
+            type: "string",
           },
           date_published: {
-            type: 'string'
+            type: "string",
           },
           doc_num: {
-            type: 'string'
+            type: "string",
           },
           htmlBody: {
-            type: 'string'
+            type: "string",
           },
           html_body: {
-            type: 'string'
+            type: "string",
           },
           id: {
-            type: 'string'
+            type: "string",
           },
           issues: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           featureId: {
-            type: 'string'
+            type: "string",
           },
           needed: {
-            type: 'object',
+            type: "object",
             properties: {
               orgs: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'string'
-                }
-              }
-            }
+                  type: "string",
+                },
+              },
+            },
           },
           orgRestricted: {
-            type: 'boolean'
+            type: "boolean",
           },
           org_restricted: {
-            type: 'boolean'
+            type: "boolean",
           },
           producingOffices: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           productNumber: {
-            type: 'string'
+            type: "string",
           },
           productType: {
-            type: 'string'
+            type: "string",
           },
           regions: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           reportingType: {
-            type: 'string'
+            type: "string",
           },
           subregions: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           summary: {
-            type: 'string'
+            type: "string",
           },
           summaryClassification: {
-            type: 'string'
+            type: "string",
           },
           summary_classification: {
-            type: 'string'
+            type: "string",
           },
           summary_classif: {
-            type: 'string'
+            type: "string",
           },
           title: {
-            type: 'string'
+            type: "string",
           },
           titleClassification: {
-            type: 'string'
+            type: "string",
           },
           title_classification: {
-            type: 'string'
+            type: "string",
           },
           title_classif: {
-            type: 'string'
+            type: "string",
           },
           topics: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           nonStateActors: {
-            type: 'array',
+            type: "array",
             items: {
-              type: 'string'
-            }
+              type: "string",
+            },
           },
           worldwide: {
-            type: 'boolean'
+            type: "boolean",
           },
           highlighted_result: {
-            type: 'string'
-          }
-        }
+            type: "string",
+          },
+        },
       },
       SearchResults: {
-        type: 'object',
+        type: "object",
         properties: {
           searchId: {
-            type: 'string'
+            type: "string",
           },
           results: {
-            $ref: '#/components/schemas/IndexedProduct'
+            $ref: "#/components/schemas/IndexedProduct",
           },
           aggregations: {
-            type: 'object'
+            type: "object",
           },
           pages: {
-            type: 'number'
+            type: "number",
           },
           totalCount: {
-            type: 'number'
+            type: "number",
           },
           siteEnhancement: {
-            type: 'string'
+            type: "string",
           },
           daClassifError: {
-            type: 'string'
-          }
-        }
+            type: "string",
+          },
+        },
       },
       PageOfProducts: {
-        type: 'object',
+        type: "object",
         properties: {
           size: {
-            type: 'number',
-            description: 'The page size'
+            type: "number",
+            description: "The page size",
           },
           number: {
-            type: 'number',
-            description: 'The page number'
+            type: "number",
+            description: "The page number",
           },
           numberOfElements: {
-            type: 'number',
-            description: 'The number of elements on the current page'
+            type: "number",
+            description: "The number of elements on the current page",
           },
           totalPages: {
-            type: 'number',
-            description: 'The total number of pages in the results'
+            type: "number",
+            description: "The total number of pages in the results",
           },
           totalElements: {
-            type: 'number',
-            description: 'The total number of elements in the result set'
+            type: "number",
+            description: "The total number of elements in the result set",
           },
           sort: {
-            type: 'object',
+            type: "object",
             properties: {
               direction: {
-                type: 'string'
+                type: "string",
               },
               property: {
-                type: 'string'
+                type: "string",
               },
               ignoreCase: {
-                type: 'boolean'
+                type: "boolean",
               },
               ascending: {
-                type: 'boolean'
-              }
-            }
+                type: "boolean",
+              },
+            },
           },
           pagingStartsWith: {
-            type: 'number',
-            description: 'The number that paging starts with (0 or 1)'
+            type: "number",
+            description: "The number that paging starts with (0 or 1)",
           },
           content: {
-            type: 'array',
+            type: "array",
             items: {
-              $ref: '#/components/schemas/ProductForWire'
-            }
-          }
-        }
+              $ref: "#/components/schemas/ProductForWire",
+            },
+          },
+        },
       },
       PageOfSavedProducts: {
-        type: 'object',
+        type: "object",
         properties: {
           size: {
-            type: 'number',
-            description: 'The page size'
+            type: "number",
+            description: "The page size",
           },
           number: {
-            type: 'number',
-            description: 'The page number'
+            type: "number",
+            description: "The page number",
           },
           numberOfElements: {
-            type: 'number',
-            description: 'The number of elements on the current page'
+            type: "number",
+            description: "The number of elements on the current page",
           },
           totalPages: {
-            type: 'number',
-            description: 'The total number of pages in the results'
+            type: "number",
+            description: "The total number of pages in the results",
           },
           totalElements: {
-            type: 'number',
-            description: 'The total number of elements in the result set'
+            type: "number",
+            description: "The total number of elements in the result set",
           },
           sort: {
-            type: 'object',
+            type: "object",
             properties: {
               direction: {
-                type: 'string'
+                type: "string",
               },
               property: {
-                type: 'string'
+                type: "string",
               },
               ignoreCase: {
-                type: 'boolean'
+                type: "boolean",
               },
               ascending: {
-                type: 'boolean'
-              }
-            }
+                type: "boolean",
+              },
+            },
           },
           pagingStartsWith: {
-            type: 'number',
-            description: 'The number that paging starts with (0 or 1)'
+            type: "number",
+            description: "The number that paging starts with (0 or 1)",
           },
           supplementaryData: {
-            type: 'object',
-            description: 'Contains aggregations for the search'
+            type: "object",
+            description: "Contains aggregations for the search",
           },
           content: {
-            type: 'array',
+            type: "array",
             items: {
-              $ref: '#/components/schemas/IndexedProduct'
-            }
-          }
-        }
+              $ref: "#/components/schemas/IndexedProduct",
+            },
+          },
+        },
       },
       SavedProduct: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'number'
+            type: "number",
           },
           createdAt: {
-            type: 'string'
+            type: "string",
           },
           productId: {
-            type: 'string'
+            type: "string",
           },
           createdBy: {
-            type: 'number'
-          }
-        }
+            type: "number",
+          },
+        },
       },
       Collection: {
-        type: 'object',
+        type: "object",
         properties: {
           id: {
-            type: 'number'
+            type: "number",
           },
           createdAt: {
-            type: 'string'
+            type: "string",
           },
           updatedAt: {
-            type: 'string'
+            type: "string",
           },
           name: {
-            type: 'string'
+            type: "string",
           },
           description: {
-            type: 'string'
+            type: "string",
           },
           image: {
-            type: 'string'
+            type: "string",
           },
           createdBy: {
-            type: 'number'
-          }
-        }
+            type: "number",
+          },
+        },
       },
       PageOfCollections: {
-        type: 'object',
+        type: "object",
         properties: {
           size: {
-            type: 'number',
-            description: 'The page size'
+            type: "number",
+            description: "The page size",
           },
           number: {
-            type: 'number',
-            description: 'The page number'
+            type: "number",
+            description: "The page number",
           },
           numberOfElements: {
-            type: 'number',
-            description: 'The number of elements on the current page'
+            type: "number",
+            description: "The number of elements on the current page",
           },
           totalPages: {
-            type: 'number',
-            description: 'The total number of pages in the results'
+            type: "number",
+            description: "The total number of pages in the results",
           },
           totalElements: {
-            type: 'number',
-            description: 'The total number of elements in the result set'
+            type: "number",
+            description: "The total number of elements in the result set",
           },
           sort: {
-            type: 'object',
+            type: "object",
             properties: {
               direction: {
-                type: 'string'
+                type: "string",
               },
               property: {
-                type: 'string'
+                type: "string",
               },
               ignoreCase: {
-                type: 'boolean'
+                type: "boolean",
               },
               ascending: {
-                type: 'boolean'
-              }
-            }
+                type: "boolean",
+              },
+            },
           },
           pagingStartsWith: {
-            type: 'number',
-            description: 'The number that paging starts with (0 or 1)'
+            type: "number",
+            description: "The number that paging starts with (0 or 1)",
           },
           content: {
-            type: 'array',
+            type: "array",
             items: {
-              $ref: '#/components/schemas/Collection'
-            }
-          }
-        }
+              $ref: "#/components/schemas/Collection",
+            },
+          },
+        },
       },
       NewCollection: {
-        type: 'object',
+        type: "object",
         properties: {
           name: {
-            type: 'string'
+            type: "string",
           },
           description: {
-            type: 'string'
+            type: "string",
           },
           image: {
-            type: 'string'
-          }
-        }
+            type: "string",
+          },
+        },
       },
       ListOfSavedProducts: {
-        type: 'array',
+        type: "array",
         items: {
-          $ref: '#/components/schemas/SavedProduct'
-        }
-      }
-    }
+          $ref: "#/components/schemas/SavedProduct",
+        },
+      },
+      Feed: {
+        type: "object",
+        properties: {
+          id: {
+            type: "number",
+          },
+          name: {
+            type: "string",
+          },
+          searchParams: {
+            type: "string",
+          },
+          selectedReadings: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/SavedProduct",
+            },
+          },
+          state: {
+            type: "string",
+          },
+          order: {
+            type: "number",
+          },
+          classification: {
+            type: "string",
+          },
+        },
+      },
+    },
   },
 };
 
-const outputFile = './swagger_output.json';
-const endpointsFiles = ['./routes/*.js'];
+const outputFile = "./swagger_output.json";
+const endpointsFiles = ["./routes/*.js"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-  require('./bin/www');
+  require("./bin/www");
 });
