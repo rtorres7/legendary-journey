@@ -108,7 +108,7 @@
             {{ product.title }}
           </p>
           <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            {{ dayjs(product.datePublished).utc().format("DD MMMM YYYY") }}
+            {{ dayjs(product.createdAt).utc().format("DD MMMM YYYY") }}
           </div>
         </router-link>
       </div>
