@@ -54,10 +54,18 @@ class WorkspaceService {
   }
 
   async createSavedProduct(productId, userId) {
-    const savedProduct = await models.SavedProduct.create({
-      productId: productId,
-      createdBy: userId,
+    const savedProductResponse = await models.SavedProduct.findCreateFind({
+      where: {
+        productId: productId,
+        createdBy: userId,
+      },
+      defaults: {
+        productId: productId,
+        createdBy: userId,
+      }
     });
+
+    const savedProduct = savedProductResponse["0"];
 
     try {
       const product = await this.productService.findById(productId);
