@@ -1,4 +1,6 @@
 {
-  "verbose": true,
-  "ignore": ["*.test.js", "swagger_output.json"]
+  "watch": ["src/**/*"],
+  "ext": "ts,js,json",
+  "ignore": ["*.test.js", "swagger_output.json"],
+  "verbose": true
 }

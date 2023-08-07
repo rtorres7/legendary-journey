@@ -1,4 +1,4 @@
-const { logger } = require("../../src/config/logger")
+const { logger } = require("../../src/config/logger");
 
 describe('logger load via require', () => {
   it('should log messages', () => {

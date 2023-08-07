@@ -152,8 +152,13 @@ router.post("/documents/:id/attachments", (req, res) => {
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Upload an attachment to the product. Use POST /articles/{id}/attachments'
- */
-  res.redirect(307, `/articles/${req.params.id}/attachments`);
+  */
+  
+  let url = `/articles/${req.params.id}/attachments`;
+  if (req.query.is_visible === 'false') {
+    url += `?is_visible=false`;
+  }
+  res.redirect(307, url);
 });
 
 router.get("/documents/:id/attachments/:attachmentId", (req, res) => {
@@ -173,5 +178,19 @@ router.delete("/documents/:id/attachments/:attachmentId", (req, res) => {
  */
   res.redirect(`/articles/${req.params.id}/attachments/${req.params.attachmentId}`);
 });
+
+router.get("/documents/:id/images/article", (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Download an thumbnail image attached to the product. Use GET /articles/{id}/attachments/{attachmentId}'
+  */
+  let url = `/articles/${req.params.id}/attachments/article`;
+  if (req.params.updated_at) {
+    url += `?update_at=${req.params.updated_at}`;
+  }
+  res.redirect(url);
+});
+
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const ProductService = require('./product-service');
 const { models } = require('../data/sequelize');
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
-const runSearch = require('../util/search');
+const { runSearch } = require('../util/search');
 
 const PRODUCT_FIELDS = [
   { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
@@ -15,7 +15,7 @@ const PRODUCT_FIELDS = [
   { field: 'savedProductUserId' },
   { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
   { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
-]
+];
 
 class WorkspaceService {
   constructor() {
@@ -37,7 +37,7 @@ class WorkspaceService {
       savedProductUserId: userId,
     };
 
-    const results = await runSearch.runSearch(
+    const results = await runSearch(
       term,
       this.index,
       perPage,
@@ -151,7 +151,7 @@ class WorkspaceService {
       collection: collectionId
     };
 
-    const results = await runSearch.runSearch(
+    const results = await runSearch(
       term,
       this.index,
       perPage,

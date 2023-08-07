@@ -848,7 +848,6 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import { useCookies } from "vue3-cookies";
-import { formatDate } from "@current/helpers";
 import {
   BriefcaseIcon,
   ExclamationCircleIcon,
@@ -866,6 +865,8 @@ import axios from "@/shared/config/wireAxios";
 import { mockDocument } from "@current/data";
 import {
   UploadableFile,
+  formatDate,
+  getApiBaseUrl,
   getValueForCode,
   getValueForName,
   hasProductImage,
@@ -941,9 +942,7 @@ export default {
     const router = useRouter();
     const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
-    const apiBaseUrl = computed(() => {
-      return import.meta.env.MODE === "container" ? "/api" : "";
-    });
+    const apiBaseUrl = computed(getApiBaseUrl);
     const extraConfig = {
       plugins: [SimpleUploadAdapter],
       toolbar: {
@@ -969,6 +968,7 @@ export default {
       simpleUpload: {
         //the URL that images are uploaded to.
         uploadUrl:
+          getApiBaseUrl() +
           "/documents/" +
           props.documentNumber +
           "/attachments?is_visible=false",
