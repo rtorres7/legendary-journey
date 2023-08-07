@@ -66,7 +66,7 @@ describe("Feeds Routes", () => {
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
-          expect(res.body.length).toBe(1);
+          expect(res.body.length).toBe(2);
 
           const ids = res.body.map((feed) => feed.name);
           expect(ids).toStrictEqual(["Test Feed #1", "Test Feed #2"]);

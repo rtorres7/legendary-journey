@@ -12,7 +12,7 @@ describe("Feeds Service", () => {
     process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
 
     // Load Feeds
-    const feed = await loadFeeds(postgresContainer.getConnectionUri());
+    await loadFeeds(postgresContainer.getConnectionUri());
   }, 120_000);
 
   beforeEach(() => {
