@@ -59,7 +59,7 @@ AttachmentSchema.virtual('updated_at').get(function () {
 
 AttachmentSchema.virtual('usage').get(function () {
   const parsed = path.parse(this.fileName);
-  const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
+  const isThumbnail = parsed.name === 'article' && /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
   return isThumbnail ? 'article' : '';
 });
 
@@ -217,6 +217,7 @@ ArticleSchema.virtual('indexable').get(function () {
     datePublished: this.datePublished,
     htmlBody: this.htmlBody,
     id: this.get('_id'),
+    images: findArticleImage(this.attachmentsMetadata),
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,

@@ -15,8 +15,6 @@ RUN npm install
 EXPOSE 3000
 
 # normal
-# CMD ["npm", "start"]
-
+CMD ["npm", "start"]
 # for remote debugging
-# USER root
-CMD ["npm", "run", "start:inspect"]
+# CMD ["npm", "run", "start:inspect"]

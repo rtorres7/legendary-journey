@@ -1,11 +1,11 @@
 <template>
   <div id="img-container" class="relative overflow-hidden">
-    <template v-if="hasArticleImage(product)">
+    <template v-if="hasProductImage(product)">
       <div
         v-show="!smartRender"
         id="image-blur"
         class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-        :style="{ background: 'url(' + getImgUrl(product) + ')' }"
+        :style="{ background: 'url(' + getProductImageUrl(product.images, product.doc_num) + ')' }"
       ></div>
       <img
         id="product-img"
@@ -13,7 +13,7 @@
           smartRender ? '' : 'inset-x-0',
           'absolute h-full mx-auto z-[3]',
         ]"
-        :src="getImgUrl(product)"
+        :src="getProductImageUrl(product.images, product.doc_num)"
         alt=""
         @load="onImgLoad"
       />
@@ -30,9 +30,7 @@
   </div>
 </template>
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
-import { isEmpty, getProductImageUrl } from "@current/helpers";
+import { hasProductImage, getProductImageUrl } from "@current/helpers";
 
 export default {
   props: {
@@ -47,39 +45,6 @@ export default {
   },
   emits: ["imageLoaded", "imageNotFound"],
   setup(props, { emit }) {
-    const store = useStore();
-
-    const sampleImage = computed(() => store.state.testConsole.sampleImage);
-    const uploadBinary = computed(() => store.state.testConsole.uploadBinary);
-
-    const hasArticleImage = (product) => {
-      console.log('ProductImage:', product);
-      if (sampleImage.value || uploadBinary.value) {
-        return true;
-      }
-      let hasImages = true;
-      if (isEmpty(product.images)) {
-        hasImages = false;
-      } else {
-        if (product.images.table && isEmpty(product.images.table.article)) {
-          hasImages = false;
-        }
-      }
-      if (props.smartRender && !hasImages) {
-        emit("imageNotFound");
-      }
-      return hasImages;
-    };
-
-    const getImgUrl = (product) => {
-      if (sampleImage.value) {
-        return new URL("@/shared/assets/sydney.jpg", import.meta.url).href;
-      }
-      if (uploadBinary.value) {
-        return uploadBinary.value;
-      }
-      return getProductImageUrl(product.images, product.doc_num);
-    };
 
     const onImgLoad = () => {
       if (props.smartRender) {
@@ -90,9 +55,9 @@ export default {
     };
 
     return {
-      hasArticleImage,
       onImgLoad,
-      getImgUrl,
+      hasProductImage,
+      getProductImageUrl,
     };
   },
 };

@@ -228,14 +228,8 @@ class ProductService {
     }
 
     await product.save();
+    this.productSearchService.update(product);
   }
-
-  async setThumbnail(productNumber, thumbnailMetadata) {
-    const product = await Article.findOne({ productNumber: productNumber });
-    product.thumbnailMetadata = thumbnailMetadata;
-    await product.save();
-  }
-
 }
 
 module.exports = ProductService;

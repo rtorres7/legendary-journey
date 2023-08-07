@@ -114,9 +114,10 @@ router.post('/articles/processDocument', async (req, res, next) => {
       default:
         res.sendStatus(404);
     }
-  } catch (err) {
-    logger.error(`POST /articles/processDocument:`, err);
-    next(err);
+  } catch (error) {
+    res.json({
+      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+    });
   }
 });
 
@@ -257,9 +258,10 @@ router.put('/articles/:id', async (req, res, next) => {
    */
   try {
     await updateArticle(req.params.id, req, res, next);
-  } catch (err) {
-    logger.error(`PUT /articles/${req.params.id}:`, err);
-    next(err);
+  } catch (error) {
+    res.json({
+      error: `Unable to update article with id ${req.params.id}: ${error.message}`,
+    });
   }
 });
 
@@ -267,76 +269,76 @@ router.put('/articles/:id', async (req, res, next) => {
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
 async function updateArticle(id, req, res, next) {
-  const countries = await metadataService.findCountriesFor(req.body.countries);
-  const subregions = await metadataService.findSubRegionsForCountries(
-    req.body.countries
-  );
-  const regions = await metadataService.findRegionsForSubRegions(
-    subregions.map((subregion) => subregion.code)
-  );
-  const topics = await metadataService.findTopicsFor(req.body.topics);
-  const issues = await metadataService.findIssuesForTopics(req.body.topics);
-  const producingOffices = await metadataService.findProducingOfficesFor(
-    req.body.producing_offices
-  );
-  const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
-  if (!coauthors) {
-    throw new Error('coauthors not found');
-  }
-  const coordinators = await metadataService.findCoordinatorsFor(
-    req.body.coordinators
-  );
-  const dissemOrgs = await metadataService.findDissemOrgsFor(
-    req.body.dissem_orgs
-  );
-  const productType = await metadataService.findProductType(
-    req.body.product_type_id
-  );
-  const reportingType = await metadataService.findReportingTypeFor(
-    req.body.product_type_id
-  );
-  const nonStateActors = await metadataService.findNonStateActorsFor(
-    req.body.non_state_actors
-  );
-  const article = {
-    classification: req.body.classification,
-    classificationXml: req.body.classification, // This will need to changed when we have real xml
-    coauthors: coauthors.map(({name, code}) => ({name, code})),
-    coordinators: coordinators.map(({name, code}) => ({name, code})),
-    countries: countries.map(({name, code}) => ({name, code})),
-    nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
-    datePublished: dayjs(req.body.date_published).format('YYYY-MM-DD'),
-    dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
-    htmlBody: req.body.html_body,
-    issues: issues,
-    pocInfo: req.body.poc_info,
-    producingOffices: producingOffices.map(({name, code}) => ({name, code})),
-    productNumber: req.body.doc_num,
-    productType: productType,
-    publicationNumber: req.body.publication_number,
-    regions: regions.map(({name, code}) => ({name, code})),
-    reportingType: reportingType,
-    state: req.body.state,
-    subregions: subregions.map(({name, code}) => ({name, code})),
-    summary: req.body.summary,
-    summaryClassification: req.body.summary_classif,
-    summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
-    title: req.body.title,
-    titleClassification: req.body.title_classif,
-    titleClassificationXml: req.body.title_classif, // This will need to be changed when we have real xml
-    topics: topics,
-    thumbnailCaption: req.body.thumbnailCaption,
-    updatedAt: dayjs().toDate(),
-    updatedBy: {
-      id: req.user.id,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
-      dn: req.user.dn,
-    },
-    worldwide: req.body.worldwide,
-  };
-
   try {
+    const countries = await metadataService.findCountriesFor(req.body.countries);
+    const subregions = await metadataService.findSubRegionsForCountries(
+      req.body.countries
+    );
+    const regions = await metadataService.findRegionsForSubRegions(
+      subregions.map((subregion) => subregion.code)
+    );
+    const topics = await metadataService.findTopicsFor(req.body.topics);
+    const issues = await metadataService.findIssuesForTopics(req.body.topics);
+    const producingOffices = await metadataService.findProducingOfficesFor(
+      req.body.producing_offices
+    );
+    const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
+    if (!coauthors) {
+      throw new Error('coauthors not found');
+    }
+    const coordinators = await metadataService.findCoordinatorsFor(
+      req.body.coordinators
+    );
+    const dissemOrgs = await metadataService.findDissemOrgsFor(
+      req.body.dissem_orgs
+    );
+    const productType = await metadataService.findProductType(
+      req.body.product_type_id
+    );
+    const reportingType = await metadataService.findReportingTypeFor(
+      req.body.product_type_id
+    );
+    const nonStateActors = await metadataService.findNonStateActorsFor(
+      req.body.non_state_actors
+    );
+    const article = {
+      classification: req.body.classification,
+      classificationXml: req.body.classification, // This will need to changed when we have real xml
+      coauthors: coauthors.map(({name, code}) => ({name, code})),
+      coordinators: coordinators.map(({name, code}) => ({name, code})),
+      countries: countries.map(({name, code}) => ({name, code})),
+      nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
+      datePublished: dayjs(req.body.date_published).format('YYYY-MM-DD'),
+      dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
+      htmlBody: req.body.html_body,
+      issues: issues,
+      pocInfo: req.body.poc_info,
+      producingOffices: producingOffices.map(({name, code}) => ({name, code})),
+      productNumber: req.body.doc_num,
+      productType: productType,
+      publicationNumber: req.body.publication_number,
+      regions: regions.map(({name, code}) => ({name, code})),
+      reportingType: reportingType,
+      state: req.body.state,
+      subregions: subregions.map(({name, code}) => ({name, code})),
+      summary: req.body.summary,
+      summaryClassification: req.body.summary_classif,
+      summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
+      title: req.body.title,
+      titleClassification: req.body.title_classif,
+      titleClassificationXml: req.body.title_classif, // This will need to be changed when we have real xml
+      topics: topics,
+      thumbnailCaption: req.body.thumbnailCaption,
+      updatedAt: dayjs().toDate(),
+      updatedBy: {
+        id: req.user.id,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        dn: req.user.dn,
+      },
+      worldwide: req.body.worldwide,
+    };
+
     const updatedArticle = await productService.updateProduct(id, article);
     res.json({
       success: true,
@@ -373,7 +375,7 @@ router.delete('/articles/:id', async (req, res) => {
   }
 });
 
-router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res, next) => {
+router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'}, { name: 'upload' }]), async (req, res, next) => {
   /*
     #swagger.summary = 'Upload an attachment for the given product'
     #swagger.tags = ['Products']
@@ -392,30 +394,26 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
   
   try {
     const id = uuidv4();
-    const parsed = path.parse(req.file.originalname);
+    const field = (req.files.file ? req.files.file[0] : null) || (req.files.upload ? req.files.upload[0] : null);
+    const parsed = path.parse(field.originalname);
     const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
-    const isVisible = req.params.is_visible ? req.params.is_visible !== 'false' : !isThumbnail;
+    const isVisible = req.query.is_visible !== 'false' || isThumbnail;
   
     const attachment = {
       attachmentId: id,
-      fileName: req.file.originalname,
-      mimeType: req.file.mimetype,
+      fileName: field.originalname,
+      mimeType: field.mimetype,
       createdAt: new Date(),
-      fileSize: req.file.size,
+      fileSize: field.size,
       type: 'ATTACHMENT',
-      destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
+      destination: `${field.storage}://${field.bucket}/${field.path}`,
       visible: isVisible,
     };
-    
-    
-    await productService.addAttachment(req.params.productNumber, attachment);
-    // logger.info(`POST /articles/${req.params.productNumber}/attachments:  attachmentId:${id}, is_visible:${req.params.is_visible}`);
     // logger.info("%O", attachment);
-
+    await productService.addAttachment(req.params.productNumber, attachment);
     res.json({att_id: id, success: true});
-  } catch (err) {
-    logger.error(`POST /articles/${req.params.productNumber}/attachments:`, err);
-    next(err);
+  } catch (error) {
+    res.status(500).json({error: 'Unable to upload attachment'});
   }
 });
 
@@ -434,45 +432,47 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
       }
     }
    */
-  // logger.info(`GET /articles/${req.params.productNumber}/attachments/${req.params.attachmentId}`);
+  try {
+    const product = await productService.findByProductNumber(req.params.productNumber);
 
-  const product = await productService.findByProductNumber(req.params.productNumber);
-
-  let attachments;
-  if (req.params.attachmentId === 'article') {
-    const last = product.attachmentsMetadata.reduce((acc, value) => {
-      if (value.usage === 'article') {
-        if (acc == null) {
-          return value;
+    let attachments;
+    if (req.params.attachmentId === 'article') {
+      const last = product.attachmentsMetadata.reduce((acc, value) => {
+        if (value.usage === 'article') {
+          if (acc == null) {
+            return value;
+          }
+          if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
+            return value;
+          }
+          return acc;
         }
-        if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
-          return value;
-        }
-        return acc;
-      }
-    });
-    attachments = last != null ? [last] : [];
-  } else {
-    attachments = product.attachmentsMetadata.filter(att =>
-      att.id === req.params.attachmentId ||
-      att.attachmentId === req.params.attachmentId ||
-      att.fileName === req.params.attachmentId);
-  }
+      });
+      attachments = last != null ? [last] : [];
+    } else {
+      attachments = product.attachmentsMetadata.filter(att =>
+        att.id === req.params.attachmentId ||
+        att.attachmentId === req.params.attachmentId ||
+        att.fileName === req.params.attachmentId);
+    }
 
-  if (attachments.length === 0) {
-    KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
-  } else {
-    const attachment = attachments[0];
-    res.attachment(attachment.fileName);
+    if (attachments.length === 0) {
+      KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
+    } else {
+      const attachment = attachments[0];
+      res.attachment(attachment.fileName);
 
-    const [, path] = attachment.destination.split("//");
-    const bucketSeparatorIndex = path.indexOf("/");
-    const bucket = path.substring(0, bucketSeparatorIndex);
-    const objectName = path.substring(bucketSeparatorIndex);
+      const [, path] = attachment.destination.split("//");
+      const bucketSeparatorIndex = path.indexOf("/");
+      const bucket = path.substring(0, bucketSeparatorIndex);
+      const objectName = path.substring(bucketSeparatorIndex);
 
-    const fileStream = await objectStoreService.getObject(bucket, objectName);
+      const fileStream = await objectStoreService.getObject(bucket, objectName);
 
-    fileStream.pipe(res);
+      fileStream.pipe(res);
+    }
+  } catch (error) {
+    res.json({error: 'Unable to get attachment'});
   }
 });
 

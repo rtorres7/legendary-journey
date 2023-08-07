@@ -152,8 +152,13 @@ router.post("/documents/:id/attachments", (req, res) => {
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Upload an attachment to the product. Use POST /articles/{id}/attachments'
- */
-  res.redirect(307, `/articles/${req.params.id}/attachments`);
+  */
+  
+  let url = `/articles/${req.params.id}/attachments`;
+  if (req.query.is_visible === 'false') {
+    url += `?is_visible=false`;
+  }
+  res.redirect(307, url);
 });
 
 router.get("/documents/:id/attachments/:attachmentId", (req, res) => {
