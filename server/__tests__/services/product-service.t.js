@@ -2,14 +2,14 @@ const { GenericContainer } = require("testcontainers");
 const mongoose = require("mongoose");
 const ProductService = require('../../src/services/product-service');
 
-const { loadArticlesIntoMongo } = require("../__utils__/dataLoader");
+const { loadProductsIntoMongo } = require("../__utils__/dataLoader");
 
 const { v4: uuidv4 } = require("uuid");
 const utc = require("dayjs/plugin/utc");
 const dayjs = require("dayjs");
 dayjs.extend(utc);
 
-const Article = require("../../src/models/products");
+const Product = require("../../src/models/products");
 
 jest.mock('../../src/services/product-search-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -43,8 +43,8 @@ describe('ProductService', () => {
 
     mongoUrl = `mongodb://${mongoContainer.getHost()}:${mongoContainer.getMappedPort(27017)}/mxms`;
 
-    // Load articles
-    await loadArticlesIntoMongo(mongoUrl);
+    // Load products
+    await loadProductsIntoMongo(mongoUrl);
   }, 120_000);
 
   beforeEach(async () => {
@@ -85,12 +85,12 @@ describe('ProductService', () => {
 
   describe('createProduct', () => {
     afterEach(async () => {
-      await Article.deleteMany({ summary: 'My test' });
-      await Article.deleteMany({ summary: 'Error test' });
+      await Product.deleteMany({ summary: 'My test' });
+      await Product.deleteMany({ summary: 'Error test' });
     });
 
     it('should save the new product and index it in elastic search', async () => {
-      const product = new Article({
+      const product = new Product({
         createdAt: dayjs().toDate(),
         datePublished: dayjs().format(),
         htmlBody: 'Creation test',
@@ -138,7 +138,7 @@ describe('ProductService', () => {
     });
 
     it('should delete the saved product if the indexing fails', async () => {
-      const product = new Article({
+      const product = new Product({
         createdAt: dayjs().toDate(),
         datePublished: dayjs().format(),
         htmlBody: 'Creation test',
@@ -176,21 +176,21 @@ describe('ProductService', () => {
       }).rejects
         .toThrow('There was a problem indexing product, rolling back database save');
 
-      const result = await Article.find({ summary: 'Error test' });
+      const result = await Product.find({ summary: 'Error test' });
       expect(result).toHaveLength(0);
     });
   });
 
   describe('updateProduct', () => {
     afterEach(async () => {
-      await Article.deleteMany({ productNumber: 'foo' });
-      await Article.deleteMany({ productNumber: 'bar' });
+      await Product.deleteMany({ productNumber: 'foo' });
+      await Product.deleteMany({ productNumber: 'bar' });
     });
 
     it('should save the update the product and update the index in elastic search', async () => {
-      const original = await Article.create({ productNumber: "foo" });
+      const original = await Product.create({ productNumber: "foo" });
 
-      const update = new Article({
+      const update = new Product({
         _id: original.id,
         productNumber: "foo",
         summary: 'Updated'
@@ -203,9 +203,9 @@ describe('ProductService', () => {
     });
 
     it('should rollback the update of the saved product if the indexing update fails', async () => {
-      const original = await Article.create({ productNumber: "bar" });
+      const original = await Product.create({ productNumber: "bar" });
 
-      const update = new Article({
+      const update = new Product({
         _id: original.id,
         productNumber: "bar",
         summary: 'Error test'
@@ -216,22 +216,22 @@ describe('ProductService', () => {
       }).rejects
         .toThrow('There was a problem updating product in index');
 
-      const result = await Article.find({ productNumber: 'bar' });
+      const result = await Product.find({ productNumber: 'bar' });
       expect(result.summary).toBeUndefined();
     });
   });
 
   describe('deleteProduct', () => {
     it('should remove the product from the database and the index', async () => {
-      const original = await Article.create({ productNumber: "product-to-delete" });
+      const original = await Product.create({ productNumber: "product-to-delete" });
 
-      const countWithRecordToDelete = await Article.count();
+      const countWithRecordToDelete = await Product.count();
       await service.deleteProduct(original.id);
 
-      const countAfterDelete = await Article.count();
+      const countAfterDelete = await Product.count();
       expect(countAfterDelete).toEqual(countWithRecordToDelete - 1);
 
-      const result = await Article.find({ productNumber: 'product-to-delete' });
+      const result = await Product.find({ productNumber: 'product-to-delete' });
       expect(result).toHaveLength(0);
     });
 
