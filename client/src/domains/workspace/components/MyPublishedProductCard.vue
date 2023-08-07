@@ -54,16 +54,18 @@
                 <MenuItems
                   class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                 >
-                  <!-- <MenuItem>
-                      <div
-                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                      aria-label="copy URL to clipboard"
+                      @click="copyUrl(product)"
+                    >
+                      <ShareIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Share</span
                       >
-                        <ShareIcon class="h-5 w-5" aria-hidden="true" /><span
-                          class="capitalize"
-                          >Share</span
-                        >
-                      </div>
-                    </MenuItem> -->
+                    </div>
+                  </MenuItem>
                   <template v-if="type === 'product' || type === 'favorites'">
                     <MenuItem>
                       <div
@@ -193,6 +195,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
   XMarkIcon,
+  ShareIcon,
 } from "@heroicons/vue/24/outline";
 import ProductImage from "@workspace/components/ProductImage.vue";
 import dayjs from "dayjs/esm/index.js";
@@ -207,6 +210,7 @@ export default {
     PencilSquareIcon,
     TrashIcon,
     XMarkIcon,
+    ShareIcon,
     ProductImage,
     Overlay,
     LoadingSpinner,
@@ -231,6 +235,16 @@ export default {
     const createNotification = inject("create-notification");
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
+    };
+    const copyUrl = (product) => {
+      let url = `${window.location.origin}/product/${product.productNumber}`;
+      console.log(url);
+      navigator.clipboard.writeText(url);
+      createNotification({
+        message: "URL Copied to Clipboard",
+        type: "success",
+        canClose: false,
+      });
     };
     const deleteProduct = () => {
       emit("delete", props.product);
@@ -271,6 +285,7 @@ export default {
     return {
       environment,
       getImg,
+      copyUrl,
       deleteProduct,
       removeSavedProduct,
       savingProduct,
