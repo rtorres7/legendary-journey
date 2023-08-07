@@ -396,7 +396,7 @@ router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'
     const field = (req.files.file ? req.files.file[0] : null) || (req.files.upload ? req.files.upload[0] : null);
     const parsed = path.parse(field.originalname);
     const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
-    const isVisible = req.query.is_visible !== 'false' || isThumbnail;
+    const isVisible = !isThumbnail && req.query.is_visible !== 'false';
   
     const attachment = {
       attachmentId: id,
