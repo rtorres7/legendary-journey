@@ -25,6 +25,8 @@ const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
 const ProductSearchService = require("../services/product-search-service");
 const searchService = new ProductSearchService();
+const WorkspaceService = require("../services/workspace");
+const workspaceService = new WorkspaceService();
 
 const upload = objectStoreService.buildUpload("foo", "bar");
 const { logger } = require('../config/logger');
@@ -209,7 +211,7 @@ router.get('/articles/:id/edit', async (req, res) => {
 });
 
 
-router.get('/articles/:id/view', async (req, res, next) => {
+router.get('/articles/:id/view', async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product for viewing details'
     #swagger.tags = ['Products']
@@ -267,7 +269,7 @@ router.put('/articles/:id', async (req, res, next) => {
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
-async function updateArticle(id, req, res, next) {
+async function updateArticle(id, req, res) {
   try {
     const countries = await metadataService.findCountriesFor(req.body.countries);
     const subregions = await metadataService.findSubRegionsForCountries(
@@ -368,13 +370,15 @@ router.delete('/articles/:id', async (req, res) => {
 
   try {
     await productService.deleteProduct(req.params.id);
+    await workspaceService.deleteSavedProductForAllUsers(req.params.id);
     res.json({success: true});
   } catch (error) {
+    console.log("Delete error", error);
     res.json({error: 'Unable to delete article'});
   }
 });
 
-router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'}, { name: 'upload' }]), async (req, res, next) => {
+router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'}, { name: 'upload' }]), async (req, res) => {
   /*
     #swagger.summary = 'Upload an attachment for the given product'
     #swagger.tags = ['Products']
@@ -390,14 +394,14 @@ router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'
       }
     }
    */
-  
+
   try {
     const id = uuidv4();
     const field = (req.files.file ? req.files.file[0] : null) || (req.files.upload ? req.files.upload[0] : null);
     const parsed = path.parse(field.originalname);
     const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
     const isVisible = !isThumbnail && req.query.is_visible !== 'false';
-  
+
     const attachment = {
       attachmentId: id,
       fileName: field.originalname,

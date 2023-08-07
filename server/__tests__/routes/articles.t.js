@@ -2,10 +2,8 @@ import { expect, jest } from '@jest/globals';
 import request from "supertest";
 import dayjs from 'dayjs';
 
-import { MinioContainerUtils } from '../__utils__/containerUtils';
 import { articles } from "../__utils__/dataLoader";
 import { setupApp, setupAppWithUser } from '../__utils__/expressUtils';
-import { Client } from 'minio';
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -59,12 +57,6 @@ jest.mock('../../src/services/product-service.js', () => {
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
     const { metadata } = require("../__utils__/dataLoader");
-    const metaPromise = function(name, value) {
-      return new Promise((resolve, reject) => {
-        console.log(`metadata.${name}:  ${value}`);
-        resolve(value);
-      });
-    };
     return {
       findCountriesFor: jest.fn().mockResolvedValue(metadata.criteria.countries.values),
       findSubRegionsForCountries: jest.fn().mockResolvedValue(metadata.criteria.subregions.values),
@@ -78,6 +70,15 @@ jest.mock('../../src/services/metadata.js', () => {
       findProductType: jest.fn().mockResolvedValue(metadata.criteria.product_types.values[0]),
       findReportingTypeFor: jest.fn().mockResolvedValue(metadata.criteria.reporting_types.values[0]),
       findNonStateActorsFor: jest.fn().mockResolvedValue(metadata.criteria.non_state_actors.values),
+    };
+  });
+});
+
+jest.mock('../../src/services/workspace.js', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      deleteSavedProductForAllUsers: jest.fn().mockImplementation(() => {
+      }),
     };
   });
 });

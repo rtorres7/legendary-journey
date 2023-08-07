@@ -110,6 +110,25 @@ class WorkspaceService {
     });
   }
 
+  async deleteSavedProductForAllUsers(productId) {
+    await models.SavedProduct.destroy({
+      where: {
+        productId: productId
+      }
+    });
+
+    await this.client.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          match: {
+            productId: productId
+          }
+        }
+      }
+    });
+  }
+
   async findPageOfCollectionsForUser(userId, page, limit, offset, sortDir) {
     const { count, rows } = await models.Collection.findAndCountAll({
       offset: offset,
