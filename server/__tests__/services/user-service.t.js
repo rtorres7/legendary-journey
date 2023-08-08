@@ -7,13 +7,19 @@ describe("User Service", () => {
   let service;
   let organization;
 
+  let sequelize;
+  let User;
+  let Organization;
+
   beforeAll(async () => {
     postgresContainer = await new PostgreSqlContainer().start();
     process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
 
-    await loadUsers(postgresContainer.getConnectionUri());
+    const loadedData = await loadUsers(postgresContainer.getConnectionUri());
+    sequelize = loadedData.sequelize;
+    User = loadedData.User;
+    Organization = loadedData.Organization;
 
-    const sequelize = new Sequelize(postgresContainer.getConnectionUri());
     const organizationModel = require("../../src/models/organization");
     organizationModel(sequelize);
     organization = await sequelize.models.Organization.findOne({
@@ -27,23 +33,33 @@ describe("User Service", () => {
   });
 
   afterAll(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 300_000)); // wait 5 minutes for the container to stop
     postgresContainer.stop();
   });
 
   describe("findById", () => {
     it("should return the user with the given id", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-
-      const userModel = require("../../src/models/user");
-      userModel(sequelize);
-
-      const originalUser = await sequelize.models.User.findOne({
+      const originalUser = await User.findOne({
         where: { email: "foo@example.com" },
+        attributes: { exclude: ["organizationId"] },
+        include: [
+          {
+            model: Organization,
+            attributes: ["name"],
+          },
+        ],
       });
+
+      if (originalUser && originalUser.Organization) {
+        originalUser.setDataValue(
+          "organization",
+          originalUser.Organization.name,
+        );
+        delete originalUser.dataValues.Organization;
+      }
+
       const user = await service.findById(originalUser.id);
 
-      expect(user).toEqual(originalUser);
+      expect(user.get()).toEqual(originalUser.get());
     });
   });
 

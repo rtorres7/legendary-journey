@@ -8,6 +8,8 @@ const { Sequelize } = require("sequelize");
 
 const { logger } = require("../../src/config/logger");
 
+const path = require("path");
+
 const articles = [
   new Article({
     classification: "UNC",
@@ -2941,18 +2943,21 @@ const loadCollectionProducts = async (postgresUrl) => {
 const loadUsers = async (postgresUrl) => {
  
   const sequelize = new Sequelize(postgresUrl);
-  
-  const userModel = require("../../src/models/user");
-  userModel(sequelize);
 
-  const organizationModel = require("../../src/models/organization");
-  organizationModel(sequelize);
-
-  await sequelize.models.Organization.sync().catch(e => console.error(e));
-  await sequelize.models.User.sync().catch(e => console.error(e));
+  const Organization = require("../../src/models/organization")(sequelize);
+  const User = require("../../src/models/user")(sequelize);
 
   sequelize.models.Organization.hasMany(sequelize.models.User, { foreignKey: 'organizationId' });
   sequelize.models.User.belongsTo(sequelize.models.Organization, { foreignKey: 'organizationId' });
+
+  // Ensure the models are not undefined
+  if (!Organization || !User) {
+    throw new Error("Models not initialized correctly");
+  }
+
+  // Sync the models
+  await Organization.sync();
+  await User.sync();
 
   await sequelize.models.Organization.create({
     name: "DNI",
@@ -2967,6 +2972,13 @@ const loadUsers = async (postgresUrl) => {
     dn: "O=US,OU=OFFICE,CN=foo",
     organizationId: organization.id,
   });
+
+  return {
+    sequelize,
+    User,
+    Organization
+  };
+
 };
 
 module.exports = {

@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define(
+  const Organization = sequelize.define(
     "Organization",
     {
       name: {
@@ -14,4 +14,5 @@ module.exports = (sequelize) => {
       underscored: true,
     },
   );
+  return Organization;
 };

@@ -2,9 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
 
-  const Organization = sequelize.models.Organization;
-
-  sequelize.define("User", {
+  const User = sequelize.define("User", {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -65,7 +63,7 @@ module.exports = (sequelize) => {
     organizationId: {
       type: DataTypes.BIGINT,
       references: {
-        model: Organization,
+        model: sequelize.models.Organization,
         key: "id",
       },
       allowNull: false,
@@ -92,4 +90,5 @@ module.exports = (sequelize) => {
     tableName: 'users',
     underscored: true,
   });
+  return User;
 };
