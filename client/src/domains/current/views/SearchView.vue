@@ -1008,7 +1008,7 @@ export default {
         case "product_types[]":
           return criteria.value.product_types;
         case "producing_offices[]":
-          return criteria.value.producing_offices.values;
+          return criteria.value.producing_offices;
         case "classification[]":
           return criteria.value.classification;
         case "media_tags[]":
