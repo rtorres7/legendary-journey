@@ -1223,11 +1223,25 @@ export default {
                 : "";
               break;
             case "title":
-              payload.value.title_classif = model.name;
+              if (
+                import.meta.env.MODE !== "production" &&
+                import.meta.env.MODE !== "development"
+              ) {
+                payload.value.title_classif = model.marking;
+              } else {
+                payload.value.title_classif = model.name;
+              }
               payload.value.title_classif_xml = model.xml;
               break;
             case "summary":
-              payload.value.summary_classif = model.name;
+              if (
+                import.meta.env.MODE !== "production" &&
+                import.meta.env.MODE !== "development"
+              ) {
+                payload.value.summary_classif = model.marking;
+              } else {
+                payload.value.summary_classif = model.name;
+              }
               payload.value.summary_classif_xml = model.xml;
               break;
           }
@@ -1390,6 +1404,12 @@ export default {
       selectedPublicationDate.value = dayjs(product.value.date_published)
         .utc()
         .format("YYYY/MM/DD");
+      form.value.pocInfo = updatedProduct.poc_info;
+      form.value.title = updatedProduct.title;
+      form.value.attachments = updatedProduct.attachments?.filter(
+        (attachment) => attachment.visible === true
+      );
+      form.value.summary = updatedProduct.summary;
       if (
         import.meta.env.MODE !== "production" &&
         import.meta.env.MODE !== "development"
@@ -1399,18 +1419,20 @@ export default {
           updatedProduct.classification
         );
         form.value.classificationXML = classificationValue?.name;
+        let titleClassificationValue = lists.classification.find(
+          (item) => item.marking === updatedProduct.titleClassification
+        );
+        form.value.titleClassificationXML = titleClassificationValue?.name;
+        let summaryClassificationValue = lists.classification.find(
+          (item) => item.marking === updatedProduct.summaryClassification
+        );
+        form.value.summaryClassificationXML = summaryClassificationValue?.name;
       } else {
         form.value.classificationXML = updatedProduct.classification_xml;
+        form.value.titleClassificationXML = updatedProduct.title_classif_xml;
+        form.value.summaryClassificationXML =
+          updatedProduct.summary_classif_xml;
       }
-
-      form.value.pocInfo = updatedProduct.poc_info;
-      form.value.title = updatedProduct.title;
-      form.value.attachments = updatedProduct.attachments?.filter(
-        (attachment) => attachment.visible === true
-      );
-      form.value.summary = updatedProduct.summary;
-      form.value.summaryClassificationXML = updatedProduct.summary_classif_xml;
-      form.value.titleClassificationXML = updatedProduct.title_classif_xml;
       form.value.editorData = updatedProduct.html_body;
       form.value.thumbnailCaption = updatedProduct.thumbnailCaption;
     };
