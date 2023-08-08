@@ -67,21 +67,23 @@ class WorkspaceService {
 
     const savedProduct = savedProductResponse["0"];
 
-    try {
-      const product = await this.productService.findById(productId);
-      const savedProductToIndex = {
-        ...product.indexable,
-        savedProductUserId: userId,
-        productId,
-        id: savedProduct.id
-      };
+    if (savedProductResponse["1"]) {
+      try {
+        const product = await this.productService.findById(productId);
+        const savedProductToIndex = {
+          ...product.indexable,
+          savedProductUserId: userId,
+          productId,
+          id: savedProduct.id
+        };
 
-      await this.client.index({
-        index: this.index,
-        document: savedProductToIndex,
-      });
-    } catch (error) {
-      console.log("There was a problem indexing saved product");
+        await this.client.index({
+          index: this.index,
+          document: savedProductToIndex,
+        });
+      } catch (error) {
+        console.log("There was a problem indexing saved product");
+      }
     }
 
     return savedProduct;
