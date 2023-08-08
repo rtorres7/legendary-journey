@@ -1,5 +1,6 @@
 const { PostgreSqlContainer } = require("testcontainers");
 const { loadFeeds } = require("../__utils__/dataLoader");
+const { Sequelize } = require("sequelize");
 
 describe("Feeds Service", () => {
   let postgresContainer;
@@ -24,9 +25,17 @@ describe("Feeds Service", () => {
 
   describe("findAllFeeds", () => {
     it("should return all feeds", async () => {
+      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const feedsModel = require("../../src/models/feeds");
+      feedsModel(sequelize);
+
+      const originalFeeds = await sequelize.models.Feed.findAll();
       const feeds = await service.findAllFeeds();
 
+      expect(originalFeeds).toHaveLength(1);
       expect(feeds).toHaveLength(1);
+      expect(originalFeeds[0].name).toEqual("Test Feed #1");
+      expect(feeds[0].name).toEqual("Test Feed #1");
     });
   });
 
