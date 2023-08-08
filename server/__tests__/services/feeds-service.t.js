@@ -1,5 +1,3 @@
-import FeedsService from "../../src/services/feeds-service";
-
 const { PostgreSqlContainer } = require("testcontainers");
 const { loadFeeds } = require("../__utils__/dataLoader");
 
@@ -16,6 +14,7 @@ describe("Feeds Service", () => {
   }, 120_000);
 
   beforeEach(() => {
+    const FeedsService = require("../../src/services/feeds");
     service = new FeedsService();
   });
 

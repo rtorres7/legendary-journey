@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
+const Feed = require("../models/feed");
 const FeedsService = require("../services/feeds-service");
 const feedsService = new FeedsService();
 

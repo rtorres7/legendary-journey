@@ -130,7 +130,7 @@ describe("Feeds Routes", () => {
         .expect("Content-Type", /json/)
         .then((res) => {
           expect(res.body.name).toBe("Updated name");
-          expect(res.body.description).toBe("toasted");
+          expect(res.body.searchParams).toBe("toasted");
           expect(res.body.state).toBe("Posted");
           expect(res.body.classification).toBe("S");
         });
