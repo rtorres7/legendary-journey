@@ -113,6 +113,7 @@ export default {
       emit("update:classObj", {
         xml: val.xml,
         name: val.name,
+        code: val.code,
         marking: val.marking,
         block: "",
       });

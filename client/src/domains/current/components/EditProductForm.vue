@@ -998,6 +998,7 @@ export default {
     const previewProduct = ref(null);
     const criteria = computed(() => store.state.metadata.criteria);
     const lists = {
+      classification: criteria.value.classification,
       countries: criteria.value.countries.filter((a) => a.code !== "WW"),
       dissemOrgs: criteria.value.dissem_orgs,
       producing_offices: criteria.value.producing_offices,
@@ -1208,18 +1209,39 @@ export default {
         case "classification":
           switch (property) {
             case "document":
-              payload.value.classification = model.name;
+              if (
+                import.meta.env.MODE !== "production" &&
+                import.meta.env.MODE !== "development"
+              ) {
+                payload.value.classification = model.code;
+              } else {
+                payload.value.classification = model.name;
+              }
               payload.value.classification_xml = model.xml;
               payload.value.classification_decl_fmt = model.block
                 ? `Classified By: ${model.block.classifiedBy}\nDerived From: ${model.block.derivedFrom}\nDeclassify On: ${model.block.declassOn}`
                 : "";
               break;
             case "title":
-              payload.value.title_classif = model.name;
+              if (
+                import.meta.env.MODE !== "production" &&
+                import.meta.env.MODE !== "development"
+              ) {
+                payload.value.title_classif = model.marking;
+              } else {
+                payload.value.title_classif = model.name;
+              }
               payload.value.title_classif_xml = model.xml;
               break;
             case "summary":
-              payload.value.summary_classif = model.name;
+              if (
+                import.meta.env.MODE !== "production" &&
+                import.meta.env.MODE !== "development"
+              ) {
+                payload.value.summary_classif = model.marking;
+              } else {
+                payload.value.summary_classif = model.name;
+              }
               payload.value.summary_classif_xml = model.xml;
               break;
           }
@@ -1382,15 +1404,35 @@ export default {
       selectedPublicationDate.value = dayjs(product.value.date_published)
         .utc()
         .format("YYYY/MM/DD");
-      form.value.classificationXML = updatedProduct.classification_xml;
       form.value.pocInfo = updatedProduct.poc_info;
       form.value.title = updatedProduct.title;
       form.value.attachments = updatedProduct.attachments?.filter(
         (attachment) => attachment.visible === true
       );
       form.value.summary = updatedProduct.summary;
-      form.value.summaryClassificationXML = updatedProduct.summary_classif_xml;
-      form.value.titleClassificationXML = updatedProduct.title_classif_xml;
+      if (
+        import.meta.env.MODE !== "production" &&
+        import.meta.env.MODE !== "development"
+      ) {
+        let classificationValue = getValueForCode(
+          lists.classification,
+          updatedProduct.classification
+        );
+        form.value.classificationXML = classificationValue?.name;
+        let titleClassificationValue = lists.classification.find(
+          (item) => item.marking === updatedProduct.titleClassification
+        );
+        form.value.titleClassificationXML = titleClassificationValue?.name;
+        let summaryClassificationValue = lists.classification.find(
+          (item) => item.marking === updatedProduct.summaryClassification
+        );
+        form.value.summaryClassificationXML = summaryClassificationValue?.name;
+      } else {
+        form.value.classificationXML = updatedProduct.classification_xml;
+        form.value.titleClassificationXML = updatedProduct.title_classif_xml;
+        form.value.summaryClassificationXML =
+          updatedProduct.summary_classif_xml;
+      }
       form.value.editorData = updatedProduct.html_body;
       form.value.thumbnailCaption = updatedProduct.thumbnailCaption;
     };
