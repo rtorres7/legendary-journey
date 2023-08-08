@@ -114,7 +114,7 @@ router.post("/special_editions/", async (req, res) => {
 router.put("/special_editions/:id", async (req, res) => {
   /*
     #swagger.summary = 'Updates a Feed.'
-    #swagger.tags = ['Feed']
+    #swagger.tags = ['Feeds']
     #swagger.requestBody = {
       schema: {
         $ref: '#/definitions/Feed'
@@ -142,7 +142,7 @@ router.put("/special_editions/:id", async (req, res) => {
 router.delete("/special_editions/:id", async (req, res) => {
   /*
     #swagger.summary = 'Deletes a Feed.'
-    #swagger.tags = ['Feed']
+    #swagger.tags = ['Feeds']
     #swagger.responses[204] = {
       schema: {
       }
