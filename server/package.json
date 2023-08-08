@@ -4,7 +4,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "node --require ts-node/register src/swagger.ts",
+    "start": "node --watch --require ts-node/register src/swagger.ts",
     "start:inspect": "node --watch --require ts-node/register --inspect=0.0.0.0:9229 src/swagger.ts",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles",

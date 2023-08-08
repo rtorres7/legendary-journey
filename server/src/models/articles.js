@@ -135,6 +135,7 @@ const ArticleSchema = new Schema(
 ArticleSchema.virtual('features').get(function () {
   return {
     datePublished: this.datePublished,
+    createdAt: this.createdAt,
     id: this.get('_id'),
     featureId: this.get('_id'),
     doc_num: this.productNumber,
@@ -298,6 +299,7 @@ ArticleSchema.virtual("data.details").get(function () {
     coauthors: this.coauthors?.map((author) => author.name), // UI needs a list not the objects right now
     coordinators: this.coordinators?.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,
+    createdAt: this.createdAt,
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
