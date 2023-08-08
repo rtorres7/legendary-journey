@@ -1,6 +1,7 @@
 const { PostgreSqlContainer } = require("testcontainers");
 const { loadFeeds } = require("../__utils__/dataLoader");
 const { Sequelize } = require("sequelize");
+const { Feed } = require("../../src/models/feed");
 
 describe("Feeds Service", () => {
   let postgresContainer;
@@ -15,7 +16,7 @@ describe("Feeds Service", () => {
   }, 120_000);
 
   beforeEach(() => {
-    const FeedsService = require("../../src/services/feeds");
+    const FeedsService = require("../../src/services/feeds-service");
     service = new FeedsService();
   });
 
@@ -26,7 +27,7 @@ describe("Feeds Service", () => {
   describe("findAllFeeds", () => {
     it("should return all feeds", async () => {
       const sequelize = new Sequelize(postgresContainer.getConnectionUri());
-      const feedsModel = require("../../src/models/feeds");
+      const feedsModel = require("../../src/models/feed");
       feedsModel(sequelize);
 
       const originalFeeds = await sequelize.models.Feed.findAll();
@@ -41,7 +42,7 @@ describe("Feeds Service", () => {
 
   describe("findById", () => {
     it("should return a feed with the given id", async () => {
-      const feed = await service.findById(1);
+      const feed = await service.findFeedById(1);
 
       expect(feed.name).toEqual("Test Feed #1");
       expect(feed.searchParams).toEqual(
@@ -61,6 +62,7 @@ describe("Feeds Service", () => {
         classification: "U",
       };
       const savedFeed = await service.createFeed(newFeed);
+      console.log(savedFeed);
       expect(savedFeed.id).toBeDefined();
     });
   });
@@ -76,14 +78,16 @@ describe("Feeds Service", () => {
       };
       const original = await models.Feed.create(newFeed);
 
-      const updated = await service.Feed(original.id, { name: "Test Feed #3" });
+      const updated = await service.updateFeed(original.id, {
+        name: "Test Feed #3",
+      });
 
       expect(updated.name).toEqual("Test Feed #3");
     });
   });
 
-  describe("deleteCollection", () => {
-    it("should delete the given collection", async () => {
+  describe("deleteFeed", () => {
+    it("should delete the given feed", async () => {
       const { models } = require("../../src/data/sequelize");
       const newFeed = {
         name: "Test Feed #4",

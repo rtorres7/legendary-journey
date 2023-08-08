@@ -27,7 +27,7 @@
       [
         "summary",
         {
-          "summaryThreshold": 1
+          "summaryThreshold": 0
         }
       ]
     ],
