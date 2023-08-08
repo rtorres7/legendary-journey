@@ -89,15 +89,14 @@ router.post("/special_editions/", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const feed = new Feed({
+    const feed = {
       name: req.body.name,
       searchParams: req.body.searchParams,
       selectedReadings: req.body.selectedReadings,
       state: req.body.state,
       order: req.body.order,
       classification: req.body.classification,
-    });
-    console.log("still in the router");
+    };
     try {
       const savedFeed = await feedsService.createFeed(feed);
       res.json(savedFeed);

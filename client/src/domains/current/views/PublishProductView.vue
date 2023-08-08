@@ -267,12 +267,12 @@
                 <div class="relative pb-4 md:pb-0 md:pr-4">
                   <ProductImage
                     :class="[
-                      product.images.length > 0 ? 'cursor-pointer' : null,
+                      product.images?.length > 0 ? 'cursor-pointer' : null,
                       'h-[140px] w-full sm:h-[170px] sm:w-[510px] md:h-[75px] md:w-[225px] lg:h-[100px] lg:w-[300px] xl:h-[135px] xl:w-[405px]',
                     ]"
                     :product="product"
                     @click="
-                      product.images.length > 0
+                      product.images?.length > 0
                         ? openPreviewThumbnailDialog(product)
                         : null
                     "

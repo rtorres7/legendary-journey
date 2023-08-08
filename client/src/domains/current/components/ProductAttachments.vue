@@ -41,6 +41,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { DocumentIcon } from "@heroicons/vue/24/outline";
+import { getApiBaseUrl } from "@current/helpers";
 
 export default {
   components: {
@@ -54,9 +55,7 @@ export default {
   },
   setup(props) {
     const route = useRoute();
-    const apiBaseUrl = computed(() => {
-      return import.meta.env.MODE === "container" ? "/api" : "";
-    });
+    const apiBaseUrl = computed(getApiBaseUrl);
     const docNum = computed(
       () => `${route.params.doc_num}` || props.article.doc_num
     );
