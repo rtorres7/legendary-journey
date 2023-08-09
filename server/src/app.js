@@ -159,6 +159,7 @@ const indexRouter = require("./routes");
 const legacyRouter = require("./routes/legacy");
 const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
+const feedsRouter = require("./routes/feeds");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use(indexRouter);
@@ -168,6 +169,7 @@ app.use(authRouter);
 app.use(homeRouter);
 app.use(searchRouter);
 app.use(workspaceRouter);
+app.use(feedsRouter);
 
 // Legacy routes
 app.use(legacyRouter);
