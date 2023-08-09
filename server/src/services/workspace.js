@@ -30,7 +30,7 @@ class WorkspaceService {
     return { totalViews, uniqueViews };
   }
 
-  async function _getTotalViews(productId) {
+  async _getTotalViews(productId) {
     try {
       const query = `
         SELECT total_view_count
@@ -46,7 +46,7 @@ class WorkspaceService {
     }
   }
 
-  async function _getUniqueViews(productId) {
+  async _getUniqueViews(productId) {
     try {
       const query = `
         SELECT COUNT(*) AS unique_view_count
