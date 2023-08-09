@@ -24,9 +24,9 @@ const articles = [
     createdAt: new Date("2022-09-01T13:16:43Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-01"),
     dissemOrgs: [
@@ -117,9 +117,9 @@ const articles = [
     createdAt: new Date("2022-08-31T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-02"),
     dissemOrgs: [
@@ -233,15 +233,15 @@ const articles = [
     createdAt: new Date("2022-08-30T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-03"),
     dissemOrgs: [
       {
         code: "COMMERCE",
-        name: "COMMERCE"
+        name: "COMMERCE",
       },
     ],
     htmlBody: [
@@ -321,9 +321,9 @@ const articles = [
     createdAt: new Date("2022-08-29T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-04"),
     dissemOrgs: [],
@@ -394,9 +394,9 @@ const articles = [
     createdAt: new Date("2022-08-28T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-05"),
     dissemOrgs: [],
@@ -2886,9 +2886,9 @@ const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
       ...articles[0].indexable,
       savedProductUserId: 1,
       productId: "WIReWIRe_sample_1",
-      id: savedProductId
+      id: savedProductId,
     },
-    id: savedProductId
+    id: savedProductId,
   });
 
   await client.indices.refresh({ index: "savedproducts" });
@@ -2941,21 +2941,18 @@ const loadCollectionProducts = async (postgresUrl) => {
 };
 
 const loadUsers = async (postgresUrl) => {
- 
   const sequelize = new Sequelize(postgresUrl);
 
   const Organization = require("../../src/models/organization")(sequelize);
   const User = require("../../src/models/user")(sequelize);
 
-  sequelize.models.Organization.hasMany(sequelize.models.User, { foreignKey: 'organizationId' });
-  sequelize.models.User.belongsTo(sequelize.models.Organization, { foreignKey: 'organizationId' });
+  sequelize.models.Organization.hasMany(sequelize.models.User, {
+    foreignKey: "organizationId",
+  });
+  sequelize.models.User.belongsTo(sequelize.models.Organization, {
+    foreignKey: "organizationId",
+  });
 
-  // Ensure the models are not undefined
-  if (!Organization || !User) {
-    throw new Error("Models not initialized correctly");
-  }
-
-  // Sync the models
   await Organization.sync();
   await User.sync();
 
@@ -2963,9 +2960,9 @@ const loadUsers = async (postgresUrl) => {
     name: "DNI",
   });
 
-  const organization = await sequelize.models.Organization.findOne({ where: { name: "DNI" } });
-
-  if (!organization) throw new Error("Organization not found");
+  const organization = await sequelize.models.Organization.findOne({
+    where: { name: "DNI" },
+  });
 
   await sequelize.models.User.create({
     email: "foo@example.com",
@@ -2976,9 +2973,8 @@ const loadUsers = async (postgresUrl) => {
   return {
     sequelize,
     User,
-    Organization
+    Organization,
   };
-
 };
 
 module.exports = {

@@ -897,6 +897,9 @@ const doc = {
               type: 'string'
             }
           },
+          organizationId: {
+            type: 'integer'
+          },
           authorizations: {
             type: 'object',
             properties: {
