@@ -65,11 +65,17 @@ const indices = [
         classificationXml: {
           type: "keyword",
         },
+        images: {
+          type: "object",
+        },
         needed: {
           type: "object",
         },
         orgRestricted: {
           type: "text",
+        },
+        pdfVersionAttachmentId: {
+          type: "text"
         },
         productNumber: {
           type: "text",
@@ -172,6 +178,9 @@ const indices = [
         createdById: {
           type: "keyword",
           index: true,
+        },
+        images: {
+          type: "object",
         },
         needed: {
           type: "object",

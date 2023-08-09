@@ -18,7 +18,7 @@ router.get('/workspace/drafts', async (req, res) => {
     }
     #swagger.responses[500] = {
       schema: {
-        $ref: '#/definition/StandardError'
+        $ref: '#/definitions/StandardError'
       }
     }
    */
@@ -46,7 +46,7 @@ router.get('/workspace/recent', async (req, res) => {
     }
     #swagger.responses[500] = {
       schema: {
-        $ref: '#/definition/StandardError'
+        $ref: '#/definitions/StandardError'
       }
     }
    */
@@ -84,7 +84,7 @@ router.get('/workspace/products', async (req, res) => {
     }
     #swagger.responses[500] = {
       schema: {
-        $ref: '#/definition/StandardError'
+        $ref: '#/definitions/StandardError'
       }
     }
    */
@@ -150,7 +150,7 @@ router.delete('/workspace/saved/:productId', async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    await workspaceService.deleteSavedProduct(req.params.productId, 1);
+    await workspaceService.deleteSavedProduct(req.params.productId, currentUser.id);
     res.status(204).send();
   });
 });
@@ -196,7 +196,7 @@ router.post('/workspace/collections', async (req, res) => {
       description: req.body.description,
       image: req.body.image,
       createdBy: currentUser.id,
-    })
+    });
 
     res.json(savedCollection);
   });

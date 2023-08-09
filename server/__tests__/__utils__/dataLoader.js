@@ -2890,7 +2890,7 @@ const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
   });
 
   await client.indices.refresh({ index: "savedproducts" });
-}
+};
 
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);

@@ -223,11 +223,12 @@ class ProductService {
       pdfStream.on("end", () => {
         const result = Buffer.concat(chunks);
         const base64String = result.toString("base64");
-        this.productSearchService.indexAttachment(product.id, base64String);
+        this.productSearchService.indexAttachment(product.id, attachmentData.attachmentId, base64String);
       });
     }
 
     await product.save();
+    this.productSearchService.update(product.indexable);
   }
 }
 

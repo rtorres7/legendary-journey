@@ -57,23 +57,48 @@ class ProductSearchService {
     });
   }
 
-  async indexAttachment(id, attachmentBase64) {
+  async indexAttachment(docId, attachmentId, attachmentBase64) {
     await this.client.updateByQuery({
       index: this.index,
       pipeline: "mxms-attachment-pipeline",
       query: {
         term: {
-          "_id": id
+          "_id": docId
         }
       },
       script: {
-        source: "ctx._source.pdfVersionRaw=params['attachmentContent']",
+        source: "ctx._source.pdfVersionRaw=params['attachmentContent']; ctx._source.pdfVersionAttachmentId=params['attachmentId']",
         lang: 'painless',
         params: {
-          attachmentContent: attachmentBase64
+          attachmentContent: attachmentBase64,
+          attachmentId: attachmentId
         }
       }
     });
+  }
+
+  async removeIndexedAttachment(docId, attachmentId){
+    const existingDoc = await this.client.get({
+      id: docId,
+      index: this.index
+    });
+
+    const sourceData = existingDoc._source;
+
+    if (sourceData.pdfVersionAttachmentId === attachmentId) {
+      sourceData.pdfVersion = null;
+      sourceData.pdfVersionAttachmentId = null;
+
+      await this.client.update({
+        index: this.index,
+        id: docId,
+        body: {
+          doc: {
+            ...sourceData,
+          },
+        },
+      });
+    }
   }
 
   async createIndexesIfNecessary() {

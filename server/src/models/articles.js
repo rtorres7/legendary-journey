@@ -1,40 +1,66 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const path = require('path');
+const _ = require('lodash');
+const dayjs = require("dayjs");
+
+
 const Schema = mongoose.Schema;
 
-const DissemSchema = new Schema({
-  name: String,
-  code: String,
+const DissemSchema = new Schema(
+  {
+    name: String,
+    code: String,
   },
   {
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
-  });
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
 
 const AttachmentSchema = new Schema({
-    fileName: String,
-    mimeType: String,
-    createdAt: Date,
-    fileSize: Number,
-    type: String,
-    attachmentId: String,
-    destination: String,
-    visible: Boolean,
-  },
-  {
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
-  });
+  fileName: String,
+  mimeType: String,
+  createdAt: Date,
+  updatedAt: Date,
+  fileSize: Number,
+  type: String,
+  attachmentId: String,
+  destination: String,
+  visible: Boolean,
+},
+{
+  toJSON: {virtuals: true},
+  toObject: {virtuals: true},
+});
 
-AttachmentSchema.virtual("mime_type").get(function () {
+AttachmentSchema.virtual('mime_type').get(function () {
   return this.mimeType;
 });
 
-AttachmentSchema.virtual("file_name").get(function () {
+AttachmentSchema.virtual('file_name').get(function () {
   return this.fileName;
 });
 
-AttachmentSchema.virtual("file_size").get(function () {
+AttachmentSchema.virtual('file_size').get(function () {
   return this.fileSize;
+});
+
+AttachmentSchema.virtual('created_at').get(function () {
+  return this.createdAt;
+});
+
+AttachmentSchema.virtual('updated_at').get(function () {
+  return this.updatedAt ? this.updatedAt : this.createdAt;
+});
+
+AttachmentSchema.virtual('updated_at').get(function () {
+  return this.updatedAt ? this.updatedAt : this.createdAt;
+});
+
+AttachmentSchema.virtual('usage').get(function () {
+  const parsed = path.parse(this.fileName);
+  const isThumbnail = parsed.name === 'article' && /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
+  return isThumbnail ? 'article' : '';
 });
 
 const ArticleSchema = new Schema(
@@ -80,7 +106,7 @@ const ArticleSchema = new Schema(
     },
     state: {
       type: String,
-      default: "draft",
+      default: 'draft',
     },
     subregions: [DissemSchema],
     summary: String,
@@ -106,13 +132,14 @@ const ArticleSchema = new Schema(
   },
 );
 
-ArticleSchema.virtual("features").get(function () {
+ArticleSchema.virtual('features').get(function () {
   return {
     datePublished: this.datePublished,
-    id: this.get("_id"),
-    featureId: this.get("_id"),
+    createdAt: this.createdAt,
+    id: this.get('_id'),
+    featureId: this.get('_id'),
     doc_num: this.productNumber,
-    images: this.images,
+    images: findArticleImage(this.attachmentsMetadata),
     needed: this.needed,
     orgRestricted: this.orgRestricted,
     nonStateActors: this.nonStateActors,
@@ -128,9 +155,9 @@ ArticleSchema.virtual("features").get(function () {
     attributes: {
       date_published: this.datePublished,
       doc_num: this.productNumber,
-      feature_id: this.get("_id"),
-      id: this.get("_id"),
-      images: this.images,
+      feature_id: this.get('_id'),
+      id: this.get('_id'),
+      images: findArticleImage(this.attachmentsMetadata),
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       nonStateActors: this.nonStateActors,
@@ -147,11 +174,11 @@ ArticleSchema.virtual("features").get(function () {
   };
 });
 
-ArticleSchema.virtual("forWire").get(function () {
+ArticleSchema.virtual('forWire').get(function () {
   return {
     datePublished: this.datePublished,
-    id: this.get("_id"),
-    images: this.images,
+    id: this.get('_id'),
+    images: findArticleImage(this.attachmentsMetadata),
     needed: this.needed,
     orgRestricted: this.orgRestricted,
     productNumber: this.productNumber,
@@ -166,8 +193,8 @@ ArticleSchema.virtual("forWire").get(function () {
     attributes: {
       date_published: this.datePublished,
       doc_num: this.productNumber,
-      id: this.get("_id"),
-      images: this.images,
+      id: this.get('_id'),
+      images: findArticleImage(this.attachmentsMetadata),
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
@@ -182,7 +209,7 @@ ArticleSchema.virtual("forWire").get(function () {
   };
 });
 
-ArticleSchema.virtual("indexable").get(function () {
+ArticleSchema.virtual('indexable').get(function () {
   return {
     classification: this.classification,
     classificationXml: this.classificationXml,
@@ -190,7 +217,8 @@ ArticleSchema.virtual("indexable").get(function () {
     createdById: this.createdBy?.id,
     datePublished: this.datePublished,
     htmlBody: this.htmlBody,
-    id: this.get("_id"),
+    id: this.get('_id'),
+    images: findArticleImage(this.attachmentsMetadata),
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
@@ -213,8 +241,9 @@ ArticleSchema.virtual("indexable").get(function () {
   };
 });
 
-ArticleSchema.virtual("data.document").get(function () {
+ArticleSchema.virtual('data.document').get(function () {
   return {
+    // attachments: this.attachmentsMetadata,
     attachments: this.attachmentsMetadata,
     classification: this.classification,
     coauthors: this.coauthors,
@@ -223,7 +252,7 @@ ArticleSchema.virtual("data.document").get(function () {
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
-    id: this.get("_id"),
+    id: this.get('_id'),
     issues: this.issues,
     nonStateActors: this.nonStateActors,
     pocInfo: this.pocInfo,
@@ -250,6 +279,7 @@ ArticleSchema.virtual("data.document").get(function () {
     dissem_orgs: this.dissemOrgs,
     non_state_actors: this.nonStateActors,
     html_body: this.htmlBody,
+    images: findArticleImage(this.attachmentsMetadata),
     poc_info: this.pocInfo,
     producing_offices: this.producingOffices,
     product_type_id: this.productType.code,
@@ -269,11 +299,13 @@ ArticleSchema.virtual("data.details").get(function () {
     coauthors: this.coauthors?.map((author) => author.name), // UI needs a list not the objects right now
     coordinators: this.coordinators?.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,
+    createdAt: this.createdAt,
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
-    id: this.get("_id"),
-    featureId: this.get("_id"),
+    id: this.get('_id'),
+    featureId: this.get('_id'),
+    images: findArticleImage(this.attachmentsMetadata),
     issues: this.issues,
     legacyCurrentId: this.legacyCurrentId,
     pocInfo: this.pocInfo,
@@ -307,9 +339,9 @@ ArticleSchema.virtual("data.details").get(function () {
       org_restricted: this.orgRestricted,
     },
     feature_date: this.datePublished,
-    feature_id: this.get("_id"),
+    feature_id: this.get('_id'),
     html_body: this.htmlBody,
-    legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
+    legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== '',
     poc_info: this.pocInfo,
     posted_at: this.datePublished,
     producing_offices: this.producingOffices?.map((office) => office.name),
@@ -320,6 +352,23 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
-const Article = mongoose.model("Article", ArticleSchema, "articles");
+function findArticleImage(attachmentsMetadata) {
+  const latest = _.reduce(attachmentsMetadata, function(result, value) {
+    if (value.usage === 'article') {
+      if (result == null) {
+        return value;
+      }
+      // console.log(`result:${result.updated_at}, value:${value.updated_at}`);
+      if (dayjs(result.updated_at).isBefore(dayjs(value.updated_at))) {
+        return value;
+      }
+    }
+    return result;
+  }, null);
+  // console.log(`latest:${latest.updated_at}`);
+  return latest != null ? [latest] : [];
+}
+
+const Article = mongoose.model('Article', ArticleSchema, 'articles');
 
 module.exports = Article;

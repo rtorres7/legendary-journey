@@ -518,7 +518,7 @@
                 : 'hidden'
             "
           >
-            <div class="text-2xl text-gray-700">Alvaro's Workspace</div>
+            <!-- <div class="text-2xl text-gray-700">Dashboard Overview</div> -->
             <!-- <div class="text-gray-400 text-sm">
                 <p class="hidden 3xl:block">3XL Mode 1800px</p>
                 <p class="hidden 2xl:block 3xl:hidden">2XL Mode 1536px</p>
@@ -528,8 +528,44 @@
                 <p class="hidden sm:block md:hidden">SM Mode 640px</p>
                 <p class="block sm:hidden">Less than SM mode</p>
               </div> -->
-            <div class="py-6 flex items-center">
-              <div class="text-lg font-bold">Continue where you left off</div>
+            <div class="flex items-center pb-8">
+              <div class="text-2xl font-bold">For You</div>
+            </div>
+            <div class="pb-6 flex justify-between items-center">
+              <div class="text-lg font-semibold text-gray-700">
+                Recently Saved
+              </div>
+              <a
+                class="flex items-center text-gray-500 text-sm font-semibold"
+                href="/demo#saved"
+              >
+                <span>See All</span>
+                <ChevronRightIcon class="h-4 w-4" />
+              </a>
+            </div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <MockProductCard :product="products[5]" type="product" />
+              <MockProductCard :product="products[6]" type="product" />
+              <MockProductCard
+                :product="products[7]"
+                type="product"
+                class="hidden lg:flex"
+              />
+              <MockProductCard
+                :product="products[8]"
+                type="product"
+                class="hidden 2xl:flex"
+              />
+            </div>
+            <div class="py-8 flex items-center">
+              <div class="text-2xl font-bold">Happening at DNI/NCTC</div>
+            </div>
+            <div class="pb-6 flex items-center">
+              <div class="text-lg font-semibold text-gray-700">
+                Drafts within the last week
+              </div>
             </div>
             <div
               class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8 cursor-pointer"
@@ -597,8 +633,8 @@
                 </Menu>
               </div>
               <div class="flex items-center space-x-4">
-                <MaxProductIcon class="w-8 h-8 text-green-500" icon="globe" />
-                <div class="text-xs text-gray-500">Community</div>
+                <MaxProductIcon class="w-8 h-8 text-blue-500" icon="wave" />
+                <div class="text-xs text-gray-500">Current</div>
               </div>
               <p
                 class="font-semibold text-gray-700 line-clamp-2 mt-4"
@@ -611,12 +647,15 @@
               <div class="text-sm text-gray-500 mt-4">15 hours ago</div>
             </div>
             <div class="py-6 flex justify-between items-center">
-              <div class="text-lg font-bold">My Recent Products</div>
+              <div class="text-lg font-semibold text-gray-700">
+                Recently Published
+              </div>
               <a
                 class="flex items-center text-gray-500 text-sm font-semibold"
-                href="/demo#products"
+                href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
+                target="_blank"
               >
-                <span>More Products</span>
+                <span>See All</span>
                 <ChevronRightIcon class="h-4 w-4" />
               </a>
             </div>
@@ -637,7 +676,7 @@
               />
             </div>
             <div class="py-6 flex items-center">
-              <div class="text-lg font-bold">Your Stats</div>
+              <div class="text-lg font-semibold text-gray-700">The Stats</div>
             </div>
             <div
               class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"

@@ -403,11 +403,28 @@ describe('ProductSearchService', () => {
       const attachment = fs.readFileSync(path.resolve(__dirname, "../__utils__/pdfToIndex.pdf"));
       const attachmentString = attachment.toString("base64");
 
-      await service.indexAttachment("64709619aa530082dd5cc40e", attachmentString);
+      await service.indexAttachment("64709619aa530082dd5cc40e", "12345", attachmentString);
 
       const esRecord = await client.get({index: "products", id: "64709619aa530082dd5cc40e" });
 
       expect(esRecord._source.pdfVersion.content).toEqual("test");
+    });
+  });
+
+  describe('removeIndexedAttachment', () => {
+    it('should remove an indexed attachment', async () => {
+      const attachment = fs.readFileSync(path.resolve(__dirname, "../__utils__/pdfToIndex.pdf"));
+      const attachmentString = attachment.toString("base64");
+
+      await service.indexAttachment("64709619aa530082dd5cc416", "12345", attachmentString);
+
+      const esRecord = await client.get({index: "products", id: "64709619aa530082dd5cc416" });
+      expect(esRecord._source.pdfVersion.content).toEqual("test");
+
+      await service.removeIndexedAttachment("64709619aa530082dd5cc416", "12345");
+
+      const esRecord2 = await client.get({index: "products", id: "64709619aa530082dd5cc416" });
+      expect(esRecord2._source.pdfVersion).toBeNull();
     });
   });
 });

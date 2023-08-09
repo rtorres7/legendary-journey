@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const path = require('path');
 
-const _ = require("lodash");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
@@ -18,14 +18,20 @@ const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
+
+const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+
 const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
+const ProductSearchService = require("../services/product-search-service");
+const searchService = new ProductSearchService();
+const WorkspaceService = require("../services/workspace");
+const workspaceService = new WorkspaceService();
 
-const multer = require('multer');
-const ObjectStorageEngine = require('../util/object-storage-engine');
-const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
-const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'}); // TODO: This needs to be updated
-const upload = multer({ storage: engine });
+const upload = objectStoreService.buildUpload("foo", "bar");
+const { logger } = require('../config/logger');
+
+const _ = require('lodash');
 
 //GET articles by date
 router.get('/articles/date/:date', async (req, res) => {
@@ -82,7 +88,7 @@ router.get('/articles/:productNumber', async (req, res) => {
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
-router.post('/articles/processDocument', (req, res) => {
+router.post('/articles/processDocument', async (req, res, next) => {
   /*
     #swagger.tags = ['Products']
     #swagger.deprecated = true
@@ -95,19 +101,25 @@ router.post('/articles/processDocument', (req, res) => {
     }
    */
 
-  switch (req.body.document_action) {
-    case 'create':
-      res.redirect(307, '/articles/');
-      break;
-    case "publish":
-      req.body.state = "posted";
-      updateArticle(req.body.id, req, res);
-      break;
-    case "save":
-      updateArticle(req.body.id, req, res);
-      break;
-    default:
-      res.sendStatus(404);
+  try {
+    switch (req.body.document_action) {
+      case 'create':
+        res.redirect(307, '/articles/');
+        break;
+      case "publish":
+        req.body.state = "posted";
+        await updateArticle(req.body.id, req, res, next);
+        break;
+      case "save":
+        await updateArticle(req.body.id, req, res, next);
+        break;
+      default:
+        res.sendStatus(404);
+    }
+  } catch (error) {
+    res.json({
+      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+    });
   }
 });
 
@@ -225,7 +237,7 @@ router.get('/articles/:id/view', async (req, res) => {
 });
 
 // Update an article
-router.put('/articles/:id', async (req, res) => {
+router.put('/articles/:id', async (req, res, next) => {
   /*
     #swagger.summary = 'Update a product'
     #swagger.tags = ['Products']
@@ -246,82 +258,88 @@ router.put('/articles/:id', async (req, res) => {
       }
     }
    */
-
-  await updateArticle(req.params.id, req, res);
+  try {
+    await updateArticle(req.params.id, req, res, next);
+  } catch (error) {
+    logger.error(`Unable to update article with id ${req.params.id}: ${error.message}`);
+    next(error);
+  }
 });
 
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
 async function updateArticle(id, req, res) {
-  const countries = await metadataService.findCountriesFor(req.body.countries);
-  const subregions = await metadataService.findSubRegionsForCountries(
-    req.body.countries
-  );
-  const regions = await metadataService.findRegionsForSubRegions(
-    subregions.map((subregion) => subregion.code)
-  );
-  const topics = await metadataService.findTopicsFor(req.body.topics);
-  const issues = await metadataService.findIssuesForTopics(req.body.topics);
-  const producingOffices = await metadataService.findProducingOfficesFor(
-    req.body.producing_offices
-  );
-  const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
-  const coordinators = await metadataService.findCoordinatorsFor(
-    req.body.coordinators
-  );
-  const dissemOrgs = await metadataService.findDissemOrgsFor(
-    req.body.dissem_orgs
-  );
-  const productType = await metadataService.findProductType(
-    req.body.product_type_id
-  );
-  const reportingType = await metadataService.findReportingTypeFor(
-    req.body.product_type_id
-  );
-  const nonStateActors = await metadataService.findNonStateActorsFor(
-    req.body.non_state_actors
-  );
-
-  const article = {
-    classification: req.body.classification,
-    classificationXml: req.body.classification, // This will need to changed when we have real xml
-    coauthors: coauthors.map(({name, code}) => ({name, code})),
-    coordinators: coordinators.map(({name, code}) => ({name, code})),
-    countries: countries.map(({name, code}) => ({name, code})),
-    nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
-    datePublished: dayjs(req.body.date_published).format('YYYY-MM-DD'),
-    dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
-    htmlBody: req.body.html_body,
-    issues: issues,
-    pocInfo: req.body.poc_info,
-    producingOffices: producingOffices.map(({name, code}) => ({name, code})),
-    productNumber: req.body.doc_num,
-    productType: productType,
-    publicationNumber: req.body.publication_number,
-    regions: regions.map(({name, code}) => ({name, code})),
-    reportingType: reportingType,
-    state: req.body.state,
-    subregions: subregions.map(({name, code}) => ({name, code})),
-    summary: req.body.summary,
-    summaryClassification: req.body.summary_classif,
-    summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
-    title: req.body.title,
-    titleClassification: req.body.title_classif,
-    titleClassificationXml: req.body.title_classif, // This will need to be changed when we have real xml
-    topics: topics,
-    thumbnailCaption: req.body.thumbnailCaption,
-    updatedAt: dayjs().toDate(),
-    updatedBy: {
-      id: req.user.id,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
-      dn: req.user.dn,
-    },
-    worldwide: req.body.worldwide,
-  };
-
   try {
+    const countries = await metadataService.findCountriesFor(req.body.countries);
+    const subregions = await metadataService.findSubRegionsForCountries(
+      req.body.countries
+    );
+    const regions = await metadataService.findRegionsForSubRegions(
+      subregions.map((subregion) => subregion.code)
+    );
+    const topics = await metadataService.findTopicsFor(req.body.topics);
+    const issues = await metadataService.findIssuesForTopics(req.body.topics);
+    const producingOffices = await metadataService.findProducingOfficesFor(
+      req.body.producing_offices
+    );
+    const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
+    if (!coauthors) {
+      throw new Error('coauthors not found');
+    }
+    const coordinators = await metadataService.findCoordinatorsFor(
+      req.body.coordinators
+    );
+    const dissemOrgs = await metadataService.findDissemOrgsFor(
+      req.body.dissem_orgs
+    );
+    const productType = await metadataService.findProductType(
+      req.body.product_type_id
+    );
+    const reportingType = await metadataService.findReportingTypeFor(
+      req.body.product_type_id
+    );
+    const nonStateActors = await metadataService.findNonStateActorsFor(
+      req.body.non_state_actors
+    );
+    const article = {
+      classification: req.body.classification,
+      classificationXml: req.body.classification, // This will need to changed when we have real xml
+      coauthors: coauthors.map(({name, code}) => ({name, code})),
+      coordinators: coordinators.map(({name, code}) => ({name, code})),
+      countries: countries.map(({name, code}) => ({name, code})),
+      nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
+      datePublished: dayjs(req.body.date_published).format('YYYY-MM-DD'),
+      dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
+      htmlBody: req.body.html_body,
+      issues: issues,
+      pocInfo: req.body.poc_info,
+      producingOffices: producingOffices.map(({name, code}) => ({name, code})),
+      productNumber: req.body.doc_num,
+      productType: productType,
+      publicationNumber: req.body.publication_number,
+      regions: regions.map(({name, code}) => ({name, code})),
+      reportingType: reportingType,
+      state: req.body.state,
+      subregions: subregions.map(({name, code}) => ({name, code})),
+      summary: req.body.summary,
+      summaryClassification: req.body.summary_classif,
+      summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
+      title: req.body.title,
+      titleClassification: req.body.title_classif,
+      titleClassificationXml: req.body.title_classif, // This will need to be changed when we have real xml
+      topics: topics,
+      thumbnailCaption: req.body.thumbnailCaption,
+      updatedAt: dayjs().toDate(),
+      updatedBy: {
+        id: req.user.id,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        dn: req.user.dn,
+      },
+      worldwide: req.body.worldwide,
+    };
+
     const updatedArticle = await productService.updateProduct(id, article);
     res.json({
       success: true,
@@ -335,6 +353,7 @@ async function updateArticle(id, req, res) {
     res.json({
       error: `There was a problem updating product: ${error.message}`,
     });
+    throw error;
   }
 }
 // Delete an article
@@ -351,13 +370,15 @@ router.delete('/articles/:id', async (req, res) => {
 
   try {
     await productService.deleteProduct(req.params.id);
+    await workspaceService.deleteSavedProductForAllUsers(req.params.id);
     res.json({success: true});
   } catch (error) {
+    console.log("Delete error", error);
     res.json({error: 'Unable to delete article'});
   }
 });
 
-router.post('/articles/:productNumber/attachments', upload.single('file'), async (req, res) => {
+router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'}, { name: 'upload' }]), async (req, res) => {
   /*
     #swagger.summary = 'Upload an attachment for the given product'
     #swagger.tags = ['Products']
@@ -368,27 +389,35 @@ router.post('/articles/:productNumber/attachments', upload.single('file'), async
     }
     #swagger.responses[200] = {
       schema: {
-        att_id: 'abc'
+        att_id: 'abc',
         success: true,
       }
     }
    */
 
-  const id = uuidv4();
-  const attachment = {
-    attachmentId: id,
-    fileName: req.file.originalname,
-    mimeType: req.file.mimetype,
-    createdAt: new Date(),
-    fileSize: req.file.size,
-    type: 'ATTACHMENT',
-    destination: `${req.file.storage}://${req.file.bucket}/${req.file.path}`,
-    visible: true
-  };
+  try {
+    const id = uuidv4();
+    const field = (req.files.file ? req.files.file[0] : null) || (req.files.upload ? req.files.upload[0] : null);
+    const parsed = path.parse(field.originalname);
+    const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
+    const isVisible = !isThumbnail && req.query.is_visible !== 'false';
 
-  await productService.addAttachment(req.params.productNumber, attachment);
-
-  res.json({att_id: id, success: true});
+    const attachment = {
+      attachmentId: id,
+      fileName: field.originalname,
+      mimeType: field.mimetype,
+      createdAt: new Date(),
+      fileSize: field.size,
+      type: 'ATTACHMENT',
+      destination: `${field.storage}://${field.bucket}/${field.path}`,
+      visible: isVisible,
+    };
+    // logger.info("%O", attachment);
+    await productService.addAttachment(req.params.productNumber, attachment);
+    res.json({att_id: id, success: true});
+  } catch (error) {
+    res.status(500).json({error: 'Unable to upload attachment'});
+  }
 });
 
 router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
@@ -406,29 +435,47 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
       }
     }
    */
+  try {
+    const product = await productService.findByProductNumber(req.params.productNumber);
 
-  const product = await productService.findByProductNumber(req.params.productNumber);
+    let attachments;
+    if (req.params.attachmentId === 'article') {
+      const last = product.attachmentsMetadata.reduce((acc, value) => {
+        if (value.usage === 'article') {
+          if (acc == null) {
+            return value;
+          }
+          if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
+            return value;
+          }
+          return acc;
+        }
+      });
+      attachments = last != null ? [last] : [];
+    } else {
+      attachments = product.attachmentsMetadata.filter(att =>
+        att.id === req.params.attachmentId ||
+        att.attachmentId === req.params.attachmentId ||
+        att.fileName === req.params.attachmentId);
+    }
 
-  const attachments = product.attachmentsMetadata.filter(att =>
-    att.id === req.params.attachmentId ||
-    att.attachmentId === req.params.attachmentId ||
-    att.fileName === req.params.attachmentId
-  );
+    if (attachments.length === 0) {
+      KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
+    } else {
+      const attachment = attachments[0];
+      res.attachment(attachment.fileName);
 
-  if (attachments.length === 0) {
-    KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
-  } else {
-    const attachment = attachments[0];
-    res.attachment(attachment.fileName);
+      const [, path] = attachment.destination.split("//");
+      const bucketSeparatorIndex = path.indexOf("/");
+      const bucket = path.substring(0, bucketSeparatorIndex);
+      const objectName = path.substring(bucketSeparatorIndex);
 
-    const [, path] = attachment.destination.split("//");
-    const bucketSeparatorIndex = path.indexOf("/");
-    const bucket = path.substring(0, bucketSeparatorIndex);
-    const objectName = path.substring(bucketSeparatorIndex);
+      const fileStream = await objectStoreService.getObject(bucket, objectName);
 
-    const fileStream = await objectStoreService.getObject(bucket, objectName);
-
-    fileStream.pipe(res);
+      fileStream.pipe(res);
+    }
+  } catch (error) {
+    res.json({error: 'Unable to get attachment'});
   }
 });
 
@@ -456,6 +503,8 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
     const objectName = path.substring(bucketSeparatorIndex);
 
     await objectStoreService.removeObject(bucket, objectName);
+
+    await searchService.removeIndexedAttachment(product.id, att.attachmentId);
   }
 
   res.json({ success: true });

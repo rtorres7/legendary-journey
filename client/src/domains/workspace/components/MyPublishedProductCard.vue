@@ -64,30 +64,32 @@
                         >
                       </div>
                     </MenuItem> -->
-                  <!-- <template v-if="type === 'product' || type === 'favorites'">
-                      <MenuItem>
-                        <div
-                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                  <template v-if="type === 'product' || type === 'favorites'">
+                    <MenuItem>
+                      <div
+                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        @click="saveProduct(product)"
+                      >
+                        <BookmarkIcon class="h-5 w-5" aria-hidden="true" /><span
+                          class="capitalize"
+                          >Save</span
                         >
-                          <BookmarkIcon
-                            class="h-5 w-5"
-                            aria-hidden="true"
-                          /><span class="capitalize">Save</span>
-                        </div>
-                      </MenuItem>
-                    </template>
-                    <template v-if="type === 'saved' || type === 'favorites'">
-                      <MenuItem>
-                        <div
-                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                      </div>
+                    </MenuItem>
+                  </template>
+                  <template v-if="type === 'saved' || type === 'favorites'">
+                    <MenuItem>
+                      <div
+                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        @click="removeSavedProduct"
+                      >
+                        <XMarkIcon class="h-5 w-5" aria-hidden="true" /><span
+                          class="capitalize"
+                          >Remove</span
                         >
-                          <XMarkIcon class="h-5 w-5" aria-hidden="true" /><span
-                            class="capitalize"
-                            >Remove</span
-                          >
-                        </div>
-                      </MenuItem>
-                    </template> -->
+                      </div>
+                    </MenuItem>
+                  </template>
                   <template v-if="type === 'product'">
                     <MenuItem v-if="product.featureId">
                       <router-link
@@ -160,7 +162,7 @@
           <div class="px-4 text-sm text-gray-500 pb-4">
             <div class="flex space-x-2">
               <div>
-                {{ dayjs(product.datePublished).format("YYYY-MM-DD") }}
+                {{ dayjs(product.datePublished).utc().format("DD MMMM YYYY") }}
               </div>
               <!-- <div>•</div>
                 <div>{{ product.views }} views</div> -->
@@ -170,27 +172,46 @@
       </div>
     </template>
   </div>
+  <Overlay :show="savingProduct">
+    <div class="max-w-xs inline-block">
+      <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
+      <div class="w-fit m-auto">
+        <LoadingSpinner class="h-16 w-16" />
+      </div>
+    </div>
+  </Overlay>
 </template>
 <script>
-import { ref } from "vue";
+import { inject, ref } from "vue";
+import axios from "@/shared/config/wireAxios";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import Overlay from "./Overlay.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 import {
+  BookmarkIcon,
   EllipsisVerticalIcon,
   PencilSquareIcon,
   TrashIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import ProductImage from "@workspace/components/ProductImage.vue";
-import dayjs from "dayjs/esm/index.js";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 export default {
   components: {
     Menu,
     MenuButton,
     MenuItem,
     MenuItems,
+    BookmarkIcon,
     EllipsisVerticalIcon,
     PencilSquareIcon,
     TrashIcon,
+    XMarkIcon,
     ProductImage,
+    Overlay,
+    LoadingSpinner,
   },
   props: {
     product: {
@@ -206,20 +227,58 @@ export default {
       default: false,
     },
   },
-  emits: ["delete"],
+  emits: ["delete", "remove"],
   setup(props, { emit }) {
     const environment = ref(import.meta.env.MODE);
+    const createNotification = inject("create-notification");
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
     };
     const deleteProduct = () => {
       emit("delete", props.product);
     };
+    const removeSavedProduct = () => {
+      emit("remove", props.product);
+    };
+    const savingProduct = ref(false);
+    const saveProduct = (product) => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Product Saved",
+          message: `Product ${product.productNumber} has been saved.`,
+          type: "success",
+        });
+      } else {
+        savingProduct.value = true;
+        axios.put("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            savingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            savingProduct.value = false;
+            createNotification({
+              title: "Product Saved",
+              message: `Product ${product.productNumber} has been saved.`,
+              type: "success",
+            });
+          }
+        });
+      }
+    };
     return {
       environment,
       getImg,
       deleteProduct,
+      removeSavedProduct,
+      savingProduct,
+      saveProduct,
       dayjs,
+      utc,
     };
   },
 };
