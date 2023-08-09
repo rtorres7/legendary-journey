@@ -70,19 +70,24 @@ export const getProductImageUrl = (images, docNum) => {
   if (Array.isArray(images)) {
     updatedAt = images.filter((image) => image.usage == "article")[0]
       .updated_at;
-  } else if (images && images.table.article) {
+  } else if (images && images.table?.article) {
     updatedAt = images.table.article.table.updated_at;
   } else {
     updatedAt = "";
   }
   return (
     window.location.origin +
+    getApiBaseUrl() +
     "/documents/" +
     docNum +
     "/images/article?updated_at=" +
     updatedAt
   );
 };
+
+export const getApiBaseUrl = () => {
+  return import.meta.env.MODE === "container" ? "/api" : "";
+};  
 
 //Damion's Idea
 export const isProduction = () => {

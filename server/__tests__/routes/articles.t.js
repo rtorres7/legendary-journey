@@ -1,49 +1,51 @@
-const request = require("supertest");
-const { setupApp, setupAppWithUser } = require('../__utils__/expressUtils');
-const { articles } = require("../__utils__/dataLoader");
-const router = require('../../src/routes/articles');
-const dayjs = require('dayjs');
+import { expect, jest } from '@jest/globals';
+import request from "supertest";
+import dayjs from 'dayjs';
+
+import { articles } from "../__utils__/dataLoader";
+import { setupApp, setupAppWithUser } from '../__utils__/expressUtils';
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
     const { articles } = require("../__utils__/dataLoader");
     return {
       findAllByDate: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.findAllByDate:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return [articles[1]];
       }),
       findByProductNumber: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.findByProductNumber:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       updateProduct: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.updateProduct:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       createProduct: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.createProduct:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       findById: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.findById:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
-
         return articles[0];
       }),
       deleteProduct: jest.fn().mockImplementation(() => {
+        // console.log("mock ProductService.deleteProduct:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -72,7 +74,19 @@ jest.mock('../../src/services/metadata.js', () => {
   });
 });
 
+jest.mock('../../src/services/workspace.js', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      deleteSavedProductForAllUsers: jest.fn().mockImplementation(() => {
+      }),
+    };
+  });
+});
+
+const USER = { id: 1, firstName: 'First', lastName: 'Last', dn: 'O=org,OU=orgunit,CN=commonname' };
+
 describe("Article Routes", () => {
+
   afterEach(() => {
     jest.clearAllMocks();
     delete process.env.THROW_TEST_ERROR;
@@ -80,6 +94,8 @@ describe("Article Routes", () => {
 
   describe("GET /articles/date/:date", () => {
     it("should return all articles for the given date", () => {
+      delete process.env.THROW_TEST_ERROR;
+
       const router = require('../../src/routes/articles');
       const app = setupApp(router);
 
@@ -149,7 +165,7 @@ describe("Article Routes", () => {
 
     it("should send update document when document_action is save", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const original = articles[0];
       const postData = {
@@ -195,7 +211,7 @@ describe("Article Routes", () => {
   describe("POST /articles", () => {
     it("should create the given article", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -217,7 +233,7 @@ describe("Article Routes", () => {
 
     it("should create the given article including producing_office", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -240,7 +256,7 @@ describe("Article Routes", () => {
 
     it("should create the given article defaulting date published", () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -263,7 +279,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const postData = {
         document_action: "save",
@@ -339,7 +355,7 @@ describe("Article Routes", () => {
   describe("PUT /articles/:id", () => {
     it("should update document", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const original = articles[0];
 
@@ -349,6 +365,7 @@ describe("Article Routes", () => {
         id: original.id,
         date_published: original.datePublished,
         doc_num: original.productNumber,
+        coauthors: ["ANCESTRY"],
       };
 
       return request(app)
@@ -356,7 +373,8 @@ describe("Article Routes", () => {
         .send(postData)
         .expect(200)
         .expect("Content-Type", /json/)
-        .then(async (res) => {
+        .then(async (res, rej) => {
+          expect(rej).toBeUndefined();
           expect(res.body.success).toBe(true);
           expect(res.body.date).toEqual(dayjs(original.datePublished).format("YYYY-MM-DD"));
           expect(res.body.doc_num).toBe(original.productNumber);
@@ -369,7 +387,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupAppWithUser(router, {id: 1});
+      const app = setupAppWithUser(router, USER);
 
       const original = articles[0];
 
@@ -379,6 +397,7 @@ describe("Article Routes", () => {
         id: original.id,
         date_published: original.datePublished,
         doc_num: original.productNumber,
+        coauthors: ["ANCESTRY"],
       };
 
       return request(app)

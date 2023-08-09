@@ -1,10 +1,10 @@
+const { config } = require("./config/config");
 const cors = require("cors");
 const express = require("express");
 const MongoStore = require("connect-mongo");
 const auth = require("./services/auth");
 const path = require("path");
 const session = require("express-session");
-const { config } = require("./config/config");
 const { successHandler, errorHandler } = require("./config/morgan");
 
 const app = express();

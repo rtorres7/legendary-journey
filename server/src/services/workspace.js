@@ -1,7 +1,7 @@
 const ProductService = require('./product-service');
 const { models } = require('../data/sequelize');
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
-const runSearch = require('../util/search');
+const { runSearch } = require('../util/search');
 
 const PRODUCT_FIELDS = [
   { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
@@ -15,7 +15,7 @@ const PRODUCT_FIELDS = [
   { field: 'savedProductUserId' },
   { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
   { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
-]
+];
 
 class WorkspaceService {
   constructor() {
@@ -37,7 +37,7 @@ class WorkspaceService {
       savedProductUserId: userId,
     };
 
-    const results = await runSearch.runSearch(
+    const results = await runSearch(
       term,
       this.index,
       perPage,
@@ -54,26 +54,36 @@ class WorkspaceService {
   }
 
   async createSavedProduct(productId, userId) {
-    const savedProduct = await models.SavedProduct.create({
-      productId: productId,
-      createdBy: userId,
+    const savedProductResponse = await models.SavedProduct.findCreateFind({
+      where: {
+        productId: productId,
+        createdBy: userId,
+      },
+      defaults: {
+        productId: productId,
+        createdBy: userId,
+      }
     });
 
-    try {
-      const product = await this.productService.findById(productId);
-      const savedProductToIndex = {
-        ...product.indexable,
-        savedProductUserId: userId,
-        productId,
-        id: savedProduct.id
-      };
+    const savedProduct = savedProductResponse["0"];
 
-      await this.client.index({
-        index: this.index,
-        document: savedProductToIndex,
-      });
-    } catch (error) {
-      console.log("There was a problem indexing saved product");
+    if (savedProductResponse["1"]) {
+      try {
+        const product = await this.productService.findById(productId);
+        const savedProductToIndex = {
+          ...product.indexable,
+          savedProductUserId: userId,
+          productId,
+          id: savedProduct.id
+        };
+
+        await this.client.index({
+          index: this.index,
+          document: savedProductToIndex,
+        });
+      } catch (error) {
+        console.log("There was a problem indexing saved product");
+      }
     }
 
     return savedProduct;
@@ -107,6 +117,25 @@ class WorkspaceService {
           },
         },
       },
+    });
+  }
+
+  async deleteSavedProductForAllUsers(productId) {
+    await models.SavedProduct.destroy({
+      where: {
+        productId: productId
+      }
+    });
+
+    await this.client.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          match: {
+            productId: productId
+          }
+        }
+      }
     });
   }
 
@@ -151,7 +180,7 @@ class WorkspaceService {
       collection: collectionId
     };
 
-    const results = await runSearch.runSearch(
+    const results = await runSearch(
       term,
       this.index,
       perPage,
