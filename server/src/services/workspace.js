@@ -37,7 +37,7 @@ class WorkspaceService {
         FROM total_views
         WHERE product_id = $1;
       `;
-      const result = await client.query(query, [productId]);
+      const result = await client.query(query, [productId]); //Need to fix this client
       const totalViews = result.rows[0]?.total_view_count || 0;
       return totalViews;
     } catch (error) {
@@ -53,7 +53,7 @@ class WorkspaceService {
         FROM unique_views
         WHERE product_id = $1;
       `;
-      const result = await client.query(query, [productId]);
+      const result = await client.query(query, [productId]); //Need to fix this client
       const uniqueViews = parseInt(result.rows[0]?.unique_view_count || 0, 10);
       return uniqueViews;
     } catch (error) {
