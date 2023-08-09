@@ -15,13 +15,51 @@ const PRODUCT_FIELDS = [
   { field: 'savedProductUserId' },
   { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
   { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
-]
+];
 
 class WorkspaceService {
   constructor() {
     this.client = require("../data/elasticsearch");
     this.index = "savedproducts";
     this.productService = new ProductService();
+  }
+
+  async getUserProductViews(userId) {
+    const totalViews = await this._getTotalViews(userId);
+    const uniqueViews = await this._getUniqueViews(userId);
+    return { totalViews, uniqueViews };
+  }
+
+  async function _getTotalViews(productId) {
+    try {
+      const query = `
+        SELECT total_view_count
+        FROM total_views
+        WHERE product_id = $1;
+      `;
+      const result = await client.query(query, [productId]);
+      const totalViews = result.rows[0]?.total_view_count || 0;
+      return totalViews;
+    } catch (error) {
+      console.error(`Unable to retrieve total views for product ${productId}: ${error.message}`);
+      throw error;
+    }
+  }
+
+  async function _getUniqueViews(productId) {
+    try {
+      const query = `
+        SELECT COUNT(*) AS unique_view_count
+        FROM unique_views
+        WHERE product_id = $1;
+      `;
+      const result = await client.query(query, [productId]);
+      const uniqueViews = parseInt(result.rows[0]?.unique_view_count || 0, 10);
+      return uniqueViews;
+    } catch (error) {
+      console.error(`Unable to retrieve unique views for product ${productId}: ${error.message}`);
+      throw error;
+    }
   }
 
   async findPageOfSavedProductsForUser(
