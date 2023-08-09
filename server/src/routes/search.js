@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const ProductSearchService = require("../services/product-search-service");
+const {runAsUser} = require('../util/request');
 const searchService = new ProductSearchService(process.env.ES_URL);
+const WorkspaceService = require("../services/workspace");
+const workspaceService = new WorkspaceService();
 
 router.get('/search', async (req, res) => {
   /*
@@ -31,9 +34,15 @@ router.get('/search', async (req, res) => {
     }
  */
 
-  const term = req.query.text;
-  const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir, req.query);
-  res.json(results);
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const term = req.query.text;
+    const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir, req.query);
+
+    for (let product of results.results) {
+      await augmentProductWithSaved(product, currentUser.id, product.id);
+    }
+    res.json(results);
+  });
 });
 
 router.get('/relatedSearch/:id', async (req, res) => {
@@ -53,7 +62,13 @@ router.get('/relatedSearch/:id', async (req, res) => {
 
   const results = await searchService.relatedSearch(req.params.id);
   res.json(results);
-
 });
+
+async function augmentProductWithSaved(productData, currentUserId, productId) {
+  productData.saved = await workspaceService.isProductSaved(
+    currentUserId,
+    productId,
+  );
+}
 
 module.exports = router;
