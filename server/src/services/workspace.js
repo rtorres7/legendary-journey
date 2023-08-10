@@ -47,19 +47,14 @@ class WorkspaceService {
   }
 
   async _getUniqueViews(productId) {
-    try {
-      const query = `
-        SELECT COUNT(*) AS unique_view_count
-        FROM unique_views
-        WHERE product_id = $1;
-      `;
-      const result = await client.query(query, [productId]); //Need to fix this client
-      const uniqueViews = parseInt(result.rows[0]?.unique_view_count || 0, 10);
-      return uniqueViews;
-    } catch (error) {
-      console.error(`Unable to retrieve unique views for product ${productId}: ${error.message}`);
-      throw error;
-    }
+    const uniqueUserCount = await UniqueView.count({
+      where: {
+        productId: productId
+      },
+      distinct: true,
+      col: 'viewedBy'
+    });
+    return uniqueUserCount;
   }
 
   async findPageOfSavedProductsForUser(
