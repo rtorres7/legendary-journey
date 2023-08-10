@@ -8,6 +8,8 @@ const { Sequelize } = require("sequelize");
 
 const { logger } = require("../../src/config/logger");
 
+const path = require("path");
+
 const articles = [
   new Article({
     classification: "UNC",
@@ -2957,15 +2959,34 @@ const loadCollectionProducts = async (postgresUrl) => {
 const loadUsers = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const userModel = require("../../src/models/user");
-  userModel(sequelize);
+  const Organization = require("../../src/models/organization")(sequelize);
+  const User = require("../../src/models/user")(sequelize);
 
-  await sequelize.models.User.sync();
+  sequelize.models.Organization.hasMany(sequelize.models.User, {
+    foreignKey: "organizationId",
+  });
+  sequelize.models.User.belongsTo(sequelize.models.Organization, {
+    foreignKey: "organizationId",
+  });
+
+  await Organization.sync();
+  await User.sync();
+
+  const organization = await sequelize.models.Organization.create({
+    name: "DNI",
+  });
 
   await sequelize.models.User.create({
     email: "foo@example.com",
     dn: "O=US,OU=OFFICE,CN=foo",
+    organizationId: organization.id,
   });
+
+  return {
+    sequelize,
+    User,
+    Organization,
+  };
 };
 
 module.exports = {

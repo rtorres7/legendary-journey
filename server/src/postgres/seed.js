@@ -1,262 +1,293 @@
-const { models } = require('../data/sequelize');
+const { models } = require("../data/sequelize");
 
-function loadUserData() {
-  models.User.findOrCreate({
+async function loadOrganizationData() {
+  const [organization, created] = await models.Organization.findOrCreate({
     where: {
-      userName: 'alvaram'
+      name: "DNI",
     },
     defaults: {
-      fullName: 'Alvaro Ramirez',
-      firstName: 'Alvaro',
-      lastName: 'Ramirez',
-      userName: 'alvaram',
-      enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=alvaram',
-      email: 'alvaram@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      name: "DNI",
+    },
   });
 
-  models.User.findOrCreate({
+  return organization;
+}
+
+async function loadUserData(organization) {
+  await models.User.findOrCreate({
     where: {
-      userName: 'juliluc'
+      userName: "alvaram",
     },
     defaults: {
-      fullName: 'Julie Luckanavage',
-      firstName: 'Julie',
-      lastName: 'Luckanavage',
-      userName: 'juliluc',
+      fullName: "Alvaro Ramirez",
+      firstName: "Alvaro",
+      lastName: "Ramirez",
+      userName: "alvaram",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=juliluc',
-      email: 'juliluc@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=alvaram",
+      email: "alvaram@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'rodotor'
+      userName: "juliluc",
     },
     defaults: {
-      fullName: 'Rodolfo Torres',
-      firstName: 'Roldolfo',
-      lastName: 'Torres',
-      userName: 'rodotor',
+      fullName: "Julie Luckanavage",
+      firstName: "Julie",
+      lastName: "Luckanavage",
+      userName: "juliluc",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=rodotor',
-      email: 'rodotor@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=juliluc",
+      email: "juliluc@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'kevibeh'
+      userName: "rodotor",
     },
     defaults: {
-      fullName: 'Kevin Behr',
-      firstName: 'Kevin',
-      lastName: 'Behr',
-      userName: 'kevibeh',
+      fullName: "Rodolfo Torres",
+      firstName: "Roldolfo",
+      lastName: "Torres",
+      userName: "rodotor",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=kevibeh',
-      email: 'kevibeh@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=rodotor",
+      email: "rodotor@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'danikol'
+      userName: "kevibeh",
     },
     defaults: {
-      fullName: 'Daniel Kolb',
-      firstName: 'Daniel',
-      lastName: 'Kolb',
-      userName: 'danikol',
+      fullName: "Kevin Behr",
+      firstName: "Kevin",
+      lastName: "Behr",
+      userName: "kevibeh",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=danikol',
-      email: 'danikol@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=kevibeh",
+      email: "kevibeh@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'chriroh'
+      userName: "danikol",
     },
     defaults: {
-      fullName: 'Christopher Rohr',
-      firstName: 'Christopher',
-      lastName: 'Rohr',
-      userName: 'chriroh',
+      fullName: "Daniel Kolb",
+      firstName: "Daniel",
+      lastName: "Kolb",
+      userName: "danikol",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=chriroh',
-      email: 'chriroh@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=danikol",
+      email: "danikol@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'timocor'
+      userName: "chriroh",
     },
     defaults: {
-      fullName: 'Timothy Corbitt',
-      firstName: 'Timothy',
-      lastName: 'Corbitt',
-      userName: 'timocor',
+      fullName: "Christopher Rohr",
+      firstName: "Christopher",
+      lastName: "Rohr",
+      userName: "chriroh",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=timocor',
-      email: 'timocor@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=chriroh",
+      email: "chriroh@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'kylemue'
+      userName: "timocor",
     },
     defaults: {
-      fullName: 'M Kyle Mueller',
-      firstName: 'M Kyle',
-      lastName: 'Mueller',
-      userName: 'kylemue',
+      fullName: "Timothy Corbitt",
+      firstName: "Timothy",
+      lastName: "Corbitt",
+      userName: "timocor",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=kylemue',
-      email: 'kylemue@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=timocor",
+      email: "timocor@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'brentay'
+      userName: "kylemue",
     },
     defaults: {
-      fullName: 'Brent Taylor',
-      firstName: 'Brent',
-      lastName: 'Taylor',
-      userName: 'brentay',
+      fullName: "M Kyle Mueller",
+      firstName: "M Kyle",
+      lastName: "Mueller",
+      userName: "kylemue",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=brentay',
-      email: 'brentay@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=kylemue",
+      email: "kylemue@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'amangil'
+      userName: "brentay",
     },
     defaults: {
-      fullName: 'Amanda Gilbreath',
-      firstName: 'Amanda',
-      lastName: 'Gilbreath',
-      userName: 'amangil',
+      fullName: "Brent Taylor",
+      firstName: "Brent",
+      lastName: "Taylor",
+      userName: "brentay",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=amangil',
-      email: 'amangil@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=brentay",
+      email: "brentay@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'damimil'
+      userName: "amangil",
     },
     defaults: {
-      fullName: 'Damion Miles',
-      firstName: 'Damion',
-      lastName: 'Miles',
-      userName: 'damimil',
+      fullName: "Amanda Gilbreath",
+      firstName: "Amanda",
+      lastName: "Gilbreath",
+      userName: "amangil",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=damimil',
-      email: 'damimil@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=amangil",
+      email: "amangil@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'jonaosz'
+      userName: "damimil",
     },
     defaults: {
-      fullName: 'Jonathan Oszczakiewicz',
-      firstName: 'Jonathan',
-      lastName: 'Oszczakiewicz',
-      userName: 'jonaosz',
+      fullName: "Damion Miles",
+      firstName: "Damion",
+      lastName: "Miles",
+      userName: "damimil",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=jonaosz',
-      email: 'jonaosz@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=damimil",
+      email: "damimil@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'kevihad'
+      userName: "jonaosz",
     },
     defaults: {
-      fullName: 'Kevin Nguyen',
-      firstName: 'Kevin',
-      lastName: 'Nguyen',
-      userName: 'kevihad',
+      fullName: "Jonathan Oszczakiewicz",
+      firstName: "Jonathan",
+      lastName: "Oszczakiewicz",
+      userName: "jonaosz",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=kevihad',
-      email: 'kevihad@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=jonaosz",
+      email: "jonaosz@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'jerekim'
+      userName: "kevihad",
     },
     defaults: {
-      fullName: 'Jeremiah Kim',
-      firstName: 'Jeremiah',
-      lastName: 'Kim',
-      userName: 'jerekim',
+      fullName: "Kevin Nguyen",
+      firstName: "Kevin",
+      lastName: "Nguyen",
+      userName: "kevihad",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=jerekim',
-      email: 'jerekim@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=kevihad",
+      email: "kevihad@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'joonkim'
+      userName: "jerekim",
     },
     defaults: {
-      fullName: 'Joon Kim',
-      firstName: 'Joon',
-      lastName: 'Kim',
-      userName: 'joonkim',
+      fullName: "Jeremiah Kim",
+      firstName: "Jeremiah",
+      lastName: "Kim",
+      userName: "jerekim",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=joonkim',
-      email: 'joonkim@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=jerekim",
+      email: "jerekim@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 
-  models.User.findOrCreate({
+  await models.User.findOrCreate({
     where: {
-      userName: 'scotbea'
+      userName: "joonkim",
     },
     defaults: {
-      fullName: 'Scott Bearden',
-      firstName: 'Scott',
-      lastName: 'Bearden',
-      userName: 'scotbea',
+      fullName: "Joon Kim",
+      firstName: "Joon",
+      lastName: "Kim",
+      userName: "joonkim",
       enabled: true,
-      dn: 'O=udev2dev.com,OU=maximus,CN=scotbea',
-      email: 'scotbea@example.com',
-      roles: ['wire_editor', 'community_editor']
-    }
+      dn: "O=udev2dev.com,OU=maximus,CN=joonkim",
+      email: "joonkim@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
+  });
+
+  await models.User.findOrCreate({
+    where: {
+      userName: "scotbea",
+    },
+    defaults: {
+      fullName: "Scott Bearden",
+      firstName: "Scott",
+      lastName: "Bearden",
+      userName: "scotbea",
+      enabled: true,
+      dn: "O=udev2dev.com,OU=maximus,CN=scotbea",
+      email: "scotbea@example.com",
+      roles: ["wire_editor", "community_editor"],
+      organizationId: organization.id,
+    },
   });
 }
 
-
-module.exports = loadUserData
+module.exports = {
+  loadUserData,
+  loadOrganizationData,
+};

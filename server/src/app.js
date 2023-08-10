@@ -138,14 +138,23 @@ setupMongoose();
 // Setup elastic search client
 require("./data/elasticsearch");
 
+async function loadAllData(loadOrganizationData, loadUserData) {
+  const organization = await loadOrganizationData();
+  await loadUserData(organization);
+}
+
 // Load seed data
 if (process.env.MXS_ENV === "container") {
   const ProductService = require("./services/product-service");
   const productService = new ProductService();
   productService.initializeProductData();
 
-  const loadUserData = require("./postgres/seed");
-  loadUserData();
+  const { loadOrganizationData } = require("./postgres/seed");
+  const { loadUserData } = require("./postgres/seed");
+
+  loadAllData(loadOrganizationData, loadUserData).then(() => {
+    console.log("All data loaded");
+  });
 }
 
 /***********************************

@@ -20,15 +20,19 @@ if (sequelize === undefined) {
       require("../../models/collection_products"),
       require("../../models/user"),
       require("../../models/feed"),
+      require("../../models/organization"),
     ];
 
     for (const modelDefiner of modelDefiners) {
       modelDefiner(sequelize);
     }
 
-    const { Collection, SavedProduct, CollectionProducts } = sequelize.models;
+    const { User, Organization, Collection, SavedProduct, CollectionProducts } =
+      sequelize.models;
     Collection.belongsToMany(SavedProduct, { through: CollectionProducts });
     SavedProduct.belongsToMany(Collection, { through: CollectionProducts });
+    User.belongsTo(Organization, { foreignKey: "organizationId" });
+    Organization.hasMany(User, { foreignKey: "organizationId" });
   }
 }
 

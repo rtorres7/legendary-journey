@@ -32,5 +32,31 @@
             </column>
         </createTable>
     </changeSet>
+     <changeSet id="4" author="kevibeh">
+        <createTable tableName="organization">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Unique Identifier for organization">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="created_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date organization was created">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp without time zone" defaultValueComputed="current_timestamp" remarks="Date organization was updated">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text" remarks="Name of the organization">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="organization" indexName="organization_name_idx">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="5" author="kevibeh">
+        <addColumn tableName="users">
+            <column name="organization_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_users_organization" referencedTableName="organization" referencedColumnNames="id" />
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
