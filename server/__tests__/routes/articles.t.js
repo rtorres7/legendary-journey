@@ -79,6 +79,11 @@ jest.mock('../../src/services/workspace.js', () => {
     return {
       deleteSavedProductForAllUsers: jest.fn().mockImplementation(() => {
       }),
+      isProductSaved: jest.fn().mockImplementationOnce(() => {
+        return true;
+      }).mockImplementation(() => {
+        return false;
+      }),
     };
   });
 });
@@ -97,7 +102,7 @@ describe("Article Routes", () => {
       delete process.env.THROW_TEST_ERROR;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get("/articles/date/2022-09-01")
@@ -113,7 +118,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get('/articles/date/2022-09-01')
@@ -126,7 +131,7 @@ describe("Article Routes", () => {
   describe("GET /articles/:id", () => {
     it("should return an article for the given productNumber", () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get("/articles/WIReWIRe_sample_1")
@@ -141,7 +146,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get('/articles/WIReWIRe_sample_1')
@@ -327,7 +332,7 @@ describe("Article Routes", () => {
   describe("GET /articles/:id/view", () => {
     it("should return the requested article for viewing", async () => {
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get("/articles/64709619aa530082dd5cc416/view")
@@ -342,7 +347,7 @@ describe("Article Routes", () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/articles');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get('/articles/64709619aa530082dd5cc416/view')

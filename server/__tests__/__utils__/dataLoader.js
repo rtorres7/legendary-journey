@@ -6,10 +6,6 @@ const mongoose = require("mongoose");
 
 const { Sequelize } = require("sequelize");
 
-const { logger } = require("../../src/config/logger");
-
-const path = require("path");
-
 const articles = [
   new Article({
     classification: "UNC",

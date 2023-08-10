@@ -45,19 +45,26 @@ router.get('/articles/date/:date', async (req, res) => {
     }
    */
 
-  try {
-    const articles = await productService.findAllByDate(req.params.date);
-    res.json({ features: articles.map((article) => article.forWire) });
-  } catch (error) {
-    // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-    handleMongooseError(
-      `Unable to find articles for date ${req.params.date}`,
-      error
-    );
-    res.json({
-      error: `Unable to find articles for date ${req.params.date}: ${error.message}`,
-    });
-  }
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    try {
+      const articles = await productService.findAllByDate(req.params.date);
+      const augmentedArticles = await Promise.all(articles.map(async article => {
+        const baseData = article.forWire;
+        await augmentProductWithSaved(baseData, currentUser.id, article.id);
+        return baseData;
+      }));
+      res.json({features: augmentedArticles});
+    } catch (error) {
+      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+      handleMongooseError(
+        `Unable to find articles for date ${req.params.date}`,
+        error
+      );
+      res.json({
+        error: `Unable to find articles for date ${req.params.date}: ${error.message}`,
+      });
+    }
+  });
 });
 
 //GET articles by id
@@ -72,19 +79,23 @@ router.get('/articles/:productNumber', async (req, res) => {
     }
    */
 
-  try {
-    const article = await productService.findByProductNumber(req.params.productNumber);
-    res.json(article.data.details);
-  } catch (error) {
-    // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-    handleMongooseError(
-      `Unable to find article with product number ${req.params.productNumber}`,
-      error,
-    );
-    res.json({
-      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
-    });
-  }
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    try {
+      const article = await productService.findByProductNumber(req.params.productNumber);
+      const details = article.data.details;
+      await augmentProductWithSaved(details, currentUser.id, article.id, false);
+      res.json(details);
+    } catch (error) {
+      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+      handleMongooseError(
+        `Unable to find article with product number ${req.params.productNumber}`,
+        error,
+      );
+      res.json({
+        error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+      });
+    }
+  });
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
@@ -222,18 +233,22 @@ router.get('/articles/:id/view', async (req, res) => {
     }
    */
 
-  try {
-    const product = await productService.findById(req.params.id);
-    res.json(product.data.details);
-  } catch (error) {
-    handleMongooseError(
-      `Unable to find article with id ${req.params.id}`,
-      error
-    );
-    res.json({
-      error: `Unable to find article with id ${req.params.id}: ${error.message}`,
-    });
-  }
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    try {
+      const product = await productService.findById(req.params.id);
+      const details = product.data.details;
+      await augmentProductWithSaved(details, currentUser.id, product.id, false);
+      res.json(details);
+    } catch (error) {
+      handleMongooseError(
+        `Unable to find article with id ${req.params.id}`,
+        error
+      );
+      res.json({
+        error: `Unable to find article with id ${req.params.id}: ${error.message}`,
+      });
+    }
+  });
 });
 
 // Update an article
@@ -509,5 +524,14 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
 
   res.json({ success: true });
 });
+
+async function augmentProductWithSaved(productData, currentUserId, productId, addToAttributes=true) {
+  const isSaved = await workspaceService.isProductSaved(currentUserId, productId);
+  productData.saved = isSaved;
+
+  if (addToAttributes) {
+    productData.attributes.saved = isSaved;
+  }
+}
 
 module.exports = router;

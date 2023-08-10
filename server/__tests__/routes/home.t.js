@@ -1,6 +1,5 @@
 const request = require('supertest');
-const express = require("express");
-const { setupApp } = require("../__utils__/expressUtils");
+const { setupAppWithUser} = require("../__utils__/expressUtils");
 
 jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -12,10 +11,25 @@ jest.mock('../../src/services/product-service.js', () => {
         }
 
         return {
-          featured: articles,
-          briefs: articles.slice(0, 3),
+          featured: articles.map(article => article.features),
+          briefs: articles.slice(0, 3).map(article => article.features),
         };
       })
+    };
+  });
+});
+
+jest.mock("../../src/services/workspace.js", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      isProductSaved: jest
+        .fn()
+        .mockImplementationOnce(() => {
+          return true;
+        })
+        .mockImplementation(() => {
+          return false;
+        }),
     };
   });
 });
@@ -27,11 +41,8 @@ describe('Home Routes', () => {
 
   describe('GET /features', () => {
     it("should return featured articles and briefs", () => {
-      const app = express();
-      app.use(express.json());
-
       const router = require('../../src/routes/home');
-      app.use(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get('/home/features')
@@ -47,7 +58,7 @@ describe('Home Routes', () => {
       process.env.THROW_TEST_ERROR = true;
 
       const router = require('../../src/routes/home');
-      const app = setupApp(router);
+      const app = setupAppWithUser(router, {id: 1});
 
       return request(app)
         .get('/home/features')
