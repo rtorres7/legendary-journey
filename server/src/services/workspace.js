@@ -31,18 +31,17 @@ class WorkspaceService {
   }
 
   async _getTotalViews(productId) {
-    try {
-      const query = `
-        SELECT total_view_count
-        FROM total_views
-        WHERE product_id = $1;
-      `;
-      const result = await client.query(query, [productId]); //Need to fix this client
-      const totalViews = result.rows[0]?.total_view_count || 0;
-      return totalViews;
-    } catch (error) {
-      console.error(`Unable to retrieve total views for product ${productId}: ${error.message}`);
-      throw error;
+    const totalViewEntry = await TotalView.findOne({
+      where: {
+        productId: productId
+      },
+      attributes: ['totalViewCount']
+    });
+
+    if (totalViewEntry) {
+      return totalViewEntry.totalViewCount;
+    } else {
+      return 0;
     }
   }
 
