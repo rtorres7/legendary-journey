@@ -2,6 +2,8 @@ const ProductService = require('./product-service');
 const { models } = require('../data/sequelize');
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const runSearch = require('../util/search');
+// const UniqueView = models.UniqueView;
+// const TotalView = models.TotalView;
 
 const PRODUCT_FIELDS = [
   { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
@@ -31,7 +33,7 @@ class WorkspaceService {
   }
 
   async _getTotalViews(productId) {
-    const totalViewEntry = await TotalView.findOne({
+    const totalViewEntry = await models.TotalView.findOne({
       where: {
         productId: productId
       },
@@ -46,7 +48,7 @@ class WorkspaceService {
   }
 
   async _getUniqueViews(productId) {
-    const uniqueUserCount = await UniqueView.count({
+    const uniqueUserCount = await models.UniqueView.count({
       where: {
         productId: productId
       },
