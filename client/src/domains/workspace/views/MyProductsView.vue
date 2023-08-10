@@ -9,7 +9,8 @@
       </template>
       <template v-else>
         <div v-if="numProducts > 0" class="font-semibold mb-4 sm:mb-0">
-          {{ numProducts }} products
+          <template v-if="numProducts == 1">{{ numProducts }} product</template>
+          <template v-else>{{ numProducts }} products</template>
         </div>
       </template>
       <!-- <div class="flex space-x-4">

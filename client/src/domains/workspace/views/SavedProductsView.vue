@@ -13,7 +13,7 @@
           <template v-else>{{ numProducts }} products</template>
         </div>
       </template>
-      <div class="flex space-x-4">
+      <div v-if="mySaved.length > 0" class="flex space-x-4">
         <Listbox
           v-model="selectedSort"
           as="div"
