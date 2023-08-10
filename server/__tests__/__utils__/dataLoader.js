@@ -2863,6 +2863,22 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
   mongoose.connection.close();
 };
 
+const loadFeeds = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const feedsModel = require("../../src/models/feed");
+  feedsModel(sequelize);
+
+  await sequelize.models.Feed.sync();
+
+  return await sequelize.models.Feed.create({
+    name: "Test Feed #1",
+    searchParams: "https://localhost:8443/search?text=test123",
+    state: "Draft",
+    classification: "U",
+  });
+};
+
 const loadSavedProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -2956,12 +2972,8 @@ const loadUsers = async (postgresUrl) => {
   await Organization.sync();
   await User.sync();
 
-  await sequelize.models.Organization.create({
+  const organization = await sequelize.models.Organization.create({
     name: "DNI",
-  });
-
-  const organization = await sequelize.models.Organization.findOne({
-    where: { name: "DNI" },
   });
 
   await sequelize.models.User.create({
@@ -2981,6 +2993,7 @@ module.exports = {
   loadElasticSearch,
   loadMetadata,
   loadArticlesIntoMongo,
+  loadFeeds,
   loadSavedProducts,
   loadSavedProductsForSearch,
   loadCollections,
