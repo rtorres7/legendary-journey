@@ -5,13 +5,15 @@
       class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
       :style="{
         background:
-          'url(' + getProductImageUrl(product.images, product.doc_num) + ')',
+          'url(' +
+          getProductImageUrl(product.images, product.productNumber) +
+          ')',
       }"
     ></div>
     <img
       id="product-img"
       class="inset-x-0 absolute h-full mx-auto z-[3]"
-      :src="getProductImageUrl(product.images, product.doc_num)"
+      :src="getProductImageUrl(product.images, product.productNumber)"
       alt=""
       @load="onImgLoad"
     />
