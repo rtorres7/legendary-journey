@@ -349,7 +349,7 @@ ArticleSchema.virtual("data.details").get(function () {
     producing_offices: this.producingOffices?.map((office) => office.name),
     product_type_id: this.productType.code,
     product_type_name: this.productType.name,
-    published_by: this.publishedBy?.name,
+    published_by: this.publishedBy?.dn,
     title_classif: this.titleClassification,
     updated_by: this.updatedBy,
   };
