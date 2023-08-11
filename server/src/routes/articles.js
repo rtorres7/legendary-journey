@@ -290,7 +290,7 @@ router.put('/articles/:id', async (req, res, next) => {
 });
 
 async function publishProduct(id, user, productContent, req, res) {
-  const productData = buildUpdate(id, productContent, user);
+  const productData = await buildUpdate(id, productContent, user);
   productData.publishedBy = {
     id: user.id,
     firstName: user.firstName,
