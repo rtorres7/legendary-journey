@@ -607,7 +607,7 @@ import {
   getValueForCode,
   getValueForName,
   formatDate,
-  isFavoriteProduct,
+  isSavedProduct,
 } from "@current/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
@@ -1497,7 +1497,7 @@ export default {
       updateFavoriteStatus,
     };
   },
-  methods: { isFavoriteProduct },
+  methods: { isSavedProduct },
 };
 </script>
 <style scoped lang="scss"></style>
