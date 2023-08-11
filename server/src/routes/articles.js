@@ -113,13 +113,22 @@ router.post('/articles/processDocument', async (req, res, next) => {
    */
 
   try {
+    let updatedProduct;
+
     switch (req.body.document_action) {
       case 'create':
         res.redirect(307, '/articles/');
         break;
       case "publish":
-        req.body.state = "posted";
-        await updateArticle(req.body.id, req, res, next);
+        updatedProduct = await publishProduct(req.body.id, req.body.date_published || dayjs().format('YYYY-MM-DD'), req.user);
+        res.json({
+          success: true,
+          article: updatedProduct.data.document,
+          date: dayjs(updatedProduct.datePublished).format('YYYY-MM-DD'),
+          doc_num: updatedProduct.productNumber,
+          id: updatedProduct._id,
+          state: updatedProduct.state,
+        });
         break;
       case "save":
         await updateArticle(req.body.id, req, res, next);
@@ -129,7 +138,7 @@ router.post('/articles/processDocument', async (req, res, next) => {
     }
   } catch (error) {
     res.json({
-      error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+      error: `Unable to find article with product number ${req.body.productNumber}: ${error.message}`,
     });
   }
 });
@@ -184,6 +193,12 @@ router.post('/articles/', async (req, res) => {
       topics: topics,
       nonStateActors: nonStateActors,
       updatedAt: dayjs().toDate(),
+      updatedBy: {
+        id: currentUser.id,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        dn: currentUser.dn,
+      },
     });
 
     try {
@@ -281,6 +296,21 @@ router.put('/articles/:id', async (req, res, next) => {
   }
 });
 
+async function publishProduct(id, datePublished, user) {
+  const productUpdates = {
+    publishedBy: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      dn: user.dn,
+    },
+    state: "posted",
+    datePublished: datePublished
+  };
+
+  return await productService.updateProduct(id, productUpdates);
+}
+
 // This method is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
@@ -299,9 +329,6 @@ async function updateArticle(id, req, res) {
       req.body.producing_offices
     );
     const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
-    if (!coauthors) {
-      throw new Error('coauthors not found');
-    }
     const coordinators = await metadataService.findCoordinatorsFor(
       req.body.coordinators
     );
@@ -317,6 +344,7 @@ async function updateArticle(id, req, res) {
     const nonStateActors = await metadataService.findNonStateActorsFor(
       req.body.non_state_actors
     );
+
     const article = {
       classification: req.body.classification,
       classificationXml: req.body.classification, // This will need to changed when we have real xml
@@ -335,7 +363,6 @@ async function updateArticle(id, req, res) {
       publicationNumber: req.body.publication_number,
       regions: regions.map(({name, code}) => ({name, code})),
       reportingType: reportingType,
-      state: req.body.state,
       subregions: subregions.map(({name, code}) => ({name, code})),
       summary: req.body.summary,
       summaryClassification: req.body.summary_classif,
