@@ -29,6 +29,36 @@
       </div>
     </template>
     <template v-else>
+      <button
+        v-if="
+          environment != 'production' &&
+          !isProductLocked(sitrep) &&
+          sitrep.state == 'posted'
+        "
+        class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
+        :aria-label="`save product ${sitrep.productNumber}`"
+      >
+        <template v-if="isSavedProduct(sitrep)">
+          <tippy content="Saved" placement="bottom">
+            <BookmarkIconSolid
+              aria-hidden="true"
+              class="h-5 w-5"
+              @click.prevent="save(sitrep)"
+              @keydown.enter.prevent="save(sitrep)"
+            />
+          </tippy>
+        </template>
+        <template v-else>
+          <tippy content="Save" placement="bottom">
+            <BookmarkIcon
+              aria-hidden="true"
+              class="h-5 w-5"
+              @click.prevent="save(sitrep)"
+              @keydown.enter.prevent="save(sitrep)"
+            />
+          </tippy>
+        </template>
+      </button>
       <div class="flex flex-col h-full justify-between">
         <div>
           <p class="text-sm mb-2 line-clamp-2">
@@ -52,12 +82,33 @@
       </template>
     </template>
   </MaxCard>
+  <MaxOverlay :show="savingProduct || removingProduct">
+    <div class="max-w-xs inline-block">
+      <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
+        Saving Product...
+      </p>
+      <p v-if="removingProduct" class="mb-4 font-semibold text-2xl">
+        Removing Product...
+      </p>
+      <div class="w-fit m-auto">
+        <MaxLoadingSpinner class="h-16 w-16" />
+      </div>
+    </div>
+  </MaxOverlay>
 </template>
 
 <script>
-import { isProductLocked, formatDate } from "@current/helpers";
+import { isProductLocked, formatDate, isSavedProduct } from "@current/helpers";
+import { BookmarkIcon } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
+import { ref } from "vue";
 
 export default {
+  components: {
+    BookmarkIcon,
+    BookmarkIconSolid,
+  },
   props: {
     sitrep: {
       type: Object,
@@ -69,9 +120,17 @@ export default {
     },
   },
   setup() {
+    const environment = ref(import.meta.env.MODE);
+    const { save, savingProduct, removingProduct } = updateSavedStatus();
+
     return {
       formatDate,
       isProductLocked,
+      environment,
+      isSavedProduct,
+      save,
+      savingProduct,
+      removingProduct,
     };
   },
 };

@@ -58,7 +58,11 @@
         ]"
       >
         <button
-          v-if="!isProductLocked(product) && product.state == 'posted'"
+          v-if="
+            environment != 'production' &&
+            !isProductLocked(product) &&
+            product.state == 'posted'
+          "
           class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
           :aria-label="`save product ${product.productNumber}`"
         >
@@ -140,6 +144,7 @@ import ProductImage from "@current/components/ProductImage.vue";
 import { BookmarkIcon } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import updateSavedStatus from "@current/composables/updateSavedStatus";
+import { ref } from "vue";
 
 export default {
   components: {
@@ -163,9 +168,11 @@ export default {
   },
   setup() {
     const offlineMode = import.meta.env.MODE === "offline";
+    const environment = ref(import.meta.env.MODE);
     const { save, savingProduct, removingProduct } = updateSavedStatus();
     return {
       offlineMode,
+      environment,
       isProductLocked,
       formatDate,
       isSavedProduct,
