@@ -121,8 +121,8 @@ router.post('/articles/processDocument', async (req, res) => {
         await publishProduct(req.body.id, req.user, req.body, req, res);
         break;
       case "save": {
-        const productData = await buildUpdate(req.params.id, req.body, req.user);
-        await updateProduct(req.params.id, productData, req, res);
+        const productData = await buildUpdate(req.body.id, req.body, req.user);
+        await updateProduct(req.body.id, productData, req, res);
         break;
       }
       default:
@@ -403,7 +403,6 @@ async function updateProduct(id, productData, req, res) {
     res.json({
       error: `There was a problem updating product: ${error.message}`,
     });
-    throw error;
   }
 }
 // Delete an article
