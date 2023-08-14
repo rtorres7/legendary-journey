@@ -37,25 +37,16 @@
         "
         class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
         :aria-label="`save product ${sitrep.productNumber}`"
+        @click.prevent="save(sitrep)"
       >
         <template v-if="isSavedProduct(sitrep)">
           <tippy content="Saved" placement="bottom">
-            <BookmarkIconSolid
-              aria-hidden="true"
-              class="h-5 w-5"
-              @click.prevent="save(sitrep)"
-              @keydown.enter.prevent="save(sitrep)"
-            />
+            <BookmarkIconSolid aria-hidden="true" class="h-5 w-5" />
           </tippy>
         </template>
         <template v-else>
           <tippy content="Save" placement="bottom">
-            <BookmarkIcon
-              aria-hidden="true"
-              class="h-5 w-5"
-              @click.prevent="save(sitrep)"
-              @keydown.enter.prevent="save(sitrep)"
-            />
+            <BookmarkIcon aria-hidden="true" class="h-5 w-5" />
           </tippy>
         </template>
       </button>

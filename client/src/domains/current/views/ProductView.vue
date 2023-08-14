@@ -71,6 +71,37 @@
               </tippy>
             </button>
           </div>
+          <div>
+            <button
+              v-if="environment != 'production'"
+              :aria-label="`save product ${product.productNumber}`"
+              @click.prevent="save(product)"
+            >
+              <template v-if="isSavedProduct(product)">
+                <tippy content="Saved">
+                  <BookmarkIconSolid aria-hidden="true" class="h-6 w-6" />
+                </tippy>
+              </template>
+              <template v-else>
+                <tippy content="Save this product">
+                  <BookmarkIcon aria-hidden="true" class="h-6 w-6" />
+                </tippy>
+              </template>
+            </button>
+          </div>
+          <MaxOverlay :show="savingProduct || removingProduct">
+            <div class="max-w-xs inline-block">
+              <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
+                Saving Product...
+              </p>
+              <p v-if="removingProduct" class="mb-4 font-semibold text-2xl">
+                Removing Product...
+              </p>
+              <div class="w-fit m-auto">
+                <MaxLoadingSpinner class="h-16 w-16" />
+              </div>
+            </div>
+          </MaxOverlay>
           <div
             v-show="
               canManageWire &&
@@ -163,7 +194,7 @@
 
 <script>
 import dayjs from "dayjs/esm/index.js";
-import { formatDate, hasProductAccess } from "@current/helpers";
+import { formatDate, hasProductAccess, isSavedProduct } from "@current/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -172,7 +203,9 @@ import {
   LinkIcon,
   EnvelopeIcon,
   PencilIcon,
+  BookmarkIcon,
 } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import NotAuthorized from "@current/components/NotAuthorized.vue";
 import ProductNavigation from "@current/components/ProductNavigation.vue";
 import ProductContent from "@current/components/ProductContent.vue";
@@ -180,6 +213,7 @@ import ProductAttachments from "@current/components/ProductAttachments.vue";
 import ProductRelated from "@current/components/ProductRelated.vue";
 import ProductMetrics from "@current/components/ProductMetrics.vue";
 import { productDetails } from "@current/data";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
 import axios from "@/shared/config/wireAxios";
 
 export default {
@@ -188,6 +222,8 @@ export default {
     LinkIcon,
     EnvelopeIcon,
     PencilIcon,
+    BookmarkIcon,
+    BookmarkIconSolid,
     NotAuthorized,
     ProductNavigation,
     ProductContent,
@@ -198,6 +234,7 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
+    const environment = ref(import.meta.env.MODE);
     const url = computed(() => window.location);
     const createNotification = inject("create-notification");
     const product = computed(() => store.state.product.document);
@@ -207,6 +244,7 @@ export default {
     const loadingFeaturedArticles = computed(
       () => store.state.features.loading
     );
+    const { save, savingProduct, removingProduct } = updateSavedStatus();
     const relatedProducts = computed(
       () => store.state.relatedProducts.relatedDocuments
     );
@@ -415,6 +453,11 @@ export default {
       theme,
       productIsFavorite,
       offlineMode,
+      isSavedProduct,
+      save,
+      savingProduct,
+      removingProduct,
+      environment,
     };
   },
 };

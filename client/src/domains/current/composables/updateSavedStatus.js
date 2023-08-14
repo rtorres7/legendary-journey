@@ -1,8 +1,10 @@
 import { inject, ref } from "vue";
 import axios from "@/shared/config/wireAxios";
+import { useRoute } from "vue-router";
 import { productDetails } from "@current/data";
 
 export default function updateSavedStatus() {
+  const route = useRoute();
   const createNotification = inject("create-notification");
   const savingProduct = ref(false);
   const removingProduct = ref(false);
@@ -18,11 +20,18 @@ export default function updateSavedStatus() {
       documentMatch.data.saved = !product.saved;
       product.saved = !product.saved;
     } else {
+      //feature_id is not in network call on search and products pages
+      let id;
+      if (route.name == "search" || route.name == "products") {
+        id = "id";
+      } else {
+        id = "feature_id";
+      }
       let savedPromise;
       if (product.saved) {
         removingProduct.value = true;
         savedPromise = axios
-          .delete("/workspace/saved/" + product.feature_id)
+          .delete("/workspace/saved/" + product.id)
           .then((response) => {
             if (response.data.error) {
               removingProduct.value = false;
@@ -36,7 +45,7 @@ export default function updateSavedStatus() {
               removingProduct.value = false;
               createNotification({
                 title: "Product Removed",
-                message: `Product ${product.doc_num} has been removed.`,
+                message: `Product ${product.doc_num} has been removed from Saved products.`,
                 type: "success",
               });
             }
@@ -44,7 +53,7 @@ export default function updateSavedStatus() {
       } else {
         savingProduct.value = true;
         savedPromise = axios
-          .put("/workspace/saved/" + product.feature_id)
+          .put("/workspace/saved/" + product.id)
           .then((response) => {
             if (response.data.error) {
               savingProduct.value = false;
@@ -58,7 +67,7 @@ export default function updateSavedStatus() {
               savingProduct.value = false;
               createNotification({
                 title: "Product Saved",
-                message: `Product ${product.doc_num} has been saved.`,
+                message: `Product ${product.doc_num} has been added to Saved products.`,
                 type: "success",
               });
             }

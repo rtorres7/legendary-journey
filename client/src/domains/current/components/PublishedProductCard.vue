@@ -65,14 +65,13 @@
           "
           class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
           :aria-label="`save product ${product.productNumber}`"
+          @click.prevent="save(product)"
         >
           <template v-if="isSavedProduct(product)">
             <tippy content="Saved" placement="bottom">
               <BookmarkIconSolid
                 aria-hidden="true"
                 :class="headline ? 'h-6 w-6' : 'h-5 w-5'"
-                @click.prevent="save(product)"
-                @keydown.enter.prevent="save(product)"
               />
             </tippy>
           </template>
@@ -81,8 +80,6 @@
               <BookmarkIcon
                 aria-hidden="true"
                 :class="headline ? 'h-6 w-6' : 'h-5 w-5'"
-                @click.prevent="save(product)"
-                @keydown.enter.prevent="save(product)"
               />
             </tippy>
           </template>
