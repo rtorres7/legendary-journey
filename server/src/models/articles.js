@@ -36,19 +36,15 @@ const AttachmentSchema = new Schema({
 AttachmentSchema.virtual('mime_type').get(function () {
   return this.mimeType;
 });
-
 AttachmentSchema.virtual('file_name').get(function () {
   return this.fileName;
 });
-
 AttachmentSchema.virtual('file_size').get(function () {
   return this.fileSize;
 });
-
 AttachmentSchema.virtual('created_at').get(function () {
   return this.createdAt;
 });
-
 AttachmentSchema.virtual('updated_at').get(function () {
   return this.updatedAt ? this.updatedAt : this.createdAt;
 });

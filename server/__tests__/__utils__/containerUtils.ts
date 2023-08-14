@@ -1,11 +1,13 @@
 import crypto from 'crypto';
 import fs from 'fs';
+import path from "path";
 import { Client } from 'minio';
 import { GenericContainer, MongoDBContainer, StartedMongoDBContainer, StartedTestContainer, Wait } from 'testcontainers';
 import tmp from 'tmp';
 
 import config from '../../src/config/config';
 import logger from '../../src/config/logger';
+import { KiwiPreconditions } from '@kiwiproject/kiwi-js';
 
 tmp.setGracefulCleanup();
 const tmpSubDir = tmp.dirSync().name;
@@ -49,13 +51,10 @@ export class MinioContainerUtils {
   }
 
   /**
-   * Create tmp object in bucket
-   * @return {Promise<string>} file/object name
+   * 
    */
-  static async putRandomObject(client: Client, bucketName: string, objectName?: string, objectSize?: number): Promise<string> {
-    objectSize = objectSize === undefined ? 1048576 : objectSize;
-    const file = await MinioContainerUtils.fileWriteRandomToTmp(objectSize);
-    objectName = objectName ? objectName : file.split('/').pop();
+  static async putFile(client: Client, bucketName: string, objectName: string, file: string, metadata?: Record<string, string>): Promise<string> {
+    KiwiPreconditions.checkArgument(fs.existsSync(file));
     const readStream = fs.createReadStream(file, 'binary');
     return new Promise((resolve, reject) => {
       client
@@ -66,6 +65,17 @@ export class MinioContainerUtils {
         })
         .catch((error) => reject(error));
     });
+  }
+
+  /**
+   * Create tmp object in bucket
+   * @return {Promise<string>} file/object name
+   */
+  static async putRandomObject(client: Client, bucketName: string, objectName?: string, objectSize?: number): Promise<string> {
+    objectSize = objectSize === undefined ? 1048576 : objectSize;
+    const file = await MinioContainerUtils.fileWriteRandomToTmp(objectSize);
+    objectName = objectName ? objectName : file.split('/').pop();
+    return this.putFile(client, bucketName, objectName, file);
   }
 
   /**
