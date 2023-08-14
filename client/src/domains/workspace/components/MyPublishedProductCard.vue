@@ -54,16 +54,17 @@
                 <MenuItems
                   class="origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                 >
-                  <!-- <MenuItem>
-                      <div
-                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                  <MenuItem>
+                    <div
+                      class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                      @click="shareProduct()"
+                    >
+                      <ShareIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Share</span
                       >
-                        <ShareIcon class="h-5 w-5" aria-hidden="true" /><span
-                          class="capitalize"
-                          >Share</span
-                        >
-                      </div>
-                    </MenuItem> -->
+                    </div>
+                  </MenuItem>
                   <template v-if="type === 'product' || type === 'favorites'">
                     <MenuItem>
                       <div
@@ -188,6 +189,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import Overlay from "./Overlay.vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import {
+  ShareIcon,
   BookmarkIcon,
   EllipsisVerticalIcon,
   PencilSquareIcon,
@@ -204,6 +206,7 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
+    ShareIcon,
     BookmarkIcon,
     EllipsisVerticalIcon,
     PencilSquareIcon,
@@ -227,12 +230,15 @@ export default {
       default: false,
     },
   },
-  emits: ["delete", "remove"],
+  emits: ["share", "delete", "remove"],
   setup(props, { emit }) {
     const environment = ref(import.meta.env.MODE);
     const createNotification = inject("create-notification");
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
+    };
+    const shareProduct = () => {
+      emit("share", props.product);
     };
     const deleteProduct = () => {
       emit("delete", props.product);
@@ -273,6 +279,7 @@ export default {
     return {
       environment,
       getImg,
+      shareProduct,
       deleteProduct,
       removeSavedProduct,
       savingProduct,

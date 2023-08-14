@@ -64,6 +64,7 @@
             type="product"
             :class="index < numCards ? 'block' : 'hidden'"
             @delete="openDeleteDialog(product)"
+            @share="openShareDialog(product)"
           />
         </template>
       </div>
@@ -93,6 +94,25 @@
         <div class="font-semibold text-xl text-slate-700">2.4m</div>
       </div>
     </div>
+    <BaseDialog
+      :isOpen="isShareDialogOpen"
+      :title="'Share Product'"
+      class="max-w-2xl"
+      @close="closeShareDialog"
+    >
+      <MaxInput
+        v-model="shareLink"
+        label="Link to share"
+        type="text"
+        disabled="true"
+        placeholder="{{ shareLink }}"
+      />
+      <template #actions>
+        <BaseButton class="w-[100px]" color="primary" @click="copyShareLink"
+          >Copy Link</BaseButton
+        >
+      </template>
+    </BaseDialog>
     <BaseDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Product'"
@@ -164,13 +184,37 @@ export default {
     const createNotification = inject("create-notification");
     const selectedProduct = ref();
     const loadingDelete = ref(false);
-    const isDeleteDialogOpen = ref(false);
-    const closeDeleteDialog = () => {
-      isDeleteDialogOpen.value = false;
+
+    //Dialogs
+    const isShareDialogOpen = ref(false);
+    const openShareDialog = (product) => {
+      selectedProduct.value = product;
+      isShareDialogOpen.value = true;
     };
+    const closeShareDialog = () => {
+      isShareDialogOpen.value = false;
+    };
+    const isDeleteDialogOpen = ref(false);
     const openDeleteDialog = (product) => {
       selectedProduct.value = product;
       isDeleteDialogOpen.value = true;
+    };
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+
+    const shareLink = computed(() => {
+      return (
+        window.location.origin + "/product/" + selectedProduct.value.doc_num
+      );
+    });
+    const copyShareLink = () => {
+      navigator.clipboard.writeText(shareLink.value);
+      createNotification({
+        message: "Link Copied to Clipboard",
+        type: "success",
+        canClose: false,
+      });
     };
     const deleteProduct = () => {
       if (import.meta.env.MODE === "offline") {
@@ -337,9 +381,14 @@ export default {
       loadingPublished,
       loadingStats,
       loadingDelete,
+      isShareDialogOpen,
+      openShareDialog,
+      closeShareDialog,
       isDeleteDialogOpen,
       openDeleteDialog,
       closeDeleteDialog,
+      shareLink,
+      copyShareLink,
       deleteProduct,
       getProductIcon,
       screenWidth,
