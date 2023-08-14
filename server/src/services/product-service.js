@@ -232,15 +232,15 @@ class ProductService {
   async getAttachment(productNumber, attachmentId) {
     KiwiPreconditions.checkArgumentDefined(productNumber);
     KiwiPreconditions.checkArgumentDefined(attachmentId);
-    const product = await this.findByProductNumber(productNumber);
-    return this.attachmentService.get(product, attachmentId);
+    const product = this.findByProductNumber(productNumber);
+    return await this.attachmentService.get(product, attachmentId);
   }
 
   async deleteAttachment(productNumber, attachmentId) {
     KiwiPreconditions.checkArgumentDefined(productNumber);
     KiwiPreconditions.checkArgumentDefined(attachmentId);
     const product = await this.findByProductNumber(productNumber);
-    const metadata = this.attachmentService.delete(product, attachmentId);
+    const metadata = await this.attachmentService.delete(product, attachmentId);
     await this.productSearchService.removeIndexedAttachment(product.id, metadata.attachmentId);
   }
 }

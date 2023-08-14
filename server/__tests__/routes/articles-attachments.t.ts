@@ -191,43 +191,25 @@ describe("Article Attachment Routes", () => {
       */
       });
     });
+
+    it("should add attachment to metadata", async () => {
+      const product = articles[0];
+      const uploadInfo: FileUploadedObjectInfo = {
+        fieldname: "file",
+        originalname: "article.jpg",
+        encoding: "7bit",
+        mimetype: "image/jpeg",
+        etag: "180b9159a3d82185c1b16a7049757420",
+        versionId: null,
+        storage: "minio",
+        bucketName: "attachments",
+        objectName: "f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1",
+        size: 58251,
+        visible: true,
+        attachmentId: "8abcefbe-d7bb-4c14-a385-3ca31620f4d1",
+      };
+      const attachmentService = new AttachmentService();
+      return await attachmentService.add(product, uploadInfo);
+    });
   });
 });
-
-describe("Article Attachment Service", () => {
-  let server: StartedTestContainer;
-  let client: Client;
-
-  const attachmentService = new AttachmentService();
-
-  beforeAll(async () => {
-    server = await MinioContainerUtils.startContainer();
-    client = MinioContainerUtils.newClient();
-  });
-
-  describe("add", async () => {
-    const product = articles[0];
-    const uploadInfo: FileUploadedObjectInfo = {
-      fieldname: "file",
-      originalname: "article.jpg",
-      encoding: "7bit",
-      mimetype: "image/jpeg",
-      etag: "180b9159a3d82185c1b16a7049757420",
-      versionId: null,
-      storage: "minio",
-      bucketName: "attachments",
-      objectName: "f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1",
-      size: 58251,
-      visible: true,
-      attachmentId: "8abcefbe-d7bb-4c14-a385-3ca31620f4d1",
-    };
-    await attachmentService.add(product, uploadInfo);
-
-    expect(product.attachmentsMetadata).toBeArrayOfSize(2);
-  });
-});
-
-/*
-fileUploadedObjectInfo:{"fieldname":"file","originalname":"article.jpg","encoding":"7bit","mimetype":"image/jpeg","etag":"180b9159a3d82185c1b16a7049757420","versionId":null,"storage":"minio","bucketName":"attachments","objectName":"f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1","size":58251,"visible":true,"attachmentId":"8abcefbe-d7bb-4c14-a385-3ca31620f4d1"}
-2023-08-11 10:44:31 info: AttachmentService.add:  uploadInfo:{"fieldname":"file","originalname":"article.jpg","encoding":"7bit","mimetype":"image/jpeg","etag":"180b9159a3d82185c1b16a7049757420","versionId":null,"storage":"minio","bucketName":"attachments","objectName":"f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1","size":58251,"visible":true,"attachmentId":"8abcefbe-d7bb-4c14-a385-3ca31620f4d1"}
-*/

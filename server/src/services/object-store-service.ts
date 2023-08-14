@@ -102,6 +102,10 @@ export class ObjectStoreService {
       .then((stats) => {
         logger.info("ObjectStoreService.statObject:  bucketName:%s, objectName:%s, stats:%j", bucketName, objectName, stats);
         return stats;
+      })
+      .catch((error) => {
+        logger.error(error);
+        throw error;
       });
   }
 
@@ -118,7 +122,7 @@ export class ObjectStoreService {
         return stream;
       })
       .catch((error) => {
-        logger.error("ObjectStoreService.getObject:  bucketName:%s, objectName:%s", bucketName, objectName);
+        logger.error(error);
         throw error;
       });
   }
@@ -142,11 +146,14 @@ export class ObjectStoreService {
   /** Minio.Client.removeObject(bucketName: string, objectName: string, removeOpts?: RemoveOptions): Promise<void> */
   async removeObject(bucketName: string, objectName: string): Promise<void> {
     objectName = this.sanitize(objectName);
-    return this.getClient()
+    return await this.getClient()
       .removeObject(bucketName, objectName)
       .then(() => {
         logger.info("ObjectStoreService.removeObject:  bucketName:%s, objectName:%s", bucketName, objectName);
-        return;
+      })
+      .catch((error) => {
+        logger.error(error);
+        throw error;
       });
   }
 
