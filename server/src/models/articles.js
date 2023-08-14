@@ -27,6 +27,7 @@ const AttachmentSchema = new Schema({
   attachmentId: String,
   destination: String,
   visible: Boolean,
+  deleted: Boolean,
 },
 {
   toJSON: {virtuals: true},
@@ -239,7 +240,6 @@ ArticleSchema.virtual('indexable').get(function () {
 
 ArticleSchema.virtual('data.document').get(function () {
   return {
-    // attachments: this.attachmentsMetadata,
     attachments: this.attachmentsMetadata,
     classification: this.classification,
     coauthors: this.coauthors,

@@ -6,6 +6,7 @@ const { handleMongooseError } = require("../util/errors");
 const _ = require("lodash");
 const { ObjectStoreService } = require('./object-store-service');
 const { AttachmentService } = require('./attachment-service');
+const { logger } = require('../config/logger');
 
 class ProductService {
   constructor() {
@@ -232,7 +233,7 @@ class ProductService {
   async getAttachment(productNumber, attachmentId) {
     KiwiPreconditions.checkArgumentDefined(productNumber);
     KiwiPreconditions.checkArgumentDefined(attachmentId);
-    const product = this.findByProductNumber(productNumber);
+    const product = await this.findByProductNumber(productNumber);
     return await this.attachmentService.get(product, attachmentId);
   }
 

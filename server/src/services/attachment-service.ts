@@ -118,6 +118,8 @@ export class AttachmentService {
    * Find attachment metadata in {@link Product.attachmentsMetadata}
    */
   findMetadata(product: Product, id: string): Attachment {
+    // logger.info("%O", product);
+    KiwiPreconditions.checkArgument(Array.isArray(product.attachmentsMetadata));
     const results = product.attachmentsMetadata.filter(this.findMetadataFn(id));
     switch(results.length) {
       case 0:
@@ -125,6 +127,14 @@ export class AttachmentService {
       case 1:
         return results[0];
       default:
+        if (id === 'article') {
+          // in case of multiple thumbnails, delete all except the last one
+          logger.warn("AttachmentService.findMetadata:  id:%s, results.length:%d", id, results.length);
+          for (let i = 0; i < results.length - 1; i++) {
+            results[i].deleted = true;
+          }
+          return results[results.length - 1];
+        }
         throw new Error(`too many attachment metadata ${id} count ${results.length}`);
     }
   }
