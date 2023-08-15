@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const path = require('path');
+const path = require("path");
 
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
+
+const constant = require("../util/constant.js");
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -19,22 +21,24 @@ const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
-const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
-const { ObjectStoreService } = require('../services/object-store-service');
+const { ObjectStoreService } = require("../services/object-store-service");
 const objectStoreService = new ObjectStoreService();
 const ProductSearchService = require("../services/product-search-service");
 const searchService = new ProductSearchService();
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
+const EventService = require("../services/event-service");
+const eventService = new EventService();
 
 const upload = objectStoreService.buildUpload("foo", "bar");
-const { logger } = require('../config/logger');
+const { logger } = require("../config/logger");
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 //GET articles by date
-router.get('/articles/date/:date', async (req, res) => {
+router.get("/articles/date/:date", async (req, res) => {
   /*
     #swagger.summary = 'Get a list of products for a given date'
     #swagger.tags = ['Products']
@@ -48,17 +52,19 @@ router.get('/articles/date/:date', async (req, res) => {
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
       const articles = await productService.findAllByDate(req.params.date);
-      const augmentedArticles = await Promise.all(articles.map(async article => {
-        const baseData = article.forWire;
-        await augmentProductWithSaved(baseData, currentUser.id, article.id);
-        return baseData;
-      }));
-      res.json({features: augmentedArticles});
+      const augmentedArticles = await Promise.all(
+        articles.map(async (article) => {
+          const baseData = article.forWire;
+          await augmentProductWithSaved(baseData, currentUser.id, article.id);
+          return baseData;
+        }),
+      );
+      res.json({ features: augmentedArticles });
     } catch (error) {
       // TODO: Replace the following with kiwi-js#KiwiStandardResponses
       handleMongooseError(
         `Unable to find articles for date ${req.params.date}`,
-        error
+        error,
       );
       res.json({
         error: `Unable to find articles for date ${req.params.date}: ${error.message}`,
@@ -68,7 +74,7 @@ router.get('/articles/date/:date', async (req, res) => {
 });
 
 //GET articles by id
-router.get('/articles/:productNumber', async (req, res) => {
+router.get("/articles/:productNumber", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product with a given product number'
     #swagger.tags = ['Products']
@@ -81,8 +87,65 @@ router.get('/articles/:productNumber', async (req, res) => {
 
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
-      const article = await productService.findByProductNumber(req.params.productNumber);
+      const article = await productService.findByProductNumber(
+        req.params.productNumber,
+      );
       const details = article.data.details;
+
+      try {
+        await eventService.registerEvent(
+          constant.EVENT_TYPES.PRODUCT_VIEW,
+          currentUser.id,
+          req.params.productNumber,
+          { producingOffices: article.producingOffices },
+        );
+        console.info("Event registered");
+      } catch (err) {
+        console.error("Failed to register event", err);
+      }
+
+      await augmentProductWithSaved(details, currentUser.id, article.id, false);
+      res.json(details);
+    } catch (error) {
+      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+      handleMongooseError(
+        `Unable to find article with product number ${req.params.productNumber}`,
+        error,
+      );
+      res.json({
+        error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+      });
+    }
+  });
+});
+
+//GET article details by id
+// This route is needed to deconflict with the /articles/:id route, because the client is
+// was calling both (this one for the details, the other for the document), and therefore
+// duplicating the product view metrics
+router.get("/articles/:productNumber/preload", async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve product details with a given product number'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDetails'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definitions/ErrorResponse'
+      }
+    }
+   */
+
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    try {
+      const article = await productService.findByProductNumber(
+        req.params.productNumber,
+      );
+      const details = article.data.details;
+
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
       res.json(details);
     } catch (error) {
@@ -99,7 +162,7 @@ router.get('/articles/:productNumber', async (req, res) => {
 });
 
 // POST (adapter to support /processDocument while working towards splitting it up)
-router.post('/articles/processDocument', async (req, res, next) => {
+router.post("/articles/processDocument", async (req, res, next) => {
   /*
     #swagger.tags = ['Products']
     #swagger.deprecated = true
@@ -114,8 +177,8 @@ router.post('/articles/processDocument', async (req, res, next) => {
 
   try {
     switch (req.body.document_action) {
-      case 'create':
-        res.redirect(307, '/articles/');
+      case "create":
+        res.redirect(307, "/articles/");
         break;
       case "publish":
         req.body.state = "posted";
@@ -135,7 +198,7 @@ router.post('/articles/processDocument', async (req, res, next) => {
 });
 
 // POST
-router.post('/articles/', async (req, res) => {
+router.post("/articles/", async (req, res) => {
   /*
     #swagger.summary = 'Create a new product'
     #swagger.tags = ['Products']
@@ -156,10 +219,20 @@ router.post('/articles/', async (req, res) => {
   await runAsUser(req, res, async (currentUser, req, res) => {
     const topics = await metadataService.findTopicsFor(req.body.topics);
     const issues = await metadataService.findIssuesForTopics(topics);
-    const producingOffices = req.body.producing_office && (await metadataService.findProducingOfficesFor([req.body.producing_office]));
-    const productType = await metadataService.findProductType(req.body.product_type_id);
-    const reportingType = await metadataService.findReportingTypeFor(req.body.product_type_id);
-    const nonStateActors = await metadataService.findNonStateActorsFor(req.body.non_state_actors);
+    const producingOffices =
+      req.body.producing_office &&
+      (await metadataService.findProducingOfficesFor([
+        req.body.producing_office,
+      ]));
+    const productType = await metadataService.findProductType(
+      req.body.product_type_id,
+    );
+    const reportingType = await metadataService.findReportingTypeFor(
+      req.body.product_type_id,
+    );
+    const nonStateActors = await metadataService.findNonStateActorsFor(
+      req.body.non_state_actors,
+    );
 
     const article = new Article({
       createdAt: dayjs().toDate(),
@@ -169,7 +242,7 @@ router.post('/articles/', async (req, res) => {
         lastName: currentUser.lastName,
         dn: currentUser.dn,
       },
-      datePublished: req.body.date_published || dayjs().format('YYYY-MM-DD'),
+      datePublished: req.body.date_published || dayjs().format("YYYY-MM-DD"),
       htmlBody: req.body.html_body,
       issues: issues,
       needed: {},
@@ -188,15 +261,20 @@ router.post('/articles/', async (req, res) => {
 
     try {
       const savedArticle = await productService.createProduct(article);
-      res.json({ article: { id: savedArticle.id }, doc_num: savedArticle.productNumber });
+      res.json({
+        article: { id: savedArticle.id },
+        doc_num: savedArticle.productNumber,
+      });
     } catch (error) {
-      res.json({ error: `There was a problem creating product: ${error.message}` });
+      res.json({
+        error: `There was a problem creating product: ${error.message}`,
+      });
     }
   });
 });
 
 // Fetch single post
-router.get('/articles/:id/edit', async (req, res) => {
+router.get("/articles/:id/edit", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product for editing'
     #swagger.tags = ['Products']
@@ -213,7 +291,7 @@ router.get('/articles/:id/edit', async (req, res) => {
   } catch (error) {
     handleMongooseError(
       `Unable to find article with id ${req.params.id}`,
-      error
+      error,
     );
     res.json({
       error: `Unable to find article with id ${req.params.id}: ${error.message}`,
@@ -221,8 +299,7 @@ router.get('/articles/:id/edit', async (req, res) => {
   }
 });
 
-
-router.get('/articles/:id/view', async (req, res) => {
+router.get("/articles/:id/view", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product for viewing details'
     #swagger.tags = ['Products']
@@ -242,7 +319,7 @@ router.get('/articles/:id/view', async (req, res) => {
     } catch (error) {
       handleMongooseError(
         `Unable to find article with id ${req.params.id}`,
-        error
+        error,
       );
       res.json({
         error: `Unable to find article with id ${req.params.id}: ${error.message}`,
@@ -252,7 +329,7 @@ router.get('/articles/:id/view', async (req, res) => {
 });
 
 // Update an article
-router.put('/articles/:id', async (req, res, next) => {
+router.put("/articles/:id", async (req, res, next) => {
   /*
     #swagger.summary = 'Update a product'
     #swagger.tags = ['Products']
@@ -276,7 +353,9 @@ router.put('/articles/:id', async (req, res, next) => {
   try {
     await updateArticle(req.params.id, req, res, next);
   } catch (error) {
-    logger.error(`Unable to update article with id ${req.params.id}: ${error.message}`);
+    logger.error(
+      `Unable to update article with id ${req.params.id}: ${error.message}`,
+    );
     next(error);
   }
 });
@@ -286,57 +365,64 @@ router.put('/articles/:id', async (req, res, next) => {
 // contents of this method back in the update endpoint.
 async function updateArticle(id, req, res) {
   try {
-    const countries = await metadataService.findCountriesFor(req.body.countries);
+    const countries = await metadataService.findCountriesFor(
+      req.body.countries,
+    );
     const subregions = await metadataService.findSubRegionsForCountries(
-      req.body.countries
+      req.body.countries,
     );
     const regions = await metadataService.findRegionsForSubRegions(
-      subregions.map((subregion) => subregion.code)
+      subregions.map((subregion) => subregion.code),
     );
     const topics = await metadataService.findTopicsFor(req.body.topics);
     const issues = await metadataService.findIssuesForTopics(req.body.topics);
     const producingOffices = await metadataService.findProducingOfficesFor(
-      req.body.producing_offices
+      req.body.producing_offices,
     );
-    const coauthors = await metadataService.findCoauthorsFor(req.body.coauthors);
+    const coauthors = await metadataService.findCoauthorsFor(
+      req.body.coauthors,
+    );
     if (!coauthors) {
-      throw new Error('coauthors not found');
+      throw new Error("coauthors not found");
     }
     const coordinators = await metadataService.findCoordinatorsFor(
-      req.body.coordinators
+      req.body.coordinators,
     );
     const dissemOrgs = await metadataService.findDissemOrgsFor(
-      req.body.dissem_orgs
+      req.body.dissem_orgs,
     );
     const productType = await metadataService.findProductType(
-      req.body.product_type_id
+      req.body.product_type_id,
     );
     const reportingType = await metadataService.findReportingTypeFor(
-      req.body.product_type_id
+      req.body.product_type_id,
     );
     const nonStateActors = await metadataService.findNonStateActorsFor(
-      req.body.non_state_actors
+      req.body.non_state_actors,
     );
     const article = {
       classification: req.body.classification,
       classificationXml: req.body.classification, // This will need to changed when we have real xml
-      coauthors: coauthors.map(({name, code}) => ({name, code})),
-      coordinators: coordinators.map(({name, code}) => ({name, code})),
-      countries: countries.map(({name, code}) => ({name, code})),
-      nonStateActors: nonStateActors.map(({name, code}) => ({name, code})),
-      datePublished: dayjs(req.body.date_published).format('YYYY-MM-DD'),
-      dissemOrgs: dissemOrgs.map(({name, code}) => ({name, code})),
+      coauthors: coauthors.map(({ name, code }) => ({ name, code })),
+      coordinators: coordinators.map(({ name, code }) => ({ name, code })),
+      countries: countries.map(({ name, code }) => ({ name, code })),
+      nonStateActors: nonStateActors.map(({ name, code }) => ({ name, code })),
+      datePublished: dayjs(req.body.date_published).format("YYYY-MM-DD"),
+      dissemOrgs: dissemOrgs.map(({ name, code }) => ({ name, code })),
       htmlBody: req.body.html_body,
       issues: issues,
       pocInfo: req.body.poc_info,
-      producingOffices: producingOffices.map(({name, code}) => ({name, code})),
+      producingOffices: producingOffices.map(({ name, code }) => ({
+        name,
+        code,
+      })),
       productNumber: req.body.doc_num,
       productType: productType,
       publicationNumber: req.body.publication_number,
-      regions: regions.map(({name, code}) => ({name, code})),
+      regions: regions.map(({ name, code }) => ({ name, code })),
       reportingType: reportingType,
       state: req.body.state,
-      subregions: subregions.map(({name, code}) => ({name, code})),
+      subregions: subregions.map(({ name, code }) => ({ name, code })),
       summary: req.body.summary,
       summaryClassification: req.body.summary_classif,
       summaryClassificationXml: req.body.summary_classif, // This will need to changed when we have real xml
@@ -359,7 +445,7 @@ async function updateArticle(id, req, res) {
     res.json({
       success: true,
       article: updatedArticle.data.document,
-      date: dayjs(updatedArticle.datePublished).format('YYYY-MM-DD'),
+      date: dayjs(updatedArticle.datePublished).format("YYYY-MM-DD"),
       doc_num: updatedArticle.productNumber,
       id: updatedArticle._id,
       state: updatedArticle.state,
@@ -372,7 +458,7 @@ async function updateArticle(id, req, res) {
   }
 }
 // Delete an article
-router.delete('/articles/:id', async (req, res) => {
+router.delete("/articles/:id", async (req, res) => {
   /*
     #swagger.summary = 'Delete a given product'
     #swagger.tags = ['Products']
@@ -386,15 +472,18 @@ router.delete('/articles/:id', async (req, res) => {
   try {
     await productService.deleteProduct(req.params.id);
     await workspaceService.deleteSavedProductForAllUsers(req.params.id);
-    res.json({success: true});
+    res.json({ success: true });
   } catch (error) {
     console.log("Delete error", error);
-    res.json({error: 'Unable to delete article'});
+    res.json({ error: "Unable to delete article" });
   }
 });
 
-router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'}, { name: 'upload' }]), async (req, res) => {
-  /*
+router.post(
+  "/articles/:productNumber/attachments",
+  upload.fields([{ name: "file" }, { name: "upload" }]),
+  async (req, res) => {
+    /*
     #swagger.summary = 'Upload an attachment for the given product'
     #swagger.tags = ['Products']
     #swagger.requestBody = {
@@ -410,33 +499,40 @@ router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'
     }
    */
 
-  try {
-    const id = uuidv4();
-    const field = (req.files.file ? req.files.file[0] : null) || (req.files.upload ? req.files.upload[0] : null);
-    const parsed = path.parse(field.originalname);
-    const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
-    const isVisible = !isThumbnail && req.query.is_visible !== 'false';
+    try {
+      const id = uuidv4();
+      const field =
+        (req.files.file ? req.files.file[0] : null) ||
+        (req.files.upload ? req.files.upload[0] : null);
+      const parsed = path.parse(field.originalname);
+      const isThumbnail =
+        parsed.name === "article" &&
+        parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
+      const isVisible = !isThumbnail && req.query.is_visible !== "false";
 
-    const attachment = {
-      attachmentId: id,
-      fileName: field.originalname,
-      mimeType: field.mimetype,
-      createdAt: new Date(),
-      fileSize: field.size,
-      type: 'ATTACHMENT',
-      destination: `${field.storage}://${field.bucket}/${field.path}`,
-      visible: isVisible,
-    };
-    // logger.info("%O", attachment);
-    await productService.addAttachment(req.params.productNumber, attachment);
-    res.json({att_id: id, success: true});
-  } catch (error) {
-    res.status(500).json({error: 'Unable to upload attachment'});
-  }
-});
+      const attachment = {
+        attachmentId: id,
+        fileName: field.originalname,
+        mimeType: field.mimetype,
+        createdAt: new Date(),
+        fileSize: field.size,
+        type: "ATTACHMENT",
+        destination: `${field.storage}://${field.bucket}/${field.path}`,
+        visible: isVisible,
+      };
+      // logger.info("%O", attachment);
+      await productService.addAttachment(req.params.productNumber, attachment);
+      res.json({ att_id: id, success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Unable to upload attachment" });
+    }
+  },
+);
 
-router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
-  /*
+router.get(
+  "/articles/:productNumber/attachments/:attachmentId",
+  async (req, res) => {
+    /*
     #swagger.summary = 'Download a given attachment for the given product'
     #swagger.tags = ['Products']
     #swagger.responses[200] = {
@@ -450,52 +546,65 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
       }
     }
    */
-  try {
-    const product = await productService.findByProductNumber(req.params.productNumber);
+    try {
+      const product = await productService.findByProductNumber(
+        req.params.productNumber,
+      );
 
-    let attachments;
-    if (req.params.attachmentId === 'article') {
-      const last = product.attachmentsMetadata.reduce((acc, value) => {
-        if (value.usage === 'article') {
-          if (acc == null) {
-            return value;
+      let attachments;
+      if (req.params.attachmentId === "article") {
+        const last = product.attachmentsMetadata.reduce((acc, value) => {
+          if (value.usage === "article") {
+            if (acc == null) {
+              return value;
+            }
+            if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
+              return value;
+            }
+            return acc;
           }
-          if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
-            return value;
-          }
-          return acc;
-        }
-      });
-      attachments = last != null ? [last] : [];
-    } else {
-      attachments = product.attachmentsMetadata.filter(att =>
-        att.id === req.params.attachmentId ||
-        att.attachmentId === req.params.attachmentId ||
-        att.fileName === req.params.attachmentId);
+        });
+        attachments = last != null ? [last] : [];
+      } else {
+        attachments = product.attachmentsMetadata.filter(
+          (att) =>
+            att.id === req.params.attachmentId ||
+            att.attachmentId === req.params.attachmentId ||
+            att.fileName === req.params.attachmentId,
+        );
+      }
+
+      if (attachments.length === 0) {
+        KiwiStandardResponsesExpress.standardNotFoundResponse(
+          "Unable to find attachment",
+          res,
+        );
+      } else {
+        const attachment = attachments[0];
+        res.attachment(attachment.fileName);
+
+        const [, path] = attachment.destination.split("//");
+        const bucketSeparatorIndex = path.indexOf("/");
+        const bucket = path.substring(0, bucketSeparatorIndex);
+        const objectName = path.substring(bucketSeparatorIndex);
+
+        const fileStream = await objectStoreService.getObject(
+          bucket,
+          objectName,
+        );
+
+        fileStream.pipe(res);
+      }
+    } catch (error) {
+      res.json({ error: "Unable to get attachment" });
     }
+  },
+);
 
-    if (attachments.length === 0) {
-      KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
-    } else {
-      const attachment = attachments[0];
-      res.attachment(attachment.fileName);
-
-      const [, path] = attachment.destination.split("//");
-      const bucketSeparatorIndex = path.indexOf("/");
-      const bucket = path.substring(0, bucketSeparatorIndex);
-      const objectName = path.substring(bucketSeparatorIndex);
-
-      const fileStream = await objectStoreService.getObject(bucket, objectName);
-
-      fileStream.pipe(res);
-    }
-  } catch (error) {
-    res.json({error: 'Unable to get attachment'});
-  }
-});
-
-router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, res) => {
-  /*
+router.delete(
+  "/articles/:productNumber/attachments/:attachmentId",
+  async (req, res) => {
+    /*
     #swagger.summary = 'Remove a given attachment for the given product'
     #swagger.tags = ['Products']
     #swagger.responses[200] = {
@@ -505,28 +614,44 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
     }
    */
 
-  const product = await productService.findByProductNumber(req.params.productNumber);
+    const product = await productService.findByProductNumber(
+      req.params.productNumber,
+    );
 
-  const removedAttachments = _.remove(product.attachmentsMetadata, (att => att.id === req.params.attachmentId || att.attachmentId === req.params.attachmentId));
-  product.markModified('attachmentsMetadata');
-  await product.save();
+    const removedAttachments = _.remove(
+      product.attachmentsMetadata,
+      (att) =>
+        att.id === req.params.attachmentId ||
+        att.attachmentId === req.params.attachmentId,
+    );
+    product.markModified("attachmentsMetadata");
+    await product.save();
 
-  for (const att of removedAttachments) {
-    const [, path] = att.destination.split("//");
-    const bucketSeparatorIndex = path.indexOf("/");
-    const bucket = path.substring(0, bucketSeparatorIndex);
-    const objectName = path.substring(bucketSeparatorIndex);
+    for (const att of removedAttachments) {
+      const [, path] = att.destination.split("//");
+      const bucketSeparatorIndex = path.indexOf("/");
+      const bucket = path.substring(0, bucketSeparatorIndex);
+      const objectName = path.substring(bucketSeparatorIndex);
 
-    await objectStoreService.removeObject(bucket, objectName);
+      await objectStoreService.removeObject(bucket, objectName);
 
-    await searchService.removeIndexedAttachment(product.id, att.attachmentId);
-  }
+      await searchService.removeIndexedAttachment(product.id, att.attachmentId);
+    }
 
-  res.json({ success: true });
-});
+    res.json({ success: true });
+  },
+);
 
-async function augmentProductWithSaved(productData, currentUserId, productId, addToAttributes=true) {
-  const isSaved = await workspaceService.isProductSaved(currentUserId, productId);
+async function augmentProductWithSaved(
+  productData,
+  currentUserId,
+  productId,
+  addToAttributes = true,
+) {
+  const isSaved = await workspaceService.isProductSaved(
+    currentUserId,
+    productId,
+  );
   productData.saved = isSaved;
 
   if (addToAttributes) {

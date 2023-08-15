@@ -41,20 +41,15 @@ describe("User Service", () => {
       const originalUser = await User.findOne({
         where: { email: "foo@example.com" },
         attributes: { exclude: ["organizationId"] },
-        include: [
-          {
-            model: Organization,
-            attributes: ["name"],
-          },
-        ],
+        include: [Organization],
       });
 
       if (originalUser && originalUser.Organization) {
+        //originalUser.organization = originalUser.Organization.name;
         originalUser.setDataValue(
           "organization",
           originalUser.Organization.name,
         );
-        delete originalUser.dataValues.Organization;
       }
 
       const user = await service.findById(originalUser.id);

@@ -1,3 +1,9 @@
+const EVENT_TYPES = {
+  PRODUCT_VIEW: "PRODUCT_VIEW",
+  PRODUCT_PRINT: "PRODUCT_PRINT",
+  PRODUCT_SAVE: "PRODUCT_SAVE",
+};
+
 const indices = [
   {
     index: "products",
@@ -75,7 +81,7 @@ const indices = [
           type: "text",
         },
         pdfVersionAttachmentId: {
-          type: "text"
+          type: "text",
         },
         productNumber: {
           type: "text",
@@ -209,8 +215,50 @@ const indices = [
       },
     },
   },
+  {
+    index: "eventlogs",
+    mappings: {
+      properties: {
+        eventType: {
+          type: "keyword",
+          index: true,
+        },
+        productId: {
+          type: "keyword",
+          index: true,
+        },
+        userId: {
+          type: "keyword",
+          index: true,
+        },
+        organization: {
+          properties: {
+            id: {
+              type: "keyword",
+              index: true,
+            },
+            name: {
+              type: "text",
+              fields: {
+                keyword: {
+                  type: "keyword",
+                  ignore_above: 256,
+                },
+              },
+            },
+          },
+        },
+        timestamp: {
+          type: "date",
+          format: "strict_date_optional_time||epoch_millis",
+          index: true,
+        },
+      },
+    },
+  },
 ];
 
 module.exports = {
   indices,
+  EVENT_TYPES,
 };

@@ -33,7 +33,7 @@ passport.use(new OAuth2Strategy({
 
   const user = await findUser(dn);
   if (user === undefined || user === null) {
-    // TODO: Deny access or create user?
+    // TODO: Create user and organization if it doesn't exist
     return cb('Unable to find user', null);
   }
 

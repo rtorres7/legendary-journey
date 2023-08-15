@@ -4,7 +4,8 @@ const ProductSearchService = require("../services/product-search-service");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const { handleMongooseError } = require("../util/errors");
 const _ = require("lodash");
-const { ObjectStoreService } = require('../services/object-store-service');
+const { ObjectStoreService } = require("../services/object-store-service");
+const constant = require("../util/constant.js");
 
 class ProductService {
   constructor() {
@@ -22,6 +23,13 @@ class ProductService {
     }).exec();
   }
 
+  async countAllByOrganization(organizationName) {
+    console.log("org name is:", organizationName);
+    return await Article.countDocuments({
+      "producingOffices.name": organizationName,
+    }).exec();
+  }
+
   async findByProductNumber(productNumber) {
     return await Article.findOne({ productNumber: productNumber }).exec();
   }
@@ -36,9 +44,14 @@ class ProductService {
     try {
       await this.productSearchService.create(savedProduct.indexable);
     } catch (error) {
-      console.log('There was a problem indexing product, rolling back database save', error);
+      console.log(
+        "There was a problem indexing product, rolling back database save",
+        error,
+      );
       await Article.deleteOne({ _id: savedProduct.id });
-      throw new Error('There was a problem indexing product, rolling back database save');
+      throw new Error(
+        "There was a problem indexing product, rolling back database save",
+      );
     }
 
     return savedProduct;
@@ -48,7 +61,7 @@ class ProductService {
     const updatedProduct = await Article.findByIdAndUpdate(
       { _id: id },
       product,
-      { new: true }
+      { new: true },
     ).exec();
 
     try {
@@ -75,8 +88,15 @@ class ProductService {
   }
 
   async findFeaturesAndBriefs() {
-    const featuredProducts = await Article.find({'state': 'posted'}).sort({ _id: -1 }).exec();
-    const briefProducts = await Article.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
+    const featuredProducts = await Article.find({ state: "posted" })
+      .sort({ _id: -1 })
+      .exec();
+    const briefProducts = await Article.find({
+      "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
+    })
+      .sort({ datePublished: -1 })
+      .limit(3)
+      .exec();
 
     return {
       featured: featuredProducts.map((product) => product.features),
@@ -89,7 +109,7 @@ class ProductService {
       userId,
       limit,
       offset,
-      sortDir
+      sortDir,
     );
     const draftCount = await this.#countDraftProductsForUser(userId);
 
@@ -97,15 +117,14 @@ class ProductService {
       page,
       limit,
       draftCount,
-      drafts.map((draft) => draft.features)
+      drafts.map((draft) => draft.features),
     )
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("createdAt", sortDir));
   }
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
-      .find({ state: 'draft', 'createdBy.id': userId })
+    return await Article.find({ state: "draft", "createdBy.id": userId })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -113,9 +132,10 @@ class ProductService {
   }
 
   async #countDraftProductsForUser(userId) {
-    return await Article
-      .count({ state: 'draft', 'createdBy.id': userId })
-      .exec();
+    return await Article.count({
+      state: "draft",
+      "createdBy.id": userId,
+    }).exec();
   }
 
   async findPageOfRecentProductsForUser(userId, page, limit, offset, sortDir) {
@@ -123,7 +143,7 @@ class ProductService {
       userId,
       limit,
       offset,
-      sortDir
+      sortDir,
     );
     const recentCount = await this.#countRecentProductsForUser(userId);
 
@@ -131,15 +151,14 @@ class ProductService {
       page,
       limit,
       recentCount,
-      recentProducts.map((recent) => recent.features)
+      recentProducts.map((recent) => recent.features),
     )
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("datePublished", sortDir));
   }
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
-      .find({ state: 'posted', 'createdBy.id': userId })
+    return await Article.find({ state: "posted", "createdBy.id": userId })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -147,9 +166,10 @@ class ProductService {
   }
 
   async #countRecentProductsForUser(userId) {
-    return await Article
-      .count({ state: 'posted', 'createdBy.id': userId })
-      .exec();
+    return await Article.count({
+      state: "posted",
+      "createdBy.id": userId,
+    }).exec();
   }
 
   async findPageOfProductsForUser(userId, page, limit, offset, sortDir) {
@@ -157,7 +177,7 @@ class ProductService {
       userId,
       limit,
       offset,
-      sortDir
+      sortDir,
     );
     const count = await this.#countAllProductsForUser(userId);
 
@@ -165,15 +185,14 @@ class ProductService {
       page,
       limit,
       count,
-      products.map((product) => product.features)
+      products.map((product) => product.features),
     )
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("createdAt", sortDir));
   }
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
-      .find({ 'createdBy.id': userId })
+    return await Article.find({ "createdBy.id": userId })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -181,31 +200,38 @@ class ProductService {
   }
 
   async #countAllProductsForUser(userId) {
-    return await Article
-      .count({ 'createdBy.id': userId })
-      .exec();
+    return await Article.count({ "createdBy.id": userId }).exec();
   }
 
   async initializeProductData() {
-    const indexesCreated = await this.productSearchService.createIndexesIfNecessary();
+    const indexesCreated =
+      await this.productSearchService.createIndexesIfNecessary();
 
-    if (indexesCreated.includes('products')) {
+    if (indexesCreated.includes("products")) {
       try {
         const products = await Article.find().exec();
-        products.forEach(product => {
+        products.forEach((product) => {
           this.productSearchService.create(product.indexable);
         });
       } catch (error) {
-        handleMongooseError('There was a problem initializing product seed data');
+        handleMongooseError(
+          "There was a problem initializing product seed data",
+        );
       }
     }
   }
 
   async addAttachment(productNumber, attachmentData) {
     const product = await Article.findOne({ productNumber: productNumber });
-    product.attachmentsMetadata = [...product.attachmentsMetadata, attachmentData];
+    product.attachmentsMetadata = [
+      ...product.attachmentsMetadata,
+      attachmentData,
+    ];
 
-    const firstPdfIdx = _.findIndex(product.attachmentsMetadata, att => att.mimeType === "application/pdf");
+    const firstPdfIdx = _.findIndex(
+      product.attachmentsMetadata,
+      (att) => att.mimeType === "application/pdf",
+    );
 
     if (firstPdfIdx === product.attachmentsMetadata.length - 1) {
       const [, path] = attachmentData.destination.split("//");
@@ -213,22 +239,45 @@ class ProductService {
       const bucket = path.substring(0, bucketSeparatorIndex);
       const objectName = path.substring(bucketSeparatorIndex);
 
-      const pdfStream = await this.objectStoreService.getObject(bucket, objectName);
+      const pdfStream = await this.objectStoreService.getObject(
+        bucket,
+        objectName,
+      );
       const chunks = [];
 
-      pdfStream.on('data', chunk => {
+      pdfStream.on("data", (chunk) => {
         chunks.push(chunk);
       });
 
       pdfStream.on("end", () => {
         const result = Buffer.concat(chunks);
         const base64String = result.toString("base64");
-        this.productSearchService.indexAttachment(product.id, attachmentData.attachmentId, base64String);
+        this.productSearchService.indexAttachment(
+          product.id,
+          attachmentData.attachmentId,
+          base64String,
+        );
       });
     }
 
     await product.save();
     this.productSearchService.update(product.indexable);
+  }
+
+  async incrementPrintCount(productNumber, userId) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.print_count += 1;
+    await product.save();
+    this.productSearchService.update(product.indexable);
+    return product;
+  }
+
+  async incrementEmailCount(productNumber, userId) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.email_count += 1;
+    await product.save();
+    this.productSearchService.update(product.indexable);
+    return product;
   }
 }
 

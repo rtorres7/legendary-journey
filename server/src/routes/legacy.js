@@ -39,7 +39,7 @@ router.get("/preload/documents/:id.json", function (req, res) {
   #swagger.summary = 'DEPRECATED: Retrieve a product details . Use GET /articles/{id}'
  */
 
-  res.redirect(`/articles/${req.params.id}`);
+  res.redirect(`/articles/${req.params.id}/preload`);
 });
 
 router.get("/documents/:id/preview.json", function (req, res) {
@@ -52,14 +52,14 @@ router.get("/documents/:id/preview.json", function (req, res) {
   res.redirect(`/articles/${req.params.id}`);
 });
 
-router.get("/documents/:docNum/related_documents.json", function (req,res) {
+router.get("/documents/:docNum/related_documents.json", function (req, res) {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Retrieve related documents. Use GET /relatedSearch/{productNumber}'
  */
 
-  res.redirect("/relatedSearch/" +req.params.docNum);
+  res.redirect("/relatedSearch/" + req.params.docNum);
 });
 
 router.get("/my_wire/user_data", function (req, res) {
@@ -124,15 +124,24 @@ router.get(
     /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Retrieve metrics for a given document. NOT IMPLEMENTED!'
+  #swagger.summary = 'DEPRECATED: Retrieve metrics for a given document. Use GET /metrics/products/{id}/unique-readership-by-organization'
  */
 
-    res.send({
-      metrics: {
-        readership: {},
-        uniqueReadership: {},
-      },
-    });
+    let url = `/metrics/products/${req.params.doc_num}/unique-readership-by-organization`;
+
+    let queryParams = [];
+    if (req.query.readership_start_date) {
+      queryParams.push(
+        `readership_start_date=${req.query.readership_start_date}`,
+      );
+    }
+    if (req.query.readership_end_date) {
+      queryParams.push(`readership_end_date=${req.query.readership_end_date}`);
+    }
+    if (queryParams.length > 0) {
+      url += "?" + queryParams.join("&");
+    }
+    res.redirect(url);
   },
 );
 
@@ -153,9 +162,9 @@ router.post("/documents/:id/attachments", (req, res) => {
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Upload an attachment to the product. Use POST /articles/{id}/attachments'
   */
-  
+
   let url = `/articles/${req.params.id}/attachments`;
-  if (req.query.is_visible === 'false') {
+  if (req.query.is_visible === "false") {
     url += `?is_visible=false`;
   }
   res.redirect(307, url);
@@ -167,7 +176,9 @@ router.get("/documents/:id/attachments/:attachmentId", (req, res) => {
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Download an attachment attached to the product. Use GET /articles/{id}/attachments/{attachmentId}'
  */
-  res.redirect(`/articles/${req.params.id}/attachments/${req.params.attachmentId}`);
+  res.redirect(
+    `/articles/${req.params.id}/attachments/${req.params.attachmentId}`,
+  );
 });
 
 router.delete("/documents/:id/attachments/:attachmentId", (req, res) => {
@@ -176,7 +187,9 @@ router.delete("/documents/:id/attachments/:attachmentId", (req, res) => {
   #swagger.deprecated = true
   #swagger.summary = 'DEPRECATED: Remove an attachment attached to the product. Use DELETE /articles/{id}/attachments/{attachmentId}'
  */
-  res.redirect(`/articles/${req.params.id}/attachments/${req.params.attachmentId}`);
+  res.redirect(
+    `/articles/${req.params.id}/attachments/${req.params.attachmentId}`,
+  );
 });
 
 router.get("/documents/:id/images/article", (req, res) => {
@@ -192,5 +205,26 @@ router.get("/documents/:id/images/article", (req, res) => {
   res.redirect(url);
 });
 
+router.post("/documents/:id/record_email.js", (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Increment a product email metric. Use POST /metrics/products/{id}/record-email'
+  */
+  let url = `/articles/${req.params.id}/attachments/article`;
+  if (req.params.updated_at) {
+    url += `?update_at=${req.params.updated_at}`;
+  }
+  res.redirect(307, `/metrics/products/${req.params.id}/record-email`);
+});
+
+router.post("/documents/:id/record_print.js", (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Increment a product print metric. Use POST /metrics/products/{id}/record-print'
+  */
+  res.redirect(307, `/metrics/products/${req.params.id}/record-print`);
+});
 
 module.exports = router;

@@ -1,21 +1,23 @@
 const { models } = require("../data/sequelize");
 
 class UserService {
-
   async fetchUser(options) {
     const user = await models.User.findOne({
       where: options,
-      attributes: { exclude: ['organizationId'] },
-      include: [{
-        model: models.Organization,
-        attributes: ['name']
-      }],
+      attributes: { exclude: ["organizationId"] },
+      include: [
+        {
+          model: models.Organization,
+        },
+      ],
     });
+
+    //const plainUser = user.get({ plain: true });
 
     if (user && user.Organization) {
       // Modify the user object to include organization name as a string
+      //user.organization = user.Organization.name;
       user.setDataValue("organization", user.Organization.name);
-      delete user.dataValues.Organization; // unnecessary field, for now
     }
 
     return user;
