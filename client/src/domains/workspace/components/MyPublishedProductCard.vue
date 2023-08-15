@@ -230,7 +230,7 @@ export default {
       default: false,
     },
   },
-  emits: ["share", "delete", "remove"],
+  emits: ["delete", "remove"],
   setup(props, { emit }) {
     const environment = ref(import.meta.env.MODE);
     const createNotification = inject("create-notification");
@@ -238,7 +238,14 @@ export default {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
     };
     const shareProduct = () => {
-      emit("share", props.product);
+      const shareUrl =
+        window.location.origin + "/product/" + props.product.doc_num;
+      navigator.clipboard.writeText(shareUrl);
+      createNotification({
+        message: "URL Copied to Clipboard",
+        type: "success",
+        canClose: false,
+      });
     };
     const deleteProduct = () => {
       emit("delete", props.product);
