@@ -2214,7 +2214,7 @@ db.metadata.insertOne({
       ],
     },
     producing_offices: {
-      displayName: "Producing Offices",
+      displayName: "Authored By Organizations",
       values: [
         {
           ancestry: "1000",
