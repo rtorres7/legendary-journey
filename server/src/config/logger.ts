@@ -1,6 +1,6 @@
 import winston from "winston";
 
-const colorFormat = ['development', 'test'].some((i) => i === process.env.NODE_ENV) ? winston.format.colorize() : winston.format.uncolorize();
+const colorFormat = process.env.NODE_ENV !== 'production' ? winston.format.colorize() : winston.format.uncolorize();
 
 export const logger = winston.createLogger({
   // https://github.com/winstonjs/winston
@@ -8,14 +8,16 @@ export const logger = winston.createLogger({
   level: 'info', // process.env.MXS_ENV === 'container' ? 'debug' : 'info',
   format: winston.format.combine(
     winston.format.errors({ stack: true }),
-    winston.format.timestamp(),
+    // winston.format.timestamp(),
     winston.format.splat(),
     colorFormat,
     winston.format.printf(({ level, message, timestamp, stack }) => {
       if (stack && level.includes('error')) { // colorize changes the level?
-        return `${timestamp} ${level}: ${message}\n${stack}`;
+        return `${level}: ${message}\n${stack}`;
+        // return `${timestamp} ${level}: ${message}\n${stack}`;
       }
-      return `${timestamp} ${level}: ${message}`;
+      return `${level}: ${message}`;
+      // return `${timestamp} ${level}: ${message}`;
     }),
   ),
   transports: [

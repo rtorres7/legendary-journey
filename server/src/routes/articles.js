@@ -19,7 +19,7 @@ const productService = new ProductService();
 const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
-const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const {KiwiStandardResponsesExpress, KiwiPreconditions} = require("@kiwiproject/kiwi-js");
 
 const { ObjectStoreService } = require('../services/object-store-service');
 const objectStoreService = new ObjectStoreService();
@@ -28,7 +28,8 @@ const searchService = new ProductSearchService();
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
 
-const upload = objectStoreService.buildUpload("foo", "bar");
+const upload = objectStoreService.buildUpload("attachments");
+const { config } = require('../config/config');
 const { logger } = require('../config/logger');
 
 const _ = require('lodash');
@@ -129,9 +130,10 @@ router.post('/articles/processDocument', async (req, res) => {
         res.sendStatus(404);
     }
   } catch (error) {
-    res.json({
-      error: `Unable to find article with product number ${req.body.productNumber}: ${error.message}`,
-    });
+    logger.error(error);
+    // res.json({
+    //   error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+    // });
   }
 });
 
@@ -284,7 +286,7 @@ router.put('/articles/:id', async (req, res, next) => {
     const productData = await buildUpdate(req.params.id, req.body, req.user);
     await updateProduct(req.params.id, productData, req, res,);
   } catch (error) {
-    logger.error(`Unable to update article with id ${req.params.id}: ${error.message}`);
+    logger.error(error);
     next(error);
   }
 });
@@ -439,32 +441,32 @@ router.post('/articles/:productNumber/attachments', upload.fields([{name: 'file'
     #swagger.responses[200] = {
       schema: {
         att_id: 'abc',
+        url: '/api/documents/12345/attachments/67890',
         success: true,
       }
     }
    */
 
   try {
-    const id = uuidv4();
-    const field = (req.files.file ? req.files.file[0] : null) || (req.files.upload ? req.files.upload[0] : null);
-    const parsed = path.parse(field.originalname);
-    const isThumbnail = parsed.name === 'article' && parsed.ext.match(/^\.(jpg|jpeg|png|gif|webp)$/i);
-    const isVisible = !isThumbnail && req.query.is_visible !== 'false';
-
-    const attachment = {
-      attachmentId: id,
-      fileName: field.originalname,
-      mimeType: field.mimetype,
-      createdAt: new Date(),
-      fileSize: field.size,
-      type: 'ATTACHMENT',
-      destination: `${field.storage}://${field.bucket}/${field.path}`,
-      visible: isVisible,
-    };
-    // logger.info("%O", attachment);
-    await productService.addAttachment(req.params.productNumber, attachment);
-    res.json({att_id: id, success: true});
+    const files = [];
+    if (Array.isArray(req.files.file)) {
+      files.push(...req.files.file);
+    }
+    if (Array.isArray(req.files.upload)) {
+      files.push(...req.files.upload);
+    }
+    // logger.info("%o", req.files);
+    KiwiPreconditions.checkArgument(files.length === 1);
+    const fileUploadedObjectInfo = files[0];
+    // logger.info("fileUploadedObjectInfo:%j", fileUploadedObjectInfo);
+    const attachment = await productService.addAttachment(req.params.productNumber, fileUploadedObjectInfo);
+    res.json({
+      att_id: attachment._id,
+      url: `${config.basePath}/documents/${req.params.productNumber}/attachments/${attachment.attachmentId}`,
+      success: true,
+    });
   } catch (error) {
+    logger.error(error);
     res.status(500).json({error: 'Unable to upload attachment'});
   }
 });
@@ -485,46 +487,14 @@ router.get('/articles/:productNumber/attachments/:attachmentId', async (req, res
     }
    */
   try {
-    const product = await productService.findByProductNumber(req.params.productNumber);
-
-    let attachments;
-    if (req.params.attachmentId === 'article') {
-      const last = product.attachmentsMetadata.reduce((acc, value) => {
-        if (value.usage === 'article') {
-          if (acc == null) {
-            return value;
-          }
-          if (dayjs(acc.updated_at).isBefore(dayjs(value.updated_at))) {
-            return value;
-          }
-          return acc;
-        }
-      });
-      attachments = last != null ? [last] : [];
-    } else {
-      attachments = product.attachmentsMetadata.filter(att =>
-        att.id === req.params.attachmentId ||
-        att.attachmentId === req.params.attachmentId ||
-        att.fileName === req.params.attachmentId);
-    }
-
-    if (attachments.length === 0) {
-      KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
-    } else {
-      const attachment = attachments[0];
-      res.attachment(attachment.fileName);
-
-      const [, path] = attachment.destination.split("//");
-      const bucketSeparatorIndex = path.indexOf("/");
-      const bucket = path.substring(0, bucketSeparatorIndex);
-      const objectName = path.substring(bucketSeparatorIndex);
-
-      const fileStream = await objectStoreService.getObject(bucket, objectName);
-
-      fileStream.pipe(res);
-    }
+    const { metadata, stream } = await productService.getAttachment(req.params.productNumber, req.params.attachmentId);
+    res.attachment(metadata.fileName);
+    res.set('content-type', metadata.mimeType);
+    stream.pipe(res);
   } catch (error) {
-    res.json({error: 'Unable to get attachment'});
+    logger.error(error);
+    // KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
+    res.status(404).json({error: 'Unable to get attachment'});
   }
 });
 
@@ -537,7 +507,7 @@ router.delete('/articles/:productNumber/attachments/:attachmentId', async (req, 
         success: true
       }
     }
-   */
+  */
 
   const product = await productService.findByProductNumber(req.params.productNumber);
 
