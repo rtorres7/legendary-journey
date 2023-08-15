@@ -1,4 +1,4 @@
-import dayjs from 'dayjs/esm/index.js';
+import dayjs from "dayjs/esm/index.js";
 
 const buildArray = (item, count, sort_dir) => {
   const array = [];
@@ -281,7 +281,7 @@ export const getSearchDataFromUrl = (url, { name, query }) => {
               count: 2,
             },
           ],
-          displayName: "Producing Offices",
+          displayName: "Authored By Organizations",
         },
         media_tags: {
           rows: [
@@ -465,7 +465,7 @@ export const getSearchDataFromUrl = (url, { name, query }) => {
               count: 2,
             },
           ],
-          displayName: "Producing Offices",
+          displayName: "Authored By Organizations",
         },
         media_tags: {
           rows: [
@@ -647,7 +647,7 @@ export const getSearchDataFromUrl = (url, { name, query }) => {
                   count: 2,
                 },
               ],
-              displayName: "Producing Offices",
+              displayName: "Authored By Organizations",
             },
             media_tags: {
               rows: [
@@ -798,7 +798,7 @@ export const getSearchDataFromUrl = (url, { name, query }) => {
                   count: 1,
                 },
               ],
-              displayName: "Producing Offices",
+              displayName: "Authored By Organizations",
             },
             media_tags: {
               rows: [
