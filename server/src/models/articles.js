@@ -27,6 +27,7 @@ const AttachmentSchema = new Schema({
   attachmentId: String,
   destination: String,
   visible: Boolean,
+  deleted: Boolean,
 },
 {
   toJSON: {virtuals: true},
@@ -36,19 +37,15 @@ const AttachmentSchema = new Schema({
 AttachmentSchema.virtual('mime_type').get(function () {
   return this.mimeType;
 });
-
 AttachmentSchema.virtual('file_name').get(function () {
   return this.fileName;
 });
-
 AttachmentSchema.virtual('file_size').get(function () {
   return this.fileSize;
 });
-
 AttachmentSchema.virtual('created_at').get(function () {
   return this.createdAt;
 });
-
 AttachmentSchema.virtual('updated_at').get(function () {
   return this.updatedAt ? this.updatedAt : this.createdAt;
 });
@@ -243,7 +240,6 @@ ArticleSchema.virtual('indexable').get(function () {
 
 ArticleSchema.virtual('data.document').get(function () {
   return {
-    // attachments: this.attachmentsMetadata,
     attachments: this.attachmentsMetadata,
     classification: this.classification,
     coauthors: this.coauthors,
@@ -300,6 +296,7 @@ ArticleSchema.virtual("data.details").get(function () {
     coordinators: this.coordinators?.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,
     createdAt: this.createdAt,
+    createdBy: this.createdBy,
     datePublished: this.datePublished,
     dissemOrgs: this.dissemOrgs,
     htmlBody: this.htmlBody,
@@ -325,6 +322,7 @@ ArticleSchema.virtual("data.details").get(function () {
     titleClassificationXml: this.titleClassificationXml,
     topics: this.topics,
     thumbnailCaption: this.thumbnailCaption,
+    updatedBy: this.updatedBy,
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields
@@ -347,8 +345,9 @@ ArticleSchema.virtual("data.details").get(function () {
     producing_offices: this.producingOffices?.map((office) => office.name),
     product_type_id: this.productType.code,
     product_type_name: this.productType.name,
-    published_by: this.publishedBy?.name,
+    published_by: this.publishedBy?.dn,
     title_classif: this.titleClassification,
+    updated_by: this.updatedBy,
   };
 });
 

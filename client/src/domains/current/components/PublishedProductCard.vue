@@ -57,6 +57,33 @@
           'relative flex flex-col justify-between px-4',
         ]"
       >
+        <button
+          v-if="
+            environment != 'production' &&
+            !isProductLocked(product) &&
+            product.state == 'posted'
+          "
+          class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
+          :aria-label="`save product ${product.productNumber}`"
+          @click.prevent="save(product)"
+        >
+          <template v-if="isSavedProduct(product)">
+            <tippy content="Saved" placement="bottom">
+              <BookmarkIconSolid
+                aria-hidden="true"
+                :class="headline ? 'h-6 w-6' : 'h-5 w-5'"
+              />
+            </tippy>
+          </template>
+          <template v-else>
+            <tippy content="Save" placement="bottom">
+              <BookmarkIcon
+                aria-hidden="true"
+                :class="headline ? 'h-6 w-6' : 'h-5 w-5'"
+              />
+            </tippy>
+          </template>
+        </button>
         <div>
           <h1
             :class="[
@@ -94,20 +121,33 @@
       </div>
     </template>
   </MaxCard>
+  <MaxOverlay :show="savingProduct || removingProduct">
+    <div class="max-w-xs inline-block">
+      <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
+        Saving Product...
+      </p>
+      <p v-if="removingProduct" class="mb-4 font-semibold text-2xl">
+        Removing Product...
+      </p>
+      <div class="w-fit m-auto">
+        <MaxLoadingSpinner class="h-16 w-16" />
+      </div>
+    </div>
+  </MaxOverlay>
 </template>
 <script>
-import {
-  isProductLocked,
-  formatDate,
-  isFavoriteProduct,
-} from "@current/helpers";
+import { isProductLocked, formatDate, isSavedProduct } from "@current/helpers";
 import ProductImage from "@current/components/ProductImage.vue";
-import axios from "@/shared/config/wireAxios";
-import { productDetails } from "@current/data";
+import { BookmarkIcon } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
+import { ref } from "vue";
 
 export default {
   components: {
     ProductImage,
+    BookmarkIcon,
+    BookmarkIconSolid,
   },
   props: {
     product: {
@@ -125,37 +165,17 @@ export default {
   },
   setup() {
     const offlineMode = import.meta.env.MODE === "offline";
-    const updateFavoriteStatus = (product, event) => {
-      if (event) {
-        event.preventDefault();
-      }
-
-      if (import.meta.env.MODE === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        documentMatch.data.favorite = !product.favorite;
-        product.favorite = !product.favorite;
-      } else {
-        let favoritePromise;
-        if (product.favorite) {
-          favoritePromise = axios.delete(`/document_favorites/${product.id}`);
-        } else {
-          favoritePromise = axios.post("document_favorites", {
-            id: product.id,
-          });
-        }
-
-        favoritePromise.then(() => (product.favorite = !product.favorite));
-      }
-    };
-
+    const environment = ref(import.meta.env.MODE);
+    const { save, savingProduct, removingProduct } = updateSavedStatus();
     return {
       offlineMode,
+      environment,
       isProductLocked,
       formatDate,
-      isFavoriteProduct,
-      updateFavoriteStatus,
+      isSavedProduct,
+      save,
+      savingProduct,
+      removingProduct,
     };
   },
 };

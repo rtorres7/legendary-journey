@@ -883,6 +883,9 @@ const doc = {
               type: "string",
             },
           },
+          organizationId: {
+            type: "integer",
+          },
           authorizations: {
             type: "object",
             properties: {
@@ -1700,6 +1703,35 @@ const doc = {
         type: "array",
         items: {
           $ref: "#/components/schemas/SavedProduct",
+        },
+      },
+      Feed: {
+        type: "object",
+        properties: {
+          id: {
+            type: "number",
+          },
+          name: {
+            type: "string",
+          },
+          searchParams: {
+            type: "string",
+          },
+          selectedReadings: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/SavedProduct",
+            },
+          },
+          state: {
+            type: "string",
+          },
+          order: {
+            type: "number",
+          },
+          classification: {
+            type: "string",
+          },
         },
       },
     },

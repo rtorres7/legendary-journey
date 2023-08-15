@@ -8,6 +8,7 @@ import logger from './logger';
 
 interface IConfig {
   nodeEnv: string,
+  basePath: string,
   port: number,
   mxs: {
     env: string,
@@ -102,6 +103,7 @@ export class ConfigLoader {
     const schema = Joi.object()
       .keys({
         NODE_ENV: Joi.string().optional().allow(''), // .string().valid("production", "development", "test").required(),
+        BASE_PATH: Joi.string().optional().default(''),
         PORT: Joi.number().default(3000),
 
         ES_URL: Joi.string().required().description('Elasticsearch URL'),
@@ -132,6 +134,7 @@ export class ConfigLoader {
   private buildConfig(env: any): IConfig {
     return {
       nodeEnv: env.NODE_ENV,
+      basePath: env.BASE_PATH,
       port: env.PORT,
       mxs: {
         env: env.MXS_ENV,

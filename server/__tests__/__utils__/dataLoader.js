@@ -6,10 +6,20 @@ const mongoose = require("mongoose");
 
 const { Sequelize } = require("sequelize");
 
-const { logger } = require("../../src/config/logger");
-
 const articles = [
   new Article({
+    attachmentsMetadata: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 152437,
+        type: "ATTACHMENT",
+        attachmentId: "1c44f780-ee46-4615-b058-6c84eab870ad",
+        destination: "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+        visible: false,
+      },
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -22,9 +32,9 @@ const articles = [
     createdAt: new Date("2022-09-01T13:16:43Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-01"),
     dissemOrgs: [
@@ -98,6 +108,18 @@ const articles = [
     worldwide: false,
   }),
   new Article({
+    attachmentsMetadata: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 384096,
+        type: "ATTACHMENT",
+        attachmentId: "e6eec89a-e4e1-49a6-90ad-99e9de7ed8b1",
+        destination: "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+        visible: false,
+      },
+    ],
     classification: "S",
     classificationXml: "",
     countries: [
@@ -115,9 +137,9 @@ const articles = [
     createdAt: new Date("2022-08-31T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-02"),
     dissemOrgs: [
@@ -219,6 +241,18 @@ const articles = [
     worldwide: false,
   }),
   new Article({
+    attachmentsMetadata: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 399296,
+        type: "ATTACHMENT",
+        attachmentId: "48d35447-6b51-40c4-9793-63da601e3ec0",
+        destination: "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+        visible: false,
+      }
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -231,15 +265,15 @@ const articles = [
     createdAt: new Date("2022-08-30T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-03"),
     dissemOrgs: [
       {
         code: "COMMERCE",
-        name: "COMMERCE"
+        name: "COMMERCE",
       },
     ],
     htmlBody: [
@@ -307,6 +341,18 @@ const articles = [
     worldwide: true,
   }),
   new Article({
+    attachments: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-08-29T13:00:00Z"),
+        fileSize: 75668,
+        type: "ATTACHMENT",
+        attachmentId: "b33d5fa9-f888-4a2c-9ff1-5ed69cb0cb22",
+        destination: "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+        visible: false,
+      }
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -319,9 +365,9 @@ const articles = [
     createdAt: new Date("2022-08-29T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-04"),
     dissemOrgs: [],
@@ -392,9 +438,9 @@ const articles = [
     createdAt: new Date("2022-08-28T13:00:00Z"),
     createdBy: {
       id: 1,
-      firstName: 'John',
-      lastName: 'Smith',
-      dn: 'foo'
+      firstName: "John",
+      lastName: "Smith",
+      dn: "foo",
     },
     datePublished: new Date("2022-09-05"),
     dissemOrgs: [],
@@ -2861,6 +2907,22 @@ const loadArticlesIntoMongo = async (mongoUrl) => {
   mongoose.connection.close();
 };
 
+const loadFeeds = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+
+  const feedsModel = require("../../src/models/feed");
+  feedsModel(sequelize);
+
+  await sequelize.models.Feed.sync();
+
+  return await sequelize.models.Feed.create({
+    name: "Test Feed #1",
+    searchParams: "https://localhost:8443/search?text=test123",
+    state: "Draft",
+    classification: "U",
+  });
+};
+
 const loadSavedProducts = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -2884,9 +2946,9 @@ const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
       ...articles[0].indexable,
       savedProductUserId: 1,
       productId: "WIReWIRe_sample_1",
-      id: savedProductId
+      id: savedProductId,
     },
-    id: savedProductId
+    id: savedProductId,
   });
 
   await client.indices.refresh({ index: "savedproducts" });
@@ -2941,21 +3003,41 @@ const loadCollectionProducts = async (postgresUrl) => {
 const loadUsers = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
-  const userModel = require("../../src/models/user");
-  userModel(sequelize);
+  const Organization = require("../../src/models/organization")(sequelize);
+  const User = require("../../src/models/user")(sequelize);
 
-  await sequelize.models.User.sync();
+  sequelize.models.Organization.hasMany(sequelize.models.User, {
+    foreignKey: "organizationId",
+  });
+  sequelize.models.User.belongsTo(sequelize.models.Organization, {
+    foreignKey: "organizationId",
+  });
+
+  await Organization.sync();
+  await User.sync();
+
+  const organization = await sequelize.models.Organization.create({
+    name: "DNI",
+  });
 
   await sequelize.models.User.create({
     email: "foo@example.com",
     dn: "O=US,OU=OFFICE,CN=foo",
+    organizationId: organization.id,
   });
+
+  return {
+    sequelize,
+    User,
+    Organization,
+  };
 };
 
 module.exports = {
   loadElasticSearch,
   loadMetadata,
   loadArticlesIntoMongo,
+  loadFeeds,
   loadSavedProducts,
   loadSavedProductsForSearch,
   loadCollections,

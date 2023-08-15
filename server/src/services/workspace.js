@@ -250,6 +250,17 @@ class WorkspaceService {
 
     return null;
   }
+
+  async isProductSaved(userId, productId) {
+    const savedProduct = await models.SavedProduct.findOne({
+      where: {
+        productId: productId,
+        createdBy: userId,
+      }
+    });
+
+    return savedProduct !== null;
+  }
 }
 
 module.exports = WorkspaceService;

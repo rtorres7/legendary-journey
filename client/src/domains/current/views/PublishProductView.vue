@@ -217,6 +217,27 @@
                       >
                     </button>
                     <button
+                      v-if="
+                        environment != 'production' && product.state == 'posted'
+                      "
+                      class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
+                      :aria-label="`save product ${product.productNumber}`"
+                      @click="save(product)"
+                    >
+                      <template v-if="isSavedProduct(product)">
+                        <BookmarkIconSolid
+                          aria-hidden="true"
+                          class="h-5 w-5"
+                        /><span class="pl-3">Saved</span>
+                      </template>
+                      <template v-else>
+                        <BookmarkIcon aria-hidden="true" class="h-5 w-5" /><span
+                          class="pl-3"
+                          >Save</span
+                        >
+                      </template>
+                    </button>
+                    <button
                       class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       @click.prevent="openDeleteDialog(product)"
                     >
@@ -227,38 +248,63 @@
                   </template>
                 </div>
                 <div class="flex h-fit lg:hidden space-x-4">
-                  <tippy content="Edit Product">
-                    <router-link
-                      :to="{
-                        name: 'edit',
-                        params: {
-                          date: routeDate,
-                          id: product.id,
-                          doc_num: product.doc_num,
-                        },
-                      }"
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                  <template v-if="!restrictedProduct(product)">
+                    <tippy content="Edit Product">
+                      <router-link
+                        :to="{
+                          name: 'edit',
+                          params: {
+                            date: routeDate,
+                            id: product.id,
+                            doc_num: product.doc_num,
+                          },
+                        }"
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                      >
+                        <PencilSquareIcon class="h-6 w-6" />
+                      </router-link>
+                    </tippy>
+                    <tippy content="Preview Product">
+                      <button
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        aria-label="Preview product"
+                        @click.prevent="openPreviewDialog(product)"
+                      >
+                        <DocumentMagnifyingGlassIcon class="h-6 w-6" />
+                      </button>
+                    </tippy>
+                    <tippy
+                      :content="isSavedProduct(product) ? 'Saved' : 'Save'"
                     >
-                      <PencilSquareIcon class="h-6 w-6" />
-                    </router-link>
-                  </tippy>
-                  <tippy content="Preview Product">
-                    <button
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                      aria-label="Preview product"
-                      @click.prevent="openPreviewDialog(product)"
-                    >
-                      <DocumentMagnifyingGlassIcon class="h-6 w-6" />
-                    </button>
-                  </tippy>
-                  <tippy content="Delete Product"
-                    ><button
-                      class="hover:text-black dark:hover:text-white energy:hover:text-white"
-                      aria-label="Delete product"
-                      @click.prevent="openDeleteDialog(product)"
-                    >
-                      <TrashIcon class="h-6 w-6" /></button
-                  ></tippy>
+                      <button
+                        v-if="
+                          environment != 'production' &&
+                          product.state == 'posted'
+                        "
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        :aria-label="`save product ${product.productNumber}`"
+                        @click="save(product)"
+                      >
+                        <template v-if="isSavedProduct(product)">
+                          <BookmarkIconSolid
+                            aria-hidden="true"
+                            class="h-6 w-6"
+                          />
+                        </template>
+                        <template v-else>
+                          <BookmarkIcon aria-hidden="true" class="h-6 w-6" />
+                        </template>
+                      </button>
+                    </tippy>
+                    <tippy content="Delete Product"
+                      ><button
+                        class="hover:text-black dark:hover:text-white energy:hover:text-white"
+                        aria-label="Delete product"
+                        @click.prevent="openDeleteDialog(product)"
+                      >
+                        <TrashIcon class="h-6 w-6" /></button
+                    ></tippy>
+                  </template>
                 </div>
               </div>
               <div
@@ -301,6 +347,23 @@
                     {{ product.summary }}
                   </p>
                 </div>
+
+                <MaxOverlay :show="savingProduct || removingProduct">
+                  <div class="max-w-xs inline-block">
+                    <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
+                      Saving Product...
+                    </p>
+                    <p
+                      v-if="removingProduct"
+                      class="mb-4 font-semibold text-2xl"
+                    >
+                      Removing Product...
+                    </p>
+                    <div class="w-fit m-auto">
+                      <MaxLoadingSpinner class="h-16 w-16" />
+                    </div>
+                  </div>
+                </MaxOverlay>
               </div>
             </MaxCard>
           </template>
@@ -473,11 +536,18 @@ import {
   DocumentMagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
+  BookmarkIcon,
 } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import ProductRestrictedLink from "@current/components/ProductRestrictedLink.vue";
-import { getValueForCode, hasProductAccess } from "@current/helpers";
+import {
+  getValueForCode,
+  hasProductAccess,
+  isSavedProduct,
+} from "@current/helpers";
 import ProductContent from "@current/components/ProductContent.vue";
 import ProductImage from "@current/components/ProductImage.vue";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
 
 export default {
   components: {
@@ -485,6 +555,8 @@ export default {
     DocumentMagnifyingGlassIcon,
     PencilSquareIcon,
     TrashIcon,
+    BookmarkIcon,
+    BookmarkIconSolid,
     ProductContent,
     ProductImage,
     ProductRestrictedLink,
@@ -493,6 +565,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+    const environment = ref(import.meta.env.MODE);
     const metadata = inject("metadata");
     const routeDate = computed(() => route.params.date);
     const selectedDate = ref();
@@ -508,6 +581,7 @@ export default {
     const isCommunityExclusive = computed(
       () => store.getters["user/isCommunityExclusive"]
     );
+    const { save, savingProduct, removingProduct } = updateSavedStatus();
     const showOnlyDrafts = ref(false);
     const drafts = computed(() =>
       articles.value.filter((a) => a.attributes.state === "draft")
@@ -825,6 +899,11 @@ export default {
       openDeleteDialog,
       closeDeleteDialog,
       deleteProduct,
+      isSavedProduct,
+      save,
+      savingProduct,
+      removingProduct,
+      environment,
     };
   },
 };

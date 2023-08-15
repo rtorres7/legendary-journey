@@ -4,8 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "node --watch --require ts-node/register src/swagger.ts",
-    "start:inspect": "node --watch --require ts-node/register --inspect=0.0.0.0:9229 src/swagger.ts",
+    "start": "node  --experimental-vm-modules --watch --require ts-node/register src/swagger.ts",
+    "start:inspect": "node  --experimental-vm-modules --watch --require ts-node/register --inspect=0.0.0.0:9229 src/swagger.ts",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles",
     "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --verbose=true",
@@ -33,12 +33,12 @@
       [
         "summary",
         {
-          "summaryThreshold": 1
+          "summaryThreshold": 0
         }
       ]
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/__tests__/__utils__/jest.setup.ts"
+      "jest-extended/all"
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/__tests__/__utils__",

@@ -133,6 +133,10 @@
             <span class="font-semibold">Published By: </span>
             {{ product.published_by }}
           </p>
+          <p v-if="product.updatedBy.dn && canManageWire">
+            <span class="font-semibold">Updated By: </span>
+            {{ product.updatedBy.dn }}
+          </p>
           <p v-if="product.poc_info">
             <span class="font-semibold">Contact: </span>{{ product.poc_info }}
           </p>

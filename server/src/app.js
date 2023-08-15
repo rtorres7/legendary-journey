@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const MongoStore = require("connect-mongo");
 const auth = require("./services/auth");
+const fs = require('fs');
 const path = require("path");
 const session = require("express-session");
 const { successHandler, errorHandler } = require("./config/morgan");
@@ -138,14 +139,39 @@ setupMongoose();
 // Setup elastic search client
 require("./data/elasticsearch");
 
+async function loadAllData(loadOrganizationData, loadUserData) {
+  const organization = await loadOrganizationData();
+  await loadUserData(organization);
+}
+
+async function loadObjectStore() {
+  const { ObjectStoreService } = require("./services/object-store-service");
+  const objectStoreService = new ObjectStoreService();
+  try {
+    await objectStoreService.makeBucket("attachments");
+  } catch (error) {
+    // bucket already exists
+  }
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg"), "binary"), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg"), "binary"), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")  , "binary"), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")     , "binary"), { "content-type": "image/jpeg"});
+}
+
 // Load seed data
 if (process.env.MXS_ENV === "container") {
   const ProductService = require("./services/product-service");
   const productService = new ProductService();
   productService.initializeProductData();
 
-  const loadUserData = require("./postgres/seed");
-  loadUserData();
+  const { loadOrganizationData } = require("./postgres/seed");
+  const { loadUserData } = require("./postgres/seed");
+
+  loadAllData(loadOrganizationData, loadUserData).then(() => {
+    console.log("All data loaded");
+  });
+
+  loadObjectStore().then(() => console.log("Loaded minio"));
 }
 
 /***********************************
@@ -159,6 +185,7 @@ const indexRouter = require("./routes");
 const legacyRouter = require("./routes/legacy");
 const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
+const feedsRouter = require("./routes/feeds");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use(indexRouter);
@@ -168,6 +195,7 @@ app.use(authRouter);
 app.use(homeRouter);
 app.use(searchRouter);
 app.use(workspaceRouter);
+app.use(feedsRouter);
 
 // Legacy routes
 app.use(legacyRouter);

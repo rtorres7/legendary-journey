@@ -68,16 +68,6 @@
             />
           </div>
           <div>
-            <MaxImageFileChooser
-              :label="'File Attachment'"
-              :binary="editionEvent.icon"
-              :file="imageFile"
-              required
-              @onImageAdded="updateImageFile"
-              @onImageRemoved="removeImageFile"
-            />
-          </div>
-          <div>
             <span
               v-show="!editionEvent.valid"
               class="ml-1 text-red-600 dark:text-red-500 energy:text-red-500"
