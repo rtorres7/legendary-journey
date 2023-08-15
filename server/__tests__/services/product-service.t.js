@@ -9,6 +9,8 @@ const utc = require("dayjs/plugin/utc");
 const dayjs = require("dayjs");
 dayjs.extend(utc);
 
+const { logger } = require("../../src/config/logger");
+
 const Article = require("../../src/models/articles");
 
 jest.mock('../../src/services/product-search-service.js', () => {
@@ -274,6 +276,23 @@ describe('ProductService', () => {
       expect(drafts.totalPages).toEqual(1);
       expect(drafts.totalElements).toEqual(4);
       expect(drafts.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
+    });
+  });
+
+  describe('findPageOfRecentProductsForUserOrProducingOffice', () => {
+    it('should return a page of recent products', async () => {
+      const results = await service.findPageOfRecentProductsForUserOrProducingOffice(100, 'AGRICULTURE', 1, 10, 0, 'desc');
+      // logger.info("%o", results);
+      expect(results.content).toHaveLength(1);
+      expect(results.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_4']);
+      // results mapped to Article.features which lacks the producingOffices property
+      // expect(results.content.every(product => product.producingOffices.findIndex(i => i.name === 'AGRICULTURE') >= 0)).toBeTrue();
+      expect(results.size).toEqual(10);
+      expect(results.number).toEqual(1);
+      expect(results.numberOfElements).toEqual(1);
+      expect(results.totalPages).toEqual(1);
+      expect(results.totalElements).toEqual(1);
+      expect(results.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
     });
   });
 

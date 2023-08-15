@@ -141,7 +141,7 @@ class ProductService {
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
     return await Article
-      .find({ state: 'posted', 'createdBy.id': userId })
+      .find({state: 'posted', 'createdBy.id': userId })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -151,6 +151,44 @@ class ProductService {
   async #countRecentProductsForUser(userId) {
     return await Article
       .count({ state: 'posted', 'createdBy.id': userId })
+      .exec();
+  }
+
+  async findPageOfRecentProductsForUserOrProducingOffice(userId, producingOfficeName, page, limit, offset, sortDir) {
+    KiwiPreconditions.checkArgumentDefined(userId);
+    KiwiPreconditions.checkArgumentDefined(producingOfficeName);
+    const recentProducts = await this.#findRecentProductsForUserOrProducingOffice(userId, producingOfficeName, limit, offset, sortDir);
+    const recentCount = await this.#countRecentProductsForUserOrProducingOffice(userId, producingOfficeName);
+    return KiwiPage.of(page, limit, recentCount, recentProducts.map((recent) => recent.features))
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("datePublished", sortDir));
+  }
+
+  async #findRecentProductsForUserOrProducingOffice(userId, producingOfficeName) {
+    return await Article
+      .find({
+        $and: [
+          { state: 'posted' },
+          { $or: [
+            { 'createdBy.id': userId },
+            { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
+          ]}
+        ]
+      })
+      .exec();
+  }
+
+  async #countRecentProductsForUserOrProducingOffice(userId, producingOfficeName) {
+    return await Article
+      .count({
+        $and: [
+          { state: 'posted' },
+          { $or: [
+            { 'createdBy.id': userId },
+            { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
+          ]}
+        ]
+      })
       .exec();
   }
 

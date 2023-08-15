@@ -251,10 +251,9 @@ export class ObjectStorageEngine implements multer.StorageEngine {
     cb(null, fileUploadedObjectInfo);
   }
 
-  async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void,): Promise<void> {
-    // const objectName = this.sanitize(file.objectName);
-    logger.info("ObjectStorageEngine._removeFile:  file:%j", file);
-    // await this.service.removeObject(this.bucket, objectName);
+  async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void): Promise<void> {
+    logger.info('ObjectStorageEngine._removeFile:  %j', file);
+    // await this.service.removeObject(this.bucket, file.filename);
     cb(null);
   }
 }
