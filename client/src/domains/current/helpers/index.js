@@ -38,8 +38,8 @@ export const isProductLocked = (product) => {
   return !isEmpty(product.needed) || product.org_restricted;
 };
 
-export const isFavoriteProduct = (product) => {
-  return !!product.favorite;
+export const isSavedProduct = (product) => {
+  return !!product.saved;
 };
 
 export const hasProductAccess = (product, organization) => {
@@ -87,7 +87,7 @@ export const getProductImageUrl = (images, docNum) => {
 
 export const getApiBaseUrl = () => {
   return import.meta.env.MODE === "container" ? "/api" : "";
-};  
+};
 
 //Damion's Idea
 export const isProduction = () => {
