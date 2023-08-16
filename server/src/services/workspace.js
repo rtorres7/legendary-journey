@@ -32,7 +32,7 @@ class WorkspaceService {
     return { totalViews, uniqueViews };
   }
 
-  async _getTotalViews(productId) {
+  async getTotalViews(productId) {
     const totalViewEntry = await models.TotalView.findOne({
       where: {
         productId: productId
@@ -47,7 +47,7 @@ class WorkspaceService {
     }
   }
 
-  async _getUniqueViews(productId) {
+  async getUniqueViews(productId) {
     const uniqueUserCount = await models.UniqueView.count({
       where: {
         productId: productId

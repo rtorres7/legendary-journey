@@ -27,6 +27,11 @@ const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
 const engine = new ObjectStorageEngine({ bucket: 'foo', prefix: 'bar'}); // TODO: This needs to be updated
 const upload = multer({ storage: engine });
 
+const WorkspaceService = require("../services/workspace-service");
+const workspaceService = new WorkspaceService();
+const TotalView = require("../models/total_view");
+const UniqueView = require("../models/unique_view");
+
 //GET articles by date
 router.get('/articles/date/:date', async (req, res) => {
   /*
@@ -70,15 +75,12 @@ router.get('/articles/:productNumber', async (req, res) => {
     const article = await productService.findByProductNumber(req.params.productNumber);
 
     // Increase the view counters
-    // Note: The actual implementation might depend on how you identify unique users
     article.data.details.totalViews++;
     if (isNewUserView(req)) {
       article.data.details.uniqueViews++;
     }
-
-    // Save the changes
     await productService.updateProduct(article._id, article);
-
+    await workspaceService.updateViews(req.params.productNumber, article.data.details.totalViews, article.data.details.uniqueViews);
     res.json(article.data.details);
   } catch (error) {
     // TODO: Replace the following with kiwi-js#KiwiStandardResponses
@@ -98,7 +100,6 @@ function isNewUserView(req) {
   // TODO: Implement this function
   return false;
 }
-
 
 // POST (adapter to support /processDocument while working towards splitting it up)
 router.post('/articles/processDocument', (req, res) => {
