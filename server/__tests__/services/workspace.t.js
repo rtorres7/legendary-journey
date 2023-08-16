@@ -1,8 +1,7 @@
-const { ElasticsearchContainer } = require("testcontainers");
-const { PostgreSqlContainer } = require('testcontainers');
 const {  loadSavedProducts, loadCollections, loadCollectionProducts, loadSavedProductsForSearch } = require('../__utils__/dataLoader');
 const { Client } = require("@elastic/elasticsearch");
 const constant = require("../../src/util/constant");
+const { PostgresExtension, ElasticSearchExtension } = require("@kiwiproject/kiwi-test-js");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -14,16 +13,14 @@ jest.mock('../../src/services/metadata.js', () => {
 });
 
 describe('Workspace Service', () => {
-  let postgresContainer;
   let service;
-  let esContainer;
   let client;
 
   beforeAll(async () => {
-    esContainer = await new ElasticsearchContainer().start();
-    process.env.ES_URL = esContainer.getHttpUrl();
+    const esUrl = ElasticSearchExtension.getElasticSearchUrl();
+    process.env.ES_URL = esUrl;
 
-    client = new Client({ node: esContainer.getHttpUrl() });
+    client = new Client({ node: esUrl });
 
     // Setup index
     await client.indices.create({
@@ -31,23 +28,25 @@ describe('Workspace Service', () => {
       mappings: constant.indices[1].mappings,
     });
 
-    postgresContainer = await new PostgreSqlContainer().start();
-    process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
+    await PostgresExtension.setupNewDatabase("workspace");
+    const postgresUri = PostgresExtension.getPostgresUriWithDb("workspace");
+
+    process.env.POSTGRES_CONNECTION_URL = postgresUri;
 
     // Load Saved Products
-    const savedProduct = await loadSavedProducts(postgresContainer.getConnectionUri());
-    await loadSavedProductsForSearch(esContainer.getHttpUrl(), savedProduct.id);
-    await loadCollections(postgresContainer.getConnectionUri());
-    await loadCollectionProducts(postgresContainer.getConnectionUri());
-  }, 120_000);
+    const savedProduct = await loadSavedProducts(postgresUri);
+    await loadSavedProductsForSearch(esUrl, savedProduct.id);
+    await loadCollections(postgresUri);
+    await loadCollectionProducts(postgresUri);
+  });
 
   beforeEach(() => {
     const WorkspaceService = require("../../src/services/workspace");
     service = new WorkspaceService();
-  })
+  });
 
   afterAll(() => {
-    postgresContainer.stop();
+    client.close();
   });
 
   describe('findPageOfSavedProductsForUser', () => {

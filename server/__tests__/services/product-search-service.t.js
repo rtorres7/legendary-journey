@@ -1,11 +1,10 @@
-const { ElasticsearchContainer } = require("testcontainers");
 const { Client } = require("@elastic/elasticsearch");
 const ProductSearchService = require("../../src/services/product-search-service");
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
-const { logger } = require("../../src/config/logger");
 const fs = require('fs');
 const path = require('path');
+const { ElasticSearchExtension } = require("@kiwiproject/kiwi-test-js");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -18,17 +17,12 @@ jest.mock('../../src/services/metadata.js', () => {
 
 describe('ProductSearchService', () => {
   let service;
-  let container;
   let client;
 
   beforeAll(async () => {
-    container = await new ElasticsearchContainer("elasticsearch:8.6.1")
-      .withEnvironment({ "xpack.security.enabled": "false" })
-      .start();
-    process.env.ES_URL = container.getHttpUrl();
-    logger.info(`ProductSearchService.beforeAll:  ${container.getHttpUrl()}`);
-
-    client = new Client({ node: container.getHttpUrl() });
+    const esUrl = ElasticSearchExtension.getElasticSearchUrl();
+    process.env.ES_URL = esUrl;
+    client = new Client({ node: esUrl });
 
     // Setup index
     await client.indices.create({
@@ -50,11 +44,11 @@ describe('ProductSearchService', () => {
     });
 
     // Load data
-    await loadElasticSearch(container.getHttpUrl());
-  }, 70_000);
+    await loadElasticSearch(esUrl);
+  });
 
   afterAll(async () => {
-    await container.stop();
+    client.close();
   });
 
   beforeEach(() => {

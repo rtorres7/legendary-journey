@@ -1,8 +1,0 @@
-{
-  "env": {
-    "node": true,
-    "es2022": true,
-    "jest": true,
-    "jest/globals": true
-  }
-}
