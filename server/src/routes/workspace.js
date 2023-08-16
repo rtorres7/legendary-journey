@@ -39,7 +39,7 @@ router.get('/workspace/drafts', async (req, res) => {
 
 router.get('/workspace/recent', async (req, res) => {
   /*
-    #swagger.summary = 'Retrieve a page of most recently published products created by the current user'
+    #swagger.summary = 'Retrieve a page of most recently published products created by the current user's organization'
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
@@ -57,8 +57,8 @@ router.get('/workspace/recent', async (req, res) => {
     const {perPage, page, skip, sortDir} = pagingParams(req);
 
     try {
-      const pageOfRecentProducts = await productService.findPageOfRecentProductsForUserOrProducingOffice(
-        currentUser.id, currentUser.dataValues?.organization, page, perPage, skip, sortDir);
+      const pageOfRecentProducts = await productService.findPageOfRecentProductsForProducingOffice(
+        currentUser.dataValues?.organization, page, perPage, skip, sortDir);
       res.json(pageOfRecentProducts);
     } catch (error) {
       logger.error(error);

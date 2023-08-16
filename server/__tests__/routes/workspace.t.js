@@ -23,7 +23,7 @@ jest.mock('../../src/services/product-service.js', () => {
           content: articles.filter(article => article.state === 'posted'),
         };
       }),
-      findPageOfRecentProductsForUserOrProducingOffice: jest.fn().mockImplementation((userId, producingOfficeName, page, limit, offset, sortDir) => {
+      findPageOfRecentProductsForProducingOffice: jest.fn().mockImplementation((producingOfficeName, page, limit, offset, sortDir) => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
         }
@@ -31,10 +31,7 @@ jest.mock('../../src/services/product-service.js', () => {
         return {
           content: articles.filter(article =>
             article.state === 'posted' &&
-            (
-              article.createdBy.id === userId ||
-              article.producingOffices.findIndex(i => i.name === producingOfficeName) >= 0
-            )
+            article.producingOffices.findIndex(i => i.name === producingOfficeName) >= 0
           ),
         };
       }),
@@ -156,19 +153,20 @@ describe('Workspace Routes', () => {
   });
 
   describe('GET /workspace/recent', () => {
-    it('should return recent posted products from user and organization', () => {
+    it('should return recent posted products for user\'s organization', () => {
       const router = require('../../src/routes/workspace');
-      const app = setupAppWithUser(router, CURRENT_USER);
+      const app = setupAppWithUser(router, { id: 1, dataValues: { organization: 'ANCESTRY' } });
 
       return request(app)
         .get('/workspace/recent')
         .expect(200)
         .expect('Content-Type', /json/)
         .then((res) => {
-          expect(res.body.content.length).toBe(4);
+          expect(res.body.content.length).toBe(2);
 
           const ids = res.body.content.map((product) => product.productNumber);
-          expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]);
+          // expect(ids).toStrictEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]);
+          expect(ids).toStrictEqual(["WIReWIRe_sample_2", "WIReWIRe_sample_3"]);
         });
     });
 

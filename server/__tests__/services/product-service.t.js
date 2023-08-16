@@ -279,9 +279,9 @@ describe('ProductService', () => {
     });
   });
 
-  describe('findPageOfRecentProductsForUserOrProducingOffice', () => {
+  describe('findPageOfRecentProductsForProducingOffice', () => {
     it('should return a page of recent products', async () => {
-      const results = await service.findPageOfRecentProductsForUserOrProducingOffice(100, 'AGRICULTURE', 1, 10, 0, 'desc');
+      const results = await service.findPageOfRecentProductsForProducingOffice('AGRICULTURE', 1, 10, 0, 'desc');
       // logger.info("%o", results);
       expect(results.content).toHaveLength(1);
       expect(results.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_4']);

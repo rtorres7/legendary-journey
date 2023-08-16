@@ -154,39 +154,32 @@ class ProductService {
       .exec();
   }
 
-  async findPageOfRecentProductsForUserOrProducingOffice(userId, producingOfficeName, page, limit, offset, sortDir) {
-    KiwiPreconditions.checkArgumentDefined(userId);
+  async findPageOfRecentProductsForProducingOffice(producingOfficeName, page, limit, offset, sortDir) {
     KiwiPreconditions.checkArgumentDefined(producingOfficeName);
-    const recentProducts = await this.#findRecentProductsForUserOrProducingOffice(userId, producingOfficeName, limit, offset, sortDir);
-    const recentCount = await this.#countRecentProductsForUserOrProducingOffice(userId, producingOfficeName);
+    const recentProducts = await this.#findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir);
+    const recentCount = await this.#countRecentProductsForProducingOffice(producingOfficeName);
     return KiwiPage.of(page, limit, recentCount, recentProducts.map((recent) => recent.features))
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("datePublished", sortDir));
   }
 
-  async #findRecentProductsForUserOrProducingOffice(userId, producingOfficeName) {
+  async #findRecentProductsForProducingOffice(producingOfficeName) {
     return await Article
       .find({
         $and: [
           { state: 'posted' },
-          { $or: [
-            { 'createdBy.id': userId },
-            { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
-          ]}
+          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
         ]
       })
       .exec();
   }
 
-  async #countRecentProductsForUserOrProducingOffice(userId, producingOfficeName) {
+  async #countRecentProductsForProducingOffice(producingOfficeName) {
     return await Article
       .count({
         $and: [
           { state: 'posted' },
-          { $or: [
-            { 'createdBy.id': userId },
-            { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
-          ]}
+          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
         ]
       })
       .exec();
