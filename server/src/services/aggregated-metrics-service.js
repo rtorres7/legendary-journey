@@ -69,11 +69,21 @@ class AggregatedMetricsService {
       },
     );
 
+    // If there's no data, push a placeholder entry
+    if (readershipData.length === 0) {
+      readershipData.push({
+        name: "No Data",
+        y: 1, // This could be set to any nominal value since there's no real data.
+      });
+    }
+
     const uniqueReadershipCount =
-      result.aggregations.organizations.buckets.reduce(
-        (acc, bucket) => acc + bucket.unique_users.value,
-        0,
-      );
+      readershipData[0].name === "No Data"
+        ? 1
+        : result.aggregations.organizations.buckets.reduce(
+            (acc, bucket) => acc + bucket.unique_users.value,
+            0,
+          );
 
     return {
       metrics: {
