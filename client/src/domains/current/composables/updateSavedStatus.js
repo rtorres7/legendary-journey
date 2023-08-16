@@ -20,18 +20,22 @@ export default function updateSavedStatus() {
       documentMatch.data.saved = !product.saved;
       product.saved = !product.saved;
     } else {
-      //feature_id is not in network call on search and products pages
+      //(high side) products page needs to use the attribute document_id from wires_controller
       let id;
-      if (route.name == "search" || route.name == "products") {
-        id = "id";
+      if (
+        route.name == "products" &&
+        (import.meta.env.MODE == "production" ||
+          import.meta.env.MODE == "development")
+      ) {
+        id = product.document_id;
       } else {
-        id = "feature_id";
+        id = product.id;
       }
       let savedPromise;
       if (product.saved) {
         removingProduct.value = true;
         savedPromise = axios
-          .delete("/workspace/saved/" + product.id)
+          .delete("/workspace/saved/" + id)
           .then((response) => {
             if (response.data.error) {
               removingProduct.value = false;
@@ -52,26 +56,24 @@ export default function updateSavedStatus() {
           });
       } else {
         savingProduct.value = true;
-        savedPromise = axios
-          .put("/workspace/saved/" + product.id)
-          .then((response) => {
-            if (response.data.error) {
-              savingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              savingProduct.value = false;
-              createNotification({
-                title: "Product Saved",
-                message: `Product ${product.doc_num} has been added to Saved products.`,
-                type: "success",
-              });
-            }
-          });
+        savedPromise = axios.put("/workspace/saved/" + id).then((response) => {
+          if (response.data.error) {
+            savingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            savingProduct.value = false;
+            createNotification({
+              title: "Product Saved",
+              message: `Product ${product.doc_num} has been added to Saved products.`,
+              type: "success",
+            });
+          }
+        });
       }
 
       savedPromise.then(() => (product.saved = !product.saved));

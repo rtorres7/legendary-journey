@@ -58,11 +58,7 @@
         ]"
       >
         <button
-          v-if="
-            environment != 'production' &&
-            !isProductLocked(product) &&
-            product.state == 'posted'
-          "
+          v-if="environment != 'production' && !isProductLocked(product)"
           class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
           :aria-label="`save product ${product.productNumber}`"
           @click.prevent="save(product)"

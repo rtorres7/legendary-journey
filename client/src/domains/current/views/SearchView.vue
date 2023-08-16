@@ -493,11 +493,7 @@
                   </template>
                 </div>
                 <button
-                  v-if="
-                    environment != 'production' &&
-                    !isProductLocked(item) &&
-                    item.state == 'posted'
-                  "
+                  v-if="environment != 'production' && !isProductLocked(item)"
                   class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0"
                   :aria-label="`save product ${item.productNumber}`"
                   @click.prevent="save(item)"
