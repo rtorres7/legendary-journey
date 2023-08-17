@@ -6,6 +6,8 @@ const ProductService = require('../services/product-service');
 const productService = new ProductService();
 const WorkspaceService = require('../services/workspace');
 const workspaceService = new WorkspaceService();
+const { logger } = require("../config/logger");
+
 
 router.get('/workspace/drafts', async (req, res) => {
   /*
@@ -37,7 +39,7 @@ router.get('/workspace/drafts', async (req, res) => {
 
 router.get('/workspace/recent', async (req, res) => {
   /*
-    #swagger.summary = 'Retrieve a page of most recently published products created by the current user'
+    #swagger.summary = 'Retrieve a page of most recently published products created by the current user's organization'
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
@@ -55,9 +57,11 @@ router.get('/workspace/recent', async (req, res) => {
     const {perPage, page, skip, sortDir} = pagingParams(req);
 
     try {
-      const pageOfRecentProducts = await productService.findPageOfRecentProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      const pageOfRecentProducts = await productService.findPageOfRecentProductsForProducingOffice(
+        currentUser.dataValues?.organization, page, perPage, skip, sortDir);
       res.json(pageOfRecentProducts);
     } catch (error) {
+      logger.error(error);
       KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find posted products: ${error.message}`, res);
     }
   });
