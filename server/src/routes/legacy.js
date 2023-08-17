@@ -199,8 +199,8 @@ router.get("/documents/:id/images/article", (req, res) => {
   #swagger.summary = 'DEPRECATED: Download an thumbnail image attached to the product. Use GET /articles/{id}/attachments/{attachmentId}'
   */
   let url = `/articles/${req.params.id}/attachments/article`;
-  if (req.params.updated_at) {
-    url += `?update_at=${req.params.updated_at}`;
+  if (req.query.updated_at) {
+    url += `?update_at=${req.query.updated_at}`;
   }
   res.redirect(url);
 });

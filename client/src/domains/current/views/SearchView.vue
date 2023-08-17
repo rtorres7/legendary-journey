@@ -480,7 +480,7 @@
                   </div>
                 </div>
                 <div
-                  class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300 wrap-anywhere"
+                  class="py-2 text-sm text-slate-600 dark:text-slate-300 energy:text-zinc-300 wrap-anywhere pb-8"
                 >
                   <template v-if="showHighlightedResult()">
                     <span
@@ -492,6 +492,23 @@
                     <span class="line-clamp-5">{{ item.summary }}</span>
                   </template>
                 </div>
+                <button
+                  v-if="environment != 'production' && !isProductLocked(item)"
+                  class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0"
+                  :aria-label="`save product ${item.productNumber}`"
+                  @click.prevent="save(item)"
+                >
+                  <template v-if="isSavedProduct(item)">
+                    <tippy content="Saved" placement="bottom">
+                      <BookmarkIconSolid aria-hidden="true" class="h-5 w-5" />
+                    </tippy>
+                  </template>
+                  <template v-else>
+                    <tippy content="Save" placement="bottom">
+                      <BookmarkIcon aria-hidden="true" class="h-5 w-5" />
+                    </tippy>
+                  </template>
+                </button>
               </div>
             </div>
           </template>
@@ -592,6 +609,19 @@
         </Dialog>
       </TransitionRoot>
     </div>
+    <MaxOverlay :show="savingProduct || removingProduct">
+      <div class="max-w-xs inline-block">
+        <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
+          Saving Product...
+        </p>
+        <p v-if="removingProduct" class="mb-4 font-semibold text-2xl">
+          Removing Product...
+        </p>
+        <div class="w-fit m-auto">
+          <MaxLoadingSpinner class="h-16 w-16" />
+        </div>
+      </div>
+    </MaxOverlay>
   </template>
 </template>
 
@@ -607,7 +637,7 @@ import {
   getValueForCode,
   getValueForName,
   formatDate,
-  isFavoriteProduct,
+  isSavedProduct,
 } from "@current/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
@@ -626,15 +656,18 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import {
+  BookmarkIcon,
   CalendarIcon,
   ChevronUpIcon,
   ChevronUpDownIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import MaxAppListbox from "@current/components/max-ui/lab/MaxAppListbox.vue";
 import PublishedProductCard from "@current/components/PublishedProductCard.vue";
 import ProductRestrictedLink from "@current/components/ProductRestrictedLink.vue";
 import SearchResultsFacets from "@current/components/SearchResultsFacets.vue";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
 
 const sortOptions = [
   { name: "Newest", key: "desc", type: "sort_dir" },
@@ -666,6 +699,8 @@ export default {
     ListboxOption,
     TransitionChild,
     TransitionRoot,
+    BookmarkIcon,
+    BookmarkIconSolid,
     CalendarIcon,
     ChevronUpIcon,
     ChevronUpDownIcon,
@@ -687,6 +722,8 @@ export default {
     const totalCount = computed(() => store.state.search.totalCount);
     const aggregations = computed(() => store.state.search.aggregations);
     const offlineMode = import.meta.env.MODE === "offline";
+    const environment = ref(import.meta.env.MODE);
+    const { save, savingProduct, removingProduct } = updateSavedStatus();
 
     const getSubregionNameForCountryCode = (code) => {
       return criteria.value.subregions.find((subregion) => {
@@ -1495,9 +1532,13 @@ export default {
       openMobileFacetsDialog,
       offlineMode,
       updateFavoriteStatus,
+      environment,
+      isSavedProduct,
+      save,
+      savingProduct,
+      removingProduct,
     };
   },
-  methods: { isFavoriteProduct },
 };
 </script>
 <style scoped lang="scss"></style>

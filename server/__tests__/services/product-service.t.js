@@ -1,4 +1,4 @@
-const { GenericContainer } = require("testcontainers");
+const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
 const mongoose = require("mongoose");
 const ProductService = require('../../src/services/product-service');
 
@@ -8,6 +8,8 @@ const { v4: uuidv4 } = require("uuid");
 const utc = require("dayjs/plugin/utc");
 const dayjs = require("dayjs");
 dayjs.extend(utc);
+
+const { logger } = require("../../src/config/logger");
 
 const Article = require("../../src/models/articles");
 
@@ -32,20 +34,15 @@ jest.mock('../../src/services/product-search-service.js', () => {
 });
 
 describe('ProductService', () => {
-  let mongoContainer;
   let mongoUrl;
   let service;
 
   beforeAll(async () => {
-    mongoContainer = await new GenericContainer("mongo")
-      .withExposedPorts(27017)
-      .start();
-
-    mongoUrl = `mongodb://${mongoContainer.getHost()}:${mongoContainer.getMappedPort(27017)}/mxms`;
+    mongoUrl = MongoExtension.getMongoUriWithDb("products");
 
     // Load articles
     await loadArticlesIntoMongo(mongoUrl);
-  }, 120_000);
+  });
 
   beforeEach(async () => {
     await mongoose.connect(mongoUrl, { useNewUrlParser: true });
@@ -54,10 +51,6 @@ describe('ProductService', () => {
 
   afterEach(() => {
     mongoose.connection.close();
-  });
-
-  afterAll(() => {
-    mongoContainer.stop();
   });
 
   describe('findAllByDate', () => {
@@ -274,6 +267,23 @@ describe('ProductService', () => {
       expect(drafts.totalPages).toEqual(1);
       expect(drafts.totalElements).toEqual(4);
       expect(drafts.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
+    });
+  });
+
+  describe('findPageOfRecentProductsForProducingOffice', () => {
+    it('should return a page of recent products', async () => {
+      const results = await service.findPageOfRecentProductsForProducingOffice('AGRICULTURE', 1, 10, 0, 'desc');
+      // logger.info("%o", results);
+      expect(results.content).toHaveLength(1);
+      expect(results.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_4']);
+      // results mapped to Article.features which lacks the producingOffices property
+      // expect(results.content.every(product => product.producingOffices.findIndex(i => i.name === 'AGRICULTURE') >= 0)).toBeTrue();
+      expect(results.size).toEqual(10);
+      expect(results.number).toEqual(1);
+      expect(results.numberOfElements).toEqual(1);
+      expect(results.totalPages).toEqual(1);
+      expect(results.totalElements).toEqual(1);
+      expect(results.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
     });
   });
 

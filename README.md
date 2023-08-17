@@ -50,7 +50,7 @@
 
 ### Running the frontend in offline mode (must be in client folder)
 
-```
+```sh
 cd client
 npm install
 npm run dev:offline
@@ -58,13 +58,13 @@ npm run dev:offline
 
 ### Compiles and minifies for production in offline mode (must be in client folder)
 
-```
+```sh
 npm run build:offline
 ```
 
 ### Lints and fixes files
 
-```
+```sh
 npm run lint
 ```
 
@@ -82,13 +82,13 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Building the Container Images
 
-```
+```sh
 docker-compose build
 ```
 
 ### Running the Containers
 
-```
+```sh
 docker-compose up
 # App is running on https://localhost:8443
 # Server (Node.js + Express.js) is running on localhost:3000
@@ -97,27 +97,31 @@ docker-compose up
 
 ### Building & Running the Containers Together
 
-```
+```sh
 npm install
 npm start
 ```
 
 ### Stopping the Containers
 
-```
+```sh
 docker-compose stop # this will safely maintain data in your MongoDB database container
 ```
 
 ### Destroying the Containers
 
-```
+```sh
 docker-compose down # this will delete any data persisted in your MongoDB database container
 ```
 
 ### Destroying all containers, volumes, and images
 
-```
+```sh
 docker system prune -a --volumes
+
+# aliases for removing only containers/volumes (preserve images to avoid download)
+alias dcrm='docker rm -f $(docker ps -aq)'
+alias dvrm='docker volume rm $(docker volume ls -q)'
 ```
 
 ## How to run Sonar Analysis
@@ -134,7 +138,7 @@ If using a mac, then it can be installed through homebrew also.
 
 #### Sonar Token
 
-```
+```sh
 export SONAR_TOKEN=...token provided offline...
 ```
 
@@ -143,13 +147,13 @@ export SONAR_TOKEN=...token provided offline...
 Your _.p12 certificate will need to be converted to a _.jks. The following command will ask for the p12 password and a
 password for the new jks.
 
-```
+```sh
 keytool -v -importkeystore -srckeystore <username>.p12 -srcstoretype PKCS12 -destkeystore <username>.jks
 ```
 
 #### Sonar Options
 
-```
+```sh
 export SONAR_SCANNER_OPTS="-Djavax.net.ssl.keyStore=<path-to-jks> -Djavax.net.ssl.keyStorePassword=<jks-password>"
 ```
 
@@ -160,7 +164,7 @@ have sonarqube use the project's eslint rules
 
 From the project root:
 
-```
+```sh
 npm run sonar
 ```
 

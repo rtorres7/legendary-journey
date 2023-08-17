@@ -2,6 +2,18 @@
 db.articles.drop();
 db.articles.insertMany([
   {
+    attachmentsMetadata: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 152437,
+        type: "ATTACHMENT",
+        attachmentId: "1c44f780-ee46-4615-b058-6c84eab870ad",
+        destination: "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+        visible: false,
+      },
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -96,6 +108,18 @@ db.articles.insertMany([
     worldwide: false,
   },
   {
+    attachmentsMetadata: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 384096,
+        type: "ATTACHMENT",
+        attachmentId: "e6eec89a-e4e1-49a6-90ad-99e9de7ed8b1",
+        destination: "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+        visible: false,
+      },
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -204,6 +228,18 @@ db.articles.insertMany([
     worldwide: false,
   },
   {
+    attachmentsMetadata: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 399296,
+        type: "ATTACHMENT",
+        attachmentId: "48d35447-6b51-40c4-9793-63da601e3ec0",
+        destination: "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+        visible: false,
+      }
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -304,6 +340,18 @@ db.articles.insertMany([
     worldwide: true,
   },
   {
+    attachments: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-08-29T13:00:00Z"),
+        fileSize: 75668,
+        type: "ATTACHMENT",
+        attachmentId: "b33d5fa9-f888-4a2c-9ff1-5ed69cb0cb22",
+        destination: "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+        visible: false,
+      }
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
@@ -2166,7 +2214,7 @@ db.metadata.insertOne({
       ],
     },
     producing_offices: {
-      displayName: "Producing Offices",
+      displayName: "Authored By Organizations",
       values: [
         {
           ancestry: "1000",

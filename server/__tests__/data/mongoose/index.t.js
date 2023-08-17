@@ -1,26 +1,14 @@
-const { GenericContainer } = require("testcontainers");
+const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
 const mongoose = require('mongoose');
 
 describe('Mongoose setup', () => {
-  let container;
-
-  beforeAll(async () => {
-    container = await new GenericContainer('mongo')
-      .withExposedPorts(27017)
-      .start();
-  }, 120_000);
-
-  afterAll(async () => {
-    await container.stop();
-  });
-
   afterEach(() => {
     mongoose.connection.close();
     jest.clearAllMocks();
   });
 
   it('should setup mongoose', async () => {
-    process.env.MONGO_DATABASE_URL = `${container.getHost()}:${container.getMappedPort(27017)}`;
+    process.env.MONGO_DATABASE_URL = MongoExtension.getMongoUriWithDb("articles");
 
     const log = jest.spyOn(console, 'log').mockImplementation(() => {});
     const setupMongoose = require('../../../src/data/mongoose');

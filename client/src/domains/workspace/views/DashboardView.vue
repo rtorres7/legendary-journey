@@ -254,7 +254,7 @@ export default {
           (p) => p.code == product.productType.id
         );
       }
-      if (p.icon != null) {
+      if (p && p.icon) {
         return p.icon;
       } else {
         return;

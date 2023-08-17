@@ -1,16 +1,22 @@
 const dayjs = require("dayjs");
 const Article = require("../models/articles");
-const ProductSearchService = require("../services/product-search-service");
-const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
+const ProductSearchService = require("./product-search-service");
+const {
+  KiwiPage,
+  KiwiSort,
+  KiwiPreconditions,
+} = require("@kiwiproject/kiwi-js");
 const { handleMongooseError } = require("../util/errors");
 const _ = require("lodash");
-const { ObjectStoreService } = require("../services/object-store-service");
+const { ObjectStoreService } = require("./object-store-service");
 const constant = require("../util/constant.js");
+const { AttachmentService } = require("./attachment-service");
+const { logger } = require("../config/logger");
 
 class ProductService {
   constructor() {
     this.productSearchService = new ProductSearchService();
-    this.objectStoreService = new ObjectStoreService();
+    this.attachmentService = new AttachmentService();
   }
 
   async findAllByDate(date) {
@@ -172,6 +178,51 @@ class ProductService {
     }).exec();
   }
 
+  async findPageOfRecentProductsForProducingOffice(
+    producingOfficeName,
+    page,
+    limit,
+    offset,
+    sortDir,
+  ) {
+    KiwiPreconditions.checkArgumentDefined(producingOfficeName);
+    const recentProducts = await this.#findRecentProductsForProducingOffice(
+      producingOfficeName,
+      limit,
+      offset,
+      sortDir,
+    );
+    const recentCount = await this.#countRecentProductsForProducingOffice(
+      producingOfficeName,
+    );
+    return KiwiPage.of(
+      page,
+      limit,
+      recentCount,
+      recentProducts.map((recent) => recent.features),
+    )
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("datePublished", sortDir));
+  }
+
+  async #findRecentProductsForProducingOffice(producingOfficeName) {
+    return await Article.find({
+      $and: [
+        { state: "posted" },
+        { producingOffices: { $elemMatch: { name: producingOfficeName } } },
+      ],
+    }).exec();
+  }
+
+  async #countRecentProductsForProducingOffice(producingOfficeName) {
+    return await Article.count({
+      $and: [
+        { state: "posted" },
+        { producingOffices: { $elemMatch: { name: producingOfficeName } } },
+      ],
+    }).exec();
+  }
+
   async findPageOfProductsForUser(userId, page, limit, offset, sortDir) {
     const products = await this.#findAllProductsForUser(
       userId,
@@ -221,47 +272,64 @@ class ProductService {
     }
   }
 
-  async addAttachment(productNumber, attachmentData) {
-    const product = await Article.findOne({ productNumber: productNumber });
-    product.attachmentsMetadata = [
-      ...product.attachmentsMetadata,
-      attachmentData,
-    ];
+  async addAttachment(productNumber, fileUploadedObjectInfo) {
+    KiwiPreconditions.checkArgumentDefined(productNumber);
+    KiwiPreconditions.checkArgumentDefined(fileUploadedObjectInfo);
+    const product = await this.findByProductNumber(productNumber);
+    const added = await this.attachmentService.add(
+      product,
+      fileUploadedObjectInfo,
+    );
 
-    const firstPdfIdx = _.findIndex(
-      product.attachmentsMetadata,
+    const firstPdf = product.attachmentsMetadata.find(
       (att) => att.mimeType === "application/pdf",
     );
 
-    if (firstPdfIdx === product.attachmentsMetadata.length - 1) {
-      const [, path] = attachmentData.destination.split("//");
-      const bucketSeparatorIndex = path.indexOf("/");
-      const bucket = path.substring(0, bucketSeparatorIndex);
-      const objectName = path.substring(bucketSeparatorIndex);
-
-      const pdfStream = await this.objectStoreService.getObject(
-        bucket,
-        objectName,
+    if (firstPdf?.attachmentId === added.attachmentId) {
+      const { metadata, stream } = await this.attachmentService.get(
+        product,
+        firstPdf.attachmentId,
       );
       const chunks = [];
-
-      pdfStream.on("data", (chunk) => {
+      stream.on("data", (chunk) => {
         chunks.push(chunk);
       });
-
-      pdfStream.on("end", () => {
+      stream.on("end", async () => {
         const result = Buffer.concat(chunks);
         const base64String = result.toString("base64");
-        this.productSearchService.indexAttachment(
+        await this.productSearchService.indexAttachment(
           product.id,
-          attachmentData.attachmentId,
+          fileUploadedObjectInfo.attachmentId,
           base64String,
         );
       });
     }
 
     await product.save();
-    this.productSearchService.update(product.indexable);
+    await this.productSearchService.update(product.indexable);
+    const metadata = this.attachmentService.findMetadata(
+      product,
+      added.attachmentId,
+    ); // need mongo id
+    return Promise.resolve(metadata);
+  }
+
+  async getAttachment(productNumber, attachmentId) {
+    KiwiPreconditions.checkArgumentDefined(productNumber);
+    KiwiPreconditions.checkArgumentDefined(attachmentId);
+    const product = await this.findByProductNumber(productNumber);
+    return await this.attachmentService.get(product, attachmentId);
+  }
+
+  async deleteAttachment(productNumber, attachmentId) {
+    KiwiPreconditions.checkArgumentDefined(productNumber);
+    KiwiPreconditions.checkArgumentDefined(attachmentId);
+    const product = await this.findByProductNumber(productNumber);
+    const metadata = await this.attachmentService.delete(product, attachmentId);
+    await this.productSearchService.removeIndexedAttachment(
+      product.id,
+      metadata.attachmentId,
+    );
   }
 
   async incrementPrintCount(productNumber, userId) {
@@ -278,6 +346,44 @@ class ProductService {
     await product.save();
     this.productSearchService.update(product.indexable);
     return product;
+  }
+
+  async incrementPrintCount(productNumber, userId) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.print_count += 1;
+    await product.save();
+    this.productSearchService.update(product.indexable);
+    return product;
+  }
+
+  async incrementEmailCount(productNumber, userId) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.email_count += 1;
+    await product.save();
+    await this.productSearchService.update(product.indexable);
+    const metadata = this.attachmentService.findMetadata(
+      product,
+      added.attachmentId,
+    ); // need mongo id
+    return Promise.resolve(metadata);
+  }
+
+  async getAttachment(productNumber, attachmentId) {
+    KiwiPreconditions.checkArgumentDefined(productNumber);
+    KiwiPreconditions.checkArgumentDefined(attachmentId);
+    const product = await this.findByProductNumber(productNumber);
+    return await this.attachmentService.get(product, attachmentId);
+  }
+
+  async deleteAttachment(productNumber, attachmentId) {
+    KiwiPreconditions.checkArgumentDefined(productNumber);
+    KiwiPreconditions.checkArgumentDefined(attachmentId);
+    const product = await this.findByProductNumber(productNumber);
+    const metadata = await this.attachmentService.delete(product, attachmentId);
+    await this.productSearchService.removeIndexedAttachment(
+      product.id,
+      metadata.attachmentId,
+    );
   }
 }
 

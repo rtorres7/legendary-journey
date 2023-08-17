@@ -1,21 +1,18 @@
-const { PostgreSqlContainer } = require('testcontainers');
 const { Sequelize } = require("sequelize");
+const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
 
 describe('User model', () => {
-  let postgresContainer;
+  let postgresUri;
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start();
-    process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
+    await PostgresExtension.setupNewDatabase("user_model");
+    postgresUri = PostgresExtension.getPostgresUriWithDb("user_model");
+    process.env.POSTGRES_CONNECTION_URL = postgresUri;
   }, 120_000);
-
-  afterAll(() => {
-    postgresContainer.stop();
-  });
 
   describe('authorizations', () => {
     it('should contain some with true if wire_editor', async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const sequelize = new Sequelize(postgresUri);
 
       const userModel = require('../../src/models/user');
       userModel(sequelize);
@@ -37,7 +34,7 @@ describe('User model', () => {
     });
 
     it('should contain some with true if community_editor', async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const sequelize = new Sequelize(postgresUri);
 
       const userModel = require('../../src/models/user');
       userModel(sequelize);
@@ -59,7 +56,7 @@ describe('User model', () => {
     });
 
     it('should contain one with true if special_edition_manager', async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const sequelize = new Sequelize(postgresUri);
 
       const userModel = require('../../src/models/user');
       userModel(sequelize);

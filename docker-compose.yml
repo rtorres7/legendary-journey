@@ -35,6 +35,7 @@ services:
       - /data/node_modules
       - /data/build
       - ./certs/localhost.crt:/etc/ssl/certs/localhost.crt
+      - ./client/src/shared/assets/mocks:/tmp/mocks:ro
     depends_on: #TODO: conditions deprecated in Compose File Version 3.x
       elasticsearch:
         condition: service_healthy
@@ -43,8 +44,9 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      - BASE_PATH=/api
       - ES_URL=http://elasticsearch:9200
-      - MONGO_DATABASE_URL=mongodb:27017
+      - MONGO_DATABASE_URL=mongodb://mongodb:27017/articles
       - POSTGRES_CONNECTION_URL=postgres://maximus:magic@postgres:5432/maximus
       - MXS_ENV=container
       - MXS_BASE_URI=https://localhost:8443
@@ -172,7 +174,7 @@ services:
       - your-network
 
   liquibase:
-    image: liquibase/liquibase
+    image: liquibase/liquibase:4.23
     container_name: liquibase
     environment:
       LIQUIBASE_SECURE_PARSING: false
@@ -228,13 +230,12 @@ services:
         condition: service_healthy
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.25.2
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/nginx/certs
     ports:
-      # - 8080:80
       - 8443:443
     networks:
       - your-network
@@ -244,7 +245,7 @@ services:
       - client
 
   minio:
-    image: quay.io/minio/minio:latest
+    image: minio/minio:RELEASE.2023-08-09T23-30-22Z
     container_name: minio
     restart: unless-stopped
     environment:

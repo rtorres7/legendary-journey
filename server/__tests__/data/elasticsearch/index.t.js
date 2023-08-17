@@ -1,21 +1,12 @@
-const { ElasticsearchContainer } = require("testcontainers");
+const { ElasticSearchExtension } = require("@kiwiproject/kiwi-test-js");
 
 describe('Elasticsearch setup', () => {
-  let container;
-
   beforeAll(async () => {
-    container = await new ElasticsearchContainer().start();
-    process.env.ES_URL = container.getHttpUrl();
-    console.log(container.getHttpUrl());
-  }, 120_000);
-
-  afterAll(async () => {
-    await container.stop();
+    process.env.ES_URL = ElasticSearchExtension.getElasticSearchUrl();
   });
 
   it('should setup the client and return it', () => {
     const client = require('../../../src/data/elasticsearch');
-
     expect(client).toBeDefined();
   });
 
