@@ -51,6 +51,13 @@ jest.mock("../../src/services/product-service.js", () => {
           content: articles,
         };
       }),
+      countAllByOrganization: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error("whoops");
+        }
+
+        return Promise.resolve({ totalCreated: articles.length });
+      }),
     };
   });
 });
@@ -119,6 +126,18 @@ jest.mock("../../src/services/workspace.js", () => {
           }
 
           return null;
+        }),
+    };
+  });
+});
+
+jest.mock("../../src/services/aggregated-metrics-service.js", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getTotalViewsForProductsPublishedByOrganization: jest
+        .fn()
+        .mockImplementation((organizationName, startDate, endDate) => {
+          return Promise.resolve({ totalViews: { totalViews: 500 } });
         }),
     };
   });
@@ -220,7 +239,10 @@ describe("Workspace Routes", () => {
   describe("GET /workspace/stats", () => {
     it("should return stats", () => {
       const router = require("../../src/routes/workspace");
-      const app = setupAppWithUser(router, CURRENT_USER);
+      const app = setupAppWithUser(router, {
+        id: 1,
+        Organization: { name: "AGRICULTURE" },
+      });
 
       return request(app)
         .get("/workspace/stats")

@@ -147,7 +147,6 @@ router.get("/workspace/stats", async (req, res) => {
         res,
       );
     }
-    res.json(this.event);
   });
 });
 

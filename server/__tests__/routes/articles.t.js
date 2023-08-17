@@ -114,6 +114,99 @@ jest.mock("../../src/services/workspace.js", () => {
   });
 });
 
+jest.mock("../../src/models/event_log", () => {
+  return jest.fn().mockImplementation((data) => ({
+    eventType: data.eventType || "PRODUCT_VIEW",
+    timestamp: data.timestamp || Date.now(),
+    userId: data.userId || 1,
+    productId: data.productId || "WIReWIRe_sample_1",
+    meta: data.meta || {},
+
+    save: jest.fn().mockResolvedValue(this),
+  }));
+});
+
+jest.mock("../../src/data/elasticsearch", () => {
+  let mockDocumentStore = {};
+
+  return {
+    index: jest.fn((params) => {
+      if (!params.index || !params.id || !params.document) {
+        return Promise.reject(
+          new Error("Missing required parameters for indexing."),
+        );
+      }
+
+      mockDocumentStore[params.id] = params.document;
+      return Promise.resolve({
+        result: "created",
+        _id: params.id,
+        _index: params.index,
+      });
+    }),
+    get: jest.fn((params) => {
+      if (!params.index || !params.id) {
+        return Promise.reject(
+          new Error("Missing required parameters for getting a document."),
+        );
+      }
+
+      const document = mockDocumentStore[params.id];
+      if (!document) {
+        return Promise.reject(new Error("Document not found."));
+      }
+
+      return Promise.resolve({
+        _index: params.index,
+        _id: params.id,
+        _source: document,
+      });
+    }),
+  };
+});
+
+jest.mock("../../src/services/event-service.js", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      registerEvent: jest
+        .fn()
+        .mockImplementation(async (eventType, userId, productId, meta = {}) => {
+          const event = {
+            eventType,
+            userId,
+            productId,
+            meta,
+            timestamp: Date.now(),
+            save: jest.fn(),
+          };
+
+          await event.save();
+
+          const user = {
+            Organization: "ANCESTRY",
+          };
+
+          const enrichedData = {
+            eventType,
+            userId,
+            productId,
+            meta,
+            timestamp: event.timestamp,
+            organization: user.Organization,
+          };
+
+          const result = await require("../../src/data/elasticsearch").index({
+            index: "eventlogs",
+            id: event.id,
+            document: enrichedData,
+          });
+
+          return event;
+        }),
+    };
+  });
+});
+
 const USER = {
   id: 1,
   firstName: "First",
