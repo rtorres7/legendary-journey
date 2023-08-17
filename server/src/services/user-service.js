@@ -12,11 +12,7 @@ class UserService {
       ],
     });
 
-    //const plainUser = user.get({ plain: true });
-
     if (user && user.Organization) {
-      // Modify the user object to include organization name as a string
-      //user.organization = user.Organization.name;
       user.setDataValue("organization", user.Organization.name);
     }
 

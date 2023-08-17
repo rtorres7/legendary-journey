@@ -43,7 +43,6 @@ describe("User Service", () => {
       });
 
       if (originalUser && originalUser.Organization) {
-        //originalUser.organization = originalUser.Organization.name;
         originalUser.setDataValue(
           "organization",
           originalUser.Organization.name,

@@ -73,7 +73,7 @@ class AggregatedMetricsService {
     if (readershipData.length === 0) {
       readershipData.push({
         name: "No Data",
-        y: 1, // This could be set to any nominal value since there's no real data.
+        y: 1,
       });
     }
 
