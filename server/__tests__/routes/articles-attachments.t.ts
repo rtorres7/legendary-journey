@@ -1,8 +1,6 @@
 import { expect, jest } from "@jest/globals";
 
-import { Client } from "minio";
 import request from "supertest";
-import { StartedTestContainer } from "testcontainers";
 import { v4 as uuidv4 } from "uuid";
 
 import config from "../../src/config/config";
@@ -12,6 +10,7 @@ import { articles, metadata } from "../__utils__/dataLoader";
 import { setupAppWithUser } from "../__utils__/expressUtils";
 import { AttachmentService } from "../../src/services/attachment-service";
 import { FileUploadedObjectInfo } from "../../src/services/object-store-service";
+import { MinioExtension } from "@kiwiproject/kiwi-test-js";
 
 jest.mock("../../src/services/product-service.js", () => {
   return jest.fn().mockImplementation(() => {
@@ -55,38 +54,13 @@ jest.mock("../../src/services/product-service.js", () => {
           visible: file.visible,
         });
       }),
-      deleteAttachment: jest.fn().mockImplementation((productNumber, attachmentId) => {
+      deleteAttachment: jest.fn().mockImplementation(() => {
         logger.info("ProductServiceMock.deleteAttachment:");
         return Promise.resolve();
       }),
     };
   });
 });
-
-// jest.mock("../../src/services/product-search-service.js", () => {
-//   return jest.fn().mockImplementation(() => {
-//     return {
-//       create: jest.fn().mockImplementation(async () => {
-//         return Promise.resolve();
-//       }),
-//       createIndexesIfNecessary: jest.fn().mockImplementation(async () => {
-//         return Promise.resolve();
-//       }),
-//       delete: jest.fn().mockImplementation(async () => {
-//         return Promise.resolve();
-//       }),
-//       indexAttachment: jest.fn().mockImplementation(async () => {
-//         return Promise.resolve();
-//       }),
-//       removeIndexedAttachment: jest.fn().mockImplementation(async () => {
-//         return Promise.resolve();
-//       }),
-//       update: jest.fn().mockImplementation(async () => {
-//         return Promise.resolve();
-//       }),
-//     };
-//   });
-// });
 
 jest.mock("../../src/services/metadata.js", () => {
   return jest.fn().mockImplementation(() => {
@@ -111,12 +85,8 @@ jest.mock("../../src/services/metadata.js", () => {
 const USER = { id: 1, firstName: "First", lastName: "Last", dn: "O=org,OU=orgunit,CN=commonname" };
 
 describe("Article Attachment Routes", () => {
-  let server: StartedTestContainer;
-  let client: Client;
-
-  beforeAll(async () => {
-    server = await MinioContainerUtils.startContainer();
-    client = MinioContainerUtils.newClient();
+  beforeAll(() => {
+    MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
   });
 
   describe("Attachments", () => {
@@ -177,18 +147,6 @@ describe("Article Attachment Routes", () => {
             expect(res.body.url).toBe(`${config.basePath}/documents/${original.id}/attachments/${res.body.att_id}`);
             logger.info("res.body:j", res.body);
           });
-
-        /*
-      // can't run this since product service is mocked and does not return saved attachments
-      // get attachment
-      await request(app)
-        .get(`/articles/${original.id}/attachments/${attachmentId}`)
-        .expect(200)
-        .expect('Content-Type', /binary/)
-        .then(async (res) => {
-          expect(res.body.success).toBe(true);
-        });
-      */
       });
     });
 

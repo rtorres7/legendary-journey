@@ -1,32 +1,29 @@
-const { PostgreSqlContainer } = require("testcontainers");
 const { loadFeeds } = require("../__utils__/dataLoader");
 const { Sequelize } = require("sequelize");
-const { Feed } = require("../../src/models/feed");
+const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
 
 describe("Feeds Service", () => {
-  let postgresContainer;
   let service;
+  let postgresUri;
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start();
-    process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
+    await PostgresExtension.setupNewDatabase("feeds");
+    postgresUri = PostgresExtension.getPostgresUriWithDb("feeds");
+
+    process.env.POSTGRES_CONNECTION_URL = postgresUri;
 
     // Load Feeds
-    await loadFeeds(postgresContainer.getConnectionUri());
-  }, 120_000);
+    await loadFeeds(postgresUri);
+  });
 
   beforeEach(() => {
     const FeedsService = require("../../src/services/feeds-service");
     service = new FeedsService();
   });
 
-  afterAll(() => {
-    postgresContainer.stop();
-  });
-
   describe("findAllFeeds", () => {
     it("should return all feeds", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const sequelize = new Sequelize(postgresUri);
       const feedsModel = require("../../src/models/feed");
       feedsModel(sequelize);
 

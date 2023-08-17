@@ -1,4 +1,4 @@
-const { GenericContainer } = require("testcontainers");
+const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
 const mongoose = require("mongoose");
 const ProductService = require('../../src/services/product-service');
 
@@ -34,20 +34,15 @@ jest.mock('../../src/services/product-search-service.js', () => {
 });
 
 describe('ProductService', () => {
-  let mongoContainer;
   let mongoUrl;
   let service;
 
   beforeAll(async () => {
-    mongoContainer = await new GenericContainer("mongo")
-      .withExposedPorts(27017)
-      .start();
-
-    mongoUrl = `mongodb://${mongoContainer.getHost()}:${mongoContainer.getMappedPort(27017)}/mxms`;
+    mongoUrl = MongoExtension.getMongoUriWithDb("products");
 
     // Load articles
     await loadArticlesIntoMongo(mongoUrl);
-  }, 120_000);
+  });
 
   beforeEach(async () => {
     await mongoose.connect(mongoUrl, { useNewUrlParser: true });
@@ -56,10 +51,6 @@ describe('ProductService', () => {
 
   afterEach(() => {
     mongoose.connection.close();
-  });
-
-  afterAll(() => {
-    mongoContainer.stop();
   });
 
   describe('findAllByDate', () => {
