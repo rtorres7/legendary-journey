@@ -27,12 +27,12 @@ class WorkspaceService {
   }
 
   async getUserProductViews(userId) {
-    const totalViews = await this._getTotalViews(userId);
-    const uniqueViews = await this._getUniqueViews(userId);
+    const totalViews = await this.#getTotalViews(userId);
+    const uniqueViews = await this.#getUniqueViews(userId);
     return { totalViews, uniqueViews };
   }
 
-  async getTotalViews(productId) {
+  async #getTotalViews(productId) {
     const totalViewEntry = await models.TotalView.findOne({
       where: {
         productId: productId
@@ -47,7 +47,7 @@ class WorkspaceService {
     }
   }
 
-  async getUniqueViews(productId) {
+  async #getUniqueViews(productId) {
     const uniqueUserCount = await models.UniqueView.count({
       where: {
         productId: productId
