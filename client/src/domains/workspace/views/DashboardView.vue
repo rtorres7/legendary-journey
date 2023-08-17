@@ -1,16 +1,43 @@
 <template>
   <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
+    <div class="text-2xl font-bold">For You</div>
+    <template v-if="!loadingSaved && recentlySaved.length > 0">
+      <div class="py-6 flex items-center justify-between">
+        <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
+        <router-link
+          v-if="recentlySaved.length > 4"
+          class="flex items-center text-gray-500 text-sm font-semibold"
+          to="/workspace/saved"
+        >
+          <span>See All</span>
+          <ChevronRightIcon class="h-4 w-4" />
+        </router-link>
+      </div>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+      >
+        <template v-for="(product, index) in recentlySaved" :key="product">
+          <MyPublishedProductCard
+            :product="product"
+            type="product"
+            :productTypeName="getProductTypeName(product)"
+            :class="index < numCards ? 'block' : 'hidden'"
+            @delete="openDeleteDialog(product)"
+          />
+        </template>
+      </div>
+    </template>
     <div
       v-if="loadingUser"
       class="h-8 bg-slate-200 rounded mb-8 w-1/2 animate-pulse"
     ></div>
-    <div v-if="!loadingUser && currentUsername" class="text-2xl text-gray-700">
-      {{ currentUsername }}'s Workspace
+    <div v-if="!loadingUser && currentUserOrg" class="text-2xl font-bold py-8">
+      Happening at {{ currentUserOrg }}
     </div>
     <template v-if="!loadingDrafts && !loadingPublished">
       <template v-if="myDrafts.length > 0">
-        <div class="py-6 flex items-center">
-          <div class="text-lg font-bold">Continue Working With Your Drafts</div>
+        <div class="pb-6 flex items-center">
+          <div class="text-lg font-semibold text-gray-700">Recent Drafts</div>
         </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
@@ -27,15 +54,17 @@
         </div>
       </template>
       <div class="py-6 flex justify-between items-center">
-        <div class="text-lg font-bold">My Recent Products</div>
-        <router-link
+        <div class="text-lg font-semibold text-gray-700">
+          Recently Published
+        </div>
+        <!-- <router-link
           v-if="myPublished.length > 4"
           class="flex items-center text-gray-500 text-sm font-semibold"
           to="/workspace/products"
         >
-          <span>More Products</span>
+          <span>See All</span>
           <ChevronRightIcon class="h-4 w-4" />
-        </router-link>
+        </router-link> -->
       </div>
     </template>
     <template v-if="myPublished.length == 0 && !loadingPublished">
@@ -62,6 +91,7 @@
           <MyPublishedProductCard
             :product="product"
             type="product"
+            :productTypeName="getProductTypeName(product)"
             :class="index < numCards ? 'block' : 'hidden'"
             @delete="openDeleteDialog(product)"
           />
@@ -69,7 +99,7 @@
       </div>
     </template>
     <div class="py-6 flex items-center">
-      <div class="text-lg font-bold">Your Stats</div>
+      <div class="text-lg font-bold">The Stats</div>
     </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
@@ -158,15 +188,18 @@ export default {
     const environment = ref(import.meta.env.MODE);
     const metadata = inject("metadata");
     const currentUsername = computed(() => store.state.user.user.name);
+    const currentUserOrg = computed(() => store.state.user.user.organization);
     const loadingUser = computed(() => store.state.user.loading);
     const myDrafts = ref([]);
     const myPublished = ref([]);
+    const recentlySaved = ref([]);
     const myStats = ref({
       totalViews: 0,
       totalCreated: 0,
     });
     const loadingDrafts = ref(true);
     const loadingPublished = ref(true);
+    const loadingSaved = ref(true);
     const loadingStats = ref(true);
     const createNotification = inject("create-notification");
     const selectedProduct = ref();
@@ -235,6 +268,12 @@ export default {
                 );
                 let indexOfProduct = myPublished.value.indexOf(p);
                 myPublished.value.splice(indexOfProduct, 1);
+                let s = recentlySaved.value.find(
+                  (item) =>
+                    item.productNumber == selectedProduct.value.productNumber
+                );
+                let indexOfSavedProduct = myPublished.value.indexOf(s);
+                recentlySaved.value.splice(indexOfSavedProduct, 1);
               }
             }
           });
@@ -258,6 +297,16 @@ export default {
         return p.icon;
       } else {
         return;
+      }
+    };
+    const getProductTypeName = (product) => {
+      if (product.productType.name) {
+        return product.productType.name;
+      } else {
+        let type = metadata.product_types.find(
+          (item) => item.code === product.productType
+        );
+        return type?.displayName;
       }
     };
     const numCards = ref();
@@ -301,6 +350,19 @@ export default {
           loadingPublished.value = false;
         }, 1000);
       } else {
+        axios.get("/workspace/saved").then((response) => {
+          loadingSaved.value = false;
+          if (response.data) {
+            recentlySaved.value = response.data.content;
+          } else {
+            createNotification({
+              title: "Error",
+              message: "There was an error retrieving Recently Saved Products.",
+              type: "error",
+              autoClose: false,
+            });
+          }
+        });
         axios.get("/workspace/drafts").then((response) => {
           loadingDrafts.value = false;
           if (response.data) {
@@ -339,12 +401,15 @@ export default {
     return {
       environment,
       currentUsername,
+      currentUserOrg,
       loadingUser,
       myDrafts,
       myPublished,
+      recentlySaved,
       myStats,
       loadingDrafts,
       loadingPublished,
+      loadingSaved,
       loadingStats,
       loadingDelete,
       isDeleteDialogOpen,
@@ -352,6 +417,7 @@ export default {
       closeDeleteDialog,
       deleteProduct,
       getProductIcon,
+      getProductTypeName,
       screenWidth,
       numCards,
       updateScreenWidth,

@@ -111,6 +111,7 @@
             <MyPublishedProductCard
               :product="product"
               type="saved"
+              :productTypeName="getProductTypeName(product)"
               @remove="removeSavedProduct(product)"
             />
           </template>
@@ -180,6 +181,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const path = computed(() => route.fullPath);
+    const metadata = inject("metadata");
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
@@ -289,6 +291,16 @@ export default {
         }
       }
     };
+    const getProductTypeName = (product) => {
+      if (product.productType.name) {
+        return product.productType.name;
+      } else {
+        let type = metadata.product_types.find(
+          (item) => item.code === product.productType
+        );
+        return type?.displayName;
+      }
+    };
 
     onMounted(() => {
       getSavedProducts(path.value);
@@ -334,6 +346,7 @@ export default {
       removingProduct,
       removeSavedProduct,
       getSavedProducts,
+      getProductTypeName,
     };
   },
 };

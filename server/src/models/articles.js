@@ -227,6 +227,7 @@ ArticleSchema.virtual("indexable").get(function () {
     email_count: this.email_count,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
+    featureId: this.get("_id"),
     images: findArticleImage(this.attachmentsMetadata),
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
