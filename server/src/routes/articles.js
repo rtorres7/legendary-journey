@@ -6,6 +6,8 @@ const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
+const constant = require("../util/constant.js");
+
 const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
@@ -30,6 +32,8 @@ const ProductSearchService = require("../services/product-search-service");
 const searchService = new ProductSearchService();
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
+const EventService = require("../services/event-service");
+const eventService = new EventService();
 
 const upload = objectStoreService.buildUpload("attachments");
 const { config } = require("../config/config");
@@ -91,6 +95,61 @@ router.get("/articles/:productNumber", async (req, res) => {
         req.params.productNumber,
       );
       const details = article.data.details;
+
+      try {
+        await eventService.registerEvent(
+          constant.EVENT_TYPES.PRODUCT_VIEW,
+          currentUser.id,
+          req.params.productNumber,
+          { producingOffices: article.producingOffices },
+        );
+        console.info("Event registered");
+      } catch (err) {
+        console.error("Failed to register event", err);
+      }
+
+      await augmentProductWithSaved(details, currentUser.id, article.id, false);
+      res.json(details);
+    } catch (error) {
+      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
+      handleMongooseError(
+        `Unable to find article with product number ${req.params.productNumber}`,
+        error,
+      );
+      res.json({
+        error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
+      });
+    }
+  });
+});
+
+//GET article details by id
+// This route is needed to deconflict with the /articles/:id route, because the client is
+// was calling both (this one for the details, the other for the document), and therefore
+// duplicating the product view metrics
+router.get("/articles/:productNumber/preload", async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve product details with a given product number'
+    #swagger.tags = ['Products']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/ProductDetails'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definitions/ErrorResponse'
+      }
+    }
+   */
+
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    try {
+      const article = await productService.findByProductNumber(
+        req.params.productNumber,
+      );
+      const details = article.data.details;
+
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
       res.json(details);
     } catch (error) {
@@ -308,7 +367,9 @@ router.put("/articles/:id", async (req, res, next) => {
     const productData = await buildUpdate(req.params.id, req.body, req.user);
     await updateProduct(req.params.id, productData, req, res);
   } catch (error) {
-    logger.error(error);
+    logger.error(
+      `Unable to update article with id ${req.params.id}: ${error.message}`,
+    );
     next(error);
   }
 });

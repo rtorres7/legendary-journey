@@ -81,7 +81,9 @@
           <Square3Stack3DIcon class="h-5 w-5" />
           <span class="text-sm font-normal"> Total Created</span>
         </div>
-        <div class="font-semibold text-xl text-slate-700">16</div>
+        <div class="font-semibold text-xl text-slate-700">
+          {{ myStats.totalCreated }}
+        </div>
       </div>
       <div
         class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
@@ -90,7 +92,9 @@
           <EyeIcon class="h-5 w-5" />
           <span class="text-sm font-normal">Total Views</span>
         </div>
-        <div class="font-semibold text-xl text-slate-700">2.4m</div>
+        <div class="font-semibold text-xl text-slate-700">
+          {{ myStats.totalViews }}
+        </div>
       </div>
     </div>
     <BaseDialog
@@ -157,7 +161,10 @@ export default {
     const loadingUser = computed(() => store.state.user.loading);
     const myDrafts = ref([]);
     const myPublished = ref([]);
-    const myStats = ref();
+    const myStats = ref({
+      totalViews: 0,
+      totalCreated: 0,
+    });
     const loadingDrafts = ref(true);
     const loadingPublished = ref(true);
     const loadingStats = ref(true);
@@ -316,8 +323,11 @@ export default {
           }
         });
         axios.get("/workspace/stats").then((response) => {
-          if (response.data) {
-            myStats.value = response.data.content;
+          if (response.data && response.data.totalViews) {
+            myStats.value.totalViews = computed(() => response.data.totalViews);
+            myStats.value.totalCreated = computed(
+              () => response.data.totalCreated
+            );
           } else {
             console.log("Couldn't retrieve stats");
           }

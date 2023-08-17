@@ -160,6 +160,10 @@ async function loadObjectStore() {
 
 // Load seed data
 if (process.env.MXS_ENV === "container") {
+  // TODO: This will also take care of creating an eventlog index in ES,
+  // given how initializeProductData() is implemented (looping through constant.indices).
+  // Do we want to implement a similiar method in AggregatedMetricsService?
+  // If so, we'll probably want to "split-up" the constant.indices array into separate files.
   const ProductService = require("./services/product-service");
   const productService = new ProductService();
   productService.initializeProductData();
@@ -186,6 +190,7 @@ const legacyRouter = require("./routes/legacy");
 const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
 const feedsRouter = require("./routes/feeds");
+const metricsRouter = require("./routes/metrics");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use(indexRouter);
@@ -196,6 +201,7 @@ app.use(homeRouter);
 app.use(searchRouter);
 app.use(workspaceRouter);
 app.use(feedsRouter);
+app.use(metricsRouter);
 
 // Legacy routes
 app.use(legacyRouter);

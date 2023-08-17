@@ -5,8 +5,8 @@ let esClient;
 if (esClient === undefined) {
   const esNode = process.env.ES_URL;
 
-  if (esNode === 'SWAGGER') {
-    esClient = {}
+  if (esNode === "SWAGGER") {
+    esClient = {};
   } else {
     esClient = new elasticsearch.Client({
       nodes: esNode,
