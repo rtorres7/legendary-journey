@@ -347,44 +347,6 @@ class ProductService {
     this.productSearchService.update(product.indexable);
     return product;
   }
-
-  async incrementPrintCount(productNumber, userId) {
-    const product = await Article.findOne({ productNumber: productNumber });
-    product.print_count += 1;
-    await product.save();
-    this.productSearchService.update(product.indexable);
-    return product;
-  }
-
-  async incrementEmailCount(productNumber, userId) {
-    const product = await Article.findOne({ productNumber: productNumber });
-    product.email_count += 1;
-    await product.save();
-    await this.productSearchService.update(product.indexable);
-    const metadata = this.attachmentService.findMetadata(
-      product,
-      added.attachmentId,
-    ); // need mongo id
-    return Promise.resolve(metadata);
-  }
-
-  async getAttachment(productNumber, attachmentId) {
-    KiwiPreconditions.checkArgumentDefined(productNumber);
-    KiwiPreconditions.checkArgumentDefined(attachmentId);
-    const product = await this.findByProductNumber(productNumber);
-    return await this.attachmentService.get(product, attachmentId);
-  }
-
-  async deleteAttachment(productNumber, attachmentId) {
-    KiwiPreconditions.checkArgumentDefined(productNumber);
-    KiwiPreconditions.checkArgumentDefined(attachmentId);
-    const product = await this.findByProductNumber(productNumber);
-    const metadata = await this.attachmentService.delete(product, attachmentId);
-    await this.productSearchService.removeIndexedAttachment(
-      product.id,
-      metadata.attachmentId,
-    );
-  }
 }
 
 module.exports = ProductService;
