@@ -283,7 +283,7 @@ export default {
                   (item) =>
                     item.productNumber == selectedProduct.value.productNumber
                 );
-                let indexOfSavedProduct = myPublished.value.indexOf(s);
+                let indexOfSavedProduct = recentlySaved.value.indexOf(s);
                 recentlySaved.value.splice(indexOfSavedProduct, 1);
               }
             }
