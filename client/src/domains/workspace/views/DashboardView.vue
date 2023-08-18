@@ -19,17 +19,17 @@
         <template v-for="(product, index) in recentlySaved" :key="product">
           <MyPublishedProductCard
             :product="product"
-            type="product"
+            type="saved"
             :productTypeName="getProductTypeName(product)"
             :class="index < numCards ? 'block' : 'hidden'"
-            @delete="openDeleteDialog(product)"
+            @remove="removeSavedProduct(product)"
           />
         </template>
       </div>
     </template>
     <div
       v-if="loadingUser"
-      class="h-8 bg-slate-200 rounded mb-8 w-1/2 animate-pulse"
+      class="h-8 bg-slate-200 rounded py-8 w-1/2 animate-pulse"
     ></div>
     <div v-if="!loadingUser && currentUserOrg" class="text-2xl font-bold py-8">
       Happening at {{ currentUserOrg }}
@@ -57,14 +57,15 @@
         <div class="text-lg font-semibold text-gray-700">
           Recently Published
         </div>
-        <!-- <router-link
+        <a
           v-if="myPublished.length > 4"
           class="flex items-center text-gray-500 text-sm font-semibold"
-          to="/workspace/products"
+          href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
+          target="_blank"
         >
           <span>See All</span>
           <ChevronRightIcon class="h-4 w-4" />
-        </router-link> -->
+        </a>
       </div>
     </template>
     <template v-if="myPublished.length == 0 && !loadingPublished">
@@ -155,6 +156,14 @@
         </BaseButton>
       </template>
     </BaseDialog>
+    <Overlay :show="removingProduct">
+      <div class="max-w-xs inline-block">
+        <p class="mb-4 font-semibold text-2xl">Removing Product...</p>
+        <div class="w-fit m-auto">
+          <LoadingSpinner class="h-16 w-16" />
+        </div>
+      </div>
+    </Overlay>
   </div>
 </template>
 <script>
@@ -166,6 +175,7 @@ import BaseButton from "../components/BaseButton.vue";
 import MyDraftProductCard from "../components/MyDraftProductCard.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
+import Overlay from "../components/Overlay.vue";
 import { productDetails } from "../data";
 import {
   ChevronRightIcon,
@@ -177,6 +187,7 @@ export default {
     MyDraftProductCard,
     MyPublishedProductCard,
     LoadingSpinner,
+    Overlay,
     ChevronRightIcon,
     EyeIcon,
     Square3Stack3DIcon,
@@ -275,6 +286,48 @@ export default {
                 let indexOfSavedProduct = myPublished.value.indexOf(s);
                 recentlySaved.value.splice(indexOfSavedProduct, 1);
               }
+            }
+          });
+      }
+    };
+    const removingProduct = ref(false);
+    const removeSavedProduct = (product) => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Saved Product Removed",
+          message: `Product ${product.productNumber} has been removed from Saved Products.`,
+          type: "success",
+        });
+        let p = recentlySaved.value.find(
+          (item) => item.productNumber == product.productNumber
+        );
+        let indexOfProduct = recentlySaved.value.indexOf(p);
+        recentlySaved.value.splice(indexOfProduct, 1);
+      } else {
+        removingProduct.value = true;
+        axios
+          .delete("/workspace/saved/" + product.productId)
+          .then((response) => {
+            if (response.data.error) {
+              removingProduct.value = false;
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              removingProduct.value = false;
+              createNotification({
+                title: "Product Removed",
+                message: `Product ${product.productNumber} has been removed from Saved Products.`,
+                type: "success",
+              });
+              let p = recentlySaved.value.find(
+                (item) => item.productNumber == product.productNumber
+              );
+              let indexOfProduct = recentlySaved.value.indexOf(p);
+              recentlySaved.value.splice(indexOfProduct, 1);
             }
           });
       }
@@ -416,6 +469,8 @@ export default {
       openDeleteDialog,
       closeDeleteDialog,
       deleteProduct,
+      removingProduct,
+      removeSavedProduct,
       getProductIcon,
       getProductTypeName,
       screenWidth,

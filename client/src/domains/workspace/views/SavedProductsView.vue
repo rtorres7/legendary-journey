@@ -222,7 +222,7 @@ export default {
       if (import.meta.env.MODE === "offline") {
         createNotification({
           title: "Saved Product Removed",
-          message: `Product ${product.productNumber} has been removed.`,
+          message: `Product ${product.productNumber} has been removed from Saved Products.`,
           type: "success",
         });
         let p = mySaved.value.find(
@@ -247,7 +247,7 @@ export default {
               removingProduct.value = false;
               createNotification({
                 title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed.`,
+                message: `Product ${product.productNumber} has been removed from Saved Products.`,
                 type: "success",
               });
               let p = mySaved.value.find(
