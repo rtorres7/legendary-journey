@@ -1284,7 +1284,6 @@ export default {
     };
 
     const updatePayload = (updatedProduct) => {
-      console.log("updatedProduct: ", updatedProduct);
       payload.value = Object.assign({}, updatedProduct);
       payload.value.countries = updatedProduct.countries.map(
         (country) => country.code
@@ -1336,25 +1335,18 @@ export default {
       });
       form.value.non_state_actors = nonStateActorsToSelect;
       const dissemsToSelect = [];
-      updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
-        //if statement is temporary until high side backend starts returning dissem orgs as an object
-        if (
-          import.meta.env.MODE !== "production" &&
-          import.meta.env.MODE !== "development"
-        ) {
-          let dissemValue = getValueForCode(
-            lists.dissemOrgs,
-            dissemFromBackend.code
-          );
+      //if statement is temporary until high side backend starts returning dissem orgs as an object
+      if (import.meta.env.MODE !== "production" && import.meta.env.MODE !== "development") {
+        updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
+          let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend.code);
           dissemsToSelect.push(dissemValue);
-        } else {
-          let dissemValue = getValueForCode(
-            lists.dissemOrgs,
-            dissemFromBackend
-          );
+        });
+      } else {
+        updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
+          let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
           dissemsToSelect.push(dissemValue);
-        }
-      });
+        });
+      }
       const allIntelOrgs = lists.dissemOrgs.filter(
         (org) => org.category == "IC"
       );
@@ -1367,6 +1359,7 @@ export default {
         checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
+      payload.value.dissem_orgs = dissemsToSelect.map(i => i.code);
       const coordinatorsToSelect = [];
       updatedProduct.coordinators.forEach((coordinatorsFromBackend) => {
         let coordinatorsValue = getValueForCode(
