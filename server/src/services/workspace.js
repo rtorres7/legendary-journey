@@ -1,20 +1,71 @@
-const ProductService = require('./product-service');
-const { models } = require('../data/sequelize');
+const ProductService = require("./product-service");
+const MetricsService = require("./aggregated-metrics-service");
+const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
-const { runSearch } = require('../util/search');
+const { runSearch } = require("../util/search");
 
 const PRODUCT_FIELDS = [
-  { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
-  { field: 'countries', aggregation: 'countries', filters: 'countries', filterType: 'AND' },
-  { field: 'issues', aggregation: 'issues', filters: 'issues', filterType: 'AND' },
-  { field: 'nonStateActors', aggregation: 'non_state_actors', filters: 'nonStateActors', filterType: 'AND'},
-  { field: 'producingOffices', aggregation: 'producing_offices', filters: 'producing_offices', filterType: 'OR' },
-  { field: 'productType', aggregation: 'product_types', filters: 'product_types', filterType: 'OR' },
-  { field: 'regions', aggregation: 'regions', filters: 'regions', filterType: 'AND' },
-  { field: 'reportingType', aggregation: 'reporting_types', filters: 'reporting_types', filterType: 'OR' },
-  { field: 'savedProductUserId' },
-  { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
-  { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
+  {
+    field: "classification",
+    aggregation: "classification",
+    filters: "classification",
+    filterType: "OR",
+  },
+  {
+    field: "countries",
+    aggregation: "countries",
+    filters: "countries",
+    filterType: "AND",
+  },
+  {
+    field: "issues",
+    aggregation: "issues",
+    filters: "issues",
+    filterType: "AND",
+  },
+  {
+    field: "nonStateActors",
+    aggregation: "non_state_actors",
+    filters: "nonStateActors",
+    filterType: "AND",
+  },
+  {
+    field: "producingOffices",
+    aggregation: "producing_offices",
+    filters: "producing_offices",
+    filterType: "OR",
+  },
+  {
+    field: "productType",
+    aggregation: "product_types",
+    filters: "product_types",
+    filterType: "OR",
+  },
+  {
+    field: "regions",
+    aggregation: "regions",
+    filters: "regions",
+    filterType: "AND",
+  },
+  {
+    field: "reportingType",
+    aggregation: "reporting_types",
+    filters: "reporting_types",
+    filterType: "OR",
+  },
+  { field: "savedProductUserId" },
+  {
+    field: "subregions",
+    aggregation: "subregions",
+    filters: "subregions",
+    filterType: "AND",
+  },
+  {
+    field: "topics",
+    aggregation: "topics",
+    filters: "topics",
+    filterType: "AND",
+  },
 ];
 
 class WorkspaceService {
@@ -22,6 +73,7 @@ class WorkspaceService {
     this.client = require("../data/elasticsearch");
     this.index = "savedproducts";
     this.productService = new ProductService();
+    this.metricsService = new MetricsService();
   }
 
   async findPageOfSavedProductsForUser(
@@ -37,19 +89,49 @@ class WorkspaceService {
       savedProductUserId: userId,
     };
 
-    const results = await runSearch(
-      term,
-      this.index,
-      perPage,
-      page,
-      sortDir,
-      filtersWithUser,
-      PRODUCT_FIELDS,
-    );
+    let results;
+    if (sortDir === "views") {
+      results = await runSearch(
+        term,
+        this.index,
+        perPage,
+        page,
+        "asc",
+        filtersWithUser,
+        PRODUCT_FIELDS,
+      );
+
+      const productNumbers = results.results.map(
+        (product) => product.productNumber,
+      );
+
+      const productViews =
+        await this.metricsService.getProductViewsCountForMultipleProducts(
+          productNumbers,
+        );
+
+      results.results.forEach((product) => {
+        product.views = productViews[product.productNumber] || 0;
+      });
+
+      results.results.sort((a, b) => b.views - a.views);
+    } else {
+      results = await runSearch(
+        term,
+        this.index,
+        perPage,
+        page,
+        sortDir,
+        filtersWithUser,
+        PRODUCT_FIELDS,
+      );
+    }
 
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of("datePublished", sortDir))
+      .addKiwiSort(
+        KiwiSort.of(sortDir === "views" ? "views" : "datePublished", sortDir),
+      )
       .addSupplementaryData({ aggregations: results.aggregations });
   }
 
@@ -62,7 +144,7 @@ class WorkspaceService {
       defaults: {
         productId: productId,
         createdBy: userId,
-      }
+      },
     });
 
     const savedProduct = savedProductResponse["0"];
@@ -74,7 +156,7 @@ class WorkspaceService {
           ...product.indexable,
           savedProductUserId: userId,
           productId,
-          id: savedProduct.id
+          id: savedProduct.id,
         };
 
         await this.client.index({
@@ -123,8 +205,8 @@ class WorkspaceService {
   async deleteSavedProductForAllUsers(productId) {
     await models.SavedProduct.destroy({
       where: {
-        productId: productId
-      }
+        productId: productId,
+      },
     });
 
     await this.client.deleteByQuery({
@@ -132,10 +214,10 @@ class WorkspaceService {
       body: {
         query: {
           match: {
-            productId: productId
-          }
-        }
-      }
+            productId: productId,
+          },
+        },
+      },
     });
   }
 
@@ -174,10 +256,17 @@ class WorkspaceService {
     });
   }
 
-  async findSavedProductsInCollection(collectionId, term, perPage = 10, page = 1, sortDir = "desc", filters = {}) {
+  async findSavedProductsInCollection(
+    collectionId,
+    term,
+    perPage = 10,
+    page = 1,
+    sortDir = "desc",
+    filters = {},
+  ) {
     const filtersWithUser = {
       ...filters,
-      collection: collectionId
+      collection: collectionId,
     };
 
     const results = await runSearch(
@@ -187,7 +276,7 @@ class WorkspaceService {
       page,
       sortDir,
       filtersWithUser,
-      PRODUCT_FIELDS
+      PRODUCT_FIELDS,
     );
 
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
@@ -225,8 +314,8 @@ class WorkspaceService {
       refresh: true,
       id: savedProduct.id.toString(),
       doc: {
-        collection: savedProduct.Collections.map((collection) => collection.id)
-      }
+        collection: savedProduct.Collections.map((collection) => collection.id),
+      },
     });
   }
 
@@ -256,7 +345,7 @@ class WorkspaceService {
       where: {
         productId: productId,
         createdBy: userId,
-      }
+      },
     });
 
     return savedProduct !== null;

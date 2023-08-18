@@ -194,23 +194,22 @@ export default {
     const sortOptions = [
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
-      // { name: "Most Views", key: "views", type: "sortDir" },
+      { name: "Most Views", key: "views", type: "sortDir" },
     ];
     const getSortOption = (query) => {
       const sortDir = query.sortDir ? query.sortDir : undefined;
-      // const sortField = query.sort_field ? query.sort_field : undefined;
+
       if (sortDir) {
-        return sortDir === "asc"
-          ? sortOptions[1]
-          : sortDir === "views"
-          ? sortOptions[2]
-          : sortOptions[0];
+        switch (sortDir) {
+          case "asc":
+            return sortOptions[1];
+          case "views":
+            return sortOptions[2];
+          default:
+            return sortOptions[0];
+        }
       }
-      // if (sortField && !sortDir) {
-      //   if (sortField === "score") {
-      //     return sortOptions[2];
-      //   }
-      // }
+
       return sortOptions[0];
     };
     const selectedSort = ref(getSortOption(route.query));
