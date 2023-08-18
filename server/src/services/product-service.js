@@ -205,13 +205,18 @@ class ProductService {
       .addKiwiSort(KiwiSort.of("datePublished", sortDir));
   }
 
-  async #findRecentProductsForProducingOffice(producingOfficeName) {
-    return await Article.find({
-      $and: [
-        { state: "posted" },
-        { producingOffices: { $elemMatch: { name: producingOfficeName } } },
-      ],
-    }).exec();
+  async #findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir) {
+    return await Article
+      .find({
+        $and: [
+          { state: 'posted' },
+          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
+        ]
+      })
+      .limit(limit)
+      .skip(offset)
+      .sort({ datePublished: sortDir.toLowerCase() })
+      .exec();
   }
 
   async #countRecentProductsForProducingOffice(producingOfficeName) {
