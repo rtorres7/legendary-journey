@@ -151,7 +151,9 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
       const details = article.data.details;
 
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
-      res.json(details);
+      logger.info("=========== GET details.dissemOrgs: %O", details.dissemOrgs);
+      logger.info("=========== GET details.dissem_orgs: %O", details.dissem_orgs);
+      res.json(article);
     } catch (error) {
       // TODO: Replace the following with kiwi-js#KiwiStandardResponses
       handleMongooseError(
@@ -184,9 +186,11 @@ router.post("/articles/processDocument", async (req, res) => {
       case "create":
         res.redirect(307, "/articles/");
         break;
-      case "publish":
-        await publishProduct(req.body.id, req.user, req.body, req, res);
+      case "publish": {
+        const productData = await buildUpdate(req.body.id, req.body, req.user);
+        await publishProduct(req.body.id, req.user, productData, req, res);
         break;
+      }
       case "save": {
         const productData = await buildUpdate(req.body.id, req.body, req.user);
         await updateProduct(req.body.id, productData, req, res);
@@ -300,6 +304,8 @@ router.get("/articles/:id/edit", async (req, res) => {
 
   try {
     const product = await productService.findById(req.params.id);
+    logger.info("============= GET product.dissemOrgs %O", product.dissemOrgs);
+    logger.info("============= GET product.dissem_orgs %O", product.dissem_orgs);
     res.json(product.data.document);
   } catch (error) {
     handleMongooseError(
@@ -374,8 +380,7 @@ router.put("/articles/:id", async (req, res, next) => {
   }
 });
 
-async function publishProduct(id, user, productContent, req, res) {
-  const productData = await buildUpdate(id, productContent, user);
+async function publishProduct(id, user, productData, req, res) {
   productData.publishedBy = {
     id: user.id,
     firstName: user.firstName,
@@ -383,8 +388,7 @@ async function publishProduct(id, user, productContent, req, res) {
     dn: user.dn,
   };
   productData.state = "posted";
-  productData.datePublished =
-    productContent.date_published || dayjs().format("YYYY-MM-DD");
+  productData.datePublished = productData.datePublished || dayjs().format("YYYY-MM-DD");
 
   await updateProduct(id, productData, req, res);
 }
@@ -392,43 +396,33 @@ async function publishProduct(id, user, productContent, req, res) {
 // These two methods is extracted because of the legacy processDocument call and the fact that a POST is given but our new
 // update endpoint is a put, so I can't redirect. Once we update the UI to use the broken out endpoints, we can put the
 // contents of this method back in the update endpoint.
+/**
+ * Convert a product (snake case properties) from the client to {@link Article} (camel case).
+ * @param {number} id 
+ * @param {*} productDataFromRequest 
+ * @param {User} user 
+ * @returns Partial<Artcle> {@link Article}
+ */
 async function buildUpdate(id, productDataFromRequest, user) {
-  const countries = await metadataService.findCountriesFor(
-    productDataFromRequest.countries,
-  );
-  const subregions = await metadataService.findSubRegionsForCountries(
-    productDataFromRequest.countries,
-  );
-  const regions = await metadataService.findRegionsForSubRegions(
-    subregions.map((subregion) => subregion.code),
-  );
-  const topics = await metadataService.findTopicsFor(
-    productDataFromRequest.topics,
-  );
-  const issues = await metadataService.findIssuesForTopics(
-    productDataFromRequest.topics,
-  );
-  const producingOffices = await metadataService.findProducingOfficesFor(
-    productDataFromRequest.producing_offices,
-  );
-  const coauthors = await metadataService.findCoauthorsFor(
-    productDataFromRequest.coauthors,
-  );
-  const coordinators = await metadataService.findCoordinatorsFor(
-    productDataFromRequest.coordinators,
-  );
-  const dissemOrgs = await metadataService.findDissemOrgsFor(
-    productDataFromRequest.dissem_orgs,
-  );
-  const productType = await metadataService.findProductType(
-    productDataFromRequest.product_type_id,
-  );
-  const reportingType = await metadataService.findReportingTypeFor(
-    productDataFromRequest.product_type_id,
-  );
-  const nonStateActors = await metadataService.findNonStateActorsFor(
-    productDataFromRequest.non_state_actors,
-  );
+  KiwiPreconditions.checkArgumentDefined(id);
+  KiwiPreconditions.checkArgumentDefined(productDataFromRequest);
+  KiwiPreconditions.checkArgumentDefined(user);
+
+  logger.info("=============== UPDATE productDataFromRequest.dissemOrgs %O", productDataFromRequest.dissemOrgs);
+  logger.info("=============== UPDATE productDataFromRequest.dissem_orgs %O", productDataFromRequest.dissem_orgs);
+
+  const countries = await metadataService.findCountriesFor(productDataFromRequest.countries);
+  const subregions = await metadataService.findSubRegionsForCountries(productDataFromRequest.countries);
+  const regions = await metadataService.findRegionsForSubRegions(subregions.map((subregion) => subregion.code));
+  const topics = await metadataService.findTopicsFor(productDataFromRequest.topics);
+  const issues = await metadataService.findIssuesForTopics(productDataFromRequest.topics);
+  const producingOffices = await metadataService.findProducingOfficesFor(productDataFromRequest.producing_offices);
+  const coauthors = await metadataService.findCoauthorsFor(productDataFromRequest.coauthors);
+  const coordinators = await metadataService.findCoordinatorsFor(productDataFromRequest.coordinators);
+  const dissemOrgs = await metadataService.findDissemOrgsFor(productDataFromRequest.dissem_orgs);
+  const productType = await metadataService.findProductType(productDataFromRequest.product_type_id);
+  const reportingType = await metadataService.findReportingTypeFor(productDataFromRequest.product_type_id);
+  const nonStateActors = await metadataService.findNonStateActorsFor(productDataFromRequest.non_state_actors);
 
   return {
     classification: productDataFromRequest.classification,
@@ -437,17 +431,12 @@ async function buildUpdate(id, productDataFromRequest, user) {
     coordinators: coordinators.map(({ name, code }) => ({ name, code })),
     countries: countries.map(({ name, code }) => ({ name, code })),
     nonStateActors: nonStateActors.map(({ name, code }) => ({ name, code })),
-    datePublished: dayjs(productDataFromRequest.date_published).format(
-      "YYYY-MM-DD",
-    ),
+    datePublished: dayjs(productDataFromRequest.date_published).format("YYYY-MM-DD"),
     dissemOrgs: dissemOrgs.map(({ name, code }) => ({ name, code })),
     htmlBody: productDataFromRequest.html_body,
     issues: issues,
     pocInfo: productDataFromRequest.poc_info,
-    producingOffices: producingOffices.map(({ name, code }) => ({
-      name,
-      code,
-    })),
+    producingOffices: producingOffices.map(({ name, code }) => ({ name, code })),
     productNumber: productDataFromRequest.doc_num,
     productType: productType,
     publicationNumber: productDataFromRequest.publication_number,

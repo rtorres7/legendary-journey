@@ -1,13 +1,33 @@
 const { models } = require("../data/sequelize");
 
 async function loadOrganizationData() {
+  await models.Organization.findOrCreate({
+    where: { name: "ANCESTRY" },
+    defaults: { name: "ANCESTRY" },
+  });
+  await models.Organization.findOrCreate({
+    where: { name: "AGRICULTURE" },
+    defaults: { name: "AGRICULTURE" },
+  });
+  await models.Organization.findOrCreate({
+    where: { name: "BANKING" },
+    defaults: { name: "BANKING" },
+  });
+  await models.Organization.findOrCreate({
+    where: { name: "COMMERCE" },
+    defaults: { name: "COMMERCE" },
+  });
+  await models.Organization.findOrCreate({
+    where: { name: "EDUCATION" },
+    defaults: { name: "EDUCATION" },
+  });
+  await models.Organization.findOrCreate({
+    where: { name: "TREASURY" },
+    defaults: { name: "TREASURY" },
+  });
   const [organization, created] = await models.Organization.findOrCreate({
-    where: {
-      name: "DNI",
-    },
-    defaults: {
-      name: "DNI",
-    },
+    where: { name: "DNI" },
+    defaults: { name: "DNI" },
   });
 
   return organization;
