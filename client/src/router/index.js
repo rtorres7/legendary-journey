@@ -270,7 +270,7 @@ const workspaceRoutes = [
     component: DashboardView,
     meta: {
       domain: "workspace",
-      title: "Dashboard",
+      title: "Workspace - Dashboard",
     },
   },
   {
@@ -279,7 +279,7 @@ const workspaceRoutes = [
     component: MyProductsView,
     meta: {
       domain: "workspace",
-      title: "My Products",
+      title: "Workspace - Products",
     },
   },
   {
@@ -288,7 +288,7 @@ const workspaceRoutes = [
     component: SavedProductsView,
     meta: {
       domain: "workspace",
-      title: "Saved",
+      title: "Workspace - Saved",
     },
   },
 ];
