@@ -5,7 +5,10 @@
       <div class="py-6 flex items-center justify-between">
         <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
         <router-link
-          v-if="recentlySaved.length > 4"
+          v-if="
+            recentlySaved.length > 4 ||
+            (recentlySaved.length > 1 && numCards < recentlySaved.length)
+          "
           class="flex items-center text-gray-500 text-sm font-semibold"
           to="/workspace/saved"
         >
@@ -56,7 +59,6 @@
           Recently Published
         </div>
         <a
-          v-if="myPublished.length > 4"
           class="flex items-center text-gray-500 text-sm font-semibold"
           href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
           target="_blank"
