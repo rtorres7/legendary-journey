@@ -37,6 +37,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-01"),
+    deleted: false,
     dissemOrgs: [
       {
         code: "BANKING",
@@ -142,6 +143,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-02"),
+    deleted: false,
     dissemOrgs: [
       {
         code: "ANCESTRY",
@@ -270,6 +272,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-03"),
+    deleted: false,
     dissemOrgs: [
       {
         code: "COMMERCE",
@@ -370,6 +373,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-04"),
+    deleted: false,
     dissemOrgs: [],
     htmlBody: [
       "(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.",
@@ -443,6 +447,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-05"),
+    deleted: false,
     dissemOrgs: [],
     htmlBody: [
       "(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.",

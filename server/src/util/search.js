@@ -3,12 +3,22 @@ const MetadataService = require('../services/metadata');
 const metadataService = new MetadataService();
 
 async function runSearchOne(productNum) {
-
   const searchOneParams = {
     index: "products",
     query: {
-      match: {
-        "productNumber": productNum
+      bool: {
+        must: [
+          {
+            match: {
+              "productNumber": productNum
+            }
+          },
+          {
+            match: {
+              "deleted": false
+            }
+          }
+        ]
       }
     }
   };
@@ -16,17 +26,24 @@ async function runSearchOne(productNum) {
   const client = require('../data/elasticsearch');
   const results = await client.search(searchOneParams);
 
+  if (results.hits.hits.length === 0) {
+    return null;
+  }
+
   return results.hits.hits[0]._id;
 }
 
 async function runRelatedSearch(product) {
-
   const productSearchOne = await runSearchOne(product);
+
+  if (productSearchOne === null) {
+    return {relatedDocuments: []};
+  }
+
   const relatedParams = {
     index: "products",
 
     query: {
-
       more_like_this: {
         fields: ["title", "html_body", "summary", "topics", "countries"],
         like: [{
@@ -42,22 +59,25 @@ async function runRelatedSearch(product) {
   const client = require('../data/elasticsearch');
   const results = await client.search(relatedParams);
 
-
   const relatedJSON = [];
   let i= 1;
-  results.hits.hits.map(hit => {
-    if (i < 6) {
-      relatedJSON.push({ id: hit._id, position: i, document_id: product,
-        "document": {
-          "id": hit._source.id,
-          doc_link: hit._source.productNumber,
-          doc_num: hit._source.productNumber,
-          title: hit._source.title,
-          title_classification: hit._source.titleClassification }
-      });
-    }
-    i++;
-  });
+  results.hits.hits
+    .filter(hit => {
+      return hit._source.deleted !== true;
+    })
+    .map(hit => {
+      if (i < 6) {
+        relatedJSON.push({ id: hit._id, position: i, document_id: product,
+          "document": {
+            "id": hit._source.id,
+            doc_link: hit._source.productNumber,
+            doc_num: hit._source.productNumber,
+            title: hit._source.title,
+            title_classification: hit._source.titleClassification }
+        });
+      }
+      i++;
+    });
 
   return {relatedDocuments: relatedJSON};
 }
@@ -127,6 +147,7 @@ function buildQueryFromFilters(term, filters, fields) {
     });
   }
   query.bool.must.push({match: {state: "posted"}});
+  query.bool.must.push({match: {deleted: false}});
 
   if (filters.start_date !== undefined && filters.end_date !== undefined) {
     const start = dayjs(filters.start_date).startOf('day');
@@ -142,7 +163,7 @@ function buildQueryFromFilters(term, filters, fields) {
 
 
   fields
-    .filter(field => { return field.filterType !== undefined })
+    .filter(field => field.filterType !== undefined)
     .forEach(field => {
       if (field.filterType === 'AND') {
         addAndClause(query, field.field, filters[field.filters]);
@@ -220,7 +241,7 @@ async function resolveAggregations(aggregations) {
         name: value === undefined ? 'Unknown' : value.name,
         key: bucket.key,
         count: bucket.doc_count
-      }
+      };
     });
 
     const displayName = lookups[key].displayName;

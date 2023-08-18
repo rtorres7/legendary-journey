@@ -79,6 +79,10 @@ const ArticleSchema = new Schema(
       dn: String,
     },
     datePublished: Date,
+    deleted: {
+      type: Boolean,
+      default: false
+    },
     dissemOrgs: [DissemSchema],
     email_count: {
       type: Number,
@@ -224,6 +228,7 @@ ArticleSchema.virtual("indexable").get(function () {
     countries: this.countries?.map((country) => country.code),
     createdById: this.createdBy?.id,
     datePublished: this.datePublished,
+    deleted: this.deleted,
     email_count: this.email_count,
     htmlBody: this.htmlBody,
     id: this.get("_id"),
