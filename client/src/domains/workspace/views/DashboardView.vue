@@ -39,15 +39,13 @@
         <div class="pb-6 flex items-center">
           <div class="text-lg font-semibold text-gray-700">Recent Drafts</div>
         </div>
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-        >
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <template v-for="(product, index) in myDrafts" :key="product">
             <MyDraftProductCard
               :product="product"
               :productIcon="getProductIcon(product)"
               type="product"
-              :class="index < numCards ? 'block' : 'hidden'"
+              :class="index < numDraftCards ? 'block' : 'hidden'"
               @delete="openDeleteDialog(product)"
             />
           </template>
@@ -363,6 +361,7 @@ export default {
       }
     };
     const numCards = ref();
+    const numDraftCards = ref();
     const screenWidth = ref();
     const onScreenResize = () => {
       window.addEventListener("resize", () => {
@@ -373,12 +372,16 @@ export default {
       screenWidth.value = window.innerWidth;
       if (screenWidth.value < 640) {
         numCards.value = 1;
+        numDraftCards.value = 1;
       } else if (screenWidth.value >= 640 && screenWidth.value < 1024) {
         numCards.value = 2;
+        numDraftCards.value = 2;
       } else if (screenWidth.value >= 1024 && screenWidth.value < 1536) {
         numCards.value = 3;
+        numDraftCards.value = 3;
       } else {
         numCards.value = 4;
+        numDraftCards.value = 3;
       }
     };
 
@@ -475,6 +478,7 @@ export default {
       getProductTypeName,
       screenWidth,
       numCards,
+      numDraftCards,
       updateScreenWidth,
       onScreenResize,
     };
