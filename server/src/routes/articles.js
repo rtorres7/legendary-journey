@@ -151,8 +151,6 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
       const details = article.data.details;
 
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
-      logger.info("=========== GET details.dissemOrgs: %O", details.dissemOrgs);
-      logger.info("=========== GET details.dissem_orgs: %O", details.dissem_orgs);
       res.json(article);
     } catch (error) {
       // TODO: Replace the following with kiwi-js#KiwiStandardResponses
@@ -304,8 +302,6 @@ router.get("/articles/:id/edit", async (req, res) => {
 
   try {
     const product = await productService.findById(req.params.id);
-    logger.info("============= GET product.dissemOrgs %O", product.dissemOrgs);
-    logger.info("============= GET product.dissem_orgs %O", product.dissem_orgs);
     res.json(product.data.document);
   } catch (error) {
     handleMongooseError(
@@ -407,9 +403,6 @@ async function buildUpdate(id, productDataFromRequest, user) {
   KiwiPreconditions.checkArgumentDefined(id);
   KiwiPreconditions.checkArgumentDefined(productDataFromRequest);
   KiwiPreconditions.checkArgumentDefined(user);
-
-  logger.info("=============== UPDATE productDataFromRequest.dissemOrgs %O", productDataFromRequest.dissemOrgs);
-  logger.info("=============== UPDATE productDataFromRequest.dissem_orgs %O", productDataFromRequest.dissem_orgs);
 
   const countries = await metadataService.findCountriesFor(productDataFromRequest.countries);
   const subregions = await metadataService.findSubRegionsForCountries(productDataFromRequest.countries);
