@@ -1,4 +1,6 @@
 import { date } from "joi";
+const constant = require("../util/constant.js");
+const EventLog = require("../models/event_log");
 
 class AggregatedMetricsService {
   constructor() {
@@ -18,6 +20,35 @@ class AggregatedMetricsService {
       };
     }
     return null;
+  }
+
+  async getProductViewsCountForMultipleProducts(productIds) {
+    try {
+      const viewCounts = await EventLog.aggregate([
+        {
+          $match: {
+            productId: { $in: productIds },
+            eventType: constant.EVENT_TYPES.PRODUCT_VIEW,
+          },
+        },
+        {
+          $group: {
+            _id: "$productId",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const viewsLookup = {};
+      viewCounts.forEach((entry) => {
+        viewsLookup[entry._id] = entry.count;
+      });
+
+      return viewsLookup;
+    } catch (err) {
+      console.error("Error fetching product view counts", err);
+      return {};
+    }
   }
 
   async getUniqueReadershipByOrganizationForProduct(
