@@ -338,6 +338,33 @@ describe('ProductSearchService', () => {
       expect(result.relatedDocuments.length).toBeGreaterThan(1);
     });
 
+    it("should return an empty array if requested product number is a deleted product", async () => {
+      await client.index({
+        index: "products",
+        body: {
+          productNumber: "deleted-product",
+          deleted: true
+        },
+        id: "12345",
+      });
+
+      const result = await service.relatedSearch("deleted-product");
+      expect(result.relatedDocuments).toHaveLength(0);
+    });
+
+    it("should return an empty array if requested product number is a deleted product", async () => {
+      await client.index({
+        index: "products",
+        body: {
+          productNumber: "deleted-product",
+          deleted: true
+        },
+        id: "12345",
+      });
+
+      const result = await service.relatedSearch("deleted-product");
+      expect(result.relatedDocuments).toHaveLength(0);
+    });
   });
 
   describe('create', () => {

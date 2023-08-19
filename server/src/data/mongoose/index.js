@@ -9,6 +9,10 @@ function setupMongoose() {
     return;
   }
 
+  if (process.env.MXS_ENV === 'container') {
+    mongoose.set("debug", true);
+  }
+
   // TODO: We should change articles to mxms or something else as that is the database name not the collection. Docker componse has this: `mongodb://${mongoBaseUrl}/articles`
   mongoose.connect(mongoBaseUrl, { useNewUrlParser: true })
     .catch(error => {
