@@ -63,7 +63,7 @@
                       </router-link>
                     </div>
                   </li>
-                  <li>
+                  <!-- <li>
                     <div>
                       <router-link to="/workspace/products">
                         <div
@@ -79,7 +79,7 @@
                         </div>
                       </router-link>
                     </div>
-                  </li>
+                  </li> -->
                   <li>
                     <div>
                       <router-link to="/workspace/saved">

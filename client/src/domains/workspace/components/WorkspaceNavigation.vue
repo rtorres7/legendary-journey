@@ -34,7 +34,7 @@
               </div>
             </tippy>
           </li>
-          <li>
+          <!-- <li>
             <tippy content="My Products" placement="right" theme="demo">
               <div
                 :class="
@@ -52,7 +52,7 @@
                 </router-link>
               </div>
             </tippy>
-          </li>
+          </li> -->
           <li>
             <tippy content="Saved Products" placement="right" theme="demo">
               <div
@@ -138,7 +138,7 @@
                 ref="typeaheadRef"
                 class="px-4 focus-visible:outline-none bg-transparent w-full text-slate-900 placeholder-shown:truncate text-sm"
                 aria-label="Search"
-                placeholder="Search for keywords or products"
+                placeholder="...(Coming Soon)"
                 :items="searches"
                 :min-input-length="1"
                 :item-projection="
@@ -147,6 +147,7 @@
                   }
                 "
                 :select-on-tab="false"
+                disabled
                 @selectItem="selectItemEventHandler"
                 @keydown.enter.prevent="onEnter"
               >
