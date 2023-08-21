@@ -171,8 +171,12 @@
                     dayjs(product.datePublished).utc().format("DD MMMM YYYY")
                   }}
                 </div>
-                <!-- <div>•</div>
-                <div>{{ product.views }} views</div> -->
+                <div v-if="product.views">•</div>
+                <div>
+                  {{ product.views }}
+                  <span v-if="product.views == 1">view</span>
+                  <span v-else>views</span>
+                </div>
               </div>
             </div>
           </router-link>
