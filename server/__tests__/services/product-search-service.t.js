@@ -311,7 +311,7 @@ describe('ProductSearchService', () => {
     });
 
     it('should allow filtering on non state actors with single actor', async ()=> {
-      const result = await service.search('', 10, 1, 'desc', { nonStateActors: ['EU'] });
+      const result = await service.search('', 10, 1, 'desc', { non_state_actors: ['EU'] });
       expect(result.results).toHaveLength(2);
       expect(result.totalCount).toEqual(2);
       expect(result.pages).toEqual(1);
@@ -321,7 +321,7 @@ describe('ProductSearchService', () => {
     });
 
     it('should allow filtering on non state actor with multiple actors using AND', async ()=> {
-      const result = await service.search('', 10, 1, 'desc', { nonStateActors: ['EU', 'NATO'] });
+      const result = await service.search('', 10, 1, 'desc', { non_state_actors: ['EU', 'NATO'] });
       expect(result.results).toHaveLength(1);
       expect(result.totalCount).toEqual(1);
       expect(result.pages).toEqual(1);
