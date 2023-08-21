@@ -153,6 +153,12 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
       const article = await productService.findByProductNumber(
         req.params.productNumber,
       );
+
+      if (article === null) {
+        KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with product number ${req.params.productNumber}`, res);
+        return;
+      }
+
       const details = article.data.details;
 
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
@@ -305,6 +311,12 @@ router.get("/articles/:id/edit", async (req, res) => {
 
   try {
     const product = await productService.findById(req.params.id);
+
+    if (product === null) {
+      KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with id ${req.params.id}`, res);
+      return;
+    }
+
     res.json(product.data.document);
   } catch (error) {
     handleMongooseError(
@@ -331,6 +343,12 @@ router.get("/articles/:id/view", async (req, res) => {
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
       const product = await productService.findById(req.params.id);
+
+      if (product === null) {
+        KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with id ${req.params.id}`, res);
+        return;
+      }
+
       const details = product.data.details;
       await augmentProductWithSaved(details, currentUser.id, product.id, false);
       res.json(details);
