@@ -363,7 +363,7 @@ ArticleSchema.virtual("data.details").get(function () {
     legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,
     posted_at: this.datePublished,
-    producing_offices: this.producingOffices?.map((office) => office.name),
+    producing_offices: this.producingOffices,
     product_type_id: this.productType.code,
     product_type_name: this.productType.name,
     published_by: this.publishedBy?.dn,

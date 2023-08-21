@@ -26,28 +26,25 @@ db.articles.insertMany([
     createdAt: new Date("2022-09-01T13:16:43Z"),
     datePublished: new Date("2022-09-01"),
     deleted: false,
-    dissemOrgs: {
-      displayName: "Audience",
-      values: [
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "IC",
-          code: "BANKING",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Banking",
-          id: 4,
-          label: "Banking",
-          legacy: false,
-          name: "BANKING",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-      ],
-    },
+    dissemOrgs: [
+      {
+        ancestry: "1000",
+        ancestry_depth: 1,
+        category: "IC",
+        code: "BANKING",
+        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+        description: "Dept of Banking",
+        id: 4,
+        label: "Banking",
+        legacy: false,
+        name: "BANKING",
+        ntk_org: true,
+        position: 2,
+        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+        usgov_org: true,
+        visible: true,
+      },
+    ],
     htmlBody:
       '<p><span class="portion_marked_field"> (U) </span><i><strong>Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths.</strong></i><a class="source-reference">[1]</a> As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two. </p><p><span class="portion_marked_field"> (U) </span>Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit. </p><p><span class="portion_marked_field">(U) </span>A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider. <section class="digression"><div class="digression-content"><p><span class="portion_marked_field"> (U) </span><i>For additional information, please see the wires: </i><p><a href=""><span class="portion_marked_field"> (U) </span><i>Covid: Why you should consider vaccination.</i></a><i> 31 October 2021</i></p><p><a href=""><span class="portion_marked_field"> (U) </span><i>Covid and the flu: is the flu as deadly as Covid19?</i></a> <i> 18 December 2021</i></p></p></div></section></p>',
     images: [],
@@ -60,15 +57,12 @@ db.articles.insertMany([
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by East Asia.",
-    producingOffices: {
-      displayName: "Producing Offices",
-      values: [
-        {
-          name: "EDUCATION",
-          code: "EDUCATION",
-        },
-      ],
-    },
+    producingOffices: [
+      {
+        name: "EDUCATION",
+        code: "EDUCATION",
+      },
+    ],
     productNumber: "WIReWIRe_sample_1",
     productType: {
       name: "Current",
@@ -133,28 +127,25 @@ db.articles.insertMany([
     createdAt: new Date("2022-08-31T13:00:00Z"),
     datePublished: new Date("2022-09-01"),
     deleted: false,
-    dissemOrgs: {
-      displayName: "Audience",
-      values: [
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "IC",
-          code: "ANCESTRY",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Ancestry",
-          id: 2,
-          label: "Ancestry",
-          legacy: false,
-          name: "ANCESTRY",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-      ],
-    },
+    dissemOrgs: [
+      {
+        ancestry: "1000",
+        ancestry_depth: 1,
+        category: "IC",
+        code: "ANCESTRY",
+        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+        description: "Dept of Ancestry",
+        id: 2,
+        label: "Ancestry",
+        legacy: false,
+        name: "ANCESTRY",
+        ntk_org: true,
+        position: 2,
+        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+        usgov_org: true,
+        visible: true,
+      },
+    ],
     htmlBody: [
       "(U) Kyiv, Ukraine – The speed of the Ukrainian military’s counteroffensive in the eastern Kharkiv region is nothing short of breakneck.",
       "(U) Three dozen towns and villages have been liberated from the Russian forces who fled eastwards and offered little or no resistance, analysts say.",
@@ -182,15 +173,12 @@ db.articles.insertMany([
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: {
-      displayName: "Producing Offices",
-      values: [
-        {
-          name: "ANCESTRY",
-          code: "ANCESTRY",
-        },
-      ],
-    },
+    producingOffices: [
+      {
+        name: "ANCESTRY",
+        code: "ANCESTRY",
+      },
+    ],
     productNumber: "WIReWIRe_sample_2",
     productType: {
       name: "Current",
@@ -254,28 +242,25 @@ db.articles.insertMany([
     createdAt: new Date("2022-08-30T13:00:00Z"),
     datePublished: new Date("2022-09-01"),
     deleted: false,
-    dissemOrgs: {
-      displayName: "Audience",
-      values: [
-        {
-          ancestry: "1000",
-          ancestry_depth: 1,
-          category: "POLICY",
-          code: "COMMERCE",
-          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
-          description: "Dept of Commerce",
-          id: 5,
-          label: "Commerce",
-          legacy: false,
-          name: "COMMERCE",
-          ntk_org: true,
-          position: 2,
-          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
-          usgov_org: true,
-          visible: true,
-        },
-      ],
-    },
+    dissemOrgs: [
+      {
+        ancestry: "1000",
+        ancestry_depth: 1,
+        category: "POLICY",
+        code: "COMMERCE",
+        created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+        description: "Dept of Commerce",
+        id: 5,
+        label: "Commerce",
+        legacy: false,
+        name: "COMMERCE",
+        ntk_org: true,
+        position: 2,
+        updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+        usgov_org: true,
+        visible: true,
+      },
+    ],
     htmlBody: [
       "(U) Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.",
       "(U) More than 30 settlements, including Kramatorsk and Dnipro, suffered Russian missile and air strikes over the past day, Ukraine’s General Staff said in its regular update on Facebook Monday. Kharkiv, one of at least two power plants struck by rockets, had power restored only to lose it again later on Monday after being repeatedly shelled, Interfax-Ukraine reported, citing the city’s mayor.",
@@ -295,15 +280,12 @@ db.articles.insertMany([
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: {
-      displayName: "Producing Offices",
-      values: [
-        {
-          name: "ANCESTRY",
-          code: "ANCESTRY",
-        },
-      ],
-    },
+    producingOffices: [
+      {
+        name: "ANCESTRY",
+        code: "ANCESTRY",
+      },
+    ],
     productNumber: "WIReWIRe_sample_3",
     productType: {
       name: "Current",
@@ -367,7 +349,7 @@ db.articles.insertMany([
     createdAt: new Date("2022-08-29T13:00:00Z"),
     datePublished: new Date("2022-08-29"),
     deleted: false,
-    dissemOrgs: { displayName: "Audience", values: [] },
+    dissemOrgs: [],
     htmlBody: [
       "(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.",
       "(U) Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit.",
@@ -383,15 +365,12 @@ db.articles.insertMany([
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: {
-      displayName: "Producing Offices",
-      values: [
-        {
-          name: "AGRICULTURE",
-          code: "AGRICULTURE",
-        },
-      ],
-    },
+    producingOffices: [
+      {
+        name: "AGRICULTURE",
+        code: "AGRICULTURE",
+      },
+    ],
     productNumber: "WIReWIRe_sample_4",
     productType: {
       name: "Current",
@@ -431,13 +410,20 @@ db.articles.insertMany([
     worldwide: true,
   },
   {
+    attachments: [],
     classification: "UNC",
     classificationXml: "",
-    countries: [],
+    countries: [
+      {
+        code: "AFG",
+        name: "Afghanistan",
+        digraph: "AF",
+      },
+    ],
     createdAt: new Date("2022-08-28T13:00:00Z"),
     datePublished: new Date("2022-09-01"),
     deleted: false,
-    dissemOrgs: { displayName: "Audience", values: [] },
+    dissemOrgs: [],
     htmlBody: [
       "(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.",
       "(U) Charles gave the speech from Westminster Hall in London in a traditional ceremony in which lawmakers expressed their condolences upon the death of Queen Elizabeth II. She died Thursday at age 96.",
@@ -453,15 +439,12 @@ db.articles.insertMany([
     needed: {},
     orgRestricted: false,
     pocInfo: "(U) Produced by Europe.",
-    producingOffices: {
-      displayName: "Producing Offices",
-      values: [
-        {
-          name: "COMMERCE",
-          code: "COMMERCE",
-        },
-      ],
-    },
+    producingOffices: [
+      {
+        name: "COMMERCE",
+        code: "COMMERCE",
+      },
+    ],
     productNumber: "WIReWIRe_sample_5",
     productType: {
       name: "Current",

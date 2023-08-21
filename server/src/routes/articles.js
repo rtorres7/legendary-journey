@@ -156,7 +156,7 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
       const details = article.data.details;
 
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
-      res.json(article);
+      res.json(details);
     } catch (error) {
       // TODO: Replace the following with kiwi-js#KiwiStandardResponses
       handleMongooseError(

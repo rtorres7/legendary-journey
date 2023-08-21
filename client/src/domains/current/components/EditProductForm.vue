@@ -573,7 +573,7 @@
                     </label>
                   </DropZone>
                   <div
-                    v-if="form.attachments?.length || files?.length"
+                    v-if="form.attachments.length || files?.length"
                     class="lg:basis-2/3"
                   >
                     <h2 class="font-medium">Uploaded Files</h2>
@@ -586,7 +586,7 @@
                         @remove="removeFile"
                       />
                     </ul>
-                    <ul v-show="form.attachments?.length" id="attachment-list">
+                    <ul v-show="form.attachments.length" id="attachment-list">
                       <li
                         v-for="(attachment, index) in form.attachments"
                         :id="'attachment' + attachment.id"
@@ -1078,7 +1078,7 @@ export default {
           }
         });
       }
-      payload.value["dissem_orgs"] = payloadOrgs;
+      payload.value.dissem_orgs = payloadOrgs;
     };
 
     const updateToggleAllIntelOrgs = () => {
