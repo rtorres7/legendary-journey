@@ -78,6 +78,19 @@ router.get("/workspace/recent", async (req, res) => {
           skip,
           sortDir,
         );
+
+      const ids = pageOfRecentProducts.content.map(
+        (item) => item.productNumber,
+      );
+      const viewsData =
+        await metricsService.getProductViewsCountForMultipleProducts(ids);
+
+      pageOfRecentProducts.content.forEach((item) => {
+        if (viewsData[item.productNumber]) {
+          item.views = viewsData[item.productNumber];
+        }
+      });
+
       res.json(pageOfRecentProducts);
     } catch (error) {
       logger.error(error);
@@ -212,6 +225,17 @@ router.get("/workspace/saved", async (req, res) => {
       sortDir,
       filters,
     );
+
+    const ids = savedProducts.content.map((item) => item.productNumber);
+    const viewsData =
+      await metricsService.getProductViewsCountForMultipleProducts(ids);
+
+    savedProducts.content.forEach((item) => {
+      if (viewsData[item.productNumber]) {
+        item.views = viewsData[item.productNumber];
+      }
+    });
+
     res.json(savedProducts);
   });
 });
