@@ -269,7 +269,7 @@ const doc = {
           {
             type: "object",
             properties: {
-              attachmentsMetadata: {
+              attachments: {
                 type: "object",
                 description: "Metadata about the attachments on the product",
               },

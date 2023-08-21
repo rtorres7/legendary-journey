@@ -8,7 +8,7 @@ const { Sequelize } = require("sequelize");
 
 const articles = [
   new Article({
-    attachmentsMetadata: [
+    attachments: [
       {
         fileName: "article.jpg",
         mimeType: "image/jpeg",
@@ -109,7 +109,7 @@ const articles = [
     worldwide: false,
   }),
   new Article({
-    attachmentsMetadata: [
+    attachments: [
       {
         fileName: "article.jpg",
         mimeType: "image/jpeg",
@@ -243,7 +243,7 @@ const articles = [
     worldwide: false,
   }),
   new Article({
-    attachmentsMetadata: [
+    attachments: [
       {
         fileName: "article.jpg",
         mimeType: "image/jpeg",

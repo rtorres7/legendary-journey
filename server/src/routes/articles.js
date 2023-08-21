@@ -600,12 +600,12 @@ router.delete(
     );
 
     const removedAttachments = _.remove(
-      product.attachmentsMetadata,
+      product.attachments,
       (att) =>
         att.id === req.params.attachmentId ||
         att.attachmentId === req.params.attachmentId,
     );
-    product.markModified("attachmentsMetadata");
+    product.markModified("attachments");
     await product.save();
 
     for (const att of removedAttachments) {

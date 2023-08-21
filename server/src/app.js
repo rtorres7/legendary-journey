@@ -152,10 +152,10 @@ async function loadObjectStore() {
   } catch (error) {
     // bucket already exists
   }
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg"), "binary"), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg"), "binary"), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")  , "binary"), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")     , "binary"), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg")), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg")), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")),   { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")),      { "content-type": "image/jpeg"});
 }
 
 // Load seed data

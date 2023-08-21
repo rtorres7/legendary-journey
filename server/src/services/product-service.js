@@ -288,7 +288,7 @@ class ProductService {
       fileUploadedObjectInfo,
     );
 
-    const firstPdf = product.attachmentsMetadata.find(
+    const firstPdf = product.attachments.find(
       (att) => att.mimeType === "application/pdf",
     );
 
