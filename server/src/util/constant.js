@@ -26,6 +26,10 @@ const indices = [
           type: "date",
           index: true,
         },
+        deleted: {
+          type: "boolean",
+          index: true,
+        },
         htmlBody: {
           type: "text",
           index: true,

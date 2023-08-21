@@ -11,6 +11,12 @@ if (esClient === undefined) {
     esClient = new elasticsearch.Client({
       nodes: esNode,
     });
+
+    if (process.env.MXS_ENV === 'container') {
+      esClient.diagnostic.on('request', (err, result) => {
+        console.log("ES Request: ", result.meta.request.params.body);
+      });
+    }
   }
 }
 

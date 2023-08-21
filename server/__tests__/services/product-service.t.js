@@ -9,8 +9,6 @@ const utc = require("dayjs/plugin/utc");
 const dayjs = require("dayjs");
 dayjs.extend(utc);
 
-const { logger } = require("../../src/config/logger");
-
 const Article = require("../../src/models/articles");
 
 jest.mock('../../src/services/product-search-service.js', () => {
@@ -60,6 +58,15 @@ describe('ProductService', () => {
       expect(products).toHaveLength(1);
       expect(products[0].productNumber).toEqual("WIReWIRe_sample_2");
     });
+
+    it('should not return deleted products', async () => {
+      await Article.create({ productNumber: "product-to-delete", deleted: true, datePublished: '2022-09-01' });
+
+      const products = await service.findAllByDate('2022-09-01');
+
+      expect(products).toHaveLength(1);
+      expect(products[0].productNumber).toEqual("WIReWIRe_sample_2");
+    });
   });
 
   describe('findByProductNumber', () => {
@@ -67,12 +74,24 @@ describe('ProductService', () => {
       const product = await service.findByProductNumber("WIReWIRe_sample_1");
       expect(product.productNumber).toEqual("WIReWIRe_sample_1");
     });
+
+    it('should return null if the requested product is mark deleted', async () => {
+      await Article.create({ productNumber: "product-to-delete", deleted: true });
+      const product = await service.findByProductNumber("product-to-delete");
+      expect(product).toBeNull();
+    });
   });
 
   describe('findById', () => {
     it('should find the single product by id', async() => {
       const product = await service.findById("64709619aa530082dd5cc416");
       expect(product.productNumber).toEqual("WIReWIRe_sample_2");
+    });
+
+    it('should return null if the requested product is mark deleted', async () => {
+      const savedProduct = await Article.create({ deleted: true });
+      const product = await service.findById(savedProduct.id);
+      expect(product).toBeNull();
     });
   });
 
@@ -222,10 +241,10 @@ describe('ProductService', () => {
       await service.deleteProduct(original.id);
 
       const countAfterDelete = await Article.count();
-      expect(countAfterDelete).toEqual(countWithRecordToDelete - 1);
+      expect(countAfterDelete).toEqual(countWithRecordToDelete);
 
       const result = await Article.find({ productNumber: 'product-to-delete' });
-      expect(result).toHaveLength(0);
+      expect(result[0].deleted).toEqual(true);
     });
 
     // TODO: Once we figure out the rollback strategy, we need to write a test to validate the rollback
@@ -238,12 +257,36 @@ describe('ProductService', () => {
       expect(results.featured).toHaveLength(4);
       expect(results.briefs).toHaveLength(1);
     });
+
+    it('should not return deleted products', async () => {
+      await Article.create({ productNumber: "product-to-delete", state: "posted", deleted: true, datePublished: '2023-08-01', productType: { code: 10377 } });
+
+      const results = await service.findFeaturesAndBriefs();
+
+      expect(results.featured).toHaveLength(4);
+      expect(results.briefs).toHaveLength(1);
+
+      expect(results.featured.map(p => p.productNumber)).not.toContain("product-to-delete");
+      expect(results.briefs.map(p => p.productNumber)).not.toContain("product-to-delete");
+    });
   });
 
   describe('findPageOfDraftProductsForUser', () => {
     it('should return a page of draft products', async () => {
       const drafts = await service.findPageOfDraftProductsForUser(1, 1, 10, 0, 'desc');
+      verifyDrafts(drafts);
+    });
 
+    it('should not return deleted products', async () => {
+      await Article.create({ productNumber: "product-to-delete", state: "draft", createdBy: { id: 1 }, deleted: true });
+
+      const drafts = await service.findPageOfDraftProductsForUser(1, 1, 10, 0, 'desc');
+      verifyDrafts(drafts);
+
+      expect(drafts.content.map(p => p.productNumber)).not.toContain("product-to-delete");
+    });
+
+    function verifyDrafts(drafts) {
       expect(drafts.content).toHaveLength(1);
       expect(drafts.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_5']);
       expect(drafts.size).toEqual(10);
@@ -252,53 +295,87 @@ describe('ProductService', () => {
       expect(drafts.totalPages).toEqual(1);
       expect(drafts.totalElements).toEqual(1);
       expect(drafts.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
-    });
+    }
   });
 
   describe('findPageOfRecentProductsForUser', () => {
     it('should return a page of recent products', async () => {
-      const drafts = await service.findPageOfRecentProductsForUser(1, 1, 10, 0, 'desc');
-
-      expect(drafts.content).toHaveLength(4);
-      expect(drafts.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_4', 'WIReWIRe_sample_3', 'WIReWIRe_sample_2', 'WIReWIRe_sample_1']);
-      expect(drafts.size).toEqual(10);
-      expect(drafts.number).toEqual(1);
-      expect(drafts.numberOfElements).toEqual(4);
-      expect(drafts.totalPages).toEqual(1);
-      expect(drafts.totalElements).toEqual(4);
-      expect(drafts.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
+      const recentProducts = await service.findPageOfRecentProductsForUser(1, 1, 10, 0, 'desc');
+      verifyRecentProducts(recentProducts);
     });
+
+    it('should not return deleted products', async () => {
+      await Article.create({ productNumber: "product-to-delete", state: "posted", createdBy: { id: 1 }, deleted: true });
+
+      const recentProducts = await service.findPageOfRecentProductsForUser(1, 1, 10, 0, 'desc');
+      verifyRecentProducts(recentProducts);
+
+      expect(recentProducts.content.map(p => p.productNumber)).not.toContain("product-to-delete");
+    });
+
+    function verifyRecentProducts(recentProducts) {
+      expect(recentProducts.content).toHaveLength(4);
+      expect(recentProducts.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_4', 'WIReWIRe_sample_3', 'WIReWIRe_sample_2', 'WIReWIRe_sample_1']);
+      expect(recentProducts.size).toEqual(10);
+      expect(recentProducts.number).toEqual(1);
+      expect(recentProducts.numberOfElements).toEqual(4);
+      expect(recentProducts.totalPages).toEqual(1);
+      expect(recentProducts.totalElements).toEqual(4);
+      expect(recentProducts.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
+    }
   });
 
   describe('findPageOfRecentProductsForProducingOffice', () => {
     it('should return a page of recent products', async () => {
       const results = await service.findPageOfRecentProductsForProducingOffice('AGRICULTURE', 1, 10, 0, 'desc');
-      // logger.info("%o", results);
+      verifyRecentProducts(results);
+    });
+
+    it('should not return deleted products', async () => {
+      await Article.create({ productNumber: "product-to-delete", state: "posted", producingOffices: [{ name:'AGRICULTURE' }], deleted: true });
+
+      const recentProducts = await service.findPageOfRecentProductsForProducingOffice("AGRICULTURE", 1, 10, 0, 'desc');
+      verifyRecentProducts(recentProducts);
+
+      expect(recentProducts.content.map(p => p.productNumber)).not.toContain("product-to-delete");
+    });
+
+    function verifyRecentProducts(results) {
       expect(results.content).toHaveLength(1);
       expect(results.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_4']);
-      // results mapped to Article.features which lacks the producingOffices property
-      // expect(results.content.every(product => product.producingOffices.findIndex(i => i.name === 'AGRICULTURE') >= 0)).toBeTrue();
       expect(results.size).toEqual(10);
       expect(results.number).toEqual(1);
       expect(results.numberOfElements).toEqual(1);
       expect(results.totalPages).toEqual(1);
       expect(results.totalElements).toEqual(1);
       expect(results.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
-    });
+    }
   });
 
   describe('findPageOfProductsForUser', () => {
     it('should return a page of all products', async () => {
-      const drafts = await service.findPageOfProductsForUser(1, 1, 10, 0, 'desc');
-
-      expect(drafts.content).toHaveLength(5);
-      expect(drafts.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_1', 'WIReWIRe_sample_2', 'WIReWIRe_sample_3', 'WIReWIRe_sample_4', 'WIReWIRe_sample_5']);
-      expect(drafts.size).toEqual(10);
-      expect(drafts.number).toEqual(1);
-      expect(drafts.numberOfElements).toEqual(5);
-      expect(drafts.totalPages).toEqual(1);
-      expect(drafts.totalElements).toEqual(5);
-      expect(drafts.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
+      const products = await service.findPageOfProductsForUser(1, 1, 10, 0, 'desc');
+      verifyProductsForUser(products);
     });
+
+    it('should not return deleted products', async () => {
+      await Article.create({ productNumber: "product-to-delete", createdBy: { id: 1 }, deleted: true });
+
+      const products = await service.findPageOfProductsForUser(1, 1, 10, 0, 'desc');
+      verifyProductsForUser(products);
+
+      expect(products.content.map(p => p.productNumber)).not.toContain("product-to-delete");
+    });
+
+    function verifyProductsForUser(products) {
+      expect(products.content).toHaveLength(5);
+      expect(products.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_1', 'WIReWIRe_sample_2', 'WIReWIRe_sample_3', 'WIReWIRe_sample_4', 'WIReWIRe_sample_5']);
+      expect(products.size).toEqual(10);
+      expect(products.number).toEqual(1);
+      expect(products.numberOfElements).toEqual(5);
+      expect(products.totalPages).toEqual(1);
+      expect(products.totalElements).toEqual(5);
+      expect(products.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
+    }
   });
 });

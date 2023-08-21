@@ -16,11 +16,15 @@ jest.mock("../../src/services/product-service.js", () => {
         }
         return [articles[1]];
       }),
-      findByProductNumber: jest.fn().mockImplementation(() => {
-        // console.log("mock ProductService.findByProductNumber:", process.env.THROW_TEST_ERROR);
+      findByProductNumber: jest.fn().mockImplementation((productNumber) => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
         }
+
+        if (productNumber === "not-found") {
+          return null;
+        }
+
         return articles[0];
       }),
       updateProduct: jest.fn().mockImplementation(() => {
@@ -195,7 +199,7 @@ jest.mock("../../src/services/event-service.js", () => {
             organization: user.Organization,
           };
 
-          const result = await require("../../src/data/elasticsearch").index({
+          await require("../../src/data/elasticsearch").index({
             index: "eventlogs",
             id: event.id,
             document: enrichedData,
@@ -249,7 +253,7 @@ describe("Article Routes", () => {
     });
   });
 
-  describe("GET /articles/:id", () => {
+  describe("GET /articles/:productNumber", () => {
     it("should return an article for the given productNumber", () => {
       const router = require("../../src/routes/articles");
       const app = setupAppWithUser(router, { id: 1 });
@@ -260,6 +264,19 @@ describe("Article Routes", () => {
         .expect("Content-Type", /json/)
         .then((res) => {
           expect(res.body.productNumber).toBe("WIReWIRe_sample_1");
+        });
+    });
+
+    it("should return a 404 when the productNumber can't be found", () => {
+      const router = require("../../src/routes/articles");
+      const app = setupAppWithUser(router, { id: 1 });
+
+      return request(app)
+        .get("/articles/not-found")
+        .expect(404)
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          expect(res.body.message).toBe("Unable to find product with product number not-found");
         });
     });
 

@@ -7,11 +7,7 @@ const {
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
 const { handleMongooseError } = require("../util/errors");
-const _ = require("lodash");
-const { ObjectStoreService } = require("./object-store-service");
-const constant = require("../util/constant.js");
 const { AttachmentService } = require("./attachment-service");
-const { logger } = require("../config/logger");
 
 class ProductService {
   constructor() {
@@ -26,6 +22,7 @@ class ProductService {
 
     return await Article.find({
       datePublished: { $gte: start, $lte: end },
+      deleted: false
     }).exec();
   }
 
@@ -37,11 +34,11 @@ class ProductService {
   }
 
   async findByProductNumber(productNumber) {
-    return await Article.findOne({ productNumber: productNumber }).exec();
+    return await Article.findOne({ productNumber: productNumber, deleted: false }).exec();
   }
 
   async findById(id) {
-    return await Article.findById(id).exec();
+    return await Article.findOne({ _id: id, deleted: false }).exec();
   }
 
   async createProduct(product) {
@@ -82,22 +79,20 @@ class ProductService {
   }
 
   async deleteProduct(id) {
-    await Article.deleteOne({ _id: id }).exec();
-
     try {
-      await this.productSearchService.delete(id);
+      await this.updateProduct(id, { deleted: true });
     } catch (error) {
-      console.log("There was a problem deleting product in index", error);
-      // TODO: Need to figure out how to add the record back into the database (e.g. rollback)
-      throw new Error("There was a problem deleting product in index");
+      console.log("There was a problem marking the product deleted", error);
+      throw new Error("There was a problem marking the product deleted");
     }
   }
 
   async findFeaturesAndBriefs() {
-    const featuredProducts = await Article.find({ state: "posted" })
+    const featuredProducts = await Article.find({ state: "posted", deleted: false })
       .sort({ _id: -1 })
       .exec();
     const briefProducts = await Article.find({
+      deleted: false,
       "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
     })
       .sort({ datePublished: -1 })
@@ -130,7 +125,8 @@ class ProductService {
   }
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
-    return await Article.find({ state: "draft", "createdBy.id": userId })
+    return await Article
+      .find({ state: 'draft', 'createdBy.id': userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -138,10 +134,9 @@ class ProductService {
   }
 
   async #countDraftProductsForUser(userId) {
-    return await Article.count({
-      state: "draft",
-      "createdBy.id": userId,
-    }).exec();
+    return await Article
+      .count({ state: 'draft', 'createdBy.id': userId, deleted: false })
+      .exec();
   }
 
   async findPageOfRecentProductsForUser(userId, page, limit, offset, sortDir) {
@@ -164,7 +159,8 @@ class ProductService {
   }
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
-    return await Article.find({ state: "posted", "createdBy.id": userId })
+    return await Article
+      .find({state: 'posted', 'createdBy.id': userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -172,10 +168,9 @@ class ProductService {
   }
 
   async #countRecentProductsForUser(userId) {
-    return await Article.count({
-      state: "posted",
-      "createdBy.id": userId,
-    }).exec();
+    return await Article
+      .count({ state: 'posted', 'createdBy.id': userId, deleted: false })
+      .exec();
   }
 
   async findPageOfRecentProductsForProducingOffice(
@@ -210,6 +205,7 @@ class ProductService {
       .find({
         $and: [
           { state: 'posted' },
+          { deleted: false },
           { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
         ]
       })
@@ -220,12 +216,15 @@ class ProductService {
   }
 
   async #countRecentProductsForProducingOffice(producingOfficeName) {
-    return await Article.count({
-      $and: [
-        { state: "posted" },
-        { producingOffices: { $elemMatch: { name: producingOfficeName } } },
-      ],
-    }).exec();
+    return await Article
+      .count({
+        $and: [
+          { state: 'posted' },
+          { deleted: false },
+          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
+        ]
+      })
+      .exec();
   }
 
   async findPageOfProductsForUser(userId, page, limit, offset, sortDir) {
@@ -248,7 +247,8 @@ class ProductService {
   }
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
-    return await Article.find({ "createdBy.id": userId })
+    return await Article
+      .find({ 'createdBy.id': userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -256,7 +256,9 @@ class ProductService {
   }
 
   async #countAllProductsForUser(userId) {
-    return await Article.count({ "createdBy.id": userId }).exec();
+    return await Article
+      .count({ 'createdBy.id': userId, deleted: false })
+      .exec();
   }
 
   async initializeProductData() {
@@ -291,7 +293,7 @@ class ProductService {
     );
 
     if (firstPdf?.attachmentId === added.attachmentId) {
-      const { metadata, stream } = await this.attachmentService.get(
+      const { stream } = await this.attachmentService.get(
         product,
         firstPdf.attachmentId,
       );

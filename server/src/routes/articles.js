@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
 
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
@@ -94,6 +93,12 @@ router.get("/articles/:productNumber", async (req, res) => {
       const article = await productService.findByProductNumber(
         req.params.productNumber,
       );
+
+      if (article === null) {
+        KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with product number ${req.params.productNumber}`, res);
+        return;
+      }
+
       const details = article.data.details;
 
       try {
