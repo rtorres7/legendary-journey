@@ -26,7 +26,7 @@ interface Attachment {
 
 /** placeholder {@link Article} */
 interface Product extends Record<string, any> {
-  attachmentsMetadata: Attachment[];
+  attachments: Attachment[];
   markModified(arg0: string): unknown;
 }
 
@@ -45,7 +45,7 @@ export class AttachmentService {
    */
   async add(product: any, uploadInfo: FileUploadedObjectInfo): Promise<Attachment> {
     KiwiPreconditions.checkArgumentDefined(product);
-    KiwiPreconditions.checkArgument(Array.isArray(product.attachmentsMetadata));
+    KiwiPreconditions.checkArgument(Array.isArray(product.attachments));
     KiwiPreconditions.checkArgumentDefined(uploadInfo);
     KiwiPreconditions.checkArgumentNotBlank(uploadInfo.originalname);
     KiwiPreconditions.checkArgumentNotBlank(uploadInfo.mimetype);
@@ -73,8 +73,8 @@ export class AttachmentService {
       destination: this.buildUrl(uploadInfo.storage, uploadInfo.bucketName, uploadInfo.objectName),
       visible: uploadInfo.visible,
     };
-    product.attachmentsMetadata.push(metadata);
-    product.markModified('attachmentsMetadata');
+    product.attachments.push(metadata);
+    product.markModified('attachments');
 
     logger.info("AttachmentService.add:  attachment:%j", metadata);
     return Promise.resolve(metadata);
@@ -101,7 +101,7 @@ export class AttachmentService {
    * Delete object from store.
    */
   async delete(product: Product, id: string): Promise<Attachment[]> {
-    const removed = _.remove(product.attachmentsMetadata, this.findMetadataFn(id));
+    const removed = _.remove(product.attachments, this.findAttachmentFn(id));
     if (removed.length === 0) {
       return Promise.resolve([]);
     }
@@ -110,17 +110,17 @@ export class AttachmentService {
       const { bucketName, objectName } = this.parseUrl(i.destination);
       await this.objectStoreService.removeObject(bucketName, objectName);
     }
-    product.markModified('attachmentsMetadata');
+    product.markModified('attachments');
     return Promise.resolve(removed);
   }
 
   /**
-   * Find attachment metadata in {@link Product.attachmentsMetadata}
+   * Find attachment metadata in {@link Product.attachments}
    */
   findMetadata(product: Product, id: string): Attachment {
     // logger.info("%O", product);
-    KiwiPreconditions.checkArgument(Array.isArray(product.attachmentsMetadata));
-    const results = product.attachmentsMetadata.filter(this.findMetadataFn(id));
+    KiwiPreconditions.checkArgument(Array.isArray(product.attachments));
+    const results = product.attachments.filter(this.findAttachmentFn(id));
     switch(results.length) {
       case 0:
         throw new Error(`attachment metadata ${id} not found`);
@@ -144,7 +144,7 @@ export class AttachmentService {
    * @param id mongodb id (_id or id) or attachmentId or fileName
    * @returns 
    */
-  private findMetadataFn(id: string): (i: Attachment) => boolean {
+  private findAttachmentFn(id: string): (i: Attachment) => boolean {
     if (id === "article") {
       return (i: Attachment) => !i.deleted && /^article\.(jpg|jpeg|png|gif|webp)$/i.test(i.fileName);
     } else {
@@ -153,11 +153,11 @@ export class AttachmentService {
   }  
 
   /** storage://bucket/objectName */
-  private buildUrl(storage: string, bucket: string, objectName: string): string {
+  private buildUrl(storage: string, bucketName: string, objectName: string): string {
     KiwiPreconditions.checkArgumentDefined(storage);
-    KiwiPreconditions.checkArgumentDefined(bucket);
+    KiwiPreconditions.checkArgumentDefined(bucketName);
     KiwiPreconditions.checkArgumentDefined(objectName);
-    return `${storage}://${bucket}/${objectName}`;
+    return `${storage}://${bucketName}/${objectName}`;
   }
 
   /** storage://bucket/objectName */

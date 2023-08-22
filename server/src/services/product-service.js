@@ -200,7 +200,7 @@ class ProductService {
       .addKiwiSort(KiwiSort.of("datePublished", sortDir));
   }
 
-  async #findRecentProductsForProducingOffice(producingOfficeName) {
+  async #findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir) {
     return await Article
       .find({
         $and: [
@@ -209,6 +209,9 @@ class ProductService {
           { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
         ]
       })
+      .limit(limit)
+      .skip(offset)
+      .sort({ datePublished: sortDir.toLowerCase() })
       .exec();
   }
 
@@ -285,7 +288,7 @@ class ProductService {
       fileUploadedObjectInfo,
     );
 
-    const firstPdf = product.attachmentsMetadata.find(
+    const firstPdf = product.attachments.find(
       (att) => att.mimeType === "application/pdf",
     );
 

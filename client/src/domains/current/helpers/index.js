@@ -22,12 +22,26 @@ export const isEmpty = (value) => {
   );
 };
 
+const isContainer = () => import.meta.env.MODE === "container";
+
 export const getValueForCode = (list, code) => {
-  return list.find((item) => item.code === code);
+  const result = list.find((item) => item.code === code);
+  if (isContainer) {
+    if (!result) {
+      console.log("getValueForCode:  code not found in list", code, list);
+    }
+  }
+  return result;
 };
 
 export const getValueForName = (list, name) => {
-  return list.find((item) => item.name === name);
+  const result = list.find((item) => item.name === name);
+  if (isContainer) {
+    if (!result) {
+      console.log("getValueForName:  name not found in list", name, list);
+    }
+  }
+  return result;
 };
 
 export const formatDate = (date) => {

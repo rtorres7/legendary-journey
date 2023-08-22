@@ -65,7 +65,7 @@ AttachmentSchema.virtual("usage").get(function () {
 
 const ArticleSchema = new Schema(
   {
-    attachmentsMetadata: [AttachmentSchema],
+    attachments: [AttachmentSchema],
     classification: String,
     classificationXml: String,
     coauthors: [DissemSchema],
@@ -151,7 +151,7 @@ ArticleSchema.virtual("features").get(function () {
     id: this.get("_id"),
     featureId: this.get("_id"),
     doc_num: this.productNumber,
-    images: findArticleImage(this.attachmentsMetadata),
+    images: findArticleImage(this.attachments),
     needed: this.needed,
     orgRestricted: this.orgRestricted,
     nonStateActors: this.nonStateActors,
@@ -169,7 +169,7 @@ ArticleSchema.virtual("features").get(function () {
       doc_num: this.productNumber,
       feature_id: this.get("_id"),
       id: this.get("_id"),
-      images: findArticleImage(this.attachmentsMetadata),
+      images: findArticleImage(this.attachments),
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       nonStateActors: this.nonStateActors,
@@ -190,7 +190,7 @@ ArticleSchema.virtual("forWire").get(function () {
   return {
     datePublished: this.datePublished,
     id: this.get("_id"),
-    images: findArticleImage(this.attachmentsMetadata),
+    images: findArticleImage(this.attachments),
     needed: this.needed,
     orgRestricted: this.orgRestricted,
     productNumber: this.productNumber,
@@ -206,7 +206,7 @@ ArticleSchema.virtual("forWire").get(function () {
       date_published: this.datePublished,
       doc_num: this.productNumber,
       id: this.get("_id"),
-      images: findArticleImage(this.attachmentsMetadata),
+      images: findArticleImage(this.attachments),
       needed: this.needed?.orgs?.length > 0 ? this.needed : {},
       org_restricted: this.orgRestricted,
       product_type: this.productType.name,
@@ -233,7 +233,7 @@ ArticleSchema.virtual("indexable").get(function () {
     htmlBody: this.htmlBody,
     id: this.get("_id"),
     featureId: this.get("_id"),
-    images: findArticleImage(this.attachmentsMetadata),
+    images: findArticleImage(this.attachments),
     issues: this.issues?.map((issue) => issue.code),
     needed: this.needed || { orgs: [] },
     orgRestricted: this.orgRestricted || false,
@@ -259,7 +259,7 @@ ArticleSchema.virtual("indexable").get(function () {
 
 ArticleSchema.virtual("data.document").get(function () {
   return {
-    attachments: this.attachmentsMetadata,
+    attachments: this.attachments,
     classification: this.classification,
     coauthors: this.coauthors,
     coordinators: this.coordinators,
@@ -294,7 +294,7 @@ ArticleSchema.virtual("data.document").get(function () {
     dissem_orgs: this.dissemOrgs,
     non_state_actors: this.nonStateActors,
     html_body: this.htmlBody,
-    images: findArticleImage(this.attachmentsMetadata),
+    images: findArticleImage(this.attachments),
     poc_info: this.pocInfo,
     producing_offices: this.producingOffices,
     product_type_id: this.productType.code,
@@ -309,7 +309,7 @@ ArticleSchema.virtual("data.document").get(function () {
 
 ArticleSchema.virtual("data.details").get(function () {
   return {
-    attachmentsMetadata: this.attachmentsMetadata,
+    attachments: this.attachments,
     classification: this.classification,
     coauthors: this.coauthors?.map((author) => author.name), // UI needs a list not the objects right now
     coordinators: this.coordinators?.map((coord) => coord.name), // UI needs a list not the objects right now
@@ -322,7 +322,7 @@ ArticleSchema.virtual("data.details").get(function () {
     htmlBody: this.htmlBody,
     id: this.get("_id"),
     featureId: this.get("_id"),
-    images: findArticleImage(this.attachmentsMetadata),
+    images: findArticleImage(this.attachments),
     issues: this.issues,
     legacyCurrentId: this.legacyCurrentId,
     pocInfo: this.pocInfo,
@@ -347,7 +347,7 @@ ArticleSchema.virtual("data.details").get(function () {
     worldwide: this.worldwide,
 
     // TODO: The following can go away once the UI is updated with the new model/fields
-    attachments_metadata: this.attachmentsMetadata,
+    attachments_metadata: this.attachments,
     date_published: this.datePublished,
     display_date: this.datePublished,
     dissem_orgs: this.dissemOrgs,
@@ -363,7 +363,7 @@ ArticleSchema.virtual("data.details").get(function () {
     legacy: this.legacyCurrentId !== undefined && this.legacyCurrentId !== "",
     poc_info: this.pocInfo,
     posted_at: this.datePublished,
-    producing_offices: this.producingOffices?.map((office) => office.name),
+    producing_offices: this.producingOffices,
     product_type_id: this.productType.code,
     product_type_name: this.productType.name,
     published_by: this.publishedBy?.dn,
@@ -372,9 +372,9 @@ ArticleSchema.virtual("data.details").get(function () {
   };
 });
 
-function findArticleImage(attachmentsMetadata) {
+function findArticleImage(attachments) {
   const latest = _.reduce(
-    attachmentsMetadata,
+    attachments,
     function (result, value) {
       if (value.usage === "article") {
         if (result == null) {

@@ -27,7 +27,7 @@
     </h1>
     <div class="flex space-x-4 text-sm md:text-md">
       <p class="capitalize">
-        {{ `${product.state} -` }}
+        {{ product.state }} - 
         {{ formatDate(product.date_published) }}
       </p>
       <p aria-hidden="true">●</p>
@@ -95,12 +95,8 @@
           </p>
           <p>
             <span class="font-semibold">Audience: </span>
-            <template
-              v-if="
-                product.dissem_orgs && product.dissem_orgs?.values?.length > 0
-              "
-            >
-              {{ product.dissem_orgs.values.map((a) => a.name).join(", ") }}
+            <template v-if="product.dissem_orgs && product.dissem_orgs?.length > 0">
+              {{ product.dissem_orgs.map((a) => a.name).join(", ") }}
             </template>
             <template v-else>
               <span class="italic">Viewable to all.</span>
@@ -187,9 +183,6 @@ export default {
     DisclosureButton,
     DisclosurePanel,
   },
-  computed: {
-    ...mapGetters("user", ["canManageWire", "canViewDocumentAdminTools"]),
-  },
   props: {
     product: {
       type: Object,
@@ -206,6 +199,9 @@ export default {
       formatDate,
       environment,
     };
+  },
+  computed: {
+    ...mapGetters("user", ["canManageWire", "canViewDocumentAdminTools"]),
   },
 };
 </script>

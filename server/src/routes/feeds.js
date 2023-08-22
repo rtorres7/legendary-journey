@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { logger } = require("../config/logger");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const Feed = require("../models/feed");
@@ -101,6 +102,7 @@ router.post("/special_editions/", async (req, res) => {
       const savedFeed = await feedsService.createFeed(feed);
       res.json(savedFeed);
     } catch (error) {
+      logger.error(error);
       res.json({
         error: `There was a problem creating the feed: ${error.message}`,
       });
