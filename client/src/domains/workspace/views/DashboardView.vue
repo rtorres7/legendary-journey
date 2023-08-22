@@ -32,17 +32,17 @@
     </template>
     <div
       v-if="loadingUser"
-      class="h-8 bg-slate-200 rounded py-8 w-1/2 animate-pulse"
+      class="h-8 bg-slate-200 rounded my-6 w-1/2 animate-pulse"
     ></div>
-    <div v-if="!loadingUser && currentUserOrg" class="text-2xl font-bold py-8">
+    <div v-if="!loadingUser && currentUserOrg" class="text-2xl font-bold py-6">
       Happening at {{ currentUserOrg }}
     </div>
     <template v-if="!loadingDrafts && !loadingPublished">
-      <template v-if="myDrafts.length > 0">
+      <template v-if="myDrafts.length > 0 && canManageWire">
         <div class="pb-6 flex items-center">
           <div class="text-lg font-semibold text-gray-700">Recent Drafts</div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
           <template v-for="(product, index) in myDrafts" :key="product">
             <MyDraftProductCard
               :product="product"
@@ -54,7 +54,7 @@
           </template>
         </div>
       </template>
-      <div class="py-6 flex justify-between items-center">
+      <div class="pb-6 flex justify-between items-center">
         <div class="text-lg font-semibold text-gray-700">
           Recently Published
         </div>
@@ -72,7 +72,7 @@
       <p class="italic">No published products to show</p>
     </template>
     <template v-if="loadingPublished">
-      <div class="h-6 bg-slate-200 rounded mb-6 w-1/3 animate-pulse"></div>
+      <div class="h-6 bg-slate-200 rounded my-6 w-1/3 animate-pulse"></div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
@@ -99,35 +99,37 @@
         </template>
       </div>
     </template>
-    <div class="py-6 flex items-center">
-      <div class="text-lg font-bold">The Stats</div>
-    </div>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-    >
-      <div
-        class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-      >
-        <div class="flex space-x-4 items-center text-slate-500">
-          <Square3Stack3DIcon class="h-5 w-5" />
-          <span class="text-sm font-normal"> Total Created</span>
-        </div>
-        <div class="font-semibold text-xl text-slate-700">
-          {{ myStats.totalCreated }}
-        </div>
+    <template v-if="canManageWire && !loadingStats">
+      <div class="py-6 flex items-center">
+        <div class="text-lg font-bold">The Stats</div>
       </div>
       <div
-        class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
-        <div class="flex space-x-4 items-center text-slate-500">
-          <EyeIcon class="h-5 w-5" />
-          <span class="text-sm font-normal">Total Views</span>
+        <div
+          class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+        >
+          <div class="flex space-x-4 items-center text-slate-500">
+            <Square3Stack3DIcon class="h-5 w-5" />
+            <span class="text-sm font-normal"> Total Created</span>
+          </div>
+          <div class="font-semibold text-xl text-slate-700">
+            {{ myStats.totalCreated }}
+          </div>
         </div>
-        <div class="font-semibold text-xl text-slate-700">
-          {{ myStats.totalViews }}
+        <div
+          class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+        >
+          <div class="flex space-x-4 items-center text-slate-500">
+            <EyeIcon class="h-5 w-5" />
+            <span class="text-sm font-normal">Total Views</span>
+          </div>
+          <div class="font-semibold text-xl text-slate-700">
+            {{ myStats.totalViews }}
+          </div>
         </div>
       </div>
-    </div>
+    </template>
     <BaseDialog
       :isOpen="isDeleteDialogOpen"
       :title="'Delete Product'"
@@ -201,6 +203,7 @@ export default {
     const currentUsername = computed(() => store.state.user.user.name);
     const currentUserOrg = computed(() => store.state.user.user.organization);
     const loadingUser = computed(() => store.state.user.loading);
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const myDrafts = ref([]);
     const myPublished = ref([]);
     const recentlySaved = ref([]);
@@ -443,6 +446,7 @@ export default {
           }
         });
         axios.get("/workspace/stats").then((response) => {
+          loadingStats.value = false;
           if (response.data && response.data.totalViews) {
             myStats.value.totalViews = computed(() => response.data.totalViews);
             myStats.value.totalCreated = computed(
@@ -461,6 +465,7 @@ export default {
       currentUsername,
       currentUserOrg,
       loadingUser,
+      canManageWire,
       myDrafts,
       myPublished,
       recentlySaved,
