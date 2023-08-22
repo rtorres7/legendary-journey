@@ -149,6 +149,14 @@ function buildQueryFromFilters(term, filters, fields) {
   query.bool.must.push({match: {state: "posted"}});
   query.bool.must.push({match: {deleted: false}});
 
+  if (filters.id !== undefined) {
+    query.bool.should = [];
+    for (const productId of filters.id) {
+      query.bool.should.push({match: {id: productId}});
+    }
+    query.bool.minimum_should_match = 1
+  }
+
   if (filters.start_date !== undefined && filters.end_date !== undefined) {
     const start = dayjs(filters.start_date).startOf('day');
     const end = dayjs(filters.end_date).endOf('day');

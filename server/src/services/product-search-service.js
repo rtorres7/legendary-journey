@@ -4,8 +4,9 @@ const runSearch = require('../util/search');
 const PRODUCT_FIELDS = [
   { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
   { field: 'countries', aggregation: 'countries', filters: 'countries', filterType: 'AND' },
+  { field: 'id', filters: 'id' },
   { field: 'issues', aggregation: 'issues', filters: 'issues', filterType: 'AND' },
-  { field: 'nonStateActors', aggregation: 'non_state_actors', filters: 'nonStateActors', filterType: 'AND'},
+  { field: 'nonStateActors', aggregation: 'non_state_actors', filters: 'non_state_actors', filterType: 'AND'},
   { field: 'producingOffices', aggregation: 'producing_offices', filters: 'producing_offices', filterType: 'OR' },
   { field: 'productType', aggregation: 'product_types', filters: 'product_types', filterType: 'OR' },
   { field: 'regions', aggregation: 'regions', filters: 'regions', filterType: 'AND' },

@@ -1,7 +1,4 @@
-const express = require("express");
-const router = express.Router();
 const EventLog = require("../models/event_log");
-const User = require("../models/user");
 const ProductService = require("../services/product-service");
 const UserService = require("../services/user-service");
 
@@ -37,7 +34,7 @@ class EventService {
         organization: user.Organization,
       };
 
-      const result = await this.client.index({
+      await this.client.index({
         index: this.index,
         id: event.id,
         document: enrichedData,
