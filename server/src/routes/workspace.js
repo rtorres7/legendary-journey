@@ -6,10 +6,11 @@ const ProductService = require('../services/product-service');
 const productService = new ProductService();
 const WorkspaceService = require('../services/workspace');
 const workspaceService = new WorkspaceService();
+const { logger } = require("../config/logger");
 
 router.get('/workspace/drafts', async (req, res) => {
   /*
-    #swagger.summary = 'Retrieve a page of draft products created by the current user'
+    #swagger.summary = 'Retrieve a page of draft products created by the current user's organization'
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
@@ -27,9 +28,11 @@ router.get('/workspace/drafts', async (req, res) => {
     const {perPage, page, skip, sortDir} = pagingParams(req);
 
     try {
-      const pageOfDrafts = await productService.findPageOfDraftProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      const pageOfDrafts = await productService.findPageOfDraftProductsForProducingOrg(
+        currentUser.dataValues?.organization, page, perPage, skip, sortDir);
       res.json(pageOfDrafts);
     } catch (error) {
+      logger.error(error);
       KiwiStandardResponsesExpress.standardErrorResponse(500, `Unable to find draft products: ${error.message}`, res);
     }
   });

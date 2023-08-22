@@ -103,7 +103,7 @@ class ProductService {
       .addKiwiSort(KiwiSort.of("createdAt", sortDir));
   }
 
-  async #findDraftProductsForUser(userId, limit, offset, sortDir) {
+  async #findPageOfDraftProductsForUser(userId, limit, offset, sortDir) {
     return await Article
       .find({ state: 'draft', 'createdBy.id': userId })
       .limit(limit)
@@ -112,9 +112,54 @@ class ProductService {
       .exec();
   }
 
-  async #countDraftProductsForUser(userId) {
+  async #countPageOfDraftProductsForUser(userId) {
     return await Article
       .count({ state: 'draft', 'createdBy.id': userId })
+      .exec();
+  }
+
+  async findPageOfDraftProductsForProducingOrg(producingOrgName, page, limit, offset, sortDir) {
+    KiwiPreconditions.checkArgumentDefined(producingOrgName);
+    const drafts = await this.#findPageOfDraftProductsForProducingOrg(
+      producingOrgName,
+      limit,
+      offset,
+      sortDir
+    );
+    const draftCount = await this.#countDraftProductsForProducingOrg(producingOrgName);
+
+    return KiwiPage.of(
+      page,
+      limit,
+      draftCount,
+      drafts.map((draft) => draft.features)
+    )
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("createdAt", sortDir));
+  }
+
+  async #findPageOfDraftProductsForProducingOrg(producingOrgName) {
+    return await Article
+      .find({
+        $and: [
+          { state: 'draft' },
+          { 'producingOrg': { $elemMatch: { name: producingOrgName}}}
+        ]
+      })
+      .limit(limit)
+      .skip(offset)
+      .sort({ createdAt: sortDir.toLowerCase() })
+      .exec();
+  }
+
+  async #countDraftProductsForProducingOrg(userId) {
+    return await Article
+      .count({
+        $and: [
+          { state: 'draft' },
+          {'producingOrg' : { $elemMatch: { name: producingOrgName}}}
+        ]
+      })
       .exec();
   }
 
