@@ -41,11 +41,16 @@ jest.mock("../../src/services/product-service.js", () => {
         }
         return articles[0];
       }),
-      findById: jest.fn().mockImplementation(() => {
+      findById: jest.fn().mockImplementation((id) => {
         // console.log("mock ProductService.findById:", process.env.THROW_TEST_ERROR);
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
         }
+
+        if (id === "not-found") {
+          return null;
+        }
+
         return articles[0];
       }),
       deleteProduct: jest.fn().mockImplementation(() => {
@@ -451,6 +456,19 @@ describe("Article Routes", () => {
         });
     });
 
+    it("should return a 404 when the product id can't be found", async () => {
+      const router = require("../../src/routes/articles");
+      const app = setupAppWithUser(router, { id: 1 });
+
+      return request(app)
+        .get("/articles/not-found/edit")
+        .expect(404)
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          expect(res.body.message).toBe("Unable to find product with id not-found");
+        });
+    });
+
     it("should return error response when lookup fails", () => {
       process.env.THROW_TEST_ERROR = true;
 
@@ -477,6 +495,19 @@ describe("Article Routes", () => {
         .expect(200)
         .then((res) => {
           expect(res.body.id).toBe(articles[0].id);
+        });
+    });
+
+    it("should return a 404 when the product id can't be found", async () => {
+      const router = require("../../src/routes/articles");
+      const app = setupAppWithUser(router, { id: 1 });
+
+      return request(app)
+        .get("/articles/not-found/view")
+        .expect(404)
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          expect(res.body.message).toBe("Unable to find product with id not-found");
         });
     });
 
