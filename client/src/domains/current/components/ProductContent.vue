@@ -27,7 +27,7 @@
     </h1>
     <div class="flex space-x-4 text-sm md:text-md">
       <p class="capitalize">
-        {{ `${product.state} -` }}
+        {{ product.state }} - 
         {{ formatDate(product.date_published) }}
       </p>
       <p aria-hidden="true">●</p>
@@ -95,12 +95,8 @@
           </p>
           <p>
             <span class="font-semibold">Audience: </span>
-            <template
-              v-if="
-                product.dissem_orgs && product.dissem_orgs?.values?.length > 0
-              "
-            >
-              {{ product.dissem_orgs.values.map((a) => a.name).join(", ") }}
+            <template v-if="product.dissem_orgs && product.dissem_orgs?.length > 0">
+              {{ product.dissem_orgs.map((a) => a.name).join(", ") }}
             </template>
             <template v-else>
               <span class="italic">Viewable to all.</span>
@@ -129,11 +125,32 @@
             <span class="font-semibold">Co-Authored By: </span>
             {{ product.coauthors.values.map((a) => a.name).join(", ") }}
           </p>
+          <p v-if="product.created_by && canManageWire">
+            <span class="font-semibold">Created By: </span>
+            {{ product.created_by }}
+          </p>
           <p v-if="product.published_by && canManageWire">
             <span class="font-semibold">Published By: </span>
             {{ product.published_by }}
           </p>
-          <p v-if="product.updatedBy.dn && canManageWire">
+          <p v-if="product.updatedBy?.cn && canManageWire">
+            <span class="font-semibold">Updated By: </span>
+            {{ product.updatedBy.cn }}
+          </p>
+          <!--temporary until snake case is gone on high side-->
+          <p v-if="product.updated_by?.cn && canManageWire">
+            <span class="font-semibold">Updated By: </span>
+            {{ product.updated_by.cn }}
+          </p>
+          <!--temporary until platform gets CN in updatedBy-->
+          <p
+            v-if="
+              product.updatedBy?.dn &&
+              canManageWire &&
+              environment !== 'production' &&
+              environment !== 'development'
+            "
+          >
             <span class="font-semibold">Updated By: </span>
             {{ product.updatedBy.dn }}
           </p>
@@ -157,6 +174,7 @@ import { formatDate } from "@current/helpers";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { mapGetters } from "vuex";
+import { ref } from "vue";
 
 export default {
   components: {
@@ -164,9 +182,6 @@ export default {
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
-  },
-  computed: {
-    ...mapGetters("user", ["canManageWire", "canViewDocumentAdminTools"]),
   },
   props: {
     product: {
@@ -179,9 +194,14 @@ export default {
     },
   },
   setup() {
+    const environment = ref(import.meta.env.MODE);
     return {
       formatDate,
+      environment,
     };
+  },
+  computed: {
+    ...mapGetters("user", ["canManageWire", "canViewDocumentAdminTools"]),
   },
 };
 </script>

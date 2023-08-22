@@ -1,22 +1,17 @@
-const { GenericContainer } = require("testcontainers");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
 
 const MetadataService = require("../../src/services/metadata");
 const { loadMetadata } = require("../__utils__/dataLoader");
 
 describe('MetadataService', () => {
   let service;
-  let container;
   let mongoUrl;
 
   beforeAll(async() => {
-    container = await new GenericContainer("mongo")
-      .withExposedPorts(27017)
-      .start();
-
-    mongoUrl = `mongodb://${container.getHost()}:${container.getMappedPort(27017)}/mxms`;
+    mongoUrl = MongoExtension.getMongoUriWithDb("metadata");
     await loadMetadata(mongoUrl);
-  }, 120_000);
+  });
 
   beforeEach(async () => {
     await mongoose.connect(mongoUrl, { useNewUrlParser: true });
@@ -26,10 +21,6 @@ describe('MetadataService', () => {
   afterEach(() => {
     mongoose.connection.close();
     service.clearCache();
-  });
-
-  afterAll(() => {
-    container.stop();
   });
 
   describe('findTopicsFor', () => {

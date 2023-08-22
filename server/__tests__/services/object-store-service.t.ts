@@ -1,46 +1,23 @@
 import fs from "fs";
 import "jest-extended";
 import { Client } from "minio";
-import { StartedTestContainer } from "testcontainers";
 
-import config from '../../src/config/config';
 import logger from "../../src/config/logger";
 import { ObjectStoreService } from "../../src/services/object-store-service";
 import { MinioContainerUtils } from "../__utils__/containerUtils";
+import { MinioExtension } from "@kiwiproject/kiwi-test-js";
 
-// https://jest-extended.jestcommunity.dev/docs/matchers
 describe("ObjectStoreService", () => {
-
-  let server: StartedTestContainer;
-  let port: number;
   let client: Client;
 
   let service: ObjectStoreService;
 
   beforeAll(async () => {
-    // https://node.testcontainers.org/configuration/
-    // export DEBUG=testcontainers
-    // export DEBUG=testcontainers:containers
-    // process.env['DEBUG'] = 'testcontainers*';
-    // process.env['DEBUG'] = 'testcontainers:containers';
-
-    server = await MinioContainerUtils.startContainer();
+    MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
     service = new ObjectStoreService();
     client = service.getClient();
     await initMinioData();
   });
-
-  // afterAll(async () => {
-  //   minioServer.stop();
-  // });
-
-  /*
-  describe('environment', () => {
-    it('should print all environment variables', () => {
-      Object.keys(process.env).forEach((i) => logger.info(`${i} = ${process.env[i]}`));
-    });
-  });
-  */
 
   describe("buckets", () => {
     describe("makeBucket", () => {

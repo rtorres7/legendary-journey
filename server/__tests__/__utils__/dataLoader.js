@@ -8,7 +8,7 @@ const { Sequelize } = require("sequelize");
 
 const articles = [
   new Article({
-    attachmentsMetadata: [
+    attachments: [
       {
         fileName: "article.jpg",
         mimeType: "image/jpeg",
@@ -37,6 +37,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-01"),
+    deleted: false,
     dissemOrgs: [
       {
         code: "BANKING",
@@ -108,7 +109,7 @@ const articles = [
     worldwide: false,
   }),
   new Article({
-    attachmentsMetadata: [
+    attachments: [
       {
         fileName: "article.jpg",
         mimeType: "image/jpeg",
@@ -142,6 +143,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-02"),
+    deleted: false,
     dissemOrgs: [
       {
         code: "ANCESTRY",
@@ -241,7 +243,7 @@ const articles = [
     worldwide: false,
   }),
   new Article({
-    attachmentsMetadata: [
+    attachments: [
       {
         fileName: "article.jpg",
         mimeType: "image/jpeg",
@@ -270,6 +272,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-03"),
+    deleted: false,
     dissemOrgs: [
       {
         code: "COMMERCE",
@@ -370,6 +373,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-04"),
+    deleted: false,
     dissemOrgs: [],
     htmlBody: [
       "(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.",
@@ -443,6 +447,7 @@ const articles = [
       dn: "foo",
     },
     datePublished: new Date("2022-09-05"),
+    deleted: false,
     dissemOrgs: [],
     htmlBody: [
       "(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.",
@@ -515,11 +520,28 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
+          category: "IC",
+          code: "DNI",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Director of National Intelligence",
+          id: 1,
+          label: "DNI",
+          legacy: false,
+          name: "DNI",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
           category: "POLICY",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
-          id: 1,
+          id: 2,
           label: "Ancestry",
           legacy: false,
           name: "ANCESTRY",
@@ -536,7 +558,7 @@ const metadata = new Metadata({
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
-          id: 2,
+          id: 3,
           label: "Agriculture",
           legacy: false,
           name: "AGRICULTURE",
@@ -553,7 +575,7 @@ const metadata = new Metadata({
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
-          id: 3,
+          id: 4,
           label: "Banking",
           legacy: false,
           name: "BANKING",
@@ -570,7 +592,7 @@ const metadata = new Metadata({
           code: "COMMERCE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Commerce",
-          id: 4,
+          id: 5,
           label: "Commerce",
           legacy: false,
           name: "COMMERCE",
@@ -587,7 +609,7 @@ const metadata = new Metadata({
           code: "EDUCATION",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Education",
-          id: 5,
+          id: 6,
           label: "Education",
           legacy: false,
           name: "EDUCATION",
@@ -604,7 +626,7 @@ const metadata = new Metadata({
           code: "TREASURY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Treasury",
-          id: 6,
+          id: 7,
           label: "Treasury",
           legacy: false,
           name: "TREASURY",
@@ -622,11 +644,28 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
+          category: "IC",
+          code: "DNI",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Director of National Intelligence",
+          id: 1,
+          label: "DNI",
+          legacy: false,
+          name: "DNI",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
           category: "POLICY",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
-          id: 1,
+          id: 2,
           label: "Ancestry",
           legacy: false,
           name: "ANCESTRY",
@@ -643,7 +682,7 @@ const metadata = new Metadata({
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
-          id: 2,
+          id: 3,
           label: "Agriculture",
           legacy: false,
           name: "AGRICULTURE",
@@ -660,7 +699,7 @@ const metadata = new Metadata({
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
-          id: 3,
+          id: 4,
           label: "Banking",
           legacy: false,
           name: "BANKING",
@@ -677,7 +716,7 @@ const metadata = new Metadata({
           code: "COMMERCE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Commerce",
-          id: 4,
+          id: 5,
           label: "Commerce",
           legacy: false,
           name: "COMMERCE",
@@ -694,7 +733,7 @@ const metadata = new Metadata({
           code: "EDUCATION",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Education",
-          id: 5,
+          id: 6,
           label: "Education",
           legacy: false,
           name: "EDUCATION",
@@ -711,7 +750,7 @@ const metadata = new Metadata({
           code: "TREASURY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Treasury",
-          id: 6,
+          id: 7,
           label: "Treasury",
           legacy: false,
           name: "TREASURY",
@@ -1985,11 +2024,28 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
+          category: "IC",
+          code: "DNI",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Director of National Intelligence",
+          id: 1,
+          label: "DNI",
+          legacy: false,
+          name: "DNI",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
           category: "POLICY",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
-          id: 1,
+          id: 2,
           label: "Ancestry",
           legacy: false,
           name: "ANCESTRY",
@@ -2006,7 +2062,7 @@ const metadata = new Metadata({
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
-          id: 2,
+          id: 3,
           label: "Agriculture",
           legacy: false,
           name: "AGRICULTURE",
@@ -2023,7 +2079,7 @@ const metadata = new Metadata({
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
-          id: 3,
+          id: 4,
           label: "Banking",
           legacy: false,
           name: "BANKING",
@@ -2040,7 +2096,7 @@ const metadata = new Metadata({
           code: "COMMERCE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Commerce",
-          id: 4,
+          id: 5,
           label: "Commerce",
           legacy: false,
           name: "COMMERCE",
@@ -2057,7 +2113,7 @@ const metadata = new Metadata({
           code: "EDUCATION",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Education",
-          id: 5,
+          id: 6,
           label: "Education",
           legacy: false,
           name: "EDUCATION",
@@ -2074,7 +2130,7 @@ const metadata = new Metadata({
           code: "TREASURY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Treasury",
-          id: 6,
+          id: 7,
           label: "Treasury",
           legacy: false,
           name: "TREASURY",
@@ -2219,11 +2275,28 @@ const metadata = new Metadata({
         {
           ancestry: "1000",
           ancestry_depth: 1,
+          category: "IC",
+          code: "DNI",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "Director of National Intelligence",
+          id: 1,
+          label: "DNI",
+          legacy: false,
+          name: "DNI",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
           category: "POLICY",
           code: "ANCESTRY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Ancestry",
-          id: 1,
+          id: 2,
           label: "Ancestry",
           legacy: false,
           name: "ANCESTRY",
@@ -2240,7 +2313,7 @@ const metadata = new Metadata({
           code: "AGRICULTURE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Agriculture",
-          id: 2,
+          id: 3,
           label: "Agriculture",
           legacy: false,
           name: "AGRICULTURE",
@@ -2257,7 +2330,7 @@ const metadata = new Metadata({
           code: "BANKING",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Banking",
-          id: 3,
+          id: 4,
           label: "Banking",
           legacy: false,
           name: "BANKING",
@@ -2274,7 +2347,7 @@ const metadata = new Metadata({
           code: "COMMERCE",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Commerce",
-          id: 4,
+          id: 5,
           label: "Commerce",
           legacy: false,
           name: "COMMERCE",
@@ -2291,7 +2364,7 @@ const metadata = new Metadata({
           code: "EDUCATION",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Education",
-          id: 5,
+          id: 6,
           label: "Education",
           legacy: false,
           name: "EDUCATION",
@@ -2308,7 +2381,7 @@ const metadata = new Metadata({
           code: "TREASURY",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Dept of Treasury",
-          id: 6,
+          id: 7,
           label: "Treasury",
           legacy: false,
           name: "TREASURY",
@@ -2937,23 +3010,6 @@ const loadSavedProducts = async (postgresUrl) => {
   });
 };
 
-const loadSavedProductsForSearch = async (esUrl, savedProductId) => {
-  const client = new Client({ node: esUrl });
-
-  await client.index({
-    index: "savedproducts",
-    body: {
-      ...articles[0].indexable,
-      savedProductUserId: 1,
-      productId: "WIReWIRe_sample_1",
-      id: savedProductId,
-    },
-    id: savedProductId,
-  });
-
-  await client.indices.refresh({ index: "savedproducts" });
-};
-
 const loadCollections = async (postgresUrl) => {
   const sequelize = new Sequelize(postgresUrl);
 
@@ -3039,7 +3095,6 @@ module.exports = {
   loadArticlesIntoMongo,
   loadFeeds,
   loadSavedProducts,
-  loadSavedProductsForSearch,
   loadCollections,
   loadCollectionProducts,
   loadUsers,

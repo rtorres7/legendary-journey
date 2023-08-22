@@ -22,4 +22,4 @@ function pagingParams(req) {
 module.exports = {
   runAsUser,
   pagingParams
-}
+};

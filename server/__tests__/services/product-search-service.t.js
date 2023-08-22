@@ -1,11 +1,10 @@
-const { ElasticsearchContainer } = require("testcontainers");
 const { Client } = require("@elastic/elasticsearch");
 const ProductSearchService = require("../../src/services/product-search-service");
 const constant = require("../../src/util/constant");
 const { loadElasticSearch } = require("../__utils__/dataLoader");
-const { logger } = require("../../src/config/logger");
 const fs = require('fs');
 const path = require('path');
+const { ElasticSearchExtension } = require("@kiwiproject/kiwi-test-js");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -18,17 +17,12 @@ jest.mock('../../src/services/metadata.js', () => {
 
 describe('ProductSearchService', () => {
   let service;
-  let container;
   let client;
 
   beforeAll(async () => {
-    container = await new ElasticsearchContainer("elasticsearch:8.6.1")
-      .withEnvironment({ "xpack.security.enabled": "false" })
-      .start();
-    process.env.ES_URL = container.getHttpUrl();
-    logger.info(`ProductSearchService.beforeAll:  ${container.getHttpUrl()}`);
-
-    client = new Client({ node: container.getHttpUrl() });
+    const esUrl = ElasticSearchExtension.getElasticSearchUrl();
+    process.env.ES_URL = esUrl;
+    client = new Client({ node: esUrl });
 
     // Setup index
     await client.indices.create({
@@ -50,11 +44,11 @@ describe('ProductSearchService', () => {
     });
 
     // Load data
-    await loadElasticSearch(container.getHttpUrl());
-  }, 70_000);
+    await loadElasticSearch(esUrl);
+  });
 
   afterAll(async () => {
-    await container.stop();
+    client.close();
   });
 
   beforeEach(() => {
@@ -317,7 +311,7 @@ describe('ProductSearchService', () => {
     });
 
     it('should allow filtering on non state actors with single actor', async ()=> {
-      const result = await service.search('', 10, 1, 'desc', { nonStateActors: ['EU'] });
+      const result = await service.search('', 10, 1, 'desc', { non_state_actors: ['EU'] });
       expect(result.results).toHaveLength(2);
       expect(result.totalCount).toEqual(2);
       expect(result.pages).toEqual(1);
@@ -327,7 +321,7 @@ describe('ProductSearchService', () => {
     });
 
     it('should allow filtering on non state actor with multiple actors using AND', async ()=> {
-      const result = await service.search('', 10, 1, 'desc', { nonStateActors: ['EU', 'NATO'] });
+      const result = await service.search('', 10, 1, 'desc', { non_state_actors: ['EU', 'NATO'] });
       expect(result.results).toHaveLength(1);
       expect(result.totalCount).toEqual(1);
       expect(result.pages).toEqual(1);
@@ -344,6 +338,33 @@ describe('ProductSearchService', () => {
       expect(result.relatedDocuments.length).toBeGreaterThan(1);
     });
 
+    it("should return an empty array if requested product number is a deleted product", async () => {
+      await client.index({
+        index: "products",
+        body: {
+          productNumber: "deleted-product",
+          deleted: true
+        },
+        id: "12345",
+      });
+
+      const result = await service.relatedSearch("deleted-product");
+      expect(result.relatedDocuments).toHaveLength(0);
+    });
+
+    it("should return an empty array if requested product number is a deleted product", async () => {
+      await client.index({
+        index: "products",
+        body: {
+          productNumber: "deleted-product",
+          deleted: true
+        },
+        id: "12345",
+      });
+
+      const result = await service.relatedSearch("deleted-product");
+      expect(result.relatedDocuments).toHaveLength(0);
+    });
   });
 
   describe('create', () => {

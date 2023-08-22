@@ -110,6 +110,7 @@
             <MyPublishedProductCard
               :product="product"
               type="product"
+              :productTypeName="product.productType.name"
               @delete="openDeleteDialog(product)"
             />
           </template>

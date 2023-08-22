@@ -1,21 +1,23 @@
-const { PostgreSqlContainer } = require("testcontainers");
 const { loadUsers } = require("../__utils__/dataLoader");
 const { Sequelize } = require("sequelize");
+const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
 
 describe("User Service", () => {
-  let postgresContainer;
   let service;
   let organization;
+  let postgresUri;
 
   let sequelize;
   let User;
   let Organization;
 
   beforeAll(async () => {
-    postgresContainer = await new PostgreSqlContainer().start();
-    process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
+    await PostgresExtension.setupNewDatabase("users");
+    postgresUri = PostgresExtension.getPostgresUriWithDb("users");
 
-    const loadedData = await loadUsers(postgresContainer.getConnectionUri());
+    process.env.POSTGRES_CONNECTION_URL = postgresUri;
+
+    const loadedData = await loadUsers(postgresUri);
     sequelize = loadedData.sequelize;
     User = loadedData.User;
     Organization = loadedData.Organization;
@@ -25,15 +27,11 @@ describe("User Service", () => {
     organization = await sequelize.models.Organization.findOne({
       where: { name: "DNI" },
     });
-  }, 120_000);
+  });
 
   beforeEach(() => {
     const UserService = require("../../src/services/user-service");
     service = new UserService();
-  });
-
-  afterAll(async () => {
-    postgresContainer.stop();
   });
 
   describe("findById", () => {
@@ -41,12 +39,7 @@ describe("User Service", () => {
       const originalUser = await User.findOne({
         where: { email: "foo@example.com" },
         attributes: { exclude: ["organizationId"] },
-        include: [
-          {
-            model: Organization,
-            attributes: ["name"],
-          },
-        ],
+        include: [Organization],
       });
 
       if (originalUser && originalUser.Organization) {
@@ -54,7 +47,6 @@ describe("User Service", () => {
           "organization",
           originalUser.Organization.name,
         );
-        delete originalUser.dataValues.Organization;
       }
 
       const user = await service.findById(originalUser.id);
@@ -85,7 +77,7 @@ describe("User Service", () => {
 
   describe("updateUser", () => {
     it("should update the given user with the given data", async () => {
-      const sequelize = new Sequelize(postgresContainer.getConnectionUri());
+      const sequelize = new Sequelize(postgresUri);
 
       const userModel = require("../../src/models/user");
       userModel(sequelize);

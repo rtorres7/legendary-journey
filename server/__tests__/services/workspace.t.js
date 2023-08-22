@@ -1,8 +1,5 @@
-const { ElasticsearchContainer } = require("testcontainers");
-const { PostgreSqlContainer } = require('testcontainers');
-const {  loadSavedProducts, loadCollections, loadCollectionProducts, loadSavedProductsForSearch } = require('../__utils__/dataLoader');
-const { Client } = require("@elastic/elasticsearch");
-const constant = require("../../src/util/constant");
+const {  loadSavedProducts, loadCollections, loadCollectionProducts } = require('../__utils__/dataLoader');
+const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
 
 jest.mock('../../src/services/metadata.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -13,41 +10,40 @@ jest.mock('../../src/services/metadata.js', () => {
   });
 });
 
+jest.mock('../../src/services/product-search-service.js', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      search: jest.fn().mockResolvedValue({ totalCount: 1, results: [{id: 1, productNumber: "really-cool-product"}]})
+    };
+  });
+});
+
+jest.mock('../../src/services/aggregated-metrics-service.js', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getProductViewsCountForMultipleProducts: jest.fn().mockResolvedValue({ "really-cool-product": 1 })
+    };
+  });
+});
+
 describe('Workspace Service', () => {
-  let postgresContainer;
   let service;
-  let esContainer;
-  let client;
 
   beforeAll(async () => {
-    esContainer = await new ElasticsearchContainer().start();
-    process.env.ES_URL = esContainer.getHttpUrl();
+    await PostgresExtension.setupNewDatabase("workspace");
+    const postgresUri = PostgresExtension.getPostgresUriWithDb("workspace");
 
-    client = new Client({ node: esContainer.getHttpUrl() });
-
-    // Setup index
-    await client.indices.create({
-      index: 'savedproducts',
-      mappings: constant.indices[1].mappings,
-    });
-
-    postgresContainer = await new PostgreSqlContainer().start();
-    process.env.POSTGRES_CONNECTION_URL = postgresContainer.getConnectionUri();
+    process.env.POSTGRES_CONNECTION_URL = postgresUri;
 
     // Load Saved Products
-    const savedProduct = await loadSavedProducts(postgresContainer.getConnectionUri());
-    await loadSavedProductsForSearch(esContainer.getHttpUrl(), savedProduct.id);
-    await loadCollections(postgresContainer.getConnectionUri());
-    await loadCollectionProducts(postgresContainer.getConnectionUri());
-  }, 120_000);
+    await loadSavedProducts(postgresUri);
+    await loadCollections(postgresUri);
+    await loadCollectionProducts(postgresUri);
+  });
 
   beforeEach(() => {
     const WorkspaceService = require("../../src/services/workspace");
     service = new WorkspaceService();
-  })
-
-  afterAll(() => {
-    postgresContainer.stop();
   });
 
   describe('findPageOfSavedProductsForUser', () => {
@@ -55,13 +51,27 @@ describe('Workspace Service', () => {
       const products = await service.findPageOfSavedProductsForUser(1, '', 10, 1, 'desc');
 
       expect(products.content).toHaveLength(1);
-      expect(products.content.map(product => product.productId)).toEqual(['WIReWIRe_sample_1']);
+      expect(products.content.map(product => product.productNumber)).toEqual(["really-cool-product"]);
       expect(products.size).toEqual(10);
       expect(products.number).toEqual(1);
       expect(products.numberOfElements).toEqual(1);
       expect(products.totalPages).toEqual(1);
       expect(products.totalElements).toEqual(1);
       expect(products.sort).toEqual({ direction: 'desc', property: 'datePublished', ignoreCase: false, ascending: false});
+    });
+
+    it('should return a page of saved products for user with metrics included', async () => {
+      const products = await service.findPageOfSavedProductsForUser(1, '', 10, 1, 'views');
+
+      expect(products.content).toHaveLength(1);
+      expect(products.content.map(product => product.productNumber)).toEqual(["really-cool-product"]);
+      expect(products.content.map(product => product.views)).toEqual([1]);
+      expect(products.size).toEqual(10);
+      expect(products.number).toEqual(1);
+      expect(products.numberOfElements).toEqual(1);
+      expect(products.totalPages).toEqual(1);
+      expect(products.totalElements).toEqual(1);
+      expect(products.sort).toEqual({ direction: 'views', property: 'views', ignoreCase: false, ascending: false});
     });
   });
 
@@ -139,19 +149,10 @@ describe('Workspace Service', () => {
 
       await collection.addSavedProduct(product);
 
-      await client.update({
-        index: 'savedproducts',
-        refresh: true,
-        id: product.id.toString(),
-        doc: {
-          collection: [collection.id]
-        }
-      });
-
       const products = await service.findSavedProductsInCollection(collection.id, '');
 
       expect(products.content).toHaveLength(1);
-      expect(products.content.map(product => product.productId)).toEqual(['WIReWIRe_sample_1']);
+      expect(products.content.map(product => product.productNumber)).toEqual(['really-cool-product']);
       expect(products.size).toEqual(10);
       expect(products.number).toEqual(1);
       expect(products.numberOfElements).toEqual(1);
@@ -171,28 +172,6 @@ describe('Workspace Service', () => {
 
       expect(savedCollection.SavedProducts).toHaveLength(1);
       expect(savedCollection.SavedProducts[0].id).toEqual(product.id);
-
-      const results = await client.search({
-        index: 'savedproducts',
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  productId: 'WIReWIRe_sample_1',
-                },
-              },
-              {
-                match: {
-                  savedProductUserId: 1,
-                },
-              },
-            ],
-          },
-        },
-      });
-
-      expect(results.hits.hits[0]._source.collection).toEqual([collection.id]);
     });
 
     it('should return null if the collection can not be found', async () => {
@@ -222,62 +201,9 @@ describe('Workspace Service', () => {
 
       await collection.addSavedProduct(product);
 
-      await client.update({
-        index: 'savedproducts',
-        refresh: true,
-        id: product.id.toString(),
-        doc: {
-          collection: [collection.id]
-        }
-      });
-
-      const preResults = await client.search({
-        index: 'savedproducts',
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  productId: 'WIReWIRe_sample_1',
-                },
-              },
-              {
-                match: {
-                  savedProductUserId: 1,
-                },
-              },
-            ],
-          },
-        },
-      });
-
-      expect(preResults.hits.hits[0]._source.collection).toEqual([collection.id]);
-
       const savedCollection = await service.removeSavedProductFromCollection(collection.id, product.id);
 
       expect(savedCollection.SavedProducts).toHaveLength(0);
-
-      const postResults = await client.search({
-        index: 'savedproducts',
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  productId: 'WIReWIRe_sample_1',
-                },
-              },
-              {
-                match: {
-                  savedProductUserId: 1,
-                },
-              },
-            ],
-          },
-        },
-      });
-
-      expect(postResults.hits.hits[0]._source.collection).toEqual([]);
     });
 
     it('should return null if the collection can not be found', async () => {

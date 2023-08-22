@@ -1,8 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import path from "path";
 import { Client } from 'minio';
-import { GenericContainer, MongoDBContainer, StartedMongoDBContainer, StartedTestContainer, Wait } from 'testcontainers';
 import tmp from 'tmp';
 
 import config from '../../src/config/config';
@@ -10,37 +8,10 @@ import logger from '../../src/config/logger';
 import { KiwiPreconditions } from '@kiwiproject/kiwi-js';
 
 tmp.setGracefulCleanup();
-const tmpSubDir = tmp.dirSync().name;
 
 export class MinioContainerUtils {
-  /** */
-  static async startContainer(): Promise<StartedTestContainer> {
-    const container = await new GenericContainer('quay.io/minio/minio:latest')
-      .withEnvironment({
-        MINIO_BROWSER: 'off',
-        MINIO_ROOT_USER: config.minio.accessKey,
-        MINIO_ROOT_PASSWORD: config.minio.secretKey,
-      })
-      .withExposedPorts(9000) // , 9001)
-      .withWaitStrategy(Wait.forAll([Wait.forListeningPorts(), Wait.forLogMessage(/1 Online/)]))
-      .withTmpFs({ '/data': 'rw,noexec,nosuid' })
-      .withCommand(['server', '/data']) // , "--console-address", ":9001"])
-      .start();
-    const port = container.getFirstMappedPort();
-    logger.info(`MinioContainerUtils.startContainer:  port:${port}`);
+  static setMinioPort(port: number) {
     config.minio.port = port;
-    return Promise.resolve(container);
-  }
-
-  /** */
-  static newClient(): Client {
-    return new Client({
-      endPoint: config.minio.endPoint,
-      port: config.minio.port,
-      useSSL: config.minio.useSsl,
-      accessKey: config.minio.accessKey,
-      secretKey: config.minio.secretKey,
-    });
   }
 
   /**
@@ -51,9 +22,9 @@ export class MinioContainerUtils {
   }
 
   /**
-   * 
+   *
    */
-  static async putFile(client: Client, bucketName: string, objectName: string, file: string, metadata?: Record<string, string>): Promise<string> {
+  static async putFile(client: Client, bucketName: string, objectName: string, file: string): Promise<string> {
     KiwiPreconditions.checkArgument(fs.existsSync(file));
     const readStream = fs.createReadStream(file, 'binary');
     return new Promise((resolve, reject) => {
@@ -84,7 +55,7 @@ export class MinioContainerUtils {
    * @return {Promise<String>} file path
    */
   static async fileWriteRandomToTmp(size?: number): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       size = size === undefined ? 1048576 : size;
       const tmpObj = tmp.fileSync({ mode: 0o600, prefix: 'obj' });
       const writer = fs.createWriteStream(tmpObj.name);
@@ -123,7 +94,7 @@ export class MinioContainerUtils {
    * Write stream to tmp file.
    */
   static async fileWriteStreamToTmp(reader: NodeJS.ReadableStream): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let size = 0;
       const tmpObj = tmp.fileSync({ mode: 0o600, prefix: 'obj' });
       const writer = fs.createWriteStream(tmpObj.name);

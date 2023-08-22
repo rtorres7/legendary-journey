@@ -51,7 +51,7 @@ app.use(
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({
-      mongoUrl: `mongodb://${process.env.MONGO_DATABASE_URL}/articles`,
+      mongoUrl: process.env.MONGO_DATABASE_URL,
     }), // Default TTL is 14 days
   }),
 );
@@ -152,14 +152,18 @@ async function loadObjectStore() {
   } catch (error) {
     // bucket already exists
   }
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg"), "binary"), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg"), "binary"), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")  , "binary"), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")     , "binary"), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg")), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg")), { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")),   { "content-type": "image/jpeg"});
+  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")),      { "content-type": "image/jpeg"});
 }
 
 // Load seed data
 if (process.env.MXS_ENV === "container") {
+  // TODO: This will also take care of creating an eventlog index in ES,
+  // given how initializeProductData() is implemented (looping through constant.indices).
+  // Do we want to implement a similiar method in AggregatedMetricsService?
+  // If so, we'll probably want to "split-up" the constant.indices array into separate files.
   const ProductService = require("./services/product-service");
   const productService = new ProductService();
   productService.initializeProductData();
@@ -186,6 +190,7 @@ const legacyRouter = require("./routes/legacy");
 const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
 const feedsRouter = require("./routes/feeds");
+const metricsRouter = require("./routes/metrics");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use(indexRouter);
@@ -196,6 +201,7 @@ app.use(homeRouter);
 app.use(searchRouter);
 app.use(workspaceRouter);
 app.use(feedsRouter);
+app.use(metricsRouter);
 
 // Legacy routes
 app.use(legacyRouter);

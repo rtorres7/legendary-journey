@@ -1,4 +1,3 @@
-// const constant = require("../util/constant.js");
 import { Request } from "express";
 import {
   BucketItem,
@@ -9,7 +8,6 @@ import {
   UploadedObjectInfo,
 } from "minio";
 import multer from "multer";
-import crypto from "crypto";
 import { Readable } from "stream";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,7 +21,6 @@ export class ObjectStoreService {
   /** Minio.Client */
   getClient(): Client {
     if (ObjectStoreService.minioClient == null) {
-      // logger.info(`ObjectStoreService.getClient:  port:${config.minio.port}`);
       ObjectStoreService.minioClient = new Client({
         endPoint: config.minio.endPoint,
         port: config.minio.port,
@@ -41,7 +38,6 @@ export class ObjectStoreService {
       .makeBucket(bucketName)
       .then(() => {
         logger.info("ObjectStoreService.makeBucket:  bucketName:%s", bucketName);
-        return;
       });
   }
 
@@ -72,7 +68,6 @@ export class ObjectStoreService {
       .removeBucket(bucketName)
       .then(() => {
         logger.info("ObjectStoreService.removeBucket:  bucketName:%s", bucketName);
-        return;
       });
   }
 
@@ -164,7 +159,7 @@ export class ObjectStoreService {
 
   /**
    * @see {@link https://github.com/Advanon/sanitize-s3-objectkey/}
-   * @param objectName 
+   * @param objectName
    */
   public sanitize(objectName: string): string {
     const SAFE_CHARACTERS = /[^0-9a-zA-Z! _\\.\\*'\\(\\)\\\-/]/g;
@@ -224,19 +219,18 @@ export class ObjectStorageEngine implements multer.StorageEngine {
   async _handleFile(req: Request, file: Express.Multer.File, cb: (error?: any, info?: FileUploadedObjectInfo) => void): Promise<void> {
     KiwiPreconditions.checkArgumentDefined(req.params.productNumber);
     const productNumber = req.params.productNumber;
-    // logger.info("ObjectStorageEngine._handleFile:  productNumber:%s, file:%j", productNumber, file);
-    
+
     const bucketExists = await this.service.bucketExists(this.bucketName);
     if (!bucketExists) {
       await this.service.makeBucket(this.bucketName);
     }
-    
+
     const attachmentId: string = uuidv4();
     const objectName = `${this.prefix}${productNumber}/${file.originalname}-${attachmentId.substr(-12)}`;
     const uploadedObjectInfo = await this.service.putObject(this.bucketName, objectName, file.stream, {"content-type": file.mimetype });
     const bucketItemStat = await this.service.statObject(this.bucketName, objectName);
     const visible = req.query.is_visible ? req.query.is_visible !== "false" : true;
-    
+
     const fileUploadedObjectInfo = {
       ...file,
       ...uploadedObjectInfo,
@@ -251,10 +245,8 @@ export class ObjectStorageEngine implements multer.StorageEngine {
     cb(null, fileUploadedObjectInfo);
   }
 
-  async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void,): Promise<void> {
-    // const objectName = this.sanitize(file.objectName);
-    logger.info("ObjectStorageEngine._removeFile:  file:%j", file);
-    // await this.service.removeObject(this.bucket, objectName);
+  async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void): Promise<void> {
+    logger.info('ObjectStorageEngine._removeFile:  %j', file);
     cb(null);
   }
 }

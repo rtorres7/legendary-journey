@@ -1,12 +1,13 @@
 const dayjs = require("dayjs");
 const Article = require("../models/articles");
 const ProductSearchService = require("./product-search-service");
-const { KiwiPage, KiwiSort, KiwiPreconditions } = require("@kiwiproject/kiwi-js");
+const {
+  KiwiPage,
+  KiwiSort,
+  KiwiPreconditions,
+} = require("@kiwiproject/kiwi-js");
 const { handleMongooseError } = require("../util/errors");
-const _ = require("lodash");
-const { ObjectStoreService } = require('./object-store-service');
-const { AttachmentService } = require('./attachment-service');
-const { logger } = require('../config/logger');
+const { AttachmentService } = require("./attachment-service");
 
 class ProductService {
   constructor() {
@@ -21,15 +22,23 @@ class ProductService {
 
     return await Article.find({
       datePublished: { $gte: start, $lte: end },
+      deleted: false
+    }).exec();
+  }
+
+  async countAllByOrganization(organizationName) {
+    console.log("org name is:", organizationName);
+    return await Article.countDocuments({
+      "producingOffices.name": organizationName,
     }).exec();
   }
 
   async findByProductNumber(productNumber) {
-    return await Article.findOne({ productNumber: productNumber }).exec();
+    return await Article.findOne({ productNumber: productNumber, deleted: false }).exec();
   }
 
   async findById(id) {
-    return await Article.findById(id).exec();
+    return await Article.findOne({ _id: id, deleted: false }).exec();
   }
 
   async createProduct(product) {
@@ -38,9 +47,14 @@ class ProductService {
     try {
       await this.productSearchService.create(savedProduct.indexable);
     } catch (error) {
-      console.log('There was a problem indexing product, rolling back database save', error);
+      console.log(
+        "There was a problem indexing product, rolling back database save",
+        error,
+      );
       await Article.deleteOne({ _id: savedProduct.id });
-      throw new Error('There was a problem indexing product, rolling back database save');
+      throw new Error(
+        "There was a problem indexing product, rolling back database save",
+      );
     }
 
     return savedProduct;
@@ -50,7 +64,7 @@ class ProductService {
     const updatedProduct = await Article.findByIdAndUpdate(
       { _id: id },
       product,
-      { new: true }
+      { new: true },
     ).exec();
 
     try {
@@ -65,20 +79,25 @@ class ProductService {
   }
 
   async deleteProduct(id) {
-    await Article.deleteOne({ _id: id }).exec();
-
     try {
-      await this.productSearchService.delete(id);
+      await this.updateProduct(id, { deleted: true });
     } catch (error) {
-      console.log("There was a problem deleting product in index", error);
-      // TODO: Need to figure out how to add the record back into the database (e.g. rollback)
-      throw new Error("There was a problem deleting product in index");
+      console.log("There was a problem marking the product deleted", error);
+      throw new Error("There was a problem marking the product deleted");
     }
   }
 
   async findFeaturesAndBriefs() {
-    const featuredProducts = await Article.find({'state': 'posted'}).sort({ _id: -1 }).exec();
-    const briefProducts = await Article.find({ 'productType.code': { $in: [10377, 10379, 10380, 10384, 10385, 10386] }}).sort({ datePublished: -1 }).limit(3).exec();
+    const featuredProducts = await Article.find({ state: "posted", deleted: false })
+      .sort({ _id: -1 })
+      .exec();
+    const briefProducts = await Article.find({
+      deleted: false,
+      "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
+    })
+      .sort({ datePublished: -1 })
+      .limit(3)
+      .exec();
 
     return {
       featured: featuredProducts.map((product) => product.features),
@@ -91,7 +110,7 @@ class ProductService {
       userId,
       limit,
       offset,
-      sortDir
+      sortDir,
     );
     const draftCount = await this.#countDraftProductsForUser(userId);
 
@@ -99,7 +118,7 @@ class ProductService {
       page,
       limit,
       draftCount,
-      drafts.map((draft) => draft.features)
+      drafts.map((draft) => draft.features),
     )
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("createdAt", sortDir));
@@ -107,7 +126,7 @@ class ProductService {
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
     return await Article
-      .find({ state: 'draft', 'createdBy.id': userId })
+      .find({ state: 'draft', 'createdBy.id': userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -116,7 +135,7 @@ class ProductService {
 
   async #countDraftProductsForUser(userId) {
     return await Article
-      .count({ state: 'draft', 'createdBy.id': userId })
+      .count({ state: 'draft', 'createdBy.id': userId, deleted: false })
       .exec();
   }
 
@@ -125,7 +144,7 @@ class ProductService {
       userId,
       limit,
       offset,
-      sortDir
+      sortDir,
     );
     const recentCount = await this.#countRecentProductsForUser(userId);
 
@@ -133,7 +152,7 @@ class ProductService {
       page,
       limit,
       recentCount,
-      recentProducts.map((recent) => recent.features)
+      recentProducts.map((recent) => recent.features),
     )
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("datePublished", sortDir));
@@ -141,7 +160,7 @@ class ProductService {
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
     return await Article
-      .find({ state: 'posted', 'createdBy.id': userId })
+      .find({state: 'posted', 'createdBy.id': userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -150,7 +169,61 @@ class ProductService {
 
   async #countRecentProductsForUser(userId) {
     return await Article
-      .count({ state: 'posted', 'createdBy.id': userId })
+      .count({ state: 'posted', 'createdBy.id': userId, deleted: false })
+      .exec();
+  }
+
+  async findPageOfRecentProductsForProducingOffice(
+    producingOfficeName,
+    page,
+    limit,
+    offset,
+    sortDir,
+  ) {
+    KiwiPreconditions.checkArgumentDefined(producingOfficeName);
+    const recentProducts = await this.#findRecentProductsForProducingOffice(
+      producingOfficeName,
+      limit,
+      offset,
+      sortDir,
+    );
+    const recentCount = await this.#countRecentProductsForProducingOffice(
+      producingOfficeName,
+    );
+    return KiwiPage.of(
+      page,
+      limit,
+      recentCount,
+      recentProducts.map((recent) => recent.features),
+    )
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("datePublished", sortDir));
+  }
+
+  async #findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir) {
+    return await Article
+      .find({
+        $and: [
+          { state: 'posted' },
+          { deleted: false },
+          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
+        ]
+      })
+      .limit(limit)
+      .skip(offset)
+      .sort({ datePublished: sortDir.toLowerCase() })
+      .exec();
+  }
+
+  async #countRecentProductsForProducingOffice(producingOfficeName) {
+    return await Article
+      .count({
+        $and: [
+          { state: 'posted' },
+          { deleted: false },
+          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
+        ]
+      })
       .exec();
   }
 
@@ -159,7 +232,7 @@ class ProductService {
       userId,
       limit,
       offset,
-      sortDir
+      sortDir,
     );
     const count = await this.#countAllProductsForUser(userId);
 
@@ -167,7 +240,7 @@ class ProductService {
       page,
       limit,
       count,
-      products.map((product) => product.features)
+      products.map((product) => product.features),
     )
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("createdAt", sortDir));
@@ -175,7 +248,7 @@ class ProductService {
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
     return await Article
-      .find({ 'createdBy.id': userId })
+      .find({ 'createdBy.id': userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -184,21 +257,24 @@ class ProductService {
 
   async #countAllProductsForUser(userId) {
     return await Article
-      .count({ 'createdBy.id': userId })
+      .count({ 'createdBy.id': userId, deleted: false })
       .exec();
   }
 
   async initializeProductData() {
-    const indexesCreated = await this.productSearchService.createIndexesIfNecessary();
+    const indexesCreated =
+      await this.productSearchService.createIndexesIfNecessary();
 
-    if (indexesCreated.includes('products')) {
+    if (indexesCreated.includes("products")) {
       try {
         const products = await Article.find().exec();
-        products.forEach(product => {
+        products.forEach((product) => {
           this.productSearchService.create(product.indexable);
         });
       } catch (error) {
-        handleMongooseError('There was a problem initializing product seed data');
+        handleMongooseError(
+          "There was a problem initializing product seed data",
+        );
       }
     }
   }
@@ -207,26 +283,41 @@ class ProductService {
     KiwiPreconditions.checkArgumentDefined(productNumber);
     KiwiPreconditions.checkArgumentDefined(fileUploadedObjectInfo);
     const product = await this.findByProductNumber(productNumber);
-    const added = await this.attachmentService.add(product, fileUploadedObjectInfo);
+    const added = await this.attachmentService.add(
+      product,
+      fileUploadedObjectInfo,
+    );
 
-    const firstPdf = product.attachmentsMetadata.find(att => att.mimeType === "application/pdf");
+    const firstPdf = product.attachments.find(
+      (att) => att.mimeType === "application/pdf",
+    );
 
     if (firstPdf?.attachmentId === added.attachmentId) {
-      const { metadata, stream } = await this.attachmentService.get(product, firstPdf.attachmentId);
+      const { stream } = await this.attachmentService.get(
+        product,
+        firstPdf.attachmentId,
+      );
       const chunks = [];
-      stream.on('data', chunk => {
+      stream.on("data", (chunk) => {
         chunks.push(chunk);
       });
       stream.on("end", async () => {
         const result = Buffer.concat(chunks);
         const base64String = result.toString("base64");
-        await this.productSearchService.indexAttachment(product.id, fileUploadedObjectInfo.attachmentId, base64String);
+        await this.productSearchService.indexAttachment(
+          product.id,
+          fileUploadedObjectInfo.attachmentId,
+          base64String,
+        );
       });
     }
 
     await product.save();
     await this.productSearchService.update(product.indexable);
-    const metadata = this.attachmentService.findMetadata(product, added.attachmentId); // need mongo id
+    const metadata = this.attachmentService.findMetadata(
+      product,
+      added.attachmentId,
+    ); // need mongo id
     return Promise.resolve(metadata);
   }
 
@@ -242,7 +333,26 @@ class ProductService {
     KiwiPreconditions.checkArgumentDefined(attachmentId);
     const product = await this.findByProductNumber(productNumber);
     const metadata = await this.attachmentService.delete(product, attachmentId);
-    await this.productSearchService.removeIndexedAttachment(product.id, metadata.attachmentId);
+    await this.productSearchService.removeIndexedAttachment(
+      product.id,
+      metadata.attachmentId,
+    );
+  }
+
+  async incrementPrintCount(productNumber, userId) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.print_count += 1;
+    await product.save();
+    this.productSearchService.update(product.indexable);
+    return product;
+  }
+
+  async incrementEmailCount(productNumber, userId) {
+    const product = await Article.findOne({ productNumber: productNumber });
+    product.email_count += 1;
+    await product.save();
+    this.productSearchService.update(product.indexable);
+    return product;
   }
 }
 

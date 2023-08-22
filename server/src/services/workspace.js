@@ -1,27 +1,12 @@
-const ProductService = require('./product-service');
-const { models } = require('../data/sequelize');
+const MetricsService = require("./aggregated-metrics-service");
+const ProductSearchService = require("./product-search-service");
+const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
-const { runSearch } = require('../util/search');
-
-const PRODUCT_FIELDS = [
-  { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
-  { field: 'countries', aggregation: 'countries', filters: 'countries', filterType: 'AND' },
-  { field: 'issues', aggregation: 'issues', filters: 'issues', filterType: 'AND' },
-  { field: 'nonStateActors', aggregation: 'non_state_actors', filters: 'nonStateActors', filterType: 'AND'},
-  { field: 'producingOffices', aggregation: 'producing_offices', filters: 'producing_offices', filterType: 'OR' },
-  { field: 'productType', aggregation: 'product_types', filters: 'product_types', filterType: 'OR' },
-  { field: 'regions', aggregation: 'regions', filters: 'regions', filterType: 'AND' },
-  { field: 'reportingType', aggregation: 'reporting_types', filters: 'reporting_types', filterType: 'OR' },
-  { field: 'savedProductUserId' },
-  { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
-  { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
-];
 
 class WorkspaceService {
   constructor() {
-    this.client = require("../data/elasticsearch");
-    this.index = "savedproducts";
-    this.productService = new ProductService();
+    this.productSearchService = new ProductSearchService();
+    this.metricsService = new MetricsService();
   }
 
   async findPageOfSavedProductsForUser(
@@ -32,24 +17,52 @@ class WorkspaceService {
     sortDir = "desc",
     filters = {},
   ) {
-    const filtersWithUser = {
+    const savedProductsForUser = await models.SavedProduct.findAll({
+      where: {
+        createdBy: userId
+      },
+      attributes: ["productId"]
+    });
+
+    if (savedProductsForUser.length === 0) {
+      return KiwiPage.of(page, perPage, 0, [])
+        .usingOneAsFirstPage()
+        .addKiwiSort(
+          KiwiSort.of(sortDir === "views" ? "views" : "datePublished", sortDir),
+        );
+    }
+
+    const savedProductIds = savedProductsForUser.map(savedProduct => savedProduct.productId);
+    const filtersWithUsersSavedProducts = {
       ...filters,
-      savedProductUserId: userId,
+      id: savedProductIds,
     };
 
-    const results = await runSearch(
-      term,
-      this.index,
-      perPage,
-      page,
-      sortDir,
-      filtersWithUser,
-      PRODUCT_FIELDS,
-    );
+    const resolvedSortDir = sortDir === "views" ? "asc" : sortDir;
+    const results = await this.productSearchService.search(term, perPage, page, resolvedSortDir, filtersWithUsersSavedProducts);
+
+    if (sortDir === "views") {
+      const productNumbers = results.results.map(
+        (product) => product.productNumber,
+      );
+
+      const productViews =
+        await this.metricsService.getProductViewsCountForMultipleProducts(
+          productNumbers,
+        );
+
+      results.results.forEach((product) => {
+        product.views = productViews[product.productNumber] || 0;
+      });
+
+      results.results.sort((a, b) => b.views - a.views);
+    }
 
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of("datePublished", sortDir))
+      .addKiwiSort(
+        KiwiSort.of(sortDir === "views" ? "views" : "datePublished", sortDir),
+      )
       .addSupplementaryData({ aggregations: results.aggregations });
   }
 
@@ -62,31 +75,10 @@ class WorkspaceService {
       defaults: {
         productId: productId,
         createdBy: userId,
-      }
+      },
     });
 
-    const savedProduct = savedProductResponse["0"];
-
-    if (savedProductResponse["1"]) {
-      try {
-        const product = await this.productService.findById(productId);
-        const savedProductToIndex = {
-          ...product.indexable,
-          savedProductUserId: userId,
-          productId,
-          id: savedProduct.id
-        };
-
-        await this.client.index({
-          index: this.index,
-          document: savedProductToIndex,
-        });
-      } catch (error) {
-        console.log("There was a problem indexing saved product");
-      }
-    }
-
-    return savedProduct;
+    return savedProductResponse["0"];
   }
 
   async deleteSavedProduct(productId, userId) {
@@ -96,46 +88,13 @@ class WorkspaceService {
         createdBy: userId,
       },
     });
-
-    await this.client.deleteByQuery({
-      index: this.index,
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  productId: productId,
-                },
-              },
-              {
-                match: {
-                  savedProductUserId: userId,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
   }
 
   async deleteSavedProductForAllUsers(productId) {
     await models.SavedProduct.destroy({
       where: {
-        productId: productId
-      }
-    });
-
-    await this.client.deleteByQuery({
-      index: this.index,
-      body: {
-        query: {
-          match: {
-            productId: productId
-          }
-        }
-      }
+        productId: productId,
+      },
     });
   }
 
@@ -174,21 +133,30 @@ class WorkspaceService {
     });
   }
 
-  async findSavedProductsInCollection(collectionId, term, perPage = 10, page = 1, sortDir = "desc", filters = {}) {
-    const filtersWithUser = {
+  async findSavedProductsInCollection(
+    collectionId,
+    term,
+    perPage = 10,
+    page = 1,
+    sortDir = "desc",
+    filters = {},
+  ) {
+    const savedProductsForUserInCollection = await models.SavedProduct.findAll({
+      include: {
+        model: models.Collection,
+        where: {
+          id: collectionId
+        }
+      }
+    });
+
+    const savedProductIds = savedProductsForUserInCollection.map(savedProduct => savedProduct.productId);
+    const filtersWithUsersSavedProducts = {
       ...filters,
-      collection: collectionId
+      id: savedProductIds,
     };
 
-    const results = await runSearch(
-      term,
-      this.index,
-      perPage,
-      page,
-      sortDir,
-      filtersWithUser,
-      PRODUCT_FIELDS
-    );
+    const results = await this.productSearchService.search(term, perPage, page, sortDir, filtersWithUsersSavedProducts);
 
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
@@ -206,28 +174,10 @@ class WorkspaceService {
 
     if (collection && savedProduct) {
       await collection.addSavedProduct(savedProduct);
-
-      const reloadedSavedProduct = await savedProduct.reload({
-        include: models.Collection,
-      });
-
-      await this.updateCollectionsInIndex(reloadedSavedProduct);
-
       return await collection.reload({ include: models.SavedProduct });
     }
 
     return null;
-  }
-
-  async updateCollectionsInIndex(savedProduct) {
-    await this.client.update({
-      index: this.index,
-      refresh: true,
-      id: savedProduct.id.toString(),
-      doc: {
-        collection: savedProduct.Collections.map((collection) => collection.id)
-      }
-    });
   }
 
   async removeSavedProductFromCollection(collectionId, savedProductId) {
@@ -240,11 +190,6 @@ class WorkspaceService {
 
     if (collection && savedProduct) {
       await collection.removeSavedProduct(savedProduct);
-      const reloadedSavedProduct = await savedProduct.reload({
-        include: models.Collection,
-      });
-      await this.updateCollectionsInIndex(reloadedSavedProduct);
-
       return await collection.reload({ include: models.SavedProduct });
     }
 
@@ -256,7 +201,7 @@ class WorkspaceService {
       where: {
         productId: productId,
         createdBy: userId,
-      }
+      },
     });
 
     return savedProduct !== null;
