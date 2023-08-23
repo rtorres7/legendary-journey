@@ -11,8 +11,6 @@ const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
 
-const { handleMongooseError } = require("../util/errors");
-
 const { runAsUser } = require("../util/request");
 
 const ProductService = require("../services/product-service");
@@ -38,11 +36,8 @@ const upload = objectStoreService.buildUpload("attachments");
 const { config } = require("../config/config");
 const { logger } = require("../config/logger");
 
+const { legacyErrorResponse } = require("../util/errors");
 const _ = require("lodash");
-
-const legacyErrorResponse = (code, message, res) => {
-  res.status(code).json({ code, message, error: message, fieldName: '', itemId: ''});
-};
 
 //GET articles by date
 router.get("/articles/date/:date", async (req, res) => {

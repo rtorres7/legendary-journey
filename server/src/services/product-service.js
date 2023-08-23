@@ -6,7 +6,6 @@ const {
   KiwiSort,
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
-const { handleMongooseError } = require("../util/errors");
 const { AttachmentService } = require("./attachment-service");
 
 class ProductService {
@@ -277,9 +276,7 @@ class ProductService {
           this.productSearchService.create(product.indexable);
         });
       } catch (error) {
-        handleMongooseError(
-          "There was a problem initializing product seed data",
-        );
+        console.log("There was a problem initializing product seed data", error);
       }
     }
   }

@@ -179,6 +179,7 @@ describe("Workspace Routes", () => {
 
       return request(app).get("/workspace/drafts").expect(500, {
         message: "Unable to find draft products: whoops",
+        error: "Unable to find draft products: whoops",
         code: 500,
         fieldName: "",
         itemId: "",
@@ -234,6 +235,7 @@ describe("Workspace Routes", () => {
 
       return request(app).get("/workspace/recent").expect(500, {
         message: "Unable to find posted products: whoops",
+        error: "Unable to find posted products: whoops",
         code: 500,
         fieldName: "",
         itemId: "",
@@ -291,6 +293,7 @@ describe("Workspace Routes", () => {
 
       return request(app).get("/workspace/products").expect(500, {
         message: "Unable to find user's products: whoops",
+        error: "Unable to find user's products: whoops",
         code: 500,
         fieldName: "",
         itemId: "",

@@ -11,6 +11,7 @@ const { logger } = require("../config/logger");
 const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const metricsService = new AggregatedMetricsService();
 const { formatValue } = require("../util/format");
+const { legacyErrorResponse } = require("../util/errors");
 
 router.get("/workspace/drafts", async (req, res) => {
   /*
@@ -43,7 +44,8 @@ router.get("/workspace/drafts", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find draft products: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -92,7 +94,8 @@ router.get("/workspace/recent", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find posted products: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -150,7 +153,8 @@ router.get("/workspace/stats", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Failed to retrieve stats on current user's products (by organization): ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -185,7 +189,8 @@ router.get("/workspace/products", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find user's products: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -229,7 +234,8 @@ router.get("/workspace/saved", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -254,7 +260,8 @@ router.put("/workspace/saved/:productId", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -279,7 +286,8 @@ router.delete("/workspace/saved/:productId", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -310,7 +318,8 @@ router.get("/workspace/collections", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -344,7 +353,8 @@ router.post("/workspace/collections", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -378,7 +388,8 @@ router.put("/workspace/collections/:collectionId", async (req, res) => {
   } catch (error) {
     logger.error(error);
     const errorDetails = `${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -397,7 +408,8 @@ router.delete("/workspace/collections/:collectionId", async (req, res) => {
   } catch (error) {
     logger.error(error);
     const errorDetails = `${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -429,7 +441,8 @@ router.get("/workspace/collections/:collectionId/products", async (req, res) => 
   } catch (error) {
     logger.error(error);
     const errorDetails = `${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -467,7 +480,8 @@ router.put(
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
@@ -508,7 +522,8 @@ router.delete(
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
