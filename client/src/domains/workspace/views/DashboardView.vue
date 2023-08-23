@@ -95,6 +95,7 @@
             :productTypeName="getProductTypeName(product)"
             :class="index < numCards ? 'block' : 'hidden'"
             @delete="openDeleteDialog(product)"
+            @save="saveProduct(product)"
           />
         </template>
       </div>
@@ -161,6 +162,14 @@
     <Overlay :show="removingProduct">
       <div class="max-w-xs inline-block">
         <p class="mb-4 font-semibold text-2xl">Removing Product...</p>
+        <div class="w-fit m-auto">
+          <LoadingSpinner class="h-16 w-16" />
+        </div>
+      </div>
+    </Overlay>
+    <Overlay :show="savingProduct">
+      <div class="max-w-xs inline-block">
+        <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
         <div class="w-fit m-auto">
           <LoadingSpinner class="h-16 w-16" />
         </div>
@@ -293,6 +302,38 @@ export default {
           });
       }
     };
+    const savingProduct = ref(false);
+    const saveProduct = (product) => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Product Saved",
+          message: `Product ${product.productNumber} has been saved.`,
+          type: "success",
+        });
+      } else {
+        savingProduct.value = true;
+        axios.put("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            savingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            savingProduct.value = false;
+            createNotification({
+              title: "Product Saved",
+              message: `Product ${product.productNumber} has been saved.`,
+              type: "success",
+            });
+            loadSavedProducts();
+          }
+        });
+      }
+    }
+
     const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
@@ -309,7 +350,7 @@ export default {
       } else {
         removingProduct.value = true;
         axios
-          .delete("/workspace/saved/" + product.productId)
+          .delete("/workspace/saved/" + product.id)
           .then((response) => {
             if (response.data.error) {
               removingProduct.value = false;
@@ -390,6 +431,22 @@ export default {
       }
     };
 
+    const loadSavedProducts = () => {
+      axios.get("/workspace/saved").then((response) => {
+        loadingSaved.value = false;
+        if (response.data) {
+          recentlySaved.value = response.data.content;
+        } else {
+          createNotification({
+            title: "Error",
+            message: "There was an error retrieving Recently Saved Products.",
+            type: "error",
+            autoClose: false,
+          });
+        }
+      });
+    };
+
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
@@ -411,19 +468,8 @@ export default {
           loadingPublished.value = false;
         }, 1000);
       } else {
-        axios.get("/workspace/saved").then((response) => {
-          loadingSaved.value = false;
-          if (response.data) {
-            recentlySaved.value = response.data.content;
-          } else {
-            createNotification({
-              title: "Error",
-              message: "There was an error retrieving Recently Saved Products.",
-              type: "error",
-              autoClose: false,
-            });
-          }
-        });
+        loadSavedProducts();
+
         axios.get("/workspace/drafts").then((response) => {
           loadingDrafts.value = false;
           if (response.data) {
@@ -479,6 +525,8 @@ export default {
       openDeleteDialog,
       closeDeleteDialog,
       deleteProduct,
+      savingProduct,
+      saveProduct,
       removingProduct,
       removeSavedProduct,
       getProductIcon,
