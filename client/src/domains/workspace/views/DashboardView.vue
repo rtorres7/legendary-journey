@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
-    <div class="text-2xl font-bold">For You</div>
     <template v-if="!loadingSaved && recentlySaved.length > 0">
+      <div class="text-2xl font-bold">For You</div>
       <div class="py-6 flex items-center justify-between">
         <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
         <router-link
@@ -22,10 +22,11 @@
         <template v-for="(product, index) in recentlySaved" :key="product">
           <MyPublishedProductCard
             :product="product"
-            type="saved"
+            type="product"
             :productTypeName="getProductTypeName(product)"
             :class="index < numCards ? 'block' : 'hidden'"
-            @remove="removeSavedProduct(product)"
+            @delete="openDeleteDialog(product)"
+            @save="saveProduct(product)"
           />
         </template>
       </div>
@@ -332,7 +333,7 @@ export default {
           }
         });
       }
-    }
+    };
 
     const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
@@ -349,31 +350,29 @@ export default {
         recentlySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios
-          .delete("/workspace/saved/" + product.id)
-          .then((response) => {
-            if (response.data.error) {
-              removingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed from Saved Products.`,
-                type: "success",
-              });
-              let p = recentlySaved.value.find(
-                (item) => item.productNumber == product.productNumber
-              );
-              let indexOfProduct = recentlySaved.value.indexOf(p);
-              recentlySaved.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            removingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            removingProduct.value = false;
+            createNotification({
+              title: "Product Removed",
+              message: `Product ${product.productNumber} has been removed from Saved Products.`,
+              type: "success",
+            });
+            let p = recentlySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = recentlySaved.value.indexOf(p);
+            recentlySaved.value.splice(indexOfProduct, 1);
+          }
+        });
       }
     };
     const getProductIcon = (product) => {
