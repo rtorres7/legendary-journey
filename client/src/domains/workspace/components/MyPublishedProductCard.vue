@@ -73,7 +73,7 @@
                       <MenuItem>
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                          @click="saveProduct(product)"
+                          @click="saveProduct"
                         >
                           <BookmarkIcon
                             class="h-5 w-5"
@@ -185,22 +185,11 @@
         </div>
       </template>
     </div>
-    <Overlay :show="savingProduct">
-      <div class="max-w-xs inline-block">
-        <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
-        <div class="w-fit m-auto">
-          <LoadingSpinner class="h-16 w-16" />
-        </div>
-      </div>
-    </Overlay>
   </div>
 </template>
 <script>
 import { inject, ref } from "vue";
-import axios from "@/shared/config/wireAxios";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import Overlay from "./Overlay.vue";
-import LoadingSpinner from "./LoadingSpinner.vue";
 import {
   ShareIcon,
   BookmarkIcon,
@@ -225,9 +214,7 @@ export default {
     PencilSquareIcon,
     TrashIcon,
     XMarkIcon,
-    ProductImage,
-    Overlay,
-    LoadingSpinner,
+    ProductImage
   },
   props: {
     product: {
@@ -247,7 +234,7 @@ export default {
       default: false,
     },
   },
-  emits: ["delete", "remove"],
+  emits: ["delete", "remove", "save"],
   setup(props, { emit }) {
     const environment = ref(import.meta.env.MODE);
     const createNotification = inject("create-notification");
@@ -271,34 +258,8 @@ export default {
       emit("remove", props.product);
     };
     const savingProduct = ref(false);
-    const saveProduct = (product) => {
-      if (import.meta.env.MODE === "offline") {
-        createNotification({
-          title: "Product Saved",
-          message: `Product ${product.productNumber} has been saved.`,
-          type: "success",
-        });
-      } else {
-        savingProduct.value = true;
-        axios.put("/workspace/saved/" + product.id).then((response) => {
-          if (response.data.error) {
-            savingProduct.value = false;
-            createNotification({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              autoClose: false,
-            });
-          } else {
-            savingProduct.value = false;
-            createNotification({
-              title: "Product Saved",
-              message: `Product ${product.productNumber} has been saved.`,
-              type: "success",
-            });
-          }
-        });
-      }
+    const saveProduct = () => {
+      emit("save", props.product);
     };
     return {
       environment,

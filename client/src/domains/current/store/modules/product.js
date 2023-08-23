@@ -23,10 +23,16 @@ export default {
           route.name === "product-preview"
             ? `/documents/${route.params.doc_num}/preview.json`
             : `/preload/documents/${route.params.doc_num}.json`;
-        axios.get(url).then((response) => {
-          console.log("[store] getProductDetails: ", response.data);
-          commit("saveDocument", response.data);
-        });
+        axios.get(url)
+          .catch((error) => {
+            if (error.response.status === 404) {
+              router.push({ name: "notFound" });
+            }
+          })
+          .then((response) => {
+            console.log("[store] getProductDetails: ", response.data);
+            commit("saveDocument", response.data);
+          });
       }
     },
     savePrintCount({ commit }) {
