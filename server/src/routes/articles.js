@@ -11,8 +11,6 @@ const { v4: uuidv4 } = require("uuid");
 
 const Article = require("../models/articles");
 
-const { handleMongooseError } = require("../util/errors");
-
 const { runAsUser } = require("../util/request");
 
 const ProductService = require("../services/product-service");
@@ -38,6 +36,7 @@ const upload = objectStoreService.buildUpload("attachments");
 const { config } = require("../config/config");
 const { logger } = require("../config/logger");
 
+const { legacyErrorResponse } = require("../util/errors");
 const _ = require("lodash");
 
 //GET articles by date
@@ -64,14 +63,10 @@ router.get("/articles/date/:date", async (req, res) => {
       );
       res.json({ features: augmentedArticles });
     } catch (error) {
-      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-      handleMongooseError(
-        `Unable to find articles for date ${req.params.date}`,
-        error,
-      );
-      res.json({
-        error: `Unable to find articles for date ${req.params.date}: ${error.message}`,
-      });
+      logger.error(error);
+      const errorDetails = `Unable to find articles for date ${req.params.date}: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -81,7 +76,7 @@ router.get("/articles/:productNumber", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a product with a given product number'
     #swagger.tags = ['Products']
-    #swagger.responses[200] = {
+    #swagger.responses[404] = {
       schema: {
         $ref: '#/definitions/ProductDetails'
       }
@@ -116,14 +111,10 @@ router.get("/articles/:productNumber", async (req, res) => {
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
       res.json(details);
     } catch (error) {
-      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-      handleMongooseError(
-        `Unable to find article with product number ${req.params.productNumber}`,
-        error,
-      );
-      res.json({
-        error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
-      });
+      logger.error(error);
+      const errorDetails = `Unable to find article with product number ${req.params.productNumber}: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -139,11 +130,6 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
     #swagger.responses[200] = {
       schema: {
         $ref: '#/definitions/ProductDetails'
-      }
-    }
-    #swagger.responses[500] = {
-      schema: {
-        $ref: '#/definitions/ErrorResponse'
       }
     }
    */
@@ -164,14 +150,10 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
       await augmentProductWithSaved(details, currentUser.id, article.id, false);
       res.json(details);
     } catch (error) {
-      // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-      handleMongooseError(
-        `Unable to find article with product number ${req.params.productNumber}`,
-        error,
-      );
-      res.json({
-        error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
-      });
+      logger.error(error);
+      const errorDetails = `Unable to find article with product number ${req.params.productNumber}: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -210,9 +192,9 @@ router.post("/articles/processDocument", async (req, res) => {
     }
   } catch (error) {
     logger.error(error);
-    // res.json({
-    //   error: `Unable to find article with product number ${req.params.productNumber}: ${error.message}`,
-    // });
+    const errorDetails = `${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -236,65 +218,66 @@ router.post("/articles/", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const topics = await metadataService.findTopicsFor(req.body.topics);
-    const issues = await metadataService.findIssuesForTopics(topics);
-    const producingOffices =
-      req.body.producing_office &&
-      (await metadataService.findProducingOfficesFor([
-        req.body.producing_office,
-      ]));
-    const productType = await metadataService.findProductType(
-      req.body.product_type_id,
-    );
-    const reportingType = await metadataService.findReportingTypeFor(
-      req.body.product_type_id,
-    );
-    const nonStateActors = await metadataService.findNonStateActorsFor(
-      req.body.non_state_actors,
-    );
-
-    const article = new Article({
-      createdAt: dayjs().toDate(),
-      createdBy: {
-        id: currentUser.id,
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
-        dn: currentUser.dn,
-      },
-      datePublished: req.body.date_published || dayjs().format("YYYY-MM-DD"),
-      htmlBody: req.body.html_body,
-      issues: issues,
-      needed: {},
-      orgRestricted: false,
-      pocInfo: req.body.poc_info,
-      productNumber: uuidv4(),
-      producingOffices: producingOffices,
-      productType: productType,
-      publicationNumber: req.body.publication_number,
-      reportingType: reportingType,
-      summary: req.body.summary,
-      title: req.body.title,
-      topics: topics,
-      nonStateActors: nonStateActors,
-      updatedAt: dayjs().toDate(),
-      updatedBy: {
-        id: currentUser.id,
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
-        dn: currentUser.dn,
-      },
-    });
-
     try {
+      const topics = await metadataService.findTopicsFor(req.body.topics);
+      const issues = await metadataService.findIssuesForTopics(topics);
+      const producingOffices =
+        req.body.producing_office &&
+        (await metadataService.findProducingOfficesFor([
+          req.body.producing_office,
+        ]));
+      const productType = await metadataService.findProductType(
+        req.body.product_type_id,
+      );
+      const reportingType = await metadataService.findReportingTypeFor(
+        req.body.product_type_id,
+      );
+      const nonStateActors = await metadataService.findNonStateActorsFor(
+        req.body.non_state_actors,
+      );
+
+      const article = new Article({
+        createdAt: dayjs().toDate(),
+        createdBy: {
+          id: currentUser.id,
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          dn: currentUser.dn,
+        },
+        datePublished: req.body.date_published || dayjs().format("YYYY-MM-DD"),
+        htmlBody: req.body.html_body,
+        issues: issues,
+        needed: {},
+        orgRestricted: false,
+        pocInfo: req.body.poc_info,
+        productNumber: uuidv4(),
+        producingOffices: producingOffices,
+        productType: productType,
+        publicationNumber: req.body.publication_number,
+        reportingType: reportingType,
+        summary: req.body.summary,
+        title: req.body.title,
+        topics: topics,
+        nonStateActors: nonStateActors,
+        updatedAt: dayjs().toDate(),
+        updatedBy: {
+          id: currentUser.id,
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          dn: currentUser.dn,
+        },
+      });
+
       const savedArticle = await productService.createProduct(article);
       res.json({
         article: { id: savedArticle.id },
         doc_num: savedArticle.productNumber,
       });
     } catch (error) {
-      res.json({
-        error: `There was a problem creating product: ${error.message}`,
-      });
+      logger.error(error);
+      const errorDetails = `There was a problem creating product: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -321,13 +304,10 @@ router.get("/articles/:id/edit", async (req, res) => {
 
     res.json(product.data.document);
   } catch (error) {
-    handleMongooseError(
-      `Unable to find article with id ${req.params.id}`,
-      error,
-    );
-    res.json({
-      error: `Unable to find article with id ${req.params.id}: ${error.message}`,
-    });
+    logger.error(error);
+    const errorDetails = `Unable to find article with id ${req.params.id}: ${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -355,19 +335,16 @@ router.get("/articles/:id/view", async (req, res) => {
       await augmentProductWithSaved(details, currentUser.id, product.id, false);
       res.json(details);
     } catch (error) {
-      handleMongooseError(
-        `Unable to find article with id ${req.params.id}`,
-        error,
-      );
-      res.json({
-        error: `Unable to find article with id ${req.params.id}: ${error.message}`,
-      });
+      logger.error(error);
+      const errorDetails = `Unable to find article with id ${req.params.id}: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
 
 // Update an article
-router.put("/articles/:id", async (req, res, next) => {
+router.put("/articles/:id", async (req, res) => {
   /*
     #swagger.summary = 'Update a product'
     #swagger.tags = ['Products']
@@ -392,10 +369,10 @@ router.put("/articles/:id", async (req, res, next) => {
     const productData = await buildUpdate(req.params.id, req.body, req.user);
     await updateProduct(req.params.id, productData, req, res);
   } catch (error) {
-    logger.error(
-      `Unable to update article with id ${req.params.id}: ${error.message}`,
-    );
-    next(error);
+    logger.error(error);
+    const errorDetails = `Unable to update article with id ${req.params.id}: ${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -491,9 +468,10 @@ async function updateProduct(id, productData, req, res) {
       state: updatedProduct.state,
     });
   } catch (error) {
-    res.json({
-      error: `There was a problem updating product: ${error.message}`,
-    });
+    logger.error(error);
+    const errorDetails = `There was a problem updating product: ${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 }
 // Delete an article
@@ -513,8 +491,10 @@ router.delete("/articles/:id", async (req, res) => {
     await workspaceService.deleteSavedProductForAllUsers(req.params.id);
     res.json({ success: true });
   } catch (error) {
-    console.log("Delete error", error);
-    res.json({ error: "Unable to delete article" });
+    logger.error(error);
+    const errorDetails = `Unable to delete article: ${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -562,7 +542,9 @@ router.post(
       });
     } catch (error) {
       logger.error(error);
-      res.status(500).json({ error: "Unable to upload attachment" });
+      const errorDetails = `Unable to upload attachment: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
@@ -594,8 +576,9 @@ router.get(
       stream.pipe(res);
     } catch (error) {
       logger.error(error);
-      // KiwiStandardResponsesExpress.standardNotFoundResponse("Unable to find attachment", res);
-      res.status(404).json({ error: "Unable to get attachment" });
+      const errorDetails = `Unable to get attachment: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(404, errorDetails, res);
+      legacyErrorResponse(404, errorDetails, res);
     }
   },
 );
@@ -612,32 +595,38 @@ router.delete(
       }
     }
   */
+    try {
+      const product = await productService.findByProductNumber(
+        req.params.productNumber,
+      );
 
-    const product = await productService.findByProductNumber(
-      req.params.productNumber,
-    );
+      const removedAttachments = _.remove(
+        product.attachments,
+        (att) =>
+          att.id === req.params.attachmentId ||
+          att.attachmentId === req.params.attachmentId,
+      );
+      product.markModified("attachments");
+      await product.save();
 
-    const removedAttachments = _.remove(
-      product.attachments,
-      (att) =>
-        att.id === req.params.attachmentId ||
-        att.attachmentId === req.params.attachmentId,
-    );
-    product.markModified("attachments");
-    await product.save();
+      for (const att of removedAttachments) {
+        const [, path] = att.destination.split("//");
+        const bucketSeparatorIndex = path.indexOf("/");
+        const bucket = path.substring(0, bucketSeparatorIndex);
+        const objectName = path.substring(bucketSeparatorIndex);
 
-    for (const att of removedAttachments) {
-      const [, path] = att.destination.split("//");
-      const bucketSeparatorIndex = path.indexOf("/");
-      const bucket = path.substring(0, bucketSeparatorIndex);
-      const objectName = path.substring(bucketSeparatorIndex);
+        await objectStoreService.removeObject(bucket, objectName);
 
-      await objectStoreService.removeObject(bucket, objectName);
+        await searchService.removeIndexedAttachment(product.id, att.attachmentId);
+      }
 
-      await searchService.removeIndexedAttachment(product.id, att.attachmentId);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
-
-    res.json({ success: true });
   },
 );
 

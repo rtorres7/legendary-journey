@@ -6,7 +6,6 @@ const productService = new ProductService();
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
 
-const { handleMongooseError } = require("../util/errors");
 const {runAsUser} = require('../util/request');
 
 // GET home page features
@@ -36,7 +35,7 @@ router.get('/home/features', async (req, res) => {
       res.json(featuresAndBriefs);
     } catch (error) {
       // TODO: Replace the following with kiwi-js#KiwiStandardResponses
-      handleMongooseError('Unable to find features and briefs', error);
+      console.log('Unable to find features and briefs', error);
       res.json({error: 'Unable to find features and briefs'});
     }
   });

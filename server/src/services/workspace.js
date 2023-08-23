@@ -1,4 +1,4 @@
-const MetricsService = require("./aggregated-metrics-service");
+const AggregatedMetricsService = require("./aggregated-metrics-service");
 const ProductSearchService = require("./product-search-service");
 const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
@@ -6,7 +6,7 @@ const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 class WorkspaceService {
   constructor() {
     this.productSearchService = new ProductSearchService();
-    this.metricsService = new MetricsService();
+    this.metricsService = new AggregatedMetricsService();
   }
 
   async findPageOfSavedProductsForUser(
