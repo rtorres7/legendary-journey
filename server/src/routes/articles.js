@@ -40,6 +40,10 @@ const { logger } = require("../config/logger");
 
 const _ = require("lodash");
 
+const legacyErrorResponse = (code, message, res) => {
+  res.status(code).json({ code, message, error: message, fieldName: '', itemId: ''});
+};
+
 //GET articles by date
 router.get("/articles/date/:date", async (req, res) => {
   /*
@@ -66,7 +70,8 @@ router.get("/articles/date/:date", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find articles for date ${req.params.date}: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -113,7 +118,8 @@ router.get("/articles/:productNumber", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find article with product number ${req.params.productNumber}: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -151,7 +157,8 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find article with product number ${req.params.productNumber}: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -191,7 +198,8 @@ router.post("/articles/processDocument", async (req, res) => {
   } catch (error) {
     logger.error(error);
     const errorDetails = `${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -273,7 +281,8 @@ router.post("/articles/", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `There was a problem creating product: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -302,7 +311,8 @@ router.get("/articles/:id/edit", async (req, res) => {
   } catch (error) {
     logger.error(error);
     const errorDetails = `Unable to find article with id ${req.params.id}: ${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -332,7 +342,8 @@ router.get("/articles/:id/view", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find article with id ${req.params.id}: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -365,7 +376,8 @@ router.put("/articles/:id", async (req, res) => {
   } catch (error) {
     logger.error(error);
     const errorDetails = `Unable to update article with id ${req.params.id}: ${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -463,7 +475,8 @@ async function updateProduct(id, productData, req, res) {
   } catch (error) {
     logger.error(error);
     const errorDetails = `There was a problem updating product: ${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 }
 // Delete an article
@@ -485,7 +498,8 @@ router.delete("/articles/:id", async (req, res) => {
   } catch (error) {
     logger.error(error);
     const errorDetails = `Unable to delete article: ${error.message}`;
-    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
   }
 });
 
@@ -534,7 +548,8 @@ router.post(
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to upload attachment: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
@@ -567,7 +582,8 @@ router.get(
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to get attachment: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(404, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(404, errorDetails, res);
+      legacyErrorResponse(404, errorDetails, res);
     }
   },
 );
@@ -613,7 +629,8 @@ router.delete(
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
