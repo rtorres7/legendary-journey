@@ -10,6 +10,7 @@ dayjs.extend(utc);
 const { runAsUser } = require("../util/request");
 
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { logger } = require("../config/logger");
 
 const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const metricsService = new AggregatedMetricsService();
@@ -62,7 +63,7 @@ router.get(
         }
       }
      */
-  async (req, res, next) => {
+  async (req, res) => {
     await runAsUser(req, res, async (currentUser, req, res) => {
       try {
         const { productId } = req.params;
@@ -82,11 +83,9 @@ router.get(
 
         res.json(readershipData);
       } catch (error) {
-        KiwiStandardResponsesExpress.standardErrorResponse(
-          500,
-          `Failed to retrieve unique readership by organization for product: ${error.message}`,
-          res,
-        );
+        logger.error(error);
+        const errorDetails = `Failed to retrieve unique readership by organization for product: ${error.message}`;
+        KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
       }
     });
   },
@@ -131,11 +130,9 @@ router.post("/metrics/products/:productId/record-email", async (req, res) => {
       );
       res.json({ count: product.email_count });
     } catch (error) {
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `Failed to increment email_count for product: ${error.message}`,
-        res,
-      );
+      logger.error(error);
+      const errorDetails = `Failed to increment email_count for product: ${error.message}`;
+      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
     }
 
     try {
@@ -145,7 +142,7 @@ router.post("/metrics/products/:productId/record-email", async (req, res) => {
         productId,
       );
     } catch (error) {
-      console.error(`Failed to register PRODUCT_PRINT event: ${error.message}`);
+      logger.error(`Failed to register PRODUCT_PRINT event: ${error.message}`);
     }
   });
 });
@@ -189,11 +186,9 @@ router.post("/metrics/products/:productId/record-print", async (req, res) => {
       );
       res.json({ count: product.print_count });
     } catch (error) {
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `Failed to increment print_count for product: ${error.message}`,
-        res,
-      );
+      logger.error(error);
+      const errorDetails = `Failed to increment print_count for product: ${error.message}`;
+      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
     }
 
     try {
@@ -203,7 +198,7 @@ router.post("/metrics/products/:productId/record-print", async (req, res) => {
         productId,
       );
     } catch (error) {
-      console.error(`Failed to register PRODUCT_PRINT event: ${error.message}`);
+      logger.error(`Failed to register PRODUCT_PRINT event: ${error.message}`);
     }
   });
 });

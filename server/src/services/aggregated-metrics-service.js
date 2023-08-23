@@ -1,4 +1,4 @@
-import { date } from "joi";
+// import { date } from "joi";
 const constant = require("../util/constant.js");
 const EventLog = require("../models/event_log");
 
@@ -112,9 +112,9 @@ class AggregatedMetricsService {
       readershipData[0].name === "No Data"
         ? 1
         : result.aggregations.organizations.buckets.reduce(
-            (acc, bucket) => acc + bucket.unique_users.value,
-            0,
-          );
+          (acc, bucket) => acc + bucket.unique_users.value,
+          0,
+        );
 
     return {
       metrics: {
