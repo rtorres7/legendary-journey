@@ -53,6 +53,7 @@ class WorkspaceService {
 
       results.results.forEach((product) => {
         product.views = productViews[product.productNumber] || 0;
+        product.saved = true;
       });
 
       results.results.sort((a, b) => b.views - a.views);
@@ -157,6 +158,10 @@ class WorkspaceService {
     };
 
     const results = await this.productSearchService.search(term, perPage, page, sortDir, filtersWithUsersSavedProducts);
+
+    results.results.forEach((product) => {
+      product.saved = true;
+    });
 
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
