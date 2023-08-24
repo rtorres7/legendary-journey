@@ -127,6 +127,11 @@ jest.mock("../../src/services/workspace.js", () => {
 
           return null;
         }),
+      isProductSaved: jest
+        .fn()
+        .mockImplementation(() => {
+          return true;
+        })
     };
   });
 });

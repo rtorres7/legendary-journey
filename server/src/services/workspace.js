@@ -158,6 +158,10 @@ class WorkspaceService {
 
     const results = await this.productSearchService.search(term, perPage, page, sortDir, filtersWithUsersSavedProducts);
 
+    results.results.forEach((product) => {
+      product.saved = true;
+    });
+
     return KiwiPage.of(page, perPage, results.totalCount, results.results)
       .usingOneAsFirstPage()
       .addKiwiSort(KiwiSort.of("datePublished", sortDir))

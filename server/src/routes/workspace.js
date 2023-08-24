@@ -84,11 +84,12 @@ router.get("/workspace/recent", async (req, res) => {
       );
       const viewsData = await metricsService.getProductViewsCountForMultipleProducts(ids);
 
-      pageOfRecentProducts.content.forEach((item) => {
+      for (const item of pageOfRecentProducts.content) {
         if (viewsData[item.productNumber]) {
           item.views = viewsData[item.productNumber];
         }
-      });
+        await augmentProductWithSaved(item, currentUser.id, item.id.toString(), false);
+      }
 
       res.json(pageOfRecentProducts);
     } catch (error) {
@@ -185,6 +186,11 @@ router.get("/workspace/products", async (req, res) => {
         skip,
         sortDir,
       );
+
+      for (const item of pageOfProducts.content) {
+        await augmentProductWithSaved(item, currentUser.id, item.id, false);
+      }
+
       res.json(pageOfProducts);
     } catch (error) {
       logger.error(error);
@@ -228,6 +234,7 @@ router.get("/workspace/saved", async (req, res) => {
         if (viewsData[item.productNumber]) {
           item.views = viewsData[item.productNumber];
         }
+        item.saved = true;
       });
 
       res.json(savedProducts);
@@ -527,5 +534,22 @@ router.delete(
     }
   },
 );
+
+async function augmentProductWithSaved(
+  productData,
+  currentUserId,
+  productId,
+  addToAttributes = true,
+) {
+  const isSaved = await workspaceService.isProductSaved(
+    currentUserId,
+    productId,
+  );
+  productData.saved = isSaved;
+
+  if (addToAttributes) {
+    productData.attributes.saved = isSaved;
+  }
+}
 
 module.exports = router;
