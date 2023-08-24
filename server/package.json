@@ -8,7 +8,7 @@
     "start:inspect": "node  --experimental-vm-modules --watch --require ts-node/register --inspect=0.0.0.0:9229 src/swagger.ts",
     "server-dependencies": "npm install",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
-    "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --verbose=true",
+    "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --verbose=true",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "lint": "eslint --ignore-path .gitignore --fix src",
     "swagger-autogen": "DOTENV=swagger node src/swagger.js",
