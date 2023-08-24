@@ -305,33 +305,38 @@ export default {
     };
     const savingProduct = ref(false);
     const saveProduct = (product) => {
-      if (import.meta.env.MODE === "offline") {
-        createNotification({
-          title: "Product Saved",
-          message: `Product ${product.productNumber} has been saved.`,
-          type: "success",
-        });
+      if (product.saved) {
+        removeSavedProduct(product);
       } else {
-        savingProduct.value = true;
-        axios.put("/workspace/saved/" + product.id).then((response) => {
-          if (response.data.error) {
-            savingProduct.value = false;
-            createNotification({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              autoClose: false,
-            });
-          } else {
-            savingProduct.value = false;
-            createNotification({
-              title: "Product Saved",
-              message: `Product ${product.productNumber} has been saved.`,
-              type: "success",
-            });
-            loadSavedProducts();
-          }
-        });
+        if (import.meta.env.MODE === "offline") {
+          createNotification({
+            title: "Product Saved",
+            message: `Product ${product.productNumber} has been saved.`,
+            type: "success",
+          });
+        } else {
+          savingProduct.value = true;
+          axios.put("/workspace/saved/" + product.id).then((response) => {
+            if (response.data.error) {
+              savingProduct.value = false;
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              savingProduct.value = false;
+              createNotification({
+                title: "Product Saved",
+                message: `Product ${product.productNumber} has been saved.`,
+                type: "success",
+              });
+              loadSavedProducts();
+              loadPublishedProducts();
+            }
+          });
+        }
       }
     };
 
@@ -371,6 +376,7 @@ export default {
             );
             let indexOfProduct = recentlySaved.value.indexOf(p);
             recentlySaved.value.splice(indexOfProduct, 1);
+            loadPublishedProducts();
           }
         });
       }
@@ -446,6 +452,22 @@ export default {
       });
     };
 
+    const loadPublishedProducts = () => {
+      axios.get("/workspace/recent").then((response) => {
+        loadingPublished.value = false;
+        if (response.data) {
+          myPublished.value = response.data.content;
+        } else {
+          createNotification({
+            title: "Error",
+            message: "There was an error retrieving Recent Products.",
+            type: "error",
+            autoClose: false,
+          });
+        }
+      });
+    };
+
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
@@ -468,26 +490,13 @@ export default {
         }, 1000);
       } else {
         loadSavedProducts();
-
+        loadPublishedProducts();
         axios.get("/workspace/drafts").then((response) => {
           loadingDrafts.value = false;
           if (response.data) {
             myDrafts.value = response.data.content;
           } else {
             console.log("Couldn't retrieve drafts");
-          }
-        });
-        axios.get("/workspace/recent").then((response) => {
-          loadingPublished.value = false;
-          if (response.data) {
-            myPublished.value = response.data.content;
-          } else {
-            createNotification({
-              title: "Error",
-              message: "There was an error retrieving Recent Products.",
-              type: "error",
-              autoClose: false,
-            });
           }
         });
         axios.get("/workspace/stats").then((response) => {
