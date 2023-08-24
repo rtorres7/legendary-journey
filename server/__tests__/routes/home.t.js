@@ -40,7 +40,7 @@ describe('Home Routes', () => {
   });
 
   describe('GET /features', () => {
-    it("should return featured articles and briefs", () => {
+    it("should return featured articles and briefs", async () => {
       const router = require('../../src/routes/home');
       const app = setupAppWithUser(router, {id: 1});
 

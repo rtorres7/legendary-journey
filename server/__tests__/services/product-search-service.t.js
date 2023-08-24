@@ -18,19 +18,13 @@ jest.mock('../../src/services/metadata.js', () => {
 describe('ProductSearchService', () => {
   let service;
   let client;
+  let esUrl;
 
   beforeAll(async () => {
-    const esUrl = ElasticSearchExtension.getElasticSearchUrl();
+    esUrl = ElasticSearchExtension.getElasticSearchUrl();
     process.env.ES_URL = esUrl;
-    client = new Client({ node: esUrl });
 
-    // Setup index
-    await client.indices.create({
-      index: 'products',
-      mappings: constant.indices[0].mappings,
-    });
-
-    await client.ingest.putPipeline({
+    await ElasticSearchExtension.createIndex("products", constant.indices[0].mappings, [{
       id: 'mxms-attachment-pipeline',
       body: {
         processors: [{
@@ -41,18 +35,21 @@ describe('ProductSearchService', () => {
           }
         }],
       },
-    });
+    }]);
+
+    client = new Client({ node: esUrl });
 
     // Load data
     await loadElasticSearch(esUrl);
   });
 
-  afterAll(async () => {
-    client.close();
+  beforeEach(async () => {
+    service = new ProductSearchService();
   });
 
-  beforeEach(() => {
-    service = new ProductSearchService();
+  afterAll(async () => {
+    await ElasticSearchExtension.deleteIndex("products");
+    await client.close();
   });
 
   describe('search', () => {

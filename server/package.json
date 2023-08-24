@@ -7,8 +7,8 @@
     "start": "node  --experimental-vm-modules --watch --require ts-node/register src/swagger.ts",
     "start:inspect": "node  --experimental-vm-modules --watch --require ts-node/register --inspect=0.0.0.0:9229 src/swagger.ts",
     "server-dependencies": "npm install",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles",
-    "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --verbose=true",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
+    "testone": "node --experimental-vm-modules node_modules/.bin/jest --coverage --verbose=true",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "lint": "eslint --ignore-path .gitignore --fix src",
     "swagger-autogen": "DOTENV=swagger node src/swagger.js",
@@ -38,7 +38,6 @@
       ]
     ],
     "globalSetup": "<rootDir>/__tests__/__utils__/global-setup.ts",
-    "globalTeardown": "<rootDir>/__tests__/__utils__/global-teardown.ts",
     "setupFilesAfterEnv": [
       "jest-extended/all"
     ],
@@ -84,7 +83,7 @@
     "winston": "3.10.0"
   },
   "devDependencies": {
-    "@kiwiproject/kiwi-test-js": "0.1.1",
+    "@kiwiproject/kiwi-test-js": "0.2.0",
     "@types/cookie-parser": "1.4.3",
     "@types/express": "4.17.17",
     "@types/jest": "29.5.3",
