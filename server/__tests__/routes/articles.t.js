@@ -252,8 +252,12 @@ describe("Article Routes", () => {
       const router = require("../../src/routes/articles");
       const app = setupAppWithUser(router, { id: 1 });
 
-      return request(app).get("/articles/date/2022-09-01").expect(200, {
-        error: "Unable to find articles for date 2022-09-01: whoops",
+      return request(app).get("/articles/date/2022-09-01").expect(500, {
+        message: 'Unable to find articles for date 2022-09-01: whoops',
+        error: 'Unable to find articles for date 2022-09-01: whoops',
+        code: 500,
+        fieldName: '',
+        itemId: ''
       });
     });
   });
@@ -291,9 +295,12 @@ describe("Article Routes", () => {
       const router = require("../../src/routes/articles");
       const app = setupAppWithUser(router, { id: 1 });
 
-      return request(app).get("/articles/WIReWIRe_sample_1").expect(200, {
-        error:
-          "Unable to find article with product number WIReWIRe_sample_1: whoops",
+      return request(app).get("/articles/WIReWIRe_sample_1").expect(500, {
+        message: 'Unable to find article with product number WIReWIRe_sample_1: whoops',
+        error: 'Unable to find article with product number WIReWIRe_sample_1: whoops',
+        code: 500,
+        fieldName: '',
+        itemId: ''
       });
     });
   });
@@ -436,9 +443,15 @@ describe("Article Routes", () => {
         date_published: new Date(),
       };
 
-      return request(app).post("/articles").send(postData).expect(200, {
-        error: "There was a problem creating product: whoops",
-      });
+      return request(app).post("/articles")
+        .send(postData)
+        .expect(500, {
+          message: 'There was a problem creating product: whoops',
+          error: 'There was a problem creating product: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
+        });
     });
   });
 
@@ -477,9 +490,12 @@ describe("Article Routes", () => {
 
       return request(app)
         .get("/articles/64709619aa530082dd5cc416/edit")
-        .expect(200, {
-          error:
-            "Unable to find article with id 64709619aa530082dd5cc416: whoops",
+        .expect(500, {
+          message: 'Unable to find article with id 64709619aa530082dd5cc416: whoops',
+          error: 'Unable to find article with id 64709619aa530082dd5cc416: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
         });
     });
   });
@@ -519,9 +535,12 @@ describe("Article Routes", () => {
 
       return request(app)
         .get("/articles/64709619aa530082dd5cc416/view")
-        .expect(200, {
-          error:
-            "Unable to find article with id 64709619aa530082dd5cc416: whoops",
+        .expect(500, {
+          message: 'Unable to find article with id 64709619aa530082dd5cc416: whoops',
+          error: 'Unable to find article with id 64709619aa530082dd5cc416: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
         });
     });
   });
@@ -579,8 +598,12 @@ describe("Article Routes", () => {
       return request(app)
         .put(`/articles/${original.id}`)
         .send(postData)
-        .expect(200, {
-          error: "There was a problem updating product: whoops",
+        .expect(500, {
+          message: 'There was a problem updating product: whoops',
+          error: 'There was a problem updating product: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
         });
     });
   });
@@ -603,8 +626,12 @@ describe("Article Routes", () => {
 
       return request(app)
         .delete("/articles/64709619aa530082dd5cc416")
-        .expect(200, {
-          error: "Unable to delete article",
+        .expect(500, {
+          message: 'Unable to delete article: whoops',
+          error: 'Unable to delete article: whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
         });
     });
   });

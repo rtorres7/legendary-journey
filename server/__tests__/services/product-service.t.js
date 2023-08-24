@@ -1,8 +1,10 @@
 const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
+const _ = require("lodash");
 const mongoose = require("mongoose");
+const MetadataService = require("../../src/services/metadata");
 const ProductService = require('../../src/services/product-service');
 
-const { loadArticlesIntoMongo } = require("../__utils__/dataLoader");
+const { loadMetadata, loadArticlesIntoMongo } = require("../__utils__/dataLoader");
 
 const { v4: uuidv4 } = require("uuid");
 const utc = require("dayjs/plugin/utc");
@@ -34,17 +36,20 @@ jest.mock('../../src/services/product-search-service.js', () => {
 describe('ProductService', () => {
   let mongoUrl;
   let service;
+  let metadataService;
 
   beforeAll(async () => {
     mongoUrl = MongoExtension.getMongoUriWithDb("products");
 
     // Load articles
+    await loadMetadata(mongoUrl);
     await loadArticlesIntoMongo(mongoUrl);
   });
 
   beforeEach(async () => {
     await mongoose.connect(mongoUrl, { useNewUrlParser: true });
     service = new ProductService();
+    metadataService = new MetadataService();
   });
 
   afterEach(() => {
@@ -249,25 +254,116 @@ describe('ProductService', () => {
 
     // TODO: Once we figure out the rollback strategy, we need to write a test to validate the rollback
   });
-
+  
   describe('findFeaturesAndBriefs', () => {
+    afterEach(async () => {
+      await Article.deleteMany({ summary: 'My test' });
+      await Article.deleteMany({ summary: 'Error test' });
+    });
+
+    const mapDiss = (obj) => ({ name: obj.name, code: obj.code });
+    const createPublished = async (productTypeCode) => {
+      /*
+      10391 - Alert
+      10389 - Bulletin
+      10376 - Current
+      10377 - Daily Brief
+      10378 - Community Product
+      10379 - CT Digest
+      10380 - CT Weekly
+      10381 - Foreign Product
+      10382 - Special Threat Matrix
+      10383 - SVTC Notes
+      10384 - Terrorism Digest
+      10385 - Terrorism Summary
+      10386 - Threat Matrix
+      10392 - Threat of Key Concern
+      10390 - Watch
+      */
+      const countries =  mapDiss(await metadataService.findCountriesFor(["AFG"]));
+      const issues =  mapDiss(await metadataService.findIssuesForTopics(["THS"]));
+      const nonStateActors =  mapDiss(await metadataService.findNonStateActorsFor(["EU"]));
+      const producingOffices =  mapDiss(await metadataService.findProducingOfficesFor(["DNI"]));
+      const productType =  mapDiss(await metadataService.findProductType(productTypeCode));
+      const topics =  mapDiss(await metadataService.findTopicsFor(["TERR"]));
+      const article = new Article({
+        classification: "UNC",
+        classificationXml: "<?xml version='1.0'?>UNCLASSIFIED<class:Classification>",
+        countries,
+        createdAt: dayjs().toDate(),
+        datePublished: dayjs().format(),
+        htmlBody: 'Creation test',
+        issues,
+        nonStateActors,
+        orgRestricted: false,
+        pocInfo:  "National Counterterrorism Center (NCTC) Operations Center",
+        producingOffices,
+        productNumber: uuidv4(),
+        productType,
+        publicationNumber: dayjs().unix(),
+        state: "posted",
+        summary: 'My test',
+        summaryClassification: "U",
+        summaryClassificationXml: "<?xml version='1.0'?>UNCLASSIFIED<class:Classification>",
+        title: 'My test',
+        titleClassification: "U",
+        titleClassificationXml: "<?xml version='1.0'?>UNCLASSIFIED<class:Classification>",
+        topics,
+        updatedAt: dayjs().toDate(),
+      });
+      const savedProduct = await service.createProduct(article);
+      return savedProduct;
+    };
+
     it('should return featured products and briefs', async () => {
       const results = await service.findFeaturesAndBriefs();
-
-      expect(results.featured).toHaveLength(4);
-      expect(results.briefs).toHaveLength(1);
+      expect(results.featured).toHaveLength(3);
+      expect(results.briefs).toHaveLength(0);
     });
 
     it('should not return deleted products', async () => {
       await Article.create({ productNumber: "product-to-delete", state: "posted", deleted: true, datePublished: '2023-08-01', productType: { code: 10377 } });
-
       const results = await service.findFeaturesAndBriefs();
-
-      expect(results.featured).toHaveLength(4);
-      expect(results.briefs).toHaveLength(1);
-
+      expect(results.featured).toHaveLength(3);
+      expect(results.briefs).toHaveLength(0);
       expect(results.featured.map(p => p.productNumber)).not.toContain("product-to-delete");
       expect(results.briefs.map(p => p.productNumber)).not.toContain("product-to-delete");
+    });
+
+    it('should not return in features or briefs', async () => {
+      await createPublished(10391); // Alert
+      await createPublished(10389); // Bulletin
+      await createPublished(10378); // Community Product
+      await createPublished(10381); // Foreign Product
+      await createPublished(10392); // Threat of Key Concern
+      await createPublished(10390); // Watch
+      await createPublished(10376); // Current (Feature)
+      const results = await service.findFeaturesAndBriefs();
+      expect(results.featured).toHaveLength(4); // 3 existing + 1 new current
+      expect(results.briefs).toHaveLength(0);
+    });
+
+    it('should return in briefs but not in featured', async () => {
+      const briefs = [];
+      briefs.push(await createPublished(10377)); // Daily Brief
+      briefs.push(await createPublished(10379)); // CT Digest
+      briefs.push(await createPublished(10380)); // CT Weekly
+      briefs.push(await createPublished(10382)); // Special Threat Matrix
+      briefs.push(await createPublished(10383)); // SVTC Notes
+      briefs.push(await createPublished(10384)); // Terrorism Digest
+      briefs.push(await createPublished(10385)); // Terrorism Summary
+      briefs.push(await createPublished(10386)); // Threat Matrix
+      while (briefs.length > 0) {
+        const results = await service.findFeaturesAndBriefs();
+        expect(results.featured).toHaveLength(3); // no new featured
+        expect(results.briefs).toHaveLength(Math.min(briefs.length, 3)); // results limited to max 3
+        // delete results
+        for (const result of results.briefs) {
+          expect(briefs.findIndex(i => i.productNumber === result.productNumber) >= 0);
+          _.remove(briefs, i => i.productNumber === result.productNumber);
+          await service.deleteProduct(result.id);
+        }
+      }
     });
   });
 

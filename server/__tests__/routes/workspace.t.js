@@ -127,6 +127,11 @@ jest.mock("../../src/services/workspace.js", () => {
 
           return null;
         }),
+      isProductSaved: jest
+        .fn()
+        .mockImplementation(() => {
+          return true;
+        })
     };
   });
 });
@@ -138,6 +143,11 @@ jest.mock("../../src/services/aggregated-metrics-service.js", () => {
         .fn()
         .mockImplementation((organizationName, startDate, endDate) => {
           return Promise.resolve({ totalViews: { totalViews: 500 } });
+        }),
+      getProductViewsCountForMultipleProducts: jest
+        .fn()
+        .mockImplementation((ids) => {
+          return Promise.resolve({});
         }),
     };
   });
@@ -174,6 +184,7 @@ describe("Workspace Routes", () => {
 
       return request(app).get("/workspace/drafts").expect(500, {
         message: "Unable to find draft products: whoops",
+        error: "Unable to find draft products: whoops",
         code: 500,
         fieldName: "",
         itemId: "",
@@ -229,6 +240,7 @@ describe("Workspace Routes", () => {
 
       return request(app).get("/workspace/recent").expect(500, {
         message: "Unable to find posted products: whoops",
+        error: "Unable to find posted products: whoops",
         code: 500,
         fieldName: "",
         itemId: "",
@@ -286,6 +298,7 @@ describe("Workspace Routes", () => {
 
       return request(app).get("/workspace/products").expect(500, {
         message: "Unable to find user's products: whoops",
+        error: "Unable to find user's products: whoops",
         code: 500,
         fieldName: "",
         itemId: "",
@@ -294,11 +307,11 @@ describe("Workspace Routes", () => {
   });
 
   describe("GET /workspace/saved", () => {
-    it("should return all saved products", () => {
+    it("should return all saved products", async () => {
       const router = require("../../src/routes/workspace");
       const app = setupAppWithUser(router, CURRENT_USER);
 
-      return request(app)
+      return await request(app)
         .get("/workspace/saved")
         .expect(200)
         .expect("Content-Type", /json/)
@@ -314,7 +327,7 @@ describe("Workspace Routes", () => {
   });
 
   describe("PUT /workspace/saved/:productId", () => {
-    it("should mark a product saved", () => {
+    it("should mark a product saved", async () => {
       const router = require("../../src/routes/workspace");
       const app = setupAppWithUser(router, CURRENT_USER);
 
