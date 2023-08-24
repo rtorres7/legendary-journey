@@ -10,6 +10,7 @@ const dayjs = require("dayjs");
 dayjs.extend(utc);
 
 const Article = require("../../src/models/articles");
+const { verify } = require("crypto");
 
 jest.mock('../../src/services/product-search-service.js', () => {
   return jest.fn().mockImplementation(() => {
@@ -261,6 +262,34 @@ describe('ProductService', () => {
       expect(drafts.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
     });
   });
+
+  describe('findPageOfDraftProductsForProducingOrg', () => {
+    it('should return a page of recent drafts', async () => {
+      const drafts = await service.findPageOfDraftProductsForProducingOrg(1, 1, 10, 0, 'desc');
+      verifyDrafts(drafts);
+   });
+
+   it('should not return deleted products', async () => {
+    await Article.create({ productNumber: "product-to-delete", state: "draft", createdBy: { id: 1 }, deleted: true});
+
+    const drafts = await service.findPageOfDraftProductsForProducingOrg(1, 1, 10, 0, 'desc');
+    verifyDrafts(drafts);
+
+    expect(drafts.content.map( p => p.productNumber)).not.toContain("product-to-delete");
+   });
+
+   function verifyDrafts(drafts) {
+      expect(drafts.content).toHaveLength(1);
+      expect(drafts.content.map(product => product.productNumber)).toEqual(['WIReWIRe_sample_5']);
+      expect(drafts.size).toEqual(10);
+      expect(drafts.number).toEqual(1);
+      expect(drafts.numberOfElements).toEqual(1);
+      expect(drafts.totalPages).toEqual(1);
+      expect(drafts.totalElements).toEqual(1);
+      expect(drafts.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
+   }
+
+  })
 
   describe('findPageOfRecentProductsForUser', () => {
     it('should return a page of recent products', async () => {

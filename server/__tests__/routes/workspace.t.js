@@ -14,6 +14,24 @@ jest.mock('../../src/services/product-service.js', () => {
           content: articles.filter(article => article.state === 'draft'),
         };
       }),
+      findPageOfDraftProductsForProducingOrg: jest
+        .fn()
+        .mockImplementation(
+          (producingOrgName, page, limit, offset, sortDir) => {
+            if (process.env.THROW_TEST_ERROR) {
+              throw new Error("whoops");
+            }
+            return {
+              content: articles.filter(
+                (article) =>
+                  article.state === "posted" &&
+                  article.producingOrg.findIndex(
+                    (i) => i.name === producingOrgName,
+                  ) >= 0,
+                ),
+              };
+            },
+          ),
       findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error('whoops');
