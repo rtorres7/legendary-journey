@@ -53,7 +53,6 @@ class WorkspaceService {
 
       results.results.forEach((product) => {
         product.views = productViews[product.productNumber] || 0;
-        product.saved = true;
       });
 
       results.results.sort((a, b) => b.views - a.views);

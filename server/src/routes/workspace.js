@@ -84,12 +84,12 @@ router.get("/workspace/recent", async (req, res) => {
       );
       const viewsData = await metricsService.getProductViewsCountForMultipleProducts(ids);
 
-      pageOfRecentProducts.content.forEach((item) => {
+      for (const item of pageOfRecentProducts.content) {
         if (viewsData[item.productNumber]) {
           item.views = viewsData[item.productNumber];
         }
-        augmentProductWithSaved(item, currentUser.id, item.id, false);
-      });
+        await augmentProductWithSaved(item, currentUser.id, item.id.toString(), false);
+      }
 
       res.json(pageOfRecentProducts);
     } catch (error) {
@@ -187,9 +187,9 @@ router.get("/workspace/products", async (req, res) => {
         sortDir,
       );
 
-      pageOfProducts.content.forEach((item) => {
-        augmentProductWithSaved(item, currentUser.id, item.id, false);
-      });
+      for (const item of pageOfProducts.content) {
+        await augmentProductWithSaved(item, currentUser.id, item.id, false);
+      }
 
       res.json(pageOfProducts);
     } catch (error) {
@@ -234,6 +234,7 @@ router.get("/workspace/saved", async (req, res) => {
         if (viewsData[item.productNumber]) {
           item.views = viewsData[item.productNumber];
         }
+        item.saved = true;
       });
 
       res.json(savedProducts);
