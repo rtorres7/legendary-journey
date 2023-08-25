@@ -8,7 +8,11 @@ describe('User model', () => {
     await PostgresExtension.setupNewDatabase("user_model");
     postgresUri = PostgresExtension.getPostgresUriWithDb("user_model");
     process.env.POSTGRES_CONNECTION_URL = postgresUri;
-  }, 120_000);
+  });
+
+  afterAll(async () => {
+    await PostgresExtension.dropDatabase("user_model");
+  });
 
   describe('authorizations', () => {
     it('should contain some with true if wire_editor', async () => {

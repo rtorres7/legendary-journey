@@ -17,7 +17,7 @@ describe('Mongoose setup', () => {
 
     await new Promise(res => setTimeout(() => {
       res();
-    }, 100));
+    }, 200));
     expect(log).toBeCalledWith('Mongo connection successful');
   });
 });

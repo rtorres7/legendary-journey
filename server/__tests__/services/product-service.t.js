@@ -56,6 +56,10 @@ describe('ProductService', () => {
     mongoose.connection.close();
   });
 
+  afterAll(async () => {
+    await MongoExtension.dropDatabase("products");
+  });
+
   describe('findAllByDate', () => {
     it('should find the products by date', async () => {
       const products = await service.findAllByDate('2022-09-01');

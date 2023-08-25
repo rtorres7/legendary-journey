@@ -1,6 +1,7 @@
-const { loadFeeds } = require("../__utils__/dataLoader");
+const { loadFeeds, clearFeeds } = require("../__utils__/dataLoader");
 const { Sequelize } = require("sequelize");
 const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
+const _  = require("lodash");
 
 describe("Feeds Service", () => {
   let service;
@@ -9,11 +10,7 @@ describe("Feeds Service", () => {
   beforeAll(async () => {
     await PostgresExtension.setupNewDatabase("feeds");
     postgresUri = PostgresExtension.getPostgresUriWithDb("feeds");
-
     process.env.POSTGRES_CONNECTION_URL = postgresUri;
-
-    // Load Feeds
-    await loadFeeds(postgresUri);
   });
 
   beforeEach(() => {
@@ -21,32 +18,52 @@ describe("Feeds Service", () => {
     service = new FeedsService();
   });
 
-  describe("findAllFeeds", () => {
-    it("should return all feeds", async () => {
-      const sequelize = new Sequelize(postgresUri);
-      const feedsModel = require("../../src/models/feed");
-      feedsModel(sequelize);
-
-      const originalFeeds = await sequelize.models.Feed.findAll();
-      const feeds = await service.findAllFeeds();
-
-      expect(originalFeeds).toHaveLength(1);
-      expect(feeds).toHaveLength(1);
-      expect(originalFeeds[0].name).toEqual("Test Feed #1");
-      expect(feeds[0].name).toEqual("Test Feed #1");
-    });
+  afterEach(async () => {
+    await clearFeeds(postgresUri);
   });
 
-  describe("findById", () => {
-    it("should return a feed with the given id", async () => {
-      const feed = await service.findFeedById(1);
+  afterAll(async () => {
 
-      expect(feed.name).toEqual("Test Feed #1");
-      expect(feed.searchParams).toEqual(
-        "https://localhost:8443/search?text=test123",
-      );
-      expect(feed.state).toEqual("Draft");
-      expect(feed.classification).toEqual("U");
+    await PostgresExtension.dropDatabase("feeds");
+  }, 120_000);
+
+  describe("finders", () => {
+    beforeEach(async () => {
+      await loadFeeds(postgresUri);
+    });
+
+    describe("findAllFeeds", () => {
+      it("should return all feeds", async () => {
+        const sequelize = new Sequelize(postgresUri);
+        const feedsModel = require("../../src/models/feed");
+        feedsModel(sequelize);
+
+        const originalFeeds = await sequelize.models.Feed.findAll();
+        const feeds = await service.findAllFeeds();
+
+        expect(originalFeeds).toHaveLength(1);
+        expect(feeds).toHaveLength(1);
+        expect(originalFeeds[0].name).toEqual("Test Feed #1");
+        expect(feeds[0].name).toEqual("Test Feed #1");
+      });
+    });
+
+    describe("findById", () => {
+      it("should return a feed with the given id", async () => {
+        const sequelize = new Sequelize(postgresUri);
+        const feedsModel = require("../../src/models/feed");
+        feedsModel(sequelize);
+        const originalFeeds = await sequelize.models.Feed.findAll();
+
+        const feed = await service.findFeedById(_.first(originalFeeds).id);
+
+        expect(feed.name).toEqual("Test Feed #1");
+        expect(feed.searchParams).toEqual(
+          "https://localhost:8443/search?text=test123",
+        );
+        expect(feed.state).toEqual("Draft");
+        expect(feed.classification).toEqual("U");
+      });
     });
   });
 

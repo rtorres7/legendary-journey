@@ -32,7 +32,7 @@ const workspaceService = new WorkspaceService();
 const EventService = require("../services/event-service");
 const eventService = new EventService();
 
-const upload = objectStoreService.buildUpload("attachments");
+const upload = objectStoreService.buildUpload(process.env.ATTACHMENT_BUCKET || "attachments");
 const { config } = require("../config/config");
 const { logger } = require("../config/logger");
 
@@ -394,9 +394,9 @@ async function publishProduct(id, user, productData, req, res) {
 // contents of this method back in the update endpoint.
 /**
  * Convert a product (snake case properties) from the client to {@link Article} (camel case).
- * @param {number} id 
- * @param {*} productDataFromRequest 
- * @param {User} user 
+ * @param {number} id
+ * @param {*} productDataFromRequest
+ * @param {User} user
  * @returns Partial<Artcle> {@link Article}
  */
 async function buildUpdate(id, productDataFromRequest, user) {

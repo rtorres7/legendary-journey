@@ -1,33 +1,38 @@
+import { DockerComposeEnvironment, Wait } from "testcontainers";
+import path from "path";
 import {
-  PostgresExtension,
+  ElasticSearchExtension, MinioExtension,
   MongoExtension,
-  ElasticSearchExtension,
-  MinioExtension
+  PostgresExtension
 } from "@kiwiproject/kiwi-test-js";
-import config from "../../src/config/config";
 
 async function globalJestSetup() {
   console.time("All test containers started in");
 
-  console.log("Starting Postgres");
-  console.time("Postgres started in");
-  const postgres = PostgresExtension.startPostgresContainer().then(() => console.timeEnd("Postgres started in"));
+  const composeFilePath = path.resolve(__dirname, "../__utils__");
+  const composeFile = "jest-compose.yml";
 
-  console.log("Starting Mongo");
-  console.time("Mongo started in");
-  const mongo = MongoExtension.startMongoContainer().then(() => console.timeEnd("Mongo started in"));
+  const environment = await new DockerComposeEnvironment(composeFilePath, composeFile)
+    .withWaitStrategy("jest-postgres", Wait.forLogMessage(/.*database system is ready to accept connections.*/, 2))
+    .withWaitStrategy("jest-mongo", Wait.forHealthCheck())
+    .withWaitStrategy("jest-elastic", Wait.forHealthCheck())
+    .withWaitStrategy("jest-minio", Wait.forAll([Wait.forListeningPorts(), Wait.forLogMessage(/1 Online/)]))
+    .withNoRecreate()
+    .up();
 
-  console.log("Starting Elastic Search");
-  console.time("Elastic Search started in");
-  const elasticSearch = ElasticSearchExtension.startElasticSearchContainer().then(() => console.timeEnd("Elastic Search started in"));
+  console.timeEnd("All test containers started in");
 
-  console.log("Starting Minio");
-  console.time("Minio started in");
-  const minio = MinioExtension.startMinioContainer(config.minio.accessKey, config.minio.secretKey).then(() => console.timeEnd("Minio started in"));
+  const postgresContainer = environment.getContainer("jest-postgres-1");
+  PostgresExtension.setPostgresBaseUrl(postgresContainer.getHost(), postgresContainer.getMappedPort(5432));
 
-  await Promise.all([postgres, mongo, elasticSearch, minio]).then(() => {
-    console.timeEnd("All test containers started in");
-  });
+  const mongoContainer = environment.getContainer("jest-mongo-1");
+  MongoExtension.setMongoBaseUrl(mongoContainer.getHost(), mongoContainer.getMappedPort(27017));
+
+  const elasticContainer = environment.getContainer("jest-elastic-1");
+  ElasticSearchExtension.setElasticSearchUrl(elasticContainer.getHost(), elasticContainer.getMappedPort(9200));
+
+  const minioContainer = environment.getContainer("jest-minio-1");
+  MinioExtension.setMinioPort(minioContainer.getMappedPort(9000));
 }
 
 export default globalJestSetup;

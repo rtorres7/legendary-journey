@@ -26,7 +26,7 @@ jest.mock("../../src/services/product-service.js", () => {
       findPageOfRecentProductsForProducingOffice: jest
         .fn()
         .mockImplementation(
-          (producingOfficeName, page, limit, offset, sortDir) => {
+          (producingOfficeName) => {
             if (process.env.THROW_TEST_ERROR) {
               throw new Error("whoops");
             }
@@ -144,11 +144,7 @@ jest.mock("../../src/services/aggregated-metrics-service.js", () => {
         .mockImplementation((organizationName, startDate, endDate) => {
           return Promise.resolve({ totalViews: { totalViews: 500 } });
         }),
-      getProductViewsCountForMultipleProducts: jest
-        .fn()
-        .mockImplementation((ids) => {
-          return Promise.resolve({});
-        }),
+      getProductViewsCountForMultipleProducts: jest.fn().mockResolvedValue({ "really-cool-product": 1 })
     };
   });
 });
@@ -193,7 +189,7 @@ describe("Workspace Routes", () => {
   });
 
   describe("GET /workspace/recent", () => {
-    it("should return recent posted products for user's organization", () => {
+    it("should return recent posted products for user's organization", async () => {
       const router = require("../../src/routes/workspace");
       const app = setupAppWithUser(router, {
         id: 1,
@@ -213,7 +209,7 @@ describe("Workspace Routes", () => {
         });
     });
 
-    it("should return recent posted products from organization only", () => {
+    it("should return recent posted products from organization only", async () => {
       const router = require("../../src/routes/workspace");
       const app = setupAppWithUser(router, {
         id: 100,
