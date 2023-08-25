@@ -12,6 +12,8 @@
     :alternate="!loading && isProductLocked(sitrep)"
     :hoverable="!loading && !isProductLocked(sitrep) ? true : false"
     :rounded="false"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
   >
     <template v-if="loading">
       <div class="flex flex-col h-full justify-between">
@@ -29,23 +31,70 @@
       </div>
     </template>
     <template v-else>
-      <button
+      <div
         v-if="environment != 'production' && !isProductLocked(sitrep)"
-        class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
-        :aria-label="`save product ${sitrep.productNumber}`"
-        @click.prevent="save(sitrep)"
+        :class="[
+          hover ? 'not-sr-only' : 'sr-only',
+          'absolute top-0 right-0 cursor-pointer',
+        ]"
       >
-        <template v-if="isSavedProduct(sitrep)">
-          <tippy content="Saved" placement="bottom">
-            <BookmarkIconSolid aria-hidden="true" class="h-5 w-5" />
-          </tippy>
-        </template>
-        <template v-else>
-          <tippy content="Save" placement="bottom">
-            <BookmarkIcon aria-hidden="true" class="h-5 w-5" />
-          </tippy>
-        </template>
-      </button>
+        <Menu v-slot="{ open, close }" as="div" class="relative z-10">
+          <div>
+            <template v-if="open">
+              <MenuButton
+                class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                @click.prevent
+              >
+                <span class="sr-only">More Options</span>
+                <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
+              </MenuButton>
+            </template>
+            <template v-else>
+              <tippy content="More" placement="bottom">
+                <MenuButton
+                  class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span class="sr-only">More Options</span>
+                  <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
+                </MenuButton>
+              </tippy>
+            </template>
+          </div>
+          <transition
+            enterActiveClass="transition ease-out duration-100"
+            enterFromClass="transform opacity-0 scale-95"
+            enterToClass="transform opacity-100 scale-100"
+            leaveActiveClass="transition ease-in duration-75"
+            leaveFromClass="transform opacity-100 scale-100"
+            leaveToClass="transform opacity-0 scale-95"
+          >
+            <MenuItems
+              class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm font-semibold bg-white dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b dark:border-slate-700/50 energy:border-zinc-700/50"
+            >
+              <MenuItem>
+                <div
+                  class="py-2 px-3 flex items-center space-x-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
+                  @click.prevent="
+                    save(sitrep);
+                    close();
+                  "
+                >
+                  <template v-if="isSavedProduct(sitrep)">
+                    <BookmarkIconSolid aria-hidden="true" class="h-5 w-5" />
+                    <span class="capitalize">Saved</span>
+                  </template>
+                  <template v-else>
+                    <BookmarkIcon class="h-5 w-5" aria-hidden="true" /><span
+                      class="capitalize"
+                      >Save</span
+                    >
+                  </template>
+                </div>
+              </MenuItem>
+            </MenuItems>
+          </transition>
+        </Menu>
+      </div>
       <div class="flex flex-col h-full justify-between">
         <div>
           <p class="text-sm mb-2 line-clamp-2">
@@ -86,15 +135,21 @@
 
 <script>
 import { isProductLocked, formatDate, isSavedProduct } from "@current/helpers";
-import { BookmarkIcon } from "@heroicons/vue/24/outline";
+import { BookmarkIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import updateSavedStatus from "@current/composables/updateSavedStatus";
 import { ref } from "vue";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 export default {
   components: {
     BookmarkIcon,
     BookmarkIconSolid,
+    EllipsisVerticalIcon,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
   },
   props: {
     sitrep: {
@@ -109,6 +164,7 @@ export default {
   setup() {
     const environment = ref(import.meta.env.MODE);
     const { save, savingProduct, removingProduct } = updateSavedStatus();
+    const hover = ref(false);
 
     return {
       formatDate,
@@ -118,6 +174,7 @@ export default {
       save,
       savingProduct,
       removingProduct,
+      hover,
     };
   },
 };

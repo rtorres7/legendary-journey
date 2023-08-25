@@ -75,10 +75,18 @@
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
                           @click="saveProduct"
                         >
-                          <BookmarkIcon
-                            class="h-5 w-5"
-                            aria-hidden="true"
-                          /><span class="capitalize">Save</span>
+                          <template v-if="product.saved">
+                            <BookmarkIconSolid
+                              class="h-5 w-5"
+                              aria-hidden="true"
+                            /><span class="capitalize">Saved</span>
+                          </template>
+                          <template v-else>
+                            <BookmarkIcon
+                              class="h-5 w-5"
+                              aria-hidden="true"
+                            /><span class="capitalize">Save</span>
+                          </template>
                         </div>
                       </MenuItem>
                     </template>
@@ -198,6 +206,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import ProductImage from "@workspace/components/ProductImage.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -210,11 +219,12 @@ export default {
     MenuItems,
     ShareIcon,
     BookmarkIcon,
+    BookmarkIconSolid,
     EllipsisVerticalIcon,
     PencilSquareIcon,
     TrashIcon,
     XMarkIcon,
-    ProductImage
+    ProductImage,
   },
   props: {
     product: {
