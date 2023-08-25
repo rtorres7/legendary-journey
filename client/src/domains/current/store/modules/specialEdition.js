@@ -20,14 +20,11 @@ export default {
         setTimeout(() => commit("saveSpecialEdition", specialEdition), 750);
       } else {
         axios
-          .get("/special_editions/" + `${route.params.id}`, {
+          .get("/feeds/" + `${route.params.id}`, {
             params: { page: route.query.page || 1 },
           })
           .then((response) => {
-            console.log(
-              `/special_editions/${route.params.id} (response):`,
-              response
-            );
+            console.log(`/feeds/${route.params.id} (response):`, response);
             commit("saveSpecialEdition", response.data);
           });
       }

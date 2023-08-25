@@ -74,13 +74,13 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("GET /special_editions/:id", () => {
+  describe("GET /feeds/:id", () => {
     it("should return the feed with the given id", () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .get("/special_editions/1")
+        .get("/feeds/1")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -113,13 +113,13 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("PUT /special_editions/:collectionId", () => {
+  describe("PUT /feeds/:collectionId", () => {
     it("should update a feed", async () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .put(`/special_editions/1`)
+        .put(`/feeds/1`)
         .send({
           name: "Updated name",
           searchParams: "toasted",
@@ -137,12 +137,12 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("DELETE /special_editions/:collectionId", () => {
+  describe("DELETE /feeds/:collectionId", () => {
     it("should delete a feed", async () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
-      return request(app).delete(`/special_editions/1`).expect(204);
+      return request(app).delete(`/feeds/1`).expect(204);
     });
   });
 });

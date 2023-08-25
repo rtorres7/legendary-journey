@@ -19,7 +19,7 @@
           </div>
           <div>
             <MaxInput
-              v-model="editionEvent.search_params"
+              v-model="editionEvent.searchParams"
               label="Search params"
               autocomplete="off"
               placeholder="Run a search, copy the URL, and paste it here."
@@ -118,7 +118,7 @@ export default {
           icon: null,
           name: null,
           name_classification: null,
-          search_params: null,
+          searchParams: null,
           state: [],
           position: 1,
           key_readings: null,
@@ -242,7 +242,7 @@ export default {
         icon: null,
         name: null,
         name_classification: null,
-        search_params: null,
+        searchParams: null,
         state: null,
         position: 1,
         key_readings: null,
@@ -273,10 +273,10 @@ export default {
       }
       return (
         !editionEvent.value.name ||
-        !editionEvent.value.search_params ||
+        !editionEvent.value.searchParams ||
         !editionEvent.value.state ||
-        !editionEvent.value.name_classification ||
-        !editionEvent.value.icon ||
+        !editionEvent.value.classification ||
+        !editionEvent.value.selectedReadings ||
         !editionEvent.value.valid
       );
     };
@@ -307,10 +307,7 @@ export default {
         } else {
           if (props.editMode) {
             axios
-              .patch(
-                "/special_editions/" + editionEvent.value.id,
-                buildFormData()
-              )
+              .patch("/feeds/" + editionEvent.value.id, buildFormData())
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
@@ -333,7 +330,7 @@ export default {
               });
           } else {
             axios
-              .post("/special_editions", buildFormData())
+              .post("/feeds", buildFormData())
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");

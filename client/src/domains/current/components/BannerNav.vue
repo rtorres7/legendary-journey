@@ -114,7 +114,7 @@
                 </MenuItem>
                 <MenuItem v-show="canManageSpecialEditions">
                   <router-link
-                    to="/special_editions"
+                    to="/feeds"
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
                   >
                     Manage Special Editions

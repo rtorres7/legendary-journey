@@ -250,7 +250,7 @@ export default {
     //       if (props.editMode) {
     //         axios
     //           .patch(
-    //             "/special_editions/" + editionEvent.value.id,
+    //             "/feeds/" + editionEvent.value.id,
     //             buildFormData()
     //           )
     //           .then((response) => {

@@ -225,7 +225,7 @@ export default {
         router.push({ name: "specialEditions" });
       } else {
         axios
-          .delete(`/special_editions/${specialEdition.value.id}`)
+          .delete(`/feeds/${specialEdition.value.id}`)
           .then(() => {
             router.push({ name: "specialEditions" });
             createNotification({

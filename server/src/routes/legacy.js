@@ -217,7 +217,7 @@ router.post("/documents/:id/record_print.js", (req, res) => {
   res.redirect(307, `/metrics/products/${req.params.id}/record-print`);
 });
 
-router.get("/special_editions/links", async (req, res) => {
+router.get("/feeds/links", async (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
@@ -232,23 +232,23 @@ router.get("/special_editions/links", async (req, res) => {
   res.json(feeds);
 });
 
-router.get("/special_editions/", async (req, res) => {
+router.get("/feeds/", async (req, res) => {
   res.redirect("/feeds/");
 });
 
-router.get("/special_editions/:id", async (req, res) => {
+router.get("/feeds/:id", async (req, res) => {
   res.redirect(`/feeds/${req.params.id}`);
 });
 
-router.post("/special_editions/", async (req, res) => {
+router.post("/feeds/", async (req, res) => {
   res.redirect("/feeds/");
 });
 
-router.put("/special_editions/:id", async (req, res) => {
+router.put("/feeds/:id", async (req, res) => {
   res.redirect(`/feeds/${req.params.id}`);
 });
 
-router.delete("/special_editions/", async (req, res) => {
+router.delete("/feeds/", async (req, res) => {
   res.redirect("/feeds/");
 });
 
