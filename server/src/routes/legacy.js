@@ -5,6 +5,7 @@ const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
 const SpecialEditions = require("../models/special_editions");
+const Feed = require("../models/feed");
 const DissemOrgs = require("../models/dissem_orgs");
 
 router.get(
@@ -70,17 +71,6 @@ router.get("/my_wire/user_data", function (req, res) {
  */
 
   res.redirect("/auth/profile");
-});
-
-router.get("/special_editions/links", async (req, res) => {
-  /*
-  #swagger.tags = ['Legacy']
-  #swagger.deprecated = true
-  #swagger.summary = 'DEPRECATED: Retrieve special editions.'
- */
-
-  const specialEditions = await SpecialEditions.findOne({}).exec();
-  res.json(specialEditions);
 });
 
 router.get("/documents/:doc_num", function (req, res) {
@@ -225,6 +215,41 @@ router.post("/documents/:id/record_print.js", (req, res) => {
   #swagger.summary = 'DEPRECATED: Increment a product print metric. Use POST /metrics/products/{id}/record-print'
   */
   res.redirect(307, `/metrics/products/${req.params.id}/record-print`);
+});
+
+router.get("/special_editions/links", async (req, res) => {
+  /*
+  #swagger.tags = ['Legacy']
+  #swagger.deprecated = true
+  #swagger.summary = 'DEPRECATED: Retrieve special editions.'
+ */
+
+  // const specialEditions = await SpecialEditions.findOne({}).exec();
+  // res.json(specialEditions);
+  // res.redirect("/feeds/links");
+  console.log("------------------made it to the correct route");
+  const feeds = await Feed.findOne({}).exec();
+  res.json(feeds);
+});
+
+router.get("/special_editions/", async (req, res) => {
+  res.redirect("/feeds/");
+});
+
+router.get("/special_editions/:id", async (req, res) => {
+  res.redirect(`/feeds/${req.params.id}`);
+});
+
+router.post("/special_editions/", async (req, res) => {
+  res.redirect("/feeds/");
+});
+
+router.put("/special_editions/:id", async (req, res) => {
+  res.redirect(`/feeds/${req.params.id}`);
+});
+
+router.delete("/special_editions/", async (req, res) => {
+  res.redirect("/feeds/");
 });
 
 module.exports = router;

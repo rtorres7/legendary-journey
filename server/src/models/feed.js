@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       searchParams: DataTypes.STRING,
       selectedReadings: DataTypes.ARRAY(DataTypes.STRING),
       state: DataTypes.STRING,
-      order: DataTypes.INTEGER,
+      position: DataTypes.INTEGER,
       classification: DataTypes.STRING,
     },
     {

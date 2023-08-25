@@ -17,10 +17,6 @@ class FeedsService {
     return feed;
   }
 
-  //// This method is likely unnecessary - we can just call the product service and not duplicate code here
-  // async findPageOfProductsForFeedForUser(){
-  // }
-
   async createFeed(feed) {
     let savedFeed;
     try {

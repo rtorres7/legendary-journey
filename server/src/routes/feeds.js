@@ -30,14 +30,43 @@ router.get("/special_editions", async (req, res) => {
     } catch (error) {
       KiwiStandardResponsesExpress.standardErrorResponse(
         500,
-        `Unable to find feeds: ${error.message}`,
+        `[findAllFeeds] Unable to find feeds: ${error.message}`,
         res,
       );
     }
   });
 });
 
-router.get("/special_editions/:id", async (req, res) => {
+router.get("/feeds/links", async (req, res) => {
+  /*
+    #swagger.summary = 'Get a list of links'
+    #swagger.tags = ['Feeds']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/Feed'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definition/StandardError'
+      }
+    }
+   */
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    try {
+      const feeds = await feedsService.findAllFeeds();
+      res.json(feeds);
+    } catch (error) {
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        `[findAllFeeds2] Unable to find feeds: ${error.message}`,
+        res,
+      );
+    }
+  });
+});
+
+router.get("/feeds/:id", async (req, res) => {
   /*
     #swagger.summary = 'Retrieves a Feed by a given id'
     #swagger.tags = ['Feeds']
@@ -62,14 +91,14 @@ router.get("/special_editions/:id", async (req, res) => {
     } catch (error) {
       KiwiStandardResponsesExpress.standardErrorResponse(
         500,
-        `Unable to find feeds: ${error.message}`,
+        `[findFeedById] Unable to find feeds: ${error.message}`,
         res,
       );
     }
   });
 });
 
-router.post("/special_editions/", async (req, res) => {
+router.post("/feeds/", async (req, res) => {
   /*
     #swagger.summary = 'Creates a Feed.'
     #swagger.tags = ['Feeds']
@@ -110,7 +139,7 @@ router.post("/special_editions/", async (req, res) => {
   });
 });
 
-router.put("/special_editions/:id", async (req, res) => {
+router.put("/feeds/:id", async (req, res) => {
   /*
     #swagger.summary = 'Updates a Feed.'
     #swagger.tags = ['Feeds']
@@ -138,7 +167,7 @@ router.put("/special_editions/:id", async (req, res) => {
   res.json(updatedFeed);
 });
 
-router.delete("/special_editions/:id", async (req, res) => {
+router.delete("/feeds/:id", async (req, res) => {
   /*
     #swagger.summary = 'Deletes a Feed.'
     #swagger.tags = ['Feeds']
