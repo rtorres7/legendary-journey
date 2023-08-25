@@ -125,7 +125,7 @@ const currentRoutes = [
     },
   },
   {
-    path: "/special_editions",
+    path: "/feeds",
     name: "specialEditions",
     component: CurrentSpecialEditionsManagerView,
     meta: {

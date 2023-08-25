@@ -7,7 +7,7 @@ const Feed = require("../models/feed");
 const FeedsService = require("../services/feeds-service");
 const feedsService = new FeedsService();
 
-router.get("/special_editions", async (req, res) => {
+router.get("/feeds", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve all Feeds (SEs) that currently exist.'
     #swagger.tags = ['Feeds']

@@ -56,13 +56,13 @@ describe("Feeds Routes", () => {
     delete process.env.THROW_TEST_ERROR;
   });
 
-  describe("GET /special_editions", () => {
+  describe("GET /feeds", () => {
     it("should return all feeds", () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .get("/special_editions")
+        .get("/feeds")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -89,7 +89,7 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("POST /special_editions", () => {
+  describe("POST /feeds", () => {
     it("should create a feed", () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
@@ -102,7 +102,7 @@ describe("Feeds Routes", () => {
       };
 
       return request(app)
-        .post("/special_editions")
+        .post("/feeds")
         .send(newFeed)
         .expect(200)
         .expect("Content-Type", /json/)

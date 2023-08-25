@@ -264,7 +264,7 @@ export default {
     //           });
     //       } else {
     //         axios
-    //           .post("/special_editions", buildFormData())
+    //           .post("/feeds", buildFormData())
     //           .then((response) => {
     //             console.log(response);
     //             store.dispatch("specialEditions/loadConceptsLinks");

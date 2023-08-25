@@ -589,7 +589,7 @@
                   </li>
                   <li v-show="canManageSpecialEditions">
                     <router-link
-                      to="/special_editions"
+                      to="/feeds"
                       class="hover:text-black dark:hover:text-white energy:hover:text-white"
                       @click="closeUserMenuModal"
                     >

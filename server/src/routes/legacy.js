@@ -4,8 +4,6 @@ const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
-const SpecialEditions = require("../models/special_editions");
-const Feed = require("../models/feed");
 const DissemOrgs = require("../models/dissem_orgs");
 
 router.get(
@@ -217,7 +215,7 @@ router.post("/documents/:id/record_print.js", (req, res) => {
   res.redirect(307, `/metrics/products/${req.params.id}/record-print`);
 });
 
-router.get("/feeds/links", async (req, res) => {
+router.get("/special_editions/links", async (req, res) => {
   /*
   #swagger.tags = ['Legacy']
   #swagger.deprecated = true
@@ -226,29 +224,26 @@ router.get("/feeds/links", async (req, res) => {
 
   // const specialEditions = await SpecialEditions.findOne({}).exec();
   // res.json(specialEditions);
-  // res.redirect("/feeds/links");
-  console.log("------------------made it to the correct route");
-  const feeds = await Feed.findOne({}).exec();
-  res.json(feeds);
+  res.redirect("/feeds/links");
 });
 
-router.get("/feeds/", async (req, res) => {
+router.get("/special_editions/", async (req, res) => {
   res.redirect("/feeds/");
 });
 
-router.get("/feeds/:id", async (req, res) => {
+router.get("/special_editions/:id", async (req, res) => {
   res.redirect(`/feeds/${req.params.id}`);
 });
 
-router.post("/feeds/", async (req, res) => {
+router.post("/special_editions/", async (req, res) => {
   res.redirect("/feeds/");
 });
 
-router.put("/feeds/:id", async (req, res) => {
+router.put("/special_editions/:id", async (req, res) => {
   res.redirect(`/feeds/${req.params.id}`);
 });
 
-router.delete("/feeds/", async (req, res) => {
+router.delete("/special_editions/", async (req, res) => {
   res.redirect("/feeds/");
 });
 
