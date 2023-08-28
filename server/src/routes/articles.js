@@ -90,7 +90,10 @@ router.get("/articles/:productNumber", async (req, res) => {
       );
 
       if (article === null) {
-        KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with product number ${req.params.productNumber}`, res);
+        KiwiStandardResponsesExpress.standardNotFoundResponse(
+          `Unable to find product with product number ${req.params.productNumber}`,
+          res,
+        );
         return;
       }
 
@@ -141,7 +144,10 @@ router.get("/articles/:productNumber/preload", async (req, res) => {
       );
 
       if (article === null) {
-        KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with product number ${req.params.productNumber}`, res);
+        KiwiStandardResponsesExpress.standardNotFoundResponse(
+          `Unable to find product with product number ${req.params.productNumber}`,
+          res,
+        );
         return;
       }
 
@@ -244,7 +250,7 @@ router.post("/articles/", async (req, res) => {
           lastName: currentUser.lastName,
           dn: currentUser.dn,
         },
-        datePublished: req.body.date_published || dayjs().format("YYYY-MM-DD"),
+        datePublished: dayjs().toDate(),
         htmlBody: req.body.html_body,
         issues: issues,
         needed: {},
@@ -298,7 +304,10 @@ router.get("/articles/:id/edit", async (req, res) => {
     const product = await productService.findById(req.params.id);
 
     if (product === null) {
-      KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with id ${req.params.id}`, res);
+      KiwiStandardResponsesExpress.standardNotFoundResponse(
+        `Unable to find product with id ${req.params.id}`,
+        res,
+      );
       return;
     }
 
@@ -327,7 +336,10 @@ router.get("/articles/:id/view", async (req, res) => {
       const product = await productService.findById(req.params.id);
 
       if (product === null) {
-        KiwiStandardResponsesExpress.standardNotFoundResponse(`Unable to find product with id ${req.params.id}`, res);
+        KiwiStandardResponsesExpress.standardNotFoundResponse(
+          `Unable to find product with id ${req.params.id}`,
+          res,
+        );
         return;
       }
 
@@ -384,7 +396,7 @@ async function publishProduct(id, user, productData, req, res) {
     dn: user.dn,
   };
   productData.state = "posted";
-  productData.datePublished = productData.datePublished || dayjs().format("YYYY-MM-DD");
+  productData.datePublished = dayjs().toDate();
 
   await updateProduct(id, productData, req, res);
 }
@@ -404,18 +416,42 @@ async function buildUpdate(id, productDataFromRequest, user) {
   KiwiPreconditions.checkArgumentDefined(productDataFromRequest);
   KiwiPreconditions.checkArgumentDefined(user);
 
-  const countries = await metadataService.findCountriesFor(productDataFromRequest.countries);
-  const subregions = await metadataService.findSubRegionsForCountries(productDataFromRequest.countries);
-  const regions = await metadataService.findRegionsForSubRegions(subregions.map((subregion) => subregion.code));
-  const topics = await metadataService.findTopicsFor(productDataFromRequest.topics);
-  const issues = await metadataService.findIssuesForTopics(productDataFromRequest.topics);
-  const producingOffices = await metadataService.findProducingOfficesFor(productDataFromRequest.producing_offices);
-  const coauthors = await metadataService.findCoauthorsFor(productDataFromRequest.coauthors);
-  const coordinators = await metadataService.findCoordinatorsFor(productDataFromRequest.coordinators);
-  const dissemOrgs = await metadataService.findDissemOrgsFor(productDataFromRequest.dissem_orgs);
-  const productType = await metadataService.findProductType(productDataFromRequest.product_type_id);
-  const reportingType = await metadataService.findReportingTypeFor(productDataFromRequest.product_type_id);
-  const nonStateActors = await metadataService.findNonStateActorsFor(productDataFromRequest.non_state_actors);
+  const countries = await metadataService.findCountriesFor(
+    productDataFromRequest.countries,
+  );
+  const subregions = await metadataService.findSubRegionsForCountries(
+    productDataFromRequest.countries,
+  );
+  const regions = await metadataService.findRegionsForSubRegions(
+    subregions.map((subregion) => subregion.code),
+  );
+  const topics = await metadataService.findTopicsFor(
+    productDataFromRequest.topics,
+  );
+  const issues = await metadataService.findIssuesForTopics(
+    productDataFromRequest.topics,
+  );
+  const producingOffices = await metadataService.findProducingOfficesFor(
+    productDataFromRequest.producing_offices,
+  );
+  const coauthors = await metadataService.findCoauthorsFor(
+    productDataFromRequest.coauthors,
+  );
+  const coordinators = await metadataService.findCoordinatorsFor(
+    productDataFromRequest.coordinators,
+  );
+  const dissemOrgs = await metadataService.findDissemOrgsFor(
+    productDataFromRequest.dissem_orgs,
+  );
+  const productType = await metadataService.findProductType(
+    productDataFromRequest.product_type_id,
+  );
+  const reportingType = await metadataService.findReportingTypeFor(
+    productDataFromRequest.product_type_id,
+  );
+  const nonStateActors = await metadataService.findNonStateActorsFor(
+    productDataFromRequest.non_state_actors,
+  );
 
   return {
     classification: productDataFromRequest.classification,
@@ -424,12 +460,15 @@ async function buildUpdate(id, productDataFromRequest, user) {
     coordinators: coordinators.map(({ name, code }) => ({ name, code })),
     countries: countries.map(({ name, code }) => ({ name, code })),
     nonStateActors: nonStateActors.map(({ name, code }) => ({ name, code })),
-    datePublished: dayjs(productDataFromRequest.date_published).format("YYYY-MM-DD"),
+    datePublished: dayjs(productDataFromRequest.date_published).toDate(),
     dissemOrgs: dissemOrgs.map(({ name, code }) => ({ name, code })),
     htmlBody: productDataFromRequest.html_body,
     issues: issues,
     pocInfo: productDataFromRequest.poc_info,
-    producingOffices: producingOffices.map(({ name, code }) => ({ name, code })),
+    producingOffices: producingOffices.map(({ name, code }) => ({
+      name,
+      code,
+    })),
     productNumber: productDataFromRequest.doc_num,
     productType: productType,
     publicationNumber: productDataFromRequest.publication_number,
@@ -462,7 +501,7 @@ async function updateProduct(id, productData, req, res) {
     res.json({
       success: true,
       article: updatedProduct.data.document,
-      date: dayjs(updatedProduct.datePublished).format("YYYY-MM-DD"),
+      date: dayjs(updatedProduct.datePublished).toDate(),
       doc_num: updatedProduct.productNumber,
       id: updatedProduct._id,
       state: updatedProduct.state,
@@ -617,7 +656,10 @@ router.delete(
 
         await objectStoreService.removeObject(bucket, objectName);
 
-        await searchService.removeIndexedAttachment(product.id, att.attachmentId);
+        await searchService.removeIndexedAttachment(
+          product.id,
+          att.attachmentId,
+        );
       }
 
       res.json({ success: true });
