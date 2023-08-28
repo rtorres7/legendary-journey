@@ -2994,6 +2994,17 @@ const loadFeeds = async (postgresUrl) => {
     state: "Draft",
     classification: "U",
   });
+
+};
+
+const clearFeeds = async (postgresUrl) => {
+  const sequelize = new Sequelize(postgresUrl);
+  const feedsModel = require("../../src/models/feed");
+  feedsModel(sequelize);
+
+  await sequelize.models.Feed.destroy({
+    truncate: true
+  });
 };
 
 const loadSavedProducts = async (postgresUrl) => {
@@ -3094,6 +3105,7 @@ module.exports = {
   loadMetadata,
   loadArticlesIntoMongo,
   loadFeeds,
+  clearFeeds,
   loadSavedProducts,
   loadCollections,
   loadCollectionProducts,

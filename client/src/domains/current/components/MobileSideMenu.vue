@@ -336,7 +336,7 @@
 </template>
 
 <script>
-import { getValueForCode } from "@current/helpers";
+import { getValueForCode } from "@/shared/helpers";
 import { computed, inject, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";

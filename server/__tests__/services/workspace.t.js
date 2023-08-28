@@ -32,7 +32,6 @@ describe('Workspace Service', () => {
   beforeAll(async () => {
     await PostgresExtension.setupNewDatabase("workspace");
     const postgresUri = PostgresExtension.getPostgresUriWithDb("workspace");
-
     process.env.POSTGRES_CONNECTION_URL = postgresUri;
 
     // Load Saved Products
@@ -44,6 +43,10 @@ describe('Workspace Service', () => {
   beforeEach(() => {
     const WorkspaceService = require("../../src/services/workspace");
     service = new WorkspaceService();
+  });
+
+  afterAll(async () => {
+    await PostgresExtension.dropDatabase("workspace");
   });
 
   describe('findPageOfSavedProductsForUser', () => {

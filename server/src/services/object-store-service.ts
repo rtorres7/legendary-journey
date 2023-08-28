@@ -73,7 +73,7 @@ export class ObjectStoreService {
 
   /** Minio.Client.listObjects(bucketName: string, prefix?: string, recursive?: boolean): BucketStream<BucketItem> */
   async listObjects(bucketName: string): Promise<BucketItem[]> {
-    const bucketStream = this.getClient().listObjects(bucketName); // BucketStream<BucketItem>
+    const bucketStream = this.getClient().listObjects(bucketName, '', true); // BucketStream<BucketItem>
     // .catch((error) => logger.error("ObjectStoreService.listObjects:", error));
     return new Promise((resolve, reject) => {
       const data = [];

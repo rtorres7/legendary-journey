@@ -5,7 +5,10 @@
         v-show="!smartRender"
         id="image-blur"
         class="h-full w-full absolute blur-lg opacity-60 bg-center bg-no-repeat bg-cover"
-        :style="{ background: 'url(' + getProductImageUrl(product.images, product.doc_num) + ')' }"
+        :style="{
+          background:
+            'url(' + getProductImageUrl(product.images, product.doc_num) + ')',
+        }"
       ></div>
       <img
         id="product-img"
@@ -30,7 +33,7 @@
   </div>
 </template>
 <script>
-import { hasProductImage, getProductImageUrl } from "@current/helpers";
+import { hasProductImage, getProductImageUrl } from "@/shared/helpers";
 
 export default {
   props: {
@@ -45,7 +48,6 @@ export default {
   },
   emits: ["imageLoaded", "imageNotFound"],
   setup(props, { emit }) {
-
     const onImgLoad = () => {
       if (props.smartRender) {
         const articleImgWidth =

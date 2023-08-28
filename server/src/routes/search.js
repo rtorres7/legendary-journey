@@ -6,6 +6,8 @@ const {runAsUser} = require('../util/request');
 const searchService = new ProductSearchService(process.env.ES_URL);
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { logger } = require("../config/logger");
 
 router.get('/search', async (req, res) => {
   /*
@@ -35,13 +37,19 @@ router.get('/search', async (req, res) => {
  */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const term = req.query.text;
-    const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir, req.query);
+    try {
+      const term = req.query.text;
+      const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir, req.query);
 
-    for (let product of results.results) {
-      await augmentProductWithSaved(product, currentUser.id, product.id);
+      for (let product of results.results) {
+        await augmentProductWithSaved(product, currentUser.id, product.id);
+      }
+      res.json(results);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
     }
-    res.json(results);
   });
 });
 
@@ -59,9 +67,14 @@ router.get('/relatedSearch/:id', async (req, res) => {
       }
     }
  */
-
-  const results = await searchService.relatedSearch(req.params.id);
-  res.json(results);
+  try {
+    const results = await searchService.relatedSearch(req.params.id);
+    res.json(results);
+  } catch (error) {
+    logger.error(error);
+    const errorDetails = `${error.message}`;
+    KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+  }
 });
 
 async function augmentProductWithSaved(productData, currentUserId, productId) {

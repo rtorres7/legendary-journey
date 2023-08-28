@@ -23,6 +23,10 @@ describe('MetadataService', () => {
     service.clearCache();
   });
 
+  afterAll(async () => {
+    await MongoExtension.dropDatabase("metadata");
+  });
+
   describe('findTopicsFor', () => {
     it('should return list of topics that match a single code', async () => {
       const result = await service.findTopicsFor(['ACR']);

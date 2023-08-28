@@ -95,6 +95,18 @@ export default {
               id: route.params.id,
             }
           )
+          .catch((error) => {
+            if (error.response.status === 404) {
+              router.push({ name: "notFound" });
+            } else {
+              createNotification({
+                title: "Error",
+                message: "There was an error retrieving the product data.",
+                type: "error",
+                autoClose: false,
+              });
+            }
+          })
           .then((response) => {
             loadingProduct.value = false;
             if (response.data) {

@@ -6,7 +6,6 @@ const {
   KiwiSort,
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
-const { handleMongooseError } = require("../util/errors");
 const { AttachmentService } = require("./attachment-service");
 
 class ProductService {
@@ -88,12 +87,17 @@ class ProductService {
   }
 
   async findFeaturesAndBriefs() {
-    const featuredProducts = await Article.find({ state: "posted", deleted: false })
+    const featuredProducts = await Article.find({
+      state: "posted",
+      deleted: false,
+      "productType.code": 10376,
+    })
       .sort({ _id: -1 })
       .exec();
     const briefProducts = await Article.find({
+      state: "posted",
       deleted: false,
-      "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
+      "productType.code": { $in: [10377, 10379, 10380, 10382, 10383, 10384, 10385, 10386] },
     })
       .sort({ datePublished: -1 })
       .limit(3)
@@ -272,9 +276,7 @@ class ProductService {
           this.productSearchService.create(product.indexable);
         });
       } catch (error) {
-        handleMongooseError(
-          "There was a problem initializing product seed data",
-        );
+        console.log("There was a problem initializing product seed data", error);
       }
     }
   }

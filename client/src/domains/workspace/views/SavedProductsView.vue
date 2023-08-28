@@ -230,7 +230,7 @@ export default {
       } else {
         removingProduct.value = true;
         axios
-          .delete("/workspace/saved/" + product.productId)
+          .delete("/workspace/saved/" + product.id)
           .then((response) => {
             if (response.data.error) {
               removingProduct.value = false;

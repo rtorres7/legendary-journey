@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { isProduction } from "@current/helpers";
+import { isProduction } from "@/shared/helpers";
 
 // Demo
 import MockWorkspaceView from "@/domains/demo/views/MockWorkspaceView.vue";

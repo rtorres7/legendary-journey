@@ -439,6 +439,8 @@
                   ? 'This product has restricted access.'
                   : ''
               "
+              @mouseover="triggerHover(item, 'mouseover')"
+              @mouseleave="triggerHover(item, 'mouseleave')"
             >
               <div class="h-fit px-2 text-center">
                 <span class="block font-semibold">{{
@@ -492,23 +494,81 @@
                     <span class="line-clamp-5">{{ item.summary }}</span>
                   </template>
                 </div>
-                <button
+                <div
                   v-if="environment != 'production' && !isProductLocked(item)"
-                  class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0"
-                  :aria-label="`save product ${item.productNumber}`"
-                  @click.prevent="save(item)"
+                  :class="[
+                    hover && hoveredItem == item.doc_num
+                      ? 'not-sr-only'
+                      : 'sr-only',
+                    'absolute -mt-4 -mr-4 top-0 right-0 cursor-pointer',
+                  ]"
                 >
-                  <template v-if="isSavedProduct(item)">
-                    <tippy content="Saved" placement="bottom">
-                      <BookmarkIconSolid aria-hidden="true" class="h-5 w-5" />
-                    </tippy>
-                  </template>
-                  <template v-else>
-                    <tippy content="Save" placement="bottom">
-                      <BookmarkIcon aria-hidden="true" class="h-5 w-5" />
-                    </tippy>
-                  </template>
-                </button>
+                  <Menu v-slot="{ open, close }" as="div" class="relative z-10">
+                    <div>
+                      <template v-if="open">
+                        <MenuButton
+                          class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                          @click.prevent
+                        >
+                          <span class="sr-only">More Options</span>
+                          <EllipsisVerticalIcon
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        </MenuButton>
+                      </template>
+                      <template v-else>
+                        <tippy content="More" placement="bottom">
+                          <MenuButton
+                            class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                          >
+                            <span class="sr-only">More Options</span>
+                            <EllipsisVerticalIcon
+                              class="h-6 w-6"
+                              aria-hidden="true"
+                            />
+                          </MenuButton>
+                        </tippy>
+                      </template>
+                    </div>
+                    <transition
+                      enterActiveClass="transition ease-out duration-100"
+                      enterFromClass="transform opacity-0 scale-95"
+                      enterToClass="transform opacity-100 scale-100"
+                      leaveActiveClass="transition ease-in duration-75"
+                      leaveFromClass="transform opacity-100 scale-100"
+                      leaveToClass="transform opacity-0 scale-95"
+                    >
+                      <MenuItems
+                        class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm bg-white dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b dark:border-slate-700/50 energy:border-zinc-700/50"
+                      >
+                        <MenuItem>
+                          <div
+                            class="py-2 px-3 flex items-center space-x-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
+                            @click.prevent="
+                              save(item);
+                              close();
+                            "
+                          >
+                            <template v-if="isSavedProduct(item)">
+                              <BookmarkIconSolid
+                                aria-hidden="true"
+                                class="h-5 w-5"
+                              />
+                              <span class="capitalize">Saved</span>
+                            </template>
+                            <template v-else>
+                              <BookmarkIcon
+                                class="h-5 w-5"
+                                aria-hidden="true"
+                              /><span class="capitalize">Save</span>
+                            </template>
+                          </div>
+                        </MenuItem>
+                      </MenuItems>
+                    </transition>
+                  </Menu>
+                </div>
               </div>
             </div>
           </template>
@@ -638,7 +698,7 @@ import {
   getValueForName,
   formatDate,
   isSavedProduct,
-} from "@current/helpers";
+} from "@/shared/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
@@ -652,6 +712,10 @@ import {
   ListboxButton,
   ListboxOptions,
   ListboxOption,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
@@ -660,6 +724,7 @@ import {
   CalendarIcon,
   ChevronUpIcon,
   ChevronUpDownIcon,
+  EllipsisVerticalIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
@@ -697,6 +762,10 @@ export default {
     ListboxButton,
     ListboxOptions,
     ListboxOption,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
     TransitionChild,
     TransitionRoot,
     BookmarkIcon,
@@ -704,6 +773,7 @@ export default {
     CalendarIcon,
     ChevronUpIcon,
     ChevronUpDownIcon,
+    EllipsisVerticalIcon,
     XMarkIcon,
     MaxAppListbox,
     PublishedProductCard,
@@ -724,6 +794,16 @@ export default {
     const offlineMode = import.meta.env.MODE === "offline";
     const environment = ref(import.meta.env.MODE);
     const { save, savingProduct, removingProduct } = updateSavedStatus();
+    const hover = ref(false);
+    const hoveredItem = ref();
+    const triggerHover = (item, event) => {
+      hoveredItem.value = item.doc_num;
+      if (event == "mouseover") {
+        hover.value = true;
+      } else if (event == "mouseleave") {
+        hover.value = false;
+      }
+    };
 
     const getSubregionNameForCountryCode = (code) => {
       return criteria.value.subregions.find((subregion) => {
@@ -1537,6 +1617,9 @@ export default {
       save,
       savingProduct,
       removingProduct,
+      hover,
+      hoveredItem,
+      triggerHover,
     };
   },
 };

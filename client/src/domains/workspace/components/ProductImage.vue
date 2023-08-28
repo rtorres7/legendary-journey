@@ -29,7 +29,7 @@
   </template>
 </template>
 <script>
-import { hasProductImage, getProductImageUrl } from "@current/helpers";
+import { hasProductImage, getProductImageUrl } from "@/shared/helpers";
 
 export default {
   props: {

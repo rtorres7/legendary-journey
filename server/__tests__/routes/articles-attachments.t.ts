@@ -9,8 +9,9 @@ import { MinioContainerUtils } from "../__utils__/containerUtils";
 import { articles, metadata } from "../__utils__/dataLoader";
 import { setupAppWithUser } from "../__utils__/expressUtils";
 import { AttachmentService } from "../../src/services/attachment-service";
-import { FileUploadedObjectInfo } from "../../src/services/object-store-service";
+import { FileUploadedObjectInfo, ObjectStoreService } from "../../src/services/object-store-service";
 import { MinioExtension } from "@kiwiproject/kiwi-test-js";
+import { BucketItem, Client } from "minio";
 
 jest.mock("../../src/services/product-service.js", () => {
   return jest.fn().mockImplementation(() => {
@@ -85,8 +86,25 @@ jest.mock("../../src/services/metadata.js", () => {
 const USER = { id: 1, firstName: "First", lastName: "Last", dn: "O=org,OU=orgunit,CN=commonname" };
 
 describe("Article Attachment Routes", () => {
-  beforeAll(() => {
+  let service: ObjectStoreService;
+  let client: Client;
+
+  beforeAll(async () => {
     MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
+    service = new ObjectStoreService();
+    client = service.getClient();
+  });
+
+  beforeEach(async () => {
+    await client.makeBucket("attachments");
+  });
+
+  afterEach(async () => {
+    const objects: Array<BucketItem> = await service.listObjects("attachments");
+    for(const obj of objects) {
+      await service.removeObject("attachments", `${obj.name}`);
+    }
+    await service.removeBucket("attachments");
   });
 
   describe("Attachments", () => {
@@ -148,26 +166,26 @@ describe("Article Attachment Routes", () => {
             logger.info("res.body:j", res.body);
           });
       });
-    });
 
-    it("should add attachment to metadata", async () => {
-      const product = articles[0];
-      const uploadInfo: FileUploadedObjectInfo = {
-        fieldname: "file",
-        originalname: "article.jpg",
-        encoding: "7bit",
-        mimetype: "image/jpeg",
-        etag: "180b9159a3d82185c1b16a7049757420",
-        versionId: null,
-        storage: "minio",
-        bucketName: "attachments",
-        objectName: "f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1",
-        size: 58251,
-        visible: true,
-        attachmentId: "8abcefbe-d7bb-4c14-a385-3ca31620f4d1",
-      };
-      const attachmentService = new AttachmentService();
-      return await attachmentService.add(product, uploadInfo);
+      it("should add attachment to metadata", async () => {
+        const product = articles[0];
+        const uploadInfo: FileUploadedObjectInfo = {
+          fieldname: "file",
+          originalname: "article.jpg",
+          encoding: "7bit",
+          mimetype: "image/jpeg",
+          etag: "180b9159a3d82185c1b16a7049757420",
+          versionId: null,
+          storage: "minio",
+          bucketName: "attachments",
+          objectName: "f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1",
+          size: 58251,
+          visible: true,
+          attachmentId: "8abcefbe-d7bb-4c14-a385-3ca31620f4d1",
+        };
+        const attachmentService = new AttachmentService();
+        return await attachmentService.add(product, uploadInfo);
+      });
     });
   });
 });
