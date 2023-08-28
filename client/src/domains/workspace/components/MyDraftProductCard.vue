@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8"
+    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[500px] p-8"
   >
     <div
       v-if="loading"
@@ -129,7 +129,6 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   EllipsisVerticalIcon,
   PencilSquareIcon,
-  ShareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
 import dayjs from "dayjs";
@@ -144,7 +143,6 @@ export default {
     MenuItems,
     EllipsisVerticalIcon,
     PencilSquareIcon,
-    ShareIcon,
     TrashIcon,
     ProductIcon,
   },
