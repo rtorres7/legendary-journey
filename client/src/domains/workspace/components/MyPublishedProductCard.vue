@@ -95,7 +95,7 @@
                         </div>
                       </MenuItem>
                     </template>
-                    <template v-if="type === 'product'">
+                    <template v-if="type === 'product' && canManageWire">
                       <MenuItem v-if="product.featureId">
                         <router-link
                           :to="{
@@ -196,7 +196,8 @@
   </div>
 </template>
 <script>
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
+import { useStore } from "vuex";
 import axios from "@/shared/config/wireAxios";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import Overlay from "./Overlay.vue";
@@ -249,6 +250,8 @@ export default {
   },
   emits: ["delete", "remove"],
   setup(props, { emit }) {
+    const store = useStore();
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const environment = ref(import.meta.env.MODE);
     const createNotification = inject("create-notification");
     const getImg = (src) => {
@@ -301,6 +304,7 @@ export default {
       }
     };
     return {
+      canManageWire,
       environment,
       getImg,
       shareProduct,
