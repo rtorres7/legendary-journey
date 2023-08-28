@@ -33,26 +33,15 @@
     <template v-else>
       <div
         v-if="environment !== 'production'"
-        :class="[
-          hover ? 'not-sr-only' : 'sr-only',
-          'absolute top-0 right-0 cursor-pointer',
-        ]"
+        class="absolute top-0 right-0 cursor-pointer"
       >
         <Menu v-slot="{ open, close }" as="div" class="relative z-10">
           <div>
-            <template v-if="open">
-              <MenuButton
-                class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                @click.prevent
-              >
-                <span class="sr-only">More Options</span>
-                <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
-              </MenuButton>
-            </template>
-            <template v-else>
+            <template v-if="open || hover">
               <tippy content="More" placement="bottom">
                 <MenuButton
                   class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  @click.prevent
                 >
                   <span class="sr-only">More Options</span>
                   <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
