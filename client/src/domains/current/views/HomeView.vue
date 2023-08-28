@@ -47,9 +47,7 @@
                   <template v-if="briefs.length > 0">
                     <template v-for="item in briefs" :key="item">
                       <div class="w-full h-40">
-                        <ProductRestrictedLink :product="item">
-                          <SituationalAwarenessCard :sitrep="item" />
-                        </ProductRestrictedLink>
+                        <SituationalAwarenessCard :sitrep="item" />
                       </div>
                     </template>
                   </template>
@@ -85,9 +83,7 @@
               <template v-else>
                 <Slide v-for="item in briefs" :key="item">
                   <div class="w-full h-36 text-left mr-4">
-                    <ProductRestrictedLink :product="item">
-                      <SituationalAwarenessCard :sitrep="item" />
-                    </ProductRestrictedLink>
+                    <SituationalAwarenessCard :sitrep="item" />
                   </div>
                 </Slide>
               </template>
@@ -113,12 +109,10 @@
           </template>
           <template v-else>
             <template v-if="features.length > 0">
-              <ProductRestrictedLink :product="features[0].attributes">
-                <PublishedProductCard
-                  :product="features[0].attributes"
-                  headline
-                />
-              </ProductRestrictedLink>
+              <PublishedProductCard
+                :product="features[0].attributes"
+                headline
+              />
             </template>
             <template v-else>
               <div class="text-sm italic">
@@ -150,9 +144,7 @@
           <template v-else>
             <template v-for="article in features.slice(1, 3)" :key="article">
               <div class="w-full h-[288px] md:max-w-[575px]">
-                <ProductRestrictedLink :product="article.attributes">
-                  <PublishedProductCard :product="article.attributes" />
-                </ProductRestrictedLink>
+                <PublishedProductCard :product="article.attributes" />
               </div>
             </template>
           </template>
@@ -178,9 +170,7 @@
         <template v-if="features.length > 3">
           <template v-for="article in features.slice(3, 15)" :key="article">
             <div class="w-full h-[288px] md:max-w-[575px]">
-              <ProductRestrictedLink :product="article.attributes">
-                <PublishedProductCard :product="article.attributes" />
-              </ProductRestrictedLink>
+              <PublishedProductCard :product="article.attributes" />
             </div>
           </template>
         </template>
@@ -199,7 +189,6 @@ import dayjs from "dayjs/esm/index.js";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import ProductRestrictedLink from "@current/components/ProductRestrictedLink.vue";
 import PublishedProductCard from "@current/components/PublishedProductCard.vue";
 import SituationalAwarenessCard from "@current/components/SituationalAwarenessCard.vue";
 
@@ -220,7 +209,6 @@ export default {
     Carousel,
     Slide,
     Navigation,
-    ProductRestrictedLink,
     PublishedProductCard,
     SituationalAwarenessCard,
   },
