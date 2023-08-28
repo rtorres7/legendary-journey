@@ -155,12 +155,9 @@
                 </transition>
               </Menu>
             </div>
-            <router-link
+            <ProductRestrictedLink
               class="hover:underline cursor-pointer"
-              :to="{
-                name: product.state === 'draft' ? 'product-preview' : 'product',
-                params: { doc_num: product.productNumber },
-              }"
+              :product="product"
               target="_blank"
             >
               <div class="text-xs text-blue-700 font-medium pb-2">
@@ -175,14 +172,12 @@
                 >
                 {{ product.title }}
               </p>
-            </router-link>
+            </ProductRestrictedLink>
           </div>
-          <router-link
+          <ProductRestrictedLink
             class="hover:underline cursor-pointer absolute bottom-0"
-            :to="{
-              name: product.state === 'draft' ? 'product-preview' : 'product',
-              params: { doc_num: product.productNumber },
-            }"
+            :product="product"
+            target="_blank"
           >
             <div class="px-4 text-sm text-gray-500 pb-4">
               <div class="flex space-x-2">
@@ -201,7 +196,7 @@
                 </template>
               </div>
             </div>
-          </router-link>
+          </ProductRestrictedLink>
         </div>
       </template>
     </div>
@@ -221,6 +216,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
+import ProductRestrictedLink from "@workspace/components/ProductRestrictedLink.vue";
 import ProductImage from "@workspace/components/ProductImage.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -238,6 +234,7 @@ export default {
     PencilSquareIcon,
     TrashIcon,
     XMarkIcon,
+    ProductRestrictedLink,
     ProductImage,
   },
   props: {
