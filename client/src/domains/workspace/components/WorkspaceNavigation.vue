@@ -665,6 +665,7 @@ export default {
           name: "search",
           query: {
             text: item.text,
+            per_page: 10,
           },
         });
         window.open(route.href, "_blank");
@@ -675,42 +676,14 @@ export default {
         text: e.target.value,
         type: "user",
       });
-      if (
-        localStorage.getItem("lastSort") === "asc" ||
-        localStorage.getItem("lastSort") === "desc"
-      ) {
-        const route = router.resolve({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-            sort_dir: localStorage.getItem("lastSort"),
-          },
-        });
-        console.log("sort_dir", route.href);
-        console.log(router);
-        window.open(route.href, "_blank");
-      } else if (localStorage.getItem("lastSort") === "score") {
-        const route = router.resolve({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-            sort_field: localStorage.getItem("lastSort"),
-          },
-        });
-        console.log("score", route);
-        window.open(route.href, "_blank");
-      } else {
-        const route = router.resolve({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-          },
-        });
-        window.open(route.href, "_blank");
-      }
+      const route = router.resolve({
+        name: "search",
+        query: {
+          text: e.target.value,
+          per_page: 10,
+        },
+      });
+      window.open(route.href, "_blank");
     };
     const isAboutDialogOpen = ref(false);
     const closeAboutDialog = () => {
