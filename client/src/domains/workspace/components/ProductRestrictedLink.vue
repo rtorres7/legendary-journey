@@ -3,18 +3,13 @@
     v-if="!isProductLocked(product)"
     :to="{
       name: product.state === 'draft' ? 'product-preview' : 'product',
-      params: { doc_num: product.doc_num },
+      params: { doc_num: product.productNumber },
     }"
-    class="h-full"
+    v-bind="$attrs"
   >
     <slot />
   </router-link>
-  <a
-    v-else
-    tabindex="0"
-    class="hover:underline cursor-pointer h-full"
-    @click="openDialog()"
-  >
+  <a v-else tabindex="0" v-bind="$attrs" @click="openDialog()">
     <slot />
   </a>
   <MaxDialog class="max-w-[600px]" :isOpen="isDialogOpen" @close="closeDialog">
