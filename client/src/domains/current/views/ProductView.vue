@@ -194,7 +194,7 @@
 
 <script>
 import dayjs from "dayjs/esm/index.js";
-import { formatDate, hasProductAccess, isSavedProduct } from "@current/helpers";
+import { formatDate, hasProductAccess, isSavedProduct } from "@/shared/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";

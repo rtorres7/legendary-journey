@@ -698,7 +698,7 @@ import {
   getValueForName,
   formatDate,
   isSavedProduct,
-} from "@current/helpers";
+} from "@/shared/helpers";
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";

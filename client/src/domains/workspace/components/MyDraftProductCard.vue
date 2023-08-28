@@ -124,7 +124,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import { getRelativeTime } from "@current/helpers";
+import { getRelativeTime } from "@/shared/helpers";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   EllipsisVerticalIcon,

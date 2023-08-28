@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { isProductLocked, formatDate, isSavedProduct } from "@current/helpers";
+import { isProductLocked, formatDate, isSavedProduct } from "@/shared/helpers";
 import { BookmarkIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import updateSavedStatus from "@current/composables/updateSavedStatus";
