@@ -28,7 +28,13 @@
         >
           <ProductImage :product="product" />
         </router-link>
-        <div class="flex flex-col py-6 justify-between">
+        <div class="flex flex-col py-6 justify-between relative">
+          <div class="absolute w-full justify-center pt-6">
+            <MaxProductIcon
+              class="w-16 h-16 m-auto text-slate-500/20"
+              icon="locked"
+            />
+          </div>
           <div class="relative pb-6 px-4">
             <div
               class="text-gray-500 hover:text-gray-900 absolute top-0 right-0 cursor-pointer"
