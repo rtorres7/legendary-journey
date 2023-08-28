@@ -108,7 +108,14 @@
             {{ product.title }}
           </p>
           <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            {{ dayjs(product.createdAt).utc().format("DD MMMM YYYY") }}
+            <div @mouseover="hover = true" @mouseleave="hover = false">
+              <template v-if="!hover">
+                {{ relativeTime(product.createdAt) }}
+              </template>
+              <template v-else>{{
+                dayjs(product.createdAt).utc().format("MMMM DD, YYYY")
+              }}</template>
+            </div>
           </div>
         </router-link>
       </div>
@@ -116,6 +123,8 @@
   </div>
 </template>
 <script>
+import { ref } from "vue";
+import { getRelativeTime } from "@current/helpers";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   EllipsisVerticalIcon,
@@ -159,6 +168,10 @@ export default {
   },
   emits: ["delete"],
   setup(props, { emit }) {
+    const hover = ref(false);
+    const relativeTime = (createdAt) => {
+      return getRelativeTime(createdAt);
+    };
     const deleteProduct = () => {
       emit("delete", props.product);
     };
@@ -217,6 +230,8 @@ export default {
       }
     };
     return {
+      hover,
+      relativeTime,
       deleteProduct,
       icons,
       getIconColor,
