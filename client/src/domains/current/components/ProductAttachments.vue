@@ -41,7 +41,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { DocumentIcon } from "@heroicons/vue/24/outline";
-import { getApiBaseUrl } from "@current/helpers";
+import { getApiBaseUrl } from "@/shared/helpers";
 
 export default {
   components: {

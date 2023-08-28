@@ -59,7 +59,7 @@
 </template>
 <script>
 import { inject, ref } from "vue";
-import { isProductLocked } from "@current/helpers";
+import { isProductLocked } from "@/shared/helpers";
 
 export default {
   props: {
