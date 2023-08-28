@@ -60,7 +60,7 @@
         ]"
       >
         <div
-          v-if="environment != 'production' && !isProductLocked(product)"
+          v-if="environment !== 'production'"
           :class="[
             hover ? 'not-sr-only' : 'sr-only',
             'absolute top-0 right-0 cursor-pointer',
@@ -123,34 +123,38 @@
             </transition>
           </Menu>
         </div>
-        <div>
-          <h1
-            :class="[
-              headline
-                ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
-                : 'line-clamp-2',
-              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere mx-2',
-            ]"
-            :title="product.title"
-          >
-            {{ `(${product.title_classification}) ${product.title}` }}
-          </h1>
-          <p
-            v-show="headline"
-            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
-            :title="product.summary"
-          >
-            {{ `(${product.summary_classification}) ${product.summary}` }}
-          </p>
-        </div>
-        <p
-          :class="[
-            headline ? '' : 'xl:mt-1',
-            'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
-          ]"
-        >
-          {{ formatDate(product.date_published) }}
-        </p>
+        <ProductRestrictedLink :product="product">
+          <div class="h-full flex flex-col justify-between">
+            <div>
+              <h1
+                :class="[
+                  headline
+                    ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
+                    : 'line-clamp-2',
+                  'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere mx-2',
+                ]"
+                :title="product.title"
+              >
+                {{ `(${product.title_classification}) ${product.title}` }}
+              </h1>
+              <p
+                v-show="headline"
+                class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
+                :title="product.summary"
+              >
+                {{ `(${product.summary_classification}) ${product.summary}` }}
+              </p>
+            </div>
+            <p
+              :class="[
+                headline ? '' : 'xl:mt-1',
+                'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
+              ]"
+            >
+              {{ formatDate(product.date_published) }}
+            </p>
+          </div>
+        </ProductRestrictedLink>
         <template v-if="isProductLocked(product)">
           <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
@@ -160,28 +164,16 @@
       </div>
     </template>
   </MaxCard>
-  <MaxOverlay :show="savingProduct || removingProduct">
-    <div class="max-w-xs inline-block">
-      <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
-        Saving Product...
-      </p>
-      <p v-if="removingProduct" class="mb-4 font-semibold text-2xl">
-        Removing Product...
-      </p>
-      <div class="w-fit m-auto">
-        <MaxLoadingSpinner class="h-16 w-16" />
-      </div>
-    </div>
-  </MaxOverlay>
 </template>
 <script>
-import { isProductLocked, formatDate, isSavedProduct } from "@/shared/helpers";
-import ProductImage from "@current/components/ProductImage.vue";
+import { ref } from "vue";
 import { BookmarkIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
-import updateSavedStatus from "@current/composables/updateSavedStatus";
-import { ref } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { isProductLocked, formatDate, isSavedProduct } from "@/shared/helpers";
+import ProductImage from "@current/components/ProductImage.vue";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
+import ProductRestrictedLink from "@current/components/ProductRestrictedLink.vue";
 
 export default {
   components: {
@@ -193,6 +185,7 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
+    ProductRestrictedLink,
   },
   props: {
     product: {

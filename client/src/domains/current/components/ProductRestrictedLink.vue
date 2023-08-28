@@ -5,13 +5,14 @@
       name: product.state === 'draft' ? 'product-preview' : 'product',
       params: { doc_num: product.doc_num },
     }"
+    class="h-full"
   >
     <slot />
   </router-link>
   <a
     v-else
     tabindex="0"
-    class="hover:underline cursor-pointer"
+    class="hover:underline cursor-pointer h-full"
     @click="openDialog()"
   >
     <slot />

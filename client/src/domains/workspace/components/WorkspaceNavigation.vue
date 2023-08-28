@@ -555,7 +555,7 @@ import {
   favoriteProducts,
   collectionProducts,
 } from "@/domains/demo/data";
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import {
@@ -653,6 +653,9 @@ export default {
         return "text-amber-600";
       }
     };
+    onMounted(() => {
+      store.dispatch("savedSearches/getAllSearches");
+    });
     const selectItemEventHandler = (item) => {
       console.log("selectItemEventHandler: ", item);
       if (removeSearch.value) {
@@ -683,6 +686,12 @@ export default {
       });
       window.open(route.href, "_blank");
     };
+
+    const deleteSearch = (item) => {
+      removeSearch.value = true;
+      store.dispatch("savedSearches/deleteSearch", item);
+    };
+
     const isAboutDialogOpen = ref(false);
     const closeAboutDialog = () => {
       isAboutDialogOpen.value = false;
@@ -715,6 +724,7 @@ export default {
       isActiveTheme,
       selectItemEventHandler,
       onEnter,
+      deleteSearch,
       isAboutDialogOpen,
       closeAboutDialog,
       openAboutDialog,
