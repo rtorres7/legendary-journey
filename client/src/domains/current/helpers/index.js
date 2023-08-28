@@ -103,6 +103,34 @@ export const getApiBaseUrl = () => {
   return import.meta.env.MODE === "container" ? "/api" : "";
 };
 
+export const getRelativeTime = (timestamp) => {
+  const msPerMinute = 60 * 1000;
+  const msPerHour = msPerMinute * 60;
+  const msPerDay = msPerHour * 24;
+  const msPerWeek = msPerDay * 7;
+  const msPerMonth = msPerDay * 30;
+  const msPerYear = msPerDay * 365;
+  const elapsed = dayjs().diff(timestamp);
+  if (elapsed < msPerMinute) {
+    return "Just Now";
+  } else if (elapsed < msPerHour) {
+    return pluralize(Math.floor(elapsed / msPerMinute), "minute") + " ago";
+  } else if (elapsed < msPerDay) {
+    return pluralize(Math.floor(elapsed / msPerHour), "hour") + " ago";
+  } else if (elapsed < msPerWeek) {
+    return pluralize(Math.floor(elapsed / msPerDay), "day") + " ago";
+  } else if (elapsed < msPerMonth) {
+    return pluralize(Math.floor(elapsed / msPerWeek), "week") + " ago";
+  } else if (elapsed < msPerYear) {
+    return pluralize(Math.floor(elapsed / msPerMonth), "month") + " ago";
+  } else {
+    return pluralize(Math.floor(elapsed / msPerYear), "year") + "ago";
+  }
+};
+
+export const pluralize = (count, noun, suffix = "s") =>
+  `${count} ${noun}${count !== 1 ? suffix : ""}`;
+
 //Damion's Idea
 export const isProduction = () => {
   return window.location.hostname.charAt(0).toLowerCase() === "c";
