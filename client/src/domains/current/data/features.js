@@ -81,6 +81,8 @@ const articles = {
         title: "Questions loom over Ukraine’s counteroffensive in Kharkiv",
         title_classification: "U",
         title_sci: 0,
+        org_restricted: true,
+        needed: { orgs: ["GHI", "PQR"] },
         to_param: "WIRe001_sample_2",
         to_param_feature: "20",
         to_param_wire: "2022-09-01",

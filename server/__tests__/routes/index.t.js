@@ -43,9 +43,12 @@ describe('Index Routes', () => {
 
       return request(app)
         .get('/metadata')
-        .expect(200, {
-          error: 'Unable to find metadata'
+        .expect(500, {
+          message: 'Unable to find metadata:  whoops',
+          code: 500,
+          fieldName: '',
+          itemId: ''
         });
     });
-  })
-})
+  });
+});

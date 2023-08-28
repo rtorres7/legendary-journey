@@ -11,6 +11,7 @@ const { logger } = require("../config/logger");
 const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const metricsService = new AggregatedMetricsService();
 const { formatValue } = require("../util/format");
+const { legacyErrorResponse } = require("../util/errors");
 
 router.get("/workspace/drafts", async (req, res) => {
   /*
@@ -41,11 +42,10 @@ router.get("/workspace/drafts", async (req, res) => {
       );
       res.json(pageOfDrafts);
     } catch (error) {
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `Unable to find draft products: ${error.message}`,
-        res,
-      );
+      logger.error(error);
+      const errorDetails = `Unable to find draft products: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -82,23 +82,21 @@ router.get("/workspace/recent", async (req, res) => {
       const ids = pageOfRecentProducts.content.map(
         (item) => item.productNumber,
       );
-      const viewsData =
-        await metricsService.getProductViewsCountForMultipleProducts(ids);
+      const viewsData = await metricsService.getProductViewsCountForMultipleProducts(ids);
 
-      pageOfRecentProducts.content.forEach((item) => {
+      for (const item of pageOfRecentProducts.content) {
         if (viewsData[item.productNumber]) {
           item.views = viewsData[item.productNumber];
         }
-      });
+        await augmentProductWithSaved(item, currentUser.id, item.id.toString(), false);
+      }
 
       res.json(pageOfRecentProducts);
     } catch (error) {
       logger.error(error);
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `Unable to find posted products: ${error.message}`,
-        res,
-      );
+      const errorDetails = `Unable to find posted products: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -154,11 +152,10 @@ router.get("/workspace/stats", async (req, res) => {
         totalCreated: formatValue(totalCreated),
       });
     } catch (error) {
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `Failed to retrieve stats on current user's products (by organization): ${error.message}`,
-        res,
-      );
+      logger.error(error);
+      const errorDetails = `Failed to retrieve stats on current user's products (by organization): ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -180,9 +177,8 @@ router.get("/workspace/products", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const { perPage, page, skip, sortDir } = pagingParams(req);
-
     try {
+      const { perPage, page, skip, sortDir } = pagingParams(req);
       const pageOfProducts = await productService.findPageOfProductsForUser(
         currentUser.id,
         page,
@@ -190,13 +186,17 @@ router.get("/workspace/products", async (req, res) => {
         skip,
         sortDir,
       );
+
+      for (const item of pageOfProducts.content) {
+        await augmentProductWithSaved(item, currentUser.id, item.id, false);
+      }
+
       res.json(pageOfProducts);
     } catch (error) {
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `Unable to find user's products: ${error.message}`,
-        res,
-      );
+      logger.error(error);
+      const errorDetails = `Unable to find user's products: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   });
 });
@@ -213,30 +213,37 @@ router.get("/workspace/saved", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const { perPage, page, sortDir } = pagingParams(req);
-    const term = req.query.text;
-    const filters = req.query;
+    try {
+      const { perPage, page, sortDir } = pagingParams(req);
+      const term = req.query.text;
+      const filters = req.query;
 
-    const savedProducts = await workspaceService.findPageOfSavedProductsForUser(
-      currentUser.id,
-      term,
-      perPage,
-      page,
-      sortDir,
-      filters,
-    );
+      const savedProducts = await workspaceService.findPageOfSavedProductsForUser(
+        currentUser.id,
+        term,
+        perPage,
+        page,
+        sortDir,
+        filters,
+      );
 
-    const ids = savedProducts.content.map((item) => item.productNumber);
-    const viewsData =
-      await metricsService.getProductViewsCountForMultipleProducts(ids);
+      const ids = savedProducts.content.map((item) => item.productNumber);
+      const viewsData = await metricsService.getProductViewsCountForMultipleProducts(ids);
 
-    savedProducts.content.forEach((item) => {
-      if (viewsData[item.productNumber]) {
-        item.views = viewsData[item.productNumber];
-      }
-    });
+      savedProducts.content.forEach((item) => {
+        if (viewsData[item.productNumber]) {
+          item.views = viewsData[item.productNumber];
+        }
+        item.saved = true;
+      });
 
-    res.json(savedProducts);
+      res.json(savedProducts);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
   });
 });
 
@@ -250,13 +257,19 @@ router.put("/workspace/saved/:productId", async (req, res) => {
       }
     }
    */
-
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const savedProduct = await workspaceService.createSavedProduct(
-      req.params.productId,
-      currentUser.id,
-    );
-    res.json(savedProduct);
+    try {
+      const savedProduct = await workspaceService.createSavedProduct(
+        req.params.productId,
+        currentUser.id,
+      );
+      res.json(savedProduct);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
   });
 });
 
@@ -271,11 +284,18 @@ router.delete("/workspace/saved/:productId", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    await workspaceService.deleteSavedProduct(
-      req.params.productId,
-      currentUser.id,
-    );
-    res.status(204).send();
+    try {
+      await workspaceService.deleteSavedProduct(
+        req.params.productId,
+        currentUser.id,
+      );
+      res.status(204).send();
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
   });
 });
 
@@ -291,16 +311,23 @@ router.get("/workspace/collections", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const { perPage, page, skip, sortDir } = pagingParams(req);
+    try {
+      const { perPage, page, skip, sortDir } = pagingParams(req);
 
-    const collections = await workspaceService.findPageOfCollectionsForUser(
-      currentUser.id,
-      page,
-      perPage,
-      skip,
-      sortDir,
-    );
-    res.json(collections);
+      const collections = await workspaceService.findPageOfCollectionsForUser(
+        currentUser.id,
+        page,
+        perPage,
+        skip,
+        sortDir,
+      );
+      res.json(collections);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
   });
 });
 
@@ -321,14 +348,21 @@ router.post("/workspace/collections", async (req, res) => {
    */
 
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const savedCollection = await workspaceService.createCollection({
-      name: req.body.name,
-      description: req.body.description,
-      image: req.body.image,
-      createdBy: currentUser.id,
-    });
+    try {
+      const savedCollection = await workspaceService.createCollection({
+        name: req.body.name,
+        description: req.body.description,
+        image: req.body.image,
+        createdBy: currentUser.id,
+      });
 
-    res.json(savedCollection);
+      res.json(savedCollection);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
   });
 });
 
@@ -347,17 +381,23 @@ router.put("/workspace/collections/:collectionId", async (req, res) => {
       }
     }
    */
+  try {
+    const updatedCollection = await workspaceService.updateCollection(
+      req.params.collectionId,
+      {
+        name: req.body.name,
+        description: req.body.description,
+        image: req.body.image,
+      },
+    );
 
-  const updatedCollection = await workspaceService.updateCollection(
-    req.params.collectionId,
-    {
-      name: req.body.name,
-      description: req.body.description,
-      image: req.body.image,
-    },
-  );
-
-  res.json(updatedCollection);
+    res.json(updatedCollection);
+  } catch (error) {
+    logger.error(error);
+    const errorDetails = `${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
+  }
 });
 
 router.delete("/workspace/collections/:collectionId", async (req, res) => {
@@ -369,24 +409,29 @@ router.delete("/workspace/collections/:collectionId", async (req, res) => {
       }
     }
    */
-
-  await workspaceService.deleteCollection(req.params.collectionId);
-  res.status(204).send();
+  try {
+    await workspaceService.deleteCollection(req.params.collectionId);
+    res.status(204).send();
+  } catch (error) {
+    logger.error(error);
+    const errorDetails = `${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
+  }
 });
 
-router.get(
-  "/workspace/collections/:collectionId/products",
-  async (req, res) => {
-    /*
-    #swagger.summary = 'Retrieves a list of saved products for the given collection for the current user'
-    #swagger.tags = ['Workspace']
-    #swagger.responses[200] = {
-      schema: {
-        $ref: '#/definitions/PageOfSavedProducts'
-      }
+router.get("/workspace/collections/:collectionId/products", async (req, res) => {
+  /*
+  #swagger.summary = 'Retrieves a list of saved products for the given collection for the current user'
+  #swagger.tags = ['Workspace']
+  #swagger.responses[200] = {
+    schema: {
+      $ref: '#/definitions/PageOfSavedProducts'
     }
-   */
+  }
+  */
 
+  try {
     const { perPage, page, sortDir } = pagingParams(req);
     const term = req.query.text;
     const filters = req.query;
@@ -400,8 +445,13 @@ router.get(
       filters,
     );
     res.json(savedProducts);
-  },
-);
+  } catch (error) {
+    logger.error(error);
+    const errorDetails = `${error.message}`;
+    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+    legacyErrorResponse(500, errorDetails, res);
+  }
+});
 
 router.put(
   "/workspace/collections/:collectionId/products/:savedProductId",
@@ -420,19 +470,25 @@ router.put(
       }
     }
    */
-
-    const collection = await workspaceService.addSavedProductToCollection(
-      req.params.collectionId,
-      req.params.savedProductId,
-    );
-
-    if (collection) {
-      KiwiStandardResponsesExpress.standardPutResponse(collection, res);
-    } else {
-      KiwiStandardResponsesExpress.standardNotFoundResponse(
-        "Unable to find collection or saved product. Unable to add saved product to collection.",
-        res,
+    try {
+      const collection = await workspaceService.addSavedProductToCollection(
+        req.params.collectionId,
+        req.params.savedProductId,
       );
+
+      if (collection) {
+        KiwiStandardResponsesExpress.standardPutResponse(collection, res);
+      } else {
+        KiwiStandardResponsesExpress.standardNotFoundResponse(
+          "Unable to find collection or saved product. Unable to add saved product to collection.",
+          res,
+        );
+      }
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
@@ -453,24 +509,47 @@ router.delete(
       }
     }
    */
-
-    const collection = await workspaceService.removeSavedProductFromCollection(
-      req.params.collectionId,
-      req.params.savedProductId,
-    );
-
-    if (collection) {
-      KiwiStandardResponsesExpress.standardDeleteResponseWithEntity(
-        collection,
-        res,
+    try {
+      const collection = await workspaceService.removeSavedProductFromCollection(
+        req.params.collectionId,
+        req.params.savedProductId,
       );
-    } else {
-      KiwiStandardResponsesExpress.standardNotFoundResponse(
-        "Unable to find collection or saved product. Unable to remove saved product from collection.",
-        res,
-      );
+
+      if (collection) {
+        KiwiStandardResponsesExpress.standardDeleteResponseWithEntity(
+          collection,
+          res,
+        );
+      } else {
+        KiwiStandardResponsesExpress.standardNotFoundResponse(
+          "Unable to find collection or saved product. Unable to remove saved product from collection.",
+          res,
+        );
+      }
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
     }
   },
 );
+
+async function augmentProductWithSaved(
+  productData,
+  currentUserId,
+  productId,
+  addToAttributes = true,
+) {
+  const isSaved = await workspaceService.isProductSaved(
+    currentUserId,
+    productId,
+  );
+  productData.saved = isSaved;
+
+  if (addToAttributes) {
+    productData.attributes.saved = isSaved;
+  }
+}
 
 module.exports = router;

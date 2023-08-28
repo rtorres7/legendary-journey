@@ -138,7 +138,7 @@
                 ref="typeaheadRef"
                 class="px-4 focus-visible:outline-none bg-transparent w-full text-slate-900 placeholder-shown:truncate text-sm"
                 aria-label="Search"
-                placeholder="...(Coming Soon)"
+                placeholder="Search for keywords or products"
                 :items="searches"
                 :min-input-length="1"
                 :item-projection="
@@ -147,7 +147,6 @@
                   }
                 "
                 :select-on-tab="false"
-                disabled
                 @selectItem="selectItemEventHandler"
                 @keydown.enter.prevent="onEnter"
               >
@@ -556,7 +555,7 @@ import {
   favoriteProducts,
   collectionProducts,
 } from "@/domains/demo/data";
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import {
@@ -574,7 +573,6 @@ import {
   ArrowLeftOnRectangleIcon,
   Bars3Icon,
   BookmarkIcon,
-  BriefcaseIcon,
   // CheckIcon,
   // ChevronDownIcon,
   // FolderIcon,
@@ -602,7 +600,6 @@ export default {
     ArrowLeftOnRectangleIcon,
     Bars3Icon,
     BookmarkIcon,
-    BriefcaseIcon,
     // CheckIcon,
     // ChevronDownIcon,
     // FolderIcon,
@@ -656,18 +653,23 @@ export default {
         return "text-amber-600";
       }
     };
+    onMounted(() => {
+      store.dispatch("savedSearches/getAllSearches");
+    });
     const selectItemEventHandler = (item) => {
       console.log("selectItemEventHandler: ", item);
       if (removeSearch.value) {
         console.log("no routing");
         removeSearch.value = false;
       } else {
-        router.push({
+        const route = router.resolve({
           name: "search",
           query: {
             text: item.text,
+            per_page: 10,
           },
         });
+        window.open(route.href, "_blank");
       }
     };
     const onEnter = (e) => {
@@ -675,37 +677,21 @@ export default {
         text: e.target.value,
         type: "user",
       });
-      if (
-        localStorage.getItem("lastSort") === "asc" ||
-        localStorage.getItem("lastSort") === "desc"
-      ) {
-        router.push({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-            sort_dir: localStorage.getItem("lastSort"),
-          },
-        });
-      } else if (localStorage.getItem("lastSort") === "score") {
-        router.push({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-            sort_field: localStorage.getItem("lastSort"),
-          },
-        });
-      } else {
-        router.push({
-          name: "search",
-          query: {
-            text: e.target.value,
-            per_page: 10,
-          },
-        });
-      }
+      const route = router.resolve({
+        name: "search",
+        query: {
+          text: e.target.value,
+          per_page: 10,
+        },
+      });
+      window.open(route.href, "_blank");
     };
+
+    const deleteSearch = (item) => {
+      removeSearch.value = true;
+      store.dispatch("savedSearches/deleteSearch", item);
+    };
+
     const isAboutDialogOpen = ref(false);
     const closeAboutDialog = () => {
       isAboutDialogOpen.value = false;
@@ -738,6 +724,7 @@ export default {
       isActiveTheme,
       selectItemEventHandler,
       onEnter,
+      deleteSearch,
       isAboutDialogOpen,
       closeAboutDialog,
       openAboutDialog,

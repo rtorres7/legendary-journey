@@ -12,6 +12,8 @@
     "
     :hoverable="!loading && !isProductLocked(product) ? true : false"
     :rounded="false"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
   >
     <template v-if="loading">
       <div
@@ -57,57 +59,104 @@
           'relative flex flex-col justify-between px-4',
         ]"
       >
-        <button
-          v-if="environment != 'production' && !isProductLocked(product)"
-          class="text-slate-500 hover:text-slate-900 dark:text-slate-300 energy:text-zinc-300 absolute bottom-0 right-0 m-2"
-          :aria-label="`save product ${product.productNumber}`"
-          @click.prevent="save(product)"
+        <div
+          v-if="environment !== 'production'"
+          class="absolute top-0 right-0 cursor-pointer"
         >
-          <template v-if="isSavedProduct(product)">
-            <tippy content="Saved" placement="bottom">
-              <BookmarkIconSolid
-                aria-hidden="true"
-                :class="headline ? 'h-6 w-6' : 'h-5 w-5'"
-              />
-            </tippy>
-          </template>
-          <template v-else>
-            <tippy content="Save" placement="bottom">
-              <BookmarkIcon
-                aria-hidden="true"
-                :class="headline ? 'h-6 w-6' : 'h-5 w-5'"
-              />
-            </tippy>
-          </template>
-        </button>
-        <div>
-          <h1
-            :class="[
-              headline
-                ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
-                : 'line-clamp-2',
-              'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere',
-            ]"
-            :title="product.title"
-          >
-            {{ `(${product.title_classification}) ${product.title}` }}
-          </h1>
-          <p
-            v-show="headline"
-            class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
-            :title="product.summary"
-          >
-            {{ `(${product.summary_classification}) ${product.summary}` }}
-          </p>
+          <Menu v-slot="{ open, close }" as="div" class="relative z-10">
+            <div>
+              <template v-if="open || hover">
+                <template v-if="open">
+                  <MenuButton
+                    class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                    @click.prevent
+                  >
+                    <span class="sr-only">More Options</span>
+                    <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
+                  </MenuButton>
+                </template>
+                <template v-else>
+                  <tippy content="More" placement="bottom">
+                    <MenuButton
+                      class="max-w-xs mt-2 rounded-full flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                    >
+                      <span class="sr-only">More Options</span>
+                      <EllipsisVerticalIcon
+                        class="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </MenuButton>
+                  </tippy>
+                </template>
+              </template>
+            </div>
+            <transition
+              enterActiveClass="transition ease-out duration-100"
+              enterFromClass="transform opacity-0 scale-95"
+              enterToClass="transform opacity-100 scale-100"
+              leaveActiveClass="transition ease-in duration-75"
+              leaveFromClass="transform opacity-100 scale-100"
+              leaveToClass="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-2xl py-2 ring-1 ring-black ring-opacity-5 focus:outline-none text-sm bg-white dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:ring-0 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300 border-x border-b dark:border-slate-700/50 energy:border-zinc-700/50"
+              >
+                <MenuItem>
+                  <div
+                    class="py-2 px-3 flex items-center space-x-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80"
+                    @click.prevent="
+                      save(product);
+                      close();
+                    "
+                  >
+                    <template v-if="isSavedProduct(product)">
+                      <BookmarkIconSolid aria-hidden="true" class="h-5 w-5" />
+                      <span class="capitalize">Saved</span>
+                    </template>
+                    <template v-else>
+                      <BookmarkIcon class="h-5 w-5" aria-hidden="true" /><span
+                        class="capitalize"
+                        >Save</span
+                      >
+                    </template>
+                  </div>
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
         </div>
-        <p
-          :class="[
-            headline ? '' : 'xl:mt-1',
-            'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
-          ]"
-        >
-          {{ formatDate(product.date_published) }}
-        </p>
+        <ProductRestrictedLink :product="product">
+          <div class="h-full flex flex-col justify-between">
+            <div>
+              <h1
+                :class="[
+                  headline
+                    ? 'text-xl line-clamp-6 md:line-clamp-5 lg:line-clamp-4'
+                    : 'line-clamp-2',
+                  'text-black dark:text-slate-100 energy:text-zinc-100 text-center font-medium wrap-anywhere mx-2',
+                ]"
+                :title="product.title"
+              >
+                {{ `(${product.title_classification}) ${product.title}` }}
+              </h1>
+              <p
+                v-show="headline"
+                class="hidden mt-3 text-md md:line-clamp-4 lg:line-clamp-5 wrap-anywhere"
+                :title="product.summary"
+              >
+                {{ `(${product.summary_classification}) ${product.summary}` }}
+              </p>
+            </div>
+            <p
+              :class="[
+                headline ? '' : 'xl:mt-1',
+                'mb-4 text-center text-sm text-slate-600 dark:text-slate-300/80 energy:text-slate-300/80',
+              ]"
+            >
+              {{ formatDate(product.date_published) }}
+            </p>
+          </div>
+        </ProductRestrictedLink>
         <template v-if="isProductLocked(product)">
           <MaxProductIcon
             class="absolute w-12 h-12 m-auto bottom-0 right-0 text-mission-blue/20 dark:text-slate-300/20 energy:text-zinc-300/20"
@@ -117,33 +166,28 @@
       </div>
     </template>
   </MaxCard>
-  <MaxOverlay :show="savingProduct || removingProduct">
-    <div class="max-w-xs inline-block">
-      <p v-if="savingProduct" class="mb-4 font-semibold text-2xl">
-        Saving Product...
-      </p>
-      <p v-if="removingProduct" class="mb-4 font-semibold text-2xl">
-        Removing Product...
-      </p>
-      <div class="w-fit m-auto">
-        <MaxLoadingSpinner class="h-16 w-16" />
-      </div>
-    </div>
-  </MaxOverlay>
 </template>
 <script>
-import { isProductLocked, formatDate, isSavedProduct } from "@current/helpers";
-import ProductImage from "@current/components/ProductImage.vue";
-import { BookmarkIcon } from "@heroicons/vue/24/outline";
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
-import updateSavedStatus from "@current/composables/updateSavedStatus";
 import { ref } from "vue";
+import { BookmarkIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { isProductLocked, formatDate, isSavedProduct } from "@/shared/helpers";
+import ProductImage from "@current/components/ProductImage.vue";
+import updateSavedStatus from "@current/composables/updateSavedStatus";
+import ProductRestrictedLink from "@current/components/ProductRestrictedLink.vue";
 
 export default {
   components: {
     ProductImage,
     BookmarkIcon,
     BookmarkIconSolid,
+    EllipsisVerticalIcon,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    ProductRestrictedLink,
   },
   props: {
     product: {
@@ -163,6 +207,7 @@ export default {
     const offlineMode = import.meta.env.MODE === "offline";
     const environment = ref(import.meta.env.MODE);
     const { save, savingProduct, removingProduct } = updateSavedStatus();
+    const hover = ref(false);
     return {
       offlineMode,
       environment,
@@ -172,6 +217,7 @@ export default {
       save,
       savingProduct,
       removingProduct,
+      hover,
     };
   },
 };

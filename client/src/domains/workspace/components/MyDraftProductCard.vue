@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[450px] p-8"
+    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[500px] p-8"
   >
     <div
       v-if="loading"
@@ -108,7 +108,14 @@
             {{ product.title }}
           </p>
           <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            {{ dayjs(product.createdAt).utc().format("DD MMMM YYYY") }}
+            <div @mouseover="hover = true" @mouseleave="hover = false">
+              <template v-if="!hover">
+                {{ relativeTime(product.createdAt) }}
+              </template>
+              <template v-else>{{
+                dayjs(product.createdAt).utc().format("MMMM DD, YYYY")
+              }}</template>
+            </div>
           </div>
         </router-link>
       </div>
@@ -116,11 +123,12 @@
   </div>
 </template>
 <script>
+import { ref } from "vue";
+import { getRelativeTime } from "@/shared/helpers";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   EllipsisVerticalIcon,
   PencilSquareIcon,
-  ShareIcon,
   TrashIcon,
 } from "@heroicons/vue/24/outline";
 import dayjs from "dayjs";
@@ -135,7 +143,6 @@ export default {
     MenuItems,
     EllipsisVerticalIcon,
     PencilSquareIcon,
-    ShareIcon,
     TrashIcon,
     ProductIcon,
   },
@@ -159,6 +166,10 @@ export default {
   },
   emits: ["delete"],
   setup(props, { emit }) {
+    const hover = ref(false);
+    const relativeTime = (createdAt) => {
+      return getRelativeTime(createdAt);
+    };
     const deleteProduct = () => {
       emit("delete", props.product);
     };
@@ -217,6 +228,8 @@ export default {
       }
     };
     return {
+      hover,
+      relativeTime,
       deleteProduct,
       icons,
       getIconColor,

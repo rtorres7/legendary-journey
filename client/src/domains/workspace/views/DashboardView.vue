@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
-    <div class="text-2xl font-bold">For You</div>
     <template v-if="!loadingSaved && recentlySaved.length > 0">
+      <div class="text-2xl font-bold">For You</div>
       <div class="py-6 flex items-center justify-between">
         <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
         <router-link
@@ -22,10 +22,11 @@
         <template v-for="(product, index) in recentlySaved" :key="product">
           <MyPublishedProductCard
             :product="product"
-            type="saved"
+            type="product"
             :productTypeName="getProductTypeName(product)"
             :class="index < numCards ? 'block' : 'hidden'"
-            @remove="removeSavedProduct(product)"
+            @delete="openDeleteDialog(product)"
+            @save="saveProduct(product)"
           />
         </template>
       </div>
@@ -40,9 +41,11 @@
     <template v-if="!loadingDrafts && !loadingPublished">
       <template v-if="myDrafts.length > 0 && canManageWire">
         <div class="pb-6 flex items-center">
-          <div class="text-lg font-semibold text-gray-700">Recent Drafts</div>
+          <div class="text-lg font-semibold text-gray-700">
+            Drafts within the last week
+          </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
           <template v-for="(product, index) in myDrafts" :key="product">
             <MyDraftProductCard
               :product="product"
@@ -59,6 +62,10 @@
           Recently Published
         </div>
         <a
+          v-if="
+            myPublished.length > 4 ||
+            (myPublished.length > 1 && numCards < myPublished.length)
+          "
           class="flex items-center text-gray-500 text-sm font-semibold"
           href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
           target="_blank"
@@ -95,13 +102,14 @@
             :productTypeName="getProductTypeName(product)"
             :class="index < numCards ? 'block' : 'hidden'"
             @delete="openDeleteDialog(product)"
+            @save="saveProduct(product)"
           />
         </template>
       </div>
     </template>
     <template v-if="canManageWire && !loadingStats">
       <div class="py-6 flex items-center">
-        <div class="text-lg font-bold">The Stats</div>
+        <div class="text-lg font-semibold text-gray-700">The Stats</div>
       </div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
@@ -161,6 +169,14 @@
     <Overlay :show="removingProduct">
       <div class="max-w-xs inline-block">
         <p class="mb-4 font-semibold text-2xl">Removing Product...</p>
+        <div class="w-fit m-auto">
+          <LoadingSpinner class="h-16 w-16" />
+        </div>
+      </div>
+    </Overlay>
+    <Overlay :show="savingProduct">
+      <div class="max-w-xs inline-block">
+        <p class="mb-4 font-semibold text-2xl">Saving Product...</p>
         <div class="w-fit m-auto">
           <LoadingSpinner class="h-16 w-16" />
         </div>
@@ -293,6 +309,43 @@ export default {
           });
       }
     };
+    const savingProduct = ref(false);
+    const saveProduct = (product) => {
+      if (product.saved) {
+        removeSavedProduct(product);
+      } else {
+        if (import.meta.env.MODE === "offline") {
+          createNotification({
+            title: "Product Saved",
+            message: `Product ${product.productNumber} has been saved.`,
+            type: "success",
+          });
+        } else {
+          savingProduct.value = true;
+          axios.put("/workspace/saved/" + product.id).then((response) => {
+            if (response.data.error) {
+              savingProduct.value = false;
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+            } else {
+              savingProduct.value = false;
+              createNotification({
+                title: "Product Saved",
+                message: `Product ${product.productNumber} has been saved.`,
+                type: "success",
+              });
+              loadSavedProducts();
+              loadPublishedProducts();
+            }
+          });
+        }
+      }
+    };
+
     const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
@@ -308,31 +361,30 @@ export default {
         recentlySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios
-          .delete("/workspace/saved/" + product.productId)
-          .then((response) => {
-            if (response.data.error) {
-              removingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed from Saved Products.`,
-                type: "success",
-              });
-              let p = recentlySaved.value.find(
-                (item) => item.productNumber == product.productNumber
-              );
-              let indexOfProduct = recentlySaved.value.indexOf(p);
-              recentlySaved.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            removingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            removingProduct.value = false;
+            createNotification({
+              title: "Product Removed",
+              message: `Product ${product.productNumber} has been removed from Saved Products.`,
+              type: "success",
+            });
+            let p = recentlySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = recentlySaved.value.indexOf(p);
+            recentlySaved.value.splice(indexOfProduct, 1);
+            loadPublishedProducts();
+          }
+        });
       }
     };
     const getProductIcon = (product) => {
@@ -390,6 +442,38 @@ export default {
       }
     };
 
+    const loadSavedProducts = () => {
+      axios.get("/workspace/saved").then((response) => {
+        loadingSaved.value = false;
+        if (response.data) {
+          recentlySaved.value = response.data.content;
+        } else {
+          createNotification({
+            title: "Error",
+            message: "There was an error retrieving Recently Saved Products.",
+            type: "error",
+            autoClose: false,
+          });
+        }
+      });
+    };
+
+    const loadPublishedProducts = () => {
+      axios.get("/workspace/recent").then((response) => {
+        loadingPublished.value = false;
+        if (response.data) {
+          myPublished.value = response.data.content;
+        } else {
+          createNotification({
+            title: "Error",
+            message: "There was an error retrieving Recent Products.",
+            type: "error",
+            autoClose: false,
+          });
+        }
+      });
+    };
+
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
@@ -411,38 +495,14 @@ export default {
           loadingPublished.value = false;
         }, 1000);
       } else {
-        axios.get("/workspace/saved").then((response) => {
-          loadingSaved.value = false;
-          if (response.data) {
-            recentlySaved.value = response.data.content;
-          } else {
-            createNotification({
-              title: "Error",
-              message: "There was an error retrieving Recently Saved Products.",
-              type: "error",
-              autoClose: false,
-            });
-          }
-        });
+        loadSavedProducts();
+        loadPublishedProducts();
         axios.get("/workspace/drafts").then((response) => {
           loadingDrafts.value = false;
           if (response.data) {
             myDrafts.value = response.data.content;
           } else {
             console.log("Couldn't retrieve drafts");
-          }
-        });
-        axios.get("/workspace/recent").then((response) => {
-          loadingPublished.value = false;
-          if (response.data) {
-            myPublished.value = response.data.content;
-          } else {
-            createNotification({
-              title: "Error",
-              message: "There was an error retrieving Recent Products.",
-              type: "error",
-              autoClose: false,
-            });
           }
         });
         axios.get("/workspace/stats").then((response) => {
@@ -479,6 +539,8 @@ export default {
       openDeleteDialog,
       closeDeleteDialog,
       deleteProduct,
+      savingProduct,
+      saveProduct,
       removingProduct,
       removeSavedProduct,
       getProductIcon,

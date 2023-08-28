@@ -871,7 +871,7 @@ import {
   getValueForName,
   hasProductImage,
   getProductImageUrl,
-} from "@current/helpers";
+} from "@/shared/helpers";
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
 import useFileList from "@current/composables/file-list";
 import createUploader from "@current/composables/file-uploader";
@@ -1336,14 +1336,23 @@ export default {
       form.value.non_state_actors = nonStateActorsToSelect;
       const dissemsToSelect = [];
       //if statement is temporary until high side backend starts returning dissem orgs as an object
-      if (import.meta.env.MODE !== "production" && import.meta.env.MODE !== "development") {
+      if (
+        import.meta.env.MODE !== "production" &&
+        import.meta.env.MODE !== "development"
+      ) {
         updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
-          let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend.code);
+          let dissemValue = getValueForCode(
+            lists.dissemOrgs,
+            dissemFromBackend.code
+          );
           dissemsToSelect.push(dissemValue);
         });
       } else {
         updatedProduct.dissem_orgs.forEach((dissemFromBackend) => {
-          let dissemValue = getValueForCode(lists.dissemOrgs, dissemFromBackend);
+          let dissemValue = getValueForCode(
+            lists.dissemOrgs,
+            dissemFromBackend
+          );
           dissemsToSelect.push(dissemValue);
         });
       }
@@ -1359,7 +1368,7 @@ export default {
         checkAllIntelOrgs.value = false;
       }
       form.value.dissemOrgs = dissemsToSelect;
-      payload.value.dissem_orgs = dissemsToSelect.map(i => i.code);
+      payload.value.dissem_orgs = dissemsToSelect.map((i) => i.code);
       const coordinatorsToSelect = [];
       updatedProduct.coordinators.forEach((coordinatorsFromBackend) => {
         let coordinatorsValue = getValueForCode(

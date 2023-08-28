@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  jest-postgres:
+    image: "postgres:15"
+    ports:
+      - "20000:5432"
+    environment:
+      - POSTGRES_DB=test
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+  jest-mongo:
+    image: "mongo:6"
+    ports:
+      - "20001:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  jest-elastic:
+    image: "elasticsearch:8.6.1"
+    ports:
+      - "20002:9200"
+      - "20003:9300"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    healthcheck:
+      test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  jest-minio:
+    image: "minio/minio:RELEASE.2023-08-09T23-30-22Z"
+    ports:
+      - "20004:9000"
+    environment:
+      - MINIO_BROWSER=off
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=keyboard cat
+    command: server /data --console-address :9001
+    tmpfs:
+      - /data:rw,noexec,nosuid

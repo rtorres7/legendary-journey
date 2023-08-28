@@ -14,7 +14,6 @@ describe("User Service", () => {
   beforeAll(async () => {
     await PostgresExtension.setupNewDatabase("users");
     postgresUri = PostgresExtension.getPostgresUriWithDb("users");
-
     process.env.POSTGRES_CONNECTION_URL = postgresUri;
 
     const loadedData = await loadUsers(postgresUri);
@@ -32,6 +31,10 @@ describe("User Service", () => {
   beforeEach(() => {
     const UserService = require("../../src/services/user-service");
     service = new UserService();
+  });
+
+  afterAll(async () => {
+    await PostgresExtension.dropDatabase("users");
   });
 
   describe("findById", () => {
