@@ -138,7 +138,7 @@
                 ref="typeaheadRef"
                 class="px-4 focus-visible:outline-none bg-transparent w-full text-slate-900 placeholder-shown:truncate text-sm"
                 aria-label="Search"
-                placeholder="...(Coming Soon)"
+                placeholder="Search for keywords or products"
                 :items="searches"
                 :min-input-length="1"
                 :item-projection="
@@ -147,7 +147,6 @@
                   }
                 "
                 :select-on-tab="false"
-                disabled
                 @selectItem="selectItemEventHandler"
                 @keydown.enter.prevent="onEnter"
               >
@@ -662,12 +661,13 @@ export default {
         console.log("no routing");
         removeSearch.value = false;
       } else {
-        router.push({
+        const route = router.resolve({
           name: "search",
           query: {
             text: item.text,
           },
         });
+        window.open(route.href, "_blank");
       }
     };
     const onEnter = (e) => {
@@ -679,7 +679,7 @@ export default {
         localStorage.getItem("lastSort") === "asc" ||
         localStorage.getItem("lastSort") === "desc"
       ) {
-        router.push({
+        const route = router.resolve({
           name: "search",
           query: {
             text: e.target.value,
@@ -687,8 +687,11 @@ export default {
             sort_dir: localStorage.getItem("lastSort"),
           },
         });
+        console.log("sort_dir", route.href);
+        console.log(router);
+        window.open(route.href, "_blank");
       } else if (localStorage.getItem("lastSort") === "score") {
-        router.push({
+        const route = router.resolve({
           name: "search",
           query: {
             text: e.target.value,
@@ -696,14 +699,17 @@ export default {
             sort_field: localStorage.getItem("lastSort"),
           },
         });
+        console.log("score", route);
+        window.open(route.href, "_blank");
       } else {
-        router.push({
+        const route = router.resolve({
           name: "search",
           query: {
             text: e.target.value,
             per_page: 10,
           },
         });
+        window.open(route.href, "_blank");
       }
     };
     const isAboutDialogOpen = ref(false);
