@@ -104,6 +104,82 @@
         <p class="italic">No saved products to show</p>
       </template>
       <template v-else>
+        <div class="pb-6">
+          <div class="flex flex-row-reverse py-1 mt-2">
+            <template v-if="!loadingMetadata && booleanFilters.length > 0">
+              <button class="text-blue-700" @click="toggleSelectors">
+                {{
+                  showSelectors
+                    ? "Hide Selectors"
+                    : `Show Selectors (${booleanFilters.length})`
+                }}
+              </button>
+            </template>
+          </div>
+          <!-- Boolean Selectors -->
+          <template
+            v-if="
+              !loadingMetadata && showSelectors && booleanFilters.length > 0
+            "
+          >
+            <div
+              class="border border-slate-300/70 shadow-sm rounded mt-2 px-4 py-2 w-fit text-sm"
+            >
+              <div class="flex flex-wrap">
+                <template v-for="(n, index) in booleanFilters" :key="n">
+                  <div
+                    class="my-2"
+                    :class="[
+                      n.lastItem && index < booleanFilters.length - 1
+                        ? 'pr-3 border-r border-slate-700/50'
+                        : 'pr-2',
+                      index !== 0 && n.firstItem ? 'pl-3' : '',
+                    ]"
+                  >
+                    <div class="flex rounded-xl bg-slate-100 p-2">
+                      <div class="self-center pr-1">
+                        <template v-if="n.type === 'text'">
+                          <span class="pr-1 italic">Text: </span>
+                        </template>
+                        <template v-if="n.type === 'query'">
+                          <span class="pr-1 italic">Query: </span>
+                        </template>
+                        {{ n.displayName }}
+                      </div>
+                      <button
+                        type="button"
+                        class="w-5 h-5 flex items-center justify-center"
+                        tabindex="0"
+                        @click="removeFilter(n)"
+                      >
+                        <span class="sr-only">Remove filter</span>
+                        <XMarkIcon
+                          class="h-5 w-5 text-blue-700"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                  <template v-if="!n.lastItem">
+                    <template v-if="n.toggleable">
+                      <button
+                        class="mr-3 text-blue-700"
+                        @click="toggleBooleanValue(n)"
+                      >
+                        {{ n.boolean_val }}
+                      </button>
+                    </template>
+                    <template v-else>
+                      <div class="mr-3 self-center">
+                        {{ n.boolean_val }}
+                      </div>
+                    </template>
+                  </template>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
@@ -142,17 +218,21 @@
 import { computed, onMounted, inject, ref, watch } from "vue";
 import axios from "@/shared/config/wireAxios";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import { productDetails } from "../data";
+import { facetAggregations } from "../data";
 import Overlay from "../components/Overlay.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import Facets from "../components/Facets.vue";
+import { getValueForCode } from "@/shared/helpers";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/vue/24/solid";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 import {
   Listbox,
   ListboxLabel,
@@ -166,6 +246,7 @@ export default {
     AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,
+    XMarkIcon,
     Listbox,
     ListboxLabel,
     ListboxButton,
@@ -180,8 +261,11 @@ export default {
     const environment = ref(import.meta.env.MODE);
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const path = computed(() => route.fullPath);
     const metadata = inject("metadata");
+    const criteria = computed(() => store.state.metadata.criteria);
+    const loadingMetadata = computed(() => store.state.metadata.loading);
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
@@ -229,31 +313,29 @@ export default {
         mySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios
-          .delete("/workspace/saved/" + product.id)
-          .then((response) => {
-            if (response.data.error) {
-              removingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed from Saved Products.`,
-                type: "success",
-              });
-              let p = mySaved.value.find(
-                (item) => item.productNumber == product.productNumber
-              );
-              let indexOfProduct = mySaved.value.indexOf(p);
-              mySaved.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            removingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            removingProduct.value = false;
+            createNotification({
+              title: "Product Removed",
+              message: `Product ${product.productNumber} has been removed from Saved Products.`,
+              type: "success",
+            });
+            let p = mySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = mySaved.value.indexOf(p);
+            mySaved.value.splice(indexOfProduct, 1);
+          }
+        });
       }
     };
 
@@ -268,6 +350,8 @@ export default {
           });
           mySaved.value = products;
           loadingSaved.value = false;
+          aggregations.value = facetAggregations;
+          console.log("Aggregations: ", facetAggregations);
         }, 1000);
       } else {
         if (route.name == "saved") {
@@ -299,6 +383,181 @@ export default {
       }
     };
 
+    const getListForType = (type) => {
+      switch (type) {
+        case "regions[]":
+          return criteria.value.regions;
+        case "subregions[]":
+          return criteria.value.subregions;
+        case "countries[]":
+          return criteria.value.countries;
+        case "issues[]":
+          return criteria.value.issues;
+        case "topics[]":
+          return criteria.value.topics;
+        case "reporting_types[]":
+          return criteria.value.reporting_types;
+        case "product_types[]":
+          return criteria.value.product_types;
+        case "producing_offices[]":
+          return criteria.value.producing_offices;
+        case "classification[]":
+          return criteria.value.classification;
+        case "media_tags[]":
+          return criteria.value.media_tags;
+        case "non_state_actors[]":
+          return criteria.value.non_state_actors;
+        case "selected_for[]":
+          return criteria.value.selected_for;
+        default:
+          return [];
+      }
+    };
+
+    const getBooleanMapping = (queryKey) => {
+      if (queryKey === "product_types[]") {
+        return false;
+      } else {
+        const bracketIndex = queryKey.indexOf("[]");
+        if (bracketIndex !== -1) {
+          return queryKey.slice(0, bracketIndex).concat("_bool");
+        }
+        return false;
+      }
+    };
+
+    const buildBooleanFilters = () => {
+      const filteredKeys = Object.keys(route.query).filter((key) => {
+        if (key.indexOf("[]") !== -1) {
+          return true;
+        }
+        return false;
+      });
+      let queryText, queryDates;
+      if (route.query["text"]) {
+        queryText = {
+          displayName: route.query["text"],
+          firstItem: true,
+          lastItem: true,
+          type: "text",
+        };
+      }
+      let booleanFilterGroups = [];
+      filteredKeys.forEach((type) => {
+        const booleanMapping = getBooleanMapping(type);
+        const list = getListForType(type);
+        console.log("List: ", list);
+        let items = !Array.isArray(route.query[type])
+          ? [route.query[type]]
+          : route.query[type];
+        items = items.map((code) => {
+          const displayName = getValueForCode(
+            list,
+            type === "product_types[]" ? parseInt(code) : code
+          );
+          console.log("displayName: ", displayName);
+          return {
+            code,
+            displayName: displayName ? displayName.name : null,
+          };
+        });
+        console.log("items: ", items);
+        let boolean_val = "or";
+        let toggleable = false;
+        if (booleanMapping) {
+          boolean_val = route.query[booleanMapping];
+          toggleable = type === "reporting_types[]" ? false : true;
+        }
+        booleanFilterGroups.push({
+          type,
+          items,
+          boolean_val,
+          toggleable,
+        });
+      });
+      //console.log("booleanFilterGroups: ", booleanFilterGroups);
+      let booleanFilters = [];
+      if (queryText) {
+        booleanFilters.push(queryText);
+      }
+      if (queryDates) {
+        booleanFilters.push(queryDates);
+      }
+      booleanFilterGroups.forEach((filterGroup) => {
+        filterGroup.items.forEach((item, index, array) => {
+          let booleanFilter = {
+            displayName: item.displayName,
+            code: item.code,
+            type: filterGroup.type,
+            boolean_val: filterGroup.boolean_val,
+            toggleable: filterGroup.toggleable,
+          };
+          if (index === 0) {
+            booleanFilter.firstItem = true;
+          }
+          if (index === array.length - 1) {
+            booleanFilter.lastItem = true;
+          }
+          booleanFilters.push(booleanFilter);
+        });
+      });
+      console.log("booleanFilters: ", booleanFilters);
+      return booleanFilters;
+    };
+    const booleanFilters = ref(buildBooleanFilters());
+    const showSelectors = ref(true);
+
+    const toggleSelectors = () => {
+      showSelectors.value = !showSelectors.value;
+    };
+
+    const removeFilter = (item) => {
+      let query = {
+        ...route.query,
+        page: 1,
+      };
+      if (item.type === "text" || item.type === "query") {
+        delete query["text"];
+      } else if (item.type === "dates") {
+        delete query["start_date"];
+        delete query["end_date"];
+      } else {
+        const theList = getListForType(query[item.type]);
+        query[item.type] = theList.filter(
+          (queryItem) => queryItem !== item.code
+        );
+        if (query[item.type].length < 2) {
+          const booleanMapping = getBooleanMapping(item.type);
+          if (query[booleanMapping]) {
+            delete query[booleanMapping];
+          }
+          if (query[item.type].length === 0) {
+            delete query[item.type];
+          }
+        }
+      }
+      console.log("route: ", route.query);
+      router.push({
+        name: "saved",
+        query,
+      });
+    };
+
+    const toggleBooleanValue = (item) => {
+      let query = {
+        ...route.query,
+      };
+      const booleanMapping = getBooleanMapping(item.type);
+      if (query[booleanMapping] === "and") {
+        query[booleanMapping] = "or";
+      } else {
+        query[booleanMapping] = "and";
+      }
+      router.push({
+        query,
+      });
+    };
+
     onMounted(() => {
       getSavedProducts(path.value);
     });
@@ -309,22 +568,31 @@ export default {
 
     watch([selectedSort], () => {
       let query = { ...route.query };
-      // if (selectedSort.value.type === "sort_dir") {
-      // if (query.sort_field) {
-      //   delete query["sort_field"];
-      // }
       query = { ...query, sortDir: selectedSort.value.key };
-      // } else {
-      //   if (query.sort_dir) {
-      //     delete query["sort_dir"];
-      //   }
-      //   query = { ...query, sort_field: selectedSort.value.key };
-      // }
       router.push({
         query,
       });
       getSavedProducts(path.value);
-      // localStorage.setItem("lastSort", selectedSort.value.key);
+    });
+
+    watch(
+      () => route.query,
+      () => {
+        console.log(`route.query watcher triggered [${route.name}]`);
+        getSavedProducts(path.value);
+        booleanFilters.value = buildBooleanFilters();
+        closeFacetsDialog();
+      }
+    );
+
+    /*
+      Metadata needs to load first before building the query filters.
+      Countries subheader relies on Metadata so we load that as well.
+    */
+    watch([loadingMetadata], () => {
+      if (!loadingMetadata.value) {
+        booleanFilters.value = buildBooleanFilters();
+      }
     });
 
     return {
@@ -344,6 +612,13 @@ export default {
       removeSavedProduct,
       getSavedProducts,
       getProductTypeName,
+      buildBooleanFilters,
+      booleanFilters,
+      showSelectors,
+      toggleSelectors,
+      removeFilter,
+      toggleBooleanValue,
+      loadingMetadata,
     };
   },
 };
