@@ -1,7 +1,10 @@
 <template>
   <div>
     <div
-      class="flex flex-col bg-white rounded-md relative max-w-[464px] h-full shadow-md hover:shadow-lg mb-2"
+      class="flex flex-col rounded-md relative max-w-[464px] h-full shadow-md hover:shadow-lg mb-2"
+      :class="[
+        !loading && isProductLocked(product) ? 'bg-slate-50' : 'bg-white ',
+      ]"
     >
       <template v-if="loading">
         <div class="animate-pulse min-h-[370px] max-h-[555px]">
@@ -28,7 +31,16 @@
         >
           <ProductImage :product="product" />
         </router-link>
-        <div class="flex flex-col py-6 justify-between">
+        <div class="flex flex-col py-6 justify-between relative">
+          <div
+            v-if="isProductLocked(product)"
+            class="absolute w-full justify-center pt-2"
+          >
+            <MaxProductIcon
+              class="w-20 h-20 m-auto text-slate-700/20"
+              icon="locked"
+            />
+          </div>
           <div class="relative pb-6 px-4">
             <div
               class="text-gray-500 hover:text-gray-900 absolute top-0 right-0 cursor-pointer"
@@ -103,7 +115,7 @@
                         </div>
                       </MenuItem>
                     </template>
-                    <template v-if="type === 'product'">
+                    <template v-if="type === 'product' && canManageWire">
                       <MenuItem v-if="product.featureId">
                         <router-link
                           :to="{
@@ -143,12 +155,9 @@
                 </transition>
               </Menu>
             </div>
-            <router-link
+            <ProductRestrictedLink
               class="hover:underline cursor-pointer"
-              :to="{
-                name: product.state === 'draft' ? 'product-preview' : 'product',
-                params: { doc_num: product.productNumber },
-              }"
+              :product="product"
               target="_blank"
             >
               <div class="text-xs text-blue-700 font-medium pb-2">
@@ -163,14 +172,12 @@
                 >
                 {{ product.title }}
               </p>
-            </router-link>
+            </ProductRestrictedLink>
           </div>
-          <router-link
+          <ProductRestrictedLink
             class="hover:underline cursor-pointer absolute bottom-0"
-            :to="{
-              name: product.state === 'draft' ? 'product-preview' : 'product',
-              params: { doc_num: product.productNumber },
-            }"
+            :product="product"
+            target="_blank"
           >
             <div class="px-4 text-sm text-gray-500 pb-4">
               <div class="flex space-x-2">
@@ -189,14 +196,16 @@
                 </template>
               </div>
             </div>
-          </router-link>
+          </ProductRestrictedLink>
         </div>
       </template>
     </div>
   </div>
 </template>
 <script>
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
+import { useStore } from "vuex";
+import { isProductLocked } from "@/shared/helpers";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   ShareIcon,
@@ -207,6 +216,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
+import ProductRestrictedLink from "@workspace/components/ProductRestrictedLink.vue";
 import ProductImage from "@workspace/components/ProductImage.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -224,6 +234,7 @@ export default {
     PencilSquareIcon,
     TrashIcon,
     XMarkIcon,
+    ProductRestrictedLink,
     ProductImage,
   },
   props: {
@@ -246,6 +257,8 @@ export default {
   },
   emits: ["delete", "remove", "save"],
   setup(props, { emit }) {
+    const store = useStore();
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const environment = ref(import.meta.env.MODE);
     const createNotification = inject("create-notification");
     const getImg = (src) => {
@@ -272,6 +285,8 @@ export default {
       emit("save", props.product);
     };
     return {
+      isProductLocked,
+      canManageWire,
       environment,
       getImg,
       shareProduct,

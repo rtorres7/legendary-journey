@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { getValueForName } from "@current/helpers";
+import { getValueForName } from "@/shared/helpers";
 import { computed, ref, onMounted } from "vue";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";

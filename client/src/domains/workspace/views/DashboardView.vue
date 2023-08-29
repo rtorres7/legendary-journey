@@ -41,9 +41,11 @@
     <template v-if="!loadingDrafts && !loadingPublished">
       <template v-if="myDrafts.length > 0 && canManageWire">
         <div class="pb-6 flex items-center">
-          <div class="text-lg font-semibold text-gray-700">Recent Drafts</div>
+          <div class="text-lg font-semibold text-gray-700">
+            Drafts within the last week
+          </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
           <template v-for="(product, index) in myDrafts" :key="product">
             <MyDraftProductCard
               :product="product"
@@ -60,6 +62,10 @@
           Recently Published
         </div>
         <a
+          v-if="
+            myPublished.length > 4 ||
+            (myPublished.length > 1 && numCards < myPublished.length)
+          "
           class="flex items-center text-gray-500 text-sm font-semibold"
           href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
           target="_blank"
@@ -103,7 +109,7 @@
     </template>
     <template v-if="canManageWire && !loadingStats">
       <div class="py-6 flex items-center">
-        <div class="text-lg font-bold">The Stats</div>
+        <div class="text-lg font-semibold text-gray-700">The Stats</div>
       </div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"

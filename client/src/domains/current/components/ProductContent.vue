@@ -27,7 +27,7 @@
     </h1>
     <div class="flex space-x-4 text-sm md:text-md">
       <p class="capitalize">
-        {{ product.state }} - 
+        {{ product.state }} -
         {{ formatDate(product.date_published) }}
       </p>
       <p aria-hidden="true">●</p>
@@ -95,7 +95,9 @@
           </p>
           <p>
             <span class="font-semibold">Audience: </span>
-            <template v-if="product.dissem_orgs && product.dissem_orgs?.length > 0">
+            <template
+              v-if="product.dissem_orgs && product.dissem_orgs?.length > 0"
+            >
               {{ product.dissem_orgs.map((a) => a.name).join(", ") }}
             </template>
             <template v-else>
@@ -170,7 +172,7 @@
 </template>
 
 <script>
-import { formatDate } from "@current/helpers";
+import { formatDate } from "@/shared/helpers";
 import { ChevronDownIcon } from "@heroicons/vue/24/outline";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { mapGetters } from "vuex";

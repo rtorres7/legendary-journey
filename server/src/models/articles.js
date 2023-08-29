@@ -81,7 +81,7 @@ const ArticleSchema = new Schema(
     datePublished: Date,
     deleted: {
       type: Boolean,
-      default: false
+      default: false,
     },
     dissemOrgs: [DissemSchema],
     email_count: {
@@ -92,9 +92,7 @@ const ArticleSchema = new Schema(
     images: [],
     issues: [DissemSchema],
     legacyCurrentId: String,
-    needed: {
-      orgs: [],
-    },
+    needed: {},
     nonStateActors: [DissemSchema],
     orgRestricted: Boolean,
     pdfVersionBase64: String,
@@ -235,7 +233,7 @@ ArticleSchema.virtual("indexable").get(function () {
     featureId: this.get("_id"),
     images: findArticleImage(this.attachments),
     issues: this.issues?.map((issue) => issue.code),
-    needed: this.needed || { orgs: [] },
+    needed: this.needed || {},
     orgRestricted: this.orgRestricted || false,
     pdfVersionRaw: this.pdfVersionBase64,
     print_count: this.print_count,

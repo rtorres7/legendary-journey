@@ -544,7 +544,7 @@ import {
   getValueForCode,
   hasProductAccess,
   isSavedProduct,
-} from "@current/helpers";
+} from "@/shared/helpers";
 import ProductContent from "@current/components/ProductContent.vue";
 import ProductImage from "@current/components/ProductImage.vue";
 import updateSavedStatus from "@current/composables/updateSavedStatus";
