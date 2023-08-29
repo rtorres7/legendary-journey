@@ -7,6 +7,9 @@ const {
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
 const { AttachmentService } = require("./attachment-service");
+const EventLog = require("../models/event_log");
+const mongoose = require("mongoose");
+const { findArticleImage } = require("../util/images");
 
 class ProductService {
   constructor() {
@@ -194,29 +197,72 @@ class ProductService {
     const recentCount = await this.#countRecentProductsForProducingOffice(
       producingOfficeName,
     );
+
+    let kiwiSort = KiwiSort.of("datePublished", sortDir);
+    if (sortDir === "views") {
+      kiwiSort = KiwiSort.of("views", "desc");
+    }
+
     return KiwiPage.of(
       page,
       limit,
       recentCount,
-      recentProducts.map((recent) => recent.features),
+      recentProducts.map((recent) => recent),
     )
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of("datePublished", sortDir));
+      .addKiwiSort(kiwiSort);
   }
 
   async #findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir) {
-    return await Article
-      .find({
+    let sort = { datePublished: sortDir.toLowerCase() };
+    if (sortDir === "views") {
+      sort = { views: "desc" };
+    }
+
+    const products = await Article.aggregate()
+      .match({
         $and: [
           { state: 'posted' },
           { deleted: false },
           { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
         ]
       })
+      .lookup({
+        from: EventLog.collection.name,
+        localField: "productNumber",
+        foreignField: "productId",
+        as: "eventLogs"
+      })
+      .addFields({
+        views: {
+          $size: "$eventLogs"
+        }
+      })
       .limit(limit)
       .skip(offset)
-      .sort({ datePublished: sortDir.toLowerCase() })
-      .exec();
+      .sort(sort).exec();
+
+    return products.map(product => {
+      return {
+        createdAt: product.createdAt,
+        datePublished: product.datePublished,
+        doc_num: product.productNumber,
+        id: product._id.toString(),
+        featureId: product._id.toString(),
+        images: findArticleImage(product.attachments),
+        needed: product.needed,
+        nonStateActors: product.nonStateActors,
+        orgRestricted: product.orgRestricted,
+        productNumber: product.productNumber,
+        productType: product.productType,
+        state: product.state,
+        summary: product.summary,
+        summaryClassification: product.summaryClassification,
+        title: product.title,
+        titleClassification: product.titleClassification,
+        views: product.views
+      };
+    });
   }
 
   async #countRecentProductsForProducingOffice(producingOfficeName) {
@@ -355,6 +401,35 @@ class ProductService {
     await product.save();
     this.productSearchService.update(product.indexable);
     return product;
+  }
+
+  async findProductsForIds(ids, limit, offset, sortDir = undefined){
+    let query = Article.aggregate()
+      .match({ "_id": { $in: ids.map(id => new mongoose.Types.ObjectId(id)) } })
+      .lookup({
+        from: EventLog.collection.name,
+        localField: "productNumber",
+        foreignField: "productId",
+        as: "eventLogs"
+      })
+      .addFields({
+        views: {
+          $size: "$eventLogs"
+        }
+      })
+      .limit(limit)
+      .skip(offset);
+
+    if (sortDir) {
+      let sort = { datePublished: sortDir.toLowerCase() };
+      if (sortDir === "views") {
+        sort = { views: "desc" };
+      }
+
+      query = query.sort(sort);
+    }
+
+    return await query.exec();
   }
 }
 

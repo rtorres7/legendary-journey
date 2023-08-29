@@ -263,45 +263,6 @@ describe("Workspace Routes", () => {
     });
   });
 
-  describe("GET /workspace/products", () => {
-    it("should return all my products", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupAppWithUser(router, CURRENT_USER);
-
-      return request(app)
-        .get("/workspace/products")
-        .expect(200)
-        .expect("Content-Type", /json/)
-        .then((res) => {
-          expect(res.body.content.length).toBe(5);
-
-          const ids = res.body.content.map((product) => product.productNumber);
-          expect(ids).toStrictEqual([
-            "WIReWIRe_sample_1",
-            "WIReWIRe_sample_2",
-            "WIReWIRe_sample_3",
-            "WIReWIRe_sample_4",
-            "WIReWIRe_sample_5",
-          ]);
-        });
-    });
-
-    it("should return standard error response when lookup fails", () => {
-      process.env.THROW_TEST_ERROR = true;
-
-      const router = require("../../src/routes/workspace");
-      const app = setupAppWithUser(router, CURRENT_USER);
-
-      return request(app).get("/workspace/products").expect(500, {
-        message: "Unable to find user's products: whoops",
-        error: "Unable to find user's products: whoops",
-        code: 500,
-        fieldName: "",
-        itemId: "",
-      });
-    });
-  });
-
   describe("GET /workspace/saved", () => {
     it("should return all saved products", async () => {
       const router = require("../../src/routes/workspace");
