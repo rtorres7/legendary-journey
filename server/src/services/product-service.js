@@ -360,7 +360,7 @@ class ProductService {
   }
 
   async findRecentViewedProductsForUser(userId) {
-    const productIds = this.metricsService.getRecentViewsForUser(userId);
+    const productIds = await this.metricsService.getRecentViewsForUser(userId);
     const products = [];
     for (let productId of productIds) {
       const product = await Article.findOne({ 'productNumber': productId }).exec();
