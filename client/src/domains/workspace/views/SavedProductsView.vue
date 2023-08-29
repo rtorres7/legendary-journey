@@ -446,7 +446,6 @@ export default {
       filteredKeys.forEach((type) => {
         const booleanMapping = getBooleanMapping(type);
         const list = getListForType(type);
-        console.log("List: ", list);
         let items = !Array.isArray(route.query[type])
           ? [route.query[type]]
           : route.query[type];
@@ -455,7 +454,6 @@ export default {
             list,
             type === "product_types[]" ? parseInt(code) : code
           );
-          console.log("displayName: ", displayName);
           return {
             code,
             displayName: displayName ? displayName.name : null,
