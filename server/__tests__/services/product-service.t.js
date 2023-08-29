@@ -2,7 +2,7 @@ const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const MetadataService = require("../../src/services/metadata");
-const ProductService = require('../../src/services/product-service');
+const ProductService = require("../../src/services/product-service");
 
 const { loadMetadata, loadArticlesIntoMongo } = require("../__utils__/dataLoader");
 
@@ -29,6 +29,16 @@ jest.mock('../../src/services/product-search-service.js', () => {
       search: jest.fn()
         .mockResolvedValueOnce({ hits: { hits: [{ _source: { id: 1 }}] }}),
       delete: jest.fn(),
+    };
+  });
+});
+
+jest.mock('../../src/services/aggregated-metrics-service', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getRecentViewsForUser: jest.fn().mockImplementation((userId) => {
+        return ["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"];
+      })
     };
   });
 });
@@ -477,5 +487,13 @@ describe('ProductService', () => {
       expect(products.totalElements).toEqual(5);
       expect(products.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
     }
+  });
+
+  describe('findRecentViewedProductsForUser', () => {
+    it('should return a page of all products', async () => {
+      const products = await service.findRecentViewedProductsForUser(1);
+      expect(products).toBeArrayOfSize(4);
+      expect(products.map(i => i.productNumber)).toEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]);
+    });
   });
 });

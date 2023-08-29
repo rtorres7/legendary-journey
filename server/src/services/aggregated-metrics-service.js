@@ -1,6 +1,8 @@
 // import { date } from "joi";
+
 const constant = require("../util/constant.js");
 const EventLog = require("../models/event_log");
+// const { logger } = require("../config/logger");
 
 class AggregatedMetricsService {
   constructor() {
@@ -161,6 +163,47 @@ class AggregatedMetricsService {
     return {
       totalViews: totalViews,
     };
+  }
+
+  /**
+   * Get last 4 products viewed by user.
+   * @param {number} userId 
+   * @returns {Promise<number[]>} product ids
+   */
+  async getRecentViewsForUser(userId) {
+    const results = await this.client.search({
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "userId": userId } },
+            { "term": { "eventType": "PRODUCT_VIEW" } }
+          ],
+        }
+      },
+      "aggs": {
+        "group_by_productId": {
+          "terms": {
+            "field": "productId",
+          },
+          "aggs": {
+            "max_timestamp": {
+              "max": { "field": "timestamp" }
+            },
+            "sort_by_timestamp": {
+              "bucket_sort": {
+                "sort": [
+                  { "max_timestamp": { "order": "desc" } }
+                ],
+                "size": 4
+              }
+            }
+          }
+        }
+      }
+    });
+    // logger.info("%O", results.aggregations.group_by_productId.buckets.map(i => ({ productId: i.key, timestamp: i.max_timestamp.value})));
+    return results.aggregations.group_by_productId.buckets.map(i => i.key);
   }
 }
 

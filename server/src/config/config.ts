@@ -25,6 +25,9 @@ interface IConfig {
     secret: string,
     caCerts: string,
   },
+  postgres: {
+    url: string,
+  }
   minio: {
     endPoint: string,
     port: number,
@@ -150,6 +153,9 @@ export class ConfigLoader {
         id: env.MXS_OAUTH_ID,
         secret: env.MXS_OAUTH_SECRET,
         caCerts: env.NODE_EXTRA_CA_CERTS,
+      },
+      postgres: {
+        url: env.POSTGRES_CONNECTION_URL,
       },
       minio: {
         endPoint: env.MINIO_ENDPOINT,

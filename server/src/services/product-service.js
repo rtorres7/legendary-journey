@@ -1,6 +1,7 @@
 const dayjs = require("dayjs");
 const Article = require("../models/articles");
 const ProductSearchService = require("./product-search-service");
+const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const {
   KiwiPage,
   KiwiSort,
@@ -12,6 +13,7 @@ class ProductService {
   constructor() {
     this.productSearchService = new ProductSearchService();
     this.attachmentService = new AttachmentService();
+    this.metricsService = new AggregatedMetricsService();
   }
 
   async findAllByDate(date) {
@@ -355,6 +357,17 @@ class ProductService {
     await product.save();
     this.productSearchService.update(product.indexable);
     return product;
+  }
+
+  async findRecentViewedProductsForUser(userId) {
+    const productIds = this.metricsService.getRecentViewsForUser(userId);
+    const products = [];
+    for (let productId of productIds) {
+      const product = await Article.findOne({ 'productNumber': productId }).exec();
+      KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
+      products.push(product.features);
+    }
+    return products;
   }
 }
 
