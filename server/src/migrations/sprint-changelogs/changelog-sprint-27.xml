@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.22.xsd">
+
+    <changeSet id="6-pega-1267-updating-column-names" author="danikol">
+        <renameColumn newColumnName="search_params" oldColumnName="searchParams" columnDataType="text" tableName="feeds" />
+        <renameColumn newColumnName="selected_readings" oldColumnName="selectedReadings" columnDataType="text" tableName="feeds" />
+        <renameColumn newColumnName="position" oldColumnName="order" columnDataType="int" remarks="Position of the feed in the list" tableName="feeds" />
+        <setColumnRemarks columnName="classification" remarks="Overall classification of the feed" tableName="feeds" />
+    </changeSet>
+
+</databaseChangeLog>

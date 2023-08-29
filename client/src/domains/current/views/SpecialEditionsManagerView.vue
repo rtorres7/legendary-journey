@@ -127,7 +127,20 @@ export default {
     const store = useStore();
 
     const loading = computed(() => store.state.specialEditions.loading);
-    const links = computed(() => store.state.specialEditions.links);
+    const links = computed(() => {
+      const feeds = {
+        draft: store.state.specialEditions.links.filter(
+          (link) => link.state === "Draft"
+        ),
+        posted: store.state.specialEditions.links.filter(
+          (link) => link.state === "Posted"
+        ),
+        archived: store.state.specialEditions.links.filter(
+          (link) => link.state === "Archived"
+        ),
+      };
+      return feeds;
+    });
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
     );

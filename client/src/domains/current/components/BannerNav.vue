@@ -476,19 +476,13 @@
                 </template>
                 <template v-else>
                   <template
-                    v-if="
-                      specialEditionLinks.posted &&
-                      specialEditionLinks.posted.length > 0
-                    "
+                    v-if="specialEditionLinks && specialEditionLinks.length > 0"
                   >
                     <div
                       class="grid lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-2 pb-4"
                       aria-label="select a special edition"
                     >
-                      <template
-                        v-for="link in specialEditionLinks.posted"
-                        :key="link"
-                      >
+                      <template v-for="link in specialEditionLinks" :key="link">
                         <SpecialEditionLink :link="link" />
                       </template>
                     </div>
@@ -816,8 +810,10 @@ export default {
     const loadingSpecialEditionLinks = computed(
       () => store.state.specialEditions.loading
     );
-    const specialEditionLinks = computed(
-      () => store.state.specialEditions.links
+    const specialEditionLinks = computed(() =>
+      store.state.specialEditions.links.filter(
+        (link) => link.state === "Posted"
+      )
     );
     const isAdmin = computed(() => store.state.testConsole.admin);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);

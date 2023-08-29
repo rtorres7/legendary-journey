@@ -307,7 +307,46 @@ async function loadUserData(organization) {
   });
 }
 
+async function loadFeedData() {
+  await models.Feed.findOrCreate({
+    where: {
+      searchParams: "https://localhost:8443/search?text=test1",
+    },
+    defaults: {
+      name: "Test Feed #1",
+      searchParams: "https://localhost:8443/search?text=test1",
+      state: "Draft",
+      classification: "UNCLASSIFIED",
+    },
+  });
+
+  await models.Feed.findOrCreate({
+    where: {
+      searchParams: "https://localhost:8443/search?text=test2",
+    },
+    defaults: {
+      name: "Test Feed #2",
+      searchParams: "https://localhost:8443/search?text=test2",
+      state: "Posted",
+      classification: "UNCLASSIFIED",
+    },
+  });
+
+  await models.Feed.findOrCreate({
+    where: {
+      searchParams: "https://localhost:8443/search?text=test3",
+    },
+    defaults: {
+      name: "Test Feed #3",
+      searchParams: "https://localhost:8443/search?text=test3",
+      state: "Archived",
+      classification: "UNCLASSIFIED",
+    },
+  });
+}
+
 module.exports = {
   loadUserData,
   loadOrganizationData,
+  loadFeedData,
 };

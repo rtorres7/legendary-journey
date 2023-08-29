@@ -3,7 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const MongoStore = require("connect-mongo");
 const auth = require("./services/auth");
-const fs = require('fs');
+const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
 const { successHandler, errorHandler } = require("./config/morgan");
@@ -139,9 +139,10 @@ setupMongoose();
 // Setup elastic search client
 require("./data/elasticsearch");
 
-async function loadAllData(loadOrganizationData, loadUserData) {
+async function loadAllData(loadOrganizationData, loadUserData, loadFeedData) {
   const organization = await loadOrganizationData();
   await loadUserData(organization);
+  await loadFeedData();
 }
 
 async function loadObjectStore() {
@@ -152,10 +153,30 @@ async function loadObjectStore() {
   } catch (error) {
     // bucket already exists
   }
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg")), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg")), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")),   { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")),      { "content-type": "image/jpeg"});
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg")),
+    { "content-type": "image/jpeg" },
+  );
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg")),
+    { "content-type": "image/jpeg" },
+  );
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")),
+    { "content-type": "image/jpeg" },
+  );
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")),
+    { "content-type": "image/jpeg" },
+  );
 }
 
 // Load seed data
@@ -170,8 +191,9 @@ if (process.env.MXS_ENV === "container") {
 
   const { loadOrganizationData } = require("./postgres/seed");
   const { loadUserData } = require("./postgres/seed");
+  const { loadFeedData } = require("./postgres/seed");
 
-  loadAllData(loadOrganizationData, loadUserData).then(() => {
+  loadAllData(loadOrganizationData, loadUserData, loadFeedData).then(() => {
     console.log("All data loaded");
   });
 
