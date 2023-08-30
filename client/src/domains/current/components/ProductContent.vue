@@ -145,14 +145,7 @@
             {{ product.updated_by.cn }}
           </p>
           <!--temporary until platform gets CN in updatedBy-->
-          <p
-            v-if="
-              product.updatedBy?.dn &&
-              canManageWire &&
-              environment !== 'production' &&
-              environment !== 'development'
-            "
-          >
+          <p v-if="product.updatedBy?.dn && canManageWire">
             <span class="font-semibold">Updated By: </span>
             {{ product.updatedBy.dn }}
           </p>
