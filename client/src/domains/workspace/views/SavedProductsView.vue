@@ -78,13 +78,13 @@
             </transition>
           </div>
         </Listbox>
-        <button
+        <!-- <button
           class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
           @click="openFacetsDialog"
         >
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
-        </button>
+        </button> -->
       </div>
     </div>
     <template v-if="loadingSaved">
@@ -149,7 +149,7 @@ import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import Facets from "../components/Facets.vue";
 import {
-  AdjustmentsHorizontalIcon,
+  //AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/vue/24/solid";
@@ -163,7 +163,7 @@ import {
 export default {
   components: {
     MyPublishedProductCard,
-    AdjustmentsHorizontalIcon,
+    //AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,
     Listbox,
@@ -194,10 +194,10 @@ export default {
       isFacetsDialogOpen.value = true;
     };
     const sortOptions = [
+      { name: "Recently Saved", key: "created", type: "sortDir" },
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
       { name: "Most Views", key: "views", type: "sortDir" },
-      { name: "Recently Saved", key: "created", type: "sortDir" }
     ];
     const getSortOption = (query) => {
       const sortDir = query.sortDir ? query.sortDir : undefined;
@@ -230,31 +230,29 @@ export default {
         mySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios
-          .delete("/workspace/saved/" + product.id)
-          .then((response) => {
-            if (response.data.error) {
-              removingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed from Saved Products.`,
-                type: "success",
-              });
-              let p = mySaved.value.find(
-                (item) => item.productNumber == product.productNumber
-              );
-              let indexOfProduct = mySaved.value.indexOf(p);
-              mySaved.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            removingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            removingProduct.value = false;
+            createNotification({
+              title: "Product Removed",
+              message: `Product ${product.productNumber} has been removed from Saved Products.`,
+              type: "success",
+            });
+            let p = mySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = mySaved.value.indexOf(p);
+            mySaved.value.splice(indexOfProduct, 1);
+          }
+        });
       }
     };
 
