@@ -8,6 +8,7 @@ const {
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
 const { AttachmentService } = require("./attachment-service");
+const { logger } = require("../config/logger");
 
 class ProductService {
   constructor() {
@@ -361,21 +362,25 @@ class ProductService {
 
   /**
    * @param {string} userId 
-   * @param {number} page page number, redundant with skip
+   * @param {number} page page number, starts at 1
    * @param {number} perPage items per page
-   * @param {number} skip items to skip, (page - 1) * perPage, @see pagingParams
    * @param {string} sortDir 'asc' or 'desc'
    * @returns {Promise<KiwiPage>}
    */
-  async findRecentViewedProductsForUser(userId, page = 0, perPage = 4, skip = 0, sortDir = "desc") {
-    const { total, productIds } = await this.metricsService.getRecentViewsForUser(userId, skip, perPage, sortDir);
+  async findRecentViewedProductsForUser(userId, page = 1, perPage = 4, sortDir = "desc") {
+    const from = (page - 1) * perPage;
+    const { total, productIds } = await this.metricsService.getRecentViewsForUser(userId, from, perPage, sortDir);
     const products = [];
     for (let productId of productIds) {
       const product = await Article.findOne({ 'productNumber': productId }).exec();
-      KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
-      products.push(product.features);
+      if (product) {
+        products.push(product.features);
+      } else {
+        logger.error(`product ${productId} not found`);
+        // KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
+      }
     }
-    return Promise.resolve(KiwiPage.of(page, perPage, total, products));
+    return Promise.resolve(KiwiPage.of(page, perPage, total, products).usingOneAsFirstPage());
   }
 }
 

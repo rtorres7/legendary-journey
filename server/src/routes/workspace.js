@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { KiwiStandardResponsesExpress, KiwiPreconditions } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
@@ -107,10 +107,7 @@ router.get("/workspace/viewed", async (req, res) => {
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
-        "type": "array",
-        "items": {
-          $ref: '#/definitions/PageOfProducts'
-        }
+        $ref: '#/definitions/PageOfProducts'
       }
     }
     #swagger.responses[500] = {
@@ -120,9 +117,11 @@ router.get("/workspace/viewed", async (req, res) => {
     }
    */
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const { perPage, page, skip, sortDir } = pagingParams(req);
+    const { perPage, page, sortDir } = pagingParams(req); // assumes page starts with 1
+    KiwiPreconditions.checkPositive(page);
+    KiwiPreconditions.checkPositive(perPage);
     try {
-      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, sortDir);
       res.json(pageResults);
     } catch (error) {
       logger.error(error);

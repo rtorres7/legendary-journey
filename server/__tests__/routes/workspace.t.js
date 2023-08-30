@@ -64,7 +64,7 @@ jest.mock("../../src/services/product-service.js", () => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
         }
-        return Promise.resolve(KiwiPage.of(0, 4, 20, articles.slice(0, 4)));
+        return Promise.resolve(KiwiPage.of(1, 4, 20, articles.slice(0, 4)));
       })
     };
   });
@@ -527,7 +527,7 @@ describe("Workspace Routes", () => {
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
-          expect(res.body.number).toEqual(0); // page num
+          expect(res.body.number).toEqual(1); // page num
           expect(res.body.totalElements).toEqual(20); // total
           expect(res.body.content.length).toEqual(4);
         });
