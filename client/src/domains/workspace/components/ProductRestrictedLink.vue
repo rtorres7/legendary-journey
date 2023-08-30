@@ -68,7 +68,7 @@ export default {
   setup(props) {
     const metadata = inject("metadata");
     const userAccess = () => {
-      if (props.product?.org_restricted && props.product?.needed.orgs) {
+      if (props.product?.orgRestricted && props.product?.needed.orgs) {
         return props.product.needed.orgs.length > 1
           ? `affiliated with ${
               props.product.needed.orgs.slice(0, -1).join(", ") +
