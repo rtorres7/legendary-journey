@@ -165,7 +165,7 @@ router.get("/workspace/saved", async (req, res) => {
 
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
-      const { perPage, page, sortDir } = pagingParams(req);
+      const { perPage, page, sortDir } = pagingParams(req, "created");
       const term = req.query.text;
       const filters = req.query;
 

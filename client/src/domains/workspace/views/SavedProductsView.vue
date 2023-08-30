@@ -269,8 +269,8 @@ export default {
           loadingSaved.value = false;
         }, 1000);
       } else {
-        if (route.name == "saved") {
-          axios.get(path).then((response) => {
+        if (route.name === "saved") {
+          axios.get(path, {params: { perPage: 1000 }}).then((response) => {
             loadingSaved.value = false;
             if (response.data) {
               mySaved.value = response.data.content;

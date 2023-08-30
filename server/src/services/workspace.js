@@ -3,6 +3,8 @@ const ProductService = require("./product-service");
 const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const _ = require("lodash");
+const { findArticleImage } = require("../util/images");
+const path = require("path");
 
 class WorkspaceService {
   constructor() {
@@ -61,6 +63,8 @@ class WorkspaceService {
     }
 
     products = products.map(product => {
+      this.applyAttachmentUsageTo(product.attachments);
+
       return {
         classification: product.classification,
         classificationXml: product.classificationXml,
@@ -73,6 +77,7 @@ class WorkspaceService {
         htmlBody: product.htmlBody,
         id: product._id.toString(),
         issues: product.issues?.map(issue => issue.code),
+        images: findArticleImage(product?.attachments),
         nonStateActors: product.nonStateActors?.map(actor => actor.code),
         orgRestricted: product.orgRestricted,
         print_count: product.print_count,
@@ -98,6 +103,18 @@ class WorkspaceService {
       .usingOneAsFirstPage()
       .addKiwiSort(kiwiSort)
       .addSupplementaryData({ aggregations: results.aggregations });
+  }
+
+  applyAttachmentUsageTo(attachments) {
+    if (attachments) {
+      attachments.forEach(attachment => {
+        const parsed = path.parse(attachment.fileName);
+        const isThumbnail =
+          parsed.name === "article" &&
+          /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
+        attachment.usage = isThumbnail ? "article" : "";
+      });
+    }
   }
 
   async createSavedProduct(productId, userId) {
