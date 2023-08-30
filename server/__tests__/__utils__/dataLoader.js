@@ -3016,7 +3016,7 @@ const loadSavedProducts = async (postgresUrl) => {
   await sequelize.models.SavedProduct.sync();
 
   return await sequelize.models.SavedProduct.create({
-    productId: "WIReWIRe_sample_1",
+    productId: "1",
     createdBy: 1,
   });
 };

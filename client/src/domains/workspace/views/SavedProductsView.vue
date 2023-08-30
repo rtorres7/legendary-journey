@@ -17,7 +17,7 @@
         <Listbox
           v-model="selectedSort"
           as="div"
-          class="min-w-[215px] inline-flex items-center text-gray-700"
+          class="min-w-[250px] inline-flex items-center text-gray-700"
         >
           <div>
             <ListboxLabel class="text-sm line-clamp-1 xl:line-clamp-none w-max">
@@ -197,6 +197,7 @@ export default {
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
       { name: "Most Views", key: "views", type: "sortDir" },
+      { name: "Recently Saved", key: "created", type: "sortDir" }
     ];
     const getSortOption = (query) => {
       const sortDir = query.sortDir ? query.sortDir : undefined;
@@ -323,8 +324,6 @@ export default {
       router.push({
         query,
       });
-      getSavedProducts(path.value);
-      // localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     return {

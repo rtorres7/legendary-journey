@@ -13,15 +13,15 @@ jest.mock('../../src/services/metadata.js', () => {
 jest.mock('../../src/services/product-search-service.js', () => {
   return jest.fn().mockImplementation(() => {
     return {
-      search: jest.fn().mockResolvedValue({ totalCount: 1, results: [{id: 1, productNumber: "really-cool-product"}]})
+      search: jest.fn().mockResolvedValue({ totalCount: 1, results: [{id: "1", productNumber: "really-cool-product"}]})
     };
   });
 });
 
-jest.mock('../../src/services/aggregated-metrics-service.js', () => {
+jest.mock('../../src/services/product-service.js', () => {
   return jest.fn().mockImplementation(() => {
     return {
-      getProductViewsCountForMultipleProducts: jest.fn().mockResolvedValue({ "really-cool-product": 1 })
+      findProductsForIds: jest.fn().mockResolvedValue([{_id: 1, productNumber: "really-cool-product", views: 1}])
     };
   });
 });
@@ -74,7 +74,21 @@ describe('Workspace Service', () => {
       expect(products.numberOfElements).toEqual(1);
       expect(products.totalPages).toEqual(1);
       expect(products.totalElements).toEqual(1);
-      expect(products.sort).toEqual({ direction: 'views', property: 'views', ignoreCase: false, ascending: false});
+      expect(products.sort).toEqual({ direction: 'desc', property: 'views', ignoreCase: false, ascending: false});
+    });
+
+    it('should return a page of saved products for user sorted by saved time', async () => {
+      const products = await service.findPageOfSavedProductsForUser(1, '', 10, 1, 'created');
+
+      expect(products.content).toHaveLength(1);
+      expect(products.content.map(product => product.productNumber)).toEqual(["really-cool-product"]);
+      expect(products.content.map(product => product.views)).toEqual([1]);
+      expect(products.size).toEqual(10);
+      expect(products.number).toEqual(1);
+      expect(products.numberOfElements).toEqual(1);
+      expect(products.totalPages).toEqual(1);
+      expect(products.totalElements).toEqual(1);
+      expect(products.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
     });
   });
 
@@ -169,7 +183,7 @@ describe('Workspace Service', () => {
     it('should add a new saved product to a given collection', async () => {
       const { models } = require('../../src/data/sequelize');
       const collection = await models.Collection.findOne({ where: { name: 'Sample Collection' }});
-      const product = await models.SavedProduct.findOne({ where: { productId: "WIReWIRe_sample_1" }});
+      const product = await models.SavedProduct.findOne({ where: { productId: "1" }});
 
       const savedCollection = await service.addSavedProductToCollection(collection.id, product.id);
 
@@ -200,7 +214,7 @@ describe('Workspace Service', () => {
     it('should remove a saved product from a given collection', async () => {
       const { models } = require('../../src/data/sequelize');
       const collection = await models.Collection.findOne({ where: {name: 'Sample Collection' }});
-      const product = await models.SavedProduct.findOne({ where: {productId: "WIReWIRe_sample_1" }});
+      const product = await models.SavedProduct.findOne({ where: {productId: "1" }});
 
       await collection.addSavedProduct(product);
 
