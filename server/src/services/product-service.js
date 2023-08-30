@@ -10,6 +10,7 @@ const { AttachmentService } = require("./attachment-service");
 const EventLog = require("../models/event_log");
 const mongoose = require("mongoose");
 const { findArticleImage } = require("../util/images");
+const path = require("path");
 
 class ProductService {
   constructor() {
@@ -243,6 +244,8 @@ class ProductService {
       .sort(sort).exec();
 
     return products.map(product => {
+      this.applyAttachmentUsageTo(product.attachments);
+
       return {
         createdAt: product.createdAt,
         datePublished: product.datePublished,
@@ -263,6 +266,18 @@ class ProductService {
         views: product.views
       };
     });
+  }
+
+  applyAttachmentUsageTo(attachments) {
+    if (attachments) {
+      attachments.forEach(attachment => {
+        const parsed = path.parse(attachment.fileName);
+        const isThumbnail =
+          parsed.name === "article" &&
+          /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
+        attachment.usage = isThumbnail ? "article" : "";
+      });
+    }
   }
 
   async #countRecentProductsForProducingOffice(producingOfficeName) {
