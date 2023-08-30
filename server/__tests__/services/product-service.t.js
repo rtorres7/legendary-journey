@@ -343,7 +343,7 @@ describe('ProductService', () => {
       await createPublished(10390); // Watch
       await createPublished(10376); // Current (Feature)
       const results = await service.findFeaturesAndBriefs();
-      expect(results.featured).toHaveLength(4); // 3 existing + 1 new current
+      expect(results.featured).toHaveLength(8); // 3 existing + 1 new current, plus 4 warning products
       expect(results.briefs).toHaveLength(0);
     });
 

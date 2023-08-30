@@ -90,7 +90,7 @@ class ProductService {
     const featuredProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": 10376,
+      "productType.code": { $in: [10376, 10389, 10390, 10391, 10392] },
     })
       .sort({ _id: -1 })
       .exec();
