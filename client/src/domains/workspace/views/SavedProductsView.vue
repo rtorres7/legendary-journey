@@ -203,10 +203,12 @@ export default {
       const sortDir = query.sortDir ? query.sortDir : undefined;
       if (sortDir) {
         switch (sortDir) {
-          case "asc":
+          case "desc":
             return sortOptions[1];
-          case "views":
+          case "asc":
             return sortOptions[2];
+          case "views":
+            return sortOptions[3];
           default:
             return sortOptions[0];
         }
@@ -270,7 +272,7 @@ export default {
         }, 1000);
       } else {
         if (route.name === "saved") {
-          axios.get(path, {params: { perPage: 1000 }}).then((response) => {
+          axios.get(path, { params: { perPage: 1000 } }).then((response) => {
             loadingSaved.value = false;
             if (response.data) {
               mySaved.value = response.data.content;
