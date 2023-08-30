@@ -61,8 +61,9 @@ describe("aggregated-metrics-service", () => {
 
     it("should return no recent products", async() => {
       // no events, should return nothing
-      const results = await metricsService.getRecentViewsForUser(2);
-      expect(results).toBeArrayOfSize(0);
+      const { total, productIds } = await metricsService.getRecentViewsForUser(2, 0, 4);
+      expect(total).toEqual(0);
+      expect(productIds).toBeArrayOfSize(0);
     });
 
     it("should return last 4 products", async () => {
@@ -71,7 +72,7 @@ describe("aggregated-metrics-service", () => {
       };
 
       // insert events with random user and product ids
-      const productIds = new Set();
+      const eventProductIds = new Set<string>();
       for (let i = 0; i < 100; i++) {
         const userId = randomInt(3);
         const eventType = i % 2 === 0 ? constant.EVENT_TYPES.PRODUCT_VIEW : constant.EVENT_TYPES.PRODUCT_SAVE;
@@ -79,10 +80,10 @@ describe("aggregated-metrics-service", () => {
         await eventService.registerEvent(eventType, userId, productId); // do not force wait
         if (userId === 2 && eventType === constant.EVENT_TYPES.PRODUCT_VIEW) {
           // save product view events for user 2
-          if (productIds.has(productId)) {
-            productIds.delete(productId); // remove since set maintains insertion order
+          if (eventProductIds.has(productId)) {
+            eventProductIds.delete(productId); // remove since set maintains insertion order
           }
-          productIds.add(productId);
+          eventProductIds.add(productId);
         }
       }
       // insert event to force wait for elastic to finish indexing
@@ -90,13 +91,14 @@ describe("aggregated-metrics-service", () => {
       // await new Promise((resolve) => { setTimeout(resolve, 2000); });
 
       // expect results to be the last 4 view events in reverse chronological order
-      const expected = Array.from(productIds.values()).slice(-4).reverse();
+      const expected = Array.from(eventProductIds.values()).slice(-4).reverse();
       expect(expected).toBeArrayOfSize(4);
 
-      const results = await metricsService.getRecentViewsForUser(2);
-      expect(results).toBeArrayOfSize(4);
+      const { total, productIds } = await metricsService.getRecentViewsForUser(2, 0, 4); // from 0, size 4
+      expect(total).toEqual(eventProductIds.size);
+      expect(productIds).toBeArrayOfSize(4);
 
-      expect(results).toEqual(expected);
+      expect(expected).toEqual(expected);
     });
 
     xit("bulk testing", async () => {

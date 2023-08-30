@@ -166,11 +166,14 @@ class AggregatedMetricsService {
   }
 
   /**
-   * Get last 4 products viewed by user.
+   * Get products viewed by user ordered by timestamp.
    * @param {number} userId 
-   * @returns {Promise<number[]>} product ids
+   * @param {number} [from=0] items to skip
+   * @param {number} [size=4] number of items to retrieve
+   * @param {string} [order="desc"] order timestamp by "desc" or "asc"
+   * @returns {Promise<{ total: number, productIds: string[] }>} total number of buckets, 
    */
-  async getRecentViewsForUser(userId) {
+  async getRecentViewsForUser(userId, from = 0, size = 4, order = "desc") {
     const results = await this.client.search({
       "size": 0,
       "query": {
@@ -193,17 +196,26 @@ class AggregatedMetricsService {
             "sort_by_timestamp": {
               "bucket_sort": {
                 "sort": [
-                  { "max_timestamp": { "order": "desc" } }
+                  { "max_timestamp": { "order": order } }
                 ],
-                "size": 4
+                "from": from,
+                "size": size
               }
             }
+          }
+        },
+        "group_by_productId_count": {
+          "cardinality": {
+            "field": "productId"
           }
         }
       }
     });
     // logger.info("%O", results.aggregations.group_by_productId.buckets.map(i => ({ productId: i.key, timestamp: i.max_timestamp.value})));
-    return results.aggregations.group_by_productId.buckets.map(i => i.key);
+    return Promise.resolve({
+      total: results.aggregations.group_by_productId_count.value,
+      productIds: results.aggregations.group_by_productId.buckets.map(i => i.key)
+    });
   }
 }
 

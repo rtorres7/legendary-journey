@@ -1,3 +1,5 @@
+const { KiwiPage } = require("@kiwiproject/kiwi-js");
+
 const request = require("supertest");
 const { setupAppWithUser } = require("../__utils__/expressUtils");
 
@@ -62,7 +64,7 @@ jest.mock("../../src/services/product-service.js", () => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
         }
-        return Promise.resolve(articles.slice(0, 4));
+        return Promise.resolve(KiwiPage.of(0, 4, 20, articles.slice(0, 4)));
       })
     };
   });
@@ -525,7 +527,9 @@ describe("Workspace Routes", () => {
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
-          expect(res.body.content.length).toBe(4);
+          expect(res.body.number).toEqual(0); // page num
+          expect(res.body.totalElements).toEqual(20); // total
+          expect(res.body.content.length).toEqual(4);
         });
     });
   });

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { KiwiStandardResponsesExpress, KiwiPage } = require("@kiwiproject/kiwi-js");
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
@@ -120,10 +120,10 @@ router.get("/workspace/viewed", async (req, res) => {
     }
    */
   await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, skip, sortDir } = pagingParams(req);
     try {
-      const viewed = await productService.findRecentViewedProductsForUser(currentUser.id);
-      const results = KiwiPage.of(1, 4, viewed.length, viewed).usingOneAsFirstPage();
-      res.json(results);
+      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, skip, sortDir);
+      res.json(pageResults);
     } catch (error) {
       logger.error(error);
       const errorDetails = `Unable to find recently viewed products: ${error.message}`;

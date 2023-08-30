@@ -359,15 +359,23 @@ class ProductService {
     return product;
   }
 
-  async findRecentViewedProductsForUser(userId) {
-    const productIds = await this.metricsService.getRecentViewsForUser(userId);
+  /**
+   * @param {string} userId 
+   * @param {number} page page number, redundant with skip
+   * @param {number} perPage items per page
+   * @param {number} skip items to skip, (page - 1) * perPage, @see pagingParams
+   * @param {string} sortDir 'asc' or 'desc'
+   * @returns {Promise<KiwiPage>}
+   */
+  async findRecentViewedProductsForUser(userId, page = 0, perPage = 4, skip = 0, sortDir = "desc") {
+    const { total, productIds } = await this.metricsService.getRecentViewsForUser(userId, skip, perPage, sortDir);
     const products = [];
     for (let productId of productIds) {
       const product = await Article.findOne({ 'productNumber': productId }).exec();
       KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
       products.push(product.features);
     }
-    return products;
+    return Promise.resolve(KiwiPage.of(page, perPage, total, products));
   }
 }
 
