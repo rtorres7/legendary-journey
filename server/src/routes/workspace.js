@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { KiwiStandardResponsesExpress, KiwiPreconditions } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
@@ -92,6 +92,38 @@ router.get("/workspace/recent", async (req, res) => {
     }
   });
 });
+
+router.get("/workspace/viewed", async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve last 4 products viewed by the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfProducts'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, sortDir } = pagingParams(req); // assumes page starts with 1
+    KiwiPreconditions.checkPositive(page);
+    KiwiPreconditions.checkPositive(perPage);
+    try {
+      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, sortDir);
+      res.json(pageResults);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `Unable to find recently viewed products: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
+  });
+});
+
 
 router.get("/workspace/stats", async (req, res) => {
   /*

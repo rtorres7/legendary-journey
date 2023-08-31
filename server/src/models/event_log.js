@@ -1,6 +1,21 @@
-const mongoose = require("mongoose");
-const constant = require("../util/constant.js");
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from "mongoose";
+import constant from "../util/constant.js";
+
+/*
+enum EventTypes {
+  PRODUCT_VIEW = "PRODUCT_VIEW",
+  PRODUCT_PRINT = "PRODUCT_PRINT",
+  PRODUCT_SAVE = "PRODUCT_SAVE",
+}
+
+interface EventLog {
+  eventType: EventTypes,
+  timestamp: Date,
+  userId: string,
+  productId: string,
+  meta: Record<string, any>
+}
+*/
 
 const eventLogSchema = new Schema(
   {
