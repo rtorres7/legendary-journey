@@ -293,8 +293,8 @@
                   </div>
                   <template
                     v-if="
-                      environment != 'production' &&
-                      environment != 'development'
+                      environment !== 'production' &&
+                      environment !== 'development'
                     "
                   >
                     <div class="lg:w-3/4">

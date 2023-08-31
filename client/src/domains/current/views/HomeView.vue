@@ -36,7 +36,7 @@
               class="hidden h-full lg:flex flex-col space-y-2 justify-between"
             >
               <div class="lg:flex flex-col space-y-4 justify-between">
-                <template v-if="loadingFeatures">
+                <template v-if="loadingFeaturedContent">
                   <template v-for="n in 3" :key="n">
                     <div class="w-full h-40">
                       <SituationalAwarenessCard loading />
@@ -73,7 +73,7 @@
               :breakpoints="carouselBreakpoints"
               class="lg:hidden w-full"
             >
-              <template v-if="loadingFeatures">
+              <template v-if="loadingFeaturedContent">
                 <Slide v-for="n in 3" :key="n">
                   <div class="w-[280px] h-36 mr-4">
                     <SituationalAwarenessCard loading />
@@ -89,12 +89,12 @@
               </template>
               <template #addons>
                 <Navigation
-                  v-if="!loadingFeatures && briefs.length > 0"
+                  v-if="!loadingFeaturedContent && briefs.length > 0"
                   class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-slate-900 dark:hover:text-slate-900 energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
                 />
               </template>
             </Carousel>
-            <template v-if="!loadingFeatures && briefs.length === 0">
+            <template v-if="!loadingFeaturedContent && briefs.length === 0">
               <p class="lg:hidden text-sm italic">
                 No Daily Briefs were found.
               </p>
@@ -104,26 +104,23 @@
         <div
           class="py-4 lg:py-0 h-[475px] md:h-[600px] lg:h-full lg:w-2/3 xl:w-2/3 lg:pl-4 xl:pr-4"
         >
-          <template v-if="loadingFeatures">
+          <template v-if="loadingFeaturedContent">
             <PublishedProductCard loading headline />
           </template>
           <template v-else>
             <template v-if="features.length > 0">
-              <PublishedProductCard
-                :product="features[0].attributes"
-                headline
-              />
+              <PublishedProductCard :product="features[0]" headline />
             </template>
             <template v-else>
               <div class="text-sm italic">
-                No featured article was found. This could be due to access
+                No featured product was found. This could be due to access
                 control or a network error.
               </div>
             </template>
           </template>
         </div>
       </div>
-      <!-- Main Section Published Articles -->
+      <!-- Main Section Published Products -->
       <div
         class="pt-4 xl:w-1/3 xl:pt-0 border-t xl:border-t-0 xl:pl-4 xl:border-l border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
       >
@@ -134,7 +131,7 @@
         <div
           class="flex flex-col md:flex-row xl:flex-col justify-between h-full space-y-4 md:space-y-0 md:space-x-4 xl:space-y-4 xl:space-x-0"
         >
-          <template v-if="loadingFeatures">
+          <template v-if="loadingFeaturedContent">
             <template v-for="n in 2" :key="n">
               <div class="w-full h-[288px] md:max-w-[575px]">
                 <PublishedProductCard :loading="true" />
@@ -142,9 +139,9 @@
             </template>
           </template>
           <template v-else>
-            <template v-for="article in features.slice(1, 3)" :key="article">
+            <template v-for="product in features.slice(1, 3)" :key="product">
               <div class="w-full h-[288px] md:max-w-[575px]">
-                <PublishedProductCard :product="article.attributes" />
+                <PublishedProductCard :product="product" />
               </div>
             </template>
           </template>
@@ -159,7 +156,7 @@
     </div>
     <!-- TODO: There's a small gap here when going from XL to LG media screen that needs to be addressed. -->
     <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
-      <template v-if="loadingFeatures">
+      <template v-if="loadingFeaturedContent">
         <template v-for="n in 12" :key="n">
           <div class="w-full h-[288px] md:max-w-[575px]">
             <PublishedProductCard loading />
@@ -168,15 +165,15 @@
       </template>
       <template v-else>
         <template v-if="features.length > 3">
-          <template v-for="article in features.slice(3, 15)" :key="article">
+          <template v-for="product in features.slice(3, 15)" :key="product">
             <div class="w-full h-[288px] md:max-w-[575px]">
-              <PublishedProductCard :product="article.attributes" />
+              <PublishedProductCard :product="product" />
             </div>
           </template>
         </template>
         <template v-else>
           <p class="hidden xl:block italic">
-            No additional published articles were found.
+            No additional published products were found.
           </p>
         </template>
       </template>
@@ -214,20 +211,20 @@ export default {
   },
   setup() {
     const store = useStore();
-    const features = computed(() => store.state.features.articles);
-    const loadingFeatures = computed(() => store.state.features.loading);
+    const loadingFeaturedContent = computed(() => store.state.features.loading);
+    const features = computed(() => store.state.features.features);
     const briefs = computed(() => store.state.features.briefs);
     const today = ref(dayjs().format("dddd, MMMM D, YYYY"));
 
     onMounted(() => {
-      store.dispatch("features/loadFeatures");
+      store.dispatch("features/loadFeaturedContent");
     });
 
     return {
       carouselSettings,
       carouselBreakpoints,
       features,
-      loadingFeatures,
+      loadingFeaturedContent,
       briefs,
       today,
     };

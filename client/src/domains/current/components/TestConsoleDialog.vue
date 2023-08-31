@@ -221,7 +221,7 @@
                   <div class="py-2">
                     <div class="flex items-center justify-between mt-2">
                       <label id="article-counter" class="mr-4"
-                        >Published Articles (max. 5)</label
+                        >Featured Products (max. 5)</label
                       >
                       <div
                         class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
@@ -229,9 +229,7 @@
                         <button
                           class="rounded-l px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-500 energy:hover:bg-zinc-500 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
-                            changePublishedArticleCount(
-                              publishedArticleCountFromStore - 1
-                            )
+                            changeFeatureCount(featuresCountFromStore - 1)
                           "
                         >
                           -
@@ -239,14 +237,12 @@
                         <div
                           class="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-slate-700 energy:bg-zinc-700"
                         >
-                          {{ publishedArticleCountFromStore }}
+                          {{ featuresCountFromStore }}
                         </div>
                         <button
                           class="rounded-r px-4 py-2 text-sm font-medium hover:bg-mission-blue/70 dark:hover:bg-slate-500 energy:hover:bg-zinc-500 text-gray-100 dark:text-slate-300 energy:text-zinc-300"
                           @click="
-                            changePublishedArticleCount(
-                              publishedArticleCountFromStore + 1
-                            )
+                            changeFeatureCount(featuresCountFromStore + 1)
                           "
                         >
                           +
@@ -256,12 +252,12 @@
                     <SwitchGroup>
                       <div class="flex items-center justify-between mt-2">
                         <SwitchLabel class="mr-4">
-                          Enable Loading Published Articles
+                          Enable Loading Featured Content
                         </SwitchLabel>
                         <Switch
-                          v-model="loadingPublishedArticlesEnabled"
+                          v-model="loadingFeaturedContentEnabled"
                           :class="
-                            loadingPublishedArticlesEnabled
+                            loadingFeaturedContentEnabled
                               ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
                               : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
                           "
@@ -269,32 +265,7 @@
                         >
                           <span
                             :class="
-                              loadingPublishedArticlesEnabled
-                                ? 'translate-x-6'
-                                : 'translate-x-1'
-                            "
-                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup>
-                    <SwitchGroup>
-                      <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4">
-                          Enable Loading Situational Awareness
-                        </SwitchLabel>
-                        <Switch
-                          v-model="loadingSituationalAwarenessEnabled"
-                          :class="
-                            loadingSituationalAwarenessEnabled
-                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
-                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
-                          "
-                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                          <span
-                            :class="
-                              loadingSituationalAwarenessEnabled
+                              loadingFeaturedContentEnabled
                                 ? 'translate-x-6'
                                 : 'translate-x-1'
                             "
@@ -405,9 +376,8 @@ export default {
     });
 
     const loadingMetadataEnabled = ref(false);
-    const loadingHomeProductsEnabled = ref(false);
+    const loadingFeaturedContentEnabled = ref(false);
     const loadingResultsEnabled = ref(false);
-    const loadingPublishedArticlesEnabled = ref(false);
     const sampleImageEnabled = ref(false);
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
@@ -418,16 +388,13 @@ export default {
     const loadingMetadataFromStore = computed(
       () => store.state.metadata.loading
     );
-    const loadingHomeProductsFromStore = computed(
+    const loadingFeaturedContentFromStore = computed(
       () => store.state.features.loading
+    );
+    const featuresCountFromStore = computed(
+      () => store.state.features.features.length
     );
     const loadingResultsFromStore = computed(() => store.state.search.loading);
-    const publishedArticleCountFromStore = computed(
-      () => store.state.features.articles.length
-    );
-    const loadingPublishedArticlesFromStore = computed(
-      () => store.state.features.loading
-    );
     const adminFromStore = computed(() => store.state.testConsole.admin);
     const sampleImageFromStore = computed(
       () => store.state.testConsole.sampleImage
@@ -448,13 +415,8 @@ export default {
       }
     });
 
-    watch(loadingHomeProductsEnabled, (enabled) => {
-      console.log("loadingHomeProductsEnabled: ", enabled);
-      if (enabled) {
-        store.dispatch("features/setLoading", true);
-      } else {
-        store.dispatch("features/setLoading", false);
-      }
+    watch(loadingFeaturedContentEnabled, (enabled) => {
+      store.dispatch("features/setLoading", enabled);
     });
 
     watch(loadingResultsEnabled, (enabled) => {
@@ -484,13 +446,9 @@ export default {
       });
     };
 
-    const changePublishedArticleCount = (count) => {
-      store.dispatch("features/setArticles", count);
+    const changeFeatureCount = (count) => {
+      store.dispatch("features/setFeatureCount", count);
     };
-
-    watch(loadingPublishedArticlesEnabled, (enabled) => {
-      store.dispatch("features/setLoading", enabled);
-    });
 
     watch(adminEnabled, (enabled) => {
       store.dispatch("testConsole/setAdmin", enabled);
@@ -504,17 +462,12 @@ export default {
       loadingMetadataEnabled.value = loading;
     });
 
-    watch(loadingHomeProductsFromStore, (loading) => {
-      loadingHomeProductsEnabled.value = loading;
+    watch(loadingFeaturedContentFromStore, (loading) => {
+      loadingFeaturedContentEnabled.value = loading;
     });
 
     watch(loadingResultsFromStore, (loading) => {
-      console.log("loading results from store triggered: ", loading);
       loadingResultsEnabled.value = loading;
-    });
-
-    watch(loadingPublishedArticlesFromStore, (loading) => {
-      loadingPublishedArticlesEnabled.value = loading;
     });
 
     watch(adminFromStore, (status) => {
@@ -531,14 +484,13 @@ export default {
       alertEnabled,
       userAuthorizations,
       loadingMetadataEnabled,
-      loadingHomeProductsEnabled,
+      loadingFeaturedContentEnabled,
       loadingResultsEnabled,
-      publishedArticleCountFromStore,
-      loadingPublishedArticlesEnabled,
+      featuresCountFromStore,
       removeProductImage,
       changeProductImage,
       toggleNotificationToast,
-      changePublishedArticleCount,
+      changeFeatureCount,
       uploadFileName,
       adminEnabled,
       sampleImageEnabled,

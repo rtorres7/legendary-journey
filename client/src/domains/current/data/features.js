@@ -1,4 +1,4 @@
-const articles = {
+const products = {
   published: [
     {
       attributes: {
@@ -229,8 +229,44 @@ const articles = {
   ],
 };
 
-export const features = articles.published;
-export const articlesForWire = articles.published.map((article, index) => {
+export const briefs = [
+  {
+    attributes: {
+      date_published: "01-02-23",
+      doc_num: "WIRe001_sample_",
+      product_type_name: "CT Weekly",
+      title_classification: "U",
+      title: "Russian CT Weekly",
+      org_restricted: true,
+      needed: { orgs: ["GHI", "PQR"] },
+    },
+  },
+  {
+    attributes: {
+      date_published: "01-01-23",
+      doc_num: "WIRe001_sample_",
+      product_type_name: "Daily Brief",
+      title_classification: "U",
+      title: "Chinese Daily Brief",
+      org_restricted: false,
+      needed: {},
+    },
+  },
+  {
+    attributes: {
+      date_published: "12-30-22",
+      doc_num: "WIRe001_sample_",
+      product_type_name: "Daily Brief",
+      title_classification: "U",
+      title: "Iranian Daily Brief",
+      org_restricted: false,
+      needed: {},
+    },
+  },
+];
+
+export const features = products.published;
+export const articlesForWire = products.published.map((article, index) => {
   return {
     attributes: {
       ...article.attributes,
