@@ -361,7 +361,7 @@ describe('ProductService', () => {
       await createPublished(10390); // Watch
       await createPublished(10376); // Current (Feature)
       const results = await service.findFeaturesAndBriefs();
-      expect(results.featured).toHaveLength(4); // 3 existing + 1 new current
+      expect(results.featured).toHaveLength(8); // 3 existing + 1 new current, plus 4 warning products
       expect(results.briefs).toHaveLength(0);
     });
 
@@ -370,8 +370,6 @@ describe('ProductService', () => {
       briefs.push(await createPublished(10377)); // Daily Brief
       briefs.push(await createPublished(10379)); // CT Digest
       briefs.push(await createPublished(10380)); // CT Weekly
-      briefs.push(await createPublished(10382)); // Special Threat Matrix
-      briefs.push(await createPublished(10383)); // SVTC Notes
       briefs.push(await createPublished(10384)); // Terrorism Digest
       briefs.push(await createPublished(10385)); // Terrorism Summary
       briefs.push(await createPublished(10386)); // Threat Matrix

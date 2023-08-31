@@ -97,14 +97,14 @@ class ProductService {
     const featuredProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": 10376,
+      "productType.code": { $in: [10376, 10389, 10390, 10391, 10392] },
     })
       .sort({ _id: -1 })
       .exec();
     const briefProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": { $in: [10377, 10379, 10380, 10382, 10383, 10384, 10385, 10386] },
+      "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
     })
       .sort({ datePublished: -1 })
       .limit(3)
