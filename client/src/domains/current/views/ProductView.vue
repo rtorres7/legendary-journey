@@ -9,7 +9,7 @@
       <NotAuthorized :product="product" />
     </template>
     <template v-else>
-      <div v-if="!loadingFeaturedArticles && navigation">
+      <div v-if="!loadingFeaturedContent && navigation">
         <ProductNavigation :navigation="navigation" />
       </div>
       <div
@@ -73,7 +73,6 @@
           </div>
           <div>
             <button
-              v-if="environment != 'production'"
               :aria-label="`save product ${product.productNumber}`"
               @click.prevent="save(product)"
             >
@@ -240,10 +239,8 @@ export default {
     const product = computed(() => store.state.product.document);
     const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
-    const featuredArticles = computed(() => store.state.features.articles);
-    const loadingFeaturedArticles = computed(
-      () => store.state.features.loading
-    );
+    const featuredArticles = computed(() => store.state.features.features);
+    const loadingFeaturedContent = computed(() => store.state.features.loading);
     const { save, savingProduct, removingProduct } = updateSavedStatus();
     const relatedProducts = computed(
       () => store.state.relatedProducts.relatedDocuments
@@ -306,7 +303,7 @@ export default {
 
     watch([loadingProduct], () => {
       if (!loadingProduct.value && canAccessProduct.value) {
-        store.dispatch("features/loadFeatures");
+        store.dispatch("features/loadFeaturedContent");
         store.dispatch("relatedProducts/getRelatedDocuments");
         document.title = product.value.title;
         metricStartDate.value = dayjs(product.value.display_date).toDate();
@@ -332,7 +329,7 @@ export default {
 
     const buildNavigation = () => {
       const matchIndex = featuredArticles.value.findIndex((featuredArticle) => {
-        if (route.params.doc_num === featuredArticle.attributes.doc_num) {
+        if (route.params.doc_num === featuredArticle.doc_num) {
           return true;
         }
       });
@@ -346,11 +343,11 @@ export default {
         const prevArticleDocNum =
           matchIndex === 0
             ? null
-            : featuredArticles.value[matchIndex - 1].attributes.doc_num;
+            : featuredArticles.value[matchIndex - 1].doc_num;
         const nextArticleDocNum =
           matchIndex === featuredArticles.value.length - 1
             ? null
-            : featuredArticles.value[matchIndex + 1].attributes.doc_num;
+            : featuredArticles.value[matchIndex + 1].doc_num;
         if (prevArticleDocNum) {
           navigation.value["previousArticle"] = {
             doc_num: prevArticleDocNum,
@@ -382,8 +379,8 @@ export default {
       }
     };
 
-    watch([loadingFeaturedArticles], () => {
-      if (!loadingFeaturedArticles.value) {
+    watch([loadingFeaturedContent], () => {
+      if (!loadingFeaturedContent.value) {
         buildNavigation();
       }
     });
@@ -432,7 +429,7 @@ export default {
       product,
       organization,
       loadingProduct,
-      loadingFeaturedArticles,
+      loadingFeaturedContent,
       relatedProducts,
       loadingRelatedProducts,
       metrics,

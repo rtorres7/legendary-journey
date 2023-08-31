@@ -7,11 +7,11 @@
       <div class="flex grow flex-col pt-6">
         <div class="pb-6">
           <router-link to="/workspace">
-            <img
-              class="mx-auto w-[75px] h-[20px]"
-              src="@/shared/assets/nctc_logo.svg"
-              alt="NCTC. Seal. Link to homepage."
-            />
+            <div
+              class="mx-auto bg-slate-500/75 w-[45px] h-[45px] rounded flex justify-center items-center"
+            >
+              <span class="font-bold text-slate-900 text-2xl leading-4">W</span>
+            </div>
           </router-link>
         </div>
         <ul class="py-2 mx-auto text-gray-400 space-y-1">

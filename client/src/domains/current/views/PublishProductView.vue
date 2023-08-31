@@ -217,9 +217,7 @@
                       >
                     </button>
                     <button
-                      v-if="
-                        environment != 'production' && product.state == 'posted'
-                      "
+                      v-if="product.state == 'posted'"
                       class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       :aria-label="`save product ${product.productNumber}`"
                       @click="save(product)"
@@ -277,10 +275,7 @@
                       :content="isSavedProduct(product) ? 'Saved' : 'Save'"
                     >
                       <button
-                        v-if="
-                          environment != 'production' &&
-                          product.state == 'posted'
-                        "
+                        v-if="product.state == 'posted'"
                         class="hover:text-black dark:hover:text-white energy:hover:text-white"
                         :aria-label="`save product ${product.productNumber}`"
                         @click="save(product)"

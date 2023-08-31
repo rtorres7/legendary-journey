@@ -40,9 +40,9 @@ export const alerts = {
   ],
 };
 
-export { features, articlesForWire } from "./features";
+export { features, briefs, articlesForWire } from "./features";
 export { countries, regions } from "./regions";
-export { getSitreps, getSearchDataFromUrl } from "./search";
+export { getSearchDataFromUrl } from "./search";
 export { productDetails } from "./productDetails";
 export { metadata } from "./metadata";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
