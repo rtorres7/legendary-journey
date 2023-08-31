@@ -17,7 +17,7 @@
         <Listbox
           v-model="selectedSort"
           as="div"
-          class="min-w-[215px] inline-flex items-center text-gray-700"
+          class="min-w-[250px] inline-flex items-center text-gray-700"
         >
           <div>
             <ListboxLabel class="text-sm line-clamp-1 xl:line-clamp-none w-max">
@@ -78,13 +78,13 @@
             </transition>
           </div>
         </Listbox>
-        <button
+        <!-- <button
           class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
           @click="openFacetsDialog"
         >
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
-        </button>
+        </button> -->
       </div>
     </div>
     <template v-if="loadingSaved">
@@ -149,7 +149,7 @@ import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import Facets from "../components/Facets.vue";
 import {
-  AdjustmentsHorizontalIcon,
+  //AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/vue/24/solid";
@@ -163,7 +163,7 @@ import {
 export default {
   components: {
     MyPublishedProductCard,
-    AdjustmentsHorizontalIcon,
+    //AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,
     Listbox,
@@ -194,6 +194,7 @@ export default {
       isFacetsDialogOpen.value = true;
     };
     const sortOptions = [
+      { name: "Recently Saved", key: "created", type: "sortDir" },
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
       { name: "Most Views", key: "views", type: "sortDir" },
@@ -202,10 +203,12 @@ export default {
       const sortDir = query.sortDir ? query.sortDir : undefined;
       if (sortDir) {
         switch (sortDir) {
-          case "asc":
+          case "desc":
             return sortOptions[1];
-          case "views":
+          case "asc":
             return sortOptions[2];
+          case "views":
+            return sortOptions[3];
           default:
             return sortOptions[0];
         }
@@ -229,31 +232,29 @@ export default {
         mySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios
-          .delete("/workspace/saved/" + product.id)
-          .then((response) => {
-            if (response.data.error) {
-              removingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed from Saved Products.`,
-                type: "success",
-              });
-              let p = mySaved.value.find(
-                (item) => item.productNumber == product.productNumber
-              );
-              let indexOfProduct = mySaved.value.indexOf(p);
-              mySaved.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            removingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            removingProduct.value = false;
+            createNotification({
+              title: "Product Removed",
+              message: `Product ${product.productNumber} has been removed from Saved Products.`,
+              type: "success",
+            });
+            let p = mySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = mySaved.value.indexOf(p);
+            mySaved.value.splice(indexOfProduct, 1);
+          }
+        });
       }
     };
 
@@ -270,8 +271,8 @@ export default {
           loadingSaved.value = false;
         }, 1000);
       } else {
-        if (route.name == "saved") {
-          axios.get(path).then((response) => {
+        if (route.name === "saved") {
+          axios.get(path, { params: { perPage: 1000 } }).then((response) => {
             loadingSaved.value = false;
             if (response.data) {
               mySaved.value = response.data.content;
@@ -323,8 +324,6 @@ export default {
       router.push({
         query,
       });
-      getSavedProducts(path.value);
-      // localStorage.setItem("lastSort", selectedSort.value.key);
     });
 
     return {

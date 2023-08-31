@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const path = require("path");
-const _ = require("lodash");
-const dayjs = require("dayjs");
+const { findArticleImage } = require("../util/images");
 
 const Schema = mongoose.Schema;
 
@@ -369,27 +368,6 @@ ArticleSchema.virtual("data.details").get(function () {
     updated_by: this.updatedBy,
   };
 });
-
-function findArticleImage(attachments) {
-  const latest = _.reduce(
-    attachments,
-    function (result, value) {
-      if (value.usage === "article") {
-        if (result == null) {
-          return value;
-        }
-        // console.log(`result:${result.updated_at}, value:${value.updated_at}`);
-        if (dayjs(result.updated_at).isBefore(dayjs(value.updated_at))) {
-          return value;
-        }
-      }
-      return result;
-    },
-    null,
-  );
-  // console.log(`latest:${latest.updated_at}`);
-  return latest != null ? [latest] : [];
-}
 
 const Article = mongoose.model("Article", ArticleSchema, "articles");
 

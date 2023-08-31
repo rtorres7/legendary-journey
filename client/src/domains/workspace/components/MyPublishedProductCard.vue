@@ -31,7 +31,7 @@
         >
           <ProductImage :product="product" />
         </router-link>
-        <div class="flex flex-col py-6 justify-between relative">
+        <div class="flex flex-col py-6 justify-between">
           <div
             v-if="isProductLocked(product)"
             class="absolute w-full justify-center pt-2"
