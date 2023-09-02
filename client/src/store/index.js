@@ -1,4 +1,7 @@
 import { createStore } from "vuex";
+import metadata from "./modules/metadata";
+import testConsole from "./modules/test-console";
+import user from "./modules/user";
 import currentModules from "@current/store";
 
 export default createStore({
@@ -12,6 +15,9 @@ export default createStore({
   actions: {},
   mutations: {},
   modules: {
+    metadata,
+    testConsole,
+    user,
     ...currentModules,
   },
 });

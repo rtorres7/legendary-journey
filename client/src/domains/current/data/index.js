@@ -1,22 +1,3 @@
-export const user = {
-  id: 50,
-  notifications: {
-    ntk: {},
-  },
-  authorizations: {
-    canManageWire: true,
-    canManageSpecialEditions: true,
-  },
-  name: "Jonathan Oszczakiewicz",
-  email: "jonathan@gmail.com",
-  roles: ["ntk", "role_manager", "wire_editor", "community_editor"],
-  //roles: ["ntk", "role_manager", "community_editor"],
-  has_org: true,
-  organization: "DNI",
-  phone_number: "999-9999",
-  dn: "Sample DN",
-};
-
 export const alerts = {
   alerts: [
     {
@@ -44,7 +25,6 @@ export { features, briefs, articlesForWire } from "./features";
 export { countries, regions } from "./regions";
 export { getSearchDataFromUrl } from "./search";
 export { productDetails } from "./productDetails";
-export { metadata } from "./metadata";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
 export { relatedProducts } from "./relatedProducts";
 export { articleMetrics } from "./articleMetrics";

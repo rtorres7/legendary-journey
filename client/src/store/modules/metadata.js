@@ -1,4 +1,4 @@
-import { metadata } from "@current/data";
+import { metadata } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 
 export default {

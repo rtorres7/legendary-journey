@@ -147,8 +147,7 @@
   </template>
 </template>
 <script>
-import { inject, onMounted, provide, ref } from "vue";
-import { useStore } from "vuex";
+import { inject, provide, ref } from "vue";
 import { useCookies } from "vue3-cookies";
 import {
   Dialog,
@@ -170,7 +169,6 @@ export default {
   },
   setup() {
     const metadata = inject("metadata");
-    const store = useStore();
     const { cookies } = useCookies();
     const {
       notifications,
@@ -190,13 +188,6 @@ export default {
       cookies.set("betaInfoNotice", true, "21d");
       isOpen.value = false;
     };
-
-    onMounted(() => {
-      store.dispatch("alerts/loadAlerts");
-      store.dispatch("user/loadUser");
-      store.dispatch("metadata/loadMetadata");
-      store.dispatch("specialEditions/loadConceptsLinks");
-    });
 
     return {
       metadata,
