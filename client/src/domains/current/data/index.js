@@ -21,7 +21,7 @@ export const alerts = {
   ],
 };
 
-export { features, briefs, articlesForWire } from "./features";
+export { products, articlesForWire } from "./features";
 export { countries, regions } from "./regions";
 export { getSearchDataFromUrl } from "./search";
 export { productDetails } from "./productDetails";

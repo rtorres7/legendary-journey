@@ -1,4 +1,4 @@
-import { features, briefs } from "@current/data";
+import { products } from "@current/data";
 import axios from "@/shared/config/wireAxios";
 
 export default {
@@ -12,10 +12,13 @@ export default {
     loadFeaturedContent({ state, commit }) {
       state.loading = true;
       if (import.meta.env.MODE === "offline") {
-        console.log("[store] loadFeaturedContent: ", { features, briefs });
+        console.log("[store] loadFeaturedContent: ", {
+          features: products.published,
+          briefs: products.briefs,
+        });
         setTimeout(() => {
-          commit("saveFeatures", features);
-          commit("saveBriefs", briefs);
+          commit("saveFeatures", products.published);
+          commit("saveBriefs", products.briefs);
           commit("toggleLoading", false);
         }, 750);
       } else {
@@ -29,7 +32,10 @@ export default {
     },
     //Test Console Feature Only
     setFeatureCount({ commit }, count) {
-      commit("saveFeatures", count <= 0 ? [] : features.slice(0, count));
+      commit(
+        "saveFeatures",
+        count <= 0 ? [] : products.published.slice(0, count)
+      );
     },
     setLoading({ commit }, value) {
       commit("toggleLoading", value);
