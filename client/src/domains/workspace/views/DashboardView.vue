@@ -1,90 +1,13 @@
 <template>
   <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
-    <template v-if="!loadingSaved && recentlySaved.length > 0">
-      <div class="text-2xl font-bold">For You</div>
-      <div class="py-6 flex items-center justify-between">
-        <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
-        <router-link
-          v-if="
-            recentlySaved.length > 4 ||
-            (recentlySaved.length > 1 && numCards < recentlySaved.length)
-          "
-          class="flex items-center text-gray-500 text-sm font-semibold"
-          to="/workspace/saved"
-        >
-          <span>See All</span>
-          <ChevronRightIcon class="h-4 w-4" />
-        </router-link>
-      </div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-      >
-        <template v-for="(product, index) in recentlySaved" :key="product">
-          <MyPublishedProductCard
-            :product="product"
-            type="product"
-            :productTypeName="getProductTypeName(product)"
-            :class="index < numCards ? 'block' : 'hidden'"
-            @delete="openDeleteDialog(product)"
-            @save="saveProduct(product)"
-          />
-        </template>
-      </div>
-    </template>
-    <div
-      v-if="loadingUser"
-      class="h-8 bg-slate-200 rounded my-6 w-1/2 animate-pulse"
-    ></div>
-    <div v-if="!loadingUser && currentUserOrg" class="text-2xl font-bold py-6">
-      Happening at {{ currentUserOrg }}
-    </div>
-    <template v-if="!loadingDrafts && !loadingPublished">
-      <template v-if="myDrafts.length > 0 && canManageWire">
-        <div class="pb-6 flex items-center">
-          <div class="text-lg font-semibold text-gray-700">
-            Drafts within the last week
-          </div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
-          <template v-for="(product, index) in myDrafts" :key="product">
-            <MyDraftProductCard
-              :product="product"
-              :productIcon="getProductIcon(product)"
-              type="product"
-              :class="index < numDraftCards ? 'block' : 'hidden'"
-              @delete="openDeleteDialog(product)"
-            />
-          </template>
-        </div>
-      </template>
-      <div class="pb-6 flex justify-between items-center">
-        <div class="text-lg font-semibold text-gray-700">
-          Recently Published
-        </div>
-        <a
-          v-if="
-            myPublished.length > 4 ||
-            (myPublished.length > 1 && numCards < myPublished.length)
-          "
-          class="flex items-center text-gray-500 text-sm font-semibold"
-          href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
-          target="_blank"
-        >
-          <span>See All</span>
-          <ChevronRightIcon class="h-4 w-4" />
-        </a>
-      </div>
-    </template>
-    <template v-if="myPublished.length == 0 && !loadingPublished">
-      <p class="italic">No published products to show</p>
-    </template>
-    <template v-if="loadingPublished">
+    <!-- User Content -->
+    <template v-if="loadingUserContent">
       <div class="h-6 bg-slate-200 rounded my-6 w-1/3 animate-pulse"></div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
         <template v-for="(card, index) in 4" :key="card">
-          <MyPublishedProductCard
+          <PublishedProductCard
             :loading="true"
             :class="index < numCards ? 'block' : 'hidden'"
           />
@@ -92,51 +15,169 @@
       </div>
     </template>
     <template v-else>
+      <!--- Recently Saved -->
+      <template v-if="savedProducts.length > 0">
+        <div class="text-2xl font-bold">For You</div>
+        <div class="py-6 flex items-center justify-between">
+          <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
+          <router-link
+            v-if="
+              savedProducts.length > 4 ||
+              (savedProducts.length > 1 && numCards < savedProducts.length)
+            "
+            class="flex items-center text-gray-500 text-sm font-semibold"
+            to="/workspace/saved"
+          >
+            <span>See All</span>
+            <ChevronRightIcon class="h-4 w-4" />
+          </router-link>
+        </div>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+        >
+          <template v-for="(product, index) in savedProducts" :key="product">
+            <PublishedProductCard
+              :product="product"
+              type="product"
+              :productTypeName="getProductTypeName(product)"
+              :class="index < numCards ? 'block' : 'hidden'"
+              @delete="openDeleteDialog(product)"
+              @save="saveProduct(product)"
+            />
+          </template>
+        </div>
+      </template>
+    </template>
+    <!-- Organization Content -->
+    <template v-if="loadingOrgContent">
+      <div class="h-8 bg-slate-200 rounded my-6 w-1/2 animate-pulse"></div>
+      <div class="h-6 bg-slate-200 rounded my-6 w-1/3 animate-pulse"></div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
-        <template v-for="(product, index) in myPublished" :key="product">
-          <MyPublishedProductCard
-            :product="product"
-            type="product"
-            :productTypeName="getProductTypeName(product)"
+        <template v-for="(card, index) in 4" :key="card">
+          <PublishedProductCard
+            :loading="true"
             :class="index < numCards ? 'block' : 'hidden'"
-            @delete="openDeleteDialog(product)"
-            @save="saveProduct(product)"
           />
         </template>
       </div>
     </template>
-    <template v-if="canManageWire && !loadingStats">
-      <div class="py-6 flex items-center">
-        <div class="text-lg font-semibold text-gray-700">The Stats</div>
-      </div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-      >
-        <div
-          class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-        >
-          <div class="flex space-x-4 items-center text-slate-500">
-            <Square3Stack3DIcon class="h-5 w-5" />
-            <span class="text-sm font-normal"> Total Created</span>
-          </div>
-          <div class="font-semibold text-xl text-slate-700">
-            {{ myStats.totalCreated }}
-          </div>
+    <template v-else>
+      <template v-if="!user.organization">
+        <div class="italic py-8">
+          You are currently not affiliated with an organization.
         </div>
-        <div
-          class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-        >
-          <div class="flex space-x-4 items-center text-slate-500">
-            <EyeIcon class="h-5 w-5" />
-            <span class="text-sm font-normal">Total Views</span>
-          </div>
-          <div class="font-semibold text-xl text-slate-700">
-            {{ myStats.totalViews }}
-          </div>
+      </template>
+      <template v-else>
+        <div class="text-2xl font-bold py-8">
+          Happening at {{ user.organization }}
         </div>
-      </div>
+        <!--- Drafts within the last week --->
+        <template v-if="canManageWire && draftProducts.length > 0">
+          <div class="pb-6 flex items-center">
+            <div class="text-lg font-semibold text-gray-700">
+              Drafts within the last week
+            </div>
+          </div>
+          <template v-if="draftProducts.length > 0">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
+              <template
+                v-for="(product, index) in draftProducts"
+                :key="product"
+              >
+                <DraftProductCard
+                  :product="product"
+                  :productIcon="getProductIcon(product)"
+                  type="product"
+                  :class="index < numDraftCards ? 'block' : 'hidden'"
+                  @delete="openDeleteDialog(product)"
+                />
+              </template>
+            </div>
+          </template>
+          <template v-else>
+            <p class="italic">
+              No drafts have been created within the last week.
+            </p>
+          </template>
+        </template>
+        <!--- Recently published --->
+        <div class="pb-6 flex justify-between items-center">
+          <div class="text-lg font-semibold text-gray-700">
+            Recently Published
+          </div>
+          <a
+            v-if="
+              publishedProducts.length > 4 ||
+              (publishedProducts.length > 1 &&
+                numCards < publishedProducts.length)
+            "
+            class="flex items-center text-gray-500 text-sm font-semibold"
+            href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
+            target="_blank"
+          >
+            <span>See All</span>
+            <ChevronRightIcon class="h-4 w-4" />
+          </a>
+        </div>
+        <template v-if="publishedProducts.length > 0">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+          >
+            <template
+              v-for="(product, index) in publishedProducts"
+              :key="product"
+            >
+              <PublishedProductCard
+                :product="product"
+                type="product"
+                :productTypeName="getProductTypeName(product)"
+                :class="index < numCards ? 'block' : 'hidden'"
+                @delete="openDeleteDialog(product)"
+                @save="saveProduct(product)"
+              />
+            </template>
+          </div>
+        </template>
+        <template v-else>
+          <p class="italic">
+            No products have been published by your organization.
+          </p>
+        </template>
+        <!--- The Stats --->
+        <template v-if="canManageWire">
+          <div class="py-6 flex items-center">
+            <div class="text-lg font-semibold text-gray-700">The Stats</div>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+          >
+            <div
+              class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+            >
+              <div class="flex space-x-4 items-center text-slate-500">
+                <Square3Stack3DIcon class="h-5 w-5" />
+                <span class="text-sm font-normal"> Total Created</span>
+              </div>
+              <div class="font-semibold text-xl text-slate-700">
+                {{ stats.totalCreated }}
+              </div>
+            </div>
+            <div
+              class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+            >
+              <div class="flex space-x-4 items-center text-slate-500">
+                <EyeIcon class="h-5 w-5" />
+                <span class="text-sm font-normal">Total Views</span>
+              </div>
+              <div class="font-semibold text-xl text-slate-700">
+                {{ stats.totalViews }}
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
     </template>
     <BaseDialog
       :isOpen="isDeleteDialogOpen"
@@ -185,16 +226,15 @@
   </div>
 </template>
 <script>
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import axios from "@/shared/config/wireAxios";
 import BaseDialog from "../components/BaseDialog.vue";
 import BaseButton from "../components/BaseButton.vue";
-import MyDraftProductCard from "../components/MyDraftProductCard.vue";
-import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
+import DraftProductCard from "../components/DraftProductCard.vue";
+import PublishedProductCard from "../components/PublishedProductCard.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import Overlay from "../components/Overlay.vue";
-import { products } from "@/shared/data";
 import {
   ChevronRightIcon,
   EyeIcon,
@@ -202,8 +242,8 @@ import {
 } from "@heroicons/vue/24/solid";
 export default {
   components: {
-    MyDraftProductCard,
-    MyPublishedProductCard,
+    DraftProductCard,
+    PublishedProductCard,
     LoadingSpinner,
     Overlay,
     ChevronRightIcon,
@@ -216,22 +256,29 @@ export default {
     const store = useStore();
     const environment = ref(import.meta.env.MODE);
     const metadata = inject("metadata");
-    const currentUsername = computed(() => store.state.user.user.name);
-    const currentUserOrg = computed(() => store.state.user.user.organization);
-    const loadingUser = computed(() => store.state.user.loading);
-    const canManageWire = computed(() => store.getters["user/canManageWire"]);
-    const myDrafts = ref([]);
-    const myPublished = ref([]);
-    const recentlySaved = ref([]);
-    const myStats = ref({
-      totalViews: 0,
-      totalCreated: 0,
-    });
-    const loadingDrafts = ref(true);
-    const loadingPublished = ref(true);
-    const loadingSaved = ref(true);
-    const loadingStats = ref(true);
     const createNotification = inject("create-notification");
+
+    const loadingUser = computed(() => store.state.user.loading);
+    const user = computed(() => store.state.user.user);
+    const canManageWire = computed(() => store.getters["user/canManageWire"]);
+
+    const loadingSaved = computed(() => store.state.workspace.saved.loading);
+    const loadingDrafts = computed(() => store.state.workspace.drafts.loading);
+    const loadingPublished = computed(
+      () => store.state.workspace.published.loading
+    );
+    const loadingStats = computed(() => store.state.workspace.stats.loading);
+
+    const savedProducts = computed(() => store.state.workspace.saved.items);
+    const draftProducts = computed(() => store.state.workspace.drafts.items);
+    const publishedProducts = computed(
+      () => store.state.workspace.published.items
+    );
+    const stats = computed(() => store.state.workspace.stats.value);
+
+    const loadingUserContent = ref(true);
+    const loadingOrgContent = ref(true);
+
     const selectedProduct = ref();
     const loadingDelete = ref(false);
     const isDeleteDialogOpen = ref(false);
@@ -251,17 +298,17 @@ export default {
         });
         closeDeleteDialog();
         if (selectedProduct.value.state == "draft") {
-          let p = myDrafts.value.find(
+          let p = draftProducts.value.find(
             (item) => item.productNumber == selectedProduct.value.productNumber
           );
-          let indexOfProduct = myDrafts.value.indexOf(p);
-          myDrafts.value.splice(indexOfProduct, 1);
+          let indexOfProduct = draftProducts.value.indexOf(p);
+          draftProducts.value.splice(indexOfProduct, 1);
         } else {
-          let p = myPublished.value.find(
+          let p = publishedProducts.value.find(
             (item) => item.productNumber == selectedProduct.value.productNumber
           );
-          let indexOfProduct = myPublished.value.indexOf(p);
-          myPublished.value.splice(indexOfProduct, 1);
+          let indexOfProduct = publishedProducts.value.indexOf(p);
+          publishedProducts.value.splice(indexOfProduct, 1);
         }
       } else {
         loadingDelete.value = true;
@@ -285,25 +332,25 @@ export default {
               loadingDelete.value = false;
               closeDeleteDialog();
               if (selectedProduct.value.state == "draft") {
-                let p = myDrafts.value.find(
+                let p = draftProducts.value.find(
                   (item) =>
                     item.productNumber == selectedProduct.value.productNumber
                 );
-                let indexOfProduct = myDrafts.value.indexOf(p);
-                myDrafts.value.splice(indexOfProduct, 1);
+                let indexOfProduct = draftProducts.value.indexOf(p);
+                draftProducts.value.splice(indexOfProduct, 1);
               } else {
-                let p = myPublished.value.find(
+                let p = publishedProducts.value.find(
                   (item) =>
                     item.productNumber == selectedProduct.value.productNumber
                 );
-                let indexOfProduct = myPublished.value.indexOf(p);
-                myPublished.value.splice(indexOfProduct, 1);
-                let s = recentlySaved.value.find(
+                let indexOfProduct = publishedProducts.value.indexOf(p);
+                publishedProducts.value.splice(indexOfProduct, 1);
+                let s = savedProducts.value.find(
                   (item) =>
                     item.productNumber == selectedProduct.value.productNumber
                 );
-                let indexOfSavedProduct = recentlySaved.value.indexOf(s);
-                recentlySaved.value.splice(indexOfSavedProduct, 1);
+                let indexOfSavedProduct = savedProducts.value.indexOf(s);
+                savedProducts.value.splice(indexOfSavedProduct, 1);
               }
             }
           });
@@ -338,8 +385,8 @@ export default {
                 message: `Product ${product.productNumber} has been saved.`,
                 type: "success",
               });
-              loadSavedProducts();
-              loadPublishedProducts();
+              store.dispatch("workspace/loadSavedProducts");
+              store.dispatch("workspace/loadPublished");
             }
           });
         }
@@ -354,11 +401,11 @@ export default {
           message: `Product ${product.productNumber} has been removed from Saved Products.`,
           type: "success",
         });
-        let p = recentlySaved.value.find(
+        let p = savedProducts.value.find(
           (item) => item.productNumber == product.productNumber
         );
-        let indexOfProduct = recentlySaved.value.indexOf(p);
-        recentlySaved.value.splice(indexOfProduct, 1);
+        let indexOfProduct = savedProducts.value.indexOf(p);
+        savedProducts.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
         axios.delete("/workspace/saved/" + product.id).then((response) => {
@@ -377,20 +424,17 @@ export default {
               message: `Product ${product.productNumber} has been removed from Saved Products.`,
               type: "success",
             });
-            let p = recentlySaved.value.find(
+            let p = savedProducts.value.find(
               (item) => item.productNumber == product.productNumber
             );
-            let indexOfProduct = recentlySaved.value.indexOf(p);
-            recentlySaved.value.splice(indexOfProduct, 1);
-            loadPublishedProducts();
+            let indexOfProduct = savedProducts.value.indexOf(p);
+            savedProducts.value.splice(indexOfProduct, 1);
+            store.dispatch("workspace/loadPublished");
           }
         });
       }
     };
     const getProductIcon = (product) => {
-      console.log("product: ", product);
-      console.log("metadata: ", metadata);
-      console.log("environment: ", environment);
       let p;
       if (
         environment.value != "production" &&
@@ -404,7 +448,6 @@ export default {
           (p) => p.code == product.productType.id
         );
       }
-      console.log("p: ", p);
       if (p && p.icon) {
         return p.icon;
       } else {
@@ -446,96 +489,67 @@ export default {
       }
     };
 
-    const loadSavedProducts = () => {
-      axios.get("/workspace/saved").then((response) => {
-        loadingSaved.value = false;
-        if (response.data) {
-          recentlySaved.value = response.data.content;
-        } else {
-          createNotification({
-            title: "Error",
-            message: "There was an error retrieving Recently Saved Products.",
-            type: "error",
-            autoClose: false,
-          });
+    const loadOrgContent = () => {
+      if (!loadingUser.value && user.value.organization) {
+        store.dispatch("workspace/loadDrafts");
+        if (canManageWire.value) {
+          store.dispatch("workspace/loadPublished");
+          store.dispatch("workspace/loadStats");
         }
-      });
+      }
     };
 
-    const loadPublishedProducts = () => {
-      axios.get("/workspace/recent").then((response) => {
-        loadingPublished.value = false;
-        if (response.data) {
-          myPublished.value = response.data.content;
+    watch(loadingUser, () => {
+      loadOrgContent();
+    });
+
+    watch([loadingSaved], () => {
+      if (!loadingSaved.value) {
+        loadingUserContent.value = false;
+      } else {
+        loadingUserContent.value = true;
+      }
+    });
+
+    watch([loadingUser, loadingDrafts, loadingPublished, loadingStats], () => {
+      console.log("things changing");
+      if (
+        !loadingUser.value &&
+        !loadingDrafts.value &&
+        !loadingPublished.value &&
+        !loadingStats.value
+      ) {
+        loadingOrgContent.value = false;
+      } else {
+        console.log("loadingUser: ", loadingUser);
+        if (!loadingUser.value && !canManageWire.value) {
+          if (!loadingPublished.value) {
+            loadingOrgContent.value = false;
+          } else {
+            loadingOrgContent.value = true;
+          }
         } else {
-          createNotification({
-            title: "Error",
-            message: "There was an error retrieving Recent Products.",
-            type: "error",
-            autoClose: false,
-          });
+          loadingOrgContent.value = true;
         }
-      });
-    };
+      }
+    });
 
     onMounted(() => {
-      if (import.meta.env.MODE === "offline") {
-        setTimeout(() => {
-          let drafts = products.draft.map((product) => {
-            return {
-              ...product.attributes,
-            };
-          });
-          let published = products.published.map((product) => {
-            return {
-              ...product.attributes,
-            };
-          });
-          myDrafts.value = drafts;
-          myPublished.value = published;
-          loadingDrafts.value = false;
-          loadingPublished.value = false;
-        }, 1000);
-      } else {
-        loadSavedProducts();
-        loadPublishedProducts();
-        axios.get("/workspace/drafts").then((response) => {
-          loadingDrafts.value = false;
-          if (response.data) {
-            myDrafts.value = response.data.content;
-          } else {
-            console.error("Couldn't retrieve drafts");
-          }
-        });
-        axios.get("/workspace/stats").then((response) => {
-          loadingStats.value = false;
-          if (response.data && response.data.totalViews) {
-            myStats.value.totalViews = computed(() => response.data.totalViews);
-            myStats.value.totalCreated = computed(
-              () => response.data.totalCreated
-            );
-          } else {
-            console.error("Couldn't retrieve stats");
-          }
-        });
-      }
+      store.dispatch("workspace/loadSavedProducts");
+      loadOrgContent();
       updateScreenWidth();
       onScreenResize();
     });
+
     return {
       environment,
-      currentUsername,
-      currentUserOrg,
       loadingUser,
+      user,
       canManageWire,
-      myDrafts,
-      myPublished,
-      recentlySaved,
-      myStats,
-      loadingDrafts,
-      loadingPublished,
-      loadingSaved,
-      loadingStats,
+      savedProducts,
+      draftProducts,
+      publishedProducts,
+      stats,
       loadingDelete,
       isDeleteDialogOpen,
       openDeleteDialog,
@@ -552,6 +566,8 @@ export default {
       numDraftCards,
       updateScreenWidth,
       onScreenResize,
+      loadingUserContent,
+      loadingOrgContent,
     };
   },
 };

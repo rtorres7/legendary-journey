@@ -34,6 +34,14 @@
     </div>
     <div class="h-full">
       <WorkspaceNavigation>
+        <template v-if="loadingUser">
+          <div class="max-w-fit m-auto mt-[30vh]">
+            <MaxLoadingSpinner class="w-32 h-32" />
+          </div>
+        </template>
+        <template v-else>
+          <router-view />
+        </template>
         <router-view />
       </WorkspaceNavigation>
     </div>
@@ -147,7 +155,8 @@
   </template>
 </template>
 <script>
-import { inject, provide, ref } from "vue";
+import { computed, inject, provide, ref } from "vue";
+import { useStore } from "vuex";
 import { useCookies } from "vue3-cookies";
 import {
   Dialog,
@@ -168,6 +177,7 @@ export default {
     WorkspaceNavigation,
   },
   setup() {
+    const store = useStore();
     const metadata = inject("metadata");
     const { cookies } = useCookies();
     const {
@@ -177,6 +187,8 @@ export default {
       stopBodyOverflow,
       allowBodyOverflow,
     } = useNotifications();
+
+    const loadingUser = computed(() => store.state.user.loading);
 
     provide("create-notification", createNotification);
 
@@ -191,6 +203,7 @@ export default {
 
     return {
       metadata,
+      loadingUser,
       notifications,
       createNotification,
       removeNotifications,

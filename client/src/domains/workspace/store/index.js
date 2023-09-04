@@ -1,7 +1,7 @@
-//import user from "./modules/user";
+import workspace from "./modules/workspace";
 
 const workspaceModules = {
-  //user,
+  workspace,
 };
 
 export default workspaceModules;

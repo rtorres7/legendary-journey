@@ -166,8 +166,6 @@ export default {
   },
   emits: ["delete"],
   setup(props, { emit }) {
-    console.log("props: ", props);
-
     const hover = ref(false);
     const relativeTime = (createdAt) => {
       return getRelativeTime(createdAt);
