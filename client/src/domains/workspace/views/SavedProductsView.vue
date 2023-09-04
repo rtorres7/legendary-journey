@@ -95,7 +95,7 @@
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
         <template v-for="card in 6" :key="card">
-          <MyPublishedProductCard :loading="true" />
+          <PublishedProductCard :loading="true" />
         </template>
       </div>
     </template>
@@ -108,7 +108,7 @@
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
           <template v-for="product in mySaved" :key="product">
-            <MyPublishedProductCard
+            <PublishedProductCard
               :product="product"
               type="saved"
               :productTypeName="getProductTypeName(product)"
@@ -142,7 +142,7 @@
 import { computed, onMounted, inject, ref, watch } from "vue";
 import axios from "@/shared/config/wireAxios";
 import { useRoute, useRouter } from "vue-router";
-import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
+import PublishedProductCard from "../components/PublishedProductCard.vue";
 import { productDetails } from "../data";
 import Overlay from "../components/Overlay.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
@@ -162,7 +162,7 @@ import {
 } from "@headlessui/vue";
 export default {
   components: {
-    MyPublishedProductCard,
+    PublishedProductCard,
     //AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,

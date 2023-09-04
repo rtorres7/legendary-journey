@@ -140,9 +140,6 @@ export default {
     });
 
     onMounted(() => {
-      store.dispatch("alerts/loadAlerts");
-      store.dispatch("user/loadUser");
-      store.dispatch("metadata/loadMetadata");
       store.dispatch("specialEditions/loadConceptsLinks");
     });
 

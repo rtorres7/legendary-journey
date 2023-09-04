@@ -304,10 +304,12 @@ export default {
     watch([loadingProduct], () => {
       if (!loadingProduct.value && canAccessProduct.value) {
         store.dispatch("features/loadFeaturedContent");
-        store.dispatch("relatedProducts/getRelatedDocuments");
         document.title = product.value.title;
-        metricStartDate.value = dayjs(product.value.display_date).toDate();
-        metricEndDate.value = dayjs().toDate();
+        if (product.value.state === "posted") {
+          store.dispatch("relatedProducts/getRelatedDocuments");
+          metricStartDate.value = dayjs(product.value.display_date).toDate();
+          metricEndDate.value = dayjs().toDate();
+        }
       }
     });
 

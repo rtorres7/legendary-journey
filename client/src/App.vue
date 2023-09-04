@@ -20,6 +20,7 @@
 <script>
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import CurrentShell from "@current/DomainShell.vue";
 import StudioShell from "@studio/DomainShell.vue";
 import WorkspaceShell from "@workspace/DomainShell.vue";
@@ -32,10 +33,15 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const store = useStore();
 
     const domain = computed(() => route.meta.domain);
 
     onMounted(() => {
+      store.dispatch("alerts/loadAlerts");
+      store.dispatch("user/loadUser");
+      store.dispatch("metadata/loadMetadata");
+
       document.documentElement.classList.remove(
         ...document.documentElement.classList
       );
