@@ -42,7 +42,6 @@
         <template v-else>
           <router-view />
         </template>
-        <router-view />
       </WorkspaceNavigation>
     </div>
   </div>

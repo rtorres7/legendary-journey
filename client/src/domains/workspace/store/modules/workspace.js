@@ -90,6 +90,10 @@ export default {
       } else {
         axios.get("/workspace/stats").then((response) => {
           if (response.data && response.data.totalViews) {
+            console.log("[store] loadStats: ", {
+              totalViews: response.data.totalViews,
+              totalCreated: response.data.totalCreated,
+            });
             commit("saveStats", {
               totalViews: response.data.totalViews,
               totalCreated: response.data.totalCreated,

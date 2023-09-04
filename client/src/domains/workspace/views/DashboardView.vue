@@ -258,7 +258,6 @@ export default {
     const metadata = inject("metadata");
     const createNotification = inject("create-notification");
 
-    const loadingUser = computed(() => store.state.user.loading);
     const user = computed(() => store.state.user.user);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
@@ -467,11 +466,6 @@ export default {
     const numCards = ref();
     const numDraftCards = ref();
     const screenWidth = ref();
-    const onScreenResize = () => {
-      window.addEventListener("resize", () => {
-        updateScreenWidth();
-      });
-    };
     const updateScreenWidth = () => {
       screenWidth.value = window.innerWidth;
       if (screenWidth.value < 640) {
@@ -490,18 +484,14 @@ export default {
     };
 
     const loadOrgContent = () => {
-      if (!loadingUser.value && user.value.organization) {
-        store.dispatch("workspace/loadDrafts");
+      if (user.value.organization) {
+        store.dispatch("workspace/loadPublished");
         if (canManageWire.value) {
-          store.dispatch("workspace/loadPublished");
+          store.dispatch("workspace/loadDrafts");
           store.dispatch("workspace/loadStats");
         }
       }
     };
-
-    watch(loadingUser, () => {
-      loadOrgContent();
-    });
 
     watch([loadingSaved], () => {
       if (!loadingSaved.value) {
@@ -511,18 +501,15 @@ export default {
       }
     });
 
-    watch([loadingUser, loadingDrafts, loadingPublished, loadingStats], () => {
-      console.log("things changing");
+    watch([loadingDrafts, loadingPublished, loadingStats], () => {
       if (
-        !loadingUser.value &&
         !loadingDrafts.value &&
         !loadingPublished.value &&
         !loadingStats.value
       ) {
         loadingOrgContent.value = false;
       } else {
-        console.log("loadingUser: ", loadingUser);
-        if (!loadingUser.value && !canManageWire.value) {
+        if (!canManageWire.value) {
           if (!loadingPublished.value) {
             loadingOrgContent.value = false;
           } else {
@@ -538,12 +525,12 @@ export default {
       store.dispatch("workspace/loadSavedProducts");
       loadOrgContent();
       updateScreenWidth();
-      onScreenResize();
+      window.addEventListener("resize", () => {
+        updateScreenWidth();
+      });
     });
 
     return {
-      environment,
-      loadingUser,
       user,
       canManageWire,
       savedProducts,
@@ -561,11 +548,8 @@ export default {
       removeSavedProduct,
       getProductIcon,
       getProductTypeName,
-      screenWidth,
       numCards,
       numDraftCards,
-      updateScreenWidth,
-      onScreenResize,
       loadingUserContent,
       loadingOrgContent,
     };
