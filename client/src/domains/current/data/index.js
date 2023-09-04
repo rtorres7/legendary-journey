@@ -21,11 +21,8 @@ export const alerts = {
   ],
 };
 
-export { products, articlesForWire } from "./features";
 export { countries, regions } from "./regions";
 export { getSearchDataFromUrl } from "./search";
 export { productDetails } from "./productDetails";
 export { specialEdition, specialEditionLinks } from "./specialEditions";
-export { relatedProducts } from "./relatedProducts";
-export { articleMetrics } from "./articleMetrics";
 export { mockDocument } from "./document";

@@ -194,7 +194,7 @@ import MyDraftProductCard from "../components/MyDraftProductCard.vue";
 import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import Overlay from "../components/Overlay.vue";
-import { productDetails } from "../data";
+import { products } from "@/shared/data";
 import {
   ChevronRightIcon,
   EyeIcon,
@@ -388,6 +388,9 @@ export default {
       }
     };
     const getProductIcon = (product) => {
+      console.log("product: ", product);
+      console.log("metadata: ", metadata);
+      console.log("environment: ", environment);
       let p;
       if (
         environment.value != "production" &&
@@ -401,6 +404,7 @@ export default {
           (p) => p.code == product.productType.id
         );
       }
+      console.log("p: ", p);
       if (p && p.icon) {
         return p.icon;
       } else {
@@ -477,20 +481,18 @@ export default {
     onMounted(() => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
-          let drafts = [];
-          let products = [];
-          productDetails.forEach((product) => {
-            if (product.data.state == "draft") {
-              drafts.push(product.data);
-            }
+          let drafts = products.draft.map((product) => {
+            return {
+              ...product.attributes,
+            };
           });
-          productDetails.forEach((product) => {
-            if (product.data.state == "posted") {
-              products.push(product.data);
-            }
+          let published = products.published.map((product) => {
+            return {
+              ...product.attributes,
+            };
           });
           myDrafts.value = drafts;
-          myPublished.value = products;
+          myPublished.value = published;
           loadingDrafts.value = false;
           loadingPublished.value = false;
         }, 1000);
@@ -502,7 +504,7 @@ export default {
           if (response.data) {
             myDrafts.value = response.data.content;
           } else {
-            console.log("Couldn't retrieve drafts");
+            console.error("Couldn't retrieve drafts");
           }
         });
         axios.get("/workspace/stats").then((response) => {
@@ -513,7 +515,7 @@ export default {
               () => response.data.totalCreated
             );
           } else {
-            console.log("Couldn't retrieve stats");
+            console.error("Couldn't retrieve stats");
           }
         });
       }

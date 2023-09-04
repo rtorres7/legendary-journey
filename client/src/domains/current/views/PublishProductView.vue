@@ -599,12 +599,12 @@ export default {
 
     const restrictedProduct = (product) => {
       let productToCheck = product;
-      if (import.meta.env.MODE === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        productToCheck = documentMatch.data;
-      }
+      // if (import.meta.env.MODE === "offline") {
+      //   let documentMatch = productDetails.find(
+      //     ({ data }) => data.doc_num === product.doc_num
+      //   );
+      //   productToCheck = documentMatch.data;
+      // }
       if (hasProductAccess(productToCheck, organization.value)) {
         return false;
       }

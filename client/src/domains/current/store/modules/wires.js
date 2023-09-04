@@ -1,4 +1,4 @@
-import { articlesForWire } from "@current/data";
+import { products } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 
 export default {
@@ -11,8 +11,9 @@ export default {
     getWireByDate({ state, commit }, date) {
       state.loading = true;
       if (import.meta.env.MODE === "offline") {
-        console.log("[store] getWireByDate: ", articlesForWire);
-        setTimeout(() => commit("saveArticles", articlesForWire), 750);
+        const productsForBook = [...products.draft, ...products.published];
+        console.log("[store] getWireByDate: ", productsForBook);
+        setTimeout(() => commit("saveArticles", productsForBook), 750);
       } else {
         axios.get("/wires/" + date + "/getWireByDate").then((response) => {
           console.log("[store] getWireByDate: ", response.data);
