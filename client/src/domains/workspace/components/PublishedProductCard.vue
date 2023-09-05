@@ -260,7 +260,7 @@ export default {
     const store = useStore();
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const environment = ref(import.meta.env.MODE);
-    const createNotification = inject("create-notification");
+    const createSimpleNotification = inject("create-simple-notification");
     const getImg = (src) => {
       return new URL("/src/assets/mocks/" + src, import.meta.url).href;
     };
@@ -268,9 +268,8 @@ export default {
       const shareUrl =
         window.location.origin + "/product/" + props.product.doc_num;
       navigator.clipboard.writeText(shareUrl);
-      createNotification({
+      createSimpleNotification({
         message: "URL Copied to Clipboard",
-        type: "simple",
       });
     };
     const deleteProduct = () => {

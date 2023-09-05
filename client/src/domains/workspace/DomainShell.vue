@@ -20,6 +20,7 @@
           :key="item.id"
           :type="item.type"
           :title="item.title"
+          :simple="item.simple"
           :message="item.message"
           :auto-close="item.autoClose"
           :can-close="item.canClose"
@@ -182,6 +183,7 @@ export default {
     const {
       notifications,
       createNotification,
+      createSimpleNotification,
       removeNotifications,
       stopBodyOverflow,
       allowBodyOverflow,
@@ -190,6 +192,7 @@ export default {
     const loadingUser = computed(() => store.state.user.loading);
 
     provide("create-notification", createNotification);
+    provide("create-simple-notification", createSimpleNotification);
 
     const dialogPreference = ref(cookies.get("betaInfoNotice"));
 
@@ -205,6 +208,7 @@ export default {
       loadingUser,
       notifications,
       createNotification,
+      createSimpleNotification,
       removeNotifications,
       stopBodyOverflow,
       allowBodyOverflow,

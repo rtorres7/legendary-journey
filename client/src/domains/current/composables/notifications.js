@@ -24,6 +24,13 @@ export default function useNotifications() {
     );
   };
 
+  const createSimpleNotification = (options) => {
+    createNotification({
+      simple: true,
+      ...options,
+    });
+  };
+
   const createErrorNotification = (options) => {
     createNotification({
       type: "error",
@@ -46,14 +53,6 @@ export default function useNotifications() {
     });
   };
 
-  const createSimpleNotification = (options) => {
-    createNotification({
-      type: "simple",
-      title: "Simple notification.",
-      ...options,
-    });
-  };
-
   const removeNotifications = (id) => {
     const index = notifications.value.findIndex((item) => item.id === id);
     if (index !== -1) notifications.value.splice(index, 1);
@@ -70,10 +69,10 @@ export default function useNotifications() {
   return {
     notifications,
     createNotification,
+    createSimpleNotification,
     createSuccessNotification,
     createErrorNotification,
     createWarningNotification,
-    createSimpleNotification,
     removeNotifications,
     stopBodyOverflow,
     allowBodyOverflow,

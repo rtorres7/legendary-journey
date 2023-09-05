@@ -6,6 +6,7 @@ import { productDetails } from "@current/data";
 export default function updateSavedStatus() {
   const route = useRoute();
   const createNotification = inject("create-notification");
+  const createSimpleNotification = inject("create-simple-notification");
   const savingProduct = ref(false);
   const removingProduct = ref(false);
 
@@ -47,9 +48,8 @@ export default function updateSavedStatus() {
               });
             } else {
               removingProduct.value = false;
-              createNotification({
+              createSimpleNotification({
                 message: `Saved Product Removed`,
-                type: "simple",
               });
             }
           });
@@ -66,9 +66,8 @@ export default function updateSavedStatus() {
             });
           } else {
             savingProduct.value = false;
-            createNotification({
+            createSimpleNotification({
               message: `Product Saved`,
-              type: "simple",
             });
           }
         });
@@ -83,5 +82,6 @@ export default function updateSavedStatus() {
     removingProduct,
     save,
     createNotification,
+    createSimpleNotification,
   };
 }

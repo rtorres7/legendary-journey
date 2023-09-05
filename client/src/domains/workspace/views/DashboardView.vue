@@ -257,6 +257,7 @@ export default {
     const environment = ref(import.meta.env.MODE);
     const metadata = inject("metadata");
     const createNotification = inject("create-notification");
+    const createSimpleNotification = inject("create-simple-notification");
 
     const user = computed(() => store.state.user.user);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
@@ -361,9 +362,8 @@ export default {
         removeSavedProduct(product);
       } else {
         if (import.meta.env.MODE === "offline") {
-          createNotification({
+          createSimpleNotification({
             message: `Product Saved`,
-            type: "simple",
           });
         } else {
           savingProduct.value = true;
@@ -378,9 +378,8 @@ export default {
               });
             } else {
               savingProduct.value = false;
-              createNotification({
+              createSimpleNotification({
                 message: `Product Saved`,
-                type: "simple",
               });
               store.dispatch("workspace/loadSavedProducts");
               store.dispatch("workspace/loadPublished");
@@ -393,9 +392,8 @@ export default {
     const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
-        createNotification({
+        createSimpleNotification({
           message: `Saved Product Removed`,
-          type: "simple",
         });
         let p = savedProducts.value.find(
           (item) => item.productNumber == product.productNumber
@@ -415,9 +413,8 @@ export default {
             });
           } else {
             removingProduct.value = false;
-            createNotification({
+            createSimpleNotification({
               message: `Saved Product Removed`,
-              type: "simple",
             });
             let p = savedProducts.value.find(
               (item) => item.productNumber == product.productNumber

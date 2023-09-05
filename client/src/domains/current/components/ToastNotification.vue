@@ -1,11 +1,18 @@
 <!-- TODO: Style this better -->
 <template>
-  <div
-    class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg px-5 py-[1.1rem] transition duration-300 ease-in-out"
-    :style="`--toast-duration: ${duration}s`"
-  >
-    <template v-if="isSimpleNotification()">{{ message }}</template>
-    <template v-else>
+  <template v-if="simple">
+    <div
+      class="relative max-w-xs rounded-md text-sm text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg p-3 transition duration-300 ease-in-out"
+      :style="`--toast-duration: ${duration}s`"
+    >
+      {{ message }}
+    </div>
+  </template>
+  <template v-else>
+    <div
+      class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg px-5 py-[1.1rem] transition duration-300 ease-in-out"
+      :style="`--toast-duration: ${duration}s`"
+    >
       <button
         v-if="canClose"
         class="absolute top-4 right-4 flex items-center justify-center cursor-pointer"
@@ -35,8 +42,8 @@
         v-if="autoClose"
         class="animate-progress absolute bottom-0 left-0 w-full h-1.5 bg-blue-500"
       />
-    </template>
-  </div>
+    </div>
+  </template>
 </template>
 <script>
 import { computed, onMounted, ref } from "vue";
@@ -65,6 +72,11 @@ export default {
     title: {
       type: String,
       default: null,
+      required: false,
+    },
+    simple: {
+      type: Boolean,
+      default: false,
       required: false,
     },
     message: {
@@ -102,13 +114,6 @@ export default {
       }
     });
 
-    const isSimpleNotification = () => {
-      if (props.type !== "simple") {
-        return false;
-      }
-      return true;
-    };
-
     const toastIcon = computed(() => {
       switch (props.type) {
         case "error":
@@ -140,7 +145,6 @@ export default {
     };
 
     return {
-      isSimpleNotification,
       toastIcon,
       toastColor,
       close,

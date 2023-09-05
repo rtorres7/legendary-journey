@@ -217,12 +217,12 @@ export default {
     };
     const selectedSort = ref(getSortOption(route.query));
     const createNotification = inject("create-notification");
+    const createSimpleNotification = inject("create-simple-notification");
     const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
-        createNotification({
+        createSimpleNotification({
           message: `Saved Product Removed`,
-          type: "simple",
         });
         let p = mySaved.value.find(
           (item) => item.productNumber == product.productNumber
@@ -242,9 +242,8 @@ export default {
             });
           } else {
             removingProduct.value = false;
-            createNotification({
+            createSimpleNotification({
               message: `Saved Product Removed`,
-              type: "simple",
             });
             let p = mySaved.value.find(
               (item) => item.productNumber == product.productNumber

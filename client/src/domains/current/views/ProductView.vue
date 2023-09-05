@@ -235,7 +235,7 @@ export default {
     const route = useRoute();
     const environment = ref(import.meta.env.MODE);
     const url = computed(() => window.location);
-    const createNotification = inject("create-notification");
+    const createSimpleNotification = inject("create-simple-notification");
     const product = computed(() => store.state.product.document);
     const organization = computed(() => store.getters["user/organization"]);
     const loadingProduct = computed(() => store.state.product.loading);
@@ -287,9 +287,8 @@ export default {
     };
     const copyUrl = () => {
       navigator.clipboard.writeText(url.value);
-      createNotification({
+      createSimpleNotification({
         message: "URL Copied to Clipboard",
-        type: "simple",
       });
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
