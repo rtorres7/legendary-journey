@@ -221,9 +221,8 @@ export default {
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createNotification({
-          title: "Saved Product Removed",
-          message: `Product ${product.productNumber} has been removed from Saved Products.`,
-          type: "success",
+          message: `Saved Product Removed`,
+          type: "simple",
         });
         let p = mySaved.value.find(
           (item) => item.productNumber == product.productNumber
@@ -244,9 +243,8 @@ export default {
           } else {
             removingProduct.value = false;
             createNotification({
-              title: "Product Removed",
-              message: `Product ${product.productNumber} has been removed from Saved Products.`,
-              type: "success",
+              message: `Saved Product Removed`,
+              type: "simple",
             });
             let p = mySaved.value.find(
               (item) => item.productNumber == product.productNumber

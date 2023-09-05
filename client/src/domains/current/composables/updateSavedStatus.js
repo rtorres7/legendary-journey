@@ -48,9 +48,8 @@ export default function updateSavedStatus() {
             } else {
               removingProduct.value = false;
               createNotification({
-                title: "Product Removed",
-                message: `Product ${product.doc_num} has been removed from Saved products.`,
-                type: "success",
+                message: `Saved Product Removed`,
+                type: "simple",
               });
             }
           });
@@ -68,9 +67,8 @@ export default function updateSavedStatus() {
           } else {
             savingProduct.value = false;
             createNotification({
-              title: "Product Saved",
-              message: `Product ${product.doc_num} has been added to Saved products.`,
-              type: "success",
+              message: `Product Saved`,
+              type: "simple",
             });
           }
         });

@@ -362,9 +362,8 @@ export default {
       } else {
         if (import.meta.env.MODE === "offline") {
           createNotification({
-            title: "Product Saved",
-            message: `Product ${product.productNumber} has been saved.`,
-            type: "success",
+            message: `Product Saved`,
+            type: "simple",
           });
         } else {
           savingProduct.value = true;
@@ -380,9 +379,8 @@ export default {
             } else {
               savingProduct.value = false;
               createNotification({
-                title: "Product Saved",
-                message: `Product ${product.productNumber} has been saved.`,
-                type: "success",
+                message: `Product Saved`,
+                type: "simple",
               });
               store.dispatch("workspace/loadSavedProducts");
               store.dispatch("workspace/loadPublished");
@@ -396,9 +394,8 @@ export default {
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createNotification({
-          title: "Saved Product Removed",
-          message: `Product ${product.productNumber} has been removed from Saved Products.`,
-          type: "success",
+          message: `Saved Product Removed`,
+          type: "simple",
         });
         let p = savedProducts.value.find(
           (item) => item.productNumber == product.productNumber
@@ -419,9 +416,8 @@ export default {
           } else {
             removingProduct.value = false;
             createNotification({
-              title: "Product Removed",
-              message: `Product ${product.productNumber} has been removed from Saved Products.`,
-              type: "success",
+              message: `Saved Product Removed`,
+              type: "simple",
             });
             let p = savedProducts.value.find(
               (item) => item.productNumber == product.productNumber

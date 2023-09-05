@@ -270,8 +270,7 @@ export default {
       navigator.clipboard.writeText(shareUrl);
       createNotification({
         message: "URL Copied to Clipboard",
-        type: "success",
-        canClose: false,
+        type: "simple",
       });
     };
     const deleteProduct = () => {

@@ -289,8 +289,7 @@ export default {
       navigator.clipboard.writeText(url.value);
       createNotification({
         message: "URL Copied to Clipboard",
-        type: "success",
-        canClose: false,
+        type: "simple",
       });
     };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
