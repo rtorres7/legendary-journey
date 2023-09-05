@@ -16,7 +16,8 @@ const articles = [
         fileSize: 152437,
         type: "ATTACHMENT",
         attachmentId: "1c44f780-ee46-4615-b058-6c84eab870ad",
-        destination: "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+        destination:
+          "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
         visible: false,
       },
     ],
@@ -117,7 +118,8 @@ const articles = [
         fileSize: 384096,
         type: "ATTACHMENT",
         attachmentId: "e6eec89a-e4e1-49a6-90ad-99e9de7ed8b1",
-        destination: "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+        destination:
+          "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
         visible: false,
       },
     ],
@@ -251,9 +253,10 @@ const articles = [
         fileSize: 399296,
         type: "ATTACHMENT",
         attachmentId: "48d35447-6b51-40c4-9793-63da601e3ec0",
-        destination: "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+        destination:
+          "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
         visible: false,
-      }
+      },
     ],
     classification: "UNC",
     classificationXml: "",
@@ -352,9 +355,10 @@ const articles = [
         fileSize: 75668,
         type: "ATTACHMENT",
         attachmentId: "b33d5fa9-f888-4a2c-9ff1-5ed69cb0cb22",
-        destination: "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+        destination:
+          "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
         visible: false,
-      }
+      },
     ],
     classification: "UNC",
     classificationXml: "",
@@ -521,6 +525,23 @@ const metadata = new Metadata({
           ancestry: "1000",
           ancestry_depth: 1,
           category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
           code: "DNI",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Director of National Intelligence",
@@ -641,6 +662,23 @@ const metadata = new Metadata({
     coordinators: {
       displayName: "Coordinators",
       values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
         {
           ancestry: "1000",
           ancestry_depth: 1,
@@ -2025,6 +2063,23 @@ const metadata = new Metadata({
           ancestry: "1000",
           ancestry_depth: 1,
           category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
           code: "DNI",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Director of National Intelligence",
@@ -2272,6 +2327,23 @@ const metadata = new Metadata({
     producing_offices: {
       displayName: "Producing Offices",
       values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
         {
           ancestry: "1000",
           ancestry_depth: 1,
@@ -2994,7 +3066,6 @@ const loadFeeds = async (postgresUrl) => {
     state: "Draft",
     classification: "U",
   });
-
 };
 
 const clearFeeds = async (postgresUrl) => {
@@ -3003,7 +3074,7 @@ const clearFeeds = async (postgresUrl) => {
   feedsModel(sequelize);
 
   await sequelize.models.Feed.destroy({
-    truncate: true
+    truncate: true,
   });
 };
 
@@ -3090,6 +3161,7 @@ const loadUsers = async (postgresUrl) => {
   await sequelize.models.User.create({
     email: "foo@example.com",
     dn: "O=US,OU=OFFICE,CN=foo",
+    cn: "foo",
     organizationId: organization.id,
   });
 

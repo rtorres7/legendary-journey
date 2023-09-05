@@ -71,6 +71,7 @@ describe("User Service", () => {
       const savedUser = await service.createUser({
         email: "bar@example.com",
         dn: "O=US,CN=bar",
+        cn: "bar",
         organizationId: organization.id,
       });
 
@@ -105,6 +106,7 @@ describe("User Service", () => {
       const user = await models.User.create({
         email: "to-be-deleted",
         dn: "delete-me",
+        cn: "delete-me",
         organizationId: organization.id,
       });
 
@@ -112,6 +114,51 @@ describe("User Service", () => {
 
       const expected = await models.User.findOne({ where: { id: user.id } });
       expect(expected).toBeNull();
+    });
+  });
+
+  describe("createOrFindOrganization", () => {
+    it("should create or find an organization by name", async () => {
+      const orgName = "NewOrg";
+      const organization = await service.createOrFindOrganization(orgName);
+      expect(organization.name).toEqual(orgName);
+    });
+  });
+
+  describe("createUserWithOrganization", () => {
+    it("should create a user and associate it with an organization", async () => {
+      const userData = {
+        email: "newuser@example.com",
+        dn: "O=NewOrg,CN=newuser",
+        cn: "newuser",
+      };
+      const organizationName = "NewOrg";
+      const newUser = await service.createUserWithOrganization(
+        userData,
+        organizationName,
+      );
+
+      expect(newUser.id).toBeDefined();
+      expect(newUser.organizationId).toBeDefined();
+    });
+  });
+
+  describe("updateUserOrganization", () => {
+    it("should update the organization of an existing user", async () => {
+      const originalUser = await User.findOne({
+        where: { email: "foo@example.com" },
+      });
+      const newOrganizationName = "UpdatedOrg";
+
+      const updatedUser = await service.updateUserOrganization(
+        originalUser.id,
+        newOrganizationName,
+      );
+
+      expect(updatedUser.organizationId).toBeDefined();
+      expect(updatedUser.organizationId).not.toEqual(
+        originalUser.organizationId,
+      );
     });
   });
 });

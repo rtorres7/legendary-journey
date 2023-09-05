@@ -45,9 +45,11 @@ async function loadUserData(organization) {
       userName: "alvaram",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=alvaram",
+      cn: "Alvaro Ramirez",
       email: "alvaram@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -62,9 +64,11 @@ async function loadUserData(organization) {
       userName: "juliluc",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=juliluc",
+      cn: "Julie Luckanavage",
       email: "juliluc@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -79,9 +83,11 @@ async function loadUserData(organization) {
       userName: "rodotor",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=rodotor",
+      cn: "Rodolfo Torres",
       email: "rodotor@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -96,9 +102,11 @@ async function loadUserData(organization) {
       userName: "kevibeh",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=kevibeh",
+      cn: "Kevin Behr",
       email: "kevibeh@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -113,9 +121,11 @@ async function loadUserData(organization) {
       userName: "danikol",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=danikol",
+      cn: "Daniel Kolb",
       email: "danikol@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -130,9 +140,11 @@ async function loadUserData(organization) {
       userName: "chriroh",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=chriroh",
+      cn: "Christopher Rohr",
       email: "chriroh@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -147,9 +159,11 @@ async function loadUserData(organization) {
       userName: "timocor",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=timocor",
+      cn: "Timothy Corbitt",
       email: "timocor@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -164,9 +178,11 @@ async function loadUserData(organization) {
       userName: "kylemue",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=kylemue",
+      cn: "Kyle Mueller",
       email: "kylemue@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -181,9 +197,11 @@ async function loadUserData(organization) {
       userName: "brentay",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=brentay",
+      cn: "Brent Taylor",
       email: "brentay@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -198,9 +216,11 @@ async function loadUserData(organization) {
       userName: "amangil",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=amangil",
+      cn: "Amanda Gilbreath",
       email: "amangil@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -215,9 +235,11 @@ async function loadUserData(organization) {
       userName: "damimil",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=damimil",
+      cn: "Damion Miles",
       email: "damimil@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -232,9 +254,11 @@ async function loadUserData(organization) {
       userName: "jonaosz",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=jonaosz",
+      cn: "Jonathan Oszczakiewicz",
       email: "jonaosz@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -249,9 +273,11 @@ async function loadUserData(organization) {
       userName: "kevihad",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=kevihad",
+      cn: "Kevin Nguyen",
       email: "kevihad@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -266,9 +292,11 @@ async function loadUserData(organization) {
       userName: "jerekim",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=jerekim",
+      cn: "Jeremiah Kim",
       email: "jerekim@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -283,9 +311,11 @@ async function loadUserData(organization) {
       userName: "joonkim",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=joonkim",
+      cn: "Joon Kim",
       email: "joonkim@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 
@@ -300,9 +330,11 @@ async function loadUserData(organization) {
       userName: "scotbea",
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=scotbea",
+      cn: "Scott Bearden",
       email: "scotbea@example.com",
       roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
+      hasOrg: true,
     },
   });
 }
