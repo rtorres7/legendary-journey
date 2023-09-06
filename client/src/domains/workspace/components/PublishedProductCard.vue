@@ -165,7 +165,7 @@
               </div>
               <p
                 class="font-semibold text-gray-700 line-clamp-3"
-                :title="`${product.titleClassification} ${product.title}`"
+                :title="`${product.title}`"
               >
                 <span class="font-medium text-gray-500"
                   >({{ product.titleClassification }})</span

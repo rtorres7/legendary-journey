@@ -265,7 +265,7 @@ import SavedProductsView from "@workspace/views/SavedProductsView.vue";
 const workspaceRoutes = [
   {
     path: "/workspace",
-    name: "dashboard",
+    name: "workspace-dashboard",
     component: DashboardView,
     meta: {
       domain: "workspace",
@@ -274,7 +274,7 @@ const workspaceRoutes = [
   },
   {
     path: "/workspace/saved",
-    name: "saved",
+    name: "workspace-saved",
     component: SavedProductsView,
     meta: {
       domain: "workspace",

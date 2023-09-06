@@ -271,7 +271,7 @@ export default {
           loadingSaved.value = false;
         }, 1000);
       } else {
-        if (route.name === "saved") {
+        if (route.name === "workspace-saved") {
           axios.get(path, { params: { perPage: 1000 } }).then((response) => {
             loadingSaved.value = false;
             if (response.data) {

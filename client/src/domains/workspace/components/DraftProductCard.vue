@@ -98,7 +98,7 @@
           </div>
           <p
             class="font-semibold text-gray-700 line-clamp-2 mt-4"
-            :title="`${product.titleClassification} ${product.title}`"
+            :title="`${product.title}`"
           >
             <span
               v-if="product.titleClassification"
