@@ -16,6 +16,24 @@ jest.mock("../../src/services/product-service.js", () => {
           content: articles.filter((article) => article.state === "draft"),
         };
       }),
+      findPageOfDraftProductsForProducingOrg: jest
+        .fn()
+        .mockImplementation(
+          (producingOrgName, page, limit, offset, sortDir) => {
+            if (process.env.THROW_TEST_ERROR) {
+              throw new Error("whoops");
+            }
+            return {
+              content: articles.filter(
+                (article) =>
+                  article.state === "posted" &&
+                  article.producingOrg.findIndex(
+                    (i) => i.name === producingOrgName,
+                  ) >= 0,
+              ),
+            };
+          },
+        ),
       findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
@@ -27,23 +45,21 @@ jest.mock("../../src/services/product-service.js", () => {
       }),
       findPageOfRecentProductsForProducingOffice: jest
         .fn()
-        .mockImplementation(
-          (producingOfficeName) => {
-            if (process.env.THROW_TEST_ERROR) {
-              throw new Error("whoops");
-            }
+        .mockImplementation((producingOfficeName) => {
+          if (process.env.THROW_TEST_ERROR) {
+            throw new Error("whoops");
+          }
 
-            return {
-              content: articles.filter(
-                (article) =>
-                  article.state === "posted" &&
-                  article.producingOffices.findIndex(
-                    (i) => i.name === producingOfficeName,
-                  ) >= 0,
-              ),
-            };
-          },
-        ),
+          return {
+            content: articles.filter(
+              (article) =>
+                article.state === "posted" &&
+                article.producingOffices.findIndex(
+                  (i) => i.name === producingOfficeName,
+                ) >= 0,
+            ),
+          };
+        }),
       findPageOfProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
@@ -65,7 +81,7 @@ jest.mock("../../src/services/product-service.js", () => {
           throw new Error("whoops");
         }
         return Promise.resolve(KiwiPage.of(1, 4, 20, articles.slice(0, 4)));
-      })
+      }),
     };
   });
 });
@@ -135,11 +151,9 @@ jest.mock("../../src/services/workspace.js", () => {
 
           return null;
         }),
-      isProductSaved: jest
-        .fn()
-        .mockImplementation(() => {
-          return true;
-        })
+      isProductSaved: jest.fn().mockImplementation(() => {
+        return true;
+      }),
     };
   });
 });
@@ -152,7 +166,9 @@ jest.mock("../../src/services/aggregated-metrics-service.js", () => {
         .mockImplementation((organizationName, startDate, endDate) => {
           return Promise.resolve({ totalViews: { totalViews: 500 } });
         }),
-      getProductViewsCountForMultipleProducts: jest.fn().mockResolvedValue({ "really-cool-product": 1 })
+      getProductViewsCountForMultipleProducts: jest
+        .fn()
+        .mockResolvedValue({ "really-cool-product": 1 }),
     };
   });
 });
