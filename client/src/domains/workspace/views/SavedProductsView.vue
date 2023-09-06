@@ -110,9 +110,9 @@
           <template v-for="product in mySaved" :key="product">
             <PublishedProductCard
               :product="product"
-              type="saved"
-              :productTypeName="getProductTypeName(product)"
-              @remove="removeSavedProduct(product)"
+              type="product"
+              @delete="openDeleteDialog(product)"
+              @unsave="unsaveProduct(product)"
             />
           </template>
         </div>
@@ -128,6 +128,35 @@
       :facets="aggregations"
       class="grid grid-cols-2 md:grid-cols-3 gap-4"
     />
+  </BaseDialog>
+
+  <BaseDialog
+    :isOpen="isDeleteDialogOpen"
+    :title="'Delete Product'"
+    class="max-w-fit"
+    @close="closeDeleteDialog"
+  >
+    <p class="py-4 pr-4">Are you sure you want to do this?</p>
+    <template #actions>
+      <BaseButton
+        class="w-[100px]"
+        color="secondary"
+        @click.prevent="closeDeleteDialog"
+        >Cancel</BaseButton
+      >
+      <BaseButton
+        class="w-[100px]"
+        color="danger"
+        @click.prevent="deleteProduct"
+      >
+        <div :class="loadingDelete ? 'flex space-x-4' : ''">
+          <span>Delete</span>
+          <span v-if="loadingDelete">
+            <LoadingSpinner class="h-5 w-5" />
+          </span>
+        </div>
+      </BaseButton>
+    </template>
   </BaseDialog>
   <Overlay :show="removingProduct">
     <div class="max-w-xs inline-block">
@@ -147,6 +176,7 @@ import { productDetails } from "../data";
 import Overlay from "../components/Overlay.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
+import BaseButton from "../components/BaseButton.vue";
 import Facets from "../components/Facets.vue";
 import {
   //AdjustmentsHorizontalIcon,
@@ -174,6 +204,7 @@ export default {
     Overlay,
     LoadingSpinner,
     BaseDialog,
+    BaseButton,
     Facets,
   },
   setup() {
@@ -181,7 +212,6 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const path = computed(() => route.fullPath);
-    const metadata = inject("metadata");
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
@@ -218,8 +248,65 @@ export default {
     const selectedSort = ref(getSortOption(route.query));
     const createNotification = inject("create-notification");
     const createSimpleNotification = inject("create-simple-notification");
+
+    const selectedProduct = ref();
+    const loadingDelete = ref(false);
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+
+    const deleteProduct = () => {
+      if (import.meta.env.MODE === "offline") {
+        createNotification({
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+          type: "success",
+        });
+        closeDeleteDialog();
+        let p = mySaved.value.find(
+          (item) => item.productNumber == selectedProduct.value.productNumber
+        );
+        let indexOfProduct = mySaved.value.indexOf(p);
+        mySaved.value.splice(indexOfProduct, 1);
+      } else {
+        loadingDelete.value = true;
+        axios
+          .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+              loadingDelete.value = false;
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+                type: "success",
+              });
+              loadingDelete.value = false;
+              closeDeleteDialog();
+              let p = mySaved.value.find(
+                (item) =>
+                  item.productNumber == selectedProduct.value.productNumber
+              );
+              let indexOfProduct = mySaved.value.indexOf(p);
+              mySaved.value.splice(indexOfProduct, 1);
+            }
+          });
+      }
+    };
+
     const removingProduct = ref(false);
-    const removeSavedProduct = (product) => {
+    const unsaveProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createSimpleNotification({
           message: `Saved Product Removed`,
@@ -286,16 +373,6 @@ export default {
         }
       }
     };
-    const getProductTypeName = (product) => {
-      if (product.productType.name) {
-        return product.productType.name;
-      } else {
-        let type = metadata.product_types.find(
-          (item) => item.code === product.productType
-        );
-        return type?.displayName;
-      }
-    };
 
     onMounted(() => {
       getSavedProducts(path.value);
@@ -329,6 +406,11 @@ export default {
       path,
       mySaved,
       loadingSaved,
+      loadingDelete,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
+      deleteProduct,
       numProducts,
       aggregations,
       isFacetsDialogOpen,
@@ -337,9 +419,8 @@ export default {
       sortOptions,
       selectedSort,
       removingProduct,
-      removeSavedProduct,
+      unsaveProduct,
       getSavedProducts,
-      getProductTypeName,
     };
   },
 };

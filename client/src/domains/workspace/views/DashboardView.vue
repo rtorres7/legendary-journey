@@ -45,10 +45,10 @@
               <PublishedProductCard
                 :product="product"
                 type="product"
-                :productTypeName="getProductTypeName(product)"
                 :class="index < numCards ? 'block' : 'hidden'"
                 @delete="openDeleteDialog(product)"
                 @save="saveProduct(product)"
+                @unsave="unsaveProduct(product)"
               />
             </template>
           </div>
@@ -160,10 +160,10 @@
                   <PublishedProductCard
                     :product="product"
                     type="product"
-                    :productTypeName="getProductTypeName(product)"
                     :class="index < numCards ? 'block' : 'hidden'"
                     @delete="openDeleteDialog(product)"
                     @save="saveProduct(product)"
+                    @unsave="unsaveProduct(product)"
                   />
                 </template>
               </div>
@@ -388,39 +388,35 @@ export default {
     };
     const savingProduct = ref(false);
     const saveProduct = (product) => {
-      if (product.saved) {
-        removeSavedProduct(product);
+      if (import.meta.env.MODE === "offline") {
+        createSimpleNotification({
+          message: `Product Saved`,
+        });
       } else {
-        if (import.meta.env.MODE === "offline") {
-          createSimpleNotification({
-            message: `Product Saved`,
-          });
-        } else {
-          savingProduct.value = true;
-          axios.put("/workspace/saved/" + product.id).then((response) => {
-            if (response.data.error) {
-              savingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              savingProduct.value = false;
-              createSimpleNotification({
-                message: `Product Saved`,
-              });
-              store.dispatch("workspace/loadSavedProducts");
-              store.dispatch("workspace/loadPublished");
-            }
-          });
-        }
+        savingProduct.value = true;
+        axios.put("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            savingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            savingProduct.value = false;
+            createSimpleNotification({
+              message: `Product Saved`,
+            });
+            store.dispatch("workspace/loadSavedProducts");
+            store.dispatch("workspace/loadPublished");
+          }
+        });
       }
     };
 
     const removingProduct = ref(false);
-    const removeSavedProduct = (product) => {
+    const unsaveProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         removingProduct.value = true;
         setTimeout(() => {
@@ -433,7 +429,7 @@ export default {
           createSimpleNotification({
             message: `Saved Product Removed`,
           });
-        }, 1000);
+        }, 750);
       } else {
         removingProduct.value = true;
         axios.delete("/workspace/saved/" + product.id).then((response) => {
@@ -478,16 +474,6 @@ export default {
         return p.icon;
       } else {
         return;
-      }
-    };
-    const getProductTypeName = (product) => {
-      if (product.productType.name) {
-        return product.productType.name;
-      } else {
-        let type = metadata.product_types.find(
-          (item) => item.code === product.productType
-        );
-        return type?.displayName;
       }
     };
     const numCards = ref();
@@ -572,9 +558,8 @@ export default {
       savingProduct,
       saveProduct,
       removingProduct,
-      removeSavedProduct,
+      unsaveProduct,
       getProductIcon,
-      getProductTypeName,
       numCards,
       numDraftCards,
       loadingUserContent,
