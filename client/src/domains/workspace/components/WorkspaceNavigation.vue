@@ -19,7 +19,7 @@
             <tippy content="Dashboard" placement="right" theme="demo">
               <div
                 :class="
-                  route.name == 'dashboard'
+                  route.name == 'workspace-dashboard'
                     ? 'text-gray-50 bg-slate-800/90'
                     : 'hover:text-gray-50 hover:bg-slate-800/90'
                 "
@@ -57,7 +57,7 @@
             <tippy content="Saved Products" placement="right" theme="demo">
               <div
                 :class="
-                  route.name == 'saved'
+                  route.name == 'workspace-saved'
                     ? 'text-gray-50 bg-slate-800/90'
                     : 'hover:text-gray-50 hover:bg-slate-800/90'
                 "

@@ -102,6 +102,19 @@ export default {
         });
       }
     },
+    //Test Console only
+    setSavedLoading({ commit }, value) {
+      commit("toggleSavedLoading", value);
+    },
+    setDraftsLoading({ commit }, value) {
+      commit("toggleDraftsLoading", value);
+    },
+    setPublishedLoading({ commit }, value) {
+      commit("togglePublishedLoading", value);
+    },
+    setStatsLoading({ commit }, value) {
+      commit("toggleStatsLoading", value);
+    },
   },
   mutations: {
     saveSavedProducts(state, products) {
@@ -119,6 +132,19 @@ export default {
     saveStats(state, stats) {
       state.stats.value = stats;
       state.stats.loading = false;
+    },
+    //Test Console only
+    toggleSavedLoading(state, value) {
+      state.saved.loading = value;
+    },
+    toggleDraftsLoading(state, value) {
+      state.drafts.loading = value;
+    },
+    togglePublishedLoading(state, value) {
+      state.published.loading = value;
+    },
+    toggleStatsLoading(state, value) {
+      state.stats.loading = value;
     },
   },
 };
