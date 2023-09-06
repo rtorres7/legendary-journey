@@ -585,7 +585,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import MobileSideMenu from "./MobileSideMenu.vue";
-import TestConsoleDialog from "@current/components/TestConsoleDialog.vue";
+import TestConsoleDialog from "@/shared/components/TestConsoleDialog.vue";
 export default {
   components: {
     Dialog,

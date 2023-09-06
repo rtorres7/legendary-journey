@@ -685,12 +685,12 @@ import { getValueForCode } from "@/shared/helpers";
 import { inject, ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
+import TestConsoleDialog from "@/shared/components/TestConsoleDialog.vue";
 import BannerSearchBar from "@current/components/BannerSearchBar.vue";
 import BannerNavPopover from "@current/components/BannerNavPopover.vue";
 import BannerNavMap from "@current/components/BannerNavMap.vue";
 import SpecialEditionLink from "@current/components/SpecialEditionLink.vue";
 import MobileSideMenu from "@current/components/MobileSideMenu.vue";
-import TestConsoleDialog from "@current/components/TestConsoleDialog.vue";
 import {
   Dialog,
   DialogPanel,
