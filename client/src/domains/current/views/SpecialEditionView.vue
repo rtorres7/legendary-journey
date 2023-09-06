@@ -9,7 +9,7 @@
     </template>
     <template v-else>
       <p class="font-semibold text-2xl">
-        ({{ specialEdition.name_classification }}) {{ specialEdition.name }}
+        ({{ specialEdition.classification }}) {{ specialEdition.name }}
       </p>
     </template>
   </div>

@@ -36,6 +36,7 @@ class FeedsService {
   }
 
   async updateFeed(id, feed) {
+    console.log("made it to the service, id & feed: ", id, feed);
     const result = await models.Feed.update(feed, {
       where: {
         id: id,
@@ -43,7 +44,7 @@ class FeedsService {
       returning: true,
     });
 
-    return result[1][0];
+    return result;
   }
 
   async deleteFeed(id) {

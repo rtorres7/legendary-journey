@@ -26,7 +26,15 @@ export default {
   mutations: {
     importLinks(state, data) {
       state.loading = false;
-      state.links = data;
+      console.log("data: ", data);
+      let links = {
+        concepts: {
+          posted: data.filter((a) => a.state === "Posted"),
+          draft: data.filter((a) => a.state === "Draft"),
+          archived: data.filter((a) => a.state === "Archived"),
+        },
+      };
+      state.links = links.concepts;
     },
   },
 };

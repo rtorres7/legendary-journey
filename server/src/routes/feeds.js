@@ -155,16 +155,26 @@ router.put("/feeds/:id", async (req, res) => {
     }
    */
 
-  const updatedFeed = await feedsService.updateFeed(req.params.id, {
+  console.log("route successfully hit, payload: ", req.body);
+
+  const updatedFeed = {
     name: req.body.name,
     searchParams: req.body.searchParams,
     selectedReadings: req.body.selectedReadings,
     state: req.body.state,
     order: req.body.order,
     classification: req.body.classification,
-  });
+  };
 
-  res.json(updatedFeed);
+  try {
+    const savedFeed = await feedsService.updateFeed(req.params.id, updatedFeed);
+    res.json(savedFeed);
+  } catch (error) {
+    logger.error(error);
+    res.json({
+      error: `There was a problem updating the feed: ${error.message}`,
+    });
+  }
 });
 
 router.delete("/feeds/:id", async (req, res) => {

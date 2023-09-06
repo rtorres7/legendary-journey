@@ -129,15 +129,9 @@ export default {
     const loading = computed(() => store.state.specialEditions.loading);
     const links = computed(() => {
       const feeds = {
-        draft: store.state.specialEditions.links.filter(
-          (link) => link.state === "Draft"
-        ),
-        posted: store.state.specialEditions.links.filter(
-          (link) => link.state === "Posted"
-        ),
-        archived: store.state.specialEditions.links.filter(
-          (link) => link.state === "Archived"
-        ),
+        draft: store.state.specialEditions.links.draft,
+        posted: store.state.specialEditions.links.posted,
+        archived: store.state.specialEditions.links.archived,
       };
       return feeds;
     });

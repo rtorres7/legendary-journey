@@ -29,8 +29,8 @@
           </div>
           <div>
             <MaxTextarea
-              v-model="editionEvent.key_readings"
-              v-model.trim="editionEvent.key_readings"
+              v-model="editionEvent.selectedReadings"
+              v-model.trim="editionEvent.selectedReadings"
               maxlength="4000"
               rows="5"
               label="Selected Readings"
@@ -307,7 +307,7 @@ export default {
         } else {
           if (props.editMode) {
             axios
-              .patch("/feeds/" + editionEvent.value.id, buildFormData())
+              .put("/feeds/" + editionEvent.value.id, buildFormData())
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
