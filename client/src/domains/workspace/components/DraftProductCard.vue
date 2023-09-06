@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[500px] p-8"
+    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded md:max-w-[500px] p-8"
   >
     <div
       v-if="loading"

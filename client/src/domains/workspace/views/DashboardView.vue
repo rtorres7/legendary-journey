@@ -2,133 +2,46 @@
   <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
     <!-- User Content -->
     <template v-if="loadingUserContent">
-      <div class="h-6 bg-slate-200 rounded my-6 w-1/3 animate-pulse"></div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-      >
-        <template v-for="(card, index) in 4" :key="card">
-          <PublishedProductCard
-            :loading="true"
-            :class="index < numCards ? 'block' : 'hidden'"
-          />
-        </template>
+      <div class="mb-8">
+        <div class="mb-8 h-8 bg-slate-200 rounded w-40 animate-pulse"></div>
+        <div class="mb-6 h-6 bg-slate-200 rounded w-64 animate-pulse"></div>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+        >
+          <template v-for="(card, index) in 4" :key="card">
+            <PublishedProductCard
+              :loading="true"
+              :class="index < numCards ? 'block' : 'hidden'"
+            />
+          </template>
+        </div>
       </div>
     </template>
     <template v-else>
       <!--- Recently Saved -->
-      <template v-if="savedProducts.length > 0">
-        <div class="text-2xl font-bold">For You</div>
-        <div class="py-6 flex items-center justify-between">
-          <div class="text-lg font-semibold text-gray-700">Recently Saved</div>
-          <router-link
-            v-if="
-              savedProducts.length > 4 ||
-              (savedProducts.length > 1 && numCards < savedProducts.length)
-            "
-            class="flex items-center text-gray-500 text-sm font-semibold"
-            to="/workspace/saved"
-          >
-            <span>See All</span>
-            <ChevronRightIcon class="h-4 w-4" />
-          </router-link>
-        </div>
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-        >
-          <template v-for="(product, index) in savedProducts" :key="product">
-            <PublishedProductCard
-              :product="product"
-              type="product"
-              :productTypeName="getProductTypeName(product)"
-              :class="index < numCards ? 'block' : 'hidden'"
-              @delete="openDeleteDialog(product)"
-              @save="saveProduct(product)"
-            />
-          </template>
-        </div>
-      </template>
-    </template>
-    <!-- Organization Content -->
-    <template v-if="loadingOrgContent">
-      <div class="h-8 bg-slate-200 rounded my-6 w-1/2 animate-pulse"></div>
-      <div class="h-6 bg-slate-200 rounded my-6 w-1/3 animate-pulse"></div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-      >
-        <template v-for="(card, index) in 4" :key="card">
-          <PublishedProductCard
-            :loading="true"
-            :class="index < numCards ? 'block' : 'hidden'"
-          />
-        </template>
-      </div>
-    </template>
-    <template v-else>
-      <template v-if="!user.organization">
-        <div class="italic py-8">
-          You are currently not affiliated with an organization.
-        </div>
-      </template>
-      <template v-else>
-        <div class="text-2xl font-bold py-8">
-          Happening at {{ user.organization }}
-        </div>
-        <!--- Drafts within the last week --->
-        <template v-if="canManageWire && draftProducts.length > 0">
-          <div class="pb-6 flex items-center">
+      <div v-if="savedProducts.length > 0" class="pb-8">
+        <div class="text-2xl font-bold pb-8">For You</div>
+        <div>
+          <div class="pb-6 flex items-center justify-between">
             <div class="text-lg font-semibold text-gray-700">
-              Drafts within the last week
+              Recently Saved
             </div>
+            <router-link
+              v-if="
+                savedProducts.length > 4 ||
+                (savedProducts.length > 1 && numCards < savedProducts.length)
+              "
+              class="flex items-center text-gray-500 text-sm font-semibold"
+              to="/workspace/saved"
+            >
+              <span>See All</span>
+              <ChevronRightIcon class="h-4 w-4" />
+            </router-link>
           </div>
-          <template v-if="draftProducts.length > 0">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
-              <template
-                v-for="(product, index) in draftProducts"
-                :key="product"
-              >
-                <DraftProductCard
-                  :product="product"
-                  :productIcon="getProductIcon(product)"
-                  type="product"
-                  :class="index < numDraftCards ? 'block' : 'hidden'"
-                  @delete="openDeleteDialog(product)"
-                />
-              </template>
-            </div>
-          </template>
-          <template v-else>
-            <p class="italic">
-              No drafts have been created within the last week.
-            </p>
-          </template>
-        </template>
-        <!--- Recently published --->
-        <div class="pb-6 flex justify-between items-center">
-          <div class="text-lg font-semibold text-gray-700">
-            Recently Published
-          </div>
-          <a
-            v-if="
-              publishedProducts.length > 4 ||
-              (publishedProducts.length > 1 &&
-                numCards < publishedProducts.length)
-            "
-            class="flex items-center text-gray-500 text-sm font-semibold"
-            href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
-            target="_blank"
-          >
-            <span>See All</span>
-            <ChevronRightIcon class="h-4 w-4" />
-          </a>
-        </div>
-        <template v-if="publishedProducts.length > 0">
           <div
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
           >
-            <template
-              v-for="(product, index) in publishedProducts"
-              :key="product"
-            >
+            <template v-for="(product, index) in savedProducts" :key="product">
               <PublishedProductCard
                 :product="product"
                 type="product"
@@ -139,44 +52,161 @@
               />
             </template>
           </div>
-        </template>
-        <template v-else>
-          <p class="italic">
-            No products have been published by your organization.
-          </p>
-        </template>
-        <!--- The Stats --->
-        <template v-if="canManageWire">
-          <div class="py-6 flex items-center">
-            <div class="text-lg font-semibold text-gray-700">The Stats</div>
-          </div>
+        </div>
+      </div>
+    </template>
+    <!-- Organization Content -->
+    <template v-if="loadingOrgContent">
+      <div>
+        <div class="mb-8 h-8 bg-slate-200 rounded w-40 animate-pulse"></div>
+        <div class="mb-6">
+          <div class="mb-6 h-6 bg-slate-200 rounded w-64 animate-pulse"></div>
           <div
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
           >
-            <div
-              class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-            >
-              <div class="flex space-x-4 items-center text-slate-500">
-                <Square3Stack3DIcon class="h-5 w-5" />
-                <span class="text-sm font-normal"> Total Created</span>
-              </div>
-              <div class="font-semibold text-xl text-slate-700">
-                {{ stats.totalCreated }}
+            <template v-for="(card, index) in 4" :key="card">
+              <PublishedProductCard
+                :loading="true"
+                :class="index < numCards ? 'block' : 'hidden'"
+              />
+            </template>
+          </div>
+        </div>
+        <div>
+          <div class="mb-6 h-6 bg-slate-200 rounded w-64 animate-pulse"></div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+          >
+            <template v-for="(card, index) in 4" :key="card">
+              <PublishedProductCard
+                :loading="true"
+                :class="index < numCards ? 'block' : 'hidden'"
+              />
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <template v-if="!user.organization">
+        <div class="italic pb-8">
+          You are currently not affiliated with an organization.
+        </div>
+      </template>
+      <template v-else>
+        <div>
+          <div class="text-2xl font-bold pb-8">
+            Happening at {{ user.organization }}
+          </div>
+          <!--- Drafts within the last week --->
+          <div v-if="canManageWire && draftProducts.length > 0" class="pb-6">
+            <div class="pb-6 flex items-center">
+              <div class="text-lg font-semibold text-gray-700">
+                Drafts within the last week
               </div>
             </div>
-            <div
-              class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
-            >
-              <div class="flex space-x-4 items-center text-slate-500">
-                <EyeIcon class="h-5 w-5" />
-                <span class="text-sm font-normal">Total Views</span>
+            <template v-if="draftProducts.length > 0">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6"
+              >
+                <template
+                  v-for="(product, index) in draftProducts"
+                  :key="product"
+                >
+                  <DraftProductCard
+                    :product="product"
+                    :productIcon="getProductIcon(product)"
+                    type="product"
+                    :class="index < numDraftCards ? 'block' : 'hidden'"
+                    @delete="openDeleteDialog(product)"
+                  />
+                </template>
               </div>
-              <div class="font-semibold text-xl text-slate-700">
-                {{ stats.totalViews }}
+            </template>
+            <template v-else>
+              <p class="italic">
+                No drafts have been created within the last week.
+              </p>
+            </template>
+          </div>
+          <!--- Recently published --->
+          <div class="pb-6">
+            <div class="pb-6 flex justify-between items-center">
+              <div class="text-lg font-semibold text-gray-700">
+                Recently Published
+              </div>
+              <a
+                v-if="
+                  publishedProducts.length > 4 ||
+                  (publishedProducts.length > 1 &&
+                    numCards < publishedProducts.length)
+                "
+                class="flex items-center text-gray-500 text-sm font-semibold"
+                href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
+                target="_blank"
+              >
+                <span>See All</span>
+                <ChevronRightIcon class="h-4 w-4" />
+              </a>
+            </div>
+            <template v-if="publishedProducts.length > 0">
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+              >
+                <template
+                  v-for="(product, index) in publishedProducts"
+                  :key="product"
+                >
+                  <PublishedProductCard
+                    :product="product"
+                    type="product"
+                    :productTypeName="getProductTypeName(product)"
+                    :class="index < numCards ? 'block' : 'hidden'"
+                    @delete="openDeleteDialog(product)"
+                    @save="saveProduct(product)"
+                  />
+                </template>
+              </div>
+            </template>
+            <template v-else>
+              <p class="italic">
+                No products have been published by your organization.
+              </p>
+            </template>
+          </div>
+          <!--- The Stats --->
+          <div v-if="canManageWire">
+            <div class="pb-6 flex items-center">
+              <div class="text-lg font-semibold text-gray-700">The Stats</div>
+            </div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+            >
+              <div
+                class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+              >
+                <div class="flex space-x-4 items-center text-slate-500">
+                  <Square3Stack3DIcon class="h-5 w-5" />
+                  <span class="text-sm font-normal"> Total Created</span>
+                </div>
+                <div class="font-semibold text-xl text-slate-700">
+                  {{ stats.totalCreated }}
+                </div>
+              </div>
+              <div
+                class="flex justify-between border border-slate-300/70 shadow-sm rounded px-6 py-4 max-w-[464px]"
+              >
+                <div class="flex space-x-4 items-center text-slate-500">
+                  <EyeIcon class="h-5 w-5" />
+                  <span class="text-sm font-normal">Total Views</span>
+                </div>
+                <div class="font-semibold text-xl text-slate-700">
+                  {{ stats.totalViews }}
+                </div>
               </div>
             </div>
           </div>
-        </template>
+        </div>
       </template>
     </template>
     <BaseDialog
@@ -392,14 +422,18 @@ export default {
     const removingProduct = ref(false);
     const removeSavedProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
-        createSimpleNotification({
-          message: `Saved Product Removed`,
-        });
-        let p = savedProducts.value.find(
-          (item) => item.productNumber == product.productNumber
-        );
-        let indexOfProduct = savedProducts.value.indexOf(p);
-        savedProducts.value.splice(indexOfProduct, 1);
+        removingProduct.value = true;
+        setTimeout(() => {
+          let p = savedProducts.value.find(
+            (item) => item.productNumber == product.productNumber
+          );
+          let indexOfProduct = savedProducts.value.indexOf(p);
+          savedProducts.value.splice(indexOfProduct, 1);
+          removingProduct.value = false;
+          createSimpleNotification({
+            message: `Saved Product Removed`,
+          });
+        }, 1000);
       } else {
         removingProduct.value = true;
         axios.delete("/workspace/saved/" + product.id).then((response) => {
@@ -457,22 +491,22 @@ export default {
       }
     };
     const numCards = ref();
-    const numDraftCards = ref();
+    const numDraftCards = ref(3);
     const screenWidth = ref();
     const updateScreenWidth = () => {
       screenWidth.value = window.innerWidth;
       if (screenWidth.value < 640) {
         numCards.value = 1;
-        numDraftCards.value = 1;
+        //numDraftCards.value = 3;
       } else if (screenWidth.value >= 640 && screenWidth.value < 1024) {
         numCards.value = 2;
-        numDraftCards.value = 2;
+        //numDraftCards.value = 3;
       } else if (screenWidth.value >= 1024 && screenWidth.value < 1536) {
         numCards.value = 3;
-        numDraftCards.value = 3;
+        //numDraftCards.value = 3;
       } else {
         numCards.value = 4;
-        numDraftCards.value = 3;
+        //numDraftCards.value = 3;
       }
     };
 

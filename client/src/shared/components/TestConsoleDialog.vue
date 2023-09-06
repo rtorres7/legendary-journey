@@ -321,34 +321,7 @@
                   v-show="currentRoute === 'workspace-dashboard'"
                   class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
                 >
-                  <p class="font-medium">Dashboard Options</p>
-                  <div class="py-2">
-                    <SwitchGroup>
-                      <div class="flex items-center justify-between mt-2">
-                        <SwitchLabel class="mr-4">
-                          Enable Loading Saved Products
-                        </SwitchLabel>
-                        <Switch
-                          v-model="loadingSavedProductsEnabled"
-                          :class="
-                            loadingSavedProductsEnabled
-                              ? 'bg-mission-blue dark:bg-slate-400 energy:bg-zinc-400'
-                              : 'bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600'
-                          "
-                          class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                          <span
-                            :class="
-                              loadingSavedProductsEnabled
-                                ? 'translate-x-6'
-                                : 'translate-x-1'
-                            "
-                            class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
-                          />
-                        </Switch>
-                      </div>
-                    </SwitchGroup>
-                  </div>
+                  <TestConsoleWorkspace />
                 </div>
               </div>
             </DialogPanel>
@@ -373,6 +346,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import TestConsoleWorkspace from "./test-console/TestConsoleWorkspace.vue";
 
 export default {
   components: {
@@ -384,6 +358,7 @@ export default {
     TransitionChild,
     TransitionRoot,
     XMarkIcon,
+    TestConsoleWorkspace,
   },
   props: {
     isOpen: Boolean,
@@ -417,8 +392,6 @@ export default {
     const sampleImageEnabled = ref(false);
     const uploadFileName = ref(null);
     const adminEnabled = ref(false);
-    /* Workspace */
-    const loadingSavedProductsEnabled = ref(false);
 
     const userAuthorizations = computed(
       () => store.getters["user/authorizations"]
@@ -436,10 +409,6 @@ export default {
     const adminFromStore = computed(() => store.state.testConsole.admin);
     const sampleImageFromStore = computed(
       () => store.state.testConsole.sampleImage
-    );
-    /* Workspace */
-    const loadingSavedProductsFromStore = computed(
-      () => store.state.workspace.saved.loading
     );
 
     watch(
@@ -463,11 +432,6 @@ export default {
 
     watch(loadingResultsEnabled, (enabled) => {
       store.dispatch("search/setLoading", enabled);
-    });
-
-    /* Workspace */
-    watch(loadingSavedProductsEnabled, (enabled) => {
-      store.dispatch("workspace/setSavedLoading", enabled);
     });
 
     const removeProductImage = () => {
@@ -517,11 +481,6 @@ export default {
       loadingResultsEnabled.value = loading;
     });
 
-    /* Workspace */
-    watch(loadingSavedProductsFromStore, (loading) => {
-      loadingSavedProductsEnabled.value = loading;
-    });
-
     watch(adminFromStore, (status) => {
       adminEnabled.value = status;
     });
@@ -546,8 +505,6 @@ export default {
       uploadFileName,
       adminEnabled,
       sampleImageEnabled,
-      /* Workspace */
-      loadingSavedProductsEnabled,
     };
   },
 };

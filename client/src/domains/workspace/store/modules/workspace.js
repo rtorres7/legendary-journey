@@ -28,6 +28,7 @@ export default {
         const saved = products.published.slice(0, 2).map((product) => {
           return {
             ...product.attributes,
+            saved: true,
           };
         });
         console.log("[store] loadSavedProducts: ", saved);
@@ -82,7 +83,7 @@ export default {
     loadStats({ state, commit }) {
       state.stats.loading = true;
       if (import.meta.env.MODE === "offline") {
-        const stats = { totalViews: 12345, totalCreated: 100 };
+        const stats = { totalViews: "1.23k", totalCreated: 100 };
         console.log("[store] loadStats: ", stats);
         setTimeout(() => {
           commit("saveStats", stats);
