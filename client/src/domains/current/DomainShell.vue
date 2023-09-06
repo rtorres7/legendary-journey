@@ -20,6 +20,7 @@
         :key="item.id"
         :type="item.type"
         :title="item.title"
+        :simple="item.simple"
         :message="item.message"
         :auto-close="item.autoClose"
         :can-close="item.canClose"
@@ -128,12 +129,14 @@ export default {
     const {
       notifications,
       createNotification,
+      createSimpleNotification,
       removeNotifications,
       stopBodyOverflow,
       allowBodyOverflow,
     } = useNotifications();
 
     provide("create-notification", createNotification);
+    provide("create-simple-notification", createSimpleNotification);
 
     watch(useRoute(), () => {
       topOfApp.value.focus();
@@ -158,6 +161,7 @@ export default {
       loadingUser,
       notifications,
       createNotification,
+      createSimpleNotification,
       removeNotifications,
       stopBodyOverflow,
       allowBodyOverflow,
