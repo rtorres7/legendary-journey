@@ -2,7 +2,7 @@
 <template>
   <template v-if="simple">
     <div
-      class="relative max-w-xs rounded-md text-sm text-slate-300 dark:text-slate-300 energy:text-zinc-300 bg-slate-700 dark:bg-slate-700 energy:bg-zinc-700 shadow-lg p-3 transition duration-300 ease-in-out"
+      class="relative max-w-xs rounded-md text-sm text-slate-300 bg-slate-700 shadow-lg p-3 transition duration-300 ease-in-out"
       :style="`--toast-duration: ${duration}s`"
     >
       {{ message }}
