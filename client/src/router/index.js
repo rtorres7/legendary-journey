@@ -283,7 +283,7 @@ const workspaceRoutes = [
   },
 ];
 
-let routes = [...currentRoutes];
+let routes = [...currentRoutes, ...workspaceRoutes];
 
 if (!isProduction()) {
   routes = [...currentRoutes, ...studioRoutes, ...workspaceRoutes];
