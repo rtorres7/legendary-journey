@@ -1280,7 +1280,7 @@ export default {
 
     const updateSelectedDate = (model) => {
       form.value.publicationDate = dayjs(model).utc().format("YYYY-MM-DD");
-      payload.value.date_published = form.value.publicationDate;
+      //payload.value.date_published = form.value.publicationDate;
     };
 
     const updatePayload = (updatedProduct) => {
