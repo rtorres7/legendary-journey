@@ -78,13 +78,13 @@
             </transition>
           </div>
         </Listbox>
-        <!-- <button
+        <button
           class="flex space-x-2 text-sm border border-gray-300 min-h-[2.125rem] items-center rounded px-3"
           @click="openFacetsDialog"
         >
           <span>Filters</span>
           <AdjustmentsHorizontalIcon class="h-5 w-5" />
-        </button> -->
+        </button>
       </div>
     </div>
     <template v-if="loadingSaved">
@@ -104,6 +104,57 @@
         <p class="italic">No saved products to show</p>
       </template>
       <template v-else>
+        <div class="pb-6">
+          <!-- Boolean Selectors -->
+          <template
+            v-if="
+              !loadingMetadata && showSelectors && booleanFilters.length > 0
+            "
+          >
+            <div class="flex flex-wrap mt-2 py-2 w-fit text-sm">
+              <template v-for="(n, index) in booleanFilters" :key="n">
+                <div
+                  class="my-2"
+                  :class="[
+                    n.lastItem && index < booleanFilters.length - 1
+                      ? 'pr-3 border-r border-gray-300'
+                      : 'pr-2',
+                    index !== 0 && n.firstItem ? 'pl-3' : '',
+                  ]"
+                >
+                  <button
+                    :title="'Remove ' + n.displayName + ' filter'"
+                    class="flex rounded-xl transition ease-in-out bg-gray-100 p-2 hover:bg-gray-200 hover:pointer-cursor"
+                    @click="removeFilter(n)"
+                  >
+                    <span class="sr-only">Remove filter</span>
+                    <div class="self-center pr-1">
+                      <template v-if="n.type === 'text'">
+                        <span class="pr-1 italic">Text: </span>
+                      </template>
+                      <template v-if="n.type === 'query'">
+                        <span class="pr-1 italic">Query: </span>
+                      </template>
+                      {{ n.displayName }}
+                    </div>
+                  </button>
+                </div>
+                <template v-if="!n.lastItem">
+                  <template v-if="n.toggleable">
+                    <button class="mr-3" @click="toggleBooleanValue(n)">
+                      {{ n.boolean_val }}
+                    </button>
+                  </template>
+                  <template v-else>
+                    <div class="mr-3 self-center">
+                      {{ n.boolean_val }}
+                    </div>
+                  </template>
+                </template>
+              </template>
+            </div>
+          </template>
+        </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
@@ -171,15 +222,18 @@
 import { computed, onMounted, inject, ref, watch } from "vue";
 import axios from "@/shared/config/wireAxios";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 import PublishedProductCard from "../components/PublishedProductCard.vue";
 import { productDetails } from "../data";
+import { facetAggregations } from "../data";
 import Overlay from "../components/Overlay.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import BaseButton from "../components/BaseButton.vue";
 import Facets from "../components/Facets.vue";
+import { getValueForCode } from "@/shared/helpers";
 import {
-  //AdjustmentsHorizontalIcon,
+  AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/vue/24/solid";
@@ -193,7 +247,7 @@ import {
 export default {
   components: {
     PublishedProductCard,
-    //AdjustmentsHorizontalIcon,
+    AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,
     Listbox,
@@ -211,7 +265,10 @@ export default {
     const environment = ref(import.meta.env.MODE);
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const path = computed(() => route.fullPath);
+    const criteria = computed(() => store.state.metadata.criteria);
+    const loadingMetadata = computed(() => store.state.metadata.loading);
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
@@ -353,6 +410,8 @@ export default {
           });
           mySaved.value = products;
           loadingSaved.value = false;
+          aggregations.value = facetAggregations;
+          console.log("Aggregations: ", facetAggregations);
         }, 1000);
       } else {
         if (route.name === "workspace-saved") {
@@ -374,6 +433,180 @@ export default {
       }
     };
 
+    const getListForType = (type) => {
+      switch (type) {
+        case "regions[]":
+          return criteria.value.regions;
+        case "subregions[]":
+          return criteria.value.subregions;
+        case "countries[]":
+          return criteria.value.countries;
+        case "issues[]":
+          return criteria.value.issues;
+        case "topics[]":
+          return criteria.value.topics;
+        case "reporting_types[]":
+          return criteria.value.reporting_types;
+        case "product_types[]":
+          return criteria.value.product_types;
+        case "producing_offices[]":
+          return criteria.value.producing_offices;
+        case "classification[]":
+          return criteria.value.classification;
+        case "media_tags[]":
+          return criteria.value.media_tags;
+        case "non_state_actors[]":
+          return criteria.value.non_state_actors;
+        case "selected_for[]":
+          return criteria.value.selected_for;
+        default:
+          return [];
+      }
+    };
+    const getBooleanMapping = (queryKey) => {
+      if (queryKey === "product_types[]") {
+        return false;
+      } else {
+        const bracketIndex = queryKey.indexOf("[]");
+        if (bracketIndex !== -1) {
+          return queryKey.slice(0, bracketIndex).concat("_bool");
+        }
+        return false;
+      }
+    };
+    const buildBooleanFilters = () => {
+      const filteredKeys = Object.keys(route.query).filter((key) => {
+        if (key.indexOf("[]") !== -1) {
+          return true;
+        }
+        return false;
+      });
+      let queryText, queryDates;
+      if (route.query["text"]) {
+        queryText = {
+          displayName: route.query["text"],
+          firstItem: true,
+          lastItem: true,
+          type: "text",
+        };
+      }
+      let booleanFilterGroups = [];
+      filteredKeys.forEach((type) => {
+        const booleanMapping = getBooleanMapping(type);
+        const list = getListForType(type);
+        let items = !Array.isArray(route.query[type])
+          ? [route.query[type]]
+          : route.query[type];
+        items = items.map((code) => {
+          const displayName = getValueForCode(
+            list,
+            type === "product_types[]" ? parseInt(code) : code
+          );
+          return {
+            code,
+            displayName: displayName ? displayName.name : null,
+          };
+        });
+        console.log("items: ", items);
+        let boolean_val = "or";
+        let toggleable = false;
+        if (booleanMapping) {
+          boolean_val = route.query[booleanMapping];
+          toggleable = type === "reporting_types[]" ? false : true;
+        }
+        booleanFilterGroups.push({
+          type,
+          items,
+          boolean_val,
+          toggleable,
+        });
+      });
+      //console.log("booleanFilterGroups: ", booleanFilterGroups);
+      let booleanFilters = [];
+      if (queryText) {
+        booleanFilters.push(queryText);
+      }
+      if (queryDates) {
+        booleanFilters.push(queryDates);
+      }
+      booleanFilterGroups.forEach((filterGroup) => {
+        filterGroup.items.forEach((item, index, array) => {
+          let booleanFilter = {
+            displayName: item.displayName,
+            code: item.code,
+            type: filterGroup.type,
+            boolean_val: filterGroup.boolean_val,
+            toggleable: filterGroup.toggleable,
+          };
+          if (index === 0) {
+            booleanFilter.firstItem = true;
+          }
+          if (index === array.length - 1) {
+            booleanFilter.lastItem = true;
+          }
+          booleanFilters.push(booleanFilter);
+        });
+      });
+      console.log("booleanFilters: ", booleanFilters);
+      return booleanFilters;
+    };
+    const booleanFilters = ref(buildBooleanFilters());
+    const showSelectors = ref(true);
+    const toggleSelectors = () => {
+      showSelectors.value = !showSelectors.value;
+    };
+    const removeFilter = (item) => {
+      let query = {
+        ...route.query,
+        page: 1,
+      };
+      if (item.type === "text" || item.type === "query") {
+        delete query["text"];
+      } else if (item.type === "dates") {
+        delete query["start_date"];
+        delete query["end_date"];
+      } else {
+        const list = getListForType(item.type);
+        const filterList = [];
+        list.forEach((x) => {
+          if (query[item.type].includes(x.code)) {
+            filterList.push(x.code);
+          }
+        });
+        query[item.type] = filterList.filter(
+          (queryItem) => queryItem !== item.code
+        );
+        if (query[item.type].length < 2) {
+          const booleanMapping = getBooleanMapping(item.type);
+          if (query[booleanMapping]) {
+            delete query[booleanMapping];
+          }
+          if (query[item.type].length === 0) {
+            delete query[item.type];
+          }
+        }
+      }
+      console.log("route: ", route.query);
+      router.push({
+        name: "workspace-saved",
+        query,
+      });
+    };
+    const toggleBooleanValue = (item) => {
+      let query = {
+        ...route.query,
+      };
+      const booleanMapping = getBooleanMapping(item.type);
+      if (query[booleanMapping] === "and") {
+        query[booleanMapping] = "or";
+      } else {
+        query[booleanMapping] = "and";
+      }
+      router.push({
+        query,
+      });
+    };
+
     onMounted(() => {
       getSavedProducts(path.value);
     });
@@ -384,20 +617,26 @@ export default {
 
     watch([selectedSort], () => {
       let query = { ...route.query };
-      // if (selectedSort.value.type === "sort_dir") {
-      // if (query.sort_field) {
-      //   delete query["sort_field"];
-      // }
       query = { ...query, sortDir: selectedSort.value.key };
-      // } else {
-      //   if (query.sort_dir) {
-      //     delete query["sort_dir"];
-      //   }
-      //   query = { ...query, sort_field: selectedSort.value.key };
-      // }
       router.push({
         query,
       });
+    });
+
+    watch(
+      () => route.query,
+      () => {
+        console.log(`route.query watcher triggered [${route.name}]`);
+        getSavedProducts(path.value);
+        booleanFilters.value = buildBooleanFilters();
+        closeFacetsDialog();
+      }
+    );
+
+    watch([loadingMetadata], () => {
+      if (!loadingMetadata.value) {
+        booleanFilters.value = buildBooleanFilters();
+      }
     });
 
     return {
@@ -421,6 +660,13 @@ export default {
       removingProduct,
       unsaveProduct,
       getSavedProducts,
+      buildBooleanFilters,
+      booleanFilters,
+      showSelectors,
+      toggleSelectors,
+      removeFilter,
+      toggleBooleanValue,
+      loadingMetadata,
     };
   },
 };
