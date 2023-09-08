@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: mxms-resources
+  ports:
+    - name: postgres-port
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+spec:
+  selector:
+    app: mxms-resources
+  ports:
+    - name: elasticsearch-request-port
+      protocol: TCP
+      port: 9200
+      targetPort: 9200
+    - name: elasticsearch-com-port
+      protocol: TCP
+      port: 9300
+      targetPort: 9300
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: mxms-resources
+  ports:
+    - name: mongo-port
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+spec:
+  selector:
+    app: mxms-resources
+  ports:
+    - name: minio-access-port
+      protocol: TCP
+      port: 9000
+      targetPort: 9000
+    - name: minio-console-port
+      protocol: TCP
+      port: 9001
+      targetPort: 9001
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+spec:
+  selector:
+    app: mxms-resources
+  ports:
+    - name: keycloak-port
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+spec:
+  selector:
+    app: mxms-resources
+  ports:
+    - name: kibana-port
+      protocol: TCP
+      port: 5601
+      targetPort: 5601
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resources
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mxms-resources
+  template:
+    metadata:
+      labels:
+        app: mxms-resources
+    spec:
+      containers:
+        - name: postgres
+          image: {{POSTGRES_IMAGE_WITH_TAG}}
+          env:
+            - name: POSTGRES_USER
+              value: maximus
+            - name: POSTGRES_PASSWORD
+              value: magic
+            - name: POSTGRES_MULTIPLE_DATABASES
+              value: keycloak
+          ports:
+            - containerPort: 5432
+        - name: elasticsearch
+          image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
+          env:
+            - name: xpack.security.enabled
+              value: "false"
+            - name: discovery.type
+              value: single-node
+            - name: ES_JAVA_OPTS
+              value: -Xms1024m -Xmx1024m
+          ports:
+            - containerPort: 9200
+            - containerPort: 9300
+          resources:
+            limits:
+              memory: 2048Mi
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+        - name: mongo
+          image: mongo:6
+          env:
+            - name: MONGO_INITDB_DATABASE
+              value: articles
+          ports:
+            - containerPort: 27017
+        - name: minio
+          image: minio/minio:RELEASE.2023-08-09T23-30-22Z
+          env:
+            - name: MINIO_ROOT_USER
+              value: minioadmin
+            - name: MINIO_ROOT_PASSWORD
+              value: keyboard cat
+          ports:
+            - containerPort: 9000
+            - containerPort: 9001
+          command: ["minio", "server", "/data", "--console-address", ":9001"]
+        - name: keycloak
+          image: {{KEYCLOAK_IMAGE_WITH_TAG}}
+          env:
+            - name: KC_DB
+              value: keycloak
+            - name: KC_DB_URL
+              value: jdbc:postgresql://localhost:5432/keycloak
+            - name: KC_DB_USERNAME
+              value: maximus
+            - name: KC_DB_PASSWORD
+              value: magic
+            - name: KC_DB_SCHEMA
+              value: public
+            - name: KC_HOSTNAME_STRICT_HTTPS
+              value: "false"
+            - name: KEYCLOAK_USER
+              value: admin
+            - name: KEYCLOAK_PASSWORD
+              value: password
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: password
+            - name: KC_TRANSACTION_XA_ENABLED
+              value: "false"
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_PROXY_ADDRESS_FORWARDING
+              value: "true"
+            - name: KC_PROXY
+              value: passthrough
+            - name: KC_HOSTNAME_STRICT_BACKCHANNEL
+              value: "false"
+            - name: HTTP_ADDRESS_FORWARDING
+              value: "true"
+          ports:
+            - containerPort: 8080
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:8.6.1
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: http://elasticsearch:9200
+          ports:
+            - containerPort: 5601
