@@ -23,7 +23,7 @@
       <template v-else>
         <router-link
           :to="{
-            name: product.state === 'draft' ? 'product-preview' : 'product',
+            name: 'product',
             params: { doc_num: product.productNumber },
           }"
           class="relative overflow-hidden cursor-pointer max-h-[261px] aspect-video"
@@ -81,75 +81,56 @@
                         >
                       </div>
                     </MenuItem>
-                    <template v-if="type === 'product' || type === 'favorites'">
-                      <MenuItem>
+                    <MenuItem>
+                      <div
+                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        @click="product.saved ? unsaveProduct() : saveProduct()"
+                      >
+                        <template v-if="product.saved">
+                          <BookmarkIconSolid
+                            class="h-5 w-5"
+                            aria-hidden="true"
+                          /><span class="capitalize">Saved</span>
+                        </template>
+                        <template v-else>
+                          <BookmarkIcon
+                            class="h-5 w-5"
+                            aria-hidden="true"
+                          /><span class="capitalize">Save</span>
+                        </template>
+                      </div>
+                    </MenuItem>
+                    <template v-if="canManageWire && product.featureId">
+                      <router-link
+                        :to="{
+                          name: 'edit',
+                          params: {
+                            date: dayjs(product.datePublished).format(
+                              'YYYY-MM-DD'
+                            ),
+                            id: product.featureId,
+                            doc_num: product.productNumber,
+                          },
+                        }"
+                      >
                         <div
                           class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                          @click="saveProduct"
                         >
-                          <template v-if="product.saved">
-                            <BookmarkIconSolid
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            /><span class="capitalize">Saved</span>
-                          </template>
-                          <template v-else>
-                            <BookmarkIcon
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            /><span class="capitalize">Save</span>
-                          </template>
+                          <PencilSquareIcon
+                            class="h-5 w-5"
+                            aria-hidden="true"
+                          /><span class="capitalize">Edit</span>
                         </div>
-                      </MenuItem>
-                    </template>
-                    <template v-if="type === 'saved' || type === 'favorites'">
-                      <MenuItem>
-                        <div
-                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                          @click="removeSavedProduct"
+                      </router-link>
+                      <div
+                        class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
+                        @click="deleteProduct"
+                      >
+                        <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
+                          class="capitalize"
+                          >Delete</span
                         >
-                          <XMarkIcon class="h-5 w-5" aria-hidden="true" /><span
-                            class="capitalize"
-                            >Remove</span
-                          >
-                        </div>
-                      </MenuItem>
-                    </template>
-                    <template v-if="type === 'product' && canManageWire">
-                      <MenuItem v-if="product.featureId">
-                        <router-link
-                          :to="{
-                            name: 'edit',
-                            params: {
-                              date: dayjs(product.datePublished).format(
-                                'YYYY-MM-DD'
-                              ),
-                              id: product.featureId,
-                              doc_num: product.productNumber,
-                            },
-                          }"
-                        >
-                          <div
-                            class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                          >
-                            <PencilSquareIcon
-                              class="h-5 w-5"
-                              aria-hidden="true"
-                            /><span class="capitalize">Edit</span>
-                          </div>
-                        </router-link>
-                      </MenuItem>
-                      <MenuItem v-if="product.featureId">
-                        <div
-                          class="py-2 px-3 hover:bg-gray-100 flex items-center space-x-4 cursor-pointer"
-                          @click="deleteProduct"
-                        >
-                          <TrashIcon class="h-5 w-5" aria-hidden="true" /><span
-                            class="capitalize"
-                            >Delete</span
-                          >
-                        </div>
-                      </MenuItem>
+                      </div>
                     </template>
                   </MenuItems>
                 </transition>
@@ -161,11 +142,11 @@
               target="_blank"
             >
               <div class="text-xs text-blue-700 font-medium pb-2">
-                {{ productTypeName }}
+                {{ getProductType(product) }}
               </div>
               <p
                 class="font-semibold text-gray-700 line-clamp-3"
-                :title="`${product.titleClassification} ${product.title}`"
+                :title="`${product.title}`"
               >
                 <span class="font-medium text-gray-500"
                   >({{ product.titleClassification }})</span
@@ -203,7 +184,9 @@
   </div>
 </template>
 <script>
-import { computed, inject, ref } from "vue";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { computed, inject } from "vue";
 import { useStore } from "vuex";
 import { isProductLocked } from "@/shared/helpers";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
@@ -213,14 +196,13 @@ import {
   EllipsisVerticalIcon,
   PencilSquareIcon,
   TrashIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/24/solid";
 import ProductRestrictedLink from "@workspace/components/ProductRestrictedLink.vue";
 import ProductImage from "@workspace/components/ProductImage.vue";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+
 dayjs.extend(utc);
+
 export default {
   components: {
     Menu,
@@ -233,7 +215,6 @@ export default {
     EllipsisVerticalIcon,
     PencilSquareIcon,
     TrashIcon,
-    XMarkIcon,
     ProductRestrictedLink,
     ProductImage,
   },
@@ -241,10 +222,6 @@ export default {
     product: {
       type: Object,
       default: () => {},
-    },
-    productTypeName: {
-      type: String,
-      default: "",
     },
     type: {
       type: String,
@@ -255,47 +232,51 @@ export default {
       default: false,
     },
   },
-  emits: ["delete", "remove", "save"],
+  emits: ["delete", "save", "unsave"],
   setup(props, { emit }) {
     const store = useStore();
+    const metadata = inject("metadata");
+    const createSimpleNotification = inject("create-simple-notification");
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
-    const environment = ref(import.meta.env.MODE);
-    const createNotification = inject("create-notification");
-    const getImg = (src) => {
-      return new URL("/src/assets/mocks/" + src, import.meta.url).href;
-    };
+
     const shareProduct = () => {
       const shareUrl =
         window.location.origin + "/product/" + props.product.doc_num;
       navigator.clipboard.writeText(shareUrl);
-      createNotification({
-        message: "URL Copied to Clipboard",
-        type: "success",
-        canClose: false,
+      createSimpleNotification({
+        message: "Link copied to Clipboard",
       });
     };
     const deleteProduct = () => {
       emit("delete", props.product);
     };
-    const removeSavedProduct = () => {
-      emit("remove", props.product);
-    };
-    const savingProduct = ref(false);
     const saveProduct = () => {
       emit("save", props.product);
     };
+    const unsaveProduct = () => {
+      emit("unsave", props.product);
+    };
+
+    const getProductType = (product) => {
+      if (product.productType.name) {
+        return product.productType.name;
+      } else {
+        let type = metadata.product_types.find(
+          (item) => item.code === product.productType
+        );
+        return type?.displayName;
+      }
+    };
+
     return {
+      dayjs,
       isProductLocked,
       canManageWire,
-      environment,
-      getImg,
       shareProduct,
       deleteProduct,
-      removeSavedProduct,
-      savingProduct,
       saveProduct,
-      dayjs,
-      utc,
+      unsaveProduct,
+      getProductType,
     };
   },
 };

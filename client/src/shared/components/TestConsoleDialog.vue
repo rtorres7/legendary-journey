@@ -213,6 +213,7 @@
                     </div>
                   </ul>
                 </div>
+                <!-- Home Options -->
                 <div
                   v-show="currentRoute === 'home'"
                   class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
@@ -276,6 +277,7 @@
                     </SwitchGroup>
                   </div>
                 </div>
+                <!-- Search-Like Options -->
                 <div
                   v-show="
                     currentRoute === 'search' ||
@@ -314,6 +316,13 @@
                     </SwitchGroup>
                   </div>
                 </div>
+                <!-- Workspace Dashboard Options -->
+                <div
+                  v-show="currentRoute === 'workspace-dashboard'"
+                  class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
+                >
+                  <TestConsoleWorkspace />
+                </div>
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -337,6 +346,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import TestConsoleWorkspace from "./test-console/TestConsoleWorkspace.vue";
 
 export default {
   components: {
@@ -348,6 +358,7 @@ export default {
     TransitionChild,
     TransitionRoot,
     XMarkIcon,
+    TestConsoleWorkspace,
   },
   props: {
     isOpen: Boolean,

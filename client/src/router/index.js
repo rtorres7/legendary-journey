@@ -260,13 +260,12 @@ const studioRoutes = [
 
 //Workspace
 import DashboardView from "@workspace/views/DashboardView.vue";
-import MyProductsView from "@workspace/views/MyProductsView.vue";
 import SavedProductsView from "@workspace/views/SavedProductsView.vue";
 
 const workspaceRoutes = [
   {
     path: "/workspace",
-    name: "dashboard",
+    name: "workspace-dashboard",
     component: DashboardView,
     meta: {
       domain: "workspace",
@@ -274,17 +273,8 @@ const workspaceRoutes = [
     },
   },
   {
-    path: "/workspace/products",
-    name: "myProducts",
-    component: MyProductsView,
-    meta: {
-      domain: "workspace",
-      title: "My Products",
-    },
-  },
-  {
     path: "/workspace/saved",
-    name: "saved",
+    name: "workspace-saved",
     component: SavedProductsView,
     meta: {
       domain: "workspace",
@@ -293,7 +283,7 @@ const workspaceRoutes = [
   },
 ];
 
-let routes = [...currentRoutes];
+let routes = [...currentRoutes, ...workspaceRoutes];
 
 if (!isProduction()) {
   routes = [...currentRoutes, ...studioRoutes, ...workspaceRoutes];
