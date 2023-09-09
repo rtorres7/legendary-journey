@@ -32,8 +32,10 @@ const workspaceService = new WorkspaceService();
 const EventService = require("../services/event-service");
 const eventService = new EventService();
 
-const upload = objectStoreService.buildUpload(process.env.ATTACHMENT_BUCKET || "attachments");
 const { config } = require("../config/config");
+const upload = objectStoreService.buildUpload(
+  config.minio.attachmentBucket || "attachments",
+);
 const { logger } = require("../config/logger");
 
 const { legacyErrorResponse } = require("../util/errors");

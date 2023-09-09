@@ -2,14 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 const ProductSearchService = require("../services/product-search-service");
-const {runAsUser} = require('../util/request');
-const searchService = new ProductSearchService(process.env.ES_URL);
+const { runAsUser } = require("../util/request");
+const { config } = require("../config/config");
+const searchService = new ProductSearchService(config.elasticsearch.url);
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 const { logger } = require("../config/logger");
 
-router.get('/search', async (req, res) => {
+router.get("/search", async (req, res) => {
   /*
     #swagger.tags = ['Search']
     #swagger.summary = 'Runs a search for products'
@@ -39,7 +40,13 @@ router.get('/search', async (req, res) => {
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
       const term = req.query.text;
-      const results = await searchService.search(term, req.query.per_page, req.query.page, req.query.sort_dir, req.query);
+      const results = await searchService.search(
+        term,
+        req.query.per_page,
+        req.query.page,
+        req.query.sort_dir,
+        req.query,
+      );
 
       for (let product of results.results) {
         await augmentProductWithSaved(product, currentUser.id, product.id);
@@ -48,12 +55,16 @@ router.get('/search', async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        errorDetails,
+        res,
+      );
     }
   });
 });
 
-router.get('/relatedSearch/:id', async (req, res) => {
+router.get("/relatedSearch/:id", async (req, res) => {
   /*
     #swagger.tags = ['Search']
     #swagger.summary = 'Runs a search for related products'

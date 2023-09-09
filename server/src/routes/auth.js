@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../services/auth");
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { config } = require("../config/config");
 
 router.get(
   "/auth/login",
@@ -11,7 +12,7 @@ router.get(
     #swagger.summary = 'Checks for user being authenticated and if no redirects to OAuth provider'
    */
 
-    scope: process.env.MXS_OAUTH_SCOPES.split(","),
+    scope: config.oauth.scope,
   }),
 );
 
@@ -38,7 +39,8 @@ router.get("/auth/profile", (req, res) => {
       }
     }
    */
-
+  console.log("Inside auth/profile");
+  console.log("req.user", req.user);
   res.json(req.user);
 });
 

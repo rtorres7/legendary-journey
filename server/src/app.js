@@ -3,7 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const MongoStore = require("connect-mongo");
 const auth = require("./services/auth");
-const fs = require('fs');
+const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
 const { successHandler, errorHandler } = require("./config/morgan");
@@ -51,7 +51,7 @@ app.use(
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_DATABASE_URL,
+      mongoUrl: config.mongodb.url,
     }), // Default TTL is 14 days
   }),
 );
@@ -61,7 +61,7 @@ app.use(
  *
  * Sets up the HTTP request logging.
  */
-if (process.env.NODE_ENV !== "test") {
+if (config.nodeEnv !== "test") {
   app.use(successHandler);
   app.use(errorHandler);
 }
@@ -110,7 +110,7 @@ app.use(auth.ensureAuthenticated);
  * Documentation
  * Adds api documentation
  */
-if (process.env.MXS_ENV === "container") {
+if (config.mxs.env === "container") {
   const swaggerUi = require("swagger-ui-express");
   const swaggerFile = require("./swagger_output.json");
 
@@ -119,8 +119,8 @@ if (process.env.MXS_ENV === "container") {
     swaggerOptions: {
       oauth2RedirectUrl: "https://localhost:8443/api-docs/oauth2-redirect.html",
       oauth: {
-        clientId: process.env.MXS_OAUTH_ID,
-        clientSecret: process.env.MXS_OAUTH_SECRET,
+        clientId: config.oauth.id,
+        clientSecret: config.oauth.secret,
       },
     },
   };
@@ -152,14 +152,34 @@ async function loadObjectStore() {
   } catch (error) {
     // bucket already exists
   }
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_1/article.jpg-6c84eab870ad", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg")), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg")), { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_3/article.jpg-63da601e3ec0", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")),   { "content-type": "image/jpeg"});
-  await objectStoreService.putObject("attachments", "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22", fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")),      { "content-type": "image/jpeg"});
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_001_astronaut.jpg")),
+    { "content-type": "image/jpeg" },
+  );
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_002_mountains.jpg")),
+    { "content-type": "image/jpeg" },
+  );
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_003_soldier.jpg")),
+    { "content-type": "image/jpeg" },
+  );
+  await objectStoreService.putObject(
+    "attachments",
+    "WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+    fs.createReadStream(path.resolve("/tmp/mocks", "16x9_004_lima.jpg")),
+    { "content-type": "image/jpeg" },
+  );
 }
 
 // Load seed data
-if (process.env.MXS_ENV === "container") {
+if (config.mxs.env === "container") {
   // TODO: This will also take care of creating an eventlog index in ES,
   // given how initializeProductData() is implemented (looping through constant.indices).
   // Do we want to implement a similiar method in AggregatedMetricsService?

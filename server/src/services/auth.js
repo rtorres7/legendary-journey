@@ -4,6 +4,7 @@ const userService = new UserService();
 const keycloakStrategy = require("./keycloakStrategy");
 const geoaxisStrategy = require("./geoaxisStrategy");
 require("dotenv").config();
+const { config } = require("../config/config");
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -18,19 +19,16 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-if (process.env.MXS_OAUTH_STRATEGY === "keycloak") {
+if (config.oauth.strategy === "keycloak") {
   passport.use(keycloakStrategy());
-} else if (process.env.MXS_OAUTH_STRATEGY === "geoaxis") {
+} else if (config.oauth.strategy === "geoaxis") {
   passport.use(geoaxisStrategy());
 }
 
 const OPEN_PATHS = ["login", "callback", "api-docs"];
 
 function ensureAuthenticated(req, res, next) {
-  if (
-    process.env.MXS_ENV === "container" &&
-    req.referer?.includes("api-docs")
-  ) {
+  if (config.mxs.env === "container" && req.referer?.includes("api-docs")) {
     return next();
   }
 

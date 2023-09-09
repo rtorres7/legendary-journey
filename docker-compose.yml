@@ -44,27 +44,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      - BASE_PATH=/api
-      - ES_URL=http://elasticsearch:9200
-      - MONGO_DATABASE_URL=mongodb://mongodb:27017/articles
-      - POSTGRES_CONNECTION_URL=postgres://maximus:magic@postgres:5432/maximus
-      - MXS_ENV=container
-      - MXS_BASE_URI=https://localhost:8443
-      - MXS_OAUTH_AUTH_URL=https://gxis.geoaxis.gxaws.com/ms_oauth/oauth2/endpoints/oauthservice/authorize
-      - MXS_OAUTH_TOKEN_URL=https://gxisapi.gxaws.com/ms_oauth/oauth2/endpoints/oauthservice/tokens
-      - MXS_OAUTH_ID=maximu3330002880002208202382
-      - MXS_OAUTH_SECRET=C@lifornication1
-      - MXS_OAUTH_SCOPES=UserProfile.me
-      - MXS_OAUTH_CALLBACK_URL=https://localhost:8443/api/auth/callback
-      - MXS_OAUTH_USER_INFO_URL=https://gxisapi.gxaws.com/ms_oauth/oauth2/ms_oauth/resources/userprofile/me
-      - MXS_OAUTH_STRATEGY=geoaxis
-      - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/localhost.crt #TODO: trust self-signed cert to avoid "oauthError: Error: self-signed certificate"
-      - NODE_TLS_REJECT_UNAUTHORIZED=0 #TODO: DO NOT USE IN PRODUCTION
-      - MINIO_ENDPOINT=minio
-      - MINIO_PORT=9000
-      - MINIO_USE_SSL=false
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=keyboard cat
+      - NODE_ENV=development
     container_name: server
 
   postgres:
