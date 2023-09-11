@@ -10,7 +10,7 @@
       v-model="selectedDate"
       class="w-fit h-fit"
       :enable-time-picker="false"
-      :disabled-week-days="[6, 0]"
+      :disabled-dates="disabledDates"
       week-start="0"
       auto-apply
       @update:modelValue="selectDate"
@@ -812,6 +812,15 @@ export default {
       }
     };
 
+    const today = computed(() => new Date());
+    const disabledDates = (Date) => {
+      if (Date > today.value && (Date.getDay() == 0 || Date.getDay() == 6)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     const selectDate = () => {
       const date = dayjs(selectedDate.value).format("YYYY-MM-DD");
       router.push({ name: "products", params: { date } });
@@ -857,6 +866,7 @@ export default {
       dayjs,
       utc,
       routeDate,
+      disabledDates,
       selectedDate,
       loadingPreview,
       previewProduct,
