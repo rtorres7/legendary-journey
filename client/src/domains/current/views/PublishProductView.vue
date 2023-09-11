@@ -10,7 +10,7 @@
       v-model="selectedDate"
       class="w-fit h-fit"
       :enable-time-picker="false"
-      :disabled-week-days="[6, 0]"
+      :disabled-dates="disabledDates"
       week-start="0"
       auto-apply
       @update:modelValue="selectDate"
@@ -217,9 +217,7 @@
                       >
                     </button>
                     <button
-                      v-if="
-                        environment != 'production' && product.state == 'posted'
-                      "
+                      v-if="product.state == 'posted'"
                       class="min-w-[110px] xl:min-w-[125px] flex px-3 py-2 border border-slate-900/10 dark:border-slate-50/[0.25] energy:border-zinc-50/25 hover:bg-slate-50 dark:hover:bg-slate-900 energy:hover:bg-zinc-900"
                       :aria-label="`save product ${product.productNumber}`"
                       @click="save(product)"
@@ -277,10 +275,7 @@
                       :content="isSavedProduct(product) ? 'Saved' : 'Save'"
                     >
                       <button
-                        v-if="
-                          environment != 'production' &&
-                          product.state == 'posted'
-                        "
+                        v-if="product.state == 'posted'"
                         class="hover:text-black dark:hover:text-white energy:hover:text-white"
                         :aria-label="`save product ${product.productNumber}`"
                         @click="save(product)"
@@ -604,12 +599,12 @@ export default {
 
     const restrictedProduct = (product) => {
       let productToCheck = product;
-      if (import.meta.env.MODE === "offline") {
-        let documentMatch = productDetails.find(
-          ({ data }) => data.doc_num === product.doc_num
-        );
-        productToCheck = documentMatch.data;
-      }
+      // if (import.meta.env.MODE === "offline") {
+      //   let documentMatch = productDetails.find(
+      //     ({ data }) => data.doc_num === product.doc_num
+      //   );
+      //   productToCheck = documentMatch.data;
+      // }
       if (hasProductAccess(productToCheck, organization.value)) {
         return false;
       }
@@ -817,6 +812,15 @@ export default {
       }
     };
 
+    const today = computed(() => new Date());
+    const disabledDates = (Date) => {
+      if (Date > today.value && (Date.getDay() == 0 || Date.getDay() == 6)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     const selectDate = () => {
       const date = dayjs(selectedDate.value).format("YYYY-MM-DD");
       router.push({ name: "products", params: { date } });
@@ -862,6 +866,7 @@ export default {
       dayjs,
       utc,
       routeDate,
+      disabledDates,
       selectedDate,
       loadingPreview,
       previewProduct,

@@ -1,48 +1,55 @@
-import { features, getSitreps } from "@current/data";
+import { products } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 
 export default {
   namespaced: true,
   state: {
-    articles: [],
+    features: [],
     briefs: [],
     loading: true,
   },
   actions: {
-    loadFeatures({ state, commit }) {
+    loadFeaturedContent({ state, commit }) {
       state.loading = true;
       if (import.meta.env.MODE === "offline") {
-        console.log("[store] loadFeatures: ", features, getSitreps);
+        console.log("[store] loadFeaturedContent: ", {
+          features: products.published,
+          briefs: products.briefs,
+        });
         setTimeout(() => {
-          commit("saveArticles", features);
-          commit("saveBriefs", getSitreps);
+          commit("saveFeatures", products.published);
+          commit("saveBriefs", products.briefs);
           commit("toggleLoading", false);
         }, 750);
       } else {
         axios.get("/home/features").then((response) => {
-          console.log("[store] loadFeatures: ", response);
-          const data = response.data;
-          commit("saveArticles", data.featured);
-          commit("saveBriefs", data.briefs);
+          console.log("[store] loadFeaturedContent: ", response);
+          commit("saveFeatures", response.data.featured);
+          commit("saveBriefs", response.data.briefs);
           commit("toggleLoading", false);
         });
       }
     },
     //Test Console Feature Only
-    setArticles({ commit }, count) {
-      commit("saveArticles", count <= 0 ? [] : features.slice(0, count));
+    setFeatureCount({ commit }, count) {
+      commit(
+        "saveFeatures",
+        count <= 0 ? [] : products.published.slice(0, count)
+      );
     },
     setLoading({ commit }, value) {
       commit("toggleLoading", value);
     },
   },
   mutations: {
-    saveArticles(state, articles) {
-      state.articles = articles;
+    saveFeatures(state, features) {
+      state.features = features.map((product) => {
+        return product.attributes;
+      });
     },
     saveBriefs(state, briefs) {
-      state.briefs = briefs.map((article) => {
-        return article.attributes;
+      state.briefs = briefs.map((product) => {
+        return product.attributes;
       });
     },
     toggleLoading(state, value) {

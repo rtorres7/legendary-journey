@@ -902,3 +902,171 @@ export const productDetails = [
     },
   },
 ];
+
+export const facetAggregations = {
+  reporting_types: {
+    rows: [
+      {
+        name: "Reporting: Open Source",
+        key: "reporting.open_source",
+        count: 351,
+      },
+      {
+        name: "Reporting: Mission",
+        key: "reporting.mission",
+        count: 147,
+      },
+      {
+        name: "Reporting: Operations",
+        key: "reporting.operations",
+        count: 135,
+      },
+      {
+        name: "Reporting: Collaboration",
+        key: "reporting.collaboration",
+        count: 115,
+      },
+      {
+        name: "Reporting: Enterprise",
+        key: "reporting.enterprise",
+        count: 95,
+      },
+      {
+        name: "Analysis: Critical",
+        key: "analysis.critical",
+        count: 8,
+      },
+    ],
+    displayName: "Reporting Types",
+  },
+  issues: {
+    rows: [
+      {
+        name: "Ukraine War",
+        key: "UW",
+        count: 421,
+      },
+      {
+        name: "Russian Invasion",
+        key: "RI",
+        count: 338,
+      },
+      {
+        name: "Economic Turmoil",
+        key: "ET",
+        count: 80,
+      },
+    ],
+    displayName: "Topics",
+  },
+  countries: {
+    rows: [
+      {
+        name: "Ukraine",
+        key: "UKR",
+        count: 421,
+      },
+      {
+        name: "Russia",
+        key: "RUS",
+        count: 373,
+      },
+      {
+        name: "Belarus",
+        key: "BLR",
+        count: 120,
+      },
+      {
+        name: "Germany",
+        key: "DEU",
+        count: 98,
+      },
+      {
+        name: "Finland",
+        key: "FIN",
+        count: 35,
+      },
+      {
+        name: "Hungary",
+        key: "HUN",
+        count: 12,
+      },
+    ],
+    displayName: "Countries",
+  },
+  non_state_actors: {
+    rows: [
+      {
+        name: "EU",
+        key: "EU",
+        count: 394,
+      },
+      {
+        name: "NATO",
+        key: "NATO",
+        count: 248,
+      },
+      {
+        name: "UN",
+        key: "UN",
+        count: 280,
+      },
+    ],
+    displayName: "Non State Actors",
+  },
+  classifications: {
+    rows: [
+      {
+        name: "UNCLASSIFIED",
+        key: "UNC",
+        count: 421,
+      },
+    ],
+    displayName: "Classification",
+  },
+  producing_offices: {
+    rows: [
+      {
+        name: "Directorate of Foreign Affairs",
+        key: "DFA",
+        count: 271,
+      },
+      {
+        name: "Directorate of Defense",
+        key: "DOD",
+        count: 248,
+      },
+      {
+        name: "Surveillance Office",
+        key: "SVO",
+        count: 140,
+      },
+      {
+        name: "Office of Command",
+        key: "OOC",
+        count: 52,
+      },
+      {
+        name: "Directorate of CounterTerrorism",
+        key: "DOC",
+        count: 15,
+      },
+      {
+        name: "National Office",
+        key: "NAO",
+        count: 2,
+      },
+    ],
+    displayName: "Authored By Organizations",
+  },
+  media_tags: {
+    rows: [
+      {
+        name: "graphic",
+        key: "graphic",
+        count: 310,
+      },
+    ],
+    displayName: "Media Tags",
+  },
+};

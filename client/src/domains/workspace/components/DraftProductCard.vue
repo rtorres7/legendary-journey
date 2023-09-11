@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded max-w-[500px] p-8"
+    class="relative flex flex-col bg-white shadow-md hover:shadow-lg rounded md:max-w-[500px] p-8"
   >
     <div
       v-if="loading"
@@ -98,7 +98,7 @@
           </div>
           <p
             class="font-semibold text-gray-700 line-clamp-2 mt-4"
-            :title="`${product.titleClassification} ${product.title}`"
+            :title="`${product.title}`"
           >
             <span
               v-if="product.titleClassification"

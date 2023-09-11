@@ -1,6 +1,7 @@
 const dayjs = require("dayjs");
 const Article = require("../models/articles");
 const ProductSearchService = require("./product-search-service");
+const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const {
   KiwiPage,
   KiwiSort,
@@ -11,11 +12,13 @@ const EventLog = require("../models/event_log");
 const mongoose = require("mongoose");
 const { findArticleImage } = require("../util/images");
 const path = require("path");
+const { logger } = require("../config/logger");
 
 class ProductService {
   constructor() {
     this.productSearchService = new ProductSearchService();
     this.attachmentService = new AttachmentService();
+    this.metricsService = new AggregatedMetricsService();
   }
 
   async findAllByDate(date) {
@@ -94,14 +97,14 @@ class ProductService {
     const featuredProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": 10376,
+      "productType.code": { $in: [10376, 10389, 10390, 10391, 10392] },
     })
       .sort({ _id: -1 })
       .exec();
     const briefProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": { $in: [10377, 10379, 10380, 10382, 10383, 10384, 10385, 10386] },
+      "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
     })
       .sort({ datePublished: -1 })
       .limit(3)
@@ -445,6 +448,29 @@ class ProductService {
     }
 
     return await query.exec();
+  }
+  
+  /**
+   * @param {string} userId 
+   * @param {number} page page number, starts at 1
+   * @param {number} perPage items per page
+   * @param {string} sortDir 'asc' or 'desc'
+   * @returns {Promise<KiwiPage>}
+   */
+  async findRecentViewedProductsForUser(userId, page = 1, perPage = 4, sortDir = "desc") {
+    const from = (page - 1) * perPage;
+    const { total, productIds } = await this.metricsService.getRecentViewsForUser(userId, from, perPage, sortDir);
+    const products = [];
+    for (let productId of productIds) {
+      const product = await Article.findOne({ 'productNumber': productId }).exec();
+      if (product) {
+        products.push(product.features);
+      } else {
+        logger.error(`product ${productId} not found`);
+        // KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
+      }
+    }
+    return Promise.resolve(KiwiPage.of(page, perPage, total, products).usingOneAsFirstPage());
   }
 }
 

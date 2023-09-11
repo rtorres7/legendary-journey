@@ -1,3 +1,5 @@
+const { KiwiPage } = require("@kiwiproject/kiwi-js");
+
 const request = require("supertest");
 const { setupAppWithUser } = require("../__utils__/expressUtils");
 
@@ -58,6 +60,12 @@ jest.mock("../../src/services/product-service.js", () => {
 
         return Promise.resolve({ totalCreated: articles.length });
       }),
+      findRecentViewedProductsForUser: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error("whoops");
+        }
+        return Promise.resolve(KiwiPage.of(1, 4, 20, articles.slice(0, 4)));
+      })
     };
   });
 });
@@ -467,6 +475,23 @@ describe("Workspace Routes", () => {
       return request(app)
         .delete("/workspace/collections/1000/products/1000")
         .expect(404);
+    });
+  });
+
+  describe("GET /workspace/viewed", () => {
+    it("should return recently viewed products", async () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupAppWithUser(router, CURRENT_USER);
+
+      return request(app)
+        .get(`/workspace/viewed`)
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          expect(res.body.number).toEqual(1); // page num
+          expect(res.body.totalElements).toEqual(20); // total
+          expect(res.body.content.length).toEqual(4);
+        });
     });
   });
 });

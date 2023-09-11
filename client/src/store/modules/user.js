@@ -1,4 +1,4 @@
-import { user } from "@current/data";
+import { user } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 
 export default {
