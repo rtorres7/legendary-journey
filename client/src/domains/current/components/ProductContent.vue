@@ -80,12 +80,6 @@
             >{{ product.doc_num }}
           </p>
           <p>
-            <template v-if="product.posted_at"> </template>
-            <template v-else>
-              {{ formatDate(product.posted_on) }}
-            </template>
-          </p>
-          <p>
             <span class="font-semibold">Publication Date: </span
             >{{ formatDate(product.date_published) }}
           </p>
