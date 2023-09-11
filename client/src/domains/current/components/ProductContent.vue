@@ -27,7 +27,6 @@
     </h1>
     <div class="flex space-x-4 text-sm md:text-md">
       <p class="capitalize">
-        {{ product.state }} -
         {{ formatDate(product.date_published) }}
       </p>
       <p aria-hidden="true">●</p>
