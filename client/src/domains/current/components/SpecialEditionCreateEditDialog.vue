@@ -271,11 +271,12 @@ export default {
       if (editionEvent.value.valid === undefined) {
         editionEvent.value.valid = true;
       }
+      console.log(editionEvent.value);
       return (
         !editionEvent.value.name ||
         !editionEvent.value.searchParams ||
         !editionEvent.value.state ||
-        !editionEvent.value.classification ||
+        !editionEvent.value.name_classification ||
         !editionEvent.value.selectedReadings ||
         !editionEvent.value.valid
       );
@@ -307,7 +308,7 @@ export default {
         } else {
           if (props.editMode) {
             axios
-              .put("/feeds/" + editionEvent.value.id, buildFormData())
+              .put("/feeds/" + editionEvent.value.id, editionEvent.value)
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
@@ -330,7 +331,7 @@ export default {
               });
           } else {
             axios
-              .post("/feeds", buildFormData())
+              .post("/feeds", editionEvent.value)
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");

@@ -27,6 +27,16 @@ export default {
     importLinks(state, data) {
       state.loading = false;
       console.log("data: ", data);
+      for (let feed of data) {
+        if (feed.selectedReadings != null) {
+          let selectedReadings = Array.from(
+            feed.selectedReadings.matchAll(/"([\w]+)"/g)
+          )
+            .map((a) => a[1])
+            .join("\n");
+          console.log(selectedReadings);
+        }
+      }
       let links = {
         concepts: {
           posted: data.filter((a) => a.state === "Posted"),

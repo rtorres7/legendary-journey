@@ -58,7 +58,7 @@ describe("Feeds Service", () => {
 
         expect(feed.name).toEqual("Test Feed #1");
         expect(feed.searchParams).toEqual(
-          "https://localhost:8443/search?text=test123",
+          "https://localhost:8443/search?text=test111",
         );
         expect(feed.state).toEqual("Draft");
         expect(feed.classification).toEqual("U");

@@ -25,7 +25,17 @@ export default {
           })
           .then((response) => {
             console.log(`/feeds/${route.params.id} (response):`, response);
-            commit("saveSpecialEdition", response.data);
+            let feed = response.data;
+            if (feed.selectedReadings != null) {
+              let selectedReadings = Array.from(
+                feed.selectedReadings.matchAll(/"([\w]+)"/g)
+              )
+                .map((a) => a[1])
+                .join("\n");
+              feed.selectedReadings = selectedReadings;
+            }
+            console.log(feed);
+            commit("saveSpecialEdition", feed);
           });
       }
     },

@@ -44,7 +44,7 @@ class FeedsService {
       returning: true,
     });
 
-    return result;
+    return result[1][0];
   }
 
   async deleteFeed(id) {

@@ -315,7 +315,9 @@ async function loadFeedData() {
     defaults: {
       name: "Test Feed #1",
       searchParams: "https://localhost:8443/search?text=test1",
+      selectedReadings: "WIReWIRe_sample_1",
       state: "Draft",
+      position: 1,
       classification: "UNCLASSIFIED",
     },
   });
@@ -327,7 +329,9 @@ async function loadFeedData() {
     defaults: {
       name: "Test Feed #2",
       searchParams: "https://localhost:8443/search?text=test2",
+      selectedReadings: "WIReWIRe_sample_2",
       state: "Posted",
+      position: 2,
       classification: "UNCLASSIFIED",
     },
   });
@@ -339,7 +343,9 @@ async function loadFeedData() {
     defaults: {
       name: "Test Feed #3",
       searchParams: "https://localhost:8443/search?text=test3",
+      selectedReadings: "WIReWIRe_sample_3",
       state: "Archived",
+      position: 3,
       classification: "UNCLASSIFIED",
     },
   });

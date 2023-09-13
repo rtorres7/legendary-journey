@@ -25,7 +25,7 @@ router.get("/feeds", async (req, res) => {
 
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
-      const feeds = await feedsService.findAllFeeds();
+      let feeds = await feedsService.findAllFeeds();
       res.json(feeds);
     } catch (error) {
       KiwiStandardResponsesExpress.standardErrorResponse(
@@ -36,6 +36,12 @@ router.get("/feeds", async (req, res) => {
     }
   });
 });
+
+// {
+//   "name": "Test Feed #1234",
+//   "searchParams": "https://localhost:8443/search?text=test2",
+//   "selectedReadings": ["WIReWIRe_sample_2", "WIReWIRe_sample_3"]
+// }
 
 router.get("/feeds/links", async (req, res) => {
   /*
@@ -122,10 +128,10 @@ router.post("/feeds/", async (req, res) => {
     const feed = {
       name: req.body.name,
       searchParams: req.body.searchParams,
-      selectedReadings: req.body.selectedReadings,
+      selectedReadings: req.body.selectedReadings.split("\n"),
       state: req.body.state,
-      order: req.body.order,
-      classification: req.body.classification,
+      position: req.body.position,
+      classification: req.body.name_classification,
     };
     try {
       const savedFeed = await feedsService.createFeed(feed);
@@ -160,14 +166,15 @@ router.put("/feeds/:id", async (req, res) => {
   const updatedFeed = {
     name: req.body.name,
     searchParams: req.body.searchParams,
-    selectedReadings: req.body.selectedReadings,
+    selectedReadings: req.body.selectedReadings.split("\n"),
     state: req.body.state,
-    order: req.body.order,
+    position: req.body.position,
     classification: req.body.classification,
   };
 
   try {
     const savedFeed = await feedsService.updateFeed(req.params.id, updatedFeed);
+    console.log(savedFeed);
     res.json(savedFeed);
   } catch (error) {
     logger.error(error);
