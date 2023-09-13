@@ -203,7 +203,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-48 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem v-show="canManageWire">
                         <router-link
@@ -220,7 +220,7 @@
                       </MenuItem>
                       <MenuItem v-show="canManageSpecialEditions">
                         <router-link
-                          to="/special_editions"
+                          to="/feeds"
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         >
                           Manage Special Editions
@@ -259,7 +259,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-40 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem>
                         <router-link
@@ -280,6 +280,7 @@
                       <MenuItem>
                         <a
                           class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                          :href="`${metadata.user_support.help_url}`"
                           target="_blank"
                           >User Support
                         </a>
@@ -352,7 +353,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-48 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem v-show="canManageWire">
                         <router-link
@@ -369,7 +370,7 @@
                       </MenuItem>
                       <MenuItem v-show="canManageSpecialEditions">
                         <router-link
-                          to="/special_editions"
+                          to="/feeds"
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         >
                           Manage Special Editions
@@ -401,7 +402,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-40 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem>
                         <router-link
@@ -414,6 +415,7 @@
                       <MenuItem>
                         <a
                           class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                          :href="`${metadata.user_support.help_url}`"
                           target="_blank"
                           >User Support
                         </a>

@@ -15,7 +15,7 @@ export default {
         console.log("[store] loadConceptsLinks: ", specialEditionLinks);
         setTimeout(() => commit("importLinks", specialEditionLinks), 750);
       } else {
-        axios.get("/special_editions/links").then((response) => {
+        axios.get("/feeds/links").then((response) => {
           console.log("[store] loadConceptsLinks: ", response);
           commit("importLinks", response.data);
         });
@@ -26,7 +26,25 @@ export default {
   mutations: {
     importLinks(state, data) {
       state.loading = false;
-      state.links = data.concepts;
+      console.log("data: ", data);
+      for (let feed of data) {
+        if (feed.selectedReadings != null) {
+          let selectedReadings = Array.from(
+            feed.selectedReadings.matchAll(/"([\w]+)"/g)
+          )
+            .map((a) => a[1])
+            .join("\n");
+          feed.selectedReadings = selectedReadings;
+        }
+      }
+      let links = {
+        concepts: {
+          posted: data.filter((a) => a.state.toLowerCase() === "posted"),
+          draft: data.filter((a) => a.state.toLowerCase() === "draft"),
+          archived: data.filter((a) => a.state.toLowerCase() === "archived"),
+        },
+      };
+      state.links = links.concepts;
     },
   },
 };

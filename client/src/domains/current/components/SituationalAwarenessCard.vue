@@ -105,7 +105,7 @@
           <div
             class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
           >
-            Posted {{ formatDate(sitrep.date_published) }}
+            {{ formatDate(sitrep.date_published) }}
           </div>
         </div>
       </ProductRestrictedLink>

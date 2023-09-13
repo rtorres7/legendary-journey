@@ -112,6 +112,17 @@
             "
           >
             <div class="flex flex-wrap mt-2 py-2 w-fit text-sm">
+              <div
+                v-if="booleanFilters.length > 1"
+                class="my-2 pr-3 border-r border-gray-300"
+              >
+                <button
+                  class="rounded-xl transition-colors bg-gray-500 hover:bg-gray-400 text-white p-2 hover:pointer-cursor"
+                  @click="clearFilters"
+                >
+                  Clear all filters
+                </button>
+              </div>
               <template v-for="(n, index) in booleanFilters" :key="n">
                 <div
                   class="my-2"
@@ -120,12 +131,13 @@
                       ? 'pr-3 border-r border-gray-300'
                       : 'pr-2',
                     index !== 0 && n.firstItem ? 'pl-3' : '',
+                    booleanFilters.length > 1 && index == 0 && n.firstItem
+                      ? 'pl-3'
+                      : '',
                   ]"
                 >
-                  <button
-                    :title="'Remove ' + n.displayName + ' filter'"
-                    class="flex rounded-xl transition ease-in-out bg-gray-100 p-2 hover:bg-gray-200 hover:pointer-cursor"
-                    @click="removeFilter(n)"
+                  <div
+                    class="flex rounded-xl bg-gray-200 p-2 hover:pointer-cursor"
                   >
                     <span class="sr-only">Remove filter</span>
                     <div class="self-center pr-1">
@@ -137,11 +149,26 @@
                       </template>
                       {{ n.displayName }}
                     </div>
-                  </button>
+                    <button
+                      type="button"
+                      class="w-5 h-5 flex items-center justify-center"
+                      tabindex="0"
+                      @click="removeFilter(n)"
+                    >
+                      <span class="sr-only">Remove filter</span>
+                      <XMarkIcon
+                        class="h-5 w-5 transition-colors hover:text-gray-500"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
                 </div>
                 <template v-if="!n.lastItem">
                   <template v-if="n.toggleable">
-                    <button class="mr-3" @click="toggleBooleanValue(n)">
+                    <button
+                      class="mr-3 text-blue-600"
+                      @click="toggleBooleanValue(n)"
+                    >
                       {{ n.boolean_val }}
                     </button>
                   </template>
@@ -155,10 +182,19 @@
             </div>
           </template>
         </div>
+        <div class="flex justify-center">
+          <div class="pb-4">
+            <MaxPagination
+              :currentPage="currentPage"
+              :totalCount="numProducts"
+              :maxPerPage="maxPerPage"
+            />
+          </div>
+        </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
-          <template v-for="product in mySaved" :key="product">
+          <template v-for="product in paginatedProducts()" :key="product">
             <PublishedProductCard
               :product="product"
               type="product"
@@ -166,6 +202,15 @@
               @unsave="unsaveProduct(product)"
             />
           </template>
+        </div>
+        <div class="flex justify-center">
+          <div class="pt-4">
+            <MaxPagination
+              :currentPage="currentPage"
+              :totalCount="numProducts"
+              :maxPerPage="maxPerPage"
+            />
+          </div>
         </div>
       </template>
     </template>
@@ -237,6 +282,7 @@ import {
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/vue/24/solid";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 import {
   Listbox,
   ListboxLabel,
@@ -250,6 +296,7 @@ export default {
     AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,
+    XMarkIcon,
     Listbox,
     ListboxLabel,
     ListboxButton,
@@ -272,6 +319,8 @@ export default {
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
+    const currentPage = ref(parseInt(route.query.page) || 1);
+    const maxPerPage = ref(20);
     const aggregations = ref([]);
     const isFacetsDialogOpen = ref(false);
     const closeFacetsDialog = () => {
@@ -592,6 +641,9 @@ export default {
         query,
       });
     };
+    const clearFilters = () => {
+      router.push({ name: "workspace-saved", query: {} });
+    };
     const toggleBooleanValue = (item) => {
       let query = {
         ...route.query,
@@ -605,6 +657,13 @@ export default {
       router.push({
         query,
       });
+    };
+
+    const paginatedProducts = () => {
+      return mySaved.value.slice(
+        (currentPage.value - 1) * maxPerPage.value,
+        currentPage.value * maxPerPage.value
+      );
     };
 
     onMounted(() => {
@@ -630,6 +689,7 @@ export default {
         getSavedProducts(path.value);
         booleanFilters.value = buildBooleanFilters();
         closeFacetsDialog();
+        currentPage.value = parseInt(route.query.page) || 1;
       }
     );
 
@@ -651,6 +711,8 @@ export default {
       closeDeleteDialog,
       deleteProduct,
       numProducts,
+      currentPage,
+      maxPerPage,
       aggregations,
       isFacetsDialogOpen,
       closeFacetsDialog,
@@ -665,7 +727,9 @@ export default {
       showSelectors,
       toggleSelectors,
       removeFilter,
+      clearFilters,
       toggleBooleanValue,
+      paginatedProducts,
       loadingMetadata,
     };
   },

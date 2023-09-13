@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mxms-server
+spec:
+  selector:
+    app: mxms-app
+  ports:
+    - name: server-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mxms-client
+spec:
+  selector:
+    app: mxms-app
+  ports:
+    - name: server-port
+      protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mxms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mxms-app
+  template:
+    metadata:
+      labels:
+        app: mxms-app
+    spec:
+      initContainers:
+        - name: liquibase
+          image: {{LIQUIBASE_IMAGE_WITH_TAG}}
+      containers:
+        - name: mxms-server
+          image: {{SERVER_IMAGE_WITH_TAG}}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: BASE_PATH
+              value: /api
+            - name: ES_URL
+              value: http://elasticsearch:9200
+            - name: MONGO_DATABASE_URL
+              value: mongodb://mongo:27017/articles
+            - name: POSTGRES_CONNECTION_URL
+              value: postgres://maximus:magic@postgres:5432/maximus
+            - name: MXS_ENV
+              value: production
+            - name: MXS_BASE_URI
+              value: https://localhost:8443
+            - name: MXS_OAUTH_ID
+              value: maximus
+            - name: MXS_OAUTH_SECRET
+              value: jJjVjNLQJ9r3dTc64rt2cFwenmEeusaY
+            - name: MINIO_ENDPOINT
+              value: localhost
+            - name: MINIO_PORT
+              value: "9000"
+            - name: MINIO_USE_SSL
+              value: "false"
+            - name: MINIO_ACCESS_KEY
+              value: minioadmin
+            - name: MINIO_SECRET_KEY
+              value: keyboard cat
+            - name: NODE_EXTRA_CA_CERTS
+              value: /etc/ssl/certs/localhost.crt
+        - name: mxms-client
+          image: {{UI_IMAGE_WITH_TAG}}
+          ports:
+            - containerPort: 80
+          env:
+            - name: API_URL
+              value: http://localhost:8081/
