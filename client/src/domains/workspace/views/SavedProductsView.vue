@@ -182,10 +182,19 @@
             </div>
           </template>
         </div>
+        <div class="flex justify-center">
+          <div class="pb-4">
+            <MaxPagination
+              :currentPage="currentPage"
+              :totalCount="numProducts"
+              :maxPerPage="maxPerPage"
+            />
+          </div>
+        </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
-          <template v-for="product in mySaved" :key="product">
+          <template v-for="product in paginatedProducts()" :key="product">
             <PublishedProductCard
               :product="product"
               type="product"
@@ -193,6 +202,15 @@
               @unsave="unsaveProduct(product)"
             />
           </template>
+        </div>
+        <div class="flex justify-center">
+          <div class="pt-4">
+            <MaxPagination
+              :currentPage="currentPage"
+              :totalCount="numProducts"
+              :maxPerPage="maxPerPage"
+            />
+          </div>
         </div>
       </template>
     </template>
@@ -301,6 +319,8 @@ export default {
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
+    const currentPage = ref(parseInt(route.query.page) || 1);
+    const maxPerPage = ref(20);
     const aggregations = ref([]);
     const isFacetsDialogOpen = ref(false);
     const closeFacetsDialog = () => {
@@ -639,6 +659,13 @@ export default {
       });
     };
 
+    const paginatedProducts = () => {
+      return mySaved.value.slice(
+        (currentPage.value - 1) * maxPerPage.value,
+        currentPage.value * maxPerPage.value
+      );
+    };
+
     onMounted(() => {
       getSavedProducts(path.value);
     });
@@ -662,6 +689,7 @@ export default {
         getSavedProducts(path.value);
         booleanFilters.value = buildBooleanFilters();
         closeFacetsDialog();
+        currentPage.value = parseInt(route.query.page) || 1;
       }
     );
 
@@ -683,6 +711,8 @@ export default {
       closeDeleteDialog,
       deleteProduct,
       numProducts,
+      currentPage,
+      maxPerPage,
       aggregations,
       isFacetsDialogOpen,
       closeFacetsDialog,
@@ -699,6 +729,7 @@ export default {
       removeFilter,
       clearFilters,
       toggleBooleanValue,
+      paginatedProducts,
       loadingMetadata,
     };
   },
