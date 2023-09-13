@@ -7,11 +7,11 @@
       <div class="flex grow flex-col pt-6">
         <div class="pb-6">
           <router-link to="/workspace">
-            <img
-              class="mx-auto w-[75px] h-[20px]"
-              src="@/shared/assets/nctc_logo.svg"
-              alt="NCTC. Seal. Link to homepage."
-            />
+            <div
+              class="mx-auto bg-slate-500/75 w-[45px] h-[45px] rounded flex justify-center items-center"
+            >
+              <span class="font-bold text-slate-900 text-2xl leading-4">W</span>
+            </div>
           </router-link>
         </div>
         <ul class="py-2 mx-auto text-gray-400 space-y-1">
@@ -19,7 +19,7 @@
             <tippy content="Dashboard" placement="right" theme="demo">
               <div
                 :class="
-                  route.name == 'dashboard'
+                  route.name == 'workspace-dashboard'
                     ? 'text-gray-50 bg-slate-800/90'
                     : 'hover:text-gray-50 hover:bg-slate-800/90'
                 "
@@ -57,7 +57,7 @@
             <tippy content="Saved Products" placement="right" theme="demo">
               <div
                 :class="
-                  route.name == 'saved'
+                  route.name == 'workspace-saved'
                     ? 'text-gray-50 bg-slate-800/90'
                     : 'hover:text-gray-50 hover:bg-slate-800/90'
                 "
@@ -203,7 +203,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-48 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem v-show="canManageWire">
                         <router-link
@@ -259,7 +259,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-40 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem>
                         <router-link
@@ -280,6 +280,7 @@
                       <MenuItem>
                         <a
                           class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                          :href="`${metadata.user_support.help_url}`"
                           target="_blank"
                           >User Support
                         </a>
@@ -352,7 +353,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-48 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem v-show="canManageWire">
                         <router-link
@@ -401,7 +402,7 @@
                     leaveToClass="transform opacity-0 scale-95"
                   >
                     <MenuItems
-                      class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                      class="origin-top-right absolute right-0 mt-2 w-40 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                     >
                       <MenuItem>
                         <router-link
@@ -414,6 +415,7 @@
                       <MenuItem>
                         <a
                           class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                          :href="`${metadata.user_support.help_url}`"
                           target="_blank"
                           >User Support
                         </a>
@@ -585,7 +587,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import MobileSideMenu from "./MobileSideMenu.vue";
-import TestConsoleDialog from "@current/components/TestConsoleDialog.vue";
+import TestConsoleDialog from "@/shared/components/TestConsoleDialog.vue";
 export default {
   components: {
     Dialog,

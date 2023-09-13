@@ -17,7 +17,7 @@
         <Listbox
           v-model="selectedSort"
           as="div"
-          class="min-w-[215px] inline-flex items-center text-gray-700"
+          class="min-w-[250px] inline-flex items-center text-gray-700"
         >
           <div>
             <ListboxLabel class="text-sm line-clamp-1 xl:line-clamp-none w-max">
@@ -95,7 +95,7 @@
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
         <template v-for="card in 6" :key="card">
-          <MyPublishedProductCard :loading="true" />
+          <PublishedProductCard :loading="true" />
         </template>
       </div>
     </template>
@@ -104,15 +104,93 @@
         <p class="italic">No saved products to show</p>
       </template>
       <template v-else>
+        <div class="pb-6">
+          <!-- Boolean Selectors -->
+          <template
+            v-if="
+              !loadingMetadata && showSelectors && booleanFilters.length > 0
+            "
+          >
+            <div class="flex flex-wrap mt-2 py-2 w-fit text-sm">
+              <div
+                v-if="booleanFilters.length > 1"
+                class="my-2 pr-3 border-r border-gray-300"
+              >
+                <button
+                  class="rounded-xl transition-colors bg-gray-500 hover:bg-gray-400 text-white p-2 hover:pointer-cursor"
+                  @click="clearFilters"
+                >
+                  Clear all filters
+                </button>
+              </div>
+              <template v-for="(n, index) in booleanFilters" :key="n">
+                <div
+                  class="my-2"
+                  :class="[
+                    n.lastItem && index < booleanFilters.length - 1
+                      ? 'pr-3 border-r border-gray-300'
+                      : 'pr-2',
+                    index !== 0 && n.firstItem ? 'pl-3' : '',
+                    booleanFilters.length > 1 && index == 0 && n.firstItem
+                      ? 'pl-3'
+                      : '',
+                  ]"
+                >
+                  <div
+                    class="flex rounded-xl bg-gray-200 p-2 hover:pointer-cursor"
+                  >
+                    <span class="sr-only">Remove filter</span>
+                    <div class="self-center pr-1">
+                      <template v-if="n.type === 'text'">
+                        <span class="pr-1 italic">Text: </span>
+                      </template>
+                      <template v-if="n.type === 'query'">
+                        <span class="pr-1 italic">Query: </span>
+                      </template>
+                      {{ n.displayName }}
+                    </div>
+                    <button
+                      type="button"
+                      class="w-5 h-5 flex items-center justify-center"
+                      tabindex="0"
+                      @click="removeFilter(n)"
+                    >
+                      <span class="sr-only">Remove filter</span>
+                      <XMarkIcon
+                        class="h-5 w-5 transition-colors hover:text-gray-500"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </div>
+                <template v-if="!n.lastItem">
+                  <template v-if="n.toggleable">
+                    <button
+                      class="mr-3 text-blue-600"
+                      @click="toggleBooleanValue(n)"
+                    >
+                      {{ n.boolean_val }}
+                    </button>
+                  </template>
+                  <template v-else>
+                    <div class="mr-3 self-center">
+                      {{ n.boolean_val }}
+                    </div>
+                  </template>
+                </template>
+              </template>
+            </div>
+          </template>
+        </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
           <template v-for="product in mySaved" :key="product">
-            <MyPublishedProductCard
+            <PublishedProductCard
               :product="product"
-              type="saved"
-              :productTypeName="getProductTypeName(product)"
-              @remove="removeSavedProduct(product)"
+              type="product"
+              @delete="openDeleteDialog(product)"
+              @unsave="unsaveProduct(product)"
             />
           </template>
         </div>
@@ -129,6 +207,35 @@
       class="grid grid-cols-2 md:grid-cols-3 gap-4"
     />
   </BaseDialog>
+
+  <BaseDialog
+    :isOpen="isDeleteDialogOpen"
+    :title="'Delete Product'"
+    class="max-w-fit"
+    @close="closeDeleteDialog"
+  >
+    <p class="py-4 pr-4">Are you sure you want to do this?</p>
+    <template #actions>
+      <BaseButton
+        class="w-[100px]"
+        color="secondary"
+        @click.prevent="closeDeleteDialog"
+        >Cancel</BaseButton
+      >
+      <BaseButton
+        class="w-[100px]"
+        color="danger"
+        @click.prevent="deleteProduct"
+      >
+        <div :class="loadingDelete ? 'flex space-x-4' : ''">
+          <span>Delete</span>
+          <span v-if="loadingDelete">
+            <LoadingSpinner class="h-5 w-5" />
+          </span>
+        </div>
+      </BaseButton>
+    </template>
+  </BaseDialog>
   <Overlay :show="removingProduct">
     <div class="max-w-xs inline-block">
       <p class="mb-4 font-semibold text-2xl">Removing Product...</p>
@@ -142,17 +249,22 @@
 import { computed, onMounted, inject, ref, watch } from "vue";
 import axios from "@/shared/config/wireAxios";
 import { useRoute, useRouter } from "vue-router";
-import MyPublishedProductCard from "../components/MyPublishedProductCard.vue";
+import { useStore } from "vuex";
+import PublishedProductCard from "../components/PublishedProductCard.vue";
 import { productDetails } from "../data";
+import { facetAggregations } from "../data";
 import Overlay from "../components/Overlay.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
+import BaseButton from "../components/BaseButton.vue";
 import Facets from "../components/Facets.vue";
+import { getValueForCode } from "@/shared/helpers";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   CheckIcon,
 } from "@heroicons/vue/24/solid";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 import {
   Listbox,
   ListboxLabel,
@@ -162,10 +274,11 @@ import {
 } from "@headlessui/vue";
 export default {
   components: {
-    MyPublishedProductCard,
+    PublishedProductCard,
     AdjustmentsHorizontalIcon,
     ChevronDownIcon,
     CheckIcon,
+    XMarkIcon,
     Listbox,
     ListboxLabel,
     ListboxButton,
@@ -174,14 +287,17 @@ export default {
     Overlay,
     LoadingSpinner,
     BaseDialog,
+    BaseButton,
     Facets,
   },
   setup() {
     const environment = ref(import.meta.env.MODE);
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     const path = computed(() => route.fullPath);
-    const metadata = inject("metadata");
+    const criteria = computed(() => store.state.metadata.criteria);
+    const loadingMetadata = computed(() => store.state.metadata.loading);
     const mySaved = ref([]);
     const loadingSaved = ref(true);
     const numProducts = computed(() => mySaved.value.length);
@@ -194,6 +310,7 @@ export default {
       isFacetsDialogOpen.value = true;
     };
     const sortOptions = [
+      { name: "Recently Saved", key: "created", type: "sortDir" },
       { name: "Newest", key: "desc", type: "sortDir" },
       { name: "Oldest", key: "asc", type: "sortDir" },
       { name: "Most Views", key: "views", type: "sortDir" },
@@ -202,10 +319,12 @@ export default {
       const sortDir = query.sortDir ? query.sortDir : undefined;
       if (sortDir) {
         switch (sortDir) {
-          case "asc":
+          case "desc":
             return sortOptions[1];
-          case "views":
+          case "asc":
             return sortOptions[2];
+          case "views":
+            return sortOptions[3];
           default:
             return sortOptions[0];
         }
@@ -214,13 +333,69 @@ export default {
     };
     const selectedSort = ref(getSortOption(route.query));
     const createNotification = inject("create-notification");
-    const removingProduct = ref(false);
-    const removeSavedProduct = (product) => {
+    const createSimpleNotification = inject("create-simple-notification");
+
+    const selectedProduct = ref();
+    const loadingDelete = ref(false);
+    const isDeleteDialogOpen = ref(false);
+    const closeDeleteDialog = () => {
+      isDeleteDialogOpen.value = false;
+    };
+    const openDeleteDialog = (product) => {
+      selectedProduct.value = product;
+      isDeleteDialogOpen.value = true;
+    };
+
+    const deleteProduct = () => {
       if (import.meta.env.MODE === "offline") {
         createNotification({
-          title: "Saved Product Removed",
-          message: `Product ${product.productNumber} has been removed from Saved Products.`,
+          title: "Product Deleted",
+          message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
           type: "success",
+        });
+        closeDeleteDialog();
+        let p = mySaved.value.find(
+          (item) => item.productNumber == selectedProduct.value.productNumber
+        );
+        let indexOfProduct = mySaved.value.indexOf(p);
+        mySaved.value.splice(indexOfProduct, 1);
+      } else {
+        loadingDelete.value = true;
+        axios
+          .delete("/documents/" + selectedProduct.value.featureId + "/deleteMe")
+          .then((response) => {
+            if (response.data.error) {
+              createNotification({
+                title: "Error",
+                message: response.data.error,
+                type: "error",
+                autoClose: false,
+              });
+              loadingDelete.value = false;
+            } else {
+              createNotification({
+                title: "Product Deleted",
+                message: `Product ${selectedProduct.value.productNumber} has been deleted.`,
+                type: "success",
+              });
+              loadingDelete.value = false;
+              closeDeleteDialog();
+              let p = mySaved.value.find(
+                (item) =>
+                  item.productNumber == selectedProduct.value.productNumber
+              );
+              let indexOfProduct = mySaved.value.indexOf(p);
+              mySaved.value.splice(indexOfProduct, 1);
+            }
+          });
+      }
+    };
+
+    const removingProduct = ref(false);
+    const unsaveProduct = (product) => {
+      if (import.meta.env.MODE === "offline") {
+        createSimpleNotification({
+          message: `Saved Product Removed`,
         });
         let p = mySaved.value.find(
           (item) => item.productNumber == product.productNumber
@@ -229,31 +404,27 @@ export default {
         mySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
-        axios
-          .delete("/workspace/saved/" + product.id)
-          .then((response) => {
-            if (response.data.error) {
-              removingProduct.value = false;
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.productNumber} has been removed from Saved Products.`,
-                type: "success",
-              });
-              let p = mySaved.value.find(
-                (item) => item.productNumber == product.productNumber
-              );
-              let indexOfProduct = mySaved.value.indexOf(p);
-              mySaved.value.splice(indexOfProduct, 1);
-            }
-          });
+        axios.delete("/workspace/saved/" + product.id).then((response) => {
+          if (response.data.error) {
+            removingProduct.value = false;
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            removingProduct.value = false;
+            createSimpleNotification({
+              message: `Saved Product Removed`,
+            });
+            let p = mySaved.value.find(
+              (item) => item.productNumber == product.productNumber
+            );
+            let indexOfProduct = mySaved.value.indexOf(p);
+            mySaved.value.splice(indexOfProduct, 1);
+          }
+        });
       }
     };
 
@@ -268,10 +439,12 @@ export default {
           });
           mySaved.value = products;
           loadingSaved.value = false;
+          aggregations.value = facetAggregations;
+          console.log("Aggregations: ", facetAggregations);
         }, 1000);
       } else {
-        if (route.name == "saved") {
-          axios.get(path).then((response) => {
+        if (route.name === "workspace-saved") {
+          axios.get(path, { params: { perPage: 1000 } }).then((response) => {
             loadingSaved.value = false;
             if (response.data) {
               mySaved.value = response.data.content;
@@ -288,15 +461,182 @@ export default {
         }
       }
     };
-    const getProductTypeName = (product) => {
-      if (product.productType.name) {
-        return product.productType.name;
-      } else {
-        let type = metadata.product_types.find(
-          (item) => item.code === product.productType
-        );
-        return type?.displayName;
+
+    const getListForType = (type) => {
+      switch (type) {
+        case "regions[]":
+          return criteria.value.regions;
+        case "subregions[]":
+          return criteria.value.subregions;
+        case "countries[]":
+          return criteria.value.countries;
+        case "issues[]":
+          return criteria.value.issues;
+        case "topics[]":
+          return criteria.value.topics;
+        case "reporting_types[]":
+          return criteria.value.reporting_types;
+        case "product_types[]":
+          return criteria.value.product_types;
+        case "producing_offices[]":
+          return criteria.value.producing_offices;
+        case "classification[]":
+          return criteria.value.classification;
+        case "media_tags[]":
+          return criteria.value.media_tags;
+        case "non_state_actors[]":
+          return criteria.value.non_state_actors;
+        case "selected_for[]":
+          return criteria.value.selected_for;
+        default:
+          return [];
       }
+    };
+    const getBooleanMapping = (queryKey) => {
+      if (queryKey === "product_types[]") {
+        return false;
+      } else {
+        const bracketIndex = queryKey.indexOf("[]");
+        if (bracketIndex !== -1) {
+          return queryKey.slice(0, bracketIndex).concat("_bool");
+        }
+        return false;
+      }
+    };
+    const buildBooleanFilters = () => {
+      const filteredKeys = Object.keys(route.query).filter((key) => {
+        if (key.indexOf("[]") !== -1) {
+          return true;
+        }
+        return false;
+      });
+      let queryText, queryDates;
+      if (route.query["text"]) {
+        queryText = {
+          displayName: route.query["text"],
+          firstItem: true,
+          lastItem: true,
+          type: "text",
+        };
+      }
+      let booleanFilterGroups = [];
+      filteredKeys.forEach((type) => {
+        const booleanMapping = getBooleanMapping(type);
+        const list = getListForType(type);
+        let items = !Array.isArray(route.query[type])
+          ? [route.query[type]]
+          : route.query[type];
+        items = items.map((code) => {
+          const displayName = getValueForCode(
+            list,
+            type === "product_types[]" ? parseInt(code) : code
+          );
+          return {
+            code,
+            displayName: displayName ? displayName.name : null,
+          };
+        });
+        console.log("items: ", items);
+        let boolean_val = "or";
+        let toggleable = false;
+        if (booleanMapping) {
+          boolean_val = route.query[booleanMapping];
+          toggleable = type === "reporting_types[]" ? false : true;
+        }
+        booleanFilterGroups.push({
+          type,
+          items,
+          boolean_val,
+          toggleable,
+        });
+      });
+      //console.log("booleanFilterGroups: ", booleanFilterGroups);
+      let booleanFilters = [];
+      if (queryText) {
+        booleanFilters.push(queryText);
+      }
+      if (queryDates) {
+        booleanFilters.push(queryDates);
+      }
+      booleanFilterGroups.forEach((filterGroup) => {
+        filterGroup.items.forEach((item, index, array) => {
+          let booleanFilter = {
+            displayName: item.displayName,
+            code: item.code,
+            type: filterGroup.type,
+            boolean_val: filterGroup.boolean_val,
+            toggleable: filterGroup.toggleable,
+          };
+          if (index === 0) {
+            booleanFilter.firstItem = true;
+          }
+          if (index === array.length - 1) {
+            booleanFilter.lastItem = true;
+          }
+          booleanFilters.push(booleanFilter);
+        });
+      });
+      console.log("booleanFilters: ", booleanFilters);
+      return booleanFilters;
+    };
+    const booleanFilters = ref(buildBooleanFilters());
+    const showSelectors = ref(true);
+    const toggleSelectors = () => {
+      showSelectors.value = !showSelectors.value;
+    };
+    const removeFilter = (item) => {
+      let query = {
+        ...route.query,
+        page: 1,
+      };
+      if (item.type === "text" || item.type === "query") {
+        delete query["text"];
+      } else if (item.type === "dates") {
+        delete query["start_date"];
+        delete query["end_date"];
+      } else {
+        const list = getListForType(item.type);
+        const filterList = [];
+        list.forEach((x) => {
+          if (query[item.type].includes(x.code)) {
+            filterList.push(x.code);
+          }
+        });
+        query[item.type] = filterList.filter(
+          (queryItem) => queryItem !== item.code
+        );
+        if (query[item.type].length < 2) {
+          const booleanMapping = getBooleanMapping(item.type);
+          if (query[booleanMapping]) {
+            delete query[booleanMapping];
+          }
+          if (query[item.type].length === 0) {
+            delete query[item.type];
+          }
+        }
+      }
+      console.log("route: ", route.query);
+      router.push({
+        name: "workspace-saved",
+        query,
+      });
+    };
+    const clearFilters = () => {
+      router.push({ name: "workspace-saved", query: {} });
+    };
+    const toggleBooleanValue = (item) => {
+      let query = {
+        ...route.query,
+      };
+      const booleanMapping = getBooleanMapping(item.type);
+      if (query[booleanMapping] === "and") {
+        query[booleanMapping] = "or";
+      } else {
+        query[booleanMapping] = "and";
+      }
+      router.push({
+        query,
+      });
     };
 
     onMounted(() => {
@@ -309,22 +649,26 @@ export default {
 
     watch([selectedSort], () => {
       let query = { ...route.query };
-      // if (selectedSort.value.type === "sort_dir") {
-      // if (query.sort_field) {
-      //   delete query["sort_field"];
-      // }
       query = { ...query, sortDir: selectedSort.value.key };
-      // } else {
-      //   if (query.sort_dir) {
-      //     delete query["sort_dir"];
-      //   }
-      //   query = { ...query, sort_field: selectedSort.value.key };
-      // }
       router.push({
         query,
       });
-      getSavedProducts(path.value);
-      // localStorage.setItem("lastSort", selectedSort.value.key);
+    });
+
+    watch(
+      () => route.query,
+      () => {
+        console.log(`route.query watcher triggered [${route.name}]`);
+        getSavedProducts(path.value);
+        booleanFilters.value = buildBooleanFilters();
+        closeFacetsDialog();
+      }
+    );
+
+    watch([loadingMetadata], () => {
+      if (!loadingMetadata.value) {
+        booleanFilters.value = buildBooleanFilters();
+      }
     });
 
     return {
@@ -333,6 +677,11 @@ export default {
       path,
       mySaved,
       loadingSaved,
+      loadingDelete,
+      isDeleteDialogOpen,
+      openDeleteDialog,
+      closeDeleteDialog,
+      deleteProduct,
       numProducts,
       aggregations,
       isFacetsDialogOpen,
@@ -341,9 +690,16 @@ export default {
       sortOptions,
       selectedSort,
       removingProduct,
-      removeSavedProduct,
+      unsaveProduct,
       getSavedProducts,
-      getProductTypeName,
+      buildBooleanFilters,
+      booleanFilters,
+      showSelectors,
+      toggleSelectors,
+      removeFilter,
+      clearFilters,
+      toggleBooleanValue,
+      loadingMetadata,
     };
   },
 };

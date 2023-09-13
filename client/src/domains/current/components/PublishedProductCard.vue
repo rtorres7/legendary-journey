@@ -59,10 +59,7 @@
           'relative flex flex-col justify-between px-4',
         ]"
       >
-        <div
-          v-if="environment !== 'production'"
-          class="absolute top-0 right-0 cursor-pointer"
-        >
+        <div class="absolute top-0 right-0 cursor-pointer">
           <Menu v-slot="{ open, close }" as="div" class="relative z-10">
             <div>
               <template v-if="open || hover">

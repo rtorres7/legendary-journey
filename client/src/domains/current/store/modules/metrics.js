@@ -1,4 +1,4 @@
-import { articleMetrics } from "@current/data";
+import { products } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 import router from "@/router";
 
@@ -23,7 +23,7 @@ export default {
     getMetrics({ state, commit }, { start, end }) {
       state.loading = true;
       if (import.meta.env.MODE === "offline") {
-        const metrics = getMetricsForArticle(articleMetrics);
+        const metrics = getMetricsForArticle(products.metrics);
         // console.log("basic_metrics.json?readership_start_date="+state.readershipStartDate+"&readership_end_date="+state.readershipEndDate);
         console.log(
           "[store] getMetrics:",

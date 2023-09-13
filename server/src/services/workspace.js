@@ -1,12 +1,15 @@
-const AggregatedMetricsService = require("./aggregated-metrics-service");
 const ProductSearchService = require("./product-search-service");
+const ProductService = require("./product-service");
 const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
+const _ = require("lodash");
+const { findArticleImage } = require("../util/images");
+const path = require("path");
 
 class WorkspaceService {
   constructor() {
+    this.productService = new ProductService();
     this.productSearchService = new ProductSearchService();
-    this.metricsService = new AggregatedMetricsService();
   }
 
   async findPageOfSavedProductsForUser(
@@ -21,15 +24,23 @@ class WorkspaceService {
       where: {
         createdBy: userId
       },
-      attributes: ["productId"]
+      attributes: ["productId"],
+      order: [
+        ["createdAt", "desc"]
+      ]
     });
+
+    let kiwiSort = KiwiSort.of("datePublished", sortDir);
+    if (sortDir === "views") {
+      kiwiSort = KiwiSort.of("views", "desc");
+    } else if (sortDir === "created") {
+      kiwiSort = KiwiSort.of("createdAt", "desc");
+    }
 
     if (savedProductsForUser.length === 0) {
       return KiwiPage.of(page, perPage, 0, [])
         .usingOneAsFirstPage()
-        .addKiwiSort(
-          KiwiSort.of(sortDir === "views" ? "views" : "datePublished", sortDir),
-        );
+        .addKiwiSort(kiwiSort);
     }
 
     const savedProductIds = savedProductsForUser.map(savedProduct => savedProduct.productId);
@@ -38,32 +49,72 @@ class WorkspaceService {
       id: savedProductIds,
     };
 
-    const resolvedSortDir = sortDir === "views" ? "asc" : sortDir;
-    const results = await this.productSearchService.search(term, perPage, page, resolvedSortDir, filtersWithUsersSavedProducts);
+    const results = await this.productSearchService.search(term, savedProductIds.length, 1, "desc", filtersWithUsersSavedProducts);
+    const resultIds = results.results.map(result => result.id);
 
-    if (sortDir === "views") {
-      const productNumbers = results.results.map(
-        (product) => product.productNumber,
-      );
+    let products;
 
-      const productViews =
-        await this.metricsService.getProductViewsCountForMultipleProducts(
-          productNumbers,
-        );
-
-      results.results.forEach((product) => {
-        product.views = productViews[product.productNumber] || 0;
-      });
-
-      results.results.sort((a, b) => b.views - a.views);
+    if (sortDir === "created") {
+      const resultIdsForPage = resultIds.slice(0, perPage);
+      const productsFound = await this.productService.findProductsForIds(resultIdsForPage, resultIdsForPage.length, 0);
+      products = savedProductIds.map(id => _.find(productsFound, product => product._id.toString() === id)).filter(product => product !== undefined);
+    } else {
+      products = await this.productService.findProductsForIds(resultIds, perPage, (page - 1) * perPage, sortDir);
     }
 
-    return KiwiPage.of(page, perPage, results.totalCount, results.results)
+    products = products.map(product => {
+      this.applyAttachmentUsageTo(product.attachments);
+
+      return {
+        classification: product.classification,
+        classificationXml: product.classificationXml,
+        countries: product.countries?.map(country => country.code),
+        createdById: product.createdBy?.id,
+        datePublished: product.datePublished,
+        deleted: product.deleted,
+        email_count: product.email_count,
+        featureId: product._id.toString(),
+        htmlBody: product.htmlBody,
+        id: product._id.toString(),
+        issues: product.issues?.map(issue => issue.code),
+        images: findArticleImage(product?.attachments),
+        nonStateActors: product.nonStateActors?.map(actor => actor.code),
+        orgRestricted: product.orgRestricted,
+        print_count: product.print_count,
+        producingOffices: product.producingOffices?.map(office => office.code),
+        productNumber: product.productNumber,
+        productType: product.productType?.code,
+        regions: product.regions?.map(region => region.code),
+        reportingType: product.reportingType?.code,
+        state: product.state,
+        subregions: product.subregions?.map(subregion => subregion.code),
+        summary: product.summary,
+        summaryClassification: product.summaryClassification,
+        title: product.title,
+        titleClassification: product.titleClassification,
+        topics: product.topics?.map(topic => topic.code),
+        updatedById: product.updatedBy?.id,
+        saved: true,
+        views: product.views
+      };
+    });
+
+    return KiwiPage.of(page, perPage, resultIds.length, products)
       .usingOneAsFirstPage()
-      .addKiwiSort(
-        KiwiSort.of(sortDir === "views" ? "views" : "datePublished", sortDir),
-      )
+      .addKiwiSort(kiwiSort)
       .addSupplementaryData({ aggregations: results.aggregations });
+  }
+
+  applyAttachmentUsageTo(attachments) {
+    if (attachments) {
+      attachments.forEach(attachment => {
+        const parsed = path.parse(attachment.fileName);
+        const isThumbnail =
+          parsed.name === "article" &&
+          /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
+        attachment.usage = isThumbnail ? "article" : "";
+      });
+    }
   }
 
   async createSavedProduct(productId, userId) {

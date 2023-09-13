@@ -3,11 +3,8 @@ import features from "./modules/features";
 import search from "./modules/search";
 import specialEdition from "./modules/specialEdition";
 import specialEditions from "./modules/specialEditions";
-import user from "./modules/user";
 import savedSearches from "./modules/saved-searches";
 import product from "./modules/product";
-import testConsole from "./modules/test-console";
-import metadata from "./modules/metadata";
 import localStorage from "./modules/localStorage";
 import relatedProducts from "./modules/relatedProducts";
 import metrics from "./modules/metrics";
@@ -19,11 +16,8 @@ const currentModules = {
   search,
   specialEdition,
   specialEditions,
-  user,
   savedSearches,
   product,
-  testConsole,
-  metadata,
   localStorage,
   relatedProducts,
   metrics,

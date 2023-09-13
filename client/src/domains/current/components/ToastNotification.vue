@@ -1,39 +1,49 @@
 <!-- TODO: Style this better -->
 <template>
-  <div
-    class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg px-5 py-[1.1rem] transition duration-300 ease-in-out"
-    :style="`--toast-duration: ${duration}s`"
-  >
-    <button
-      v-if="canClose"
-      class="absolute top-4 right-4 flex items-center justify-center cursor-pointer"
-      title="Close"
-      @click="close"
-    >
-      <XMarkIcon class="h-5 w-5" aria-hidden="true" />
-    </button>
-    <div class="flex gap-4 place-items-center">
-      <div
-        id="icon-container"
-        class="flex items-center h-12 pr-4 border-r border-slate-700/50 energy:border-zinc-700/50"
-      >
-        <component :is="toastIcon" :class="['h-8 w-8', toastColor]" />
-      </div>
-      <div class="flex flex-col gap-3">
-        <div v-show="title" class="font-semibold">
-          <span class="sr-only">New notification from Current</span>
-          {{ title }}
-        </div>
-        <p>
-          {{ message }}
-        </p>
-      </div>
-    </div>
+  <template v-if="simple">
     <div
-      v-if="autoClose"
-      class="animate-progress absolute bottom-0 left-0 w-full h-1.5 bg-blue-500"
-    />
-  </div>
+      class="relative max-w-xs rounded-md text-sm text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg p-3 transition duration-300 ease-in-out"
+      :style="`--toast-duration: ${duration}s`"
+    >
+      {{ message }}
+    </div>
+  </template>
+  <template v-else>
+    <div
+      class="relative max-w-[450px] min-h-[4rem] text-slate-900 dark:text-slate-300 energy:text-zinc-300 bg-white dark:bg-slate-700 energy:bg-zinc-700 shadow-lg px-5 py-[1.1rem] transition duration-300 ease-in-out"
+      :style="`--toast-duration: ${duration}s`"
+    >
+      <button
+        v-if="canClose"
+        class="absolute top-4 right-4 flex items-center justify-center cursor-pointer"
+        title="Close"
+        @click="close"
+      >
+        <XMarkIcon class="h-5 w-5" aria-hidden="true" />
+      </button>
+      <div class="flex gap-4 place-items-center">
+        <div
+          id="icon-container"
+          class="flex items-center h-12 pr-4 border-r border-slate-700/50 energy:border-zinc-700/50"
+        >
+          <component :is="toastIcon" :class="['h-8 w-8', toastColor]" />
+        </div>
+        <div class="flex flex-col gap-3">
+          <div v-show="title" class="font-semibold">
+            <span class="sr-only">New notification from Current</span>
+            {{ title }}
+          </div>
+          <p>
+            {{ message }}
+          </p>
+        </div>
+      </div>
+      <div
+        v-if="autoClose"
+        class="animate-progress absolute bottom-0 left-0 w-full h-1.5 bg-blue-500"
+      />
+    </div>
+  </template>
 </template>
 <script>
 import { computed, onMounted, ref } from "vue";
@@ -62,6 +72,11 @@ export default {
     title: {
       type: String,
       default: null,
+      required: false,
+    },
+    simple: {
+      type: Boolean,
+      default: false,
       required: false,
     },
     message: {

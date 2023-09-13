@@ -24,6 +24,13 @@ export default function useNotifications() {
     );
   };
 
+  const createSimpleNotification = (options) => {
+    createNotification({
+      simple: true,
+      ...options,
+    });
+  };
+
   const createErrorNotification = (options) => {
     createNotification({
       type: "error",
@@ -62,6 +69,7 @@ export default function useNotifications() {
   return {
     notifications,
     createNotification,
+    createSimpleNotification,
     createSuccessNotification,
     createErrorNotification,
     createWarningNotification,

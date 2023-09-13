@@ -6,6 +6,7 @@ import { productDetails } from "@current/data";
 export default function updateSavedStatus() {
   const route = useRoute();
   const createNotification = inject("create-notification");
+  const createSimpleNotification = inject("create-simple-notification");
   const savingProduct = ref(false);
   const removingProduct = ref(false);
 
@@ -47,10 +48,8 @@ export default function updateSavedStatus() {
               });
             } else {
               removingProduct.value = false;
-              createNotification({
-                title: "Product Removed",
-                message: `Product ${product.doc_num} has been removed from Saved products.`,
-                type: "success",
+              createSimpleNotification({
+                message: `Saved Product Removed`,
               });
             }
           });
@@ -67,10 +66,8 @@ export default function updateSavedStatus() {
             });
           } else {
             savingProduct.value = false;
-            createNotification({
-              title: "Product Saved",
-              message: `Product ${product.doc_num} has been added to Saved products.`,
-              type: "success",
+            createSimpleNotification({
+              message: `Product Saved`,
             });
           }
         });
@@ -85,5 +82,6 @@ export default function updateSavedStatus() {
     removingProduct,
     save,
     createNotification,
+    createSimpleNotification,
   };
 }

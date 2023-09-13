@@ -1,3 +1,5 @@
+const { KiwiPage } = require("@kiwiproject/kiwi-js");
+
 const request = require("supertest");
 const { setupAppWithUser } = require("../__utils__/expressUtils");
 
@@ -58,6 +60,12 @@ jest.mock("../../src/services/product-service.js", () => {
 
         return Promise.resolve({ totalCreated: articles.length });
       }),
+      findRecentViewedProductsForUser: jest.fn().mockImplementation(() => {
+        if (process.env.THROW_TEST_ERROR) {
+          throw new Error("whoops");
+        }
+        return Promise.resolve(KiwiPage.of(1, 4, 20, articles.slice(0, 4)));
+      })
     };
   });
 });
@@ -260,45 +268,6 @@ describe("Workspace Routes", () => {
           expect(res.body).toHaveProperty("totalViews");
           expect(res.body).toHaveProperty("totalCreated");
         });
-    });
-  });
-
-  describe("GET /workspace/products", () => {
-    it("should return all my products", () => {
-      const router = require("../../src/routes/workspace");
-      const app = setupAppWithUser(router, CURRENT_USER);
-
-      return request(app)
-        .get("/workspace/products")
-        .expect(200)
-        .expect("Content-Type", /json/)
-        .then((res) => {
-          expect(res.body.content.length).toBe(5);
-
-          const ids = res.body.content.map((product) => product.productNumber);
-          expect(ids).toStrictEqual([
-            "WIReWIRe_sample_1",
-            "WIReWIRe_sample_2",
-            "WIReWIRe_sample_3",
-            "WIReWIRe_sample_4",
-            "WIReWIRe_sample_5",
-          ]);
-        });
-    });
-
-    it("should return standard error response when lookup fails", () => {
-      process.env.THROW_TEST_ERROR = true;
-
-      const router = require("../../src/routes/workspace");
-      const app = setupAppWithUser(router, CURRENT_USER);
-
-      return request(app).get("/workspace/products").expect(500, {
-        message: "Unable to find user's products: whoops",
-        error: "Unable to find user's products: whoops",
-        code: 500,
-        fieldName: "",
-        itemId: "",
-      });
     });
   });
 
@@ -506,6 +475,23 @@ describe("Workspace Routes", () => {
       return request(app)
         .delete("/workspace/collections/1000/products/1000")
         .expect(404);
+    });
+  });
+
+  describe("GET /workspace/viewed", () => {
+    it("should return recently viewed products", async () => {
+      const router = require("../../src/routes/workspace");
+      const app = setupAppWithUser(router, CURRENT_USER);
+
+      return request(app)
+        .get(`/workspace/viewed`)
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          expect(res.body.number).toEqual(1); // page num
+          expect(res.body.totalElements).toEqual(20); // total
+          expect(res.body.content.length).toEqual(4);
+        });
     });
   });
 });

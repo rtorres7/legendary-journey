@@ -1,5 +1,9 @@
 import { createStore } from "vuex";
+import metadata from "./modules/metadata";
+import testConsole from "./modules/test-console";
+import user from "./modules/user";
 import currentModules from "@current/store";
+import workspaceModules from "@workspace/store";
 
 export default createStore({
   state: {
@@ -12,6 +16,10 @@ export default createStore({
   actions: {},
   mutations: {},
   modules: {
+    metadata,
+    testConsole,
+    user,
     ...currentModules,
+    ...workspaceModules,
   },
 });

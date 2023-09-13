@@ -1,4 +1,4 @@
-import { relatedProducts } from "@current/data";
+import { products } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 import router from "@/router";
 
@@ -14,7 +14,7 @@ export default {
       state.loading = true;
       let route = router.currentRoute.value;
       if (import.meta.env.MODE === "offline") {
-        let relatedDocuments = relatedProducts.filter(
+        let relatedDocuments = products.relatedProducts.filter(
           (relatedProduct) =>
             relatedProduct.document.doc_num === route.params.doc_num
         );

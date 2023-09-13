@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { KiwiStandardResponsesExpress, KiwiPreconditions } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
@@ -79,16 +79,8 @@ router.get("/workspace/recent", async (req, res) => {
           sortDir,
         );
 
-      const ids = pageOfRecentProducts.content.map(
-        (item) => item.productNumber,
-      );
-      const viewsData = await metricsService.getProductViewsCountForMultipleProducts(ids);
-
       for (const item of pageOfRecentProducts.content) {
-        if (viewsData[item.productNumber]) {
-          item.views = viewsData[item.productNumber];
-        }
-        await augmentProductWithSaved(item, currentUser.id, item.id.toString(), false);
+        await augmentProductWithSaved(item, currentUser.id, item.id, false);
       }
 
       res.json(pageOfRecentProducts);
@@ -100,6 +92,38 @@ router.get("/workspace/recent", async (req, res) => {
     }
   });
 });
+
+router.get("/workspace/viewed", async (req, res) => {
+  /*
+    #swagger.summary = 'Retrieve last 4 products viewed by the current user'
+    #swagger.tags = ['Workspace']
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definitions/PageOfProducts'
+      }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definitions/StandardError'
+      }
+    }
+   */
+  await runAsUser(req, res, async (currentUser, req, res) => {
+    const { perPage, page, sortDir } = pagingParams(req); // assumes page starts with 1
+    KiwiPreconditions.checkPositive(page);
+    KiwiPreconditions.checkPositive(perPage);
+    try {
+      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, sortDir);
+      res.json(pageResults);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `Unable to find recently viewed products: ${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
+  });
+});
+
 
 router.get("/workspace/stats", async (req, res) => {
   /*
@@ -160,47 +184,6 @@ router.get("/workspace/stats", async (req, res) => {
   });
 });
 
-router.get("/workspace/products", async (req, res) => {
-  /*
-    #swagger.summary = 'Retrieve a page of products created by the current user'
-    #swagger.tags = ['Workspace']
-    #swagger.responses[200] = {
-      schema: {
-        $ref: '#/definitions/PageOfProducts'
-      }
-    }
-    #swagger.responses[500] = {
-      schema: {
-        $ref: '#/definitions/StandardError'
-      }
-    }
-   */
-
-  await runAsUser(req, res, async (currentUser, req, res) => {
-    try {
-      const { perPage, page, skip, sortDir } = pagingParams(req);
-      const pageOfProducts = await productService.findPageOfProductsForUser(
-        currentUser.id,
-        page,
-        perPage,
-        skip,
-        sortDir,
-      );
-
-      for (const item of pageOfProducts.content) {
-        await augmentProductWithSaved(item, currentUser.id, item.id, false);
-      }
-
-      res.json(pageOfProducts);
-    } catch (error) {
-      logger.error(error);
-      const errorDetails = `Unable to find user's products: ${error.message}`;
-      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-      legacyErrorResponse(500, errorDetails, res);
-    }
-  });
-});
-
 router.get("/workspace/saved", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve a page of saved products by the current user'
@@ -214,7 +197,7 @@ router.get("/workspace/saved", async (req, res) => {
 
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
-      const { perPage, page, sortDir } = pagingParams(req);
+      const { perPage, page, sortDir } = pagingParams(req, "created");
       const term = req.query.text;
       const filters = req.query;
 
@@ -226,16 +209,6 @@ router.get("/workspace/saved", async (req, res) => {
         sortDir,
         filters,
       );
-
-      const ids = savedProducts.content.map((item) => item.productNumber);
-      const viewsData = await metricsService.getProductViewsCountForMultipleProducts(ids);
-
-      savedProducts.content.forEach((item) => {
-        if (viewsData[item.productNumber]) {
-          item.views = viewsData[item.productNumber];
-        }
-        item.saved = true;
-      });
 
       res.json(savedProducts);
     } catch (error) {

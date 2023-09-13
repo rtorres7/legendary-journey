@@ -1,6 +1,8 @@
 // import { date } from "joi";
+
 const constant = require("../util/constant.js");
 const EventLog = require("../models/event_log");
+// const { logger } = require("../config/logger");
 
 class AggregatedMetricsService {
   constructor() {
@@ -161,6 +163,59 @@ class AggregatedMetricsService {
     return {
       totalViews: totalViews,
     };
+  }
+
+  /**
+   * Get products viewed by user ordered by timestamp.
+   * @param {number} userId 
+   * @param {number} [from=0] items to skip
+   * @param {number} [size=4] number of items to retrieve
+   * @param {string} [order="desc"] order timestamp by "desc" or "asc"
+   * @returns {Promise<{ total: number, productIds: string[] }>} total number of buckets, 
+   */
+  async getRecentViewsForUser(userId, from = 0, size = 4, order = "desc") {
+    const results = await this.client.search({
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "userId": userId } },
+            { "term": { "eventType": "PRODUCT_VIEW" } }
+          ],
+        }
+      },
+      "aggs": {
+        "group_by_productId": {
+          "terms": {
+            "field": "productId",
+          },
+          "aggs": {
+            "max_timestamp": {
+              "max": { "field": "timestamp" }
+            },
+            "sort_by_timestamp": {
+              "bucket_sort": {
+                "sort": [
+                  { "max_timestamp": { "order": order } }
+                ],
+                "from": from,
+                "size": size
+              }
+            }
+          }
+        },
+        "group_by_productId_count": {
+          "cardinality": {
+            "field": "productId"
+          }
+        }
+      }
+    });
+    // logger.info("%O", results.aggregations.group_by_productId.buckets.map(i => ({ productId: i.key, timestamp: i.max_timestamp.value})));
+    return Promise.resolve({
+      total: results.aggregations.group_by_productId_count.value,
+      productIds: results.aggregations.group_by_productId.buckets.map(i => i.key)
+    });
   }
 }
 

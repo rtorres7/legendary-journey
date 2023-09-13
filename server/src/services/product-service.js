@@ -1,17 +1,24 @@
 const dayjs = require("dayjs");
 const Article = require("../models/articles");
 const ProductSearchService = require("./product-search-service");
+const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const {
   KiwiPage,
   KiwiSort,
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
 const { AttachmentService } = require("./attachment-service");
+const EventLog = require("../models/event_log");
+const mongoose = require("mongoose");
+const { findArticleImage } = require("../util/images");
+const path = require("path");
+const { logger } = require("../config/logger");
 
 class ProductService {
   constructor() {
     this.productSearchService = new ProductSearchService();
     this.attachmentService = new AttachmentService();
+    this.metricsService = new AggregatedMetricsService();
   }
 
   async findAllByDate(date) {
@@ -90,14 +97,14 @@ class ProductService {
     const featuredProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": 10376,
+      "productType.code": { $in: [10376, 10389, 10390, 10391, 10392] },
     })
       .sort({ _id: -1 })
       .exec();
     const briefProducts = await Article.find({
       state: "posted",
       deleted: false,
-      "productType.code": { $in: [10377, 10379, 10380, 10382, 10383, 10384, 10385, 10386] },
+      "productType.code": { $in: [10377, 10379, 10380, 10384, 10385, 10386] },
     })
       .sort({ datePublished: -1 })
       .limit(3)
@@ -194,29 +201,86 @@ class ProductService {
     const recentCount = await this.#countRecentProductsForProducingOffice(
       producingOfficeName,
     );
+
+    let kiwiSort = KiwiSort.of("datePublished", sortDir);
+    if (sortDir === "views") {
+      kiwiSort = KiwiSort.of("views", "desc");
+    }
+
     return KiwiPage.of(
       page,
       limit,
       recentCount,
-      recentProducts.map((recent) => recent.features),
+      recentProducts.map((recent) => recent),
     )
       .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of("datePublished", sortDir));
+      .addKiwiSort(kiwiSort);
   }
 
   async #findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir) {
-    return await Article
-      .find({
+    let sort = { datePublished: sortDir.toLowerCase() };
+    if (sortDir === "views") {
+      sort = { views: "desc" };
+    }
+
+    const products = await Article.aggregate()
+      .match({
         $and: [
           { state: 'posted' },
           { deleted: false },
           { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
         ]
       })
+      .lookup({
+        from: EventLog.collection.name,
+        localField: "productNumber",
+        foreignField: "productId",
+        as: "eventLogs"
+      })
+      .addFields({
+        views: {
+          $size: "$eventLogs"
+        }
+      })
       .limit(limit)
       .skip(offset)
-      .sort({ datePublished: sortDir.toLowerCase() })
-      .exec();
+      .sort(sort).exec();
+
+    return products.map(product => {
+      this.applyAttachmentUsageTo(product.attachments);
+
+      return {
+        createdAt: product.createdAt,
+        datePublished: product.datePublished,
+        doc_num: product.productNumber,
+        id: product._id.toString(),
+        featureId: product._id.toString(),
+        images: findArticleImage(product.attachments),
+        needed: product.needed,
+        nonStateActors: product.nonStateActors,
+        orgRestricted: product.orgRestricted,
+        productNumber: product.productNumber,
+        productType: product.productType,
+        state: product.state,
+        summary: product.summary,
+        summaryClassification: product.summaryClassification,
+        title: product.title,
+        titleClassification: product.titleClassification,
+        views: product.views
+      };
+    });
+  }
+
+  applyAttachmentUsageTo(attachments) {
+    if (attachments) {
+      attachments.forEach(attachment => {
+        const parsed = path.parse(attachment.fileName);
+        const isThumbnail =
+          parsed.name === "article" &&
+          /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
+        attachment.usage = isThumbnail ? "article" : "";
+      });
+    }
   }
 
   async #countRecentProductsForProducingOffice(producingOfficeName) {
@@ -355,6 +419,58 @@ class ProductService {
     await product.save();
     this.productSearchService.update(product.indexable);
     return product;
+  }
+
+  async findProductsForIds(ids, limit, offset, sortDir = undefined){
+    let query = Article.aggregate()
+      .match({ "_id": { $in: ids.map(id => new mongoose.Types.ObjectId(id)) } })
+      .lookup({
+        from: EventLog.collection.name,
+        localField: "productNumber",
+        foreignField: "productId",
+        as: "eventLogs"
+      })
+      .addFields({
+        views: {
+          $size: "$eventLogs"
+        }
+      })
+      .limit(limit)
+      .skip(offset);
+
+    if (sortDir) {
+      let sort = { datePublished: sortDir.toLowerCase() };
+      if (sortDir === "views") {
+        sort = { views: "desc" };
+      }
+
+      query = query.sort(sort);
+    }
+
+    return await query.exec();
+  }
+  
+  /**
+   * @param {string} userId 
+   * @param {number} page page number, starts at 1
+   * @param {number} perPage items per page
+   * @param {string} sortDir 'asc' or 'desc'
+   * @returns {Promise<KiwiPage>}
+   */
+  async findRecentViewedProductsForUser(userId, page = 1, perPage = 4, sortDir = "desc") {
+    const from = (page - 1) * perPage;
+    const { total, productIds } = await this.metricsService.getRecentViewsForUser(userId, from, perPage, sortDir);
+    const products = [];
+    for (let productId of productIds) {
+      const product = await Article.findOne({ 'productNumber': productId }).exec();
+      if (product) {
+        products.push(product.features);
+      } else {
+        logger.error(`product ${productId} not found`);
+        // KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
+      }
+    }
+    return Promise.resolve(KiwiPage.of(page, perPage, total, products).usingOneAsFirstPage());
   }
 }
 

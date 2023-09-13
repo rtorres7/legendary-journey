@@ -1,16 +1,16 @@
 const EventLog = require("../models/event_log");
-const ProductService = require("../services/product-service");
+// const ProductService = require("../services/product-service");
 const UserService = require("../services/user-service");
 
 class EventService {
   constructor() {
-    this.productService = new ProductService();
+    // this.productService = new ProductService();
     this.userService = new UserService();
     this.client = require("../data/elasticsearch");
     this.index = "eventlogs";
   }
 
-  async registerEvent(eventType, userId, productId, meta = {}) {
+  async registerEvent(eventType, userId, productId, meta = {}, wait = false) {
     try {
       const event = new EventLog({
         eventType,
@@ -38,6 +38,7 @@ class EventService {
         index: this.index,
         id: event.id,
         document: enrichedData,
+        refresh: wait ? "wait_for" : false
       });
 
       return event;

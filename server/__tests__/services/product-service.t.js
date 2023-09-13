@@ -2,7 +2,9 @@ const { MongoExtension } = require("@kiwiproject/kiwi-test-js");
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const MetadataService = require("../../src/services/metadata");
-const ProductService = require('../../src/services/product-service');
+const ProductService = require("../../src/services/product-service");
+const { KiwiPreconditions } = require("@kiwiproject/kiwi-js");
+
 
 const { loadMetadata, loadArticlesIntoMongo } = require("../__utils__/dataLoader");
 
@@ -29,6 +31,22 @@ jest.mock('../../src/services/product-search-service.js', () => {
       search: jest.fn()
         .mockResolvedValueOnce({ hits: { hits: [{ _source: { id: 1 }}] }}),
       delete: jest.fn(),
+    };
+  });
+});
+
+jest.mock('../../src/services/aggregated-metrics-service', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getRecentViewsForUser: jest.fn().mockImplementation((userId, from, size, order) => {
+        KiwiPreconditions.checkArgumentDefined(userId);
+        KiwiPreconditions.checkPositiveOrZero(from);
+        KiwiPreconditions.checkPositive(size);
+        return {
+          total: 20,
+          productIds: ["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]
+        };
+      })
     };
   });
 });
@@ -343,7 +361,7 @@ describe('ProductService', () => {
       await createPublished(10390); // Watch
       await createPublished(10376); // Current (Feature)
       const results = await service.findFeaturesAndBriefs();
-      expect(results.featured).toHaveLength(4); // 3 existing + 1 new current
+      expect(results.featured).toHaveLength(8); // 3 existing + 1 new current, plus 4 warning products
       expect(results.briefs).toHaveLength(0);
     });
 
@@ -352,8 +370,6 @@ describe('ProductService', () => {
       briefs.push(await createPublished(10377)); // Daily Brief
       briefs.push(await createPublished(10379)); // CT Digest
       briefs.push(await createPublished(10380)); // CT Weekly
-      briefs.push(await createPublished(10382)); // Special Threat Matrix
-      briefs.push(await createPublished(10383)); // SVTC Notes
       briefs.push(await createPublished(10384)); // Terrorism Digest
       briefs.push(await createPublished(10385)); // Terrorism Summary
       briefs.push(await createPublished(10386)); // Threat Matrix
@@ -477,5 +493,14 @@ describe('ProductService', () => {
       expect(products.totalElements).toEqual(5);
       expect(products.sort).toEqual({ direction: 'desc', property: 'createdAt', ignoreCase: false, ascending: false});
     }
+  });
+
+  describe('findRecentViewedProductsForUser', () => {
+    it('should return a page of all products', async () => {
+      const page = await service.findRecentViewedProductsForUser(1, 1, 4, "desc");
+      expect(page.totalElements).toEqual(20);
+      expect(page.content).toBeArrayOfSize(4);
+      expect(page.content.map(i => i.productNumber)).toEqual(["WIReWIRe_sample_1", "WIReWIRe_sample_2", "WIReWIRe_sample_3", "WIReWIRe_sample_4"]);
+    });
   });
 });

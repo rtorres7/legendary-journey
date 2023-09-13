@@ -51,7 +51,7 @@
                       <router-link to="/workspace">
                         <div
                           :class="
-                            route.name == 'dashboard'
+                            route.name == 'workspace-dashboard'
                               ? 'text-gray-50 bg-slate-800/90'
                               : 'hover:text-gray-50 hover:bg-slate-800/90'
                           "
@@ -85,7 +85,7 @@
                       <router-link to="/workspace/saved">
                         <div
                           :class="
-                            route.name == 'saved'
+                            route.name == 'workspace-saved'
                               ? 'text-gray-50 bg-slate-800/90'
                               : 'hover:text-gray-50 hover:bg-slate-800/90'
                           "
@@ -150,7 +150,7 @@ import {
 import {
   ArrowLeftOnRectangleIcon,
   HomeIcon,
-  BriefcaseIcon,
+  //BriefcaseIcon,
   XMarkIcon,
   BookmarkIcon,
 } from "@heroicons/vue/24/outline";
@@ -162,7 +162,7 @@ export default {
     TransitionRoot,
     ArrowLeftOnRectangleIcon,
     HomeIcon,
-    BriefcaseIcon,
+    //BriefcaseIcon,
     XMarkIcon,
     BookmarkIcon,
   },

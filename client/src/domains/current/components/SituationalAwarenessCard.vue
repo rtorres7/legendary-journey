@@ -31,10 +31,7 @@
       </div>
     </template>
     <template v-else>
-      <div
-        v-if="environment !== 'production'"
-        class="absolute top-0 right-0 cursor-pointer"
-      >
+      <div class="absolute top-0 right-0 cursor-pointer">
         <Menu v-slot="{ open, close }" as="div" class="relative z-10">
           <div>
             <template v-if="open || hover">
@@ -108,7 +105,7 @@
           <div
             class="text-slate-600 dark:text-slate-400 energy:text-zinc-400 text-sm"
           >
-            Posted {{ formatDate(sitrep.date_published) }}
+            {{ formatDate(sitrep.date_published) }}
           </div>
         </div>
       </ProductRestrictedLink>

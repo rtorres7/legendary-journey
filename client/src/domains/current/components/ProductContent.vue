@@ -27,7 +27,6 @@
     </h1>
     <div class="flex space-x-4 text-sm md:text-md">
       <p class="capitalize">
-        {{ product.state }} -
         {{ formatDate(product.date_published) }}
       </p>
       <p aria-hidden="true">●</p>
@@ -79,15 +78,6 @@
           <p>
             <span class="font-semibold">Document Number: </span
             >{{ product.doc_num }}
-          </p>
-          <p>
-            <span class="font-semibold">Posted: </span>
-            <template v-if="product.posted_at">
-              {{ formatDate(product.posted_at) }}
-            </template>
-            <template v-else>
-              {{ formatDate(product.posted_on) }}
-            </template>
           </p>
           <p>
             <span class="font-semibold">Publication Date: </span
@@ -145,14 +135,7 @@
             {{ product.updated_by.cn }}
           </p>
           <!--temporary until platform gets CN in updatedBy-->
-          <p
-            v-if="
-              product.updatedBy?.dn &&
-              canManageWire &&
-              environment !== 'production' &&
-              environment !== 'development'
-            "
-          >
+          <p v-if="product.updatedBy?.dn && canManageWire">
             <span class="font-semibold">Updated By: </span>
             {{ product.updatedBy.dn }}
           </p>

@@ -495,7 +495,7 @@
                   </template>
                 </div>
                 <div
-                  v-if="environment != 'production' && !isProductLocked(item)"
+                  v-if="!isProductLocked(item)"
                   :class="[
                     hover && hoveredItem == item.doc_num
                       ? 'not-sr-only'
