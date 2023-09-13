@@ -34,14 +34,14 @@ export default {
           )
             .map((a) => a[1])
             .join("\n");
-          console.log(selectedReadings);
+          feed.selectedReadings = selectedReadings;
         }
       }
       let links = {
         concepts: {
-          posted: data.filter((a) => a.state === "Posted"),
-          draft: data.filter((a) => a.state === "Draft"),
-          archived: data.filter((a) => a.state === "Archived"),
+          posted: data.filter((a) => a.state.toLowerCase() === "posted"),
+          draft: data.filter((a) => a.state.toLowerCase() === "draft"),
+          archived: data.filter((a) => a.state.toLowerCase() === "archived"),
         },
       };
       state.links = links.concepts;

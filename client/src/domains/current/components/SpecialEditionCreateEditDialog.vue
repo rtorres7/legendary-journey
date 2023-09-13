@@ -35,6 +35,7 @@
               rows="5"
               label="Selected Readings"
               placeholder="One document number per line, ex: WIRe110416-02."
+              required
             />
           </div>
           <div>
@@ -100,7 +101,7 @@ import axios from "@/shared/config/wireAxios";
 // import { useField, userForm } from 'vee-validate'
 // import { mixed, number, object, string } from 'yup';
 
-const stateOptions = ["draft", "archived", "posted"];
+const stateOptions = ["Draft", "Archived", "Posted"];
 
 export default {
   props: {
