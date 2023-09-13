@@ -73,43 +73,35 @@ export const specialEdition = {
   readings: buildArray(reading, 3),
 };
 
-export const specialEditionLinks = {
-  concepts: {
-    posted: [
-      {
-        name: "(U) Russia/Ukraine Tensions",
-        // image_path: "/feeds/1/icon",
-        id: 1,
-      },
-      {
-        name: "(U) November Elections 2022",
-        // image_path: "/feeds/2/icon",
-        id: 2,
-      },
-      {
-        name: "(U) Qatar World Cup 2022",
-        // image_path: "/feeds/3/icon",
-        id: 3,
-      },
-    ],
-    draft: [
-      {
-        name: "(U) Testing Draft Edition",
-        // image_path: "/feeds/4/icon",
-        id: 4,
-      },
-    ],
-    archived: [
-      {
-        name: "(U) Special Editions Archived Test",
-        // image_path: "/feeds/5/icon",
-        id: 5,
-      },
-      {
-        name: "(U) Syria - CPP:TEST",
-        // image_path: "/feeds/6/icon",
-        id: 6,
-      },
-    ],
+export const specialEditionLinks = [
+  {
+    name: "(U) Russia/Ukraine Tensions",
+    state: "Posted",
+    id: 1,
   },
-};
+  {
+    name: "(U) November Elections 2022",
+    state: "Posted",
+    id: 2,
+  },
+  {
+    name: "(U) Qatar World Cup 2022",
+    state: "Posted",
+    id: 3,
+  },
+  {
+    name: "(U) Testing Draft Edition",
+    state: "Draft",
+    id: 4,
+  },
+  {
+    name: "(U) Special Editions Archived Test",
+    state: "Archived",
+    id: 5,
+  },
+  {
+    name: "(U) Syria - CPP:TEST",
+    state: "Draft",
+    id: 6,
+  },
+];
