@@ -28,7 +28,7 @@
     <div class="flex space-x-4 text-sm md:text-md">
       <p class="capitalize">
         {{ product.state }} -
-        {{ formatDate(product.date_published) }}
+        {{ formatDate(product.posted_at) }}
       </p>
       <p aria-hidden="true">●</p>
       <p v-if="product.authors?.length > 0">
