@@ -13,7 +13,9 @@
     >
       {{ product.classification }}
     </div>
-    <p class="font-semibold text-sm lg:text-md uppercase">product</p>
+    <p class="font-semibold text-sm lg:text-md uppercase">
+      {{ product.product_type_name }}
+    </p>
     <h1 class="font-semibold text-2xl lg:text-3xl wrap-anywhere">
       <span
         v-if="product.title_classif !== 'X'"
@@ -25,17 +27,56 @@
         {{ product.title }}
       </span>
     </h1>
-    <div class="flex space-x-4 text-sm md:text-md">
+    <div class="flex flex-col space-y-2 text-sm md:text-md">
       <p class="capitalize">
         {{ formatDate(product.date_published) }}
       </p>
-      <p aria-hidden="true">●</p>
-      <p v-if="product.authors?.length > 0">
-        <template v-for="(author, index) in product.authors" :key="index">
-          {{ author.name
+      <p v-if="product.producing_offices?.length > 0">
+        Authored By:
+        <template
+          v-for="(author, index) in product.producing_offices"
+          :key="index"
+        >
+          <router-link
+            class="hover:underline"
+            :to="'/search?text=&producing_offices[]=' + author.name"
+            target="_blank"
+          >
+            {{ author.name }}
+          </router-link>
+          <span
+            v-if="
+              product.producing_offices?.length > 1 &&
+              index < product.producing_offices?.length - 1
+            "
+            >,
+          </span>
+        </template>
+      </p>
+      <p v-if="product.coauthors?.length > 0">
+        Co-Authored By:
+        <template v-for="(coauthor, index) in product.coauthors" :key="index">
+          {{ coauthor
           }}<span
             v-if="
-              product.authors?.length > 1 && index < product.authors?.length - 1
+              product.coauthors?.length > 1 &&
+              index < product.coauthors?.length - 1
+            "
+            >,
+          </span>
+        </template>
+      </p>
+      <p v-if="product.coordinators?.length > 0">
+        <template
+          v-for="(coordinator, index) in product.coordinators"
+          :key="index"
+        >
+          Coordinated With:
+          {{ coordinator
+          }}<span
+            v-if="
+              product.coordinators?.length > 1 &&
+              index < product.coordinators?.length - 1
             "
             >,
           </span>
@@ -67,10 +108,6 @@
       </DisclosureButton>
       <DisclosurePanel>
         <div class="ml-4 space-y-2 text-sm">
-          <!-- <p>
-                <span class="font-semibold">Authored By: </span
-                >{{ product.producing_office }}
-              </p> -->
           <p>
             <span class="font-semibold">Product Type: </span
             >{{ product.product_type_name }}
@@ -139,12 +176,29 @@
             <span class="font-semibold">Updated By: </span>
             {{ product.updatedBy.dn }}
           </p>
-          <p v-if="product.poc_info">
-            <span class="font-semibold">Contact: </span>{{ product.poc_info }}
-          </p>
         </div>
       </DisclosurePanel>
     </Disclosure>
+    <template v-if="product.poc_info">
+      <p class="font-semibold pt-4">Contact Information</p>
+      <p v-if="product.poc_info" class="text-sm pb-4">
+        {{ product.poc_info }}
+      </p>
+    </template>
+    <div
+      v-if="product.classification_detail"
+      class="flex space-x-2 justify-center text-sm"
+    >
+      <p v-if="product.classification_detail.cl_by">
+        Classified By: {{ product.classification_detail.cl_by }}
+      </p>
+      <p v-if="product.classification_detail.drv_from">
+        Derived From: {{ product.classification_detail.drv_from }}
+      </p>
+      <p v-if="product.classification_detail.decl_on">
+        Declassify On: {{ product.classification_detail.decl_on }}
+      </p>
+    </div>
     <div
       v-if="product.classification !== 'INVALID'"
       class="text-center pb-2 text-sm lg:text-md"

@@ -14,9 +14,10 @@
             :to="'/product/' + relatedProduct.document.doc_num"
             target="_blank"
           >
-            <span class="block truncate">{{
-              relatedProduct.document.title
-            }}</span>
+            <span class="block truncate"
+              >({{ relatedProduct.document.title_classification }})
+              {{ relatedProduct.document.title }}</span
+            >
           </router-link>
         </li>
       </ul>

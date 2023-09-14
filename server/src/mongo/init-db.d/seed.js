@@ -15,6 +15,20 @@ db.articles.insertMany([
       },
     ],
     classification: "UNC",
+    classification_detail: {
+      id: 20,
+      document_id: 20,
+      cl_by: "2069133",
+      cl_reason: null,
+      drv_from: "U, Multiple Sources",
+      decl_on: "5",
+      created_at: "2022/09/01 13:16:43 -0400",
+      updated_at: "2022-09-01T18:42:30Z",
+      classification_xml: '<?xml version="1.0"?><class:Classification>',
+      decl_fmt: "Classified By: Person",
+      title_classif_xml: '<class:Classification xmlns:class=">',
+      summary_classif_xml: '<class:Classification xmlns:class=">',
+    },
     classificationXml: "",
     countries: [
       {
@@ -115,6 +129,20 @@ db.articles.insertMany([
       },
     ],
     classification: "UNC",
+    classification_detail: {
+      id: 20,
+      document_id: 20,
+      cl_by: "2069133",
+      cl_reason: null,
+      drv_from: "U, Multiple Sources",
+      decl_on: "5",
+      created_at: "2022/09/01 13:16:43 -0400",
+      updated_at: "2022-09-01T18:42:30Z",
+      classification_xml: '<?xml version="1.0"?><class:Classification>',
+      decl_fmt: "Classified By: Person",
+      title_classif_xml: '<class:Classification xmlns:class=">',
+      summary_classif_xml: '<class:Classification xmlns:class=">',
+    },
     classificationXml: "",
     countries: [
       {
@@ -213,6 +241,20 @@ db.articles.insertMany([
       }
     ],
     classification: "UNC",
+    classification_detail: {
+      id: 20,
+      document_id: 20,
+      cl_by: "2069133",
+      cl_reason: null,
+      drv_from: "U, Multiple Sources",
+      decl_on: "5",
+      created_at: "2022/09/01 13:16:43 -0400",
+      updated_at: "2022-09-01T18:42:30Z",
+      classification_xml: '<?xml version="1.0"?><class:Classification>',
+      decl_fmt: "Classified By: Person",
+      title_classif_xml: '<class:Classification xmlns:class=">',
+      summary_classif_xml: '<class:Classification xmlns:class=">',
+    },
     classificationXml: "",
     countries: [
       {

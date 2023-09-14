@@ -131,6 +131,53 @@
           class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
           <ProductAttachments :article="product" />
+          <div class="flex flex-col space-y-2">
+            <div v-if="product.nonStateActors.length > 0">
+              <p class="font-semibold text-lg">Non State Actors</p>
+              <ul class="list-disc ml-4">
+                <template v-for="item in product.nonStateActors" :key="item">
+                  <li>
+                    <router-link
+                      class="hover:underline"
+                      :to="'/search?text=&non_state_actors[]=' + item.name"
+                      target="_blank"
+                      >{{ item.name }}</router-link
+                    >
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div v-if="product.topics.length > 0">
+              <p class="font-semibold text-lg">Topics</p>
+              <ul class="list-disc ml-4">
+                <template v-for="item in product.topics" :key="item">
+                  <li>
+                    <router-link
+                      class="hover:underline"
+                      :to="'/search?text=&topics[]=' + item.code"
+                      target="_blank"
+                      >{{ item.name }}</router-link
+                    >
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div v-if="product.countries.length > 0">
+              <p class="font-semibold text-lg">Countries</p>
+              <ul class="list-disc ml-4">
+                <template v-for="item in product.countries" :key="item">
+                  <li>
+                    <router-link
+                      class="hover:underline"
+                      :to="'/search?text=&countries[]=' + item.code"
+                      target="_blank"
+                      >{{ item.name }}</router-link
+                    >
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </div>
           <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
           <template v-if="product.state !== 'draft'">
             <template v-if="!loadingRelatedProducts">

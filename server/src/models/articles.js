@@ -66,6 +66,20 @@ const ArticleSchema = new Schema(
   {
     attachments: [AttachmentSchema],
     classification: String,
+    classification_detail: {
+      id: Number,
+      document_id: Number,
+      cl_by: String,
+      cl_reason: String,
+      drv_from: String,
+      decl_on: String,
+      created_at: String,
+      updated_at: String,
+      classification_xml: String,
+      decl_fmt: String,
+      title_classif_xml: String,
+      summary_classif_xml: String,
+    },
     classificationXml: String,
     coauthors: [DissemSchema],
     coordinators: [DissemSchema],
@@ -308,6 +322,7 @@ ArticleSchema.virtual("data.details").get(function () {
   return {
     attachments: this.attachments,
     classification: this.classification,
+    classification_detail: this.classification_detail,
     coauthors: this.coauthors?.map((author) => author.name), // UI needs a list not the objects right now
     coordinators: this.coordinators?.map((coord) => coord.name), // UI needs a list not the objects right now
     countries: this.countries,

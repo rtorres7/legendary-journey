@@ -13,8 +13,8 @@
       <li v-for="pdf in pdfVersions" :key="pdf.binary_id">
         <router-link :to="attachmentLink + '/' + pdf.file_name" target="_blank">
           <div class="flex hover:underline">
+            <DocumentArrowDownIcon class="h-5 w-5 mr-2" aria-hidden="true" />
             PDF version of this product
-            <DocumentIcon class="h-5 w-5 ml-2" aria-hidden="true" />
           </div>
         </router-link>
       </li>
@@ -24,12 +24,12 @@
           target="_blank"
         >
           <div class="flex hover:underline">
+            <DocumentArrowDownIcon class="h-5 w-5 mr-2" aria-hidden="true" />
             {{
               attachment.title
                 ? attachment.title
                 : attachment.file_name.split(".")[0]
             }}
-            <DocumentIcon class="h-5 w-5 ml-2" aria-hidden="true" />
           </div>
         </router-link>
       </li>
@@ -40,12 +40,12 @@
 <script>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { DocumentIcon } from "@heroicons/vue/24/outline";
+import { DocumentArrowDownIcon } from "@heroicons/vue/24/outline";
 import { getApiBaseUrl } from "@/shared/helpers";
 
 export default {
   components: {
-    DocumentIcon,
+    DocumentArrowDownIcon,
   },
   props: {
     article: {
