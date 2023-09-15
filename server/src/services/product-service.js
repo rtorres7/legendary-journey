@@ -192,10 +192,12 @@ class ProductService {
     offset,
     sortDir,
   ) {
+    const oneWeekAgo = dayjs().subtract(7, "day").toDate();
     return await Article.find({
       $and: [
         { state: "draft" },
-        { producingOrg: { $elemMatch: { name: producingOrgName } } },
+        { producingOffices: { $elemMatch: { name: producingOrgName } } },
+        { createdAt: { $gte: oneWeekAgo } }, //Add condition for last week
       ],
     })
       .limit(limit)
@@ -208,7 +210,7 @@ class ProductService {
     return await Article.count({
       $and: [
         { state: "draft" },
-        { producingOrg: { $elemMatch: { name: producingOrgName } } },
+        { producingOffices: { $elemMatch: { name: producingOrgName } } },
       ],
     }).exec();
   }
