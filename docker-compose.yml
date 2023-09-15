@@ -17,6 +17,7 @@ services:
       - /data/node_modules
     environment:
       - API_URL=http://localhost:8081/
+      - BASE_URI=https://localhost:8443
       - WATCHPACK_POLLING=true
     container_name: client
 

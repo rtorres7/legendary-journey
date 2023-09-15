@@ -117,7 +117,7 @@ if (config.mxs.env === "container") {
   const opts = {
     explorer: true,
     swaggerOptions: {
-      oauth2RedirectUrl: "https://localhost:8443/api-docs/oauth2-redirect.html",
+      oauth2RedirectUrl: `https://${config.mxs.baseUri}/api-docs/oauth2-redirect.html`,
       oauth: {
         clientId: config.oauth.id,
         clientSecret: config.oauth.secret,

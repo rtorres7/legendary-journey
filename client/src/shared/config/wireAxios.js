@@ -2,7 +2,7 @@ import axios from "axios";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 if (import.meta.env.MODE === "container") {
-  axios.defaults.baseURL = "https://localhost:8443/api";
+  axios.defaults.baseURL = `${MXS_BASE_URI}/api`;
 }
 
 axios.interceptors.response.use(function (response) {
