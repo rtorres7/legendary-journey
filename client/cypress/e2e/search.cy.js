@@ -1,4 +1,4 @@
-describe("Search", () => {
+describe("High Side Search", () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/my_wire/user_data', { fixture: 'users/user-with-full-access.json' });
     cy.intercept('GET', '/api/alerts/list', { fixture: 'empty-alerts.json' });
@@ -20,19 +20,14 @@ describe("Search", () => {
             doc_num: "123456"
           }
         ],
-        totalCount: 1
+        totalCount: 50
       }
     })
-
-    cy.visit("http://localhost:8080/");
-    cy.get("#typeahead_id").type("Zelensky{enter}");
+    cy.visit("");
   });
 
-  it("navigate to the right page", () => {
-    cy.url().should("include", "/search?text=Zelensky");
-  });
-
-  it("displays search results", () => {
-    cy.contains("Inside Zelensky's World");
+  it("verify open ended search brings back result", () => {
+    cy.get("#search-container").find("button").first().click();
+    cy.contains("Showing 1");
   });
 });
