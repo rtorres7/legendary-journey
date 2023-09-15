@@ -20,15 +20,22 @@ export default {
         setTimeout(() => commit("saveSpecialEdition", specialEdition), 750);
       } else {
         axios
-          .get("/special_editions/" + `${route.params.id}`, {
+          .get("/feeds/" + `${route.params.id}`, {
             params: { page: route.query.page || 1 },
           })
           .then((response) => {
-            console.log(
-              `/special_editions/${route.params.id} (response):`,
-              response
-            );
-            commit("saveSpecialEdition", response.data);
+            console.log(`/feeds/${route.params.id} (response):`, response);
+            let feed = response.data;
+            if (feed.selectedReadings != null) {
+              let selectedReadings = Array.from(
+                feed.selectedReadings.matchAll(/"([\w]+)"/g)
+              )
+                .map((a) => a[1])
+                .join("\n");
+              feed.selectedReadings = selectedReadings;
+            }
+            console.log(feed);
+            commit("saveSpecialEdition", feed);
           });
       }
     },
