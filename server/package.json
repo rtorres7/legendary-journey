@@ -86,7 +86,7 @@
     "winston": "3.10.0"
   },
   "devDependencies": {
-    "@kiwiproject/kiwi-test-js": "0.2.0",
+    "@kiwiproject/kiwi-test-js": "0.3.0",
     "@types/cookie-parser": "1.4.3",
     "@types/express": "4.17.17",
     "@types/jest": "29.5.3",

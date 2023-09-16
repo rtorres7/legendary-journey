@@ -19,10 +19,13 @@ export class ObjectStoreService {
   private static minioClient: Client;
 
   /** Minio.Client */
-  getClient(endPoint?: string): Client {
+  getClient(): Client {
     if (ObjectStoreService.minioClient == null) {
+      console.log("config.minio.endPoint: " + config.minio.endPoint);
+      console.log("config.minio.port: " + config.minio.port);
+
       ObjectStoreService.minioClient = new Client({
-        endPoint: endPoint || config.minio.endPoint,
+        endPoint: config.minio.endPoint,
         port: config.minio.port,
         useSSL: config.minio.useSsl,
         accessKey: config.minio.accessKey,
