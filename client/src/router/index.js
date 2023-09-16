@@ -116,7 +116,7 @@ const currentRoutes = [
     },
   },
   {
-    path: "/special_editions/:id(\\d+)",
+    path: "/feeds/:id(\\d+)",
     name: "specialEdition",
     component: CurrentSpecialEditionView,
     meta: {
@@ -125,7 +125,7 @@ const currentRoutes = [
     },
   },
   {
-    path: "/special_editions",
+    path: "/feeds",
     name: "specialEditions",
     component: CurrentSpecialEditionsManagerView,
     meta: {

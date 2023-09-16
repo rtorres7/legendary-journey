@@ -8,7 +8,7 @@
     "server": "node --watch server/src/bin/www",
     "server-dependencies": "npm install --prefix server",
     "client-dependencies": "npm install --prefix client",
-    "install-all-deps": "node_modules/.bin/concurrently 'npm run server-dependencies' 'npm run client-dependencies'",
+    "install-all-deps": "concurrently \"npm run server-dependencies\" \"npm run client-dependencies\"",
     "client": "cd client && npm run serve:offline",
     "dev": "node_modules/.bin/concurrently 'npm run server' 'npm run client'",
     "sonar": "sonar-scanner -Dsonar.login=$SONAR_TOKEN",

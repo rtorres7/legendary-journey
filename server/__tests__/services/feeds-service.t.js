@@ -1,7 +1,7 @@
 const { loadFeeds, clearFeeds } = require("../__utils__/dataLoader");
 const { Sequelize } = require("sequelize");
 const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
-const _  = require("lodash");
+const _ = require("lodash");
 
 describe("Feeds Service", () => {
   let service;
@@ -23,7 +23,6 @@ describe("Feeds Service", () => {
   });
 
   afterAll(async () => {
-
     await PostgresExtension.dropDatabase("feeds");
   }, 120_000);
 
@@ -59,7 +58,7 @@ describe("Feeds Service", () => {
 
         expect(feed.name).toEqual("Test Feed #1");
         expect(feed.searchParams).toEqual(
-          "https://localhost:8443/search?text=test123",
+          "https://localhost:8443/search?text=test111",
         );
         expect(feed.state).toEqual("Draft");
         expect(feed.classification).toEqual("U");

@@ -10,7 +10,8 @@ db.articles.insertMany([
         fileSize: 152437,
         type: "ATTACHMENT",
         attachmentId: "1c44f780-ee46-4615-b058-6c84eab870ad",
-        destination: "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+        destination:
+          "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
         visible: false,
       },
     ],
@@ -110,7 +111,8 @@ db.articles.insertMany([
         fileSize: 384096,
         type: "ATTACHMENT",
         attachmentId: "e6eec89a-e4e1-49a6-90ad-99e9de7ed8b1",
-        destination: "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+        destination:
+          "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
         visible: false,
       },
     ],
@@ -145,7 +147,8 @@ db.articles.insertMany([
         visible: true,
       },
     ],
-    htmlBody: "<p>(U) Kyiv, Ukraine – The speed of the Ukrainian military's counteroffensive in the eastern Kharkiv region is nothing short of breakneck.</p><p>(U) Three dozen towns and villages have been liberated from the Russian forces who fled eastwards and offered little or no resistance, analysts say.</p><p>(U) The Russians abandoned next to no artillery or armoured vehicles, and their retreat from the heavily-fortified area did not look like a panicked flight that followed heavy fighting, according to videos from the area and Ukrainian military reports.</p><p>(U) There is only one narrow road that connected the de-occupied towns of Kupiansk and Izyum to the Russian border.</p><p>(U) But the retreat did not clog it up – and lasted days, not hours, Mitrokhin said.</p><p>(U) To him, this signifies a deliberate decision made in the Kremlin to leave the area and use the manpower and weaponry near separatist-controlled areas.</p><p>(U) “The Russian Defence Ministry made a decision – that apparently came from the very top – to fully withdraw forces from Kharkiv and to use the available resources to hold on to the positions in Donetsk, and perhaps, the border of Luhansk,” Mitrokhin said.</p><p>(U) “The aftertaste is that all of this is but a remake of Russia’s retreat from northern Ukraine in April,” he said.</p><p>(U) Moscow called the April retreat from four regions, including Kyiv, a “goodwill gesture,” but Ukrainian officials and analysts said it was caused by grave miscalculations and heavy losses in manpower and military equipment.</p>",
+    htmlBody:
+      "<p>(U) Kyiv, Ukraine – The speed of the Ukrainian military's counteroffensive in the eastern Kharkiv region is nothing short of breakneck.</p><p>(U) Three dozen towns and villages have been liberated from the Russian forces who fled eastwards and offered little or no resistance, analysts say.</p><p>(U) The Russians abandoned next to no artillery or armoured vehicles, and their retreat from the heavily-fortified area did not look like a panicked flight that followed heavy fighting, according to videos from the area and Ukrainian military reports.</p><p>(U) There is only one narrow road that connected the de-occupied towns of Kupiansk and Izyum to the Russian border.</p><p>(U) But the retreat did not clog it up – and lasted days, not hours, Mitrokhin said.</p><p>(U) To him, this signifies a deliberate decision made in the Kremlin to leave the area and use the manpower and weaponry near separatist-controlled areas.</p><p>(U) “The Russian Defence Ministry made a decision – that apparently came from the very top – to fully withdraw forces from Kharkiv and to use the available resources to hold on to the positions in Donetsk, and perhaps, the border of Luhansk,” Mitrokhin said.</p><p>(U) “The aftertaste is that all of this is but a remake of Russia’s retreat from northern Ukraine in April,” he said.</p><p>(U) Moscow called the April retreat from four regions, including Kyiv, a “goodwill gesture,” but Ukrainian officials and analysts said it was caused by grave miscalculations and heavy losses in manpower and military equipment.</p>",
     issues: [
       {
         name: "Eastern Europe Geopolitics",
@@ -208,9 +211,10 @@ db.articles.insertMany([
         fileSize: 399296,
         type: "ATTACHMENT",
         attachmentId: "48d35447-6b51-40c4-9793-63da601e3ec0",
-        destination: "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+        destination:
+          "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
         visible: false,
-      }
+      },
     ],
     classification: "UNC",
     classificationXml: "",
@@ -243,7 +247,8 @@ db.articles.insertMany([
         visible: true,
       },
     ],
-    htmlBody: "<p>(U) Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.</p><p>(U) More than 30 settlements, including Kramatorsk and Dnipro, suffered Russian missile and air strikes over the past day, Ukraine’s General Staff said in its regular update on Facebook Monday. Kharkiv, one of at least two power plants struck by rockets, had power restored only to lose it again later on Monday after being repeatedly shelled, Interfax-Ukraine reported, citing the city’s mayor.</p><p>(U) President Vladimir Putin’s spokesman, Dmitry Peskov, said Russia will not settle for anything less than victory in its invasion of the neighboring state, now in its 29th week. Still, the losses mark a major and unexpected strategic setback in Ukraine that could potentially mark a turning-point in the conflict, said two people close to the Defense Ministry and security services in Moscow.</p><p>(U) The U.S. ambassador to Ukraine, Bridget Brink, accused Russia in a tweet late on Sunday of “sending missiles to attempt to destroy critical civilian infrastructure,” in an apparent response to Kyiv’s liberation of territory that had been occupied by Russian forces.</p><p>(U) The strikes hint at efforts to retaliate after a sudden breakthrough by Ukraine that sent Russian troops fleeing and put Moscow on the defensive. Ukraine’s top commander said that 3,000 square kilometers (1,158 square miles) of lost territory have been returned to Kyiv’s control since the beginning of September.</p><p>(U) Peskov brushed off concerns over the hasty retreat in the northeast as Putin presided over a government meeting in Moscow at which he assured that the economy is returning to normal and has repelled the western sanctions imposed over the war. Chechen strongman Ramzan Kadyrov announced that he was sending a new detachment to fight in Ukraine.</p><p>(U) But with a lack of manpower and rapidly depleting equipment likely to become a growing concern for Russia’s forces, the risk is that Ukraine could try to cut off the Kremlin’s overstretched forces in the south and threaten Crimea, the person close to the Defense Ministry said.</p>",
+    htmlBody:
+      "<p>(U) Russia vowed to regain the initiative in its troubled Ukraine offensive, as it hit power plants causing blackouts across the northeast of the country after a lightning advance by Kyiv’s forces that’s reversed Moscow’s gains.</p><p>(U) More than 30 settlements, including Kramatorsk and Dnipro, suffered Russian missile and air strikes over the past day, Ukraine’s General Staff said in its regular update on Facebook Monday. Kharkiv, one of at least two power plants struck by rockets, had power restored only to lose it again later on Monday after being repeatedly shelled, Interfax-Ukraine reported, citing the city’s mayor.</p><p>(U) President Vladimir Putin’s spokesman, Dmitry Peskov, said Russia will not settle for anything less than victory in its invasion of the neighboring state, now in its 29th week. Still, the losses mark a major and unexpected strategic setback in Ukraine that could potentially mark a turning-point in the conflict, said two people close to the Defense Ministry and security services in Moscow.</p><p>(U) The U.S. ambassador to Ukraine, Bridget Brink, accused Russia in a tweet late on Sunday of “sending missiles to attempt to destroy critical civilian infrastructure,” in an apparent response to Kyiv’s liberation of territory that had been occupied by Russian forces.</p><p>(U) The strikes hint at efforts to retaliate after a sudden breakthrough by Ukraine that sent Russian troops fleeing and put Moscow on the defensive. Ukraine’s top commander said that 3,000 square kilometers (1,158 square miles) of lost territory have been returned to Kyiv’s control since the beginning of September.</p><p>(U) Peskov brushed off concerns over the hasty retreat in the northeast as Putin presided over a government meeting in Moscow at which he assured that the economy is returning to normal and has repelled the western sanctions imposed over the war. Chechen strongman Ramzan Kadyrov announced that he was sending a new detachment to fight in Ukraine.</p><p>(U) But with a lack of manpower and rapidly depleting equipment likely to become a growing concern for Russia’s forces, the risk is that Ukraine could try to cut off the Kremlin’s overstretched forces in the south and threaten Crimea, the person close to the Defense Ministry said.</p>",
     issues: [
       {
         name: "Eastern Europe Geopolitics",
@@ -306,9 +311,10 @@ db.articles.insertMany([
         fileSize: 75668,
         type: "ATTACHMENT",
         attachmentId: "b33d5fa9-f888-4a2c-9ff1-5ed69cb0cb22",
-        destination: "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+        destination:
+          "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
         visible: false,
-      }
+      },
     ],
     classification: "UNC",
     classificationXml: "",
@@ -323,7 +329,8 @@ db.articles.insertMany([
     datePublished: new Date("2022-08-29"),
     deleted: false,
     dissemOrgs: [],
-    htmlBody: "<p>(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.</p><p>(U) Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit.</p><p>(U) A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider.</p>",
+    htmlBody:
+      "<p>(U) Both COVID-19 and flu vaccines have been shown to reduce illness, hospitalizations, and deaths. As flu season approaches and COVID-19 vaccine recommendations are updated, you might be wondering if you need to wait after getting a flu vaccine before getting a COVID-19 vaccine? The answer is “no!” You can get them both at the same time if you are eligible and the timing works. Experience with other vaccines has shown that immune response (the way our bodies develop protection) and possible side effects are generally the same whether you get one vaccine at a time or two.</p><p>(U) Even though both vaccines can be given at the same visit, you should follow the recommended schedule for either vaccine: If you haven’t gotten your currently recommended doses of COVID-19 vaccine, get them as soon as you can, and ideally get a flu vaccine by the end of October. The same holds true for kids. If your child is eligible, they can get both vaccines at the same time, but don’t delay either vaccination in order to get them both at the same visit.</p><p>(U) A recent CDC study suggests people who received a flu vaccine and an mRNA COVID-19 booster at the same time were slightly more likely (8% to 11%) to report reactions like fatigue, headache, and muscle ache than people who received only the COVID-19 booster, but these reactions were mostly mild and resolved quickly. If you have concerns about getting both vaccines at the same time, speak with your healthcare provider.</p>",
     issues: [
       {
         name: "Eastern Europe Geopolitics",
@@ -392,7 +399,8 @@ db.articles.insertMany([
     datePublished: new Date("2022-09-01"),
     deleted: false,
     dissemOrgs: [],
-    htmlBody: "<p>(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.</p><p>(U) Charles gave the speech from Westminster Hall in London in a traditional ceremony in which lawmakers expressed their condolences upon the death of Queen Elizabeth II. She died Thursday at age 96.</p><p>(U) As I stand before you today, I cannot help but feel the weight of history which surrounds us, and which reminds us of the vital parliamentary traditions to which members of both houses dedicate yourselves with such personal commitment to the betterment of us all, Charles III said.</p>",
+    htmlBody:
+      "<p>(U) Britain's King Charles III made his first speech as monarch to the British parliament on Monday before traveling to Scotland to lead the procession of his mother's coffin.</p><p>(U) Charles gave the speech from Westminster Hall in London in a traditional ceremony in which lawmakers expressed their condolences upon the death of Queen Elizabeth II. She died Thursday at age 96.</p><p>(U) As I stand before you today, I cannot help but feel the weight of history which surrounds us, and which reminds us of the vital parliamentary traditions to which members of both houses dedicate yourselves with such personal commitment to the betterment of us all, Charles III said.</p>",
     issues: [
       {
         name: "Eastern Europe Geopolitics",
@@ -2979,36 +2987,36 @@ db.special_editions.insertOne({
     posted: [
       {
         name: "(U) Russia/Ukraine Tensions",
-        image_path: "/special_editions/1/icon",
+        image_path: "/feeds/1/icon",
         id: 1,
       },
       {
         name: "(U) November Elections 2022",
-        image_path: "/special_editions/2/icon",
+        image_path: "/feeds/2/icon",
         id: 2,
       },
       {
         name: "(U) Qatar World Cup 2022",
-        image_path: "/special_editions/3/icon",
+        image_path: "/feeds/3/icon",
         id: 3,
       },
     ],
     draft: [
       {
         name: "(U) Testing Draft Edition",
-        image_path: "/special_editions/4/icon",
+        image_path: "/feeds/4/icon",
         id: 4,
       },
     ],
     archived: [
       {
         name: "(U) Special Editions Archived Test",
-        image_path: "/special_editions/5/icon",
+        image_path: "/feeds/5/icon",
         id: 5,
       },
       {
         name: "(U) Syria - CPP:TEST",
-        image_path: "/special_editions/6/icon",
+        image_path: "/feeds/6/icon",
         id: 6,
       },
     ],

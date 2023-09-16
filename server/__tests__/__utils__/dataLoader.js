@@ -3062,7 +3062,7 @@ const loadFeeds = async (postgresUrl) => {
 
   return await sequelize.models.Feed.create({
     name: "Test Feed #1",
-    searchParams: "https://localhost:8443/search?text=test123",
+    searchParams: "https://localhost:8443/search?text=test111",
     state: "Draft",
     classification: "U",
   });
