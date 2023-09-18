@@ -10,10 +10,6 @@ import { KiwiPreconditions } from "@kiwiproject/kiwi-js";
 tmp.setGracefulCleanup();
 
 export class MinioContainerUtils {
-  static setMinioHost(host: string) {
-    config.minio.endPoint = host;
-  }
-
   static setMinioPort(port: number) {
     config.minio.port = port;
   }

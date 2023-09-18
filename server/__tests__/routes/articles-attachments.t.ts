@@ -100,7 +100,6 @@ describe("Article Attachment Routes", () => {
   let client: Client;
 
   beforeAll(async () => {
-    MinioContainerUtils.setMinioHost("127.0.0.1");
     MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
     service = new ObjectStoreService();
     client = service.getClient();
