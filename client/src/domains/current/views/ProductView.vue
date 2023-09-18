@@ -134,10 +134,14 @@
           <div class="flex flex-col space-y-2">
             <div v-if="product.nonStateActors.length > 0">
               <p class="font-semibold text-lg">Non State Actors</p>
-              <ul class="list-disc ml-4">
-                <template v-for="item in product.nonStateActors" :key="item">
-                  <li>
+              <ul class="list-disc list-inside">
+                <template
+                  v-for="(item, index) in product.nonStateActors"
+                  :key="item"
+                >
+                  <li v-if="index <= 4 || (index > 4 && expandNsa)">
                     <router-link
+                      :id="item.code"
                       class="hover:underline"
                       :to="'/search?text=&non_state_actors[]=' + item.name"
                       target="_blank"
@@ -146,13 +150,23 @@
                   </li>
                 </template>
               </ul>
+              <template v-if="product.nonStateActors.length > 5">
+                <button
+                  class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                  @click="toggleExpand('nsa', product.nonStateActors[4].code)"
+                >
+                  <template v-if="expandNsa"> Show Less... </template>
+                  <template v-else> Show More... </template>
+                </button>
+              </template>
             </div>
             <div v-if="product.topics.length > 0">
               <p class="font-semibold text-lg">Topics</p>
-              <ul class="list-disc ml-4">
-                <template v-for="item in product.topics" :key="item">
-                  <li>
+              <ul class="list-disc list-inside">
+                <template v-for="(item, index) in product.topics" :key="item">
+                  <li v-if="index <= 4 || (index > 4 && expandTopics)">
                     <router-link
+                      :id="item.code"
                       class="hover:underline"
                       :to="'/search?text=&topics[]=' + item.code"
                       target="_blank"
@@ -161,13 +175,26 @@
                   </li>
                 </template>
               </ul>
+              <template v-if="product.topics.length > 5">
+                <button
+                  class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                  @click="toggleExpand('topics', product.topics[4].code)"
+                >
+                  <template v-if="expandTopics"> Show Less... </template>
+                  <template v-else> Show More... </template>
+                </button>
+              </template>
             </div>
             <div v-if="product.countries.length > 0">
               <p class="font-semibold text-lg">Countries</p>
-              <ul class="list-disc ml-4">
-                <template v-for="item in product.countries" :key="item">
-                  <li>
+              <ul class="list-disc list-inside">
+                <template
+                  v-for="(item, index) in product.countries"
+                  :key="item"
+                >
+                  <li v-if="index <= 4 || (index > 4 && expandCountries)">
                     <router-link
+                      :id="item.code"
                       class="hover:underline"
                       :to="'/search?text=&countries[]=' + item.code"
                       target="_blank"
@@ -176,6 +203,15 @@
                   </li>
                 </template>
               </ul>
+              <template v-if="product.countries.length > 5">
+                <button
+                  class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
+                  @click="toggleExpand('countries', product.countries[4].code)"
+                >
+                  <template v-if="expandCountries"> Show Less... </template>
+                  <template v-else> Show More... </template>
+                </button>
+              </template>
             </div>
           </div>
           <!-- TODO: Use metadata featuresAvailable.relatedDocs for condition -->
@@ -338,6 +374,31 @@ export default {
         message: "URL Copied to Clipboard",
       });
     };
+    const expandNsa = ref(false);
+    const expandTopics = ref(false);
+    const expandCountries = ref(false);
+    const toggleExpand = (type, code) => {
+      switch (type) {
+        case "nsa":
+          expandNsa.value = !expandNsa.value;
+          if (expandNsa.value) {
+            document.getElementById(code).focus();
+          }
+          break;
+        case "topics":
+          expandTopics.value = !expandTopics.value;
+          if (expandTopics.value) {
+            document.getElementById(code).focus();
+          }
+          break;
+        case "countries":
+          expandCountries.value = !expandCountries.value;
+          if (expandCountries.value) {
+            document.getElementById(code).focus();
+          }
+          break;
+      }
+    };
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
     const theme = computed(() => store.getters["localStorage/theme"]);
@@ -490,6 +551,10 @@ export default {
       updatePrintCount,
       updateEmailCount,
       copyUrl,
+      expandNsa,
+      expandTopics,
+      expandCountries,
+      toggleExpand,
       canManageWire,
       url,
       canAccessProduct,
