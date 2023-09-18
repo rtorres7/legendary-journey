@@ -9,7 +9,7 @@
     </template>
     <template v-else>
       <p class="font-semibold text-2xl">
-        ({{ specialEdition.name_classification }}) {{ specialEdition.name }}
+        ({{ specialEdition.classification }}) {{ specialEdition.name }}
       </p>
     </template>
   </div>
@@ -225,7 +225,7 @@ export default {
         router.push({ name: "specialEditions" });
       } else {
         axios
-          .delete(`/special_editions/${specialEdition.value.id}`)
+          .delete(`/feeds/${specialEdition.value.id}`)
           .then(() => {
             router.push({ name: "specialEditions" });
             createNotification({

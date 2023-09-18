@@ -250,7 +250,7 @@ export default {
     //       if (props.editMode) {
     //         axios
     //           .patch(
-    //             "/special_editions/" + editionEvent.value.id,
+    //             "/feeds/" + editionEvent.value.id,
     //             buildFormData()
     //           )
     //           .then((response) => {
@@ -264,7 +264,7 @@ export default {
     //           });
     //       } else {
     //         axios
-    //           .post("/special_editions", buildFormData())
+    //           .post("/feeds", buildFormData())
     //           .then((response) => {
     //             console.log(response);
     //             store.dispatch("specialEditions/loadConceptsLinks");
