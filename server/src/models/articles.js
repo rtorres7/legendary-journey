@@ -106,6 +106,7 @@ const ArticleSchema = new Schema(
       name: String,
       code: Number,
     },
+    publicationDate: Date,
     publicationNumber: String,
     publishedBy: {},
     regions: [DissemSchema],
@@ -162,7 +163,7 @@ ArticleSchema.virtual("features").get(function () {
 
     // TODO: Once we update the UI to not need the attributes sub-element we can remove the below
     attributes: {
-      date_published: this.datePublished,
+      date_published: this.publicationDate,
       doc_num: this.productNumber,
       feature_id: this.get("_id"),
       id: this.get("_id"),
@@ -200,7 +201,7 @@ ArticleSchema.virtual("forWire").get(function () {
 
     // TODO: Once we update the UI to not need the attributes sub-element we can remove the below
     attributes: {
-      date_published: this.datePublished,
+      date_published: this.publicationDate,
       doc_num: this.productNumber,
       id: this.get("_id"),
       images: findArticleImage(this.attachments),
@@ -271,6 +272,7 @@ ArticleSchema.virtual("data.document").get(function () {
     producingOffices: this.producingOffices,
     productNumber: this.productNumber,
     productType: this.productType,
+    publicationDate: this.publicationDate,
     publicationNumber: this.publicationNumber,
     regions: this.regions,
     subregions: this.subregions,
@@ -286,7 +288,7 @@ ArticleSchema.virtual("data.document").get(function () {
 
     // TODO: The following can go away once the UI is updated with the new model/fields
     classification_xml: this.classificationXml,
-    date_published: this.datePublished,
+    date_published: this.publicationDate,
     doc_num: this.productNumber,
     dissem_orgs: this.dissemOrgs,
     non_state_actors: this.nonStateActors,
@@ -327,6 +329,7 @@ ArticleSchema.virtual("data.details").get(function () {
     producingOffices: this.producingOffices,
     productNumber: this.productNumber,
     productType: this.productType,
+    publicationDate: this.publicationDate,
     publicationNumber: this.publicationNumber,
     publishedBy: this.publishedBy,
     regions: this.regions,
@@ -345,7 +348,7 @@ ArticleSchema.virtual("data.details").get(function () {
 
     // TODO: The following can go away once the UI is updated with the new model/fields
     attachments_metadata: this.attachments,
-    date_published: this.datePublished,
+    date_published: this.publicationDate,
     display_date: this.datePublished,
     dissem_orgs: this.dissemOrgs,
     nonStateActors: this.nonStateActors,

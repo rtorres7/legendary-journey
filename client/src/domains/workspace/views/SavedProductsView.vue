@@ -675,7 +675,7 @@ export default {
     });
 
     watch([selectedSort], () => {
-      let query = { ...route.query };
+      let query = { ...route.query, page: currentPage.value };
       query = { ...query, sortDir: selectedSort.value.key };
       router.push({
         query,
