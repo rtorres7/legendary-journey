@@ -6,6 +6,8 @@ import tmp from "tmp";
 import config from "../../src/config/config";
 import logger from "../../src/config/logger";
 import { KiwiPreconditions } from "@kiwiproject/kiwi-js";
+import { ElasticSearchExtension } from "@kiwiproject/kiwi-test-js";
+import elasticsearch from "@elastic/elasticsearch";
 
 tmp.setGracefulCleanup();
 
@@ -126,6 +128,32 @@ export class MinioContainerUtils {
   }
 }
 
+export class ElasticSearchUtils {
+  static setUrl(url: string) {
+    config.elasticsearch.url = url;
+    process.env.ES_URL = url;
+  }
+
+  /**
+   * createIndex and deleteIndex must be called in pairs!
+   */
+  static async createIndex(client: elasticsearch.Client, name: string, mapping: any, pipelines: any[]): Promise<void> {
+    if (!await client.indices.exists({ index: name })) {
+      try {
+        await ElasticSearchExtension.createIndex(name, mapping, pipelines);
+      } catch (error) {
+        if (error.message.includes("resource_already_exists_exception")) {
+          const randomDelay = Math.floor(Math.random() * 2000) + 2000;
+          await new Promise((resolve) => { setTimeout(resolve, randomDelay); });  
+        } else {
+          throw error;
+        }
+      }
+    }
+  }
+}
+
 export default {
   MinioContainerUtils,
+  ElasticSearchUtils
 };

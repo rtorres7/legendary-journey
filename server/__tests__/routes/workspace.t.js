@@ -166,7 +166,7 @@ describe("Workspace Routes", () => {
   });
 
   describe("GET /workspace/drafts", () => {
-    it("should return draft products", () => {
+    it("should return draft products", async () => {
       const router = require("../../src/routes/workspace");
       const app = setupAppWithUser(router, CURRENT_USER);
 

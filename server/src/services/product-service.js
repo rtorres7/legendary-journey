@@ -8,7 +8,7 @@ const {
   KiwiPreconditions,
 } = require("@kiwiproject/kiwi-js");
 const { AttachmentService } = require("./attachment-service");
-const EventLog = require("../models/event_log");
+const { EventLog } = require("../models/event_log");
 const mongoose = require("mongoose");
 const { findArticleImage } = require("../util/images");
 const path = require("path");
