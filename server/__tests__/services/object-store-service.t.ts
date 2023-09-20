@@ -12,7 +12,7 @@ describe("ObjectStoreService", () => {
   let bucketName: string;
 
   beforeAll(async () => {
-    MinioContainerUtils.setMinioHost("127.0.0.1");
+    MinioContainerUtils.setMinioHost(MinioExtension.getMinioHost());
     MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
     service = new ObjectStoreService();
     client = service.getClient();
