@@ -27,7 +27,7 @@ jest.mock("../../src/services/product-service.js", () => {
               content: articles.filter(
                 (article) =>
                   article.state === "posted" &&
-                  article.producingOrg.findIndex(
+                  article.producingOffices.findIndex(
                     (i) => i.name === producingOrgName,
                   ) >= 0,
               ),
@@ -192,7 +192,8 @@ describe("Workspace Routes", () => {
         .expect("Content-Type", /json/)
         .then((res) => {
           expect(res.body.content.length).toBe(1);
-          expect(res.body.content[0].productNumber).toBe("WIReWIRe_sample_5");
+
+          expect(res.body.content[0].productNumber).toBe("WIReWIRe_sample_4");
         });
     });
 
