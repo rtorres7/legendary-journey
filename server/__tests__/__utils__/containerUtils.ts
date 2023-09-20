@@ -16,6 +16,10 @@ export class MinioContainerUtils {
     config.minio.port = port;
   }
 
+  static setMinioHost(host: string) {
+    config.minio.endPoint = host;
+  }
+
   /**
    * @return {String} random bucket name
    */
