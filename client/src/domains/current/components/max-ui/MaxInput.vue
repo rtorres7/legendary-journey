@@ -17,8 +17,15 @@
         ? 'disabled:bg-slate-200/50 disabled:dark:bg-slate-700 disabled:energy:bg-zinc-700'
         : ''
     "
+    :pattern="pattern"
     @input="$emit('update:modelValue', $event.target.value)"
   />
+  <p
+    v-if="patternRule"
+    class="disabled:bg-slate-200/50 disabled:dark:bg-slate-700 disabled:energy:bg-zinc-700 h4"
+  >
+    {{ patternRule }}
+  </p>
 </template>
 <script>
 import uniqueID from "@current/composables/uniqueID";
@@ -40,6 +47,14 @@ export default {
     disabledColor: {
       type: Boolean,
       default: true,
+    },
+    pattern: {
+      type: String,
+      default: null,
+    },
+    patternRule: {
+      type: String,
+      default: null,
     },
   },
   emits: ["update:modelValue"],

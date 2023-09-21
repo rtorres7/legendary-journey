@@ -35,7 +35,12 @@
         </template>
         <template v-else>
           <template v-if="links.posted && links.posted.length > 0">
-            <template v-for="link in links.posted" :key="link">
+            <template
+              v-for="link in links.posted.sort(
+                (a, b) => a.position > b.position
+              )"
+              :key="link"
+            >
               <MaxCard hoverable :rounded="false">
                 <SpecialEditionLink :link="link" />
               </MaxCard>
@@ -64,7 +69,12 @@
           </template>
           <template v-else>
             <template v-if="links.draft && links.draft.length > 0">
-              <template v-for="link in links.draft" :key="link">
+              <template
+                v-for="link in links.draft.sort(
+                  (a, b) => a.position > b.position
+                )"
+                :key="link"
+              >
                 <MaxCard hoverable :rounded="false">
                   <SpecialEditionLink :link="link" />
                 </MaxCard>
@@ -92,7 +102,12 @@
           </template>
           <template v-else>
             <template v-if="links.archived && links.archived.length > 0">
-              <template v-for="link in links.archived" :key="link">
+              <template
+                v-for="link in links.archived.sort(
+                  (a, b) => a.position > b.position
+                )"
+                :key="link"
+              >
                 <MaxCard hoverable :rounded="false">
                   <SpecialEditionLink :link="link" />
                 </MaxCard>

@@ -20,6 +20,7 @@ module.exports = (sequelize) => {
       state: DataTypes.STRING,
       position: DataTypes.INTEGER,
       classification: DataTypes.STRING,
+      classificationXml: DataTypes.STRING,
     },
     {
       tableName: "feeds",

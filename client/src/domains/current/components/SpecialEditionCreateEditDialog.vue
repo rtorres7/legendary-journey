@@ -24,6 +24,8 @@
               autocomplete="off"
               placeholder="Run a search, copy the URL, and paste it here."
               type="text"
+              pattern="http(s?):\/\/[\w\-\.@:%\+~#=]+\/search\?text=\w+"
+              patternRule="Format: http(s)://[domain]/search?text=[search term]"
               required
             />
           </div>
@@ -61,7 +63,7 @@
               required @classificationSelected="updateClassification"
             /> -->
             <MaxClassifier
-              v-model="editionEvent.name_classification_xml"
+              v-model="editionEvent.classificationXml"
               label="Classification"
               required
               portionMark
@@ -118,7 +120,7 @@ export default {
         return {
           icon: null,
           name: null,
-          name_classification: null,
+          classification: null,
           searchParams: null,
           state: [],
           position: 1,
@@ -188,7 +190,8 @@ export default {
     const updateClassification = (payload) => {
       // editionEvent.value.name_classification = payload.classification_string;
       // editionEvent.value.name_classification_xml = payload.classification_xml;
-      editionEvent.value.name_classification = payload.name;
+      editionEvent.value.classification = payload.name;
+      editionEvent.value.classificationXml = payload.xml;
     };
 
     const updateImageFile = (payload) => {
@@ -242,7 +245,7 @@ export default {
       editionEvent.value = {
         icon: null,
         name: null,
-        name_classification: null,
+        classification: null,
         searchParams: null,
         state: null,
         position: 1,
@@ -277,7 +280,7 @@ export default {
         !editionEvent.value.name ||
         !editionEvent.value.searchParams ||
         !editionEvent.value.state ||
-        !editionEvent.value.name_classification ||
+        !editionEvent.value.classification ||
         !editionEvent.value.selectedReadings ||
         !editionEvent.value.valid
       );

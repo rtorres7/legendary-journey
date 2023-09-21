@@ -131,7 +131,8 @@ router.post("/feeds/", async (req, res) => {
       selectedReadings: req.body.selectedReadings.split("\n"),
       state: req.body.state,
       position: req.body.position,
-      classification: req.body.name_classification,
+      classification: req.body.classification,
+      classificationXml: req.body.classificationXml,
     };
     try {
       const savedFeed = await feedsService.createFeed(feed);
@@ -170,6 +171,7 @@ router.put("/feeds/:id", async (req, res) => {
     state: req.body.state,
     position: req.body.position,
     classification: req.body.classification,
+    classificationXml: req.body.classificationXml,
   };
 
   try {

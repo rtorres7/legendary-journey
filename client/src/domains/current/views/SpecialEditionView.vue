@@ -117,11 +117,9 @@
               />
             </template>
             <template v-else>
-              <template
-                v-for="reading in specialEdition.readings"
-                :key="reading.id"
-              >
+              <template v-for="reading in selectedReadings" :key="reading?.id">
                 <router-link
+                  v-if="reading != null"
                   :to="{
                     name: 'product',
                     params: { doc_num: reading.doc_num },
@@ -195,6 +193,22 @@ export default {
       () => store.state.specialEdition.loading
     );
     const specialEdition = computed(() => store.state.specialEdition.edition);
+
+    const selectedReadings = computed(() => {
+      let readings = [];
+      readings = store.state.specialEdition.edition.selectedReadings
+        .split("\n")
+        .map((a) => {
+          // return { doc_num: a };
+          axios.get(`/articles/${a}`).then((response) => {
+            console.log(response);
+            return response.data;
+          });
+        });
+      console.log(readings);
+      return readings;
+    });
+
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
     );
@@ -275,6 +289,7 @@ export default {
     return {
       loadingSpecialEdition,
       specialEdition,
+      selectedReadings,
       canManageSpecialEditions,
       currentPage,
       isEditDialogOpen,
