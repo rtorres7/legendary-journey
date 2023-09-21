@@ -107,15 +107,11 @@
             >
             {{ product.title }}
           </p>
-          <div class="text-sm text-gray-500 mt-4 absolute bottom-0">
-            <div @mouseover="hover = true" @mouseleave="hover = false">
-              <template v-if="!hover">
-                {{ relativeTime(product.createdAt) }}
-              </template>
-              <template v-else>{{
-                dayjs(product.createdAt).utc().format("MMMM DD, YYYY")
-              }}</template>
-            </div>
+          <div
+            class="text-sm text-gray-500 mt-4 absolute bottom-0"
+            :title="dayjs(product.createdAt).utc().format('MMMM DD, YYYY')"
+          >
+            {{ relativeTime(product.createdAt) }}
           </div>
         </router-link>
       </div>
@@ -123,7 +119,6 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
 import { getRelativeTime } from "@/shared/helpers";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
@@ -166,7 +161,6 @@ export default {
   },
   emits: ["delete"],
   setup(props, { emit }) {
-    const hover = ref(false);
     const relativeTime = (createdAt) => {
       return getRelativeTime(createdAt);
     };
@@ -228,7 +222,6 @@ export default {
       }
     };
     return {
-      hover,
       relativeTime,
       deleteProduct,
       icons,

@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
 const { successHandler, errorHandler } = require("./config/morgan");
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 const app = express();
 
@@ -202,7 +203,7 @@ if (process.env.MXS_ENV === "container") {
 /***********************************
  * Route setup
  **********************************/
-const alertRouter = require("./routes/alerts");
+const { alertsRouter } = require("./routes/alerts");
 const articlesRouter = require("./routes/articles");
 const authRouter = require("./routes/auth");
 const homeRouter = require("./routes/home");
@@ -212,10 +213,9 @@ const searchRouter = require("./routes/search");
 const workspaceRouter = require("./routes/workspace");
 const feedsRouter = require("./routes/feeds");
 const metricsRouter = require("./routes/metrics");
-const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 
 app.use(indexRouter);
-app.use(alertRouter);
+app.use(alertsRouter);
 app.use(articlesRouter);
 app.use(authRouter);
 app.use(homeRouter);
