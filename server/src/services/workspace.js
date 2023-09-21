@@ -59,7 +59,8 @@ class WorkspaceService {
       const productsFound = await this.productService.findProductsForIds(resultIdsForPage, resultIdsForPage.length, 0);
       products = savedProductIds.map(id => _.find(productsFound, product => product._id.toString() === id)).filter(product => product !== undefined);
     } else {
-      products = await this.productService.findProductsForIds(resultIds, perPage, (page - 1) * perPage, sortDir);
+      const resultIdsForPage = resultIds.slice(0, perPage);
+      products = await this.productService.findProductsForIds(resultIdsForPage, resultIdsForPage.length, 0, sortDir);
     }
 
     products = products.map(product => {
