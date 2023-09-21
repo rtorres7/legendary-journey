@@ -72,25 +72,25 @@
               </div>
             </tippy>
           </li>
-          <!-- <li>
+          <li>
             <tippy content="Collections" placement="right" theme="demo">
               <div
                 :class="
-                  isActivePage('#collections')
+                  route.name == 'workspace-collections'
                     ? 'text-gray-50 bg-slate-800/90'
                     : 'hover:text-gray-50 hover:bg-slate-800/90'
                 "
                 class="my-auto rounded cursor-pointer"
               >
-                <a
-                  href="/workspace#collections"
+                <router-link
+                  to="/workspace/collections"
                   class="flex items-center justify-center h-12 w-12"
                 >
                   <FolderIcon class="h-6 w-6" aria-hidden="true" />
-                </a>
+                </router-link>
               </div>
             </tippy>
-          </li> -->
+          </li>
         </ul>
       </div>
       <ul class="pb-6 mx-auto text-gray-400 space-y-1">
@@ -577,7 +577,7 @@ import {
   BookmarkIcon,
   // CheckIcon,
   // ChevronDownIcon,
-  // FolderIcon,
+  FolderIcon,
   HomeIcon,
   InformationCircleIcon,
   MagnifyingGlassIcon,
@@ -604,7 +604,7 @@ export default {
     BookmarkIcon,
     // CheckIcon,
     // ChevronDownIcon,
-    // FolderIcon,
+    FolderIcon,
     HomeIcon,
     InformationCircleIcon,
     MagnifyingGlassIcon,
