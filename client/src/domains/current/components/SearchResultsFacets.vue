@@ -52,7 +52,6 @@ export default {
     const router = useRouter();
 
     const facetsList = ref(props.facets);
-    console.log("PROPS>FACETS =============", props.facets);
     const toggleExpand = (key) => {
       facetsList.value[key].expand = !facetsList.value[key].expand;
       if (facetsList.value[key].expand) {
