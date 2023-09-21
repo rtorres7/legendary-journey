@@ -44,6 +44,7 @@ export class AttachmentService {
    * @returns attachment metadata WARNING does not have a mongo id until the product is saved
    */
   async add(product: any, uploadInfo: FileUploadedObjectInfo): Promise<Attachment> {
+    // replace with Joi
     KiwiPreconditions.checkArgumentDefined(product);
     KiwiPreconditions.checkArgument(Array.isArray(product.attachments));
     KiwiPreconditions.checkArgumentDefined(uploadInfo);

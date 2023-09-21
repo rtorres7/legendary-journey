@@ -32,7 +32,9 @@ const workspaceService = new WorkspaceService();
 const EventService = require("../services/event-service");
 const eventService = new EventService();
 
-const upload = objectStoreService.buildUpload(process.env.ATTACHMENT_BUCKET || "attachments");
+const upload = objectStoreService.buildUpload(
+  process.env.ATTACHMENT_BUCKET || "attachments",
+);
 const { config } = require("../config/config");
 const { logger } = require("../config/logger");
 
@@ -104,7 +106,7 @@ router.get("/articles/:productNumber", async (req, res) => {
           constant.EVENT_TYPES.PRODUCT_VIEW,
           currentUser.id,
           req.params.productNumber,
-          { producingOffices: article.producingOffices },
+          { producingOffices: article.producingOffices.map(({ name, code }) => ({ name, code })) },
         );
         console.info("Event registered");
       } catch (err) {
@@ -190,6 +192,8 @@ router.post("/articles/processDocument", async (req, res) => {
       }
       case "save": {
         const productData = await buildUpdate(req.body.id, req.body, req.user);
+        productData.datePublished = req.body.datePublished;
+        productData.publicationDate = req.body.date_published;
         await updateProduct(req.body.id, productData, req, res);
         break;
       }
@@ -259,6 +263,7 @@ router.post("/articles/", async (req, res) => {
         productNumber: uuidv4(),
         producingOffices: producingOffices,
         productType: productType,
+        publicationDate: req.body.publicationDate,
         publicationNumber: req.body.publication_number,
         reportingType: reportingType,
         summary: req.body.summary,
@@ -399,6 +404,12 @@ async function publishProduct(id, user, productData, req, res) {
   productData.datePublished = dayjs().toDate();
 
   await updateProduct(id, productData, req, res);
+
+  const event = await eventService.registerEvent(constant.EVENT_TYPES.PRODUCT_PUBLISH, user.id, productData.productNumber, {
+    datePublished: productData.datePublished,
+    producingOffices: productData.producingOffices?.map(({ name, code }) => ({ name, code })),
+    title: productData.title
+  });
 }
 
 // These two methods is extracted because of the legacy processDocument call and the fact that a POST is given but our new
@@ -471,6 +482,7 @@ async function buildUpdate(id, productDataFromRequest, user) {
     })),
     productNumber: productDataFromRequest.doc_num,
     productType: productType,
+    publicationDate: productDataFromRequest.publication_date,
     publicationNumber: productDataFromRequest.publication_number,
     regions: regions.map(({ name, code }) => ({ name, code })),
     reportingType: reportingType,

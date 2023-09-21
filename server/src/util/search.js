@@ -154,7 +154,7 @@ function buildQueryFromFilters(term, filters, fields) {
     for (const productId of filters.id) {
       query.bool.should.push({match: {id: productId}});
     }
-    query.bool.minimum_should_match = 1
+    query.bool.minimum_should_match = 1;
   }
 
   if (filters.start_date !== undefined && filters.end_date !== undefined) {

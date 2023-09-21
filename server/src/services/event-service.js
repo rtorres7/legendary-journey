@@ -1,6 +1,7 @@
-const EventLog = require("../models/event_log");
+const { EventLog } = require("../models/event_log");
 // const ProductService = require("../services/product-service");
-const UserService = require("../services/user-service");
+const UserService = require("./user-service");
+const { logger } = require("../config/logger");
 
 class EventService {
   constructor() {
@@ -43,7 +44,7 @@ class EventService {
 
       return event;
     } catch (err) {
-      console.error("Error registering event", err);
+      logger.error("Error registering event", err);
     }
   }
 }

@@ -56,6 +56,10 @@ class UserService {
   async deleteUser(id) {
     await models.User.destroy({ where: { id: id } });
   }
+
+  
+
+  
 }
 
 module.exports = UserService;
