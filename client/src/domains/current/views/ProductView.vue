@@ -128,7 +128,7 @@
           <ProductContent :product="product" />
         </div>
         <div
-          class="no-print md:min-w-[480px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
+          class="no-print md:min-w-[440px] pl-0 lg:pl-8 flex flex-col pt-6 lg:pt-0 space-y-3 border-t-2 lg:border-t-0 border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-700/25"
         >
           <ProductAttachments :article="product" />
           <div class="flex flex-col space-y-2">
@@ -141,9 +141,9 @@
                 >
                   <li v-if="index <= 4 || (index > 4 && expandNsa)">
                     <router-link
-                      :id="item.code"
+                      :id="getCode(item)"
                       class="hover:underline"
-                      :to="'/search?text=&non_state_actors[]=' + item.name"
+                      :to="'/search?text=&non_state_actors[]=' + getCode(item)"
                       target="_blank"
                       >{{ item.name }}</router-link
                     >
@@ -153,7 +153,9 @@
               <template v-if="product.nonStateActors.length > 5">
                 <button
                   class="max-w-fit ml-2 mt-2 cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
-                  @click="toggleExpand('nsa', product.nonStateActors[4].code)"
+                  @click="
+                    toggleExpand('nsa', getCode(product.nonStateActors[4]))
+                  "
                 >
                   <template v-if="expandNsa"> Show Less... </template>
                   <template v-else> Show More... </template>
@@ -170,7 +172,7 @@
                       class="hover:underline"
                       :to="'/search?text=&topics[]=' + item.code"
                       target="_blank"
-                      >{{ item.name }}</router-link
+                      >{{ getName("topics", item) }}</router-link
                     >
                   </li>
                 </template>
@@ -198,7 +200,7 @@
                       class="hover:underline"
                       :to="'/search?text=&countries[]=' + item.code"
                       target="_blank"
-                      >{{ item.name }}</router-link
+                      >{{ getName("countries", item) }}</router-link
                     >
                   </li>
                 </template>
@@ -276,7 +278,13 @@
 
 <script>
 import dayjs from "dayjs/esm/index.js";
-import { formatDate, hasProductAccess, isSavedProduct } from "@/shared/helpers";
+import {
+  formatDate,
+  hasProductAccess,
+  isSavedProduct,
+  getValueForCode,
+  getValueForName,
+} from "@/shared/helpers";
 import { onMounted, computed, inject, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -343,6 +351,7 @@ export default {
     );
     const productIsFavorite = ref(store.state.product.document.favorite);
     const offlineMode = import.meta.env.MODE === "offline";
+    const criteria = computed(() => store.state.metadata.criteria);
 
     const printDocument = () => {
       const pdfs = product.value.attachments_metadata.filter(
@@ -373,6 +382,24 @@ export default {
       createSimpleNotification({
         message: "URL Copied to Clipboard",
       });
+    };
+    const getCode = (item) => {
+      //temporary until high side json structure matches low side for countries/topics/non state actors
+      const result = getValueForName(
+        criteria.value.non_state_actors,
+        item.name
+      );
+      return result.code;
+    };
+    const getName = (type, item) => {
+      //temporary until high side json structure matches low side for countries/topics/non state actors
+      if (type == "countries") {
+        const result = getValueForCode(criteria.value.countries, item.code);
+        return result.name;
+      } else if (type == "topics") {
+        const result = getValueForCode(criteria.value.topics, item.code);
+        return result.name;
+      }
     };
     const expandNsa = ref(false);
     const expandTopics = ref(false);
@@ -567,6 +594,10 @@ export default {
       savingProduct,
       removingProduct,
       environment,
+      getValueForCode,
+      getValueForName,
+      getCode,
+      getName,
     };
   },
 };
