@@ -11,10 +11,8 @@
       "port": 9229,
       "remoteRoot": "/data",
       "request": "attach",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "type": "node"
-    },
+    }
   ]
 }

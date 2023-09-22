@@ -52,7 +52,7 @@ const schema = new Schema<UserInfoDoc, UserInfoModel>(
         if (value === undefined || value === null) {
           this.meta = _.omit(this.meta, key);
         } else {
-          this.meta = { ...this.meta, [key]: value};
+          this.meta = { ...this.meta, [key]: value };
         }
       },
     },
@@ -66,13 +66,17 @@ const schema = new Schema<UserInfoDoc, UserInfoModel>(
           await new UserInfo({ userId }).save();
           return await this.findOne({ userId });
         }
-      }
+      },
     },
     timestamps: false,
     strict: true,
   },
 );
 
-export const UserInfo = model<UserInfoDoc, UserInfoModel>("UserStatus", schema, "user_status");
+export const UserInfo = model<UserInfoDoc, UserInfoModel>(
+  "UserStatus",
+  schema,
+  "user_status",
+);
 
 export default UserInfo;

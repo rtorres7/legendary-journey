@@ -12,9 +12,7 @@ import router from "../../src/routes/alerts";
 import { AlertReadState, AlertType, IAlert } from "../../src/models/alert";
 import { AlertService } from "../../src/services/alert-service";
 
-
 describe("Alert Routes", () => {
-
   let mongoUrl: string;
   let alertService: AlertService;
 
@@ -35,7 +33,9 @@ describe("Alert Routes", () => {
   });
 
   /** */
-  const buildAlert = function(overrides: Partial<IAlert> = {}): Partial<IAlert> {
+  const buildAlert = function (
+    overrides: Partial<IAlert> = {},
+  ): Partial<IAlert> {
     return {
       title: "title test",
       message: "message test",
@@ -45,14 +45,17 @@ describe("Alert Routes", () => {
       type: AlertType.PRODUCT_PUBLISHED,
       readState: AlertReadState.UNREAD,
       meta: {
-        "test": "meta.test"
+        test: "meta.test",
       },
-      ...overrides
+      ...overrides,
     };
   };
 
-  const randStr = function(prefix?: string): string {
-    return (prefix ? `${prefix}-` : "") + crypto.randomBytes(4).toString("hex").toLowerCase();
+  const randStr = function (prefix?: string): string {
+    return (
+      (prefix ? `${prefix}-` : "") +
+      crypto.randomBytes(4).toString("hex").toLowerCase()
+    );
   };
 
   describe("POST /alert/", () => {
@@ -78,7 +81,9 @@ describe("Alert Routes", () => {
     it("should create an alert", async () => {
       const user = { id: randStr("alert-get") };
       const app = setupAppWithUser(router, user);
-      const alert = await alertService.createAlert(buildAlert({ userId: user.id }));
+      const alert = await alertService.createAlert(
+        buildAlert({ userId: user.id }),
+      );
       return request(app)
         .get(`/alert/id/${alert.id}`)
         .expect(200)

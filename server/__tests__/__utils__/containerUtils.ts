@@ -141,14 +141,21 @@ export class ElasticSearchUtils {
   /**
    * createIndex and deleteIndex must be called in pairs!
    */
-  static async createIndex(client: elasticsearch.Client, name: string, mapping: any, pipelines: any[]): Promise<void> {
-    if (!await client.indices.exists({ index: name })) {
+  static async createIndex(
+    client: elasticsearch.Client,
+    name: string,
+    mapping: any,
+    pipelines: any[],
+  ): Promise<void> {
+    if (!(await client.indices.exists({ index: name }))) {
       try {
         await ElasticSearchExtension.createIndex(name, mapping, pipelines);
       } catch (error) {
         if (error.message.includes("resource_already_exists_exception")) {
           const randomDelay = Math.floor(Math.random() * 2000) + 2000;
-          await new Promise((resolve) => { setTimeout(resolve, randomDelay); });  
+          await new Promise((resolve) => {
+            setTimeout(resolve, randomDelay);
+          });
         } else {
           throw error;
         }
@@ -159,5 +166,5 @@ export class ElasticSearchUtils {
 
 export default {
   MinioContainerUtils,
-  ElasticSearchUtils
+  ElasticSearchUtils,
 };

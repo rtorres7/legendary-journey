@@ -39,7 +39,7 @@ class EventService {
         index: this.index,
         id: event.id,
         document: enrichedData,
-        refresh: wait ? "wait_for" : false
+        refresh: wait ? "wait_for" : false,
       });
 
       return event;

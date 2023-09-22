@@ -22,12 +22,10 @@ class WorkspaceService {
   ) {
     const savedProductsForUser = await models.SavedProduct.findAll({
       where: {
-        createdBy: userId
+        createdBy: userId,
       },
       attributes: ["productId"],
-      order: [
-        ["createdAt", "desc"]
-      ]
+      order: [["createdAt", "desc"]],
     });
 
     let kiwiSort = KiwiSort.of("datePublished", sortDir);
@@ -43,33 +41,54 @@ class WorkspaceService {
         .addKiwiSort(kiwiSort);
     }
 
-    const savedProductIds = savedProductsForUser.map(savedProduct => savedProduct.productId);
+    const savedProductIds = savedProductsForUser.map(
+      (savedProduct) => savedProduct.productId,
+    );
     const filtersWithUsersSavedProducts = {
       ...filters,
       id: savedProductIds,
     };
 
-    const results = await this.productSearchService.search(term, savedProductIds.length, 1, "desc", filtersWithUsersSavedProducts);
-    const resultIds = results.results.map(result => result.id);
+    const results = await this.productSearchService.search(
+      term,
+      savedProductIds.length,
+      1,
+      "desc",
+      filtersWithUsersSavedProducts,
+    );
+    const resultIds = results.results.map((result) => result.id);
 
     let products;
 
     if (sortDir === "created") {
       const resultIdsForPage = resultIds.slice(0, perPage);
-      const productsFound = await this.productService.findProductsForIds(resultIdsForPage, resultIdsForPage.length, 0);
-      products = savedProductIds.map(id => _.find(productsFound, product => product._id.toString() === id)).filter(product => product !== undefined);
+      const productsFound = await this.productService.findProductsForIds(
+        resultIdsForPage,
+        resultIdsForPage.length,
+        0,
+      );
+      products = savedProductIds
+        .map((id) =>
+          _.find(productsFound, (product) => product._id.toString() === id),
+        )
+        .filter((product) => product !== undefined);
     } else {
       const resultIdsForPage = resultIds.slice(0, perPage);
-      products = await this.productService.findProductsForIds(resultIdsForPage, resultIdsForPage.length, 0, sortDir);
+      products = await this.productService.findProductsForIds(
+        resultIdsForPage,
+        resultIdsForPage.length,
+        0,
+        sortDir,
+      );
     }
 
-    products = products.map(product => {
+    products = products.map((product) => {
       this.applyAttachmentUsageTo(product.attachments);
 
       return {
         classification: product.classification,
         classificationXml: product.classificationXml,
-        countries: product.countries?.map(country => country.code),
+        countries: product.countries?.map((country) => country.code),
         createdById: product.createdBy?.id,
         datePublished: product.datePublished,
         deleted: product.deleted,
@@ -77,26 +96,28 @@ class WorkspaceService {
         featureId: product._id.toString(),
         htmlBody: product.htmlBody,
         id: product._id.toString(),
-        issues: product.issues?.map(issue => issue.code),
+        issues: product.issues?.map((issue) => issue.code),
         images: findArticleImage(product?.attachments),
-        nonStateActors: product.nonStateActors?.map(actor => actor.code),
+        nonStateActors: product.nonStateActors?.map((actor) => actor.code),
         orgRestricted: product.orgRestricted,
         print_count: product.print_count,
-        producingOffices: product.producingOffices?.map(office => office.code),
+        producingOffices: product.producingOffices?.map(
+          (office) => office.code,
+        ),
         productNumber: product.productNumber,
         productType: product.productType?.code,
-        regions: product.regions?.map(region => region.code),
+        regions: product.regions?.map((region) => region.code),
         reportingType: product.reportingType?.code,
         state: product.state,
-        subregions: product.subregions?.map(subregion => subregion.code),
+        subregions: product.subregions?.map((subregion) => subregion.code),
         summary: product.summary,
         summaryClassification: product.summaryClassification,
         title: product.title,
         titleClassification: product.titleClassification,
-        topics: product.topics?.map(topic => topic.code),
+        topics: product.topics?.map((topic) => topic.code),
         updatedById: product.updatedBy?.id,
         saved: true,
-        views: product.views
+        views: product.views,
       };
     });
 
@@ -108,7 +129,7 @@ class WorkspaceService {
 
   applyAttachmentUsageTo(attachments) {
     if (attachments) {
-      attachments.forEach(attachment => {
+      attachments.forEach((attachment) => {
         const parsed = path.parse(attachment.fileName);
         const isThumbnail =
           parsed.name === "article" &&
@@ -197,18 +218,26 @@ class WorkspaceService {
       include: {
         model: models.Collection,
         where: {
-          id: collectionId
-        }
-      }
+          id: collectionId,
+        },
+      },
     });
 
-    const savedProductIds = savedProductsForUserInCollection.map(savedProduct => savedProduct.productId);
+    const savedProductIds = savedProductsForUserInCollection.map(
+      (savedProduct) => savedProduct.productId,
+    );
     const filtersWithUsersSavedProducts = {
       ...filters,
       id: savedProductIds,
     };
 
-    const results = await this.productSearchService.search(term, perPage, page, sortDir, filtersWithUsersSavedProducts);
+    const results = await this.productSearchService.search(
+      term,
+      perPage,
+      page,
+      sortDir,
+      filtersWithUsersSavedProducts,
+    );
 
     results.results.forEach((product) => {
       product.saved = true;

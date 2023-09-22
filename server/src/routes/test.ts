@@ -21,17 +21,29 @@ router.post("/test/product", async (req: Request, res: Response) => {
       }
     }
   */
-  await runAsUser(req, res, async (currentUser: any, req: Request, res: Response) => {
-    try {
-      // req.body
-      KiwiStandardResponsesExpress.standardGetResponseWithMessage(null, "not implemented exception", res);
-    } catch (error) {
-      logger.error(error);
-      const errorDetails = `${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-      console.log("Unable to find features and briefs", error);
-    }
-  });
+  await runAsUser(
+    req,
+    res,
+    async (currentUser: any, req: Request, res: Response) => {
+      try {
+        // req.body
+        KiwiStandardResponsesExpress.standardGetResponseWithMessage(
+          null,
+          "not implemented exception",
+          res,
+        );
+      } catch (error) {
+        logger.error(error);
+        const errorDetails = `${error.message}`;
+        KiwiStandardResponsesExpress.standardErrorResponse(
+          500,
+          errorDetails,
+          res,
+        );
+        console.log("Unable to find features and briefs", error);
+      }
+    },
+  );
 });
 
 export default router;

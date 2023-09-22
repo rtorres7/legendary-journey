@@ -81,7 +81,11 @@ router.get(
       } catch (error) {
         logger.error(error);
         const errorDetails = `Failed to retrieve unique readership by organization for product: ${error.message}`;
-        KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+        KiwiStandardResponsesExpress.standardErrorResponse(
+          500,
+          errorDetails,
+          res,
+        );
       }
     });
   },
@@ -128,7 +132,11 @@ router.post("/metrics/products/:productId/record-email", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Failed to increment email_count for product: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        errorDetails,
+        res,
+      );
     }
 
     try {
@@ -184,7 +192,11 @@ router.post("/metrics/products/:productId/record-print", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Failed to increment print_count for product: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        errorDetails,
+        res,
+      );
     }
 
     try {

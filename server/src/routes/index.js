@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const MetadataService = require('../services/metadata');
+const MetadataService = require("../services/metadata");
 const metadataService = new MetadataService();
 
 const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
@@ -20,7 +20,7 @@ router.get("/metadata", async (req, res) => {
 
   try {
     const metadata = await metadataService.getAllMetadata();
-    res.json({metadata});
+    res.json({ metadata });
   } catch (error) {
     logger.error(error);
     const errorDetails = `Unable to find metadata:  ${error.message}`;

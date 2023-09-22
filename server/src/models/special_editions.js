@@ -30,12 +30,12 @@ const SpecialEditionsSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 const SpecialEditions = mongoose.model(
   "SpecialEditions",
   SpecialEditionsSchema,
-  "special_editions"
+  "special_editions",
 );
 module.exports = SpecialEditions;
