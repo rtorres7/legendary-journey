@@ -52,7 +52,7 @@ app.use(
     resave: false,
     cookie: { secure: false, sameSite: true, maxAge: 60 * 60 * 1000 },
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_DATABASE_URL,
+      mongoUrl: config.mongodb.url,
     }), // Default TTL is 14 days
   }),
 );
@@ -62,7 +62,7 @@ app.use(
  *
  * Sets up the HTTP request logging.
  */
-if (process.env.NODE_ENV !== "test") {
+if (config.nodeEnv !== "test") {
   app.use(successHandler);
   app.use(errorHandler);
 }
@@ -111,17 +111,17 @@ app.use(auth.ensureAuthenticated);
  * Documentation
  * Adds api documentation
  */
-if (process.env.MXS_ENV === "container") {
+if (config.mxs.env === "container") {
   const swaggerUi = require("swagger-ui-express");
   const swaggerFile = require("./swagger_output.json");
 
   const opts = {
     explorer: true,
     swaggerOptions: {
-      oauth2RedirectUrl: "https://localhost:8443/api-docs/oauth2-redirect.html",
+      oauth2RedirectUrl: `https://${config.mxs.baseUri}/api-docs/oauth2-redirect.html`,
       oauth: {
-        clientId: process.env.MXS_OAUTH_ID,
-        clientSecret: process.env.MXS_OAUTH_SECRET,
+        clientId: config.oauth.id,
+        clientSecret: config.oauth.secret,
       },
     },
   };
@@ -141,7 +141,7 @@ setupMongoose();
 require("./data/elasticsearch");
 
 // Load seed data
-if (process.env.MXS_ENV === "container") {
+if (config.mxs.env === "container") {
   async function loadAllData(loadOrganizationData, loadUserData) {
     const organization = await loadOrganizationData();
     await loadUserData(organization);

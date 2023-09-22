@@ -1,9 +1,10 @@
 const elasticsearch = require("@elastic/elasticsearch");
+const { config } = require("../../config/config");
 
 let esClient;
 
 if (esClient === undefined) {
-  const esNode = process.env.ES_URL;
+  const esNode = config.elasticsearch.url;
 
   if (esNode === "SWAGGER") {
     esClient = {};
@@ -12,8 +13,8 @@ if (esClient === undefined) {
       nodes: esNode,
     });
 
-    if (process.env.MXS_ENV === 'container') {
-      esClient.diagnostic.on('request', (err, result) => {
+    if (config.mxs.env === "container") {
+      esClient.diagnostic.on("request", (err, result) => {
         console.log("ES Request: ", result.meta.request.params.body);
       });
     }

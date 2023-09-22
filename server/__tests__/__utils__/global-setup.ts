@@ -33,6 +33,7 @@ async function globalJestSetup() {
 
   const minioContainer = environment.getContainer("jest-minio-1");
   MinioExtension.setMinioPort(minioContainer.getMappedPort(9000));
+  MinioExtension.setMinioHost(minioContainer.getHost());
 }
 
 export default globalJestSetup;

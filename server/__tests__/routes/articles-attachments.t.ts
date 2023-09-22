@@ -9,7 +9,10 @@ import { MinioContainerUtils } from "../__utils__/containerUtils";
 import { articles, metadata } from "../__utils__/dataLoader";
 import { setupAppWithUser } from "../__utils__/expressUtils";
 import { AttachmentService } from "../../src/services/attachment-service";
-import { FileUploadedObjectInfo, ObjectStoreService } from "../../src/services/object-store-service";
+import {
+  FileUploadedObjectInfo,
+  ObjectStoreService,
+} from "../../src/services/object-store-service";
 import { MinioExtension } from "@kiwiproject/kiwi-test-js";
 import { BucketItem, Client } from "minio";
 
@@ -40,21 +43,23 @@ jest.mock("../../src/services/product-service.js", () => {
         logger.info("ProductServiceMock.deleteProduct:");
         return Promise.resolve(true);
       }),
-      addAttachment: jest.fn().mockImplementation((productNumber, file: any) => {
-        logger.info("ProductServiceMock.addAttachment:");
-        const id = uuidv4();
-        return Promise.resolve({
-          _id: id,
-          attachmentId: id,
-          fileName: file.originalname,
-          mimeType: file.mimetype,
-          fileSize: file.size,
-          createdAt: new Date(),
-          type: "ATTACHMENT",
-          destination: `${file.storage}://${file.bucket}/${file.objectName}`,
-          visible: file.visible,
-        });
-      }),
+      addAttachment: jest
+        .fn()
+        .mockImplementation((productNumber, file: any) => {
+          logger.info("ProductServiceMock.addAttachment:");
+          const id = uuidv4();
+          return Promise.resolve({
+            _id: id,
+            attachmentId: id,
+            fileName: file.originalname,
+            mimeType: file.mimetype,
+            fileSize: file.size,
+            createdAt: new Date(),
+            type: "ATTACHMENT",
+            destination: `${file.storage}://${file.bucket}/${file.objectName}`,
+            visible: file.visible,
+          });
+        }),
       deleteAttachment: jest.fn().mockImplementation(() => {
         logger.info("ProductServiceMock.deleteAttachment:");
         return Promise.resolve();
@@ -83,13 +88,19 @@ jest.mock("../../src/services/metadata.js", () => {
   });
 });
 
-const USER = { id: 1, firstName: "First", lastName: "Last", dn: "O=org,OU=orgunit,CN=commonname" };
+const USER = {
+  id: 1,
+  firstName: "First",
+  lastName: "Last",
+  dn: "O=org,OU=orgunit,CN=commonname",
+};
 
 describe("Article Attachment Routes", () => {
   let service: ObjectStoreService;
   let client: Client;
 
   beforeAll(async () => {
+    MinioContainerUtils.setMinioHost(MinioExtension.getMinioHost());
     MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
     service = new ObjectStoreService();
     client = service.getClient();
@@ -101,7 +112,7 @@ describe("Article Attachment Routes", () => {
 
   afterEach(async () => {
     const objects: Array<BucketItem> = await service.listObjects("attachments");
-    for(const obj of objects) {
+    for (const obj of objects) {
       await service.removeObject("attachments", `${obj.name}`);
     }
     await service.removeBucket("attachments");
@@ -162,7 +173,9 @@ describe("Article Attachment Routes", () => {
             logger.info("%j", res.body);
             expect(res.body.success).toBe(true);
             expect(res.body.att_id).toBeDefined();
-            expect(res.body.url).toBe(`${config.basePath}/documents/${original.id}/attachments/${res.body.att_id}`);
+            expect(res.body.url).toBe(
+              `${config.basePath}/documents/${original.id}/attachments/${res.body.att_id}`,
+            );
             logger.info("res.body:j", res.body);
           });
       });
@@ -178,7 +191,8 @@ describe("Article Attachment Routes", () => {
           versionId: null,
           storage: "minio",
           bucketName: "attachments",
-          objectName: "f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1",
+          objectName:
+            "f0907ac1-5aa9-4aa5-8691-adaf7c41fdf2/article.jpg-3ca31620f4d1",
           size: 58251,
           visible: true,
           attachmentId: "8abcefbe-d7bb-4c14-a385-3ca31620f4d1",
