@@ -28,7 +28,7 @@ class ProductService {
 
     return await Article.find({
       datePublished: { $gte: start, $lte: end },
-      deleted: false
+      deleted: false,
     }).exec();
   }
 
@@ -40,7 +40,10 @@ class ProductService {
   }
 
   async findByProductNumber(productNumber) {
-    return await Article.findOne({ productNumber: productNumber, deleted: false }).exec();
+    return await Article.findOne({
+      productNumber: productNumber,
+      deleted: false,
+    }).exec();
   }
 
   async findById(id) {
@@ -136,8 +139,11 @@ class ProductService {
   }
 
   async #findDraftProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
-      .find({ state: 'draft', 'createdBy.id': userId, deleted: false })
+    return await Article.find({
+      state: "draft",
+      "createdBy.id": userId,
+      deleted: false,
+    })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -145,9 +151,68 @@ class ProductService {
   }
 
   async #countDraftProductsForUser(userId) {
-    return await Article
-      .count({ state: 'draft', 'createdBy.id': userId, deleted: false })
+    return await Article.count({
+      state: "draft",
+      "createdBy.id": userId,
+      deleted: false,
+    }).exec();
+  }
+
+  async findPageOfDraftProductsForProducingOrg(
+    producingOrgName,
+    page,
+    limit,
+    offset,
+    sortDir,
+  ) {
+    KiwiPreconditions.checkArgumentDefined(producingOrgName);
+    const drafts = await this.#findPageOfDraftProductsForProducingOrg(
+      producingOrgName,
+      limit,
+      offset,
+      sortDir,
+    );
+    const draftCount = await this.#countDraftProductsForProducingOrg(
+      producingOrgName,
+    );
+
+    return KiwiPage.of(
+      page,
+      limit,
+      draftCount,
+      drafts.map((draft) => draft.features),
+    )
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("createdAt", sortDir));
+  }
+
+  async #findPageOfDraftProductsForProducingOrg(
+    producingOrgName,
+    limit,
+    offset,
+    sortDir,
+  ) {
+    const oneWeekAgo = dayjs().subtract(7, "day").toDate();
+    return await Article.find({
+      $and: [
+        { state: "draft" },
+        { producingOffices: { $elemMatch: { name: producingOrgName } } },
+        { createdAt: { $gte: oneWeekAgo } }, //Add condition for last week
+      ],
+    })
+      .limit(limit)
+      .skip(offset)
+      .sort({ createdAt: sortDir.toLowerCase() })
       .exec();
+  }
+
+  async #countDraftProductsForProducingOrg(producingOrgName) {
+    return await Article.count({
+      $and: [
+        { state: "draft" },
+        { producingOffices: { $elemMatch: { name: producingOrgName } } },
+      ],
+    }).exec();
   }
 
   async findPageOfRecentProductsForUser(userId, page, limit, offset, sortDir) {
@@ -170,8 +235,11 @@ class ProductService {
   }
 
   async #findRecentProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
-      .find({state: 'posted', 'createdBy.id': userId, deleted: false })
+    return await Article.find({
+      state: "posted",
+      "createdBy.id": userId,
+      deleted: false,
+    })
       .limit(limit)
       .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
@@ -179,9 +247,11 @@ class ProductService {
   }
 
   async #countRecentProductsForUser(userId) {
-    return await Article
-      .count({ state: 'posted', 'createdBy.id': userId, deleted: false })
-      .exec();
+    return await Article.count({
+      state: "posted",
+      "createdBy.id": userId,
+      deleted: false,
+    }).exec();
   }
 
   async findPageOfRecentProductsForProducingOffice(
@@ -217,7 +287,12 @@ class ProductService {
       .addKiwiSort(kiwiSort);
   }
 
-  async #findRecentProductsForProducingOffice(producingOfficeName, limit, offset, sortDir) {
+  async #findRecentProductsForProducingOffice(
+    producingOfficeName,
+    limit,
+    offset,
+    sortDir,
+  ) {
     let sort = { datePublished: sortDir.toLowerCase() };
     if (sortDir === "views") {
       sort = { views: "desc" };
@@ -226,27 +301,28 @@ class ProductService {
     const products = await Article.aggregate()
       .match({
         $and: [
-          { state: 'posted' },
+          { state: "posted" },
           { deleted: false },
-          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
-        ]
+          { producingOffices: { $elemMatch: { name: producingOfficeName } } },
+        ],
       })
       .lookup({
         from: EventLog.collection.name,
         localField: "productNumber",
         foreignField: "productId",
-        as: "eventLogs"
+        as: "eventLogs",
       })
       .addFields({
         views: {
-          $size: "$eventLogs"
-        }
+          $size: "$eventLogs",
+        },
       })
       .limit(limit)
       .skip(offset)
-      .sort(sort).exec();
+      .sort(sort)
+      .exec();
 
-    return products.map(product => {
+    return products.map((product) => {
       this.applyAttachmentUsageTo(product.attachments);
 
       return {
@@ -266,14 +342,14 @@ class ProductService {
         summaryClassification: product.summaryClassification,
         title: product.title,
         titleClassification: product.titleClassification,
-        views: product.views
+        views: product.views,
       };
     });
   }
 
   applyAttachmentUsageTo(attachments) {
     if (attachments) {
-      attachments.forEach(attachment => {
+      attachments.forEach((attachment) => {
         const parsed = path.parse(attachment.fileName);
         const isThumbnail =
           parsed.name === "article" &&
@@ -284,15 +360,13 @@ class ProductService {
   }
 
   async #countRecentProductsForProducingOffice(producingOfficeName) {
-    return await Article
-      .count({
-        $and: [
-          { state: 'posted' },
-          { deleted: false },
-          { 'producingOffices': { $elemMatch: { name: producingOfficeName } } }
-        ]
-      })
-      .exec();
+    return await Article.count({
+      $and: [
+        { state: "posted" },
+        { deleted: false },
+        { producingOffices: { $elemMatch: { name: producingOfficeName } } },
+      ],
+    }).exec();
   }
 
   async findPageOfProductsForUser(userId, page, limit, offset, sortDir) {
@@ -315,8 +389,7 @@ class ProductService {
   }
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
-    return await Article
-      .find({ 'createdBy.id': userId, deleted: false })
+    return await Article.find({ "createdBy.id": userId, deleted: false })
       .limit(limit)
       .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
@@ -324,9 +397,10 @@ class ProductService {
   }
 
   async #countAllProductsForUser(userId) {
-    return await Article
-      .count({ 'createdBy.id': userId, deleted: false })
-      .exec();
+    return await Article.count({
+      "createdBy.id": userId,
+      deleted: false,
+    }).exec();
   }
 
   async initializeProductData() {
@@ -340,7 +414,10 @@ class ProductService {
           this.productSearchService.create(product.indexable);
         });
       } catch (error) {
-        console.log("There was a problem initializing product seed data", error);
+        console.log(
+          "There was a problem initializing product seed data",
+          error,
+        );
       }
     }
   }
@@ -421,19 +498,19 @@ class ProductService {
     return product;
   }
 
-  async findProductsForIds(ids, limit, offset, sortDir = undefined){
+  async findProductsForIds(ids, limit, offset, sortDir = undefined) {
     let query = Article.aggregate()
-      .match({ "_id": { $in: ids.map(id => new mongoose.Types.ObjectId(id)) } })
+      .match({ _id: { $in: ids.map((id) => new mongoose.Types.ObjectId(id)) } })
       .lookup({
         from: EventLog.collection.name,
         localField: "productNumber",
         foreignField: "productId",
-        as: "eventLogs"
+        as: "eventLogs",
       })
       .addFields({
         views: {
-          $size: "$eventLogs"
-        }
+          $size: "$eventLogs",
+        },
       })
       .limit(limit)
       .skip(offset);
@@ -449,20 +526,33 @@ class ProductService {
 
     return await query.exec();
   }
-  
+
   /**
-   * @param {string} userId 
+   * @param {string} userId
    * @param {number} page page number, starts at 1
    * @param {number} perPage items per page
    * @param {string} sortDir 'asc' or 'desc'
    * @returns {Promise<KiwiPage>}
    */
-  async findRecentViewedProductsForUser(userId, page = 1, perPage = 4, sortDir = "desc") {
+  async findRecentViewedProductsForUser(
+    userId,
+    page = 1,
+    perPage = 4,
+    sortDir = "desc",
+  ) {
     const from = (page - 1) * perPage;
-    const { total, productIds } = await this.metricsService.getRecentViewsForUser(userId, from, perPage, sortDir);
+    const { total, productIds } =
+      await this.metricsService.getRecentViewsForUser(
+        userId,
+        from,
+        perPage,
+        sortDir,
+      );
     const products = [];
     for (let productId of productIds) {
-      const product = await Article.findOne({ 'productNumber': productId }).exec();
+      const product = await Article.findOne({
+        productNumber: productId,
+      }).exec();
       if (product) {
         products.push(product.features);
       } else {
@@ -470,7 +560,9 @@ class ProductService {
         // KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
       }
     }
-    return Promise.resolve(KiwiPage.of(page, perPage, total, products).usingOneAsFirstPage());
+    return Promise.resolve(
+      KiwiPage.of(page, perPage, total, products).usingOneAsFirstPage(),
+    );
   }
 }
 

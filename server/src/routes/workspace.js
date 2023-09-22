@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { KiwiStandardResponsesExpress, KiwiPreconditions } = require("@kiwiproject/kiwi-js");
+const {
+  KiwiStandardResponsesExpress,
+  KiwiPreconditions,
+} = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
@@ -15,7 +18,7 @@ const { legacyErrorResponse } = require("../util/errors");
 
 router.get("/workspace/drafts", async (req, res) => {
   /*
-    #swagger.summary = 'Retrieve a page of draft products created by the current user'
+    #swagger.summary = 'Retrieve a page of draft products created by the current user's organization'
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
@@ -33,13 +36,14 @@ router.get("/workspace/drafts", async (req, res) => {
     const { perPage, page, skip, sortDir } = pagingParams(req);
 
     try {
-      const pageOfDrafts = await productService.findPageOfDraftProductsForUser(
-        currentUser.id,
-        page,
-        perPage,
-        skip,
-        sortDir,
-      );
+      const pageOfDrafts =
+        await productService.findPageOfDraftProductsForProducingOrg(
+          currentUser.dataValues?.organization,
+          page,
+          perPage,
+          skip,
+          sortDir,
+        );
       res.json(pageOfDrafts);
     } catch (error) {
       logger.error(error);
@@ -113,7 +117,12 @@ router.get("/workspace/viewed", async (req, res) => {
     KiwiPreconditions.checkPositive(page);
     KiwiPreconditions.checkPositive(perPage);
     try {
-      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, sortDir);
+      const pageResults = await productService.findRecentViewedProductsForUser(
+        currentUser.id,
+        page,
+        perPage,
+        sortDir,
+      );
       res.json(pageResults);
     } catch (error) {
       logger.error(error);
@@ -123,7 +132,6 @@ router.get("/workspace/viewed", async (req, res) => {
     }
   });
 });
-
 
 router.get("/workspace/stats", async (req, res) => {
   /*
@@ -201,14 +209,15 @@ router.get("/workspace/saved", async (req, res) => {
       const term = req.query.text;
       const filters = req.query;
 
-      const savedProducts = await workspaceService.findPageOfSavedProductsForUser(
-        currentUser.id,
-        term,
-        perPage,
-        page,
-        sortDir,
-        filters,
-      );
+      const savedProducts =
+        await workspaceService.findPageOfSavedProductsForUser(
+          currentUser.id,
+          term,
+          perPage,
+          page,
+          sortDir,
+          filters,
+        );
 
       res.json(savedProducts);
     } catch (error) {
@@ -393,8 +402,10 @@ router.delete("/workspace/collections/:collectionId", async (req, res) => {
   }
 });
 
-router.get("/workspace/collections/:collectionId/products", async (req, res) => {
-  /*
+router.get(
+  "/workspace/collections/:collectionId/products",
+  async (req, res) => {
+    /*
   #swagger.summary = 'Retrieves a list of saved products for the given collection for the current user'
   #swagger.tags = ['Workspace']
   #swagger.responses[200] = {
@@ -404,27 +415,29 @@ router.get("/workspace/collections/:collectionId/products", async (req, res) => 
   }
   */
 
-  try {
-    const { perPage, page, sortDir } = pagingParams(req);
-    const term = req.query.text;
-    const filters = req.query;
+    try {
+      const { perPage, page, sortDir } = pagingParams(req);
+      const term = req.query.text;
+      const filters = req.query;
 
-    const savedProducts = await workspaceService.findSavedProductsInCollection(
-      req.params.collectionId,
-      term,
-      perPage,
-      page,
-      sortDir,
-      filters,
-    );
-    res.json(savedProducts);
-  } catch (error) {
-    logger.error(error);
-    const errorDetails = `${error.message}`;
-    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-    legacyErrorResponse(500, errorDetails, res);
-  }
-});
+      const savedProducts =
+        await workspaceService.findSavedProductsInCollection(
+          req.params.collectionId,
+          term,
+          perPage,
+          page,
+          sortDir,
+          filters,
+        );
+      res.json(savedProducts);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
+  },
+);
 
 router.put(
   "/workspace/collections/:collectionId/products/:savedProductId",
@@ -483,10 +496,11 @@ router.delete(
     }
    */
     try {
-      const collection = await workspaceService.removeSavedProductFromCollection(
-        req.params.collectionId,
-        req.params.savedProductId,
-      );
+      const collection =
+        await workspaceService.removeSavedProductFromCollection(
+          req.params.collectionId,
+          req.params.savedProductId,
+        );
 
       if (collection) {
         KiwiStandardResponsesExpress.standardDeleteResponseWithEntity(
