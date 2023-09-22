@@ -812,13 +812,17 @@ export default {
       }
     };
 
-    const today = computed(() => new Date());
-    const disabledDates = (Date) => {
-      if (Date > today.value && (Date.getDay() == 0 || Date.getDay() == 6)) {
-        return true;
-      } else {
-        return false;
-      }
+    // const today = computed(() => new Date());
+    // const disabledDates = (Date) => {
+    //   if (Date > today.value && (Date.getDay() == 0 || Date.getDay() == 6)) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // };
+    const disabledDates = (date) => {
+      const today = computed(() => new Date());
+      return date > today.value;
     };
 
     const selectDate = () => {
