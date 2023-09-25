@@ -100,23 +100,6 @@
                       />
                     </div>
                   </div>
-                  <div class="lg:w-1/4">
-                    <label class="text-sm font-medium"
-                      >Publication Date
-                      <span class="sr-only">Required</span>
-                      <span class="pl-1 text-red-500">*</span>
-                      <MaxDatepicker
-                        v-model="selectedPublicationDate"
-                        :enableTimePicker="false"
-                        week-start="0"
-                        auto-apply
-                        customStyle
-                        class="min-h-[2rem] flex w-full rounded-lg cursor-default px-2 mt-1 bg-transparent border border-gray-300 dark:border-slate-600 energy:border-zinc-600 focus-within:ring-2 focus-within:ring-offset-2"
-                        @update:modelValue="updateSelectedDate"
-                      >
-                      </MaxDatepicker>
-                    </label>
-                  </div>
                   <div class="lg:w-1/2 space-y-4">
                     <MaxListbox
                       v-model="form.countries"
@@ -686,23 +669,14 @@
             <div
               class="flex flex-wrap gap-4 justify-end py-6 px-8 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
             >
-              <div v-show="!isFuturePublishDate()">
-                <template v-if="product.state === 'posted'">
-                  <MaxButton color="secondary" :disabled="true">
-                    Published
-                  </MaxButton>
-                </template>
-                <template v-else>
-                  <MaxButton
-                    color="secondary"
-                    type="submit"
-                    :disabled="publishDisabled"
-                    @click.prevent="publishProduct"
-                  >
-                    Publish
-                  </MaxButton>
-                </template>
-              </div>
+              <MaxButton
+                color="secondary"
+                type="submit"
+                :disabled="publishDisabled"
+                @click.prevent="publishProduct"
+              >
+                Publish
+              </MaxButton>
               <MaxButton color="secondary" @click.prevent="saveProduct"
                 >Save</MaxButton
               >
@@ -1036,7 +1010,6 @@ export default {
       non_state_actors: [],
       pocInfo: "",
       productType: [],
-      publicationDate: "",
       //producing_office: "DNI/NCTC",
       summary: "",
       summaryClassificationXML: "",
@@ -1049,7 +1022,6 @@ export default {
     });
     const payload = ref({});
     const checkAllIntelOrgs = ref(false);
-    const selectedPublicationDate = ref(null);
     const attachmentDropzoneFile = ref("");
     const hideDialog = ref();
     const saveHideDialog = () => {
@@ -1287,15 +1259,6 @@ export default {
       }
     };
 
-    const updateSelectedDate = (model) => {
-      form.value.publicationDate = dayjs(model).utc().format("YYYY-MM-DD");
-      payload.value.date_published = form.value.publicationDate;
-    };
-
-    const isFuturePublishDate = () => {
-      return dayjs(payload.value.date_published).isAfter(dayjs());
-    };
-
     const updatePayload = (updatedProduct) => {
       payload.value = Object.assign({}, updatedProduct);
       payload.value.countries = updatedProduct.countries.map(
@@ -1415,10 +1378,6 @@ export default {
         (productFromBackend) =>
           productFromBackend.code === updatedProduct.product_type_id
       );
-      form.value.publicationDate = updatedProduct.date_published;
-      selectedPublicationDate.value = dayjs(product.value.date_published)
-        .utc()
-        .format("YYYY/MM/DD");
       form.value.pocInfo = updatedProduct.poc_info;
       form.value.title = updatedProduct.title;
       form.value.attachments = updatedProduct.attachments?.filter(
@@ -1466,7 +1425,6 @@ export default {
         !form.value.summary ||
         !form.value.summaryClassificationXML ||
         !form.value.classificationXML ||
-        !form.value.publicationDate ||
         form.value.producing_offices.length === 0 ||
         form.value.non_state_actors.length === 0
       );
@@ -1783,7 +1741,6 @@ export default {
       lists,
       form,
       checkAllIntelOrgs,
-      selectedPublicationDate,
       attachmentDropzoneFile,
       hideDialog,
       saveHideDialog,
@@ -1798,8 +1755,6 @@ export default {
       allDissemOrgsSelected,
       removeItem,
       updateField,
-      updateSelectedDate,
-      isFuturePublishDate,
       publishDisabled,
       isDeleteDialogOpen,
       openDeleteDialog,
