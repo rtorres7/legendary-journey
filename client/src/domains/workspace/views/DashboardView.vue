@@ -1,5 +1,7 @@
 <template>
-  <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
+  <div
+    class="max-w-[475px] sm:max-w-[768px] xl:max-w-[1600px] w-full p-6 md:p-8"
+  >
     <!-- User Content -->
     <template v-if="loadingUserContent">
       <div class="mb-8">
