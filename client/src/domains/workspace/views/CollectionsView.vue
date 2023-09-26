@@ -1,50 +1,110 @@
 <template>
-  <div class="w-full flex grow bg-slate-100">
-    <div class="hidden w-[300px] md:flex flex-col">
-      <div class="font-semibold p-6 text-lg">Collections</div>
-      <ul class="space-y-3 text-slate-600">
+  <div class="w-full flex flex-col md:flex-row grow bg-slate-100">
+    <div class="md:w-[300px] md:flex flex-col">
+      <div class="flex justify-between items-center">
+        <div class="font-semibold p-6 text-lg">Collections</div>
+        <div
+          class="md:hidden flex items-center cursor-pointer text-sm px-6 hover:text-slate-900"
+          @click="openCreateDialog"
+        >
+          <PlusIcon class="h-5 w-5" />
+          <span class="ml-4">New Collection</span>
+        </div>
+      </div>
+      <ul class="md:space-y-3 text-slate-600 mb-6 hidden md:flex md:flex-col">
         <template v-if="!loadingCollections && collections.length > 0">
           <template v-for="item in collections" :key="item">
             <li
               :class="[
-                'flex items-center cursor-pointer hover:text-slate-900 px-6',
+                'flex flex-col md:flex-row items-center cursor-pointer hover:text-slate-900 px-2 md:px-6 w-[80px] md:w-full',
                 activeCollection.id == item.id
                   ? 'text-slate-900 font-semibold'
                   : '',
               ]"
               @click="getProductsInCollection(item)"
             >
-              <div class="w-[60px] h-[60px]">
+              <div class="w-[60px] h-[60px] shrink-0">
                 <img
                   src="@/shared/assets/mocks/16x9_001_astronaut.jpg"
                   alt=""
                   class="rounded-full w-[60px] h-[60px]"
                 />
               </div>
-              <span class="ml-4 line-clamp-1">{{ item.name }}</span>
+              <span
+                class="md:ml-4 truncate text-sm md:text-md w-[60px] md:w-full text-center md:text-left"
+                >{{ item.name }}</span
+              >
             </li>
           </template>
         </template>
         <li
-          class="flex items-center cursor-pointer text-sm pt-4 px-6"
+          class="hidden md:flex items-center cursor-pointer text-sm pt-4 px-6 hover:text-slate-900"
           @click="openCreateDialog"
         >
           <PlusIcon class="h-5 w-5" />
           <span class="ml-4">New Collection</span>
         </li>
       </ul>
+      <Carousel
+        :settings="carouselSettings"
+        :breakpoints="carouselBreakpoints"
+        class="md:hidden w-full"
+      >
+        <template v-if="!loadingCollections">
+          <Slide v-for="item in collections" :key="item">
+            <div class="w-full h-36 text-left mx-4">
+              <div
+                :class="[
+                  'flex flex-col items-center cursor-pointer hover:text-slate-900 px-2 w-[100px]',
+                  activeCollection.id == item.id
+                    ? 'text-slate-900 font-semibold'
+                    : '',
+                ]"
+                @click="getProductsInCollection(item)"
+              >
+                <div class="w-[60px] h-[60px] shrink-0">
+                  <img
+                    src="@/shared/assets/mocks/16x9_001_astronaut.jpg"
+                    alt=""
+                    class="rounded-full w-[60px] h-[60px]"
+                  />
+                </div>
+                <span class="truncate text-sm w-[90px] text-center">{{
+                  item.name
+                }}</span>
+              </div>
+            </div>
+          </Slide>
+        </template>
+        <template #addons>
+          <Navigation
+            v-if="!loadingCollections && collections.length > 0"
+            class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-slate-900 dark:hover:text-slate-900 energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
+          />
+        </template>
+      </Carousel>
     </div>
     <div
       class="w-full md:w-[calc(100%-300px)] bg-slate-50 border-l border-slate-200 p-8 flex md:block justify-center"
     >
-      <div class="max-w-[475px] sm:max-w-[1450px]">
-        <template v-if="loadingCollections">
+      <div
+        class="min-w-[250px] sm:min-w-[400px] max-w-[475px] sm:max-w-[1450px]"
+      >
+        <template v-if="loadingCollections || loadingProducts">
           <div
-            class="h-8 bg-slate-200 rounded mb-8 w-1/3 lg:1/4 animate-pulse"
+            class="h-8 bg-slate-200 rounded mb-8 md:w-1/2 animate-pulse"
           ></div>
           <div
-            class="h-6 bg-slate-200 rounded w-1/3 lg:1/4 animate-pulse"
+            class="h-6 bg-slate-200 rounded mb-8 w-1/2 md:w-1/3 animate-pulse"
           ></div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+          ></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <template v-for="card in 6" :key="card">
+              <PublishedProductCard :loading="true" />
+            </template>
+          </div>
         </template>
         <template v-else>
           <template v-if="collections.length == 0">
@@ -59,7 +119,7 @@
                 This collection is empty
               </div>
               <div v-else class="font-semibold mb-4 sm:mb-0">
-                {{ numProducts }} products
+                {{ productsInCollection.length }} products
               </div>
               <div class="flex space-x-4">
                 <!-- <Listbox
@@ -200,6 +260,8 @@ import {
 import BaseDialog from "../components/BaseDialog.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseInput from "../components/BaseInput.vue";
+import PublishedProductCard from "../components/PublishedProductCard.vue";
+import { Carousel, Navigation, Slide } from "vue3-carousel";
 export default {
   components: {
     // Listbox,
@@ -213,8 +275,26 @@ export default {
     BaseDialog,
     BaseButton,
     BaseInput,
+    PublishedProductCard,
+    Carousel,
+    Navigation,
+    Slide,
   },
   setup() {
+    const carouselSettings = {
+      itemsToShow: 3,
+      snapAlign: "start",
+    };
+    const carouselBreakpoints = {
+      468: {
+        itemsToShow: 4,
+        snapAlign: "start",
+      },
+      568: {
+        itemsToShow: 5,
+        snapAlign: "start",
+      },
+    };
     const createSimpleNotification = inject("create-simple-notification");
     const createNotification = inject("create-notification");
     const collections = ref([]);
@@ -236,6 +316,14 @@ export default {
       isCreateDialogOpen.value = true;
     };
 
+    const resetForm = () => {
+      collection.value = {
+        name: null,
+        description: null,
+        image: null,
+      };
+    };
+
     const getCollections = () => {
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
@@ -247,6 +335,7 @@ export default {
           if (response.data) {
             collections.value = response.data.content;
             activeCollection.value = collections.value[0];
+            getProductsInCollection(activeCollection.value);
           } else {
             createNotification({
               title: "Error",
@@ -264,6 +353,7 @@ export default {
       loadingProducts.value = true;
       if (import.meta.env.MODE === "offline") {
         setTimeout(() => {
+          loadingProducts.value = false;
           console.log("Collections: ");
         }, 1000);
       } else {
@@ -307,7 +397,8 @@ export default {
                 message: `Created collection ${collection.value.name}`,
               });
               closeCreateDialog();
-              // getCollections();
+              getCollections();
+              resetForm();
             }
           });
       }
@@ -318,6 +409,8 @@ export default {
     });
 
     return {
+      carouselSettings,
+      carouselBreakpoints,
       collections,
       loadingCollections,
       loadingProducts,
