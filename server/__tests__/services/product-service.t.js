@@ -321,6 +321,7 @@ describe("ProductService", () => {
       10386 - Threat Matrix
       10392 - Threat of Key Concern
       10390 - Watch
+      10393 - First Responder's Toolbox
       */
       const countries = mapDiss(
         await metadataService.findCountriesFor(["AFG"]),
@@ -402,9 +403,10 @@ describe("ProductService", () => {
       await createPublished(10381); // Foreign Product
       await createPublished(10392); // Threat of Key Concern
       await createPublished(10390); // Watch
+      await createPublished(10393); // First Responder's Toolbox
       await createPublished(10376); // Current (Feature)
       const results = await service.findFeaturesAndBriefs();
-      expect(results.featured).toHaveLength(8); // 3 existing + 1 new current, plus 4 warning products
+      expect(results.featured).toHaveLength(9); // 3 existing + 1 new current, plus 4 warning products, plus 1 First Responder's Toolbox
       expect(results.briefs).toHaveLength(0);
     });
 
