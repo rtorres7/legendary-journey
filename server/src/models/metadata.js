@@ -227,7 +227,7 @@ const MetadataSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 const Metadata = mongoose.model("Metadata", MetadataSchema, "metadata");

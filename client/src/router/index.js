@@ -261,6 +261,7 @@ const studioRoutes = [
 //Workspace
 import DashboardView from "@workspace/views/DashboardView.vue";
 import SavedProductsView from "@workspace/views/SavedProductsView.vue";
+import CollectionsView from "@workspace/views/CollectionsView.vue";
 
 const workspaceRoutes = [
   {
@@ -279,6 +280,15 @@ const workspaceRoutes = [
     meta: {
       domain: "workspace",
       title: "Saved",
+    },
+  },
+  {
+    path: "/workspace/collections",
+    name: "workspace-collections",
+    component: CollectionsView,
+    meta: {
+      domain: "workspace",
+      title: "Collections",
     },
   },
 ];

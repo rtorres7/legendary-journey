@@ -7,7 +7,10 @@ async function runAsUser(req, res, action) {
     return await action(currentUser, req, res);
   }
 
-  KiwiStandardResponsesExpress.standardUnauthorizedResponse('User is required', res);
+  KiwiStandardResponsesExpress.standardUnauthorizedResponse(
+    "User is required",
+    res,
+  );
 }
 
 function pagingParams(req, defaultSortDir = "desc") {
@@ -21,5 +24,5 @@ function pagingParams(req, defaultSortDir = "desc") {
 
 module.exports = {
   runAsUser,
-  pagingParams
+  pagingParams,
 };

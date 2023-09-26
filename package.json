@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "docker-compose build && docker-compose up",
+    "start": "docker-compose -f docker-compose.yml -f docker-compose.local.yml build && docker-compose -f docker-compose.yml -f docker-compose.local.yml up",
+    "dev:start": "docker-compose build && docker-compose up",
     "server": "node --watch server/src/bin/www",
     "server-dependencies": "npm install --prefix server",
     "client-dependencies": "npm install --prefix client",

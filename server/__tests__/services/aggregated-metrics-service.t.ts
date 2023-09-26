@@ -1,12 +1,15 @@
 import "jest-extended";
 
-import crypto from 'crypto';
+import crypto from "crypto";
 import elasticsearch from "@elastic/elasticsearch";
 import mongoose from "mongoose";
 import dayjs from "dayjs";
 
 import { logger } from "../../src/config/logger";
-import { ElasticSearchExtension, MongoExtension } from "@kiwiproject/kiwi-test-js";
+import {
+  ElasticSearchExtension,
+  MongoExtension,
+} from "@kiwiproject/kiwi-test-js";
 
 import constant from "../../src/util/constant.js";
 import AggregatedMetricsService from "../../src/services/aggregated-metrics-service";
@@ -24,7 +27,6 @@ jest.mock("../../src/services/user-service.js", () => {
   });
 });
 
-
 describe("aggregated-metrics-service", () => {
   let mongoUrl: string;
   let esUrl: string;
@@ -39,9 +41,14 @@ describe("aggregated-metrics-service", () => {
 
     esUrl = ElasticSearchExtension.getElasticSearchUrl();
     process.env.ES_URL = esUrl;
-    esClient = new elasticsearch.Client({ nodes: esUrl});
+    esClient = new elasticsearch.Client({ nodes: esUrl });
 
-    await ElasticSearchUtils.createIndex(esClient, "eventlogs", constant.indices[1].mappings, []);
+    await ElasticSearchUtils.createIndex(
+      esClient,
+      "eventlogs",
+      constant.indices[1].mappings,
+      [],
+    );
 
     eventService = new EventService();
     metricsService = new AggregatedMetricsService();
@@ -60,7 +67,7 @@ describe("aggregated-metrics-service", () => {
   });
 
   /**
-   * 
+   *
    */
   describe("userInfo", () => {
     it("should get and set values", async () => {
@@ -93,13 +100,16 @@ describe("aggregated-metrics-service", () => {
   });
 
   /**
-   * 
+   *
    */
   describe("getRecentViewsForUser", () => {
-
-    it("should return no recent products", async() => {
+    it("should return no recent products", async () => {
       // no events, should return nothing
-      const { total, productIds } = await metricsService.getRecentViewsForUser("2", 0, 4);
+      const { total, productIds } = await metricsService.getRecentViewsForUser(
+        "2",
+        0,
+        4,
+      );
       expect(total).toEqual(0);
       expect(productIds).toBeArrayOfSize(0);
     });
@@ -113,10 +123,18 @@ describe("aggregated-metrics-service", () => {
       const eventProductIds = new Set<string>();
       for (let i = 0; i < 100; i++) {
         const userId = `recent-user-${randomInt(3)}`;
-        const eventType = i % 2 === 0 ? constant.EVENT_TYPES.PRODUCT_VIEW : constant.EVENT_TYPES.PRODUCT_SAVE;
-        const productId = `${userId}-${eventType.split("_")[1].toLowerCase()}-product-${randomInt(10)}`;
+        const eventType =
+          i % 2 === 0
+            ? constant.EVENT_TYPES.PRODUCT_VIEW
+            : constant.EVENT_TYPES.PRODUCT_SAVE;
+        const productId = `${userId}-${eventType
+          .split("_")[1]
+          .toLowerCase()}-product-${randomInt(10)}`;
         await eventService.registerEvent(eventType, userId, productId);
-        if (userId === "recent-user-2" && eventType === constant.EVENT_TYPES.PRODUCT_VIEW) {
+        if (
+          userId === "recent-user-2" &&
+          eventType === constant.EVENT_TYPES.PRODUCT_VIEW
+        ) {
           // save product view events for user 2
           if (eventProductIds.has(productId)) {
             eventProductIds.delete(productId); // remove since set maintains insertion order
@@ -125,14 +143,24 @@ describe("aggregated-metrics-service", () => {
         }
       }
       // insert final event to "force wait" (elastic waits until indexing is finished)
-      await eventService.registerEvent(constant.EVENT_TYPES.PRODUCT_VIEW, 1, `user-0-product-0`, {}, true);
+      await eventService.registerEvent(
+        constant.EVENT_TYPES.PRODUCT_VIEW,
+        1,
+        `user-0-product-0`,
+        {},
+        true,
+      );
       // await new Promise((resolve) => { setTimeout(resolve, 2000); });
 
       // expect results to be the last 4 view events in reverse chronological order
       const expected = Array.from(eventProductIds.values()).slice(-4).reverse();
       expect(expected).toBeArrayOfSize(4);
 
-      const { total, productIds } = await metricsService.getRecentViewsForUser("recent-user-2", 0, 4); // from 0, size 4
+      const { total, productIds } = await metricsService.getRecentViewsForUser(
+        "recent-user-2",
+        0,
+        4,
+      ); // from 0, size 4
       expect(total).toEqual(eventProductIds.size);
       expect(productIds).toBeArrayOfSize(4);
 
@@ -176,10 +204,9 @@ describe("aggregated-metrics-service", () => {
 
   //
   describe("getRecentPublishedForOrg", () => {
-
-    it("should return no recently published products", async() => {
+    it("should return no recently published products", async () => {
       // no events, should return nothing
-      const org = crypto.randomBytes(2).toString('hex');
+      const org = crypto.randomBytes(2).toString("hex");
       const results = await metricsService.getRecentPublishedForOrg(org);
       expect(results.length).toEqual(0);
     });
@@ -191,10 +218,10 @@ describe("aggregated-metrics-service", () => {
 
       // insert events with random product ids
       const productIds = new Set<string>();
-      const org = crypto.randomBytes(2).toString('hex');
+      const org = crypto.randomBytes(2).toString("hex");
       const meta = {
-        datePublished: dayjs().subtract(randomInt(100), 'minute'),
-        producingOffices: [ { code: org, name: org } ]
+        datePublished: dayjs().subtract(randomInt(100), "minute"),
+        producingOffices: [{ code: org, name: org }],
       };
       for (let i = 0; i < 100; i++) {
         const userId = `recent-published-${randomInt(10)}`;
@@ -204,7 +231,13 @@ describe("aggregated-metrics-service", () => {
         productIds.add(productId);
       }
       // insert final event to "force wait" (elastic waits until indexing is finished)
-      await eventService.registerEvent(constant.EVENT_TYPES.PRODUCT_VIEW, 1, `product-last`, null, true);
+      await eventService.registerEvent(
+        constant.EVENT_TYPES.PRODUCT_VIEW,
+        1,
+        `product-last`,
+        null,
+        true,
+      );
       // await new Promise((resolve) => { setTimeout(resolve, 2000); });
 
       // expect results all recently published products in the last 90 days

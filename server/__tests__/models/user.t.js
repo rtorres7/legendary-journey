@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const { PostgresExtension } = require("@kiwiproject/kiwi-test-js");
 
-describe('User model', () => {
+describe("User model", () => {
   let postgresUri;
 
   beforeAll(async () => {
@@ -14,14 +14,14 @@ describe('User model', () => {
     await PostgresExtension.dropDatabase("user_model");
   });
 
-  describe('authorizations', () => {
-    it('should contain some with true if wire_editor', async () => {
+  describe("authorizations", () => {
+    it("should contain some with true if wire_editor", async () => {
       const sequelize = new Sequelize(postgresUri);
 
-      const userModel = require('../../src/models/user');
+      const userModel = require("../../src/models/user");
       userModel(sequelize);
 
-      const user = sequelize.models.User.build({ roles: ['wire_editor'] });
+      const user = sequelize.models.User.build({ roles: ["wire_editor"] });
 
       const authorizations = user.authorizations;
 
@@ -37,13 +37,13 @@ describe('User model', () => {
       expect(authorizations.canManageSpecialEditions).toBeFalse();
     });
 
-    it('should contain some with true if community_editor', async () => {
+    it("should contain some with true if community_editor", async () => {
       const sequelize = new Sequelize(postgresUri);
 
-      const userModel = require('../../src/models/user');
+      const userModel = require("../../src/models/user");
       userModel(sequelize);
 
-      const user = sequelize.models.User.build({ roles: ['community_editor'] });
+      const user = sequelize.models.User.build({ roles: ["community_editor"] });
 
       const authorizations = user.authorizations;
 
@@ -59,13 +59,15 @@ describe('User model', () => {
       expect(authorizations.canManageSpecialEditions).toBeFalse();
     });
 
-    it('should contain one with true if special_edition_manager', async () => {
+    it("should contain one with true if special_edition_manager", async () => {
       const sequelize = new Sequelize(postgresUri);
 
-      const userModel = require('../../src/models/user');
+      const userModel = require("../../src/models/user");
       userModel(sequelize);
 
-      const user = sequelize.models.User.build({ roles: ['special_edition_manager'] });
+      const user = sequelize.models.User.build({
+        roles: ["special_edition_manager"],
+      });
 
       const authorizations = user.authorizations;
 

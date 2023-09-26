@@ -12,6 +12,7 @@ describe("ObjectStoreService", () => {
   let bucketName: string;
 
   beforeAll(async () => {
+    MinioContainerUtils.setMinioHost(MinioExtension.getMinioHost());
     MinioContainerUtils.setMinioPort(MinioExtension.getMinioPort());
     service = new ObjectStoreService();
     client = service.getClient();
@@ -31,7 +32,7 @@ describe("ObjectStoreService", () => {
 
     if (exists) {
       const objects: Array<BucketItem> = await service.listObjects(bucketName);
-      for(const obj of objects) {
+      for (const obj of objects) {
         await service.removeObject(bucketName, `${obj.name}`);
       }
       await service.removeBucket(bucketName);
@@ -44,7 +45,9 @@ describe("ObjectStoreService", () => {
         const newBucketName: string = MinioContainerUtils.randomName();
 
         await expect(service.bucketExists(newBucketName)).resolves.toBeFalse();
-        await expect(service.makeBucket(newBucketName)).resolves.toBeUndefined();
+        await expect(
+          service.makeBucket(newBucketName),
+        ).resolves.toBeUndefined();
         await expect(service.bucketExists(newBucketName)).resolves.toBeTrue();
 
         await client.removeBucket(newBucketName);
@@ -52,18 +55,24 @@ describe("ObjectStoreService", () => {
 
       it("should error creating existing bucket", async () => {
         await expect(service.bucketExists(bucketName)).resolves.toBeTrue();
-        await expect(service.makeBucket(bucketName)).rejects.toMatchObject({ code: "BucketAlreadyOwnedByYou" });
+        await expect(service.makeBucket(bucketName)).rejects.toMatchObject({
+          code: "BucketAlreadyOwnedByYou",
+        });
       });
 
       it("should error creating bucket with invalid name", async () => {
         const invalidBucketName: string = "invalid_NAME";
-        await expect(service.makeBucket(invalidBucketName)).rejects.toThrow("Invalid bucket name");
+        await expect(service.makeBucket(invalidBucketName)).rejects.toThrow(
+          "Invalid bucket name",
+        );
       });
     });
 
     describe("listBuckets", () => {
       it("should list bucket", async () => {
-        await expect(service.listBuckets()).resolves.toSatisfyAny((i) => i.name === bucketName);
+        await expect(service.listBuckets()).resolves.toSatisfyAny(
+          (i) => i.name === bucketName,
+        );
       });
     });
 
@@ -77,8 +86,12 @@ describe("ObjectStoreService", () => {
       it("should error removing nonexistent bucket", async () => {
         const nonExistentBucket = MinioContainerUtils.randomName();
 
-        await expect(service.bucketExists(nonExistentBucket)).resolves.toBeFalse();
-        await expect(service.removeBucket(nonExistentBucket)).rejects.toMatchObject({ code: "NoSuchBucket" });
+        await expect(
+          service.bucketExists(nonExistentBucket),
+        ).resolves.toBeFalse();
+        await expect(
+          service.removeBucket(nonExistentBucket),
+        ).rejects.toMatchObject({ code: "NoSuchBucket" });
       });
     });
   });
@@ -86,46 +99,95 @@ describe("ObjectStoreService", () => {
   describe("objects", () => {
     describe("putObject", () => {
       it("should put object in bucket", async () => {
-        const objectName = await MinioContainerUtils.putRandomObject(client, bucketName);
-        await expect(service.listObjects(bucketName)).resolves.toSatisfyAny((i) => i.name === objectName);
+        const objectName = await MinioContainerUtils.putRandomObject(
+          client,
+          bucketName,
+        );
+        await expect(service.listObjects(bucketName)).resolves.toSatisfyAny(
+          (i) => i.name === objectName,
+        );
       });
 
       it("should put empty object in bucket", async () => {
-        const objectName = await MinioContainerUtils.putRandomObject(client, bucketName, null, 0);
-        await expect(service.listObjects(bucketName)).resolves.toSatisfyAny((i) => i.name === objectName);
-        await expect(service.statObject(bucketName, objectName)).resolves.toMatchObject({ size: 0 });
+        const objectName = await MinioContainerUtils.putRandomObject(
+          client,
+          bucketName,
+          null,
+          0,
+        );
+        await expect(service.listObjects(bucketName)).resolves.toSatisfyAny(
+          (i) => i.name === objectName,
+        );
+        await expect(
+          service.statObject(bucketName, objectName),
+        ).resolves.toMatchObject({ size: 0 });
       });
 
       it("should error trying to put object in nonexistent bucket", async () => {
         const nonExistentBucket = MinioContainerUtils.randomName();
-        await expect(MinioContainerUtils.putRandomObject(client, nonExistentBucket)).rejects.toMatchObject({ code: "NoSuchBucket" });
+        await expect(
+          MinioContainerUtils.putRandomObject(client, nonExistentBucket),
+        ).rejects.toMatchObject({ code: "NoSuchBucket" });
       });
 
       it("should replace existing object", async () => {
-        const objectName = await MinioContainerUtils.putRandomObject(client, bucketName);
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(1);
-        await expect(MinioContainerUtils.putRandomObject(client, bucketName, objectName, 0)).resolves.toEqual(objectName);
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(1);
-        await expect(service.statObject(bucketName, objectName)).resolves.toMatchObject({ size: 0 });
-        await expect(service.removeObject(bucketName, objectName)).resolves.toBeUndefined();
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(0);
+        const objectName = await MinioContainerUtils.putRandomObject(
+          client,
+          bucketName,
+        );
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          1,
+        );
+        await expect(
+          MinioContainerUtils.putRandomObject(
+            client,
+            bucketName,
+            objectName,
+            0,
+          ),
+        ).resolves.toEqual(objectName);
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          1,
+        );
+        await expect(
+          service.statObject(bucketName, objectName),
+        ).resolves.toMatchObject({ size: 0 });
+        await expect(
+          service.removeObject(bucketName, objectName),
+        ).resolves.toBeUndefined();
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          0,
+        );
       });
     });
 
     describe("statObject", () => {
       it("should stat object", async () => {
-        const objectName = await MinioContainerUtils.putRandomObject(client, bucketName);
-        await expect(service.statObject(bucketName, objectName)).resolves.toMatchObject({ metaData: { "content-type": "binary/octet-stream" }, versionId: null });
+        const objectName = await MinioContainerUtils.putRandomObject(
+          client,
+          bucketName,
+        );
+        await expect(
+          service.statObject(bucketName, objectName),
+        ).resolves.toMatchObject({
+          metaData: { "content-type": "binary/octet-stream" },
+          versionId: null,
+        });
       });
 
       it("should error trying to stat nonexistent object", async () => {
-        await expect(service.statObject(bucketName, MinioContainerUtils.randomName())).rejects.toThrow("Not Found");
+        await expect(
+          service.statObject(bucketName, MinioContainerUtils.randomName()),
+        ).rejects.toThrow("Not Found");
       });
     });
 
     describe("getObject", () => {
       it("should get object", async () => {
-        const objectName = await MinioContainerUtils.putRandomObject(client, bucketName);
+        const objectName = await MinioContainerUtils.putRandomObject(
+          client,
+          bucketName,
+        );
         const objectStat = await service.statObject(bucketName, objectName);
         const stream = await service.getObject(bucketName, objectName);
         const file = await MinioContainerUtils.fileWriteStreamToTmp(stream);
@@ -134,43 +196,66 @@ describe("ObjectStoreService", () => {
       });
 
       it("should error trying to get nonexistent object", async () => {
-        await expect(service.statObject(bucketName, MinioContainerUtils.randomName())).rejects.toThrow("Not Found");
+        await expect(
+          service.statObject(bucketName, MinioContainerUtils.randomName()),
+        ).rejects.toThrow("Not Found");
       });
     });
 
     describe("listObjects", () => {
       it("should list bucket contents", async () => {
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(0);
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          0,
+        );
 
         await MinioContainerUtils.putRandomObject(client, bucketName);
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(1);
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          1,
+        );
 
         await MinioContainerUtils.putRandomObject(client, bucketName);
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(2);
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          2,
+        );
       });
 
       it("should error trying to list nonexistent bucket", async () => {
         const nonExistentBucket = MinioContainerUtils.randomName();
-        await expect(service.listObjects(nonExistentBucket)).rejects.toMatchObject({ code: "NoSuchBucket" });
+        await expect(
+          service.listObjects(nonExistentBucket),
+        ).rejects.toMatchObject({ code: "NoSuchBucket" });
       });
     });
 
     describe("removeObject", () => {
       it("should remove object", async () => {
-        const objectName = await MinioContainerUtils.putRandomObject(client, bucketName);
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(1);
+        const objectName = await MinioContainerUtils.putRandomObject(
+          client,
+          bucketName,
+        );
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          1,
+        );
 
-        await expect(service.removeObject(bucketName, objectName)).resolves.toBeUndefined();
-        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(0);
+        await expect(
+          service.removeObject(bucketName, objectName),
+        ).resolves.toBeUndefined();
+        await expect(service.listObjects(bucketName)).resolves.toBeArrayOfSize(
+          0,
+        );
       });
 
       it("should error trying to remove from nonexistent bucket", async () => {
         const nonExistentBucket = MinioContainerUtils.randomName();
-        await expect(service.removeObject(nonExistentBucket, nonExistentBucket)).rejects.toMatchObject({ code: "NoSuchBucket" });
+        await expect(
+          service.removeObject(nonExistentBucket, nonExistentBucket),
+        ).rejects.toMatchObject({ code: "NoSuchBucket" });
       });
 
       it("should remove nonexistent object", async () => {
-        await expect(service.removeObject(bucketName, MinioContainerUtils.randomName())).resolves.toBeUndefined();
+        await expect(
+          service.removeObject(bucketName, MinioContainerUtils.randomName()),
+        ).resolves.toBeUndefined();
       });
     });
   });

@@ -5,7 +5,10 @@ import { KiwiPreconditions } from "@kiwiproject/kiwi-js";
 
 // import { config } from "../config/config";
 import { logger } from "../config/logger";
-import { ObjectStoreService, FileUploadedObjectInfo } from "./object-store-service";
+import {
+  ObjectStoreService,
+  FileUploadedObjectInfo,
+} from "./object-store-service";
 
 /** placeholder {@link Article.AttacmentSchema} */
 interface Attachment {
@@ -40,10 +43,13 @@ export class AttachmentService {
   /**
    * Add object to store.
    * @param product
-   * @param uploadInfo 
+   * @param uploadInfo
    * @returns attachment metadata WARNING does not have a mongo id until the product is saved
    */
-  async add(product: any, uploadInfo: FileUploadedObjectInfo): Promise<Attachment> {
+  async add(
+    product: any,
+    uploadInfo: FileUploadedObjectInfo,
+  ): Promise<Attachment> {
     // replace with Joi
     KiwiPreconditions.checkArgumentDefined(product);
     KiwiPreconditions.checkArgument(Array.isArray(product.attachments));
@@ -71,11 +77,15 @@ export class AttachmentService {
       fileSize: uploadInfo.size,
       createdAt: new Date(),
       type: "ATTACHMENT",
-      destination: this.buildUrl(uploadInfo.storage, uploadInfo.bucketName, uploadInfo.objectName),
+      destination: this.buildUrl(
+        uploadInfo.storage,
+        uploadInfo.bucketName,
+        uploadInfo.objectName,
+      ),
       visible: uploadInfo.visible,
     };
     product.attachments.push(metadata);
-    product.markModified('attachments');
+    product.markModified("attachments");
 
     logger.info("AttachmentService.add:  attachment:%j", metadata);
     return Promise.resolve(metadata);
@@ -83,17 +93,23 @@ export class AttachmentService {
 
   /**
    * Retrieve object from store.
-   * @param product 
-   * @param id 
+   * @param product
+   * @param id
    * @returns metadata and object byte stream
    */
-  async get(product: Product, id: string): Promise<{ metadata: Attachment, stream: NodeJS.ReadableStream }> {
+  async get(
+    product: Product,
+    id: string,
+  ): Promise<{ metadata: Attachment; stream: NodeJS.ReadableStream }> {
     KiwiPreconditions.checkArgumentDefined(product);
     KiwiPreconditions.checkArgumentDefined(id);
     const metadata = this.findMetadata(product, id);
     logger.info("AttachmentService.get:  id:%s, metadata:%j", id, metadata);
     const { bucketName, objectName } = this.parseUrl(metadata.destination);
-    const stream = await this.objectStoreService.getObject(bucketName, objectName);
+    const stream = await this.objectStoreService.getObject(
+      bucketName,
+      objectName,
+    );
     KiwiPreconditions.checkArgumentDefined(stream);
     return Promise.resolve({ metadata, stream });
   }
@@ -111,7 +127,7 @@ export class AttachmentService {
       const { bucketName, objectName } = this.parseUrl(i.destination);
       await this.objectStoreService.removeObject(bucketName, objectName);
     }
-    product.markModified('attachments');
+    product.markModified("attachments");
     return Promise.resolve(removed);
   }
 
@@ -122,39 +138,52 @@ export class AttachmentService {
     // logger.info("%O", product);
     KiwiPreconditions.checkArgument(Array.isArray(product.attachments));
     const results = product.attachments.filter(this.findAttachmentFn(id));
-    switch(results.length) {
+    switch (results.length) {
       case 0:
         throw new Error(`attachment metadata ${id} not found`);
       case 1:
         return results[0];
       default:
-        if (id === 'article') {
+        if (id === "article") {
           // in case of multiple thumbnails, delete all except the last one
-          logger.warn("AttachmentService.findMetadata:  id:%s, results.length:%d", id, results.length);
+          logger.warn(
+            "AttachmentService.findMetadata:  id:%s, results.length:%d",
+            id,
+            results.length,
+          );
           for (let i = 0; i < results.length - 1; i++) {
             results[i].deleted = true;
           }
           return results[results.length - 1];
         }
-        throw new Error(`too many attachment metadata ${id} count ${results.length}`);
+        throw new Error(
+          `too many attachment metadata ${id} count ${results.length}`,
+        );
     }
   }
 
   /**
    * Special case if id === "article", searches only against fileNames matching article.ext
    * @param id mongodb id (_id or id) or attachmentId or fileName
-   * @returns 
+   * @returns
    */
   private findAttachmentFn(id: string): (i: Attachment) => boolean {
     if (id === "article") {
-      return (i: Attachment) => !i.deleted && /^article\.(jpg|jpeg|png|gif|webp)$/i.test(i.fileName);
+      return (i: Attachment) =>
+        !i.deleted && /^article\.(jpg|jpeg|png|gif|webp)$/i.test(i.fileName);
     } else {
-      return (i: Attachment) => !i.deleted && (i.id === id || i.attachmentId === id || i.fileName === id);
+      return (i: Attachment) =>
+        !i.deleted &&
+        (i.id === id || i.attachmentId === id || i.fileName === id);
     }
-  }  
+  }
 
   /** storage://bucket/objectName */
-  private buildUrl(storage: string, bucketName: string, objectName: string): string {
+  private buildUrl(
+    storage: string,
+    bucketName: string,
+    objectName: string,
+  ): string {
     KiwiPreconditions.checkArgumentDefined(storage);
     KiwiPreconditions.checkArgumentDefined(bucketName);
     KiwiPreconditions.checkArgumentDefined(objectName);
@@ -162,7 +191,11 @@ export class AttachmentService {
   }
 
   /** storage://bucket/objectName */
-  public parseUrl(url: string): { storage: string; bucketName: string; objectName: string } {
+  public parseUrl(url: string): {
+    storage: string;
+    bucketName: string;
+    objectName: string;
+  } {
     KiwiPreconditions.checkArgumentDefined(url);
     const [storage, path] = url.split("://");
     const bucketSeparatorIndex = path.indexOf("/");
@@ -183,7 +216,10 @@ export class AttachmentService {
   private isThumbnail(fileName: string): boolean {
     KiwiPreconditions.checkArgumentDefined(fileName);
     const parsed = path.parse(fileName);
-    return parsed.name === "article" && /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext);
+    return (
+      parsed.name === "article" &&
+      /^\.(jpg|jpeg|png|gif|webp)$/i.test(parsed.ext)
+    );
   }
 }
 

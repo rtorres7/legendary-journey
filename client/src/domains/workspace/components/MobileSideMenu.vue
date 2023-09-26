@@ -97,23 +97,23 @@
                       </router-link>
                     </div>
                   </li>
-                  <!-- <li>
-                  <div>
-                    <a href="/workspace#collections" class="">
-                      <div
-                        :class="
-                          isActivePage('#collections')
-                            ? 'text-gray-50 bg-slate-800/90'
-                            : 'hover:text-gray-50 hover:bg-slate-800/90'
-                        "
-                        class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                      >
-                        <FolderIcon class="h-6 w-6" aria-hidden="true" />
-                        <span class="ml-4">Collections</span>
-                      </div>
-                    </a>
-                  </div>
-                </li> -->
+                  <li>
+                    <div>
+                      <router-link to="/workspace/collections">
+                        <div
+                          :class="
+                            route.name == 'workspace-collections'
+                              ? 'text-gray-50 bg-slate-800/90'
+                              : 'hover:text-gray-50 hover:bg-slate-800/90'
+                          "
+                          class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
+                        >
+                          <FolderIcon class="h-6 w-6" aria-hidden="true" />
+                          <span class="ml-4">Collections</span>
+                        </div>
+                      </router-link>
+                    </div>
+                  </li>
                 </ul>
               </div>
               <ul class="text-gray-400 space-y-1">
@@ -151,6 +151,7 @@ import {
   ArrowLeftOnRectangleIcon,
   HomeIcon,
   //BriefcaseIcon,
+  FolderIcon,
   XMarkIcon,
   BookmarkIcon,
 } from "@heroicons/vue/24/outline";
@@ -163,6 +164,7 @@ export default {
     ArrowLeftOnRectangleIcon,
     HomeIcon,
     //BriefcaseIcon,
+    FolderIcon,
     XMarkIcon,
     BookmarkIcon,
   },

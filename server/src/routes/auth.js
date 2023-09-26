@@ -1,28 +1,35 @@
 const express = require("express");
 const router = express.Router();
-const auth = require('../services/auth');
-const {KiwiStandardResponsesExpress} = require('@kiwiproject/kiwi-js');
+const auth = require("../services/auth");
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
+const { config } = require("../config/config");
 
-router.get('/auth/login', auth.passport.authenticate('oauth2', {
-  /*
+router.get(
+  "/auth/login",
+  auth.passport.authenticate("oauth2", {
+    /*
     #swagger.tags = ['Auth']
     #swagger.summary = 'Checks for user being authenticated and if no redirects to OAuth provider'
    */
 
-  scope: ['openid', 'profile', 'roles', 'email']
-}));
+    scope: config.oauth.scope,
+  }),
+);
 
-router.get('/auth/callback', auth.passport.authenticate('oauth2', {
-  /*
+router.get(
+  "/auth/callback",
+  auth.passport.authenticate("oauth2", {
+    /*
     #swagger.tags = ['Auth']
     #swagger.summary = 'Callback for the OAuth provider and sets the user as logged in or redirects to login again'
    */
 
-  failureRedirect: '/auth/login',
-  successRedirect: '/'
-}));
+    failureRedirect: "/auth/login",
+    successRedirect: "/",
+  }),
+);
 
-router.get('/auth/profile', (req, res) => {
+router.get("/auth/profile", (req, res) => {
   /*
     #swagger.tags = ['Auth']
     #swagger.summary = 'Returns the logged in user information'
@@ -32,11 +39,12 @@ router.get('/auth/profile', (req, res) => {
       }
     }
    */
-
+  console.log("Inside auth/profile");
+  console.log("req.user", req.user);
   res.json(req.user);
 });
 
-router.delete('/auth/logout', (req, res) => {
+router.delete("/auth/logout", (req, res) => {
   /*
     #swagger.tags = ['Auth']
     #swagger.summary = 'Logs out the user'
@@ -54,8 +62,12 @@ router.delete('/auth/logout', (req, res) => {
 
   req.logout((error) => {
     if (error) {
-      console.warn('There was a problem logging out', error);
-      KiwiStandardResponsesExpress.standardErrorResponse(500, error.message, res);
+      console.warn("There was a problem logging out", error);
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        error.message,
+        res,
+      );
       return;
     }
 
