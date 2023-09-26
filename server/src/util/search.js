@@ -100,9 +100,7 @@ async function runSearch(
   const skipCount = (page - 1) * perPage;
   const sortClause = buildSortClause(sortMethod);
   const query = buildQueryFromFilters(term, filters, fields);
-  const aggregations = buildAggregations(
-    fields.filter((field) => field.aggregation !== undefined),
-  );
+  const aggregations = buildAggregations(fields.filter(field => field.aggregation !== undefined), filters);
 
   const searchParams = {
     index: indexName,
@@ -242,18 +240,18 @@ function addOrClause(query, term, filters) {
   query.bool.filter.push(orClause);
 }
 
-function buildAggregations(fields) {
+function buildAggregations(fields, filters) {
   return fields.reduce((agg, field) => {
     return {
       ...agg,
-      [field["aggregation"]]: { terms: { field: field["field"] } },
+      [field['aggregation']]: { terms: { field: field['field'], exclude: filters[field["aggregation"]], } },
     };
   }, {});
 }
 
 async function resolveAggregations(aggregations) {
   const lookups = await metadataService.findAllLookups();
-
+  
   const resolvedAggs = {};
   Object.entries(aggregations).forEach((entry) => {
     const [key, value] = entry;
@@ -272,8 +270,9 @@ async function resolveAggregations(aggregations) {
     });
 
     const displayName = lookups[key].displayName;
-
-    resolvedAggs[key] = { displayName: displayName, rows: rows };
+    if (rows.length > 0) {
+      resolvedAggs[key] = { displayName: displayName, rows: rows} ;
+    }
   });
 
   return resolvedAggs;
