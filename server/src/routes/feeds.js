@@ -6,6 +6,8 @@ const { runAsUser, pagingParams } = require("../util/request");
 const Feed = require("../models/feed");
 const FeedsService = require("../services/feeds-service");
 const feedsService = new FeedsService();
+const ProductSearchService = require("../services/product-search-service");
+const searchService = new ProductSearchService(process.env.ES_URL);
 
 router.get("/feeds", async (req, res) => {
   /*
@@ -93,6 +95,61 @@ router.get("/feeds/:id", async (req, res) => {
 
     try {
       const feed = await feedsService.findFeedById(req.params.id);
+
+      const nullToUndefined = (val) => (val === null ? undefined : val);
+
+      const url = new URL(feed.searchParams);
+      const perPage = nullToUndefined(url.searchParams.get("per_page"));
+      const page = nullToUndefined(url.searchParams.get("page"));
+      const sortDir = nullToUndefined(url.searchParams.get("sort_dir"));
+      const searchParams = new URLSearchParams(url.search);
+      const searchText = nullToUndefined(searchParams.get("text"));
+
+      const queryObject = {};
+      url.searchParams.forEach((value, key) => {
+        queryObject[key] = nullToUndefined(value);
+      });
+
+      const searchResults = await searchService.search(
+        searchText,
+        perPage,
+        page,
+        sortDir,
+        queryObject,
+      );
+
+      if (searchResults && searchResults.results) {
+        feed.setDataValue("articles", searchResults.results);
+      }
+
+      feed.setDataValue("readings", [
+        {
+          id: "WIReWIRe_sample_2",
+          name: "WIReWIRe_sample_2",
+          title: "WIReWIRe_sample_2",
+          doc_num: "WIReWIRe_sample_2",
+          name_classification: "UNCLASSIFIED",
+          title_classification: "UNCLASSIFIED",
+        },
+        {
+          id: "WIReWIRe_sample_5",
+          name: "WIReWIRe_sample_5",
+          title: "WIReWIRe_sample_5",
+          doc_num: "WIReWIRe_sample_5",
+          name_classification: "UNCLASSIFIED",
+          title_classification: "UNCLASSIFIED",
+        },
+      ]);
+
+      feed.setDataValue(
+        "selectedReadings",
+        '{"WIReWIRe_sample_3","WIReWIRe_sample_5"}',
+      );
+
+      // const arrayFromString = feed.selectedReadings.slice(1, -1).split(",");
+      // const newlineDelimitedString = arrayFromString.join("\n");
+      // feed.setDataValue("selectedReadings", newlineDelimitedString);
+
       res.json(feed);
     } catch (error) {
       KiwiStandardResponsesExpress.standardErrorResponse(

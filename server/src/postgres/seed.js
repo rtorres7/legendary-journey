@@ -97,7 +97,7 @@ async function loadUserData(organization) {
       enabled: true,
       dn: "O=udev2dev.com,OU=maximus,CN=kevibeh",
       email: "kevibeh@example.com",
-      roles: ["wire_editor", "community_editor"],
+      roles: ["wire_editor", "community_editor", "special_edition_manager"],
       organizationId: organization.id,
     },
   });
