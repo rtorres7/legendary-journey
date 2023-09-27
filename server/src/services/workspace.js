@@ -1,5 +1,6 @@
 const ProductSearchService = require("./product-search-service");
 const ProductService = require("./product-service");
+const { ObjectStoreService } = require("./object-store-service");
 const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const _ = require("lodash");
@@ -10,6 +11,7 @@ class WorkspaceService {
   constructor() {
     this.productService = new ProductService();
     this.productSearchService = new ProductSearchService();
+    this.objectStoreService = new ObjectStoreService();
   }
 
   async findPageOfSavedProductsForUser(
@@ -204,6 +206,33 @@ class WorkspaceService {
         id: id,
       },
     });
+  }
+
+  async getCollectionImage(id) {
+    const collection = await models.Collection.findByPk(id);
+
+    if (collection.image) {
+      const imageData = JSON.parse(collection.image);
+      const stream = await this.objectStoreService.getObject(
+        imageData.bucketName,
+        imageData.objectName,
+      );
+
+      return Promise.resolve({ metadata: imageData, stream });
+    }
+
+    return Promise.resolve({ metadata: null, stream: null });
+  }
+
+  async deleteCollectionImage(id) {
+    const collection = await models.Collection.findByPk(id);
+    if (collection.image) {
+      const imageData = JSON.parse(collection.image);
+      await this.objectStoreService.removeObject(
+        imageData.bucketName,
+        imageData.objectName,
+      );
+    }
   }
 
   async findSavedProductsInCollection(
