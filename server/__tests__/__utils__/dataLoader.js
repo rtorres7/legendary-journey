@@ -16,7 +16,8 @@ const articles = [
         fileSize: 152437,
         type: "ATTACHMENT",
         attachmentId: "1c44f780-ee46-4615-b058-6c84eab870ad",
-        destination: "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
+        destination:
+          "minio://attachments/WIReWIRe_sample_1/article.jpg-6c84eab870ad",
         visible: false,
       },
     ],
@@ -117,7 +118,8 @@ const articles = [
         fileSize: 384096,
         type: "ATTACHMENT",
         attachmentId: "e6eec89a-e4e1-49a6-90ad-99e9de7ed8b1",
-        destination: "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
+        destination:
+          "minio://attachments/WIReWIRe_sample_2/article.jpg-99e9de7ed8b1",
         visible: false,
       },
     ],
@@ -251,9 +253,10 @@ const articles = [
         fileSize: 399296,
         type: "ATTACHMENT",
         attachmentId: "48d35447-6b51-40c4-9793-63da601e3ec0",
-        destination: "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
+        destination:
+          "minio://attachments/WIReWIRe_sample_3/article.jpg-63da601e3ec0",
         visible: false,
-      }
+      },
     ],
     classification: "UNC",
     classificationXml: "",
@@ -352,9 +355,10 @@ const articles = [
         fileSize: 75668,
         type: "ATTACHMENT",
         attachmentId: "b33d5fa9-f888-4a2c-9ff1-5ed69cb0cb22",
-        destination: "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
+        destination:
+          "minio://attachments/WIReWIRe_sample_4/article.jpg-5ed69cb0cb22",
         visible: false,
-      }
+      },
     ],
     classification: "UNC",
     classificationXml: "",
@@ -481,7 +485,7 @@ const articles = [
       name: "Analysis: All Source",
       code: "analysis.all_source",
     },
-    state: "draft",
+    state: "posted",
     subregions: [],
     summary:
       "Events to commemorate Queen Elizabeth II are continuing across the U.K. this week, after King Charles III was proclaimed monarch at a ceremony in London over the weekend. King Charles III visited Parliament on Monday, where he made his first address there as monarch and lawmakers expressed their condolences for the death of his mother, before flying with the queen consort to Edinburgh. That the King has chosen to begin his reign with visits to Edinburgh, Belfast and Cardiff is telling. It suggests that the future of the Union is at the heart of his concerns. The early decades of his late mother's reign were characterised by the long, slow contraction of British Imperial power around the world. He will be alert to the possibility that his own reign could come to be defined by the continuation of that process here - and the eventual dissolution of the United Kingdom itself.",
@@ -3062,7 +3066,6 @@ const loadFeeds = async (postgresUrl) => {
     state: "Draft",
     classification: "U",
   });
-
 };
 
 const clearFeeds = async (postgresUrl) => {
@@ -3071,7 +3074,7 @@ const clearFeeds = async (postgresUrl) => {
   feedsModel(sequelize);
 
   await sequelize.models.Feed.destroy({
-    truncate: true
+    truncate: true,
   });
 };
 
