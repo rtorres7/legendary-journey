@@ -28,6 +28,24 @@ class WorkspaceService {
       order: [["createdAt", "desc"]],
     });
 
+    return await this.runSearchFromSavedProductIds(
+      sortDir,
+      savedProductsForUser,
+      page,
+      perPage,
+      filters,
+      term,
+    );
+  }
+
+  async runSearchFromSavedProductIds(
+    sortDir,
+    savedProductsForUser,
+    page,
+    perPage,
+    filters,
+    term,
+  ) {
     let kiwiSort = KiwiSort.of("datePublished", sortDir);
     if (sortDir === "views") {
       kiwiSort = KiwiSort.of("views", "desc");
@@ -215,6 +233,8 @@ class WorkspaceService {
     filters = {},
   ) {
     const savedProductsForUserInCollection = await models.SavedProduct.findAll({
+      attributes: ["productId"],
+      order: [["createdAt", "desc"]],
       include: {
         model: models.Collection,
         where: {
@@ -223,30 +243,14 @@ class WorkspaceService {
       },
     });
 
-    const savedProductIds = savedProductsForUserInCollection.map(
-      (savedProduct) => savedProduct.productId,
-    );
-    const filtersWithUsersSavedProducts = {
-      ...filters,
-      id: savedProductIds,
-    };
-
-    const results = await this.productSearchService.search(
-      term,
-      perPage,
-      page,
+    return await this.runSearchFromSavedProductIds(
       sortDir,
-      filtersWithUsersSavedProducts,
+      savedProductsForUserInCollection,
+      page,
+      perPage,
+      filters,
+      term,
     );
-
-    results.results.forEach((product) => {
-      product.saved = true;
-    });
-
-    return KiwiPage.of(page, perPage, results.totalCount, results.results)
-      .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of("datePublished", sortDir))
-      .addSupplementaryData({ aggregations: results.aggregations });
   }
 
   async addSavedProductToCollection(collectionId, savedProductId) {
