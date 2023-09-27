@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col md:flex-row grow bg-slate-100">
-    <div class="md:w-[300px] md:flex flex-col">
+    <div class="w-full md:w-[300px] md:flex flex-col">
       <div class="flex justify-between items-center">
         <div class="font-semibold p-6 text-lg">Collections</div>
         <div
@@ -11,12 +11,12 @@
           <span class="ml-4">New Collection</span>
         </div>
       </div>
-      <ul class="md:space-y-3 text-slate-600 mb-6 hidden md:flex md:flex-col">
+      <ul class="hidden md:flex md:flex-col space-y-3 text-slate-600 mb-6">
         <template v-if="!loadingCollections && collections.length > 0">
           <template v-for="item in collections" :key="item">
             <li
               :class="[
-                'flex flex-col md:flex-row items-center cursor-pointer hover:text-slate-900 px-2 md:px-6 w-[80px] md:w-full',
+                'flex flex-row items-center cursor-pointer hover:text-slate-900 px-6 w-full',
                 activeCollection.id == item.id
                   ? 'text-slate-900 font-semibold'
                   : '',
@@ -25,20 +25,19 @@
             >
               <div class="w-[60px] h-[60px] shrink-0">
                 <img
-                  src="@/shared/assets/mocks/16x9_001_astronaut.jpg"
+                  src="@/shared/assets/mocks/1x1_001_plane.jpg"
                   alt=""
                   class="rounded-full w-[60px] h-[60px]"
                 />
               </div>
-              <span
-                class="md:ml-4 truncate text-sm md:text-md w-[60px] md:w-full text-center md:text-left"
-                >{{ item.name }}</span
-              >
+              <span class="ml-4 truncate w-full text-left">{{
+                item.name
+              }}</span>
             </li>
           </template>
         </template>
         <li
-          class="hidden md:flex items-center cursor-pointer text-sm pt-4 px-6 hover:text-slate-900"
+          class="flex items-center cursor-pointer text-sm pt-4 px-6 hover:text-slate-900"
           @click="openCreateDialog"
         >
           <PlusIcon class="h-5 w-5" />
@@ -64,7 +63,7 @@
               >
                 <div class="w-[60px] h-[60px] shrink-0">
                   <img
-                    src="@/shared/assets/mocks/16x9_001_astronaut.jpg"
+                    src="@/shared/assets/mocks/1x1_001_plane.jpg"
                     alt=""
                     class="rounded-full w-[60px] h-[60px]"
                   />
@@ -79,18 +78,16 @@
         <template #addons>
           <Navigation
             v-if="!loadingCollections && collections.length > 0"
-            class="bg-mission-blue text-mission-gray hover:text-mission-gray dark:bg-slate-300 dark:text-slate-900 dark:hover:text-slate-900 energy:bg-zinc-300 energy:text-zinc-700 energy:hover:text-zinc-700"
+            class="bg-slate-900 text-slate-300 hover:text-gray-200"
           />
         </template>
       </Carousel>
     </div>
     <div
-      class="w-full md:w-[calc(100%-300px)] bg-slate-50 border-l border-slate-200 p-8 flex md:block justify-center"
+      class="w-full md:w-[calc(100%-300px)] md:bg-slate-50 border-l border-slate-200 p-8 flex md:block justify-center"
     >
-      <div
-        class="min-w-[250px] sm:min-w-[400px] max-w-[475px] sm:max-w-[1450px]"
-      >
-        <template v-if="loadingCollections || loadingProducts">
+      <template v-if="loadingCollections || loadingProducts">
+        <div class="w-full">
           <div
             class="h-8 bg-slate-200 rounded mb-8 md:w-1/2 animate-pulse"
           ></div>
@@ -98,15 +95,16 @@
             class="h-6 bg-slate-200 rounded mb-8 w-1/2 md:w-1/3 animate-pulse"
           ></div>
           <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
-          ></div>
-          <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 min-w-[250px] sm:min-w-[400px] max-w-[475px] sm:max-w-[1450px]"
+          >
             <template v-for="card in 6" :key="card">
               <PublishedProductCard :loading="true" />
             </template>
           </div>
-        </template>
-        <template v-else>
+        </div>
+      </template>
+      <template v-else>
+        <div class="w-full">
           <template v-if="collections.length == 0">
             <p class="italic">No collections to show</p>
           </template>
@@ -198,8 +196,8 @@
           </template>
         </div> -->
           </template>
-        </template>
-      </div>
+        </div>
+      </template>
     </div>
   </div>
   <BaseDialog
@@ -209,14 +207,26 @@
     @close="closeCreateDialog"
   >
     <form id="createCollectionForm" @submit.prevent="createCollection">
-      <!-- <p class="py-4 pr-4">Are you sure you want to do this?</p> -->
-      <BaseInput
-        v-model="collection.name"
-        label="Name"
-        autocomplete="off"
-        type="text"
-        required
-      />
+      <div class="flex flex-col space-y-6">
+        <div>
+          <BaseInput
+            v-model="collection.name"
+            label="Name"
+            autocomplete="off"
+            type="text"
+            required
+          />
+        </div>
+        <div>
+          <ImageFileChooser
+            :label="'Thumbnail'"
+            :binary="collection.image"
+            :file="imageFile"
+            @onImageAdded="updateImageFile"
+            @onImageRemoved="removeImageFile"
+          />
+        </div>
+      </div>
     </form>
     <template #actions>
       <BaseButton
@@ -230,6 +240,7 @@
         color="secondary"
         type="submit"
         form="createCollectionForm"
+        :disabled="isSubmitDisabled()"
         >Create
         <!-- <div :class="loadingDelete ? 'flex space-x-4' : ''">
           <span>Delete</span>
@@ -261,6 +272,7 @@ import BaseDialog from "../components/BaseDialog.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseInput from "../components/BaseInput.vue";
 import PublishedProductCard from "../components/PublishedProductCard.vue";
+import ImageFileChooser from "../components/ImageFileChooser.vue";
 import { Carousel, Navigation, Slide } from "vue3-carousel";
 export default {
   components: {
@@ -276,6 +288,7 @@ export default {
     BaseButton,
     BaseInput,
     PublishedProductCard,
+    ImageFileChooser,
     Carousel,
     Navigation,
     Slide,
@@ -302,12 +315,36 @@ export default {
     const loadingProducts = ref(true);
     const productsInCollection = ref([]);
     // const numProducts = computed(() => mySaved.value.length);
+
     const collection = ref({
       name: "",
       description: "",
       image: "",
     });
     const activeCollection = ref();
+
+    const imageFile = ref(null);
+
+    const updateImageFile = (payload) => {
+      collection.value.image = payload.binary;
+      imageFile.value = payload.file;
+      // validateIcon(imageFile.value);
+    };
+
+    const removeImageFile = () => {
+      collection.value.image = null;
+      imageFile.value = null;
+      // editionEvent.value.valid = true;
+    };
+
+    const isSubmitDisabled = () => {
+      if (collection.value.name == "") {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     const isCreateDialogOpen = ref(false);
     const closeCreateDialog = () => {
       isCreateDialogOpen.value = false;
@@ -418,6 +455,10 @@ export default {
       getProductsInCollection,
       collection,
       activeCollection,
+      imageFile,
+      updateImageFile,
+      removeImageFile,
+      isSubmitDisabled,
       createCollection,
       isCreateDialogOpen,
       openCreateDialog,
