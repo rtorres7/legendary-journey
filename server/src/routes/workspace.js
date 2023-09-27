@@ -463,7 +463,7 @@ router.get(
   */
 
     try {
-      const { perPage, page, sortDir } = pagingParams(req);
+      const { perPage, page, sortDir } = pagingParams(req, "created");
       const term = req.query.text;
       const filters = req.query;
 
