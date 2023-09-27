@@ -56,13 +56,13 @@ describe("Feeds Routes", () => {
     delete process.env.THROW_TEST_ERROR;
   });
 
-  describe("GET /feeds", () => {
+  describe("GET /special_editions", () => {
     it("should return all feeds", () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .get("/feeds")
+        .get("/special_editions")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -74,13 +74,13 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("GET /feeds/:id", () => {
+  describe("GET /special_editions/:id", () => {
     it("should return the feed with the given id", () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .get("/feeds/1")
+        .get("/special_editions/1")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
@@ -89,7 +89,7 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("POST /feeds", () => {
+  describe("POST /special_editions", () => {
     it("should create a feed", () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
@@ -102,7 +102,7 @@ describe("Feeds Routes", () => {
       };
 
       return request(app)
-        .post("/feeds")
+        .post("/special_editions")
         .send(newFeed)
         .expect(200)
         .expect("Content-Type", /json/)
@@ -113,13 +113,13 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("PUT /feeds/:collectionId", () => {
+  describe("PUT /special_editions/:collectionId", () => {
     it("should update a feed", async () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
       return request(app)
-        .put(`/feeds/1`)
+        .put(`/special_editions/1`)
         .send({
           name: "Updated name",
           searchParams: "toasted",
@@ -137,12 +137,12 @@ describe("Feeds Routes", () => {
     });
   });
 
-  describe("DELETE /feeds/:collectionId", () => {
+  describe("DELETE /special_editions/:collectionId", () => {
     it("should delete a feed", async () => {
       const router = require("../../src/routes/feeds");
       const app = setupAppWithUser(router, { id: 1 });
 
-      return request(app).delete(`/feeds/1`).expect(204);
+      return request(app).delete(`/special_editions/1`).expect(204);
     });
   });
 });

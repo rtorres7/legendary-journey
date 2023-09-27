@@ -4,14 +4,19 @@
 import { logger } from "../config/logger";
 
 import { KiwiPage, KiwiPreconditions, KiwiSort } from "@kiwiproject/kiwi-js";
-import { Alert, IAlert, AlertDoc, AlertValidator, AlertReadState, AlertType } from "../models/alert";
+import {
+  Alert,
+  IAlert,
+  AlertDoc,
+  AlertValidator,
+  AlertReadState,
+  AlertType,
+} from "../models/alert";
 import { UserInfo } from "../models/user_info";
 import AggregatedMetricsService from "./aggregated-metrics-service";
 
-
 /** */
 export class AlertService {
-
   private aggregatedMetricsService: AggregatedMetricsService;
 
   constructor() {
@@ -19,23 +24,34 @@ export class AlertService {
   }
 
   /***/
-  async counts(user: any): Promise<{ "total": number, "unread": number }> {
+  async counts(user: any): Promise<{ total: number; unread: number }> {
     KiwiPreconditions.checkArgumentDefined(user.id);
     const total = await Alert.countDocuments({ userId: user.id }).exec();
-    const unread = await Alert.countDocuments({ userId: user.id, readState: AlertReadState.UNREAD }).exec();
+    const unread = await Alert.countDocuments({
+      userId: user.id,
+      readState: AlertReadState.UNREAD,
+    }).exec();
     return { total, unread };
   }
 
   /** */
-  async findByUserPaged(user: any, perPage = 10, page = 1, skip = 0, sortDir = "desc"): Promise<KiwiPage> {
+  async findByUserPaged(
+    user: any,
+    perPage = 10,
+    page = 1,
+    skip = 0,
+    sortDir = "desc",
+  ): Promise<KiwiPage> {
     KiwiPreconditions.checkArgumentDefined(user.id);
     const total: number = await Alert.countDocuments({ userId: user.id });
     const alerts: AlertDoc[] = await Alert.find({ userId: user.id })
-      .sort({ "createdAt": sortDir === "desc" ? -1 : 1 })
+      .sort({ createdAt: sortDir === "desc" ? -1 : 1 })
       .skip(skip)
       .limit(perPage)
       .exec();
-    return KiwiPage.of(page, perPage, total, alerts).usingOneAsFirstPage().addKiwiSort(KiwiSort.of("createdAt", sortDir));      
+    return KiwiPage.of(page, perPage, total, alerts)
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("createdAt", sortDir));
   }
 
   /** */
@@ -57,21 +73,27 @@ export class AlertService {
       throw new Error(`AlertService.createAlert`, { cause: error });
     }
     return await new Alert({ ...value }).save();
-  }  
-
-  /** */
-  async updateAlert(id: string, updates: Partial<IAlert>): Promise<AlertDoc> {
-    return await Alert.findByIdAndUpdate({ _id: id }, updates, { new: true }).exec();
   }
 
   /** */
-  async findProcessedEventIds(user: any, type: AlertType, gteDate: Date): Promise<Set<string>> {
+  async updateAlert(id: string, updates: Partial<IAlert>): Promise<AlertDoc> {
+    return await Alert.findByIdAndUpdate({ _id: id }, updates, {
+      new: true,
+    }).exec();
+  }
+
+  /** */
+  async findProcessedEventIds(
+    user: any,
+    type: AlertType,
+    gteDate: Date,
+  ): Promise<Set<string>> {
     const events = await Alert.find({
       userId: user.id,
       type,
-      createdAt : { $gte : gteDate }
+      createdAt: { $gte: gteDate },
     }).exec();
-    return new Set(events.map(i => i.meta?.eventId).filter(i => i));
+    return new Set(events.map((i) => i.meta?.eventId).filter((i) => i));
   }
 
   /** */
@@ -82,8 +104,15 @@ export class AlertService {
     const userInfo = await UserInfo.findByUserId(user.id);
     const searchDate: Date = userInfo.getMeta(KEY);
     const newSearchDate = Date.now();
-    const events = await this.aggregatedMetricsService.getRecentPublishedForOrg(user.organization, searchDate);
-    const existingEventIds = await this.findProcessedEventIds(user, AlertType.PRODUCT_PUBLISHED, searchDate);
+    const events = await this.aggregatedMetricsService.getRecentPublishedForOrg(
+      user.organization,
+      searchDate,
+    );
+    const existingEventIds = await this.findProcessedEventIds(
+      user,
+      AlertType.PRODUCT_PUBLISHED,
+      searchDate,
+    );
     const alerts = [];
     for (const e of events) {
       if (existingEventIds.has(e.eventId)) {
@@ -99,8 +128,8 @@ export class AlertService {
         readState: AlertReadState.UNREAD,
         productNumber: e.productId,
         meta: {
-          eventId: e.eventId
-        }
+          eventId: e.eventId,
+        },
       });
       logger.info(`created alert ${alert.id} from event ${e.eventId}`);
       alerts.push(alert);

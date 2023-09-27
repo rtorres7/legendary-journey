@@ -1,28 +1,92 @@
 const constant = require("../util/constant.js");
-const runSearch = require('../util/search');
+const runSearch = require("../util/search");
 
 const PRODUCT_FIELDS = [
-  { field: 'classification', aggregation: 'classification', filters: 'classification', filterType: 'OR' },
-  { field: 'countries', aggregation: 'countries', filters: 'countries', filterType: 'AND' },
-  { field: 'id', filters: 'id' },
-  { field: 'issues', aggregation: 'issues', filters: 'issues', filterType: 'AND' },
-  { field: 'nonStateActors', aggregation: 'non_state_actors', filters: 'non_state_actors', filterType: 'AND'},
-  { field: 'producingOffices', aggregation: 'producing_offices', filters: 'producing_offices', filterType: 'OR' },
-  { field: 'productType', aggregation: 'product_types', filters: 'product_types', filterType: 'OR' },
-  { field: 'regions', aggregation: 'regions', filters: 'regions', filterType: 'AND' },
-  { field: 'reportingType', aggregation: 'reporting_types', filters: 'reporting_types', filterType: 'OR' },
-  { field: 'subregions', aggregation: 'subregions', filters: 'subregions', filterType: 'AND' },
-  { field: 'topics', aggregation: 'topics', filters: 'topics', filterType: 'AND' },
+  {
+    field: "classification",
+    aggregation: "classification",
+    filters: "classification",
+    filterType: "OR",
+  },
+  {
+    field: "countries",
+    aggregation: "countries",
+    filters: "countries",
+    filterType: "AND",
+  },
+  { field: "id", filters: "id" },
+  {
+    field: "issues",
+    aggregation: "issues",
+    filters: "issues",
+    filterType: "AND",
+  },
+  {
+    field: "nonStateActors",
+    aggregation: "non_state_actors",
+    filters: "non_state_actors",
+    filterType: "AND",
+  },
+  {
+    field: "producingOffices",
+    aggregation: "producing_offices",
+    filters: "producing_offices",
+    filterType: "OR",
+  },
+  {
+    field: "productType",
+    aggregation: "product_types",
+    filters: "product_types",
+    filterType: "OR",
+  },
+  {
+    field: "regions",
+    aggregation: "regions",
+    filters: "regions",
+    filterType: "AND",
+  },
+  {
+    field: "reportingType",
+    aggregation: "reporting_types",
+    filters: "reporting_types",
+    filterType: "OR",
+  },
+  {
+    field: "subregions",
+    aggregation: "subregions",
+    filters: "subregions",
+    filterType: "AND",
+  },
+  {
+    field: "topics",
+    aggregation: "topics",
+    filters: "topics",
+    filterType: "AND",
+  },
 ];
 
 class ProductSearchService {
   constructor() {
-    this.client = require('../data/elasticsearch');
+    this.client = require("../data/elasticsearch");
     this.index = "products";
   }
 
-  async search(term, perPage=10, page=1, sortMethod='desc', filters = {}) {
-    return await runSearch.runSearch(term, this.index, perPage, page, sortMethod, filters, PRODUCT_FIELDS);
+  async search(
+    term,
+    perPage = 10,
+    page = 1,
+    sortMethod = "desc",
+    filters = {},
+  ) {
+    return await runSearch.runSearch(
+      term,
+      this.index,
+      perPage,
+      page,
+      sortMethod,
+      filters,
+      PRODUCT_FIELDS,
+    );
   }
 
   async relatedSearch(id) {
@@ -64,24 +128,25 @@ class ProductSearchService {
       pipeline: "mxms-attachment-pipeline",
       query: {
         term: {
-          "_id": docId
-        }
+          _id: docId,
+        },
       },
       script: {
-        source: "ctx._source.pdfVersionRaw=params['attachmentContent']; ctx._source.pdfVersionAttachmentId=params['attachmentId']",
-        lang: 'painless',
+        source:
+          "ctx._source.pdfVersionRaw=params['attachmentContent']; ctx._source.pdfVersionAttachmentId=params['attachmentId']",
+        lang: "painless",
         params: {
           attachmentContent: attachmentBase64,
-          attachmentId: attachmentId
-        }
-      }
+          attachmentId: attachmentId,
+        },
+      },
     });
   }
 
-  async removeIndexedAttachment(docId, attachmentId){
+  async removeIndexedAttachment(docId, attachmentId) {
     const existingDoc = await this.client.get({
       id: docId,
-      index: this.index
+      index: this.index,
     });
 
     const sourceData = existingDoc._source;
@@ -106,11 +171,13 @@ class ProductSearchService {
     const indexesCreated = [];
 
     for (const indexConfig of constant.indices) {
-      if (await this.client.indices.exists({ index: indexConfig.index})) {
+      if (await this.client.indices.exists({ index: indexConfig.index })) {
         continue;
       }
 
-      console.log(`Elastic search index ${indexConfig.index} does not exist. Creating now.`);
+      console.log(
+        `Elastic search index ${indexConfig.index} does not exist. Creating now.`,
+      );
       await this.client.indices.create({
         index: indexConfig.index,
         mappings: indexConfig.mappings,
@@ -125,9 +192,9 @@ class ProductSearchService {
             remove_binary: true,
           };
 
-          console.log('ES Pipeline processor', processor);
+          console.log("ES Pipeline processor", processor);
           await this.client.ingest.putPipeline({
-            id: 'mxms-attachment-pipeline',
+            id: "mxms-attachment-pipeline",
             body: {
               description: pipeline.description,
               processors: [processor],

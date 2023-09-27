@@ -22,8 +22,12 @@ const DissemOrgsSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
-const DissemOrgs = mongoose.model("DissemOrgs", DissemOrgsSchema, "dissem_orgs");
+const DissemOrgs = mongoose.model(
+  "DissemOrgs",
+  DissemOrgsSchema,
+  "dissem_orgs",
+);
 module.exports = DissemOrgs;

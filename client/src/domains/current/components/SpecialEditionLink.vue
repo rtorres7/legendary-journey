@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="'/feeds/' + link.id" class="w-fit">
+  <router-link :to="'/special_editions/' + link.id" class="w-fit">
     <div class="flex hover:underline">
       <img :src="getImgUrl(link)" class="mr-3 max-h-[70px]" />
       <div class="py-2">{{ link.name }}</div>

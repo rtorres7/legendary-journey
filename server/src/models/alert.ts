@@ -41,8 +41,13 @@ export const AlertValidator = Joi.object<IAlert>().keys({
   userId: Joi.string().required(),
   productNumber: Joi.string().required(),
   createdBy: Joi.string().optional(),
-  type: Joi.string().required().valid(...Object.values(AlertType)),
-  readState: Joi.string().required().valid(...Object.values(AlertReadState)).default(AlertReadState.UNREAD),
+  type: Joi.string()
+    .required()
+    .valid(...Object.values(AlertType)),
+  readState: Joi.string()
+    .required()
+    .valid(...Object.values(AlertReadState))
+    .default(AlertReadState.UNREAD),
   meta: Joi.object().optional(),
 });
 

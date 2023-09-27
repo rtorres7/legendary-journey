@@ -55,9 +55,16 @@ class AggregatedMetricsService {
     }
   }
 
-  async getUniqueReadershipByOrganizationForProduct(productId, startDate, endDate) {
+  async getUniqueReadershipByOrganizationForProduct(
+    productId,
+    startDate,
+    endDate,
+  ) {
     const dateFilter = await this._createDateRangeFilter(startDate, endDate);
-    const queryFilters = [{ term: { productId: productId } }, { term: { eventType: "PRODUCT_VIEW" } }];
+    const queryFilters = [
+      { term: { productId: productId } },
+      { term: { eventType: "PRODUCT_VIEW" } },
+    ];
     if (dateFilter) queryFilters.push(dateFilter);
 
     const result = await this.client.search({
@@ -88,12 +95,14 @@ class AggregatedMetricsService {
       size: 0,
     });
 
-    const readershipData = result.aggregations.organizations.buckets.map((bucket) => {
-      return {
-        name: bucket.organization_name.buckets[0]?.key,
-        y: bucket.doc_count,
-      };
-    });
+    const readershipData = result.aggregations.organizations.buckets.map(
+      (bucket) => {
+        return {
+          name: bucket.organization_name.buckets[0]?.key,
+          y: bucket.doc_count,
+        };
+      },
+    );
 
     // If there's no data, push a placeholder entry
     if (readershipData.length === 0) {
@@ -103,7 +112,13 @@ class AggregatedMetricsService {
       });
     }
 
-    const uniqueReadershipCount = readershipData[0].name === "No Data" ? 1 : result.aggregations.organizations.buckets.reduce((acc, bucket) => acc + bucket.unique_users.value, 0);
+    const uniqueReadershipCount =
+      readershipData[0].name === "No Data"
+        ? 1
+        : result.aggregations.organizations.buckets.reduce(
+            (acc, bucket) => acc + bucket.unique_users.value,
+            0,
+          );
 
     return {
       metrics: {
@@ -113,7 +128,11 @@ class AggregatedMetricsService {
     };
   }
 
-  async getTotalViewsForProductsPublishedByOrganization(organizationName, startDate, endDate) {
+  async getTotalViewsForProductsPublishedByOrganization(
+    organizationName,
+    startDate,
+    endDate,
+  ) {
     const dateFilter = await this._createDateRangeFilter(startDate, endDate);
     const queryFilters = [
       {
@@ -162,7 +181,10 @@ class AggregatedMetricsService {
       size: 0,
       query: {
         bool: {
-          filter: [{ term: { userId: userId } }, { term: { eventType: "PRODUCT_VIEW" } }],
+          filter: [
+            { term: { userId: userId } },
+            { term: { eventType: "PRODUCT_VIEW" } },
+          ],
         },
       },
       aggs: {
@@ -193,7 +215,9 @@ class AggregatedMetricsService {
     // logger.info("%O", results.aggregations.group_by_productId.buckets.map(i => ({ productId: i.key, timestamp: i.max_timestamp.value})));
     return {
       total: results.aggregations.group_by_productId_count.value,
-      productIds: results.aggregations.group_by_productId.buckets.map((i) => i.key),
+      productIds: results.aggregations.group_by_productId.buckets.map(
+        (i) => i.key,
+      ),
     };
   }
 
@@ -212,7 +236,11 @@ class AggregatedMetricsService {
       size: 0,
       query: {
         bool: {
-          filter: [{ term: { "meta.producingOffices.code.keyword": orgId } }, { term: { eventType: "PRODUCT_PUBLISH" } }, { range: { timestamp: { gte: gteDate } } }],
+          filter: [
+            { term: { "meta.producingOffices.code.keyword": orgId } },
+            { term: { eventType: "PRODUCT_PUBLISH" } },
+            { range: { timestamp: { gte: gteDate } } },
+          ],
         },
       },
       aggs: {
@@ -224,7 +252,12 @@ class AggregatedMetricsService {
           aggs: {
             last_published: {
               top_hits: {
-                _source: ["productId", "meta.datePublished", "meta.title", "timestamp"],
+                _source: [
+                  "productId",
+                  "meta.datePublished",
+                  "meta.title",
+                  "timestamp",
+                ],
                 sort: [{ timestamp: { order: "desc" } }],
                 size: 1,
               },
