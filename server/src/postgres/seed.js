@@ -123,7 +123,7 @@ async function loadUserData(organization) {
       dn: "O=udev2dev.com,OU=maximus,CN=danikol",
       cn: "Daniel Kolb",
       email: "danikol@example.com",
-      roles: ["wire_editor", "community_editor", "special_edition_manager"],
+      roles: ["wire_editor", "community_editor"],
       organizationId: organization.id,
       hasOrg: true,
     },
@@ -339,52 +339,7 @@ async function loadUserData(organization) {
   });
 }
 
-async function loadFeedData() {
-  await models.Feed.findOrCreate({
-    where: {
-      searchParams: "https://localhost:8443/search?text=test1",
-    },
-    defaults: {
-      name: "Test Feed #1",
-      searchParams: "https://localhost:8443/search?text=test1",
-      selectedReadings: "WIReWIRe_sample_1",
-      state: "Draft",
-      position: 1,
-      classification: "UNCLASSIFIED",
-    },
-  });
-
-  await models.Feed.findOrCreate({
-    where: {
-      searchParams: "https://localhost:8443/search?text=test2",
-    },
-    defaults: {
-      name: "Test Feed #2",
-      searchParams: "https://localhost:8443/search?text=test2",
-      selectedReadings: "WIReWIRe_sample_2",
-      state: "Posted",
-      position: 2,
-      classification: "UNCLASSIFIED",
-    },
-  });
-
-  await models.Feed.findOrCreate({
-    where: {
-      searchParams: "https://localhost:8443/search?text=test3",
-    },
-    defaults: {
-      name: "Test Feed #3",
-      searchParams: "https://localhost:8443/search?text=test3",
-      selectedReadings: "WIReWIRe_sample_3",
-      state: "Archived",
-      position: 3,
-      classification: "UNCLASSIFIED",
-    },
-  });
-}
-
 module.exports = {
   loadUserData,
   loadOrganizationData,
-  loadFeedData,
 };

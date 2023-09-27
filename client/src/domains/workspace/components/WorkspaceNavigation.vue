@@ -220,7 +220,7 @@
                       </MenuItem>
                       <MenuItem v-show="canManageSpecialEditions">
                         <router-link
-                          to="/feeds"
+                          to="/special_editions"
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         >
                           Manage Special Editions
@@ -370,7 +370,7 @@
                       </MenuItem>
                       <MenuItem v-show="canManageSpecialEditions">
                         <router-link
-                          to="/feeds"
+                          to="/special_editions"
                           class="flex py-2 px-3 hover:bg-gray-100 cursor-pointer"
                         >
                           Manage Special Editions

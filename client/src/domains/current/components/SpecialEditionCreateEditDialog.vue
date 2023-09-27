@@ -19,7 +19,7 @@
           </div>
           <div>
             <MaxInput
-              v-model="editionEvent.searchParams"
+              v-model="editionEvent.search_params"
               label="Search params"
               autocomplete="off"
               placeholder="Run a search, copy the URL, and paste it here."
@@ -29,13 +29,12 @@
           </div>
           <div>
             <MaxTextarea
-              v-model="editionEvent.selectedReadings"
-              v-model.trim="editionEvent.selectedReadings"
+              v-model="editionEvent.key_readings"
+              v-model.trim="editionEvent.key_readings"
               maxlength="4000"
               rows="5"
               label="Selected Readings"
               placeholder="One document number per line, ex: WIRe110416-02."
-              required
             />
           </div>
           <div>
@@ -101,7 +100,7 @@ import axios from "@/shared/config/wireAxios";
 // import { useField, userForm } from 'vee-validate'
 // import { mixed, number, object, string } from 'yup';
 
-const stateOptions = ["Draft", "Archived", "Posted"];
+const stateOptions = ["draft", "archived", "posted"];
 
 export default {
   props: {
@@ -119,7 +118,7 @@ export default {
           icon: null,
           name: null,
           name_classification: null,
-          searchParams: null,
+          search_params: null,
           state: [],
           position: 1,
           key_readings: null,
@@ -243,7 +242,7 @@ export default {
         icon: null,
         name: null,
         name_classification: null,
-        searchParams: null,
+        search_params: null,
         state: null,
         position: 1,
         key_readings: null,
@@ -272,13 +271,12 @@ export default {
       if (editionEvent.value.valid === undefined) {
         editionEvent.value.valid = true;
       }
-      console.log(editionEvent.value);
       return (
         !editionEvent.value.name ||
-        !editionEvent.value.searchParams ||
+        !editionEvent.value.search_params ||
         !editionEvent.value.state ||
         !editionEvent.value.name_classification ||
-        !editionEvent.value.selectedReadings ||
+        !editionEvent.value.icon ||
         !editionEvent.value.valid
       );
     };
@@ -309,7 +307,10 @@ export default {
         } else {
           if (props.editMode) {
             axios
-              .put("/feeds/" + editionEvent.value.id, editionEvent.value)
+              .patch(
+                "/special_editions/" + editionEvent.value.id,
+                buildFormData()
+              )
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
@@ -332,7 +333,7 @@ export default {
               });
           } else {
             axios
-              .post("/feeds", editionEvent.value)
+              .post("/special_editions", buildFormData())
               .then((response) => {
                 console.log(response);
                 store.dispatch("specialEditions/loadConceptsLinks");
