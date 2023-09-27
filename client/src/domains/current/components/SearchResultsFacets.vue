@@ -12,13 +12,6 @@
             <div :class="facetIndex > 4 && !expand ? 'hidden' : 'block'">
               <a
                 :id="facet.key"
-                :style="{
-                  'pointer-events': $route.query.hasOwnProperty(
-                    facetType + '[]'
-                  )
-                    ? 'none'
-                    : 'auto',
-                }"
                 class="cursor-pointer text-sm text-mission-light-blue dark:text-teal-400 energy:text-energy-yellow"
                 tabindex="0"
                 @click="filter(facetType, facet.key)"
