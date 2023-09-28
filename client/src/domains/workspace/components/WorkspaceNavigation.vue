@@ -25,7 +25,7 @@
       </div>
       <div class="flex">
         <div class="flex space-x-4 px-4">
-          <tippy content="Search" theme="demo">
+          <tippy content="Current Search" theme="demo">
             <router-link
               class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300"
               to="/search"
@@ -41,7 +41,7 @@
             class="block md:hidden relative"
           >
             <div>
-              <tippy content="Admin" theme="demo">
+              <tippy content="Admin Menu" theme="demo">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-gray-400 hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 >
@@ -110,22 +110,38 @@
               <MenuItems
                 class="origin-top-right absolute right-0 mt-2 w-[200px] rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
               >
-                <MenuItem>
-                  <router-link
-                    to="/"
-                    class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                  >
-                    {{ currentUsername }}
-                  </router-link>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                    :href="`${metadata.user_support.help_url}`"
-                    target="_blank"
-                    >User Support
-                  </a>
-                </MenuItem>
+                <div
+                  class="py-2 px-3 font-medium text-center border-b border-slate-900/10"
+                >
+                  Hi, {{ currentUsername }}!
+                </div>
+                <div class="pt-2">
+                  <MenuItem>
+                    <router-link
+                      class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                      to="/"
+                      target="_blank"
+                      >Current
+                    </router-link>
+                  </MenuItem>
+                  <MenuItem>
+                    <a
+                      class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                      :href="`${metadata.user_support.help_url}`"
+                      target="_blank"
+                      >User Support
+                    </a>
+                  </MenuItem>
+                  <template v-if="environment === 'offline'">
+                    <MenuItem>
+                      <a
+                        class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                        @click="openTestConsoleModal"
+                        >Test Console</a
+                      >
+                    </MenuItem>
+                  </template>
+                </div>
               </MenuItems>
             </transition>
           </Menu>
@@ -201,7 +217,7 @@
         </div>
         <div class="pb-6 grow-0">
           <ul class="pl-7 py-4 font-medium text-gray-400 space-y-1">
-            <li>
+            <!-- <li>
               <div>
                 <tippy content="Settings" placement="right" theme="demo">
                   <div
@@ -211,7 +227,7 @@
                   </div>
                 </tippy>
               </div>
-            </li>
+            </li> -->
             <li>
               <tippy content="About" placement="right" theme="demo">
                 <button
@@ -223,7 +239,7 @@
               </tippy>
             </li>
             <li>
-              <tippy content="Exit Demo" placement="right" theme="demo">
+              <tippy content="Exit Workspace" placement="right" theme="demo">
                 <router-link to="/">
                   <div
                     class="flex items-center py-2 cursor-pointer hover:text-gray-50"
@@ -305,7 +321,7 @@
         </div>
         <div class="pb-4 grow-0">
           <ul class="pl-6 py-4 font-medium text-gray-400 space-y-1">
-            <li>
+            <!-- <li>
               <div>
                 <div
                   class="flex items-center px-4 py-2 cursor-pointer hover:text-gray-50"
@@ -314,7 +330,7 @@
                   <span class="ml-4 font-medium">Settings</span>
                 </div>
               </div>
-            </li>
+            </li> -->
             <li>
               <div>
                 <button
@@ -381,68 +397,101 @@
                 <span class="sr-only">Close main menu</span
                 ><XMarkIcon class="h-5 w-5" aria-hidden="true" />
               </button>
-              <div class="flex text-gray-50 py-6">
-                <router-link
-                  to="/workspace"
-                  class="ml-4 flex mx-auto items-center"
-                >
-                  <div
-                    class="rounded-md bg-slate-500/75 p-[.70rem] flex items-center"
-                  >
-                    <span class="font-bold text-slate-900 text-xl leading-4"
-                      >W</span
+              <div class="flex grow-0 flex-col min-h-[97vh] text-sm">
+                <div class="flex grow flex-col pt-6">
+                  <div class="text-gray-50 flex px-4 pb-6">
+                    <router-link
+                      to="/workspace"
+                      class="ml-4 flex mx-auto items-center"
                     >
+                      <div
+                        class="rounded-md bg-slate-500/75 p-[.70rem] flex items-center"
+                      >
+                        <span class="font-bold text-slate-900 text-xl leading-4"
+                          >W</span
+                        >
+                      </div>
+                      <span class="ml-3 font-bold text-2xl">Workspace</span>
+                    </router-link>
                   </div>
-                  <span class="ml-3 font-bold text-2xl">Workspace</span>
-                </router-link>
-              </div>
-              <div class="text-sm">
-                <template v-for="category in navigationItems" :key="category">
-                  <div class="text-gray-400 font-medium py-2 px-4">
-                    {{ category.categoryLabel }}
-                  </div>
-                  <ul class="py-3 pl-4 font-medium text-gray-400 space-y-1">
-                    <template
-                      v-for="categoryItem in category.items"
-                      :key="categoryItem"
-                    >
-                      <li>
-                        <div>
-                          <router-link :to="categoryItem.routeLink" class="">
-                            <div
-                              :class="
-                                isActiveRoute(categoryItem.routeName)
-                                  ? 'text-gray-50 bg-slate-800/90'
-                                  : 'hover:text-gray-50 '
-                              "
-                              class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
-                            >
-                              <template
-                                v-if="isActiveRoute(categoryItem.routeName)"
+                  <template v-for="category in navigationItems" :key="category">
+                    <div class="text-gray-400 font-medium py-2 px-4">
+                      {{ category.categoryLabel }}
+                    </div>
+                    <ul class="py-3 pl-4 font-medium text-gray-400 space-y-1">
+                      <template
+                        v-for="categoryItem in category.items"
+                        :key="categoryItem"
+                      >
+                        <li>
+                          <div>
+                            <router-link :to="categoryItem.routeLink" class="">
+                              <div
+                                :class="
+                                  isActiveRoute(categoryItem.routeName)
+                                    ? 'text-gray-50 bg-slate-800/90'
+                                    : 'hover:text-gray-50 '
+                                "
+                                class="flex items-center px-4 py-3 rounded cursor-pointer w-[200px]"
                               >
-                                <component
-                                  :is="categoryItem.icon + 'IconSolid'"
-                                  class="h-6 w-6"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                              <template v-else>
-                                <component
-                                  :is="categoryItem.icon + 'Icon'"
-                                  class="h-6 w-6"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                              <span class="ml-4">{{
-                                categoryItem.itemLabel
-                              }}</span>
-                            </div>
-                          </router-link>
+                                <template
+                                  v-if="isActiveRoute(categoryItem.routeName)"
+                                >
+                                  <component
+                                    :is="categoryItem.icon + 'IconSolid'"
+                                    class="h-6 w-6"
+                                    aria-hidden="true"
+                                  />
+                                </template>
+                                <template v-else>
+                                  <component
+                                    :is="categoryItem.icon + 'Icon'"
+                                    class="h-6 w-6"
+                                    aria-hidden="true"
+                                  />
+                                </template>
+                                <span class="ml-4">{{
+                                  categoryItem.itemLabel
+                                }}</span>
+                              </div>
+                            </router-link>
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </template>
+                </div>
+                <div class="grow-0">
+                  <ul class="pl-4 py-4 font-medium text-gray-400 space-y-1">
+                    <li>
+                      <div>
+                        <button
+                          class="flex items-center px-4 py-2 cursor-pointer hover:text-gray-50"
+                          @click="openAboutDialogMobile"
+                        >
+                          <QuestionMarkCircleIcon
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                          <span class="ml-4 font-medium">About</span>
+                        </button>
+                      </div>
+                    </li>
+                    <li>
+                      <router-link to="/">
+                        <div
+                          class="flex items-center px-4 py-2 cursor-pointer hover:text-gray-50"
+                        >
+                          <ArrowLeftOnRectangleIcon
+                            class="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                          <span class="ml-4 font-medium">Exit Workspace</span>
                         </div>
-                      </li>
-                    </template>
+                      </router-link>
+                    </li>
                   </ul>
-                </template>
+                </div>
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -587,7 +636,7 @@ import {
   ArrowLeftOnRectangleIcon,
   Bars3Icon,
   BookmarkIcon,
-  Cog8ToothIcon,
+  //Cog8ToothIcon,
   FolderIcon,
   InformationCircleIcon,
   MagnifyingGlassIcon,
@@ -618,7 +667,7 @@ export default {
     Bars3Icon,
     BookmarkIcon,
     BookmarkIconSolid,
-    Cog8ToothIcon,
+    //Cog8ToothIcon,
     FolderIcon,
     FolderIconSolid,
     InformationCircleIcon,
@@ -638,7 +687,9 @@ export default {
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const currentUsername = computed(() => store.state.user.user.name);
+    const currentUsername = computed(
+      () => store.state.user.user.name.split(" ")[0]
+    );
     const isTestConsoleMenuOpen = ref(false);
     const isMobileMenuOpen = ref(false);
     const isAboutDialogOpen = ref(false);
@@ -671,6 +722,11 @@ export default {
     };
 
     const openAboutDialog = () => {
+      isAboutDialogOpen.value = true;
+    };
+
+    const openAboutDialogMobile = () => {
+      isMobileMenuOpen.value = false;
       isAboutDialogOpen.value = true;
     };
 
@@ -775,6 +831,7 @@ export default {
       isAboutDialogOpen,
       closeAboutDialog,
       openAboutDialog,
+      openAboutDialogMobile,
       isActiveRoute,
     };
   },

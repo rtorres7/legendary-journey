@@ -107,7 +107,7 @@
                         class="hidden md:block relative"
                       >
                         <div>
-                          <tippy content="Admin" theme="demo">
+                          <tippy content="Admin Menu" theme="demo">
                             <MenuButton
                               class="max-w-xs rounded-full flex items-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
                             >
@@ -184,41 +184,40 @@
                           leaveToClass="transform opacity-0 scale-95"
                         >
                           <MenuItems
-                            class="origin-top-right absolute right-0 mt-2 w-40 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
+                            class="origin-top-right absolute right-0 mt-2 w-44 z-10 rounded-md shadow-lg py-2 text-gray-900 ring-1 bg-white ring-gray-900 ring-opacity-5 focus:outline-none text-sm"
                           >
-                            <MenuItem>
-                              <router-link
-                                to="/"
-                                class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                              >
-                                {{ currentUsername }}
-                              </router-link>
-                            </MenuItem>
-                            <MenuItem>
-                              <router-link
-                                to="/workspace"
-                                class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                              >
-                                My Workspace
-                              </router-link>
-                            </MenuItem>
-                            <MenuItem>
-                              <a
-                                class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                                :href="`${metadata.user_support.help_url}`"
-                                target="_blank"
-                                >User Support
-                              </a>
-                            </MenuItem>
-                            <template v-if="environment === 'offline'">
+                            <div
+                              class="py-2 px-3 font-medium text-center border-b border-slate-900/10"
+                            >
+                              Hi, {{ currentUsername }}!
+                            </div>
+                            <div class="pt-2">
+                              <MenuItem>
+                                <router-link
+                                  class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                                  to="/"
+                                  target="_blank"
+                                  >Current
+                                </router-link>
+                              </MenuItem>
                               <MenuItem>
                                 <a
                                   class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
-                                  @click="openTestConsoleModal"
-                                  >Test Console</a
-                                >
+                                  :href="`${metadata.user_support.help_url}`"
+                                  target="_blank"
+                                  >User Support
+                                </a>
                               </MenuItem>
-                            </template>
+                              <template v-if="environment === 'offline'">
+                                <MenuItem>
+                                  <a
+                                    class="flex cursor-pointer py-2 px-3 hover:bg-gray-100"
+                                    @click="openTestConsoleModal"
+                                    >Test Console</a
+                                  >
+                                </MenuItem>
+                              </template>
+                            </div>
                           </MenuItems>
                         </transition>
                       </Menu>
@@ -349,6 +348,11 @@
       </Dialog>
     </TransitionRoot>
   </template>
+  <!-- Test Console Dialog -->
+  <TestConsoleDialog
+    :isOpen="isTestConsoleMenuOpen"
+    @close="closeTestConsoleModal"
+  />
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
@@ -371,6 +375,7 @@ import {
   WrenchIcon,
 } from "@heroicons/vue/24/outline";
 import useNotifications from "@workspace/composables/notifications.js";
+import TestConsoleDialog from "@/shared/components/TestConsoleDialog.vue";
 import ToastNotification from "@workspace/components/ToastNotification.vue";
 import WorkspaceNavigation from "@workspace/components/WorkspaceNavigation.vue";
 export default {
@@ -386,12 +391,14 @@ export default {
     MagnifyingGlassIcon,
     UserCircleIcon,
     WrenchIcon,
+    TestConsoleDialog,
     ToastNotification,
     WorkspaceNavigation,
   },
   setup() {
     const store = useStore();
     const metadata = inject("metadata");
+    const environment = ref(import.meta.env.MODE);
     const { cookies } = useCookies();
     const {
       notifications,
@@ -407,6 +414,9 @@ export default {
     provide("create-notification", createNotification);
     provide("create-simple-notification", createSimpleNotification);
 
+    const currentUsername = computed(
+      () => store.state.user.user.name.split(" ")[0]
+    );
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
@@ -421,9 +431,20 @@ export default {
       isOpen.value = false;
     };
 
+    const isTestConsoleMenuOpen = ref(false);
+
+    const openTestConsoleModal = () => {
+      isTestConsoleMenuOpen.value = true;
+    };
+
+    const closeTestConsoleModal = () => {
+      isTestConsoleMenuOpen.value = false;
+    };
+
     return {
       dayjs,
       metadata,
+      environment,
       loadingUser,
       notifications,
       createNotification,
@@ -431,11 +452,15 @@ export default {
       removeNotifications,
       stopBodyOverflow,
       allowBodyOverflow,
+      currentUsername,
       canManageWire,
       canManageSpecialEditions,
       dialogPreference,
       isOpen,
       close,
+      isTestConsoleMenuOpen,
+      openTestConsoleModal,
+      closeTestConsoleModal,
     };
   },
 };
