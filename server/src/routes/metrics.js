@@ -42,25 +42,21 @@ router.get(
       }
       #swagger.parameters['readership_start_date'] = {
         in: 'query',
-        description: 'Start date for the readership data in the format "DD MMMM YYYY"',
+        description: 'Start date for the readership data in the format &quot;DD MMMM YYYY&quot;',
         required: false,
-        type: 'string'
+        type: 'Date'
       }
       #swagger.parameters['readership_end_date'] = {
         in: 'query',
-        description: 'End date for the readership data in the format "DD MMMM YYYY"',
+        description: 'End date for the readership data in the format &quot;DD MMMM YYYY&quot;',
         required: false,
-        type: 'string'
+        type: 'Date' }
       }
       #swagger.responses[200] = {
-        schema: {
-          $ref: '#/definitions/ReadershipData'
-        }
+        schema: { $ref: '#/definitions/ReadershipData' }
       }
       #swagger.responses[500] = {
-        schema: {
-          $ref: '#/definitions/ErrorResponse'
-        }
+        schema: { $ref: '#/definitions/ErrorResponse' }
       }
      */
   async (req, res) => {
@@ -85,7 +81,11 @@ router.get(
       } catch (error) {
         logger.error(error);
         const errorDetails = `Failed to retrieve unique readership by organization for product: ${error.message}`;
-        KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+        KiwiStandardResponsesExpress.standardErrorResponse(
+          500,
+          errorDetails,
+          res,
+        );
       }
     });
   },
@@ -113,12 +113,12 @@ router.post("/metrics/products/:productId/record-email", async (req, res) => {
           }
         }
       }
-      #swagger.responses[500] = {
-        schema: {
-          $ref: '#/definitions/ErrorResponse'
-        }
-      } 
     }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definitions/ErrorResponse'
+      }
+    } 
    */
   await runAsUser(req, res, async (currentUser, req, res) => {
     const { productId } = req.params;
@@ -132,7 +132,11 @@ router.post("/metrics/products/:productId/record-email", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Failed to increment email_count for product: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        errorDetails,
+        res,
+      );
     }
 
     try {
@@ -169,10 +173,10 @@ router.post("/metrics/products/:productId/record-print", async (req, res) => {
           }
         }
       }
-      #swagger.responses[500] = {
-        schema: {
-          $ref: '#/definitions/ErrorResponse'
-        }
+    }
+    #swagger.responses[500] = {
+      schema: {
+        $ref: '#/definitions/ErrorResponse'
       }
     }
    */
@@ -188,7 +192,11 @@ router.post("/metrics/products/:productId/record-print", async (req, res) => {
     } catch (error) {
       logger.error(error);
       const errorDetails = `Failed to increment print_count for product: ${error.message}`;
-      KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      KiwiStandardResponsesExpress.standardErrorResponse(
+        500,
+        errorDetails,
+        res,
+      );
     }
 
     try {

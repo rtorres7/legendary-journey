@@ -22,5 +22,5 @@ function setupAppWithUser(router, user) {
 
 module.exports = {
   setupApp,
-  setupAppWithUser
+  setupAppWithUser,
 };

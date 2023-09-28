@@ -11,7 +11,6 @@ import multer from "multer";
 import { Readable } from "stream";
 import { v4 as uuidv4 } from "uuid";
 
-import { KiwiPreconditions } from "@kiwiproject/kiwi-js";
 import { config } from "../config/config";
 import { logger } from "../config/logger";
 
@@ -21,6 +20,9 @@ export class ObjectStoreService {
   /** Minio.Client */
   getClient(): Client {
     if (ObjectStoreService.minioClient == null) {
+      console.log("config.minio.endPoint: " + config.minio.endPoint);
+      console.log("config.minio.port: " + config.minio.port);
+
       ObjectStoreService.minioClient = new Client({
         endPoint: config.minio.endPoint,
         port: config.minio.port,
@@ -37,7 +39,10 @@ export class ObjectStoreService {
     return this.getClient()
       .makeBucket(bucketName)
       .then(() => {
-        logger.info("ObjectStoreService.makeBucket:  bucketName:%s", bucketName);
+        logger.info(
+          "ObjectStoreService.makeBucket:  bucketName:%s",
+          bucketName,
+        );
       });
   }
 
@@ -46,8 +51,14 @@ export class ObjectStoreService {
     return this.getClient()
       .listBuckets()
       .then((list) => {
-        logger.info('ObjectStoreService.listBuckets:  ' + list.map(i => i.name).join(", "));
-        logger.info("ObjectStoreService.listBuckets:  buckets:%s", list.map((i) => i.name).join(", "));
+        logger.info(
+          "ObjectStoreService.listBuckets:  " +
+            list.map((i) => i.name).join(", "),
+        );
+        logger.info(
+          "ObjectStoreService.listBuckets:  buckets:%s",
+          list.map((i) => i.name).join(", "),
+        );
         return list;
       });
   }
@@ -57,7 +68,11 @@ export class ObjectStoreService {
     return this.getClient()
       .bucketExists(bucketName)
       .then((exists) => {
-        logger.info("ObjectStoreService.bucketExists:  bucketName:%s, exists:%s", bucketName, exists);
+        logger.info(
+          "ObjectStoreService.bucketExists:  bucketName:%s, exists:%s",
+          bucketName,
+          exists,
+        );
         return exists;
       });
   }
@@ -67,20 +82,27 @@ export class ObjectStoreService {
     return this.getClient()
       .removeBucket(bucketName)
       .then(() => {
-        logger.info("ObjectStoreService.removeBucket:  bucketName:%s", bucketName);
+        logger.info(
+          "ObjectStoreService.removeBucket:  bucketName:%s",
+          bucketName,
+        );
       });
   }
 
   /** Minio.Client.listObjects(bucketName: string, prefix?: string, recursive?: boolean): BucketStream<BucketItem> */
   async listObjects(bucketName: string): Promise<BucketItem[]> {
-    const bucketStream = this.getClient().listObjects(bucketName, '', true); // BucketStream<BucketItem>
+    const bucketStream = this.getClient().listObjects(bucketName, "", true); // BucketStream<BucketItem>
     // .catch((error) => logger.error("ObjectStoreService.listObjects:", error));
     return new Promise((resolve, reject) => {
       const data = [];
       bucketStream.on("data", (obj) => data.push(obj));
       bucketStream.on("error", (err) => reject(err));
       bucketStream.on("end", () => {
-        logger.info("ObjectStoreService.listObjects:  bucketName:%s, count:%d", bucketName, data.length);
+        logger.info(
+          "ObjectStoreService.listObjects:  bucketName:%s, count:%d",
+          bucketName,
+          data.length,
+        );
         return resolve(data);
       });
     });
@@ -95,7 +117,12 @@ export class ObjectStoreService {
     return this.getClient()
       .statObject(bucketName, objectName)
       .then((stats) => {
-        logger.info("ObjectStoreService.statObject:  bucketName:%s, objectName:%s, stats:%j", bucketName, objectName, stats);
+        logger.info(
+          "ObjectStoreService.statObject:  bucketName:%s, objectName:%s, stats:%j",
+          bucketName,
+          objectName,
+          stats,
+        );
         return stats;
       })
       .catch((error) => {
@@ -113,7 +140,11 @@ export class ObjectStoreService {
     return this.getClient()
       .getObject(bucketName, objectName)
       .then((stream) => {
-        logger.info("ObjectStoreService.getObject:  bucketName:%s, objectName:%s", bucketName, objectName);
+        logger.info(
+          "ObjectStoreService.getObject:  bucketName:%s, objectName:%s",
+          bucketName,
+          objectName,
+        );
         return stream;
       })
       .catch((error) => {
@@ -133,7 +164,13 @@ export class ObjectStoreService {
     return this.getClient()
       .putObject(bucketName, objectName, stream, metaData)
       .then((uploadedObjectInfo) => {
-        logger.info("ObjectStoreService.putObject:  bucketName:%s, objectName:%s, metadata:%j, uploadedObjectInfo:%j", bucketName, objectName, metaData, uploadedObjectInfo);
+        logger.info(
+          "ObjectStoreService.putObject:  bucketName:%s, objectName:%s, metadata:%j, uploadedObjectInfo:%j",
+          bucketName,
+          objectName,
+          metaData,
+          uploadedObjectInfo,
+        );
         return uploadedObjectInfo;
       });
   }
@@ -144,7 +181,11 @@ export class ObjectStoreService {
     return await this.getClient()
       .removeObject(bucketName, objectName)
       .then(() => {
-        logger.info("ObjectStoreService.removeObject:  bucketName:%s, objectName:%s", bucketName, objectName);
+        logger.info(
+          "ObjectStoreService.removeObject:  bucketName:%s, objectName:%s",
+          bucketName,
+          objectName,
+        );
       })
       .catch((error) => {
         logger.error(error);
@@ -152,8 +193,22 @@ export class ObjectStoreService {
       });
   }
 
-  buildUpload(bucket: string, prefix = ""): multer.Multer {
-    const engine = new ObjectStorageEngine(this, bucket, prefix);
+  buildUpload(
+    bucket: string,
+    objectNameSupplier: (
+      prefix: string,
+      req: Request,
+      file: Express.Multer.File,
+      attachmentId: string,
+    ) => string,
+    prefix = "",
+  ): multer.Multer {
+    const engine = new ObjectStorageEngine(
+      this,
+      bucket,
+      objectNameSupplier,
+      prefix,
+    );
     return multer({ storage: engine });
   }
 
@@ -163,9 +218,16 @@ export class ObjectStoreService {
    */
   public sanitize(objectName: string): string {
     const SAFE_CHARACTERS = /[^0-9a-zA-Z! _\\.\\*'\\(\\)\\\-/]/g;
-    const sanitized = objectName.replace(SAFE_CHARACTERS, '').trim().replace(/ /g, '-');
+    const sanitized = objectName
+      .replace(SAFE_CHARACTERS, "")
+      .trim()
+      .replace(/ /g, "-");
     if (objectName !== sanitized) {
-      logger.warn("ObjectStoreService.sanitize:  objectName:%s, sanitized:%s", objectName, sanitized);
+      logger.warn(
+        "ObjectStoreService.sanitize:  objectName:%s, sanitized:%s",
+        objectName,
+        sanitized,
+      );
     }
     return sanitized;
   }
@@ -175,8 +237,13 @@ export class ObjectStoreService {
  * @see Express.Multer.File
  * @see Minio.UploadedObjectInfo
  */
-type PartialMulterFile = Pick<Express.Multer.File, 'fieldname' | 'originalname' | 'encoding' | 'mimetype'>;
-export interface FileUploadedObjectInfo extends PartialMulterFile, UploadedObjectInfo {
+type PartialMulterFile = Pick<
+  Express.Multer.File,
+  "fieldname" | "originalname" | "encoding" | "mimetype"
+>;
+export interface FileUploadedObjectInfo
+  extends PartialMulterFile,
+    UploadedObjectInfo {
   /*
   Express.Multer.File
     fieldname: "file",
@@ -187,12 +254,12 @@ export interface FileUploadedObjectInfo extends PartialMulterFile, UploadedObjec
     etag: "180b9159a3d82185c1b16a7049757420",
     versionId: "1
   */
-   attachmentId: string; // 35e23a5a-9441-4450-b722-52bc8d732418
-   storage: string; // "minio",
-   bucketName: string; // "attachments",
-   objectName: string; // "article.jpg-12345678",
-   size: number; // 58251,
-   visible: boolean; // ?is_visible=false
+  attachmentId: string; // 35e23a5a-9441-4450-b722-52bc8d732418
+  storage: string; // "minio",
+  bucketName: string; // "attachments",
+  objectName: string; // "article.jpg-12345678",
+  size: number; // 58251,
+  visible: boolean; // ?is_visible=false
 }
 
 /**
@@ -202,8 +269,24 @@ export class ObjectStorageEngine implements multer.StorageEngine {
   service: ObjectStoreService;
   bucketName: string;
   prefix: string;
+  objectNameSupplier: (
+    prefix: string,
+    req: Request,
+    file: Express.Multer.File,
+    attachmentId: string,
+  ) => string;
 
-  constructor(service: ObjectStoreService, bucketName: string, prefix = "") {
+  constructor(
+    service: ObjectStoreService,
+    bucketName: string,
+    objectNameSupplier: (
+      prefix: string,
+      req: Request,
+      file: Express.Multer.File,
+      attachmentId: string,
+    ) => string,
+    prefix = "",
+  ) {
     this.service = service;
     this.bucketName = bucketName;
     this.prefix = "";
@@ -214,22 +297,39 @@ export class ObjectStorageEngine implements multer.StorageEngine {
         this.prefix = prefix + "/";
       }
     }
+    this.objectNameSupplier = objectNameSupplier;
   }
 
-  async _handleFile(req: Request, file: Express.Multer.File, cb: (error?: any, info?: FileUploadedObjectInfo) => void): Promise<void> {
-    KiwiPreconditions.checkArgumentDefined(req.params.productNumber);
-    const productNumber = req.params.productNumber;
-
+  async _handleFile(
+    req: Request,
+    file: Express.Multer.File,
+    cb: (error?: any, info?: FileUploadedObjectInfo) => void,
+  ): Promise<void> {
     const bucketExists = await this.service.bucketExists(this.bucketName);
     if (!bucketExists) {
       await this.service.makeBucket(this.bucketName);
     }
 
-    const attachmentId: string = uuidv4();
-    const objectName = `${this.prefix}${productNumber}/${file.originalname}-${attachmentId.substr(-12)}`;
-    const uploadedObjectInfo = await this.service.putObject(this.bucketName, objectName, file.stream, {"content-type": file.mimetype });
-    const bucketItemStat = await this.service.statObject(this.bucketName, objectName);
-    const visible = req.query.is_visible ? req.query.is_visible !== "false" : true;
+    const attachmentId = uuidv4();
+    const objectName = this.objectNameSupplier(
+      this.prefix,
+      req,
+      file,
+      attachmentId,
+    );
+    const uploadedObjectInfo = await this.service.putObject(
+      this.bucketName,
+      objectName,
+      file.stream,
+      { "content-type": file.mimetype },
+    );
+    const bucketItemStat = await this.service.statObject(
+      this.bucketName,
+      objectName,
+    );
+    const visible = req.query.is_visible
+      ? req.query.is_visible !== "false"
+      : true;
 
     const fileUploadedObjectInfo = {
       ...file,
@@ -241,12 +341,19 @@ export class ObjectStorageEngine implements multer.StorageEngine {
       visible,
       attachmentId,
     };
-    logger.info("ObjectStorageEngine._handleFile:  fileUploadedObjectInfo:%j", fileUploadedObjectInfo);
+    logger.info(
+      "ObjectStorageEngine._handleFile:  fileUploadedObjectInfo:%j",
+      fileUploadedObjectInfo,
+    );
     cb(null, fileUploadedObjectInfo);
   }
 
-  async _removeFile(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void): Promise<void> {
-    logger.info('ObjectStorageEngine._removeFile:  %j', file);
+  async _removeFile(
+    req: Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null) => void,
+  ): Promise<void> {
+    logger.info("ObjectStorageEngine._removeFile:  %j", file);
     cb(null);
   }
 }

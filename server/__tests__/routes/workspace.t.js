@@ -16,6 +16,22 @@ jest.mock("../../src/services/product-service.js", () => {
           content: articles.filter((article) => article.state === "draft"),
         };
       }),
+      findPageOfDraftProductsForProducingOrg: jest
+        .fn()
+        .mockImplementation((producingOrgName) => {
+          if (process.env.THROW_TEST_ERROR) {
+            throw new Error("whoops");
+          }
+          return {
+            content: articles.filter(
+              (article) =>
+                article.state === "posted" &&
+                article.producingOffices.findIndex(
+                  (i) => i.name === producingOrgName,
+                ) >= 0,
+            ),
+          };
+        }),
       findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
@@ -27,23 +43,21 @@ jest.mock("../../src/services/product-service.js", () => {
       }),
       findPageOfRecentProductsForProducingOffice: jest
         .fn()
-        .mockImplementation(
-          (producingOfficeName) => {
-            if (process.env.THROW_TEST_ERROR) {
-              throw new Error("whoops");
-            }
+        .mockImplementation((producingOfficeName) => {
+          if (process.env.THROW_TEST_ERROR) {
+            throw new Error("whoops");
+          }
 
-            return {
-              content: articles.filter(
-                (article) =>
-                  article.state === "posted" &&
-                  article.producingOffices.findIndex(
-                    (i) => i.name === producingOfficeName,
-                  ) >= 0,
-              ),
-            };
-          },
-        ),
+          return {
+            content: articles.filter(
+              (article) =>
+                article.state === "posted" &&
+                article.producingOffices.findIndex(
+                  (i) => i.name === producingOfficeName,
+                ) >= 0,
+            ),
+          };
+        }),
       findPageOfProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
@@ -65,7 +79,7 @@ jest.mock("../../src/services/product-service.js", () => {
           throw new Error("whoops");
         }
         return Promise.resolve(KiwiPage.of(1, 4, 20, articles.slice(0, 4)));
-      })
+      }),
     };
   });
 });
@@ -106,6 +120,7 @@ jest.mock("../../src/services/workspace.js", () => {
         };
       }),
       deleteCollection: jest.fn(),
+      deleteCollectionImage: jest.fn(),
       findSavedProductsInCollection: jest
         .fn()
         .mockImplementation((collectionId) => {
@@ -135,11 +150,9 @@ jest.mock("../../src/services/workspace.js", () => {
 
           return null;
         }),
-      isProductSaved: jest
-        .fn()
-        .mockImplementation(() => {
-          return true;
-        })
+      isProductSaved: jest.fn().mockImplementation(() => {
+        return true;
+      }),
     };
   });
 });
@@ -149,10 +162,12 @@ jest.mock("../../src/services/aggregated-metrics-service.js", () => {
     return {
       getTotalViewsForProductsPublishedByOrganization: jest
         .fn()
-        .mockImplementation((organizationName, startDate, endDate) => {
+        .mockImplementation(() => {
           return Promise.resolve({ totalViews: { totalViews: 500 } });
         }),
-      getProductViewsCountForMultipleProducts: jest.fn().mockResolvedValue({ "really-cool-product": 1 })
+      getProductViewsCountForMultipleProducts: jest
+        .fn()
+        .mockResolvedValue({ "really-cool-product": 1 }),
     };
   });
 });
@@ -166,7 +181,7 @@ describe("Workspace Routes", () => {
   });
 
   describe("GET /workspace/drafts", () => {
-    it("should return draft products", () => {
+    it("should return draft products", async () => {
       const router = require("../../src/routes/workspace");
       const app = setupAppWithUser(router, CURRENT_USER);
 
@@ -176,7 +191,8 @@ describe("Workspace Routes", () => {
         .expect("Content-Type", /json/)
         .then((res) => {
           expect(res.body.content.length).toBe(1);
-          expect(res.body.content[0].productNumber).toBe("WIReWIRe_sample_5");
+
+          expect(res.body.content[0].productNumber).toBe("WIReWIRe_sample_4");
         });
     });
 
@@ -341,7 +357,7 @@ describe("Workspace Routes", () => {
 
       return request(app)
         .post("/workspace/collections")
-        .send({ name: "Should save" })
+        .field("name", "Should save")
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
@@ -358,17 +374,13 @@ describe("Workspace Routes", () => {
 
       return request(app)
         .put(`/workspace/collections/1`)
-        .send({
-          name: "Updated name",
-          description: "Updated description",
-          image: "Updated image",
-        })
+        .field("name", "Updated name")
+        .field("description", "Updated description")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
           expect(res.body.name).toBe("Updated name");
           expect(res.body.description).toBe("Updated description");
-          expect(res.body.image).toBe("Updated image");
         });
     });
   });

@@ -1,14 +1,15 @@
 const { Sequelize } = require("sequelize");
+const { config } = require("../../config/config");
 
 let sequelize;
 
 if (sequelize === undefined) {
-  const postgresUrl = process.env.POSTGRES_CONNECTION_URL;
+  const postgresUrl = config.postgres.url;
 
   if (postgresUrl === "SWAGGER") {
     sequelize = { models: [] };
   } else {
-    sequelize = new Sequelize(process.env.POSTGRES_CONNECTION_URL, {
+    sequelize = new Sequelize(postgresUrl, {
       logging: console.log,
     });
 

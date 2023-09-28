@@ -116,7 +116,7 @@ const currentRoutes = [
     },
   },
   {
-    path: "/feeds/:id(\\d+)",
+    path: "/special_editions/:id(\\d+)",
     name: "specialEdition",
     component: CurrentSpecialEditionView,
     meta: {
@@ -125,7 +125,7 @@ const currentRoutes = [
     },
   },
   {
-    path: "/feeds",
+    path: "/special_editions",
     name: "specialEditions",
     component: CurrentSpecialEditionsManagerView,
     meta: {
@@ -261,6 +261,7 @@ const studioRoutes = [
 //Workspace
 import DashboardView from "@workspace/views/DashboardView.vue";
 import SavedProductsView from "@workspace/views/SavedProductsView.vue";
+import CollectionsView from "@workspace/views/CollectionsView.vue";
 
 const workspaceRoutes = [
   {
@@ -279,6 +280,15 @@ const workspaceRoutes = [
     meta: {
       domain: "workspace",
       title: "Saved",
+    },
+  },
+  {
+    path: "/workspace/collections",
+    name: "workspace-collections",
+    component: CollectionsView,
+    meta: {
+      domain: "workspace",
+      title: "Collections",
     },
   },
 ];

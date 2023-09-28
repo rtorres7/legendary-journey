@@ -485,7 +485,7 @@ const articles = [
       name: "Analysis: All Source",
       code: "analysis.all_source",
     },
-    state: "draft",
+    state: "posted",
     subregions: [],
     summary:
       "Events to commemorate Queen Elizabeth II are continuing across the U.K. this week, after King Charles III was proclaimed monarch at a ceremony in London over the weekend. King Charles III visited Parliament on Monday, where he made his first address there as monarch and lawmakers expressed their condolences for the death of his mother, before flying with the queen consort to Edinburgh. That the King has chosen to begin his reign with visits to Edinburgh, Belfast and Cardiff is telling. It suggests that the future of the Union is at the heart of his concerns. The early decades of his late mother's reign were characterised by the long, slow contraction of British Imperial power around the world. He will be alert to the possibility that his own reign could come to be defined by the continuation of that process here - and the eventual dissolution of the United Kingdom itself.",
@@ -521,6 +521,23 @@ const metadata = new Metadata({
     coauthors: {
       displayName: "Coauthors",
       values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
         {
           ancestry: "1000",
           ancestry_depth: 1,
@@ -645,6 +662,23 @@ const metadata = new Metadata({
     coordinators: {
       displayName: "Coordinators",
       values: [
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
         {
           ancestry: "1000",
           ancestry_depth: 1,
@@ -2029,6 +2063,23 @@ const metadata = new Metadata({
           ancestry: "1000",
           ancestry_depth: 1,
           category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
           code: "DNI",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Director of National Intelligence",
@@ -2280,6 +2331,23 @@ const metadata = new Metadata({
           ancestry: "1000",
           ancestry_depth: 1,
           category: "IC",
+          code: "NGA",
+          created_at: new Date("2011-07-30T16:38:33.000-04:00"),
+          description: "National Geospatial-Intelligence Agency",
+          id: 1,
+          label: "NGA",
+          legacy: false,
+          name: "NGA",
+          ntk_org: true,
+          position: 2,
+          updated_at: new Date("2014-12-16T18:22:22.000-05:00"),
+          usgov_org: true,
+          visible: true,
+        },
+        {
+          ancestry: "1000",
+          ancestry_depth: 1,
+          category: "IC",
           code: "DNI",
           created_at: new Date("2011-07-30T16:38:33.000-04:00"),
           description: "Director of National Intelligence",
@@ -2473,6 +2541,11 @@ const metadata = new Metadata({
         {
           name: "Watch",
           code: 10390,
+          publishable: true,
+        },
+        {
+          name: "First Responder's Toolbox",
+          code: 10393,
           publishable: true,
         },
       ],
@@ -2994,7 +3067,7 @@ const loadFeeds = async (postgresUrl) => {
 
   return await sequelize.models.Feed.create({
     name: "Test Feed #1",
-    searchParams: "https://localhost:8443/search?text=test111",
+    searchParams: "https://localhost:8443/search?text=test123",
     state: "Draft",
     classification: "U",
   });
@@ -3093,6 +3166,7 @@ const loadUsers = async (postgresUrl) => {
   await sequelize.models.User.create({
     email: "foo@example.com",
     dn: "O=US,OU=OFFICE,CN=foo",
+    cn: "foo",
     organizationId: organization.id,
   });
 

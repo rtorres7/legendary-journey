@@ -56,6 +56,36 @@ class UserService {
   async deleteUser(id) {
     await models.User.destroy({ where: { id: id } });
   }
+
+  async createOrFindOrganization(name) {
+    let organization = await models.Organization.findOne({
+      where: { name: name },
+    });
+
+    if (!organization) {
+      organization = models.Organization.build({ name: name });
+      await organization.save();
+    }
+    return organization;
+  }
+
+  async createUserWithOrganization(userData, organizationName) {
+    const organization = await this.createOrFindOrganization(organizationName);
+    const newUser = new models.User({
+      ...userData,
+      organizationId: organization.id,
+    });
+    await newUser.save();
+    return newUser;
+  }
+
+  async updateUserOrganization(userId, organizationName) {
+    const organization = await this.createOrFindOrganization(organizationName);
+    const user = await this.findById(userId);
+    user.organizationId = organization.id;
+    await user.save();
+    return user;
+  }
 }
 
 module.exports = UserService;

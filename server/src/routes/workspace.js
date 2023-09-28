@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { KiwiStandardResponsesExpress, KiwiPreconditions } = require("@kiwiproject/kiwi-js");
+const {
+  KiwiStandardResponsesExpress,
+  KiwiPreconditions,
+} = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
+const { ObjectStoreService } = require("../services/object-store-service");
+const objectStoreService = new ObjectStoreService();
 const { logger } = require("../config/logger");
 
 const AggregatedMetricsService = require("../services/aggregated-metrics-service");
@@ -13,9 +18,17 @@ const metricsService = new AggregatedMetricsService();
 const { formatValue } = require("../util/format");
 const { legacyErrorResponse } = require("../util/errors");
 
+const upload = objectStoreService.buildUpload(
+  process.env.ATTACHMENT_BUCKET || "attachments",
+  (prefix, req, file, attachmentId) => {
+    return `${prefix}${attachmentId.substring(0, 8)}/${file.originalname}`;
+  },
+  "workspace-collections",
+);
+
 router.get("/workspace/drafts", async (req, res) => {
   /*
-    #swagger.summary = 'Retrieve a page of draft products created by the current user'
+    #swagger.summary = 'Retrieve a page of draft products created by the current user's organization'
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
@@ -33,13 +46,14 @@ router.get("/workspace/drafts", async (req, res) => {
     const { perPage, page, skip, sortDir } = pagingParams(req);
 
     try {
-      const pageOfDrafts = await productService.findPageOfDraftProductsForUser(
-        currentUser.id,
-        page,
-        perPage,
-        skip,
-        sortDir,
-      );
+      const pageOfDrafts =
+        await productService.findPageOfDraftProductsForProducingOrg(
+          currentUser.dataValues?.organization,
+          page,
+          perPage,
+          skip,
+          sortDir,
+        );
       res.json(pageOfDrafts);
     } catch (error) {
       logger.error(error);
@@ -113,7 +127,12 @@ router.get("/workspace/viewed", async (req, res) => {
     KiwiPreconditions.checkPositive(page);
     KiwiPreconditions.checkPositive(perPage);
     try {
-      const pageResults = await productService.findRecentViewedProductsForUser(currentUser.id, page, perPage, sortDir);
+      const pageResults = await productService.findRecentViewedProductsForUser(
+        currentUser.id,
+        page,
+        perPage,
+        sortDir,
+      );
       res.json(pageResults);
     } catch (error) {
       logger.error(error);
@@ -123,7 +142,6 @@ router.get("/workspace/viewed", async (req, res) => {
     }
   });
 });
-
 
 router.get("/workspace/stats", async (req, res) => {
   /*
@@ -201,14 +219,15 @@ router.get("/workspace/saved", async (req, res) => {
       const term = req.query.text;
       const filters = req.query;
 
-      const savedProducts = await workspaceService.findPageOfSavedProductsForUser(
-        currentUser.id,
-        term,
-        perPage,
-        page,
-        sortDir,
-        filters,
-      );
+      const savedProducts =
+        await workspaceService.findPageOfSavedProductsForUser(
+          currentUser.id,
+          term,
+          perPage,
+          page,
+          sortDir,
+          filters,
+        );
 
       res.json(savedProducts);
     } catch (error) {
@@ -304,8 +323,11 @@ router.get("/workspace/collections", async (req, res) => {
   });
 });
 
-router.post("/workspace/collections", async (req, res) => {
-  /*
+router.post(
+  "/workspace/collections",
+  upload.fields([{ name: "thumbnail" }]),
+  async (req, res) => {
+    /*
     #swagger.summary = 'Creates a collection for saved products for the current user'
     #swagger.tags = ['Workspace']
     #swagger.requestBody = {
@@ -320,27 +342,53 @@ router.post("/workspace/collections", async (req, res) => {
     }
    */
 
-  await runAsUser(req, res, async (currentUser, req, res) => {
-    try {
-      const savedCollection = await workspaceService.createCollection({
-        name: req.body.name,
-        description: req.body.description,
-        image: req.body.image,
-        createdBy: currentUser.id,
-      });
+    await runAsUser(req, res, async (currentUser, req, res) => {
+      try {
+        const imageJson = req.files.thumbnail
+          ? JSON.stringify(req.files.thumbnail[0])
+          : null;
+        const savedCollection = await workspaceService.createCollection({
+          name: req.body.name,
+          description: req.body.description,
+          image: imageJson,
+          createdBy: currentUser.id,
+        });
 
-      res.json(savedCollection);
-    } catch (error) {
-      logger.error(error);
-      const errorDetails = `${error.message}`;
-      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-      legacyErrorResponse(500, errorDetails, res);
+        res.json(savedCollection);
+      } catch (error) {
+        logger.error(error);
+        const errorDetails = `${error.message}`;
+        // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+        legacyErrorResponse(500, errorDetails, res);
+      }
+    });
+  },
+);
+
+router.get("/workspace/collection/image/:collectionId", async (req, res) => {
+  try {
+    const { metadata, stream } = await workspaceService.getCollectionImage(
+      req.params.collectionId,
+    );
+
+    if (metadata) {
+      res.attachment(metadata.originalname);
+      res.set("content-type", metadata.mimetype);
+      stream.pipe(res);
+    } else {
+      legacyErrorResponse(404, "Collection image not found", res);
     }
-  });
+  } catch (error) {
+    const errorDetails = `Unable to get collection image: ${error.message}`;
+    legacyErrorResponse(404, errorDetails, res);
+  }
 });
 
-router.put("/workspace/collections/:collectionId", async (req, res) => {
-  /*
+router.put(
+  "/workspace/collections/:collectionId",
+  upload.fields([{ name: "thumbnail" }]),
+  async (req, res) => {
+    /*
     #swagger.summary = 'Updates a collection for saved products for the current user'
     #swagger.tags = ['Workspace']
     #swagger.requestBody = {
@@ -354,24 +402,30 @@ router.put("/workspace/collections/:collectionId", async (req, res) => {
       }
     }
    */
-  try {
-    const updatedCollection = await workspaceService.updateCollection(
-      req.params.collectionId,
-      {
-        name: req.body.name,
-        description: req.body.description,
-        image: req.body.image,
-      },
-    );
+    try {
+      await workspaceService.deleteCollectionImage(req.params.collectionId);
 
-    res.json(updatedCollection);
-  } catch (error) {
-    logger.error(error);
-    const errorDetails = `${error.message}`;
-    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-    legacyErrorResponse(500, errorDetails, res);
-  }
-});
+      const imageJson = req.files.thumbnail
+        ? JSON.stringify(req.files.thumbnail[0])
+        : null;
+
+      const updatedCollection = await workspaceService.updateCollection(
+        req.params.collectionId,
+        {
+          name: req.body.name,
+          description: req.body.description,
+          image: imageJson,
+        },
+      );
+
+      res.json(updatedCollection);
+    } catch (error) {
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
+  },
+);
 
 router.delete("/workspace/collections/:collectionId", async (req, res) => {
   /*
@@ -383,6 +437,8 @@ router.delete("/workspace/collections/:collectionId", async (req, res) => {
     }
    */
   try {
+    await workspaceService.deleteCollectionImage(req.params.collectionId);
+
     await workspaceService.deleteCollection(req.params.collectionId);
     res.status(204).send();
   } catch (error) {
@@ -393,8 +449,10 @@ router.delete("/workspace/collections/:collectionId", async (req, res) => {
   }
 });
 
-router.get("/workspace/collections/:collectionId/products", async (req, res) => {
-  /*
+router.get(
+  "/workspace/collections/:collectionId/products",
+  async (req, res) => {
+    /*
   #swagger.summary = 'Retrieves a list of saved products for the given collection for the current user'
   #swagger.tags = ['Workspace']
   #swagger.responses[200] = {
@@ -404,27 +462,29 @@ router.get("/workspace/collections/:collectionId/products", async (req, res) => 
   }
   */
 
-  try {
-    const { perPage, page, sortDir } = pagingParams(req);
-    const term = req.query.text;
-    const filters = req.query;
+    try {
+      const { perPage, page, sortDir } = pagingParams(req, "created");
+      const term = req.query.text;
+      const filters = req.query;
 
-    const savedProducts = await workspaceService.findSavedProductsInCollection(
-      req.params.collectionId,
-      term,
-      perPage,
-      page,
-      sortDir,
-      filters,
-    );
-    res.json(savedProducts);
-  } catch (error) {
-    logger.error(error);
-    const errorDetails = `${error.message}`;
-    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-    legacyErrorResponse(500, errorDetails, res);
-  }
-});
+      const savedProducts =
+        await workspaceService.findSavedProductsInCollection(
+          req.params.collectionId,
+          term,
+          perPage,
+          page,
+          sortDir,
+          filters,
+        );
+      res.json(savedProducts);
+    } catch (error) {
+      logger.error(error);
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
+  },
+);
 
 router.put(
   "/workspace/collections/:collectionId/products/:savedProductId",
@@ -483,10 +543,11 @@ router.delete(
     }
    */
     try {
-      const collection = await workspaceService.removeSavedProductFromCollection(
-        req.params.collectionId,
-        req.params.savedProductId,
-      );
+      const collection =
+        await workspaceService.removeSavedProductFromCollection(
+          req.params.collectionId,
+          req.params.savedProductId,
+        );
 
       if (collection) {
         KiwiStandardResponsesExpress.standardDeleteResponseWithEntity(

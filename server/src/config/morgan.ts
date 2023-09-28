@@ -1,11 +1,18 @@
-import { IncomingMessage, ServerResponse } from 'http';
-import morgan from 'morgan';
-import config from './config';
-import logger from './logger';
+import { IncomingMessage, ServerResponse } from "http";
+import morgan from "morgan";
+import config from "./config";
+import logger from "./logger";
 
-morgan.token('message', (req: IncomingMessage, res: ServerResponse<IncomingMessage> & Record<'locals', any>) => res.locals.errorMessage || '');
+morgan.token(
+  "message",
+  (
+    req: IncomingMessage,
+    res: ServerResponse<IncomingMessage> & Record<"locals", any>,
+  ) => res.locals.errorMessage || "",
+);
 
-const getIpFormat = () => (config.mxs.env !== 'container' ? ':remote-addr - ' : '');
+const getIpFormat = () =>
+  config.mxs.env !== "container" ? ":remote-addr - " : "";
 const successResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms`;
 const errorResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms - message: :message`;
 

@@ -7,7 +7,7 @@ const Feed = require("../models/feed");
 const FeedsService = require("../services/feeds-service");
 const feedsService = new FeedsService();
 
-router.get("/feeds", async (req, res) => {
+router.get("/special_editions", async (req, res) => {
   /*
     #swagger.summary = 'Retrieve all Feeds (SEs) that currently exist.'
     #swagger.tags = ['Feeds']
@@ -25,54 +25,19 @@ router.get("/feeds", async (req, res) => {
 
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
-      let feeds = await feedsService.findAllFeeds();
-      res.json(feeds);
-    } catch (error) {
-      KiwiStandardResponsesExpress.standardErrorResponse(
-        500,
-        `[findAllFeeds] Unable to find feeds: ${error.message}`,
-        res,
-      );
-    }
-  });
-});
-
-// {
-//   "name": "Test Feed #1234",
-//   "searchParams": "https://localhost:8443/search?text=test2",
-//   "selectedReadings": ["WIReWIRe_sample_2", "WIReWIRe_sample_3"]
-// }
-
-router.get("/feeds/links", async (req, res) => {
-  /*
-    #swagger.summary = 'Get a list of links'
-    #swagger.tags = ['Feeds']
-    #swagger.responses[200] = {
-      schema: {
-        $ref: '#/definitions/Feed'
-      }
-    }
-    #swagger.responses[500] = {
-      schema: {
-        $ref: '#/definition/StandardError'
-      }
-    }
-   */
-  await runAsUser(req, res, async (currentUser, req, res) => {
-    try {
       const feeds = await feedsService.findAllFeeds();
       res.json(feeds);
     } catch (error) {
       KiwiStandardResponsesExpress.standardErrorResponse(
         500,
-        `[findAllFeeds2] Unable to find feeds: ${error.message}`,
+        `Unable to find feeds: ${error.message}`,
         res,
       );
     }
   });
 });
 
-router.get("/feeds/:id", async (req, res) => {
+router.get("/special_editions/:id", async (req, res) => {
   /*
     #swagger.summary = 'Retrieves a Feed by a given id'
     #swagger.tags = ['Feeds']
@@ -97,14 +62,14 @@ router.get("/feeds/:id", async (req, res) => {
     } catch (error) {
       KiwiStandardResponsesExpress.standardErrorResponse(
         500,
-        `[findFeedById] Unable to find feeds: ${error.message}`,
+        `Unable to find feeds: ${error.message}`,
         res,
       );
     }
   });
 });
 
-router.post("/feeds/", async (req, res) => {
+router.post("/special_editions/", async (req, res) => {
   /*
     #swagger.summary = 'Creates a Feed.'
     #swagger.tags = ['Feeds']
@@ -128,10 +93,10 @@ router.post("/feeds/", async (req, res) => {
     const feed = {
       name: req.body.name,
       searchParams: req.body.searchParams,
-      selectedReadings: req.body.selectedReadings.split("\n"),
+      selectedReadings: req.body.selectedReadings,
       state: req.body.state,
-      position: req.body.position,
-      classification: req.body.name_classification,
+      order: req.body.order,
+      classification: req.body.classification,
     };
     try {
       const savedFeed = await feedsService.createFeed(feed);
@@ -145,7 +110,7 @@ router.post("/feeds/", async (req, res) => {
   });
 });
 
-router.put("/feeds/:id", async (req, res) => {
+router.put("/special_editions/:id", async (req, res) => {
   /*
     #swagger.summary = 'Updates a Feed.'
     #swagger.tags = ['Feeds']
@@ -161,30 +126,19 @@ router.put("/feeds/:id", async (req, res) => {
     }
    */
 
-  console.log("route successfully hit, payload: ", req.body);
-
-  const updatedFeed = {
+  const updatedFeed = await feedsService.updateFeed(req.params.id, {
     name: req.body.name,
     searchParams: req.body.searchParams,
-    selectedReadings: req.body.selectedReadings.split("\n"),
+    selectedReadings: req.body.selectedReadings,
     state: req.body.state,
-    position: req.body.position,
+    order: req.body.order,
     classification: req.body.classification,
-  };
+  });
 
-  try {
-    const savedFeed = await feedsService.updateFeed(req.params.id, updatedFeed);
-    console.log(savedFeed);
-    res.json(savedFeed);
-  } catch (error) {
-    logger.error(error);
-    res.json({
-      error: `There was a problem updating the feed: ${error.message}`,
-    });
-  }
+  res.json(updatedFeed);
 });
 
-router.delete("/feeds/:id", async (req, res) => {
+router.delete("/special_editions/:id", async (req, res) => {
   /*
     #swagger.summary = 'Deletes a Feed.'
     #swagger.tags = ['Feeds']

@@ -36,21 +36,21 @@ class MetadataService {
     const lookups = await this.findAllLookups();
     return await this.findLookupsByCodes(
       lookups.producing_offices.values,
-      codes
+      codes,
     );
   }
 
   async findProductType(code) {
     const lookups = await this.findAllLookups();
     return lookups.product_types.values.filter(
-      (productType) => productType.code === code
+      (productType) => productType.code === code,
     )[0];
   }
 
   async findReportingTypeFor(productTypeId) {
     const lookups = await this.findAllLookups();
     const types = lookups.reporting_types.values.filter((reportingType) =>
-      reportingType.productTypes.includes(productTypeId)
+      reportingType.productTypes.includes(productTypeId),
     );
 
     if (types.length === 0) {
@@ -111,7 +111,7 @@ class MetadataService {
     const lookups = await this.findAllLookups();
     return await this.findLookupsByCodes(
       lookups.non_state_actors.values,
-      codes
+      codes,
     );
   }
 

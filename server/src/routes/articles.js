@@ -34,7 +34,13 @@ const eventService = new EventService();
 
 const upload = objectStoreService.buildUpload(
   process.env.ATTACHMENT_BUCKET || "attachments",
+  (prefix, req, file, attachmentId) => {
+    KiwiPreconditions.checkArgumentDefined(req.params.productNumber);
+    const productNumber = req.params.productNumber;
+    return `${prefix}${productNumber}/${file.originalname}-${attachmentId.substring(0, 8)}`;
+  }
 );
+
 const { config } = require("../config/config");
 const { logger } = require("../config/logger");
 
@@ -106,7 +112,11 @@ router.get("/articles/:productNumber", async (req, res) => {
           constant.EVENT_TYPES.PRODUCT_VIEW,
           currentUser.id,
           req.params.productNumber,
-          { producingOffices: article.producingOffices },
+          {
+            producingOffices: article.producingOffices.map(
+              ({ name, code }) => ({ name, code }),
+            ),
+          },
         );
         console.info("Event registered");
       } catch (err) {
@@ -404,6 +414,20 @@ async function publishProduct(id, user, productData, req, res) {
   productData.datePublished = dayjs().toDate();
 
   await updateProduct(id, productData, req, res);
+
+  const event = await eventService.registerEvent(
+    constant.EVENT_TYPES.PRODUCT_PUBLISH,
+    user.id,
+    productData.productNumber,
+    {
+      datePublished: productData.datePublished,
+      producingOffices: productData.producingOffices?.map(({ name, code }) => ({
+        name,
+        code,
+      })),
+      title: productData.title,
+    },
+  );
 }
 
 // These two methods is extracted because of the legacy processDocument call and the fact that a POST is given but our new

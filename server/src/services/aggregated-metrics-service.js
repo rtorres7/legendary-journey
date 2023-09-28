@@ -1,7 +1,9 @@
-// import { date } from "joi";
+const dayjs = require("dayjs");
+
+const { KiwiPreconditions } = require("@kiwiproject/kiwi-js");
 
 const constant = require("../util/constant.js");
-const EventLog = require("../models/event_log");
+const { EventLog } = require("../models/event_log");
 // const { logger } = require("../config/logger");
 
 class AggregatedMetricsService {
@@ -114,9 +116,9 @@ class AggregatedMetricsService {
       readershipData[0].name === "No Data"
         ? 1
         : result.aggregations.organizations.buckets.reduce(
-          (acc, bucket) => acc + bucket.unique_users.value,
-          0,
-        );
+            (acc, bucket) => acc + bucket.unique_users.value,
+            0,
+          );
 
     return {
       metrics: {
@@ -167,55 +169,121 @@ class AggregatedMetricsService {
 
   /**
    * Get products viewed by user ordered by timestamp.
-   * @param {number} userId 
+   * @param {string} userId
    * @param {number} [from=0] items to skip
    * @param {number} [size=4] number of items to retrieve
    * @param {string} [order="desc"] order timestamp by "desc" or "asc"
-   * @returns {Promise<{ total: number, productIds: string[] }>} total number of buckets, 
+   * @returns {{ total: number, productIds: string[] }} total number of buckets,
    */
   async getRecentViewsForUser(userId, from = 0, size = 4, order = "desc") {
+    KiwiPreconditions.checkArgumentDefined(userId);
     const results = await this.client.search({
-      "size": 0,
-      "query": {
-        "bool": {
-          "filter": [
-            { "term": { "userId": userId } },
-            { "term": { "eventType": "PRODUCT_VIEW" } }
+      size: 0,
+      query: {
+        bool: {
+          filter: [
+            { term: { userId: userId } },
+            { term: { eventType: "PRODUCT_VIEW" } },
           ],
-        }
-      },
-      "aggs": {
-        "group_by_productId": {
-          "terms": {
-            "field": "productId",
-          },
-          "aggs": {
-            "max_timestamp": {
-              "max": { "field": "timestamp" }
-            },
-            "sort_by_timestamp": {
-              "bucket_sort": {
-                "sort": [
-                  { "max_timestamp": { "order": order } }
-                ],
-                "from": from,
-                "size": size
-              }
-            }
-          }
         },
-        "group_by_productId_count": {
-          "cardinality": {
-            "field": "productId"
-          }
-        }
-      }
+      },
+      aggs: {
+        group_by_productId: {
+          terms: {
+            field: "productId",
+          },
+          aggs: {
+            max_timestamp: {
+              max: { field: "timestamp" },
+            },
+            sort_by_timestamp: {
+              bucket_sort: {
+                sort: [{ max_timestamp: { order: order } }],
+                from: from,
+                size: size,
+              },
+            },
+          },
+        },
+        group_by_productId_count: {
+          cardinality: {
+            field: "productId",
+          },
+        },
+      },
     });
     // logger.info("%O", results.aggregations.group_by_productId.buckets.map(i => ({ productId: i.key, timestamp: i.max_timestamp.value})));
-    return Promise.resolve({
+    return {
       total: results.aggregations.group_by_productId_count.value,
-      productIds: results.aggregations.group_by_productId.buckets.map(i => i.key)
+      productIds: results.aggregations.group_by_productId.buckets.map(
+        (i) => i.key,
+      ),
+    };
+  }
+
+  /**
+   * Get products published by organization.
+   * @param {string} orgId
+   * @param {Date} gteDate
+   * @returns {[{ productId: string, datePublished: Date, title: string, timestamp: Date, eventId: string }]}
+   */
+  async getRecentPublishedForOrg(orgId, gteDate = null) {
+    KiwiPreconditions.checkArgumentDefined(orgId);
+    if (!gteDate) {
+      gteDate = dayjs().subtract(90, "day").toDate();
+    }
+    const results = await this.client.search({
+      size: 0,
+      query: {
+        bool: {
+          filter: [
+            { term: { "meta.producingOffices.code.keyword": orgId } },
+            { term: { eventType: "PRODUCT_PUBLISH" } },
+            { range: { timestamp: { gte: gteDate } } },
+          ],
+        },
+      },
+      aggs: {
+        group_by_productId: {
+          terms: {
+            field: "productId",
+            size: 1000,
+          },
+          aggs: {
+            last_published: {
+              top_hits: {
+                _source: [
+                  "productId",
+                  "meta.datePublished",
+                  "meta.title",
+                  "timestamp",
+                ],
+                sort: [{ timestamp: { order: "desc" } }],
+                size: 1,
+              },
+            },
+          },
+        },
+      },
     });
+    // logger.info("%o", results);
+    const count = results.aggregations.group_by_productId.buckets.length;
+    if (count === 0) {
+      return [];
+    } else {
+      return results.aggregations.group_by_productId.buckets.map((i) => {
+        const hit = i.last_published.hits.hits[0];
+        // logger.info("%o", hit);
+        KiwiPreconditions.checkArgumentDefined(hit);
+        return {
+          productId: hit._source.productId,
+          datePublished: hit._source.meta.datePublished,
+          title: hit._source.meta.title,
+          timestamp: hit._source.timestamp,
+          eventId: hit._id,
+        };
+      });
+    }
   }
 }
 
