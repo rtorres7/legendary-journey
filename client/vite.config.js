@@ -5,6 +5,7 @@ import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 import ckeditor5 from "@ckeditor/vite-plugin-ckeditor5";
 import vue from "@vitejs/plugin-vue";
+import istanbul from 'vite-plugin-istanbul';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,6 +14,12 @@ export default defineConfig({
   plugins: [
     vue(),
     ckeditor5({ theme: require.resolve("@ckeditor/ckeditor5-theme-lark") }),
+    istanbul({
+      include: 'src/*',
+      exclude: ['node_modules', 'tests/'],
+      extension: ['.js', '.ts', '.vue'],
+      requireEnv: false
+    })
   ],
   resolve: {
     alias: [

@@ -1,0 +1,30 @@
+{
+  "email": "boaty.mcboatface@maximus.gov",
+  "fullName": "Boaty McBoatface",
+  "lastName": "McBoatface",
+  "firstName": "Boaty",
+  "userName": "bmcboat",
+  "enabled": true,
+  "emailVerified": true,
+  "hasOrg": true,
+  "phone": 5555555555,
+  "dn": "cn=bmcboat,ou=maximus,o=udev2dev.com",
+  "roles": [
+    "community_editor",
+    "wire_editor"
+  ],
+  "name": "Boaty McBoatface",
+  "organizationId": 1,
+  "authorizations": {
+    "canExportZip": true,
+    "canManageRelatedProducts": true,
+    "canUnpublishDocuments": true,
+    "canUpdateAttachments": true,
+    "canManageSelects": true,
+    "canManageFeatures": true,
+    "canManageWire": true,
+    "canPreviewWireSubscriptionEmail": true,
+    "canViewDocumentAdminTools": true,
+    "canManageSpecialEditions": false
+  }
+}

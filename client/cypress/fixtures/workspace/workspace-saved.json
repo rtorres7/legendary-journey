@@ -1,0 +1,36 @@
+{
+  "content": [
+    {
+      "classification": "UNCLASSIFIED",
+      "classificationXml": "",
+      "countries": ["USA"],
+      "createdById": 1,
+      "datePublished": "2023-09-12",
+      "deleted": false,
+      "email_count": 0,
+      "featureId": "123456",
+      "htmlBody": "<p>This is my test saved product</p>",
+      "id": "123456",
+      "issues": ["HND"],
+      "images": [],
+      "nonStateActors": ["DNI"],
+      "orgRestricted": false,
+      "print_count": 0,
+      "producingOffices": ["DNI"],
+      "productNumber": "cypress-doc-1",
+      "productType": 10376,
+      "regions": ["AM"],
+      "reportingType": "analysis.all_source",
+      "state": "posted",
+      "subregions": ["AMno"],
+      "summary":  "By Boaty McBoatface",
+      "summaryClassification": "UNCLASSIFIED",
+      "title": "Something interesting happened today",
+      "titleClassification": "UNCLASSIFIED",
+      "topics": "HLTH",
+      "updatedById": 1,
+      "saved": true,
+      "views": 5
+    }
+  ]
+}

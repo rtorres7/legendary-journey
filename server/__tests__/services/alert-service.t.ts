@@ -10,13 +10,13 @@ import {
 } from "@kiwiproject/kiwi-test-js";
 
 import dayjs from "dayjs";
-import { logger } from "../../src/config/logger";
 import { AlertReadState, AlertType, IAlert } from "../../src/models/alert";
 import { EventType } from "../../src/models/event_log";
 import { AlertService } from "../../src/services/alert-service";
 import EventService from "../../src/services/event-service";
 import constant from "../../src/util/constant.js";
 import { ElasticSearchUtils } from "../__utils__/containerUtils";
+import { config } from "../../src/config/config";
 
 jest.mock("../../src/services/user-service.js", () => {
   return jest.fn().mockImplementation(() => {
@@ -40,6 +40,7 @@ describe("AlertService", () => {
 
     esUrl = ElasticSearchExtension.getElasticSearchUrl();
     process.env.ES_URL = esUrl;
+    config.elasticsearch.url = esUrl;
     esClient = new elasticsearch.Client({ nodes: esUrl });
 
     await ElasticSearchUtils.createIndex(
@@ -227,7 +228,7 @@ describe("AlertService", () => {
             producingOffices: [{ name: org, code: org }],
           };
 
-          const event = await eventService.registerEvent(
+          await eventService.registerEvent(
             EventType.PRODUCT_PUBLISH,
             user.id,
             product.productNumber,

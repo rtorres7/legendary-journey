@@ -66,6 +66,7 @@
             type="button"
             class="block lg:hidden p-1 m-auto rounded-full hover:text-white focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-offset-gray-800 focus:ring-white"
             @click="openUserMenuModal"
+            data-cy-selector="mobileMenu"
           >
             <span class="sr-only">Open user menu</span>
             <EllipsisVerticalIcon class="h-6 w-6" aria-hidden="true" />
@@ -81,6 +82,7 @@
               <tippy content="Admin Menu">
                 <MenuButton
                   class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  data-cy-selector="adminMenu"
                 >
                   <span class="sr-only">Admin Menu</span>
                   <WrenchIcon class="h-6 w-6" aria-hidden="true" />
@@ -99,7 +101,7 @@
                 class="origin-top-right absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg py-2 ring-1 ring-slate-50 ring-opacity-10 focus:outline-none text-sm font-semibold bg-mission-blue/95 dark:bg-dark-space-blue/95 energy:bg-zinc-800/95 dark:highlight-white/5 dark:text-slate-300 energy:text-zinc-300"
                 @click="close"
               >
-                <MenuItem v-show="canManageWire">
+                <MenuItem v-show="canManageWire" data-cy-selector="manageProductsAdmin">
                   <router-link
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
                     :to="{
@@ -112,7 +114,7 @@
                     Manage Products
                   </router-link>
                 </MenuItem>
-                <MenuItem v-show="canManageSpecialEditions">
+                <MenuItem v-show="canManageSpecialEditions" data-cy-selector="manageSpecialEditionsAdmin">
                   <router-link
                     to="/special_editions"
                     class="py-1 px-3 hover:bg-slate-700/80 dark:hover:bg-slate-600/80 energy:hover:bg-zinc-600/80 flex items-center cursor-pointer"
@@ -568,7 +570,7 @@
                       My Workspace
                     </router-link>
                   </li>
-                  <li v-show="canManageWire">
+                  <li v-show="canManageWire" data-cy-selector="manageProducts">
                     <router-link
                       class="hover:text-black dark:hover:text-white energy:hover:text-white cursor-pointer"
                       :to="{
@@ -582,7 +584,7 @@
                       Manage Products
                     </router-link>
                   </li>
-                  <li v-show="canManageSpecialEditions">
+                  <li v-show="canManageSpecialEditions" data-cy-selector="manageSpecialEditions">
                     <router-link
                       to="/special_editions"
                       class="hover:text-black dark:hover:text-white energy:hover:text-white"

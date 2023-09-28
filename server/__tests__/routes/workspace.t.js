@@ -18,22 +18,20 @@ jest.mock("../../src/services/product-service.js", () => {
       }),
       findPageOfDraftProductsForProducingOrg: jest
         .fn()
-        .mockImplementation(
-          (producingOrgName, page, limit, offset, sortDir) => {
-            if (process.env.THROW_TEST_ERROR) {
-              throw new Error("whoops");
-            }
-            return {
-              content: articles.filter(
-                (article) =>
-                  article.state === "posted" &&
-                  article.producingOffices.findIndex(
-                    (i) => i.name === producingOrgName,
-                  ) >= 0,
-              ),
-            };
-          },
-        ),
+        .mockImplementation((producingOrgName) => {
+          if (process.env.THROW_TEST_ERROR) {
+            throw new Error("whoops");
+          }
+          return {
+            content: articles.filter(
+              (article) =>
+                article.state === "posted" &&
+                article.producingOffices.findIndex(
+                  (i) => i.name === producingOrgName,
+                ) >= 0,
+            ),
+          };
+        }),
       findPageOfRecentProductsForUser: jest.fn().mockImplementation(() => {
         if (process.env.THROW_TEST_ERROR) {
           throw new Error("whoops");
@@ -122,6 +120,7 @@ jest.mock("../../src/services/workspace.js", () => {
         };
       }),
       deleteCollection: jest.fn(),
+      deleteCollectionImage: jest.fn(),
       findSavedProductsInCollection: jest
         .fn()
         .mockImplementation((collectionId) => {
@@ -163,7 +162,7 @@ jest.mock("../../src/services/aggregated-metrics-service.js", () => {
     return {
       getTotalViewsForProductsPublishedByOrganization: jest
         .fn()
-        .mockImplementation((organizationName, startDate, endDate) => {
+        .mockImplementation(() => {
           return Promise.resolve({ totalViews: { totalViews: 500 } });
         }),
       getProductViewsCountForMultipleProducts: jest
@@ -358,7 +357,7 @@ describe("Workspace Routes", () => {
 
       return request(app)
         .post("/workspace/collections")
-        .send({ name: "Should save" })
+        .field("name", "Should save")
         .expect(200)
         .expect("Content-Type", /json/)
         .then(async (res) => {
@@ -375,17 +374,13 @@ describe("Workspace Routes", () => {
 
       return request(app)
         .put(`/workspace/collections/1`)
-        .send({
-          name: "Updated name",
-          description: "Updated description",
-          image: "Updated image",
-        })
+        .field("name", "Updated name")
+        .field("description", "Updated description")
         .expect(200)
         .expect("Content-Type", /json/)
         .then((res) => {
           expect(res.body.name).toBe("Updated name");
           expect(res.body.description).toBe("Updated description");
-          expect(res.body.image).toBe("Updated image");
         });
     });
   });

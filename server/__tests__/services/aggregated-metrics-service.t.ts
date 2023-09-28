@@ -5,7 +5,6 @@ import elasticsearch from "@elastic/elasticsearch";
 import mongoose from "mongoose";
 import dayjs from "dayjs";
 
-import { logger } from "../../src/config/logger";
 import {
   ElasticSearchExtension,
   MongoExtension,
@@ -16,6 +15,7 @@ import AggregatedMetricsService from "../../src/services/aggregated-metrics-serv
 import EventService from "../../src/services/event-service";
 import { UserInfo } from "../../src/models/user_info";
 import { ElasticSearchUtils } from "../__utils__/containerUtils";
+import { config } from "../../src/config/config";
 
 jest.mock("../../src/services/user-service.js", () => {
   return jest.fn().mockImplementation(() => {
@@ -34,13 +34,13 @@ describe("aggregated-metrics-service", () => {
   let eventService: EventService;
   let metricsService: AggregatedMetricsService;
 
-  const USER = { id: 1, dataValues: { organization: "AGRICULTURE" } };
   beforeAll(async () => {
     mongoUrl = MongoExtension.getMongoUriWithDb("metrics");
     process.env.MONGO_DATABASE_URL = mongoUrl;
 
     esUrl = ElasticSearchExtension.getElasticSearchUrl();
     process.env.ES_URL = esUrl;
+    config.elasticsearch.url = esUrl;
     esClient = new elasticsearch.Client({ nodes: esUrl });
 
     await ElasticSearchUtils.createIndex(

@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "agency": "DNI",
+    "criteria": {
+      "classification": {
+        "displayName": "Classification",
+        "values": [
+          {
+            "name": "UNCLASSIFIED",
+            "code": "UNC"
+          }
+        ]
+      },
+      "coauthors": {
+        "displayName": "Coauthors",
+        "values": [
+          {
+            "name": "DNI",
+            "code": "DNI"
+          }
+        ]
+      },
+      "coordinators": {
+        "displayName": "Coordinators",
+        "values": [
+          {
+            "name": "DNI",
+            "code": "DNI"
+          }
+        ]
+      },
+      "countries": {
+        "displayName": "Countries",
+        "values": [
+          {
+            "name": "United States of America",
+            "code": "USA",
+            "digraph": "US"
+          }
+        ]
+      },
+      "domestic_regions": {
+        "displayName": "Domestic Regions",
+        "values": []
+      },
+      "fisa_role": {
+        "displayname": "FISA Role",
+        "values": []
+      },
+      "issues": {
+        "displayName": "Issues",
+        "values": [
+          {
+            "name": "Health and Natural Disasters",
+            "code": "HND",
+            "topics": [
+              {
+                "name": "Health",
+                "codes": [
+                  "HLTH"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "media_tags": {
+        "displayName": "Visuals",
+        "values": [
+          {
+            "name": "graphic",
+            "code": "graphic"
+          }
+        ]
+      },
+      "non_state_actors": {
+        "displayName": "Non State Actors",
+        "values": [
+          {
+            "name": "DNI",
+            "code": "DNI"
+          }
+        ]
+      },
+      "producing_offices": {
+        "displayName": "Authored by Organizations",
+        "values": [
+          {
+            "name": "DNI",
+            "code": "DNI"
+          }
+        ]
+      },
+      "product_types": {
+        "displayName": "Product Types",
+        "values": [
+          {
+            "name": "Current",
+            "code": 10376,
+            "publishable": true
+          }
+        ]
+      },
+      "regions": {
+        "displayName": "Regions",
+        "values": [
+          {
+            "name": "Americas",
+            "code": "AM",
+            "subregions": [
+              "AMca",
+              "AMce",
+              "AMno",
+              "AMso",
+              "AMan"
+            ]
+          }
+        ]
+      },
+      "reporting_types": {
+        "displayName": "Reporting Types",
+        "values": [
+          {
+            "name": "Analysis: All Source",
+            "code": "analysis.all_source",
+            "productTypes": [
+              1000,
+              1001,
+              10376,
+              10377,
+              10378,
+              10379,
+              10380,
+              10381,
+              10382,
+              10383,
+              10384,
+              10385
+            ]
+          }
+        ]
+      },
+      "selected_for": {
+        "displayName": "Front Page Featured",
+        "values": [
+          {
+            "name": "Featured",
+            "code": "featured"
+          }
+        ]
+      },
+      "subregions": {
+        "displayName": "Subregions",
+        "values": [
+          {
+            "name": "Americas, Caribbean",
+            "code": "AMca",
+            "country_codes": [
+              "ABW",
+              "AIA",
+              "ATG",
+              "BES",
+              "BHS",
+              "BLM",
+              "BRB",
+              "CUB",
+              "CUW",
+              "CYM",
+              "DMA",
+              "DOM",
+              "GLP",
+              "GRD",
+              "HTI",
+              "JAM",
+              "KNA",
+              "LCA",
+              "MAF",
+              "MSR",
+              "MTQ",
+              "PRI",
+              "SXM",
+              "TCA",
+              "TTO",
+              "VCT",
+              "VGB",
+              "VIR"
+            ]
+          },
+          {
+            "name": "Americas, Central",
+            "code": "AMce",
+            "country_codes": [
+              "BLZ",
+              "CRI",
+              "GTM",
+              "HND",
+              "NIC",
+              "PAN",
+              "SLV"
+            ]
+          },
+          {
+            "name": "Americas, North",
+            "code": "AMno",
+            "country_codes": [
+              "BMU",
+              "CAN",
+              "MEX",
+              "SPM",
+              "USA"
+            ]
+          },
+          {
+            "name": "Americas, South",
+            "code": "AMso",
+            "country_codes": [
+              "ARG",
+              "BOL",
+              "BRA",
+              "CHL",
+              "COL",
+              "ECU",
+              "FLK",
+              "GUF",
+              "GUY",
+              "PER",
+              "PRY",
+              "SGS",
+              "SUR",
+              "URY",
+              "VEN"
+            ]
+          }
+        ]
+      },
+      "topics": {
+        "displayName": "Topics",
+        "values": [
+          {
+            "name": "Health",
+            "code": "HLTH"
+          }
+        ]
+      },
+      "dissem_orgs": {
+        "displayName": "Audience",
+        "values": [
+          {
+            "name": "DNI",
+            "code": "DNI"
+          }
+        ]
+      }
+    }
+  }
+}
