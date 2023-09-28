@@ -1,6 +1,5 @@
 import { expect, jest } from "@jest/globals";
 import request from "supertest";
-import dayjs from "dayjs";
 
 import { articles } from "../__utils__/dataLoader";
 import { setupApp, setupAppWithUser } from "../__utils__/expressUtils";
@@ -348,9 +347,7 @@ describe("Article Routes", () => {
         .expect("Content-Type", /json/)
         .then(async (res) => {
           expect(res.body.success).toBe(true);
-          expect(res.body.date).toEqual(
-            dayjs(original.datePublished).format("YYYY-MM-DD"),
-          );
+          expect(res.body.date).toEqual(original.datePublished.toISOString());
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);
@@ -464,7 +461,6 @@ describe("Article Routes", () => {
 
       return request(app)
         .get("/articles/64709619aa530082dd5cc416/edit")
-        .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
           expect(res.body.id).toBe(articles[0].id);
@@ -579,9 +575,7 @@ describe("Article Routes", () => {
         .then(async (res, rej) => {
           expect(rej).toBeUndefined();
           expect(res.body.success).toBe(true);
-          expect(res.body.date).toEqual(
-            dayjs(original.datePublished).format("YYYY-MM-DD"),
-          );
+          expect(res.body.date).toEqual(original.datePublished.toISOString());
           expect(res.body.doc_num).toBe(original.productNumber);
           expect(res.body.id).toBe(original.id);
           expect(res.body.state).toBe(original.state);

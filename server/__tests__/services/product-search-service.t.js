@@ -63,22 +63,22 @@ describe("ProductSearchService", () => {
   describe("search", () => {
     it("should have default paging values", async () => {
       const result = await service.search("");
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
     });
 
     it("should respect provided paging values", async () => {
       const result = await service.search("", 1);
       expect(result.results).toHaveLength(1);
-      expect(result.totalCount).toEqual(4);
-      expect(result.pages).toEqual(4);
+      expect(result.totalCount).toEqual(5);
+      expect(result.pages).toEqual(5);
     });
 
     it("should allow sorting by datePublished ascending", async () => {
       const result = await service.search("", 10, 1, "asc");
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
@@ -87,17 +87,19 @@ describe("ProductSearchService", () => {
         "WIReWIRe_sample_2",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_4",
+        "WIReWIRe_sample_5",
       ]);
     });
 
     it("should allow sorting by datePublished desc", async () => {
       const result = await service.search("", 10, 1, "desc");
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
       expect(ids).toStrictEqual([
+        "WIReWIRe_sample_5",
         "WIReWIRe_sample_4",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_2",
@@ -107,8 +109,8 @@ describe("ProductSearchService", () => {
 
     it("should allow sorting by _score desc", async () => {
       const result = await service.search("", 10, 1, "score");
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
@@ -117,17 +119,19 @@ describe("ProductSearchService", () => {
         "WIReWIRe_sample_2",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_4",
+        "WIReWIRe_sample_5",
       ]);
     });
 
     it("should default sorting to desc", async () => {
       const result = await service.search("");
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
       expect(ids).toStrictEqual([
+        "WIReWIRe_sample_5",
         "WIReWIRe_sample_4",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_2",
@@ -294,12 +298,13 @@ describe("ProductSearchService", () => {
       const result = await service.search("", 10, 1, "desc", {
         classification: ["UNC", "S"],
       });
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
       expect(ids).toStrictEqual([
+        "WIReWIRe_sample_5",
         "WIReWIRe_sample_4",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_2",
@@ -340,12 +345,13 @@ describe("ProductSearchService", () => {
       const result = await service.search("", 10, 1, "desc", {
         reporting_types: ["analysis.all_source"],
       });
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
       expect(ids).toStrictEqual([
+        "WIReWIRe_sample_5",
         "WIReWIRe_sample_4",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_2",
@@ -357,12 +363,13 @@ describe("ProductSearchService", () => {
       const result = await service.search("", 10, 1, "desc", {
         reporting_types: ["reporting.enterprise", "analysis.all_source"],
       });
-      expect(result.results).toHaveLength(4);
-      expect(result.totalCount).toEqual(4);
+      expect(result.results).toHaveLength(5);
+      expect(result.totalCount).toEqual(5);
       expect(result.pages).toEqual(1);
 
       const ids = result.results.map((hit) => hit.productNumber);
       expect(ids).toStrictEqual([
+        "WIReWIRe_sample_5",
         "WIReWIRe_sample_4",
         "WIReWIRe_sample_3",
         "WIReWIRe_sample_2",
