@@ -2544,6 +2544,11 @@ db.metadata.insertOne({
           code: 10390,
           publishable: true,
         },
+        {
+          name: "First Responder's Toolbox",
+          code: 10393,
+          publishable: true,
+        },
       ],
     },
     regions: {
