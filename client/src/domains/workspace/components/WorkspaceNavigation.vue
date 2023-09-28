@@ -619,9 +619,9 @@ import {
   favoriteProducts,
   collectionProducts,
 } from "@/domains/demo/data";
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { useStore } from "vuex";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import {
   Dialog,
   DialogPanel,
@@ -685,7 +685,6 @@ export default {
     const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
     const store = useStore();
-    const router = useRouter();
     const route = useRoute();
     const currentUsername = computed(
       () => store.state.user.user.name.split(" ")[0]
@@ -693,13 +692,10 @@ export default {
     const isTestConsoleMenuOpen = ref(false);
     const isMobileMenuOpen = ref(false);
     const isAboutDialogOpen = ref(false);
-    const removeSearch = ref(false);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
     );
-    const searches = computed(() => store.state.savedSearches.searches);
-    const loading = computed(() => store.state.savedSearches.loading);
 
     const openTestConsoleModal = () => {
       isTestConsoleMenuOpen.value = true;
@@ -759,47 +755,6 @@ export default {
       },
     ];
 
-    onMounted(() => {
-      store.dispatch("savedSearches/getAllSearches");
-    });
-
-    const selectItemEventHandler = (item) => {
-      console.log("selectItemEventHandler: ", item);
-      if (removeSearch.value) {
-        console.log("no routing");
-        removeSearch.value = false;
-      } else {
-        const route = router.resolve({
-          name: "search",
-          query: {
-            text: item.text,
-            per_page: 10,
-          },
-        });
-        window.open(route.href, "_blank");
-      }
-    };
-
-    const onEnter = (e) => {
-      store.dispatch("savedSearches/addSearch", {
-        text: e.target.value,
-        type: "user",
-      });
-      const route = router.resolve({
-        name: "search",
-        query: {
-          text: e.target.value,
-          per_page: 10,
-        },
-      });
-      window.open(route.href, "_blank");
-    };
-
-    const deleteSearch = (item) => {
-      removeSearch.value = true;
-      store.dispatch("savedSearches/deleteSearch", item);
-    };
-
     const isActiveRoute = (name) => {
       return route.name === name;
     };
@@ -812,8 +767,6 @@ export default {
       currentUsername,
       canManageWire,
       canManageSpecialEditions,
-      searches,
-      loading,
       products,
       savedProducts,
       favoriteProducts,
@@ -825,9 +778,6 @@ export default {
       openMobileMenuModal,
       closeMobileMenuModal,
       navigationItems,
-      selectItemEventHandler,
-      onEnter,
-      deleteSearch,
       isAboutDialogOpen,
       closeAboutDialog,
       openAboutDialog,
