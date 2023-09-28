@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[475px] sm:max-w-[1600px] w-full p-8">
+  <div class="max-w-[475px] sm:max-w-none xl:max-w-[1600px] w-full p-8">
     <div class="text-2xl text-gray-700">Saved Products</div>
     <div class="py-6 sm:flex justify-between items-center">
       <template v-if="loadingSaved">
