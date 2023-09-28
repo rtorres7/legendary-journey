@@ -32,10 +32,16 @@ const workspaceService = new WorkspaceService();
 const EventService = require("../services/event-service");
 const eventService = new EventService();
 
-const { config } = require("../config/config");
 const upload = objectStoreService.buildUpload(
-  config.minio.attachmentBucket || "attachments",
+  process.env.ATTACHMENT_BUCKET || "attachments",
+  (prefix, req, file, attachmentId) => {
+    KiwiPreconditions.checkArgumentDefined(req.params.productNumber);
+    const productNumber = req.params.productNumber;
+    return `${prefix}${productNumber}/${file.originalname}-${attachmentId.substring(0, 8)}`;
+  }
 );
+
+const { config } = require("../config/config");
 const { logger } = require("../config/logger");
 
 const { legacyErrorResponse } = require("../util/errors");

@@ -9,12 +9,22 @@ const ProductService = require("../services/product-service");
 const productService = new ProductService();
 const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
+const { ObjectStoreService } = require("../services/object-store-service");
+const objectStoreService = new ObjectStoreService();
 const { logger } = require("../config/logger");
 
 const AggregatedMetricsService = require("../services/aggregated-metrics-service");
 const metricsService = new AggregatedMetricsService();
 const { formatValue } = require("../util/format");
 const { legacyErrorResponse } = require("../util/errors");
+
+const upload = objectStoreService.buildUpload(
+  process.env.ATTACHMENT_BUCKET || "attachments",
+  (prefix, req, file, attachmentId) => {
+    return `${prefix}${attachmentId.substring(0, 8)}/${file.originalname}`;
+  },
+  "workspace-collections",
+);
 
 router.get("/workspace/drafts", async (req, res) => {
   /*
@@ -313,8 +323,11 @@ router.get("/workspace/collections", async (req, res) => {
   });
 });
 
-router.post("/workspace/collections", async (req, res) => {
-  /*
+router.post(
+  "/workspace/collections",
+  upload.fields([{ name: "thumbnail" }]),
+  async (req, res) => {
+    /*
     #swagger.summary = 'Creates a collection for saved products for the current user'
     #swagger.tags = ['Workspace']
     #swagger.requestBody = {
@@ -329,27 +342,53 @@ router.post("/workspace/collections", async (req, res) => {
     }
    */
 
-  await runAsUser(req, res, async (currentUser, req, res) => {
-    try {
-      const savedCollection = await workspaceService.createCollection({
-        name: req.body.name,
-        description: req.body.description,
-        image: req.body.image,
-        createdBy: currentUser.id,
-      });
+    await runAsUser(req, res, async (currentUser, req, res) => {
+      try {
+        const imageJson = req.files.thumbnail
+          ? JSON.stringify(req.files.thumbnail[0])
+          : null;
+        const savedCollection = await workspaceService.createCollection({
+          name: req.body.name,
+          description: req.body.description,
+          image: imageJson,
+          createdBy: currentUser.id,
+        });
 
-      res.json(savedCollection);
-    } catch (error) {
-      logger.error(error);
-      const errorDetails = `${error.message}`;
-      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-      legacyErrorResponse(500, errorDetails, res);
+        res.json(savedCollection);
+      } catch (error) {
+        logger.error(error);
+        const errorDetails = `${error.message}`;
+        // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+        legacyErrorResponse(500, errorDetails, res);
+      }
+    });
+  },
+);
+
+router.get("/workspace/collection/image/:collectionId", async (req, res) => {
+  try {
+    const { metadata, stream } = await workspaceService.getCollectionImage(
+      req.params.collectionId,
+    );
+
+    if (metadata) {
+      res.attachment(metadata.originalname);
+      res.set("content-type", metadata.mimetype);
+      stream.pipe(res);
+    } else {
+      legacyErrorResponse(404, "Collection image not found", res);
     }
-  });
+  } catch (error) {
+    const errorDetails = `Unable to get collection image: ${error.message}`;
+    legacyErrorResponse(404, errorDetails, res);
+  }
 });
 
-router.put("/workspace/collections/:collectionId", async (req, res) => {
-  /*
+router.put(
+  "/workspace/collections/:collectionId",
+  upload.fields([{ name: "thumbnail" }]),
+  async (req, res) => {
+    /*
     #swagger.summary = 'Updates a collection for saved products for the current user'
     #swagger.tags = ['Workspace']
     #swagger.requestBody = {
@@ -363,24 +402,30 @@ router.put("/workspace/collections/:collectionId", async (req, res) => {
       }
     }
    */
-  try {
-    const updatedCollection = await workspaceService.updateCollection(
-      req.params.collectionId,
-      {
-        name: req.body.name,
-        description: req.body.description,
-        image: req.body.image,
-      },
-    );
+    try {
+      await workspaceService.deleteCollectionImage(req.params.collectionId);
 
-    res.json(updatedCollection);
-  } catch (error) {
-    logger.error(error);
-    const errorDetails = `${error.message}`;
-    // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
-    legacyErrorResponse(500, errorDetails, res);
-  }
-});
+      const imageJson = req.files.thumbnail
+        ? JSON.stringify(req.files.thumbnail[0])
+        : null;
+
+      const updatedCollection = await workspaceService.updateCollection(
+        req.params.collectionId,
+        {
+          name: req.body.name,
+          description: req.body.description,
+          image: imageJson,
+        },
+      );
+
+      res.json(updatedCollection);
+    } catch (error) {
+      const errorDetails = `${error.message}`;
+      // KiwiStandardResponsesExpress.standardErrorResponse(500, errorDetails, res);
+      legacyErrorResponse(500, errorDetails, res);
+    }
+  },
+);
 
 router.delete("/workspace/collections/:collectionId", async (req, res) => {
   /*
@@ -392,6 +437,8 @@ router.delete("/workspace/collections/:collectionId", async (req, res) => {
     }
    */
   try {
+    await workspaceService.deleteCollectionImage(req.params.collectionId);
+
     await workspaceService.deleteCollection(req.params.collectionId);
     res.status(204).send();
   } catch (error) {
@@ -416,7 +463,7 @@ router.get(
   */
 
     try {
-      const { perPage, page, sortDir } = pagingParams(req);
+      const { perPage, page, sortDir } = pagingParams(req, "created");
       const term = req.query.text;
       const filters = req.query;
 

@@ -11,7 +11,6 @@ import multer from "multer";
 import { Readable } from "stream";
 import { v4 as uuidv4 } from "uuid";
 
-import { KiwiPreconditions } from "@kiwiproject/kiwi-js";
 import { config } from "../config/config";
 import { logger } from "../config/logger";
 
@@ -194,8 +193,22 @@ export class ObjectStoreService {
       });
   }
 
-  buildUpload(bucket: string, prefix = ""): multer.Multer {
-    const engine = new ObjectStorageEngine(this, bucket, prefix);
+  buildUpload(
+    bucket: string,
+    objectNameSupplier: (
+      prefix: string,
+      req: Request,
+      file: Express.Multer.File,
+      attachmentId: string,
+    ) => string,
+    prefix = "",
+  ): multer.Multer {
+    const engine = new ObjectStorageEngine(
+      this,
+      bucket,
+      objectNameSupplier,
+      prefix,
+    );
     return multer({ storage: engine });
   }
 
@@ -256,8 +269,24 @@ export class ObjectStorageEngine implements multer.StorageEngine {
   service: ObjectStoreService;
   bucketName: string;
   prefix: string;
+  objectNameSupplier: (
+    prefix: string,
+    req: Request,
+    file: Express.Multer.File,
+    attachmentId: string,
+  ) => string;
 
-  constructor(service: ObjectStoreService, bucketName: string, prefix = "") {
+  constructor(
+    service: ObjectStoreService,
+    bucketName: string,
+    objectNameSupplier: (
+      prefix: string,
+      req: Request,
+      file: Express.Multer.File,
+      attachmentId: string,
+    ) => string,
+    prefix = "",
+  ) {
     this.service = service;
     this.bucketName = bucketName;
     this.prefix = "";
@@ -268,6 +297,7 @@ export class ObjectStorageEngine implements multer.StorageEngine {
         this.prefix = prefix + "/";
       }
     }
+    this.objectNameSupplier = objectNameSupplier;
   }
 
   async _handleFile(
@@ -275,18 +305,18 @@ export class ObjectStorageEngine implements multer.StorageEngine {
     file: Express.Multer.File,
     cb: (error?: any, info?: FileUploadedObjectInfo) => void,
   ): Promise<void> {
-    KiwiPreconditions.checkArgumentDefined(req.params.productNumber);
-    const productNumber = req.params.productNumber;
-
     const bucketExists = await this.service.bucketExists(this.bucketName);
     if (!bucketExists) {
       await this.service.makeBucket(this.bucketName);
     }
 
-    const attachmentId: string = uuidv4();
-    const objectName = `${this.prefix}${productNumber}/${
-      file.originalname
-    }-${attachmentId.substr(-12)}`;
+    const attachmentId = uuidv4();
+    const objectName = this.objectNameSupplier(
+      this.prefix,
+      req,
+      file,
+      attachmentId,
+    );
     const uploadedObjectInfo = await this.service.putObject(
       this.bucketName,
       objectName,

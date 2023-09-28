@@ -1,5 +1,6 @@
 const ProductSearchService = require("./product-search-service");
 const ProductService = require("./product-service");
+const { ObjectStoreService } = require("./object-store-service");
 const { models } = require("../data/sequelize");
 const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const _ = require("lodash");
@@ -10,6 +11,7 @@ class WorkspaceService {
   constructor() {
     this.productService = new ProductService();
     this.productSearchService = new ProductSearchService();
+    this.objectStoreService = new ObjectStoreService();
   }
 
   async findPageOfSavedProductsForUser(
@@ -28,6 +30,24 @@ class WorkspaceService {
       order: [["createdAt", "desc"]],
     });
 
+    return await this.runSearchFromSavedProductIds(
+      sortDir,
+      savedProductsForUser,
+      page,
+      perPage,
+      filters,
+      term,
+    );
+  }
+
+  async runSearchFromSavedProductIds(
+    sortDir,
+    savedProductsForUser,
+    page,
+    perPage,
+    filters,
+    term,
+  ) {
     let kiwiSort = KiwiSort.of("datePublished", sortDir);
     if (sortDir === "views") {
       kiwiSort = KiwiSort.of("views", "desc");
@@ -206,6 +226,33 @@ class WorkspaceService {
     });
   }
 
+  async getCollectionImage(id) {
+    const collection = await models.Collection.findByPk(id);
+
+    if (collection.image) {
+      const imageData = JSON.parse(collection.image);
+      const stream = await this.objectStoreService.getObject(
+        imageData.bucketName,
+        imageData.objectName,
+      );
+
+      return Promise.resolve({ metadata: imageData, stream });
+    }
+
+    return Promise.resolve({ metadata: null, stream: null });
+  }
+
+  async deleteCollectionImage(id) {
+    const collection = await models.Collection.findByPk(id);
+    if (collection.image) {
+      const imageData = JSON.parse(collection.image);
+      await this.objectStoreService.removeObject(
+        imageData.bucketName,
+        imageData.objectName,
+      );
+    }
+  }
+
   async findSavedProductsInCollection(
     collectionId,
     term,
@@ -215,6 +262,8 @@ class WorkspaceService {
     filters = {},
   ) {
     const savedProductsForUserInCollection = await models.SavedProduct.findAll({
+      attributes: ["productId"],
+      order: [["createdAt", "desc"]],
       include: {
         model: models.Collection,
         where: {
@@ -223,30 +272,14 @@ class WorkspaceService {
       },
     });
 
-    const savedProductIds = savedProductsForUserInCollection.map(
-      (savedProduct) => savedProduct.productId,
-    );
-    const filtersWithUsersSavedProducts = {
-      ...filters,
-      id: savedProductIds,
-    };
-
-    const results = await this.productSearchService.search(
-      term,
-      perPage,
-      page,
+    return await this.runSearchFromSavedProductIds(
       sortDir,
-      filtersWithUsersSavedProducts,
+      savedProductsForUserInCollection,
+      page,
+      perPage,
+      filters,
+      term,
     );
-
-    results.results.forEach((product) => {
-      product.saved = true;
-    });
-
-    return KiwiPage.of(page, perPage, results.totalCount, results.results)
-      .usingOneAsFirstPage()
-      .addKiwiSort(KiwiSort.of("datePublished", sortDir))
-      .addSupplementaryData({ aggregations: results.aggregations });
   }
 
   async addSavedProductToCollection(collectionId, savedProductId) {
