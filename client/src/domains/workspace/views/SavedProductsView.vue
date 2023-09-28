@@ -182,14 +182,12 @@
             </div>
           </template>
         </div>
-        <div class="flex justify-center">
-          <div class="pb-4">
-            <MaxPagination
-              :currentPage="currentPage"
-              :totalCount="numProducts"
-              :maxPerPage="maxPerPage"
-            />
-          </div>
+        <div class="flex justify-center pb-4">
+          <MaxPagination
+            :currentPage="currentPage"
+            :totalCount="numProducts"
+            :maxPerPage="maxPerPage"
+          />
         </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
@@ -472,7 +470,7 @@ export default {
             } else {
               createNotification({
                 title: "Error",
-                message: "There was an error retrieving Saved Products.",
+                message: "There was an error retrieving your saved products.",
                 type: "error",
                 autoClose: false,
               });

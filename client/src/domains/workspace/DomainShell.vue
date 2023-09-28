@@ -356,8 +356,9 @@
 </template>
 <script>
 import dayjs from "dayjs/esm/index.js";
-import { computed, inject, provide, ref } from "vue";
+import { computed, inject, onMounted, provide, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { useCookies } from "vue3-cookies";
 import {
   Dialog,
@@ -372,6 +373,7 @@ import {
 import {
   MagnifyingGlassIcon,
   UserCircleIcon,
+  XMarkIcon,
   WrenchIcon,
 } from "@heroicons/vue/24/outline";
 import useNotifications from "@workspace/composables/notifications.js";
@@ -391,6 +393,7 @@ export default {
     MenuItems,
     MagnifyingGlassIcon,
     UserCircleIcon,
+    XMarkIcon,
     WrenchIcon,
     LoadingSquares,
     TestConsoleDialog,
@@ -399,6 +402,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const metadata = inject("metadata");
     const environment = ref(import.meta.env.MODE);
     const { cookies } = useCookies();
@@ -423,8 +427,15 @@ export default {
     const canManageSpecialEditions = computed(
       () => store.getters["user/canManageSpecialEditions"]
     );
-
     const dialogPreference = ref(cookies.get("betaInfoNotice"));
+
+    const removeSearch = ref(false);
+    const searches = computed(() => store.state.savedSearches.searches);
+    const loading = computed(() => store.state.savedSearches.loading);
+
+    onMounted(() => {
+      store.dispatch("savedSearches/getAllSearches");
+    });
 
     const isOpen = ref(true);
 
@@ -443,6 +454,43 @@ export default {
       isTestConsoleMenuOpen.value = false;
     };
 
+    const selectItemEventHandler = (item) => {
+      console.log("selectItemEventHandler: ", item);
+      if (removeSearch.value) {
+        console.log("no routing");
+        removeSearch.value = false;
+      } else {
+        const route = router.resolve({
+          name: "search",
+          query: {
+            text: item.text,
+            per_page: 10,
+          },
+        });
+        window.open(route.href, "_blank");
+      }
+    };
+
+    const onEnter = (e) => {
+      store.dispatch("savedSearches/addSearch", {
+        text: e.target.value,
+        type: "user",
+      });
+      const route = router.resolve({
+        name: "search",
+        query: {
+          text: e.target.value,
+          per_page: 10,
+        },
+      });
+      window.open(route.href, "_blank");
+    };
+
+    const deleteSearch = (item) => {
+      removeSearch.value = true;
+      store.dispatch("savedSearches/deleteSearch", item);
+    };
+
     return {
       dayjs,
       metadata,
@@ -458,11 +506,16 @@ export default {
       canManageWire,
       canManageSpecialEditions,
       dialogPreference,
+      searches,
+      loading,
       isOpen,
       close,
       isTestConsoleMenuOpen,
       openTestConsoleModal,
       closeTestConsoleModal,
+      selectItemEventHandler,
+      onEnter,
+      deleteSearch,
     };
   },
 };
