@@ -228,7 +228,7 @@
               <div class="flex flex-col w-full h-full items-center">
                 <template v-if="loadingUser">
                   <div class="max-w-fit m-auto mt-[30vh]">
-                    <MaxLoadingSpinner class="w-32 h-32" />
+                    <LoadingSquares />
                   </div>
                 </template>
                 <template v-else>
@@ -375,6 +375,7 @@ import {
   WrenchIcon,
 } from "@heroicons/vue/24/outline";
 import useNotifications from "@workspace/composables/notifications.js";
+import LoadingSquares from "@workspace/components/LoadingSquares.vue";
 import TestConsoleDialog from "@/shared/components/TestConsoleDialog.vue";
 import ToastNotification from "@workspace/components/ToastNotification.vue";
 import WorkspaceNavigation from "@workspace/components/WorkspaceNavigation.vue";
@@ -391,6 +392,7 @@ export default {
     MagnifyingGlassIcon,
     UserCircleIcon,
     WrenchIcon,
+    LoadingSquares,
     TestConsoleDialog,
     ToastNotification,
     WorkspaceNavigation,
