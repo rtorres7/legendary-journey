@@ -6,6 +6,7 @@ const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const _ = require("lodash");
 const { findArticleImage } = require("../util/images");
 const path = require("path");
+const { Op } = require("sequelize");
 
 class WorkspaceService {
   constructor() {
@@ -191,8 +192,21 @@ class WorkspaceService {
     });
   }
 
-  async findPageOfCollectionsForUser(userId, page, limit, offset, sortDir) {
+  async findPageOfCollectionsForUser(
+    userId,
+    page,
+    limit,
+    offset,
+    sortDir,
+    title,
+  ) {
+    const query = { createdBy: userId };
+    if (title) {
+      query.name = { [Op.like]: `%${title}%` };
+    }
+
     const { count, rows } = await models.Collection.findAndCountAll({
+      where: query,
       offset: offset,
       limit: limit,
       order: [["createdAt", sortDir.toUpperCase()]],
