@@ -312,6 +312,7 @@ router.get("/workspace/collections", async (req, res) => {
         perPage,
         skip,
         sortDir,
+        req.query.title,
       );
       res.json(collections);
     } catch (error) {
