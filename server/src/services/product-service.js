@@ -511,9 +511,7 @@ class ProductService {
         views: {
           $size: "$eventLogs",
         },
-      })
-      .limit(limit)
-      .skip(offset);
+      });
 
     if (sortDir) {
       let sort = { datePublished: sortDir.toLowerCase() };
@@ -523,6 +521,8 @@ class ProductService {
 
       query = query.sort(sort);
     }
+
+    query = query.skip(offset).limit(limit);
 
     return await query.exec();
   }
