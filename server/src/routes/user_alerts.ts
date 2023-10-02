@@ -6,28 +6,33 @@ import {
 } from "@kiwiproject/kiwi-js";
 import { config } from "../config/config";
 import { logger } from "../config/logger";
-import { AlertService } from "../services/alert-service";
+import { UserAlertService } from "../services/user-alert-service";
 import { legacyErrorResponse } from "../util/errors";
 import { pagingParams, runAsUser } from "../util/request";
-import { AlertReadState, IAlert } from "../models/alert";
+import { UserAlertReadState, IUserAlert } from "../models/user_alert";
 
 const router = express.Router();
-const alertService = new AlertService();
+const userAlertService = new UserAlertService();
 
 // GET
-router.get("/alert/counts", async (req: Request, res: Response) => {
+router.get("/user_alerts/counts", async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get alert counts'
     #swagger.tags = ['Alerts']
-    #swagger.responses[200] = {}
+    #swagger.responses[200] = {
+      schema: {
+        total: 'total count',
+        unread: 'unread count'
+      }
+    }
    */
   await runAsUser(
     req,
     res,
     async (currentUser: any, req: Request, res: Response) => {
       try {
-        logger.info("GET /alert/counts:  user %s");
-        const counts = await alertService.counts(currentUser);
+        logger.info("GET /user_alerts/counts:  user %s");
+        const counts = await userAlertService.counts(currentUser);
         KiwiStandardResponsesExpress.standardGetResponseWithMessage(
           counts,
           "error alert count",
@@ -44,11 +49,15 @@ router.get("/alert/counts", async (req: Request, res: Response) => {
 });
 
 // GET
-router.get("/alert/list", async (req: Request, res: Response) => {
+router.get("/user_alerts/list", async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get alerts paged'
     #swagger.tags = ['Alerts']
-    #swagger.responses[200] = {}
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definition/UserAlerts'
+      }
+    }
    */
   await runAsUser(
     req,
@@ -56,8 +65,8 @@ router.get("/alert/list", async (req: Request, res: Response) => {
     async (currentUser: any, req: Request, res: Response) => {
       const { perPage, page, skip, sortDir } = pagingParams(req);
       try {
-        logger.info("GET /alert/list:  user %s", currentUser.id);
-        const kiwiPage = await alertService.findByUserPaged(
+        logger.info("GET /user_alerts/list:  user %s", currentUser.id);
+        const kiwiPage = await userAlertService.findByUserPaged(
           currentUser,
           perPage,
           page,
@@ -80,11 +89,15 @@ router.get("/alert/list", async (req: Request, res: Response) => {
 });
 
 // GET
-router.get("/alert/id/:alertId", async (req: Request, res: Response) => {
+router.get("/user_alerts/id/:alertId", async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get alert by id'
     #swagger.tags = ['Alerts']
-    #swagger.responses[200] = {}
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definition/UserAlerts'
+      }
+    }
    */
   await runAsUser(
     req,
@@ -92,8 +105,8 @@ router.get("/alert/id/:alertId", async (req: Request, res: Response) => {
     async (currentUser: any, req: Request, res: Response) => {
       try {
         const alertId = req.params.alertId;
-        logger.info("GET /alert/id/%s:  user %s", alertId, currentUser.id);
-        const alert = await alertService.findById(alertId as string);
+        logger.info("GET /user_alerts/id/%s:  user %s", alertId, currentUser.id);
+        const alert = await userAlertService.findById(alertId as string);
         if (alert.userId !== currentUser.id) {
           const errorDetails = `Alert ${alert.id} user id ${alert.userId} does not match requesting user id ${currentUser.id}`;
           logger.error(errorDetails);
@@ -117,11 +130,15 @@ router.get("/alert/id/:alertId", async (req: Request, res: Response) => {
 });
 
 // POST
-router.post("/alert/", async (req: Request, res: Response) => {
+router.post("/user_alerts/", async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'New alert'
     #swagger.tags = ['Alert']
-    #swagger.responses[200] = {}
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definition/UserAlerts'
+      }
+    }
   */
   await runAsUser(
     req,
@@ -129,23 +146,24 @@ router.post("/alert/", async (req: Request, res: Response) => {
     async (currentUser: any, req: Request, res: Response) => {
       try {
         logger.info(
-          "POST /alert/:  user %s, alert title %s",
+          "POST /user_alerts/:  user %s, alert title %s",
           currentUser.id,
           req.body.title,
         );
-        const alert: IAlert = {
+        const alert: IUserAlert = {
           title: req.body.title,
           message: req.body.message,
           userId: req.body.userId,
           productNumber: req.body.productNumber,
-          createdBy: currentUser.id,
-          type: req.body.type,
-          readState: AlertReadState.UNREAD,
+          alertType: req.body.alertType,
+          readState: UserAlertReadState.UNREAD,
+          eventLogId: req.body.eventLogId,
           meta: req.body.meta,
+          createdBy: currentUser.id,
         };
-        const alertDoc = await alertService.createAlert(alert);
+        const alertDoc = await userAlertService.createAlert(alert);
         KiwiStandardResponsesExpress.standardPostResponse(
-          `${config.basePath}/alert/${alertDoc.id}`,
+          `${config.basePath}/user_alerts/${alertDoc.id}`,
           alertDoc,
           res,
         );
@@ -164,25 +182,28 @@ router.post("/alert/", async (req: Request, res: Response) => {
 });
 
 // PUT
-router.put("/alert/:alertId", async (req: Request, res: Response) => {
+router.put("/user_alerts/:alertId", async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Update alert'
     #swagger.tags = ['Alert']
-    #swagger.responses[200] = {}
+    #swagger.responses[200] = {
+      schema: {
+        $ref: '#/definition/UserAlerts'
+      }
+    }
   */
   await runAsUser(
     req,
     res,
     async (currentUser: any, req: Request, res: Response) => {
       try {
-        const updates: Partial<IAlert> = {
+        const updates: Partial<IUserAlert> = {
           title: req.body.title,
           message: req.body.message,
-          productNumber: req.body.productNumber,
           readState: req.body.readState,
           meta: { ...req.body.meta },
         };
-        const alertDoc = await alertService.updateAlert(
+        const alertDoc = await userAlertService.updateAlert(
           req.query.alertId as string,
           updates,
         );
@@ -201,5 +222,5 @@ router.put("/alert/:alertId", async (req: Request, res: Response) => {
   );
 });
 
-export const alertsRouter = router;
+export const userAlertsRouter = router;
 export default router;

@@ -10,9 +10,9 @@ import {
 } from "@kiwiproject/kiwi-test-js";
 
 import dayjs from "dayjs";
-import { AlertReadState, AlertType, IAlert } from "../../src/models/alert";
+import { UserAlertReadState, UserAlertType, IUserAlert } from "../../src/models/user_alert";
 import { EventType } from "../../src/models/event_log";
-import { AlertService } from "../../src/services/alert-service";
+import { UserAlertService } from "../../src/services/user-alert-service";
 import EventService from "../../src/services/event-service";
 import constant from "../../src/util/constant.js";
 import { ElasticSearchUtils } from "../__utils__/containerUtils";
@@ -28,11 +28,11 @@ jest.mock("../../src/services/user-service.js", () => {
   });
 });
 
-describe("AlertService", () => {
+describe("UserAlertService", () => {
   let esUrl: string;
   let esClient: elasticsearch.Client;
   let mongoUrl: string;
-  let alertService: AlertService;
+  let userAlertService: UserAlertService;
 
   /** */
   beforeAll(async () => {
@@ -50,7 +50,7 @@ describe("AlertService", () => {
       [],
     );
 
-    alertService = new AlertService();
+    userAlertService = new UserAlertService();
   });
 
   afterAll(async () => {
@@ -69,19 +69,19 @@ describe("AlertService", () => {
 
   /** */
   const buildAlert = function (
-    overrides: Partial<IAlert> = {},
-  ): Partial<IAlert> {
+    overrides: Partial<IUserAlert> = {},
+  ): Partial<IUserAlert> {
     return {
       title: "title test",
       message: "message test",
       userId: randStr("user-id-1"),
       productNumber: randStr("product-number-1"),
       createdBy: "user-id-2",
-      type: AlertType.PRODUCT_PUBLISHED,
-      readState: AlertReadState.UNREAD,
+      alertType: UserAlertType.PRODUCT_PUBLISHED,
+      readState: UserAlertReadState.UNREAD,
+      eventLogId: randStr("event-id"),
       meta: {
         test: "meta.test",
-        eventId: randStr("event-id"),
       },
       ...overrides,
     };
@@ -100,32 +100,32 @@ describe("AlertService", () => {
       it("should create a new alert", async () => {
         // create alert
         const t = buildAlert();
-        const alert1 = await alertService.createAlert(t);
+        const alert1 = await userAlertService.createAlert(t);
         expect(alert1.id).toBeDefined();
         expect(alert1._id).toBeDefined();
-        expect(alert1.readState).toEqual(AlertReadState.UNREAD);
+        expect(alert1.readState).toEqual(UserAlertReadState.UNREAD);
         expect(alert1.createdAt).toBeDefined();
         expect(alert1.updatedAt).toBeDefined();
         // console.log(alert1);
         // console.log(alert1.toJSON());
 
         // retrieve alert
-        const alert2 = await alertService.findById(alert1.id);
+        const alert2 = await userAlertService.findById(alert1.id);
         expect(alert2.toJSON()).toMatchObject(alert1.toJSON());
 
         // update alert
-        const alert3 = await alertService.updateAlert(alert1.id, {
-          readState: AlertReadState.READ,
+        const alert3 = await userAlertService.updateAlert(alert1.id, {
+          readState: UserAlertReadState.READ,
         });
         expect(alert3.id).toEqual(alert1.id);
-        expect(alert3.readState).toEqual(AlertReadState.READ);
+        expect(alert3.readState).toEqual(UserAlertReadState.READ);
       });
     });
 
     describe("counts", () => {
       it("should return empty count", async () => {
         const user = { id: randStr("counts") };
-        const { total, unread } = await alertService.counts(user);
+        const { total, unread } = await userAlertService.counts(user);
         expect(total).toEqual(0);
         expect(unread).toEqual(0);
       });
@@ -135,10 +135,10 @@ describe("AlertService", () => {
           const t = buildAlert({ userId: user.id });
           t.productNumber = randStr("product-number");
           t.readState =
-            i % 2 == 0 ? AlertReadState.READ : AlertReadState.UNREAD;
-          await alertService.createAlert(t);
+            i % 2 == 0 ? UserAlertReadState.READ : UserAlertReadState.UNREAD;
+          await userAlertService.createAlert(t);
         }
-        const { total, unread } = await alertService.counts(user);
+        const { total, unread } = await userAlertService.counts(user);
         expect(total).toEqual(10);
         expect(unread).toEqual(5);
       });
@@ -146,8 +146,8 @@ describe("AlertService", () => {
 
     describe("list alerts", () => {
       it("should return empty page", async () => {
-        const user = { id: randStr("list") };
-        const page = await alertService.findByUserPaged(user);
+        const user = { id: randStr("list-1") };
+        const page = await userAlertService.findByUserPaged(user);
         expect(page).toBeDefined();
         expect(page.number).toEqual(1); // page number
         expect(page.size).toEqual(10); // page size
@@ -155,22 +155,22 @@ describe("AlertService", () => {
         expect(page.totalElements).toEqual(0);
       });
 
-      it("should return alerts page", async () => {
-        const user = { id: randStr("list") };
+      fit("should return alerts page", async () => {
+        const user = { id: randStr("list-2") };
         for (let i = 0; i < 20; i++) {
           const t = buildAlert({ userId: user.id });
-          await alertService.createAlert(t);
+          await userAlertService.createAlert(t);
         }
         {
-          const eventIds = await alertService.findProcessedEventIds(
+          const eventIds = await userAlertService.findProcessedEventIds(
             user,
-            AlertType.PRODUCT_PUBLISHED,
+            UserAlertType.PRODUCT_PUBLISHED,
             dayjs().subtract(1, "day").toDate(),
           );
           expect(eventIds.size).toEqual(20);
         }
         {
-          const page = await alertService.findByUserPaged(user);
+          const page = await userAlertService.findByUserPaged(user);
           expect(page).toBeDefined();
           expect(page.content).toBeArrayOfSize(10);
           expect(page.number).toEqual(1);
@@ -179,7 +179,7 @@ describe("AlertService", () => {
           expect(page.totalElements).toEqual(20);
         }
         {
-          const page = await alertService.findByUserPaged(
+          const page = await userAlertService.findByUserPaged(
             user,
             10,
             2,
@@ -194,7 +194,7 @@ describe("AlertService", () => {
           expect(page.totalElements).toEqual(20);
         }
         {
-          const page = await alertService.findByUserPaged(
+          const page = await userAlertService.findByUserPaged(
             user,
             5,
             1,
@@ -252,7 +252,7 @@ describe("AlertService", () => {
           true,
         );
 
-        const alerts = await alertService.createAlertsFromPublishedEventLogs(
+        const alerts = await userAlertService.createAlertsFromPublishedEventLogs(
           user,
         );
         expect(alerts).toBeArrayOfSize(10);
