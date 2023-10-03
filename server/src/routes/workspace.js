@@ -215,7 +215,7 @@ router.get("/workspace/saved", async (req, res) => {
 
   await runAsUser(req, res, async (currentUser, req, res) => {
     try {
-      const { perPage, page, sortDir } = pagingParams(req, "created");
+      const { perPage, page, sortDir, skip } = pagingParams(req, "created");
       const term = req.query.text;
       const filters = req.query;
 
@@ -226,6 +226,7 @@ router.get("/workspace/saved", async (req, res) => {
           perPage,
           page,
           sortDir,
+          skip,
           filters,
         );
 
@@ -464,7 +465,7 @@ router.get(
   */
 
     try {
-      const { perPage, page, sortDir } = pagingParams(req, "created");
+      const { perPage, page, sortDir, skip } = pagingParams(req, "created");
       const term = req.query.text;
       const filters = req.query;
 
@@ -475,6 +476,7 @@ router.get(
           perPage,
           page,
           sortDir,
+          skip,
           filters,
         );
       res.json(savedProducts);
