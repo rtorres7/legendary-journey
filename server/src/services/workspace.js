@@ -6,6 +6,7 @@ const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
 const _ = require("lodash");
 const { findArticleImage } = require("../util/images");
 const path = require("path");
+const { Op } = require("sequelize");
 
 class WorkspaceService {
   constructor() {
@@ -20,6 +21,7 @@ class WorkspaceService {
     perPage = 10,
     page = 1,
     sortDir = "desc",
+    skip = 0,
     filters = {},
   ) {
     const savedProductsForUser = await models.SavedProduct.findAll({
@@ -35,6 +37,7 @@ class WorkspaceService {
       savedProductsForUser,
       page,
       perPage,
+      skip,
       filters,
       term,
     );
@@ -45,6 +48,7 @@ class WorkspaceService {
     savedProductsForUser,
     page,
     perPage,
+    skip,
     filters,
     term,
   ) {
@@ -81,23 +85,26 @@ class WorkspaceService {
     let products;
 
     if (sortDir === "created") {
-      const resultIdsForPage = resultIds.slice(0, perPage);
+      const sortedResultIds = _.sortBy(resultIds, (item) =>
+        _.indexOf(savedProductIds, item),
+      );
+      const pagedResultIds = _.slice(sortedResultIds, skip, skip + perPage);
       const productsFound = await this.productService.findProductsForIds(
-        resultIdsForPage,
-        resultIdsForPage.length,
+        pagedResultIds,
+        pagedResultIds.length,
         0,
       );
+
       products = savedProductIds
         .map((id) =>
           _.find(productsFound, (product) => product._id.toString() === id),
         )
         .filter((product) => product !== undefined);
     } else {
-      const resultIdsForPage = resultIds.slice(0, perPage);
       products = await this.productService.findProductsForIds(
-        resultIdsForPage,
-        resultIdsForPage.length,
-        0,
+        resultIds,
+        perPage,
+        skip,
         sortDir,
       );
     }
@@ -191,8 +198,21 @@ class WorkspaceService {
     });
   }
 
-  async findPageOfCollectionsForUser(userId, page, limit, offset, sortDir) {
+  async findPageOfCollectionsForUser(
+    userId,
+    page,
+    limit,
+    offset,
+    sortDir,
+    title,
+  ) {
+    const query = { createdBy: userId };
+    if (title) {
+      query.name = { [Op.like]: `%${title}%` };
+    }
+
     const { count, rows } = await models.Collection.findAndCountAll({
+      where: query,
       offset: offset,
       limit: limit,
       order: [["createdAt", sortDir.toUpperCase()]],
@@ -259,6 +279,7 @@ class WorkspaceService {
     perPage = 10,
     page = 1,
     sortDir = "desc",
+    skip = 0,
     filters = {},
   ) {
     const savedProductsForUserInCollection = await models.SavedProduct.findAll({
@@ -277,6 +298,7 @@ class WorkspaceService {
       savedProductsForUserInCollection,
       page,
       perPage,
+      skip,
       filters,
       term,
     );

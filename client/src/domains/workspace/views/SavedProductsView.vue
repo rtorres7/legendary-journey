@@ -182,17 +182,10 @@
             </div>
           </template>
         </div>
-        <div class="flex justify-center pb-4">
-          <MaxPagination
-            :currentPage="currentPage"
-            :totalCount="numProducts"
-            :maxPerPage="maxPerPage"
-          />
-        </div>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
-          <template v-for="product in paginatedProducts()" :key="product">
+          <template v-for="product in mySaved" :key="product">
             <PublishedProductCard
               :product="product"
               type="product"
@@ -316,7 +309,7 @@ export default {
     const loadingMetadata = computed(() => store.state.metadata.loading);
     const mySaved = ref([]);
     const loadingSaved = ref(true);
-    const numProducts = computed(() => mySaved.value.length);
+    const numProducts = ref(0);
     const currentPage = ref(parseInt(route.query.page) || 1);
     const maxPerPage = ref(20);
     const aggregations = ref([]);
@@ -462,10 +455,11 @@ export default {
         }, 1000);
       } else {
         if (route.name === "workspace-saved") {
-          axios.get(path, { params: { perPage: 1000 } }).then((response) => {
+          axios.get(path, { params: { perPage: 20 } }).then((response) => {
             loadingSaved.value = false;
             if (response.data) {
               mySaved.value = response.data.content;
+              numProducts.value = response.data.totalElements;
               aggregations.value = response.data.supplementaryData.aggregations;
             } else {
               createNotification({
@@ -657,13 +651,6 @@ export default {
       });
     };
 
-    const paginatedProducts = () => {
-      return mySaved.value.slice(
-        (currentPage.value - 1) * maxPerPage.value,
-        currentPage.value * maxPerPage.value
-      );
-    };
-
     onMounted(() => {
       getSavedProducts(path.value);
     });
@@ -727,7 +714,6 @@ export default {
       removeFilter,
       clearFilters,
       toggleBooleanValue,
-      paginatedProducts,
       loadingMetadata,
     };
   },
