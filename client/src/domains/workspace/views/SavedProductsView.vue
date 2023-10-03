@@ -185,7 +185,7 @@
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
-          <template v-for="product in paginatedProducts()" :key="product">
+          <template v-for="product in mySaved" :key="product">
             <PublishedProductCard
               :product="product"
               type="product"
@@ -651,13 +651,6 @@ export default {
       });
     };
 
-    const paginatedProducts = () => {
-      return mySaved.value.slice(
-        (currentPage.value - 1) * maxPerPage.value,
-        currentPage.value * maxPerPage.value
-      );
-    };
-
     onMounted(() => {
       getSavedProducts(path.value);
     });
@@ -721,7 +714,6 @@ export default {
       removeFilter,
       clearFilters,
       toggleBooleanValue,
-      paginatedProducts,
       loadingMetadata,
     };
   },
