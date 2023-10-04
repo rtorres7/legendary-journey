@@ -40,7 +40,7 @@
         >
           <router-link
             class="hover:underline"
-            :to="'/search?text=&producing_offices[]=' + author.name"
+            :to="'/search?text=&producing_offices[]=' + author.code"
             target="_blank"
           >
             {{ author.name }}
