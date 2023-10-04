@@ -222,7 +222,7 @@
                   <div class="py-2">
                     <div class="flex items-center justify-between mt-2">
                       <label id="article-counter" class="mr-4"
-                        >Featured Products (max. 5)</label
+                        >Featured Products (max. 8)</label
                       >
                       <div
                         class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
@@ -317,12 +317,7 @@
                   </div>
                 </div>
                 <!-- Workspace Dashboard Options -->
-                <div
-                  v-show="currentRoute === 'workspace-dashboard'"
-                  class="py-4 border-t border-slate-900/10 dark:border-slate-50/[0.06] energy:border-zinc-500/50"
-                >
-                  <TestConsoleWorkspace />
-                </div>
+                <TestConsoleWorkspace :currentRoute="currentRoute" />
               </div>
             </DialogPanel>
           </TransitionChild>
