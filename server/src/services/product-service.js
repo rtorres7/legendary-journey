@@ -144,9 +144,9 @@ class ProductService {
       "createdBy.id": userId,
       deleted: false,
     })
-      .limit(limit)
-      .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
+      .skip(offset)
+      .limit(limit)
       .exec();
   }
 
@@ -200,9 +200,9 @@ class ProductService {
         { createdAt: { $gte: oneWeekAgo } }, //Add condition for last week
       ],
     })
-      .limit(limit)
-      .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
+      .skip(offset)
+      .limit(limit)
       .exec();
   }
 
@@ -240,9 +240,9 @@ class ProductService {
       "createdBy.id": userId,
       deleted: false,
     })
-      .limit(limit)
-      .skip(offset)
       .sort({ datePublished: sortDir.toLowerCase() })
+      .skip(offset)
+      .limit(limit)
       .exec();
   }
 
@@ -317,9 +317,10 @@ class ProductService {
           $size: "$eventLogs",
         },
       })
-      .limit(limit)
-      .skip(offset)
       .sort(sort)
+      .skip(offset)
+      .limit(limit)
+
       .exec();
 
     return products.map((product) => {
@@ -390,9 +391,9 @@ class ProductService {
 
   async #findAllProductsForUser(userId, limit, offset, sortDir) {
     return await Article.find({ "createdBy.id": userId, deleted: false })
-      .limit(limit)
-      .skip(offset)
       .sort({ createdAt: sortDir.toLowerCase() })
+      .skip(offset)
+      .limit(limit)
       .exec();
   }
 
