@@ -669,14 +669,21 @@
             <div
               class="flex flex-wrap gap-4 justify-end py-6 px-8 border-t border-slate-900/10 dark:border-slate-700/75 energy:border-zinc-700/75"
             >
-              <MaxButton
-                color="secondary"
-                type="submit"
-                :disabled="publishDisabled"
-                @click.prevent="publishProduct"
-              >
-                Publish
-              </MaxButton>
+              <template v-if="product.state === 'posted'">
+                <MaxButton color="secondary" :disabled="true">
+                  Published
+                </MaxButton>
+              </template>
+              <template v-else>
+                <MaxButton
+                  color="secondary"
+                  type="submit"
+                  :disabled="publishDisabled"
+                  @click.prevent="publishProduct"
+                >
+                  Publish
+                </MaxButton>
+              </template>
               <MaxButton color="secondary" @click.prevent="saveProduct"
                 >Save</MaxButton
               >
