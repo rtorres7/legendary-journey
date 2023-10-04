@@ -68,11 +68,11 @@
         </template>
       </p>
       <p v-if="product.coordinators?.length > 0">
+        Coordinated With:
         <template
           v-for="(coordinator, index) in product.coordinators"
           :key="index"
         >
-          Coordinated With:
           {{ coordinator
           }}<span
             v-if="
