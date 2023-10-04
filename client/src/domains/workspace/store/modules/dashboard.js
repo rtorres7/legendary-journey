@@ -7,6 +7,7 @@ export default {
     saved: {
       loading: true,
       items: [],
+      total: 0,
     },
     drafts: {
       loading: true,
@@ -15,6 +16,7 @@ export default {
     published: {
       loading: true,
       items: [],
+      total: 0,
     },
     stats: {
       loading: true,
@@ -31,15 +33,23 @@ export default {
             saved: true,
           };
         });
-        console.log("[store] loadSavedProducts: ", saved);
+        console.log("[store] loadSavedProducts: ", {
+          content: saved,
+          totalElements: saved.length,
+        });
         setTimeout(() => {
-          commit("saveSavedProducts", saved);
+          commit("saveSavedProducts", {
+            content: saved,
+            totalElements: saved.length,
+          });
         }, 1000);
       } else {
-        axios.get("/workspace/saved").then((response) => {
-          console.log("[store] loadSavedProducts: ", response.data.content);
-          commit("saveSavedProducts", response.data.content);
-        });
+        axios
+          .get("/workspace/saved", { params: { perPage: 4 } })
+          .then((response) => {
+            console.log("[store] loadSavedProducts: ", response.data);
+            commit("saveSavedProducts", response.data);
+          });
       }
     },
     loadDrafts({ state, commit }) {
@@ -69,15 +79,23 @@ export default {
             ...product.attributes,
           };
         });
-        console.log("[store] loadPublished: ", published);
+        console.log("[store] loadPublished: ", {
+          content: published,
+          totalElements: published.length,
+        });
         setTimeout(() => {
-          commit("savePublishedProducts", published);
+          commit("savePublishedProducts", {
+            content: published,
+            totalElements: published.length,
+          });
         }, 1000);
       } else {
-        axios.get("/workspace/recent").then((response) => {
-          console.log("[store] loadPublished: ", response.data.content);
-          commit("savePublishedProducts", response.data.content);
-        });
+        axios
+          .get("/workspace/recent", { params: { perPage: 4 } })
+          .then((response) => {
+            console.log("[store] loadPublished: ", response.data);
+            commit("savePublishedProducts", response.data);
+          });
       }
     },
     loadStats({ state, commit }) {
@@ -118,16 +136,18 @@ export default {
     },
   },
   mutations: {
-    saveSavedProducts(state, products) {
-      state.saved.items = products;
+    saveSavedProducts(state, data) {
+      state.saved.items = data.content;
+      state.saved.total = data.totalElements;
       state.saved.loading = false;
     },
     saveDraftProducts(state, products) {
       state.drafts.items = products;
       state.drafts.loading = false;
     },
-    savePublishedProducts(state, products) {
-      state.published.items = products;
+    savePublishedProducts(state, data) {
+      state.published.items = data.content;
+      state.published.total = data.totalElements;
       state.published.loading = false;
     },
     saveStats(state, stats) {

@@ -19,7 +19,7 @@
     </template>
     <template v-else>
       <!--- Recently Saved -->
-      <div v-if="savedProducts.length > 0" class="pb-8">
+      <div v-if="savedTotal > 0" class="pb-8">
         <div class="text-2xl font-bold pb-8">For You</div>
         <div>
           <div class="pb-6 flex items-center justify-between">
@@ -27,10 +27,7 @@
               Recently Saved
             </div>
             <router-link
-              v-if="
-                savedProducts.length > 4 ||
-                (savedProducts.length > 1 && numCards < savedProducts.length)
-              "
+              v-if="savedTotal > 4 || (savedTotal > 1 && numCards < savedTotal)"
               class="flex items-center text-gray-500 text-sm font-semibold"
               to="/workspace/saved"
             >
@@ -137,9 +134,8 @@
               </div>
               <a
                 v-if="
-                  publishedProducts.length > 4 ||
-                  (publishedProducts.length > 1 &&
-                    numCards < publishedProducts.length)
+                  publishedTotal > 4 ||
+                  (publishedTotal > 1 && numCards < publishedTotal)
                 "
                 class="flex items-center text-gray-500 text-sm font-semibold"
                 href="/search?text=&per_page=10&page=1&producing_offices[]=DNI"
@@ -149,7 +145,7 @@
                 <ChevronRightIcon class="h-4 w-4" />
               </a>
             </div>
-            <template v-if="publishedProducts.length > 0">
+            <template v-if="publishedTotal > 0">
               <div
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
               >
@@ -292,19 +288,25 @@ export default {
     const user = computed(() => store.state.user.user);
     const canManageWire = computed(() => store.getters["user/canManageWire"]);
 
-    const loadingSaved = computed(() => store.state.workspace.saved.loading);
-    const loadingDrafts = computed(() => store.state.workspace.drafts.loading);
+    const loadingSaved = computed(() => store.state.ws_dashboard.saved.loading);
+    const loadingDrafts = computed(
+      () => store.state.ws_dashboard.drafts.loading
+    );
     const loadingPublished = computed(
-      () => store.state.workspace.published.loading
+      () => store.state.ws_dashboard.published.loading
     );
-    const loadingStats = computed(() => store.state.workspace.stats.loading);
+    const loadingStats = computed(() => store.state.ws_dashboard.stats.loading);
 
-    const savedProducts = computed(() => store.state.workspace.saved.items);
-    const draftProducts = computed(() => store.state.workspace.drafts.items);
+    const savedProducts = computed(() => store.state.ws_dashboard.saved.items);
+    const savedTotal = computed(() => store.state.ws_dashboard.saved.total);
+    const draftProducts = computed(() => store.state.ws_dashboard.drafts.items);
     const publishedProducts = computed(
-      () => store.state.workspace.published.items
+      () => store.state.ws_dashboard.published.items
     );
-    const stats = computed(() => store.state.workspace.stats.value);
+    const publishedTotal = computed(
+      () => store.state.ws_dashboard.published.total
+    );
+    const stats = computed(() => store.state.ws_dashboard.stats.value);
 
     const loadingUserContent = ref(true);
     const loadingOrgContent = ref(true);
@@ -408,8 +410,8 @@ export default {
             createSimpleNotification({
               message: `Product Saved`,
             });
-            store.dispatch("workspace/loadSavedProducts");
-            store.dispatch("workspace/loadPublished");
+            store.dispatch("ws_dashboard/loadSavedProducts");
+            store.dispatch("ws_dashboard/loadPublished");
           }
         });
       }
@@ -451,7 +453,7 @@ export default {
             );
             let indexOfProduct = savedProducts.value.indexOf(p);
             savedProducts.value.splice(indexOfProduct, 1);
-            store.dispatch("workspace/loadPublished");
+            store.dispatch("ws_dashboard/loadPublished");
           }
         });
       }
@@ -498,10 +500,10 @@ export default {
 
     const loadOrgContent = () => {
       if (user.value.organization) {
-        store.dispatch("workspace/loadPublished");
+        store.dispatch("ws_dashboard/loadPublished");
         if (canManageWire.value) {
-          store.dispatch("workspace/loadDrafts");
-          store.dispatch("workspace/loadStats");
+          store.dispatch("ws_dashboard/loadDrafts");
+          store.dispatch("ws_dashboard/loadStats");
         }
       }
     };
@@ -535,7 +537,7 @@ export default {
     });
 
     onMounted(() => {
-      store.dispatch("workspace/loadSavedProducts");
+      store.dispatch("ws_dashboard/loadSavedProducts");
       loadOrgContent();
       updateScreenWidth();
       window.addEventListener("resize", () => {
@@ -547,8 +549,10 @@ export default {
       user,
       canManageWire,
       savedProducts,
+      savedTotal,
       draftProducts,
       publishedProducts,
+      publishedTotal,
       stats,
       loadingDelete,
       isDeleteDialogOpen,

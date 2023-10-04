@@ -8,12 +8,12 @@
         ></div>
       </template>
       <template v-else>
-        <div v-if="numProducts > 0" class="font-semibold mb-4 sm:mb-0">
-          <template v-if="numProducts == 1">{{ numProducts }} product</template>
-          <template v-else>{{ numProducts }} products</template>
+        <div v-if="savedTotal > 0" class="font-semibold mb-4 sm:mb-0">
+          <template v-if="savedTotal == 1">{{ savedTotal }} product</template>
+          <template v-else>{{ savedTotal }} products</template>
         </div>
       </template>
-      <div v-if="mySaved.length > 0" class="flex space-x-4">
+      <div v-if="savedTotal > 0" class="flex space-x-4">
         <Listbox
           v-model="selectedSort"
           as="div"
@@ -94,13 +94,13 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
       >
-        <template v-for="card in 6" :key="card">
+        <template v-for="card in 20" :key="card">
           <PublishedProductCard :loading="true" />
         </template>
       </div>
     </template>
     <template v-else>
-      <template v-if="mySaved.length == 0">
+      <template v-if="savedTotal == 0">
         <p class="italic">No saved products to show</p>
       </template>
       <template v-else>
@@ -185,7 +185,7 @@
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
         >
-          <template v-for="product in mySaved" :key="product">
+          <template v-for="product in savedProducts" :key="product">
             <PublishedProductCard
               :product="product"
               type="product"
@@ -194,14 +194,12 @@
             />
           </template>
         </div>
-        <div class="flex justify-center">
-          <div class="pt-4">
-            <MaxPagination
-              :currentPage="currentPage"
-              :totalCount="numProducts"
-              :maxPerPage="maxPerPage"
-            />
-          </div>
+        <div class="flex justify-center pt-8">
+          <MaxPagination
+            :currentPage="currentPage"
+            :totalCount="savedTotal"
+            :maxPerPage="20"
+          />
         </div>
       </template>
     </template>
@@ -212,18 +210,17 @@
     @close="closeFacetsDialog"
   >
     <Facets
-      :facets="aggregations"
+      :facets="savedFacets"
       class="grid grid-cols-2 md:grid-cols-3 gap-4"
     />
   </BaseDialog>
-
   <BaseDialog
     :isOpen="isDeleteDialogOpen"
     :title="'Delete Product'"
     class="max-w-fit"
     @close="closeDeleteDialog"
   >
-    <p class="py-4 pr-4">Are you sure you want to do this?</p>
+    <p class="py-4 pr-4">Are you sure you want to delete this product?</p>
     <template #actions>
       <BaseButton
         class="w-[100px]"
@@ -260,8 +257,6 @@ import axios from "@/shared/config/wireAxios";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import PublishedProductCard from "../components/PublishedProductCard.vue";
-import { productDetails } from "../data";
-import { facetAggregations } from "../data";
 import Overlay from "../components/Overlay.vue";
 import LoadingSpinner from "../components/LoadingSpinner.vue";
 import BaseDialog from "../components/BaseDialog.vue";
@@ -300,19 +295,22 @@ export default {
     Facets,
   },
   setup() {
-    const environment = ref(import.meta.env.MODE);
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
-    const path = computed(() => route.fullPath);
-    const criteria = computed(() => store.state.metadata.criteria);
+    const createNotification = inject("create-notification");
+    const createSimpleNotification = inject("create-simple-notification");
+
     const loadingMetadata = computed(() => store.state.metadata.loading);
-    const mySaved = ref([]);
-    const loadingSaved = ref(true);
-    const numProducts = ref(0);
+    const loadingSaved = computed(() => store.state.ws_saved.saved.loading);
+
+    const criteria = computed(() => store.state.metadata.criteria);
+    const savedProducts = computed(() => store.state.ws_saved.saved.items);
+    const savedTotal = computed(() => store.state.ws_saved.saved.total);
+    const savedFacets = computed(() => store.state.ws_saved.saved.facets);
+
     const currentPage = ref(parseInt(route.query.page) || 1);
-    const maxPerPage = ref(20);
-    const aggregations = ref([]);
+
     const isFacetsDialogOpen = ref(false);
     const closeFacetsDialog = () => {
       isFacetsDialogOpen.value = false;
@@ -343,10 +341,9 @@ export default {
       return sortOptions[0];
     };
     const selectedSort = ref(getSortOption(route.query));
-    const createNotification = inject("create-notification");
-    const createSimpleNotification = inject("create-simple-notification");
 
     const selectedProduct = ref();
+
     const loadingDelete = ref(false);
     const isDeleteDialogOpen = ref(false);
     const closeDeleteDialog = () => {
@@ -365,11 +362,6 @@ export default {
           type: "success",
         });
         closeDeleteDialog();
-        let p = mySaved.value.find(
-          (item) => item.productNumber == selectedProduct.value.productNumber
-        );
-        let indexOfProduct = mySaved.value.indexOf(p);
-        mySaved.value.splice(indexOfProduct, 1);
       } else {
         loadingDelete.value = true;
         axios
@@ -391,28 +383,19 @@ export default {
               });
               loadingDelete.value = false;
               closeDeleteDialog();
-              let p = mySaved.value.find(
-                (item) =>
-                  item.productNumber == selectedProduct.value.productNumber
-              );
-              let indexOfProduct = mySaved.value.indexOf(p);
-              mySaved.value.splice(indexOfProduct, 1);
+              store.dispatch("ws_saved/loadSavedProducts");
             }
           });
       }
     };
 
     const removingProduct = ref(false);
+
     const unsaveProduct = (product) => {
       if (import.meta.env.MODE === "offline") {
         createSimpleNotification({
           message: `Saved Product Removed`,
         });
-        let p = mySaved.value.find(
-          (item) => item.productNumber == product.productNumber
-        );
-        let indexOfProduct = mySaved.value.indexOf(p);
-        mySaved.value.splice(indexOfProduct, 1);
       } else {
         removingProduct.value = true;
         axios.delete("/workspace/saved/" + product.id).then((response) => {
@@ -427,50 +410,11 @@ export default {
           } else {
             removingProduct.value = false;
             createSimpleNotification({
-              message: `Saved Product Removed`,
+              message: `Product has been unsaved.`,
             });
-            let p = mySaved.value.find(
-              (item) => item.productNumber == product.productNumber
-            );
-            let indexOfProduct = mySaved.value.indexOf(p);
-            mySaved.value.splice(indexOfProduct, 1);
+            store.dispatch("ws_saved/loadSavedProducts");
           }
         });
-      }
-    };
-
-    const getSavedProducts = (path) => {
-      if (import.meta.env.MODE === "offline") {
-        setTimeout(() => {
-          let products = [];
-          productDetails.forEach((product) => {
-            if (product.data.state == "posted") {
-              products.push(product.data);
-            }
-          });
-          mySaved.value = products;
-          loadingSaved.value = false;
-          aggregations.value = facetAggregations;
-          console.log("Aggregations: ", facetAggregations);
-        }, 1000);
-      } else {
-        if (route.name === "workspace-saved") {
-          axios.get(path, { params: { perPage: 20 } }).then((response) => {
-            loadingSaved.value = false;
-            if (response.data) {
-              mySaved.value = response.data.content;
-              numProducts.value = response.data.totalElements;
-              aggregations.value = response.data.supplementaryData.aggregations;
-            } else {
-              createNotification({
-                title: "Error",
-                message: "There was an error retrieving your saved products.",
-                type: "error",
-                autoClose: false,
-              });
-            }
-          });
-        }
       }
     };
 
@@ -652,11 +596,7 @@ export default {
     };
 
     onMounted(() => {
-      getSavedProducts(path.value);
-    });
-
-    watch([path], () => {
-      getSavedProducts(path.value);
+      store.dispatch("ws_saved/loadSavedProducts");
     });
 
     watch([selectedSort], () => {
@@ -670,11 +610,13 @@ export default {
     watch(
       () => route.query,
       () => {
-        console.log(`route.query watcher triggered [${route.name}]`);
-        getSavedProducts(path.value);
-        booleanFilters.value = buildBooleanFilters();
-        closeFacetsDialog();
-        currentPage.value = parseInt(route.query.page) || 1;
+        if (route.name === "workspace-saved") {
+          console.log(`route.query watcher triggered [${route.name}]`);
+          booleanFilters.value = buildBooleanFilters();
+          closeFacetsDialog();
+          currentPage.value = parseInt(route.query.page) || 1;
+          store.dispatch("ws_saved/loadSavedProducts");
+        }
       }
     );
 
@@ -685,20 +627,18 @@ export default {
     });
 
     return {
-      environment,
-      route,
-      path,
-      mySaved,
+      loadingMetadata,
       loadingSaved,
+      savedProducts,
+      savedTotal,
+      savedFacets,
+
       loadingDelete,
       isDeleteDialogOpen,
       openDeleteDialog,
       closeDeleteDialog,
       deleteProduct,
-      numProducts,
       currentPage,
-      maxPerPage,
-      aggregations,
       isFacetsDialogOpen,
       closeFacetsDialog,
       openFacetsDialog,
@@ -706,7 +646,6 @@ export default {
       selectedSort,
       removingProduct,
       unsaveProduct,
-      getSavedProducts,
       buildBooleanFilters,
       booleanFilters,
       showSelectors,
@@ -714,7 +653,6 @@ export default {
       removeFilter,
       clearFilters,
       toggleBooleanValue,
-      loadingMetadata,
     };
   },
 };
