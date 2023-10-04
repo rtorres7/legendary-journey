@@ -225,7 +225,7 @@ class AggregatedMetricsService {
    * Get products published by organization.
    * @param {string} orgId
    * @param {Date} gteDate
-   * @returns {[{ productId: string, datePublished: Date, title: string, timestamp: Date, eventId: string }]}
+   * @returns {[{ productId: string, datePublished: Date, title: string, timestamp: Date, eventLogId: string }]}
    */
   async getRecentPublishedForOrg(orgId, gteDate = null) {
     KiwiPreconditions.checkArgumentDefined(orgId);
@@ -280,7 +280,7 @@ class AggregatedMetricsService {
           datePublished: hit._source.meta.datePublished,
           title: hit._source.meta.title,
           timestamp: hit._source.timestamp,
-          eventId: hit._id,
+          eventLogId: hit._id,
         };
       });
     }

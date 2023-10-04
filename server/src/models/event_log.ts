@@ -10,6 +10,7 @@ export enum EventType {
 
 /** */
 export interface IEventLog {
+  // mongo id
   eventType: EventType;
   timestamp: Date;
   userId: string;

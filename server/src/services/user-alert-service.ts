@@ -5,18 +5,18 @@ import { logger } from "../config/logger";
 
 import { KiwiPage, KiwiPreconditions, KiwiSort } from "@kiwiproject/kiwi-js";
 import {
-  Alert,
-  IAlert,
-  AlertDoc,
-  AlertValidator,
-  AlertReadState,
-  AlertType,
-} from "../models/alert";
+  UserAlert,
+  IUserAlert,
+  UserAlertDoc,
+  UserAlertValidator,
+  UserAlertReadState,
+  UserAlertType,
+} from "../models/user_alert";
 import { UserInfo } from "../models/user_info";
 import AggregatedMetricsService from "./aggregated-metrics-service";
 
 /** */
-export class AlertService {
+export class UserAlertService {
   private aggregatedMetricsService: AggregatedMetricsService;
 
   constructor() {
@@ -26,10 +26,10 @@ export class AlertService {
   /***/
   async counts(user: any): Promise<{ total: number; unread: number }> {
     KiwiPreconditions.checkArgumentDefined(user.id);
-    const total = await Alert.countDocuments({ userId: user.id }).exec();
-    const unread = await Alert.countDocuments({
+    const total = await UserAlert.countDocuments({ userId: user.id }).exec();
+    const unread = await UserAlert.countDocuments({
       userId: user.id,
-      readState: AlertReadState.UNREAD,
+      readState: UserAlertReadState.UNREAD,
     }).exec();
     return { total, unread };
   }
@@ -43,8 +43,8 @@ export class AlertService {
     sortDir = "desc",
   ): Promise<KiwiPage> {
     KiwiPreconditions.checkArgumentDefined(user.id);
-    const total: number = await Alert.countDocuments({ userId: user.id });
-    const alerts: AlertDoc[] = await Alert.find({ userId: user.id })
+    const total: number = await UserAlert.countDocuments({ userId: user.id });
+    const alerts: UserAlertDoc[] = await UserAlert.find({ userId: user.id })
       .sort({ createdAt: sortDir === "desc" ? -1 : 1 })
       .skip(skip)
       .limit(perPage)
@@ -55,29 +55,29 @@ export class AlertService {
   }
 
   /** */
-  async findById(alertId: string): Promise<AlertDoc> {
-    KiwiPreconditions.checkArgumentNotBlank(alertId);
-    const ret = await Alert.findById(alertId);
+  async findById(userAlertId: string): Promise<UserAlertDoc> {
+    KiwiPreconditions.checkArgumentNotBlank(userAlertId);
+    const ret = await UserAlert.findById(userAlertId);
     if (!ret) {
-      logger.error(`AlertService.findById:  alertId ${alertId} not found`);
+      logger.error(`UserAlertService.findById:  userAlertId ${userAlertId} not found`);
     }
     return ret;
   }
 
   /** */
-  async createAlert(alert: Partial<IAlert>): Promise<AlertDoc> {
-    KiwiPreconditions.checkArgumentDefined(alert);
-    const { value, error } = AlertValidator.validate(alert);
+  async createAlert(userAlert: Partial<IUserAlert>): Promise<UserAlertDoc> {
+    KiwiPreconditions.checkArgumentDefined(userAlert);
+    const { value, error } = UserAlertValidator.validate(userAlert);
     if (error) {
       logger.info(error);
-      throw new Error(`AlertService.createAlert`, { cause: error });
+      throw new Error(`UserAlertService.createAlert`, { cause: error });
     }
-    return await new Alert({ ...value }).save();
+    return await new UserAlert({ ...value }).save();
   }
 
   /** */
-  async updateAlert(id: string, updates: Partial<IAlert>): Promise<AlertDoc> {
-    return await Alert.findByIdAndUpdate({ _id: id }, updates, {
+  async updateAlert(id: string, updates: Partial<IUserAlert>): Promise<UserAlertDoc> {
+    return await UserAlert.findByIdAndUpdate({ _id: id }, updates, {
       new: true,
     }).exec();
   }
@@ -85,19 +85,19 @@ export class AlertService {
   /** */
   async findProcessedEventIds(
     user: any,
-    type: AlertType,
+    alertType: UserAlertType,
     gteDate: Date,
   ): Promise<Set<string>> {
-    const events = await Alert.find({
+    const userAlerts = await UserAlert.find({
       userId: user.id,
-      type,
+      alertType,
       createdAt: { $gte: gteDate },
     }).exec();
-    return new Set(events.map((i) => i.meta?.eventId).filter((i) => i));
+    return new Set(userAlerts.map((i: UserAlertDoc) => i.eventLogId).filter((i) => i));
   }
 
   /** */
-  async createAlertsFromPublishedEventLogs(user: any): Promise<AlertDoc[]> {
+  async createAlertsFromPublishedEventLogs(user: any): Promise<UserAlertDoc[]> {
     KiwiPreconditions.checkArgumentDefined(user);
     KiwiPreconditions.checkArgumentDefined(user.organization);
     const KEY = "lastSearchProductPublishEventDate";
@@ -110,33 +110,32 @@ export class AlertService {
     );
     const existingEventIds = await this.findProcessedEventIds(
       user,
-      AlertType.PRODUCT_PUBLISHED,
+      UserAlertType.PRODUCT_PUBLISHED,
       searchDate,
     );
-    const alerts = [];
+    const userAlerts = [];
     for (const e of events) {
-      if (existingEventIds.has(e.eventId)) {
-        logger.info(`skipping event ${e.eventId}`);
+      if (existingEventIds.has(e.eventLogId)) {
+        logger.info(`skipping event ${e.eventLogId}`);
         continue;
       }
-      const alert = await this.createAlert({
+      const userAlert = await this.createAlert({
         title: `Product published on ${e.datePublished}`,
         message: e.title,
         userId: user.id,
-        createdBy: user.id,
-        type: AlertType.PRODUCT_PUBLISHED,
-        readState: AlertReadState.UNREAD,
         productNumber: e.productId,
-        meta: {
-          eventId: e.eventId,
-        },
+        alertType: UserAlertType.PRODUCT_PUBLISHED,
+        readState: UserAlertReadState.UNREAD,
+        eventLogId: e.eventLogId,
+        // meta: {},
+        createdBy: user.id,
       });
-      logger.info(`created alert ${alert.id} from event ${e.eventId}`);
-      alerts.push(alert);
+      logger.info(`created user alert ${userAlert.id} from event ${e.eventLogId}`);
+      userAlerts.push(userAlert);
     }
     userInfo.setMeta(KEY, newSearchDate);
-    return Promise.resolve(alerts);
+    return Promise.resolve(userAlerts);
   }
 }
 
-export default AlertService;
+export default UserAlertService;
