@@ -198,12 +198,10 @@
                       v-else
                       class="line-clamp-1"
                       :title="
-                        dayjs(product.createdAt).utc().format('MMMM D, YYYY')
+                        dayjs(product.created_at).utc().format('MMMM D, YYYY')
                       "
                       >{{
-                        dayjs(product.date_published)
-                          .utc()
-                          .format("MMMM D, YYYY")
+                        dayjs(product.created_at).utc().format("MMMM D, YYYY")
                       }}</span
                     >
                   </div>
