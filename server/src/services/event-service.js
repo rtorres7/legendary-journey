@@ -1,7 +1,8 @@
 const { EventLog } = require("../models/event_log");
-// const ProductService = require("../services/product-service");
 const UserService = require("./user-service");
 const { logger } = require("../config/logger");
+const { KiwiPage, KiwiSort } = require("@kiwiproject/kiwi-js");
+const Article = require("../models/articles");
 
 class EventService {
   constructor() {
@@ -46,6 +47,81 @@ class EventService {
     } catch (err) {
       logger.error("Error registering event", err);
     }
+  }
+
+  async findPageOfRecentlyViewedForUser(userId, page, limit, offset) {
+    let recentlyViewedProducts = await this.#findRecentlyViewedProductsForUser(
+      userId,
+      limit,
+      offset,
+    );
+    recentlyViewedProducts = recentlyViewedProducts.map(
+      (product) => product.product,
+    );
+
+    const recentlyViewedCount = await this.#countRecentlyViewedProductsForUser(
+      userId,
+    );
+
+    return KiwiPage.of(page, limit, recentlyViewedCount, recentlyViewedProducts)
+      .usingOneAsFirstPage()
+      .addKiwiSort(KiwiSort.of("timestamp", "desc"));
+  }
+
+  async #findRecentlyViewedProductsForUser(userId, limit, offset) {
+    return await EventLog.aggregate()
+      .match({
+        eventType: "PRODUCT_VIEW",
+        userId: userId,
+      })
+      .sort({ timestamp: -1 })
+      .group({
+        _id: "$productId",
+        timestamp: { $first: "$timestamp" },
+      })
+      .sort({ timestamp: -1 })
+      .skip(offset)
+      .limit(limit)
+      .lookup({
+        from: Article.collection.name,
+        localField: "_id",
+        foreignField: "productNumber",
+        as: "product",
+      })
+      .unwind("product")
+      .project({
+        product: 1,
+      })
+      .lookup({
+        from: EventLog.collection.name,
+        localField: "product.productNumber",
+        foreignField: "productId",
+        as: "eventLogs",
+      })
+      .addFields({
+        product: {
+          views: {
+            $size: "$eventLogs",
+          },
+        },
+      })
+      .exec();
+  }
+
+  async #countRecentlyViewedProductsForUser(userId) {
+    const count = await EventLog.aggregate()
+      .match({
+        eventType: "PRODUCT_VIEW",
+        userId: userId,
+      })
+      .group({
+        _id: "$productId",
+        timestamp: { $first: "$timestamp" },
+      })
+      .count("total")
+      .exec();
+
+    return count[0].total;
   }
 }
 
