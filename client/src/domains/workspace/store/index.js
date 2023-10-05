@@ -1,7 +1,15 @@
-import workspace from "./modules/workspace";
+import dashboard from "./modules/dashboard";
+import saved from "./modules/saved";
 
 const workspaceModules = {
-  workspace,
+  ws_dashboard: {
+    ...dashboard,
+  },
+  ws_saved: {
+    ...saved,
+  },
 };
+
+console.log("workspaceModules: ", workspaceModules);
 
 export default workspaceModules;

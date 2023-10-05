@@ -420,7 +420,18 @@ db.articles.insertMany([
     worldwide: true,
   },
   {
-    attachments: [],
+    attachments: [
+      {
+        fileName: "article.jpg",
+        mimeType: "image/jpeg",
+        createdAt: new Date("2022-09-01T13:16:43Z"),
+        fileSize: 152437,
+        type: "ATTACHMENT",
+        attachmentId: "1c44f780-ee46-4615-b058-49c59457d84d",
+        destination: "minio://attachments/WIReWIRe_sample_5/article.jpg-49c59457d84d",
+        visible: false,
+      },
+    ],
     classification: "UNC",
     classificationXml: "",
     countries: [
