@@ -25,7 +25,15 @@
             >
               <div class="w-[60px] h-[60px] shrink-0">
                 <img
-                  src="@/shared/assets/mocks/1x1_001_plane.jpg"
+                  v-if="item.image == null || item.image == ''"
+                  src="@/shared/assets/image-not-available-1x1.png"
+                  alt=""
+                  class="rounded-full w-[60px] h-[60px]"
+                />
+                <img
+                  v-else
+                  :id="item.id"
+                  :src="getCollectionThumbnail(item.id)"
                   alt=""
                   class="rounded-full w-[60px] h-[60px]"
                 />
@@ -63,7 +71,15 @@
               >
                 <div class="w-[60px] h-[60px] shrink-0">
                   <img
-                    src="@/shared/assets/mocks/1x1_001_plane.jpg"
+                    v-if="item.image == null || item.image == ''"
+                    src="@/shared/assets/image-not-available-1x1.png"
+                    alt=""
+                    class="rounded-full w-[60px] h-[60px]"
+                  />
+                  <img
+                    v-else
+                    :id="'mobile' + item.id"
+                    :src="getCollectionThumbnail(item.id, 'mobile')"
                     alt=""
                     class="rounded-full w-[60px] h-[60px]"
                   />
@@ -220,7 +236,7 @@
         <div>
           <ImageFileChooser
             :label="'Thumbnail'"
-            :binary="collection.image"
+            :binary="imageBinary"
             :file="imageFile"
             @onImageAdded="updateImageFile"
             @onImageRemoved="removeImageFile"
@@ -242,12 +258,6 @@
         form="createCollectionForm"
         :disabled="isSubmitDisabled()"
         >Create
-        <!-- <div :class="loadingDelete ? 'flex space-x-4' : ''">
-          <span>Delete</span>
-          <span v-if="loadingDelete">
-            <LoadingSpinner class="h-5 w-5" />
-          </span>
-        </div> -->
       </BaseButton>
     </template>
   </BaseDialog>
@@ -319,22 +329,19 @@ export default {
     const collection = ref({
       name: "",
       description: "",
-      image: "",
     });
     const activeCollection = ref();
-
     const imageFile = ref(null);
+    const imageBinary = ref("");
 
     const updateImageFile = (payload) => {
-      collection.value.image = payload.binary;
       imageFile.value = payload.file;
-      // validateIcon(imageFile.value);
+      imageBinary.value = payload.binary;
     };
 
     const removeImageFile = () => {
-      collection.value.image = null;
       imageFile.value = null;
-      // editionEvent.value.valid = true;
+      imageBinary.value = "";
     };
 
     const isSubmitDisabled = () => {
@@ -348,6 +355,7 @@ export default {
     const isCreateDialogOpen = ref(false);
     const closeCreateDialog = () => {
       isCreateDialogOpen.value = false;
+      resetForm();
     };
     const openCreateDialog = () => {
       isCreateDialogOpen.value = true;
@@ -355,10 +363,11 @@ export default {
 
     const resetForm = () => {
       collection.value = {
-        name: null,
-        description: null,
-        image: null,
+        name: "",
+        description: "",
       };
+      imageFile.value = null;
+      imageBinary.value = "";
     };
 
     const getCollections = () => {
@@ -385,59 +394,90 @@ export default {
       }
     };
 
-    const getProductsInCollection = (collection) => {
-      activeCollection.value = collection;
-      loadingProducts.value = true;
+    const getCollectionThumbnail = (id, mobile) => {
       if (import.meta.env.MODE === "offline") {
-        setTimeout(() => {
-          loadingProducts.value = false;
-          console.log("Collections: ");
-        }, 1000);
+        return "@/shared/assets/mocks/1x1_001_plane.jpg";
       } else {
         axios
-          .get(`/workspace/collections/${collection.id}/products`)
+          .get(`/workspace/collection/image/${id}`, { responseType: "blob" })
           .then((response) => {
-            loadingProducts.value = false;
-            if (response.data) {
-              productsInCollection.value = response.data.content;
+            var blobURL = URL.createObjectURL(response.data);
+            var image;
+            if (mobile) {
+              image = document.getElementById(`mobile${id}`);
             } else {
-              createNotification({
-                title: "Error",
-                message: "There was an error retrieving the Collection.",
-                type: "error",
-                autoClose: false,
-              });
+              image = document.getElementById(id);
             }
+            image.onload = function () {
+              //release the blob URL once the image is loaded
+              URL.revokeObjectURL(this.src);
+            };
+            image.src = blobURL;
+          })
+          .catch((error) => {
+            console.error(error);
           });
       }
     };
 
+    const getProductsInCollection = (collection) => {
+      if (!loadingCollections.value && collections.value.length > 0) {
+        activeCollection.value = collection;
+        loadingProducts.value = true;
+        if (import.meta.env.MODE === "offline") {
+          setTimeout(() => {
+            loadingProducts.value = false;
+            console.log("Collections: ");
+          }, 1000);
+        } else {
+          axios
+            .get(`/workspace/collections/${collection.id}/products`)
+            .then((response) => {
+              loadingProducts.value = false;
+              if (response.data) {
+                productsInCollection.value = response.data.content;
+              } else {
+                createNotification({
+                  title: "Error",
+                  message: "There was an error retrieving the Collection.",
+                  type: "error",
+                  autoClose: false,
+                });
+              }
+            });
+        }
+      } else {
+        loadingProducts.value = false;
+      }
+    };
+
     const createCollection = () => {
-      console.log("Collection Form: ", collection.value);
       if (import.meta.env.MODE === "offline") {
         createSimpleNotification({
           message: `Collection Created`,
         });
       } else {
-        axios
-          .post("/workspace/collections", collection.value)
-          .then((response) => {
-            if (response.data.error) {
-              createNotification({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                autoClose: false,
-              });
-            } else {
-              createSimpleNotification({
-                message: `Created collection ${collection.value.name}`,
-              });
-              closeCreateDialog();
-              getCollections();
-              resetForm();
-            }
-          });
+        const data = new FormData();
+        data.append("name", collection.value.name);
+        data.append("thumbnail", imageFile.value);
+        axios.post("/workspace/collections", data).then((response) => {
+          if (response.data.error) {
+            createNotification({
+              title: "Error",
+              message: response.data.error,
+              type: "error",
+              autoClose: false,
+            });
+          } else {
+            createSimpleNotification({
+              message: `Created collection ${collection.value.name}`,
+            });
+            console.log(response.data);
+            closeCreateDialog();
+            getCollections();
+            resetForm();
+          }
+        });
       }
     };
 
@@ -452,10 +492,12 @@ export default {
       loadingCollections,
       loadingProducts,
       productsInCollection,
+      getCollectionThumbnail,
       getProductsInCollection,
       collection,
       activeCollection,
       imageFile,
+      imageBinary,
       updateImageFile,
       removeImageFile,
       isSubmitDisabled,
