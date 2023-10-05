@@ -57,11 +57,14 @@ export default {
       }
     },
     //Test Console only
+    setSavedCount({ commit }, count) {
+      commit(
+        "saveSavedProducts",
+        count <= 0 ? [] : savedProducts.slice(0, count)
+      );
+    },
     setSavedLoading({ commit }, value) {
       commit("toggleSavedLoading", value);
-    },
-    setDraftsLoading({ commit }, value) {
-      commit("toggleDraftsLoading", value);
     },
   },
   mutations: {

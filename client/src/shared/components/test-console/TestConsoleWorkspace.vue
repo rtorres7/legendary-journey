@@ -101,6 +101,12 @@
         </SwitchGroup>
       </ul>
     </template>
+    <template v-if="currentRoute === 'workspace-saved'">
+      <p class="font-medium">Saved Options</p>
+      <ul class="py-2 space-y-2">
+        <!-- TODO: fill this out -->
+      </ul>
+    </template>
   </div>
 </template>
 
