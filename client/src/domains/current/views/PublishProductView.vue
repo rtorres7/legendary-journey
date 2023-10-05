@@ -174,8 +174,14 @@
                     >
                   </div>
                   <div class="flex flex-col">
-                    <span class="text-xs uppercase">Publishing Date</span>
                     <span
+                      v-if="product.state === 'posted'"
+                      class="text-xs uppercase"
+                      >Publishing Date</span
+                    >
+                    <span v-else class="text-xs uppercase">Created Date</span>
+                    <span
+                      v-if="product.state === 'posted'"
                       class="line-clamp-1"
                       :title="
                         dayjs(product.date_published)
@@ -186,6 +192,16 @@
                         dayjs(product.date_published)
                           .utc()
                           .format("MMMM D, YYYY")
+                      }}</span
+                    >
+                    <span
+                      v-else
+                      class="line-clamp-1"
+                      :title="
+                        dayjs(product.created_at).utc().format('MMMM D, YYYY')
+                      "
+                      >{{
+                        dayjs(product.created_at).utc().format("MMMM D, YYYY")
                       }}</span
                     >
                   </div>
