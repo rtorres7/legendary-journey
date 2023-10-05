@@ -1,6 +1,8 @@
 import { products } from "@/shared/data";
 import axios from "@/shared/config/wireAxios";
 
+const publishedProducts = products.published.slice(0, 9);
+
 export default {
   namespaced: true,
   state: {
@@ -13,11 +15,11 @@ export default {
       state.loading = true;
       if (import.meta.env.MODE === "offline") {
         console.log("[store] loadFeaturedContent: ", {
-          features: products.published,
+          features: publishedProducts,
           briefs: products.briefs,
         });
         setTimeout(() => {
-          commit("saveFeatures", products.published);
+          commit("saveFeatures", publishedProducts);
           commit("saveBriefs", products.briefs);
           commit("toggleLoading", false);
         }, 750);
@@ -34,7 +36,7 @@ export default {
     setFeatureCount({ commit }, count) {
       commit(
         "saveFeatures",
-        count <= 0 ? [] : products.published.slice(0, count)
+        count <= 0 ? [] : publishedProducts.slice(0, count)
       );
     },
     setLoading({ commit }, value) {

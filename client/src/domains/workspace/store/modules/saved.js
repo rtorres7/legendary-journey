@@ -3,6 +3,13 @@ import { facetAggregations } from "@workspace/data";
 import axios from "@/shared/config/wireAxios";
 import router from "@/router";
 
+const savedProducts = products.published.map((product) => {
+  return {
+    ...product.attributes,
+    saved: true,
+  };
+});
+
 export default {
   namespaced: true,
   state: {
@@ -17,23 +24,25 @@ export default {
     loadSavedProducts({ state, commit }) {
       state.saved.loading = true;
       if (import.meta.env.MODE === "offline") {
-        const saved = products.published.map((product) => {
-          return {
-            ...product.attributes,
-            saved: true,
-          };
-        });
+        const { query } = router.currentRoute.value;
+        const page = query.page ? parseInt(query.page) : 1;
+        const starting = page === 1 ? 0 : (page - 1) * 20;
+        const pageMax = page * 20;
+        const ending =
+          savedProducts.length < pageMax ? savedProducts.length : pageMax;
+        const paginatedProducts = savedProducts.slice(starting, ending);
+
         console.log("[store] loadSavedProducts: ", {
-          content: saved,
-          totalElements: saved.length,
+          content: paginatedProducts,
+          totalElements: savedProducts.length,
           supplementaryData: {
             aggregations: facetAggregations,
           },
         });
         setTimeout(() => {
           commit("saveSavedProducts", {
-            content: saved,
-            totalElements: saved.length,
+            content: paginatedProducts,
+            totalElements: savedProducts.length,
             supplementaryData: {
               aggregations: facetAggregations,
             },

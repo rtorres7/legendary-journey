@@ -222,7 +222,7 @@
                   <div class="py-2">
                     <div class="flex items-center justify-between mt-2">
                       <label id="article-counter" class="mr-4"
-                        >Featured Products (max. 8)</label
+                        >Featured Products (max. 9)</label
                       >
                       <div
                         class="inline-flex items-center rounded shadow-md bg-mission-blue/30 dark:bg-slate-600 energy:bg-zinc-600"
