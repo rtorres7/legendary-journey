@@ -12,7 +12,6 @@ const { EventLog } = require("../models/event_log");
 const mongoose = require("mongoose");
 const { findArticleImage } = require("../util/images");
 const path = require("path");
-const { logger } = require("../config/logger");
 
 class ProductService {
   constructor() {
@@ -526,44 +525,6 @@ class ProductService {
     query = query.skip(offset).limit(limit);
 
     return await query.exec();
-  }
-
-  /**
-   * @param {string} userId
-   * @param {number} page page number, starts at 1
-   * @param {number} perPage items per page
-   * @param {string} sortDir 'asc' or 'desc'
-   * @returns {Promise<KiwiPage>}
-   */
-  async findRecentViewedProductsForUser(
-    userId,
-    page = 1,
-    perPage = 4,
-    sortDir = "desc",
-  ) {
-    const from = (page - 1) * perPage;
-    const { total, productIds } =
-      await this.metricsService.getRecentViewsForUser(
-        userId,
-        from,
-        perPage,
-        sortDir,
-      );
-    const products = [];
-    for (let productId of productIds) {
-      const product = await Article.findOne({
-        productNumber: productId,
-      }).exec();
-      if (product) {
-        products.push(product.features);
-      } else {
-        logger.error(`product ${productId} not found`);
-        // KiwiPreconditions.checkArgumentDefined(product, `product ${productId} not found`);
-      }
-    }
-    return Promise.resolve(
-      KiwiPage.of(page, perPage, total, products).usingOneAsFirstPage(),
-    );
   }
 }
 

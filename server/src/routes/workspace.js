@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  KiwiStandardResponsesExpress,
-  KiwiPreconditions,
-} = require("@kiwiproject/kiwi-js");
+const { KiwiStandardResponsesExpress } = require("@kiwiproject/kiwi-js");
 const { runAsUser, pagingParams } = require("../util/request");
 const ProductService = require("../services/product-service");
 const productService = new ProductService();
@@ -11,6 +8,8 @@ const WorkspaceService = require("../services/workspace");
 const workspaceService = new WorkspaceService();
 const { ObjectStoreService } = require("../services/object-store-service");
 const objectStoreService = new ObjectStoreService();
+const EventService = require("../services/event-service");
+const eventService = new EventService();
 const { logger } = require("../config/logger");
 
 const AggregatedMetricsService = require("../services/aggregated-metrics-service");
@@ -109,7 +108,7 @@ router.get("/workspace/recent", async (req, res) => {
 
 router.get("/workspace/viewed", async (req, res) => {
   /*
-    #swagger.summary = 'Retrieve last 4 products viewed by the current user'
+    #swagger.summary = 'Retrieve a page of most recently viewed products by the current user'
     #swagger.tags = ['Workspace']
     #swagger.responses[200] = {
       schema: {
@@ -123,16 +122,26 @@ router.get("/workspace/viewed", async (req, res) => {
     }
    */
   await runAsUser(req, res, async (currentUser, req, res) => {
-    const { perPage, page, sortDir } = pagingParams(req); // assumes page starts with 1
-    KiwiPreconditions.checkPositive(page);
-    KiwiPreconditions.checkPositive(perPage);
+    const { perPage, page, skip, sortDir } = pagingParams(req);
+
     try {
-      const pageResults = await productService.findRecentViewedProductsForUser(
+      const pageResults = await eventService.findPageOfRecentlyViewedForUser(
         currentUser.id,
         page,
         perPage,
+        skip,
         sortDir,
       );
+
+      for (const item of pageResults.content) {
+        await augmentProductWithSaved(
+          item,
+          currentUser.id,
+          item._id.toString(),
+          false,
+        );
+      }
+
       res.json(pageResults);
     } catch (error) {
       logger.error(error);
