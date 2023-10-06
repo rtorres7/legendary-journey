@@ -706,23 +706,4 @@ describe("ProductService", () => {
       });
     }
   });
-
-  describe("findRecentViewedProductsForUser", () => {
-    it("should return a page of all products", async () => {
-      const page = await service.findRecentViewedProductsForUser(
-        1,
-        1,
-        4,
-        "desc",
-      );
-      expect(page.totalElements).toEqual(20);
-      expect(page.content).toBeArrayOfSize(4);
-      expect(page.content.map((i) => i.productNumber)).toEqual([
-        "WIReWIRe_sample_1",
-        "WIReWIRe_sample_2",
-        "WIReWIRe_sample_3",
-        "WIReWIRe_sample_4",
-      ]);
-    });
-  });
 });

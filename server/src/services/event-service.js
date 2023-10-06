@@ -121,6 +121,10 @@ class EventService {
       .count("total")
       .exec();
 
+    if (count.length === 0) {
+      return 0;
+    }
+
     return count[0].total;
   }
 }
